@@ -1,5 +1,13 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
-import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import {
+    AGGREGATE_COMPOSITE_IDENTIFIER,
+    HttpStatusCode,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
+import {
+    BulkCommandExecutionResult,
+    CommandHandlerService,
+    FluxStandardAction,
+} from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
@@ -8,6 +16,7 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { AudioItemCreated } from '../../../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
+import { TranslateSongTitle } from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
@@ -21,6 +30,7 @@ import generateDatabaseNameForTestSuite from '../../../persistence/repositories/
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import buildTestData from '../../../test-data/buildTestData';
 import { TestEventStream } from '../../../test-data/events';
+import { buildTestInstance } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
@@ -115,67 +125,43 @@ describe('The Command Controller', () => {
         databaseProvider.close();
     });
 
-    describe('when the command type is invalid', () => {
-        it('should return a 400', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+    const commandWithInvalidType = {
+        type: 'DO_BAD_THINGS',
+        payload: {
+            [AGGREGATE_COMPOSITE_IDENTIFIER]: {
+                type: ResourceType.song,
+                id: buildDummyUuid(5),
+            },
+        },
+    };
 
-            const id = idResponse.text;
+    describe(`when executing single a command (/commands)`, () => {
+        describe('when the command type is invalid', () => {
+            it('should return a 400', async () => {
+                const result = await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send(commandWithInvalidType);
 
-            const validPayload = buildValidCommandFSA(id).payload;
+                expect(result.status).toBe(httpStatusCodes.badRequest);
+            });
+        });
 
-            const result = await request(app.getHttpServer()).post(commandEndpoint).send({
-                type: 'DO_BAD_THINGS',
-                payload: validPayload,
+        describe('when the payload is valid', () => {
+            it('should return a 200', async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+                const id = idResponse.text;
+
+                const validCommandFSA = buildValidCommandFSA(id);
+
+                const result = await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send(validCommandFSA);
+
+                expect(result.status).toBe(httpStatusCodes.ok);
             });
 
-            expect(result.status).toBe(httpStatusCodes.badRequest);
-        });
-    });
-
-    describe('when the payload is valid', () => {
-        it('should return a 200', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
-
-            const id = idResponse.text;
-
-            const validCommandFSA = buildValidCommandFSA(id);
-
-            const result = await request(app.getHttpServer())
-                .post(commandEndpoint)
-                .send(validCommandFSA);
-
-            expect(result.status).toBe(httpStatusCodes.ok);
-        });
-
-        it('should persist the result', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
-
-            const id = idResponse.text;
-
-            const validCommandFSA = buildValidCommandFSA(id);
-
-            const { payload: validPayload } = validCommandFSA;
-
-            await request(app.getHttpServer()).post(commandEndpoint).send(validCommandFSA);
-
-            const result = await testRepositoryProvider
-                .forResource<Song>(ResourceType.song)
-                .fetchById(validPayload.aggregateCompositeIdentifier.id);
-
-            const test = result as Song;
-
-            expect(test.id).toBe(validPayload.aggregateCompositeIdentifier.id);
-
-            // A create event should be the only one in the song's history
-            expect(test.eventHistory).toHaveLength(1);
-
-            expect(test.eventHistory).toMatchSnapshot();
-        });
-    });
-
-    describe('when the payload has an invalid type', () => {
-        describe('when one of the properties on the payload has an invalid type', () => {
-            it('should return a 400', async () => {
+            it('should persist the result', async () => {
                 const idResponse = await request(app.getHttpServer()).post(`/ids`);
 
                 const id = idResponse.text;
@@ -184,95 +170,184 @@ describe('The Command Controller', () => {
 
                 const { payload: validPayload } = validCommandFSA;
 
-                await request(app.getHttpServer())
-                    .post(commandEndpoint)
-                    .send({
-                        ...validCommandFSA,
-                        payload: { ...validPayload, id: [99] },
-                    })
-                    .expect(httpStatusCodes.badRequest);
+                await request(app.getHttpServer()).post(commandEndpoint).send(validCommandFSA);
+
+                const result = await testRepositoryProvider
+                    .forResource<Song>(ResourceType.song)
+                    .fetchById(validPayload.aggregateCompositeIdentifier.id);
+
+                const test = result as Song;
+
+                expect(test.id).toBe(validPayload.aggregateCompositeIdentifier.id);
+
+                // A create event should be the only one in the song's history
+                expect(test.eventHistory).toHaveLength(1);
+
+                expect(test.eventHistory).toMatchSnapshot();
             });
         });
 
-        describe('when there is a superfluous property on the payload', () => {
-            it('should return a 400', async () => {
-                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+        describe('when the payload has an invalid type', () => {
+            describe('when one of the properties on the payload has an invalid type', () => {
+                it('should return a 400', async () => {
+                    const idResponse = await request(app.getHttpServer()).post(`/ids`);
 
-                const id = idResponse.text;
+                    const id = idResponse.text;
 
-                const validCommandFSA = buildValidCommandFSA(id);
+                    const validCommandFSA = buildValidCommandFSA(id);
 
-                const { payload: validPayload } = validCommandFSA;
+                    const { payload: validPayload } = validCommandFSA;
 
-                await request(app.getHttpServer())
-                    .post(commandEndpoint)
-                    .send({
-                        ...validCommandFSA,
-                        payload: { ...validPayload, foo: ["I'm bogus, so bogus!"] },
-                    })
-                    .expect(httpStatusCodes.badRequest);
-            });
-        });
-    });
-
-    describe('when the command violates invariants through the model update', () => {
-        it('should return a 400', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
-
-            const id = idResponse.text;
-
-            const validCommandFSA = buildValidCommandFSA(id);
-
-            const { payload: validPayload } = validCommandFSA;
-
-            const result = await request(app.getHttpServer())
-                .post(commandEndpoint)
-                .send({
-                    ...validCommandFSA,
-                    payload: {
-                        ...validPayload,
-                        title: undefined,
-                        titleEnglish: undefined,
-                    },
+                    await request(app.getHttpServer())
+                        .post(commandEndpoint)
+                        .send({
+                            ...validCommandFSA,
+                            payload: { ...validPayload, id: [99] },
+                        })
+                        .expect(httpStatusCodes.badRequest);
                 });
+            });
 
-            expect(result.status).toBe(httpStatusCodes.badRequest);
+            describe('when there is a superfluous property on the payload', () => {
+                it('should return a 400', async () => {
+                    const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+                    const id = idResponse.text;
+
+                    const validCommandFSA = buildValidCommandFSA(id);
+
+                    const { payload: validPayload } = validCommandFSA;
+
+                    await request(app.getHttpServer())
+                        .post(commandEndpoint)
+                        .send({
+                            ...validCommandFSA,
+                            payload: { ...validPayload, foo: ["I'm bogus, so bogus!"] },
+                        })
+                        .expect(httpStatusCodes.badRequest);
+                });
+            });
         });
+
+        describe('when the command violates invariants through the model update', () => {
+            it('should return a 400', async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+                const id = idResponse.text;
+
+                const validCommandFSA = buildValidCommandFSA(id);
+
+                const { payload: validPayload } = validCommandFSA;
+
+                const result = await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send({
+                        ...validCommandFSA,
+                        payload: {
+                            ...validPayload,
+                            title: undefined,
+                            titleEnglish: undefined,
+                        },
+                    });
+
+                expect(result.status).toBe(httpStatusCodes.badRequest);
+            });
+        });
+
+        describe('when there is an invalid external state', () => {
+            it('should return a 400', async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+
+                const id = idResponse.text;
+
+                const validCommandFSA = buildValidCommandFSA(id);
+
+                const { payload: validPayload } = validCommandFSA;
+
+                await testRepositoryProvider.addFullSnapshot(
+                    buildInMemorySnapshot({
+                        resources: {
+                            song: [existingSong],
+                        },
+                    })
+                );
+
+                const payloadThatAddsSongWithDuplicateId = {
+                    ...validPayload,
+                    id: existingSong.id,
+                };
+
+                const badFSA = {
+                    ...validCommandFSA,
+                    payload: payloadThatAddsSongWithDuplicateId,
+                };
+
+                const result = await request(app.getHttpServer())
+                    .post(commandEndpoint)
+                    .send(badFSA);
+
+                expect(result.status).toBe(httpStatusCodes.badRequest);
+            });
+        });
+
+        // TODO Add a test case where an invalid state transition is attempted
     });
 
-    describe('when there is an invalid external state', () => {
-        it('should return a 400', async () => {
-            const idResponse = await request(app.getHttpServer()).post(`/ids`);
+    describe(`when executing a stream of commands (/commands/bulk)`, () => {
+        describe(`when some commands are valid, some have type errors, and some have execution errors`, () => {
+            it(`should return the expected result`, async () => {
+                const idResponse = await request(app.getHttpServer()).post(`/ids`);
 
-            const id = idResponse.text;
+                const id = idResponse.text;
 
-            const validCommandFSA = buildValidCommandFSA(id);
+                const validCommandFSA = buildValidCommandFSA(id);
 
-            const { payload: validPayload } = validCommandFSA;
+                const missingSongId = buildDummyUuid(404);
 
-            await testRepositoryProvider.addFullSnapshot(
-                buildInMemorySnapshot({
-                    resources: {
-                        song: [existingSong],
-                    },
-                })
-            );
+                const invalidUpdateFsa = {
+                    type: 'TRANSLATE_SONG_TITLE',
+                    payload: buildTestInstance(TranslateSongTitle, {
+                        aggregateCompositeIdentifier: {
+                            id: missingSongId,
+                        },
+                    }),
+                };
 
-            const payloadThatAddsSongWithDuplicateId = {
-                ...validPayload,
-                id: existingSong.id,
-            };
+                const commandStream = [commandWithInvalidType, validCommandFSA, invalidUpdateFsa];
 
-            const badFSA = {
-                ...validCommandFSA,
-                payload: payloadThatAddsSongWithDuplicateId,
-            };
+                const result = await request(app.getHttpServer())
+                    .post(`${commandEndpoint}/bulk`)
+                    .send({ stream: commandStream });
 
-            const result = await request(app.getHttpServer()).post(commandEndpoint).send(badFSA);
+                expect(result.status).toBe(HttpStatusCode.badRequest);
 
-            expect(result.status).toBe(httpStatusCodes.badRequest);
+                const resultsForFsas = result.body as BulkCommandExecutionResult[];
+
+                const resultForInvalidTypeCommand = resultsForFsas.find(
+                    ({ fsa }) => fsa.type === commandWithInvalidType.type
+                );
+
+                expect(resultForInvalidTypeCommand.result).toContain('DO_BAD_THINGS');
+
+                expect(resultForInvalidTypeCommand.result).toContain('no handler registered');
+
+                const resultForValidFsa = resultsForFsas.find(
+                    ({ fsa }) => fsa.type === validCommandFSA.type
+                );
+
+                // TODO `ACK` string constant?
+                expect(resultForValidFsa.result).toBe('ACK');
+
+                const resultForInvalidUpdateFsa = resultsForFsas.find(
+                    ({ fsa }) => fsa.type === invalidUpdateFsa.type
+                );
+
+                expect(resultForInvalidUpdateFsa.result).toContain('no Song with that ID');
+
+                expect(resultForInvalidUpdateFsa.result).toContain(
+                    invalidUpdateFsa.payload.aggregateCompositeIdentifier.id
+                );
+            });
         });
     });
-
-    // TODO Add a test case where an invalid state transition is attempted
 });

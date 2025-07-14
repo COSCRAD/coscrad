@@ -15,7 +15,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, Subject } from 'rxjs';
+import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
@@ -74,7 +76,14 @@ export class CommandController {
             { userId: user.id }
         );
 
-        if (result !== Ack) return sendInternalResultAsHttpResponse(res, result);
+        if (result !== Ack) {
+            return sendInternalResultAsHttpResponse(
+                res,
+                isInternalError(result)
+                    ? result
+                    : new CommandExecutionError([new InternalError(result.message)])
+            );
+        }
 
         this.commandResultSubject.next({
             data: {
@@ -113,17 +122,31 @@ export class CommandController {
             throw new UnauthorizedException();
         }
 
-        // TODO validate that meta comes through
-        const resultsForAllCommands = await this.commandHandlerService.executeStream(commandStream);
+        // TODO validate that additional meta comes through
+        const resultsForAllCommands = await this.commandHandlerService.executeStream(
+            commandStream.map(({ type, payload }) => ({
+                type,
+                payload,
+                meta: {
+                    userId: user.id,
+                },
+            }))
+        );
 
         if (
             resultsForAllCommands.some(
                 (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
             )
-        )
-            return sendInternalResultAsHttpResponse(res, resultsForAllCommands);
-
-        // notify client?
+        ) {
+            return res.status(httpStatusCodes.badRequest).send(
+                resultsForAllCommands.map(({ fsa, result }) => {
+                    return {
+                        fsa,
+                        result: result instanceof Error ? result.toString() : 'ACK',
+                    };
+                })
+            );
+        }
 
         return res.status(httpStatusCodes.ok).send(resultsForAllCommands);
     }

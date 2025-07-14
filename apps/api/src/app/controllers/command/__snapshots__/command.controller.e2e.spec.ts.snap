@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`The Command Controller when the payload is valid should persist the result 1`] = `
+exports[`The Command Controller when executing single a command (/commands) when the payload is valid should persist the result 1`] = `
 [
   {
     "meta": {
       "contributorIds": [],
       "dateCreated": 1664237194356,
-      "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0005",
+      "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0004",
       "userId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
     },
     "payload": {
       "aggregateCompositeIdentifier": {
-        "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0004",
+        "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0003",
         "type": "song",
       },
       "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",

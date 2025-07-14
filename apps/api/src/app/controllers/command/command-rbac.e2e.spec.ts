@@ -13,7 +13,7 @@ import { ArangoDatabaseProvider } from '../../../persistence/database/database.p
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import buildTestData from '../../../test-data/buildTestData';
-import httpStatusCodes from '../../constants/httpStatusCodes';
+import httpStatusCodes, { HttpStatusCode } from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
 const databaseName = generateDatabaseNameForTestSuite();
@@ -82,9 +82,17 @@ describe('Role Based Access Control for commands', () => {
 
             databaseProvider.close();
         });
-        it('should return an unauthroized error', async () => {
+        it('should return an unauthroized error from the single commands endpoint "/commands"', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
+                .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthroized error from the bulk job endpoint "/commands/bulk"', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk`)
                 .send(validCommandFSA)
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
@@ -114,10 +122,18 @@ describe('Role Based Access Control for commands', () => {
         afterAll(async () => {
             await app.close();
         });
-        it('should return an unauthroized error', async () => {
+        it('should return an unauthroized error when executing a single command via /commands', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthroized error when executing a single command via /commands/bulk', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk`)
+                .send({ stream: [validCommandFSA] })
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
@@ -164,10 +180,20 @@ describe('Role Based Access Control for commands', () => {
             afterAll(async () => {
                 await app.close();
             });
-            it('should return ok', async () => {
-                const result = request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
+            it('should return ok for a single command via /commands', async () => {
+                const result = await request(app.getHttpServer())
+                    .post(`/commands`)
+                    .send(validCommandFSA);
 
-                result.expect(httpStatusCodes.ok);
+                expect(result.status).toBe(HttpStatusCode.ok);
+            });
+
+            it('should return ok for a bulk job via /commands/bulk', async () => {
+                const res = await request(app.getHttpServer())
+                    .post(`/commands/bulk`)
+                    .send({ stream: [validCommandFSA] });
+
+                expect(res.status).toBe(HttpStatusCode.ok);
             });
         });
     });

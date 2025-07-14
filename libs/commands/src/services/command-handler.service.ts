@@ -18,7 +18,7 @@ export type CommandConstructorAndMeta<TCommandMeta extends CommandMetadataBase> 
 
 type CommandResult = Error | Ack;
 
-type BulkCommandExecutionResult = {
+export type BulkCommandExecutionResult = {
     fsa: FluxStandardAction & { meta?: Record<string, unknown> };
     result: CommandResult;
 };
@@ -39,7 +39,9 @@ export class CommandHandlerService {
     ): Promise<CommandResult> {
         const handler = this.#handlers.get(type);
 
-        if (!handler) throw new NoCommandHandlerRegisteredForCommandException(type);
+        if (!handler) {
+            return new NoCommandHandlerRegisteredForCommandException(type);
+        }
 
         const commandInstance = this.#buildCommand({ type, payload });
 
@@ -52,7 +54,6 @@ export class CommandHandlerService {
         const allResults: BulkCommandExecutionResult[] = [];
 
         for (const fsa of commandFsas) {
-            // TODO combine meta into the FSA in `execute`
             const result = await this.execute(fsa, fsa.meta);
 
             if (result !== Ack) {
