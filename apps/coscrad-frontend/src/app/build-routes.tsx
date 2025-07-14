@@ -49,7 +49,12 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         | CoscradRoute
         | [RouteFlag, (config?: ConfigurableContent) => CoscradRoute]
     )[] = [
-        // note that the base route '/' is configured dynamically according to `contentConfig.landingPage` below
+        // note that the base route '/' is configured dynamically according to `contentConfig.landingPage` and this static home page may be overridden below
+        {
+            path: '/',
+            label: 'Home',
+            element: <Home />,
+        },
         {
             path: 'About',
             label: 'About',
@@ -171,19 +176,29 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         return [];
     });
 
-    routeDefinitions.push({
-        path: '/',
-        label: 'Home',
-        element:
-            searchResultForDynamicLandingRoute.length === 1 &&
-            isNonEmptyObject(searchResultForDynamicLandingRoute[0]) ? (
-                searchResultForDynamicLandingRoute[0].element
-            ) : (
-                <Home />
-            ),
-    });
+    if (
+        searchResultForDynamicLandingRoute.length === 1 &&
+        isNonEmptyObject(searchResultForDynamicLandingRoute[0])
+    ) {
+        const dynamicHomeRouteDefinition = {
+            path: '/',
+            label: 'Home',
+            element: searchResultForDynamicLandingRoute[0].element,
+        };
 
-    return routeDefinitions
-        .filter((input) => !Array.isArray(input) || input[0])
-        .map((input) => (Array.isArray(input) ? input[1](contentConfig) : input));
+        routeDefinitions[0] = dynamicHomeRouteDefinition;
+    }
+
+    return routeDefinitions.flatMap(
+        // filter + map
+        (input) =>
+            // keep static routes and dynamic ones with true for the 0th element of the tuple (the keep flag)
+            !Array.isArray(input) || input[0]
+                ? // If we have a tuple, the 1st element is a route definition factory and we inject the config, otherwise, we have a static route definition
+                  [Array.isArray(input) ? input[1](contentConfig) : input]
+                : []
+    );
+
+    //    .filter((input) => !Array.isArray(input) || input[0])
+    //  .map((input) => (Array.isArray(input) ? input[1](contentConfig) : input));
 };
