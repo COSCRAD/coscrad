@@ -1,4 +1,8 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CategorizableCompositeIdentifier,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
@@ -17,6 +21,7 @@ import { BaseEvent } from '../../event-sourcing';
         id: buildDummyUuid(3),
         label: 'trees',
         name: buildMultilingualTextWithSingleItem('trees'),
+        members: [],
     },
 })
 /**
@@ -45,12 +50,18 @@ export class EventSourcedTagRecordForResourceViewModel {
     })
     name: MultilingualText;
 
-    constructor({ id, label }: DTO<EventSourcedTagRecordForResourceViewModel>) {
+    // TODO add decorator
+    members: CategorizableCompositeIdentifier[];
+
+    constructor({ id, label, members }: DTO<EventSourcedTagRecordForResourceViewModel>) {
         this.id = id;
 
         this.label = label;
 
         this.name = buildMultilingualTextWithSingleItem(this.label);
+
+        // TODO clone
+        this.members = members;
     }
 
     apply(event: BaseEvent): EventSourcedTagRecordForResourceViewModel {

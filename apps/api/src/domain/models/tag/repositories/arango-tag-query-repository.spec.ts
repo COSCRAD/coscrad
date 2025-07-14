@@ -1,3 +1,4 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -112,6 +113,63 @@ describe(`ArangoTagQueryRepository`, () => {
             const result = await testQueryRepository.fetchMany();
 
             expect(result).toHaveLength(existingTags.length);
+        });
+    });
+
+    describe(`count`, () => {
+        const existingTag = tagIds.map((tagId, index) =>
+            buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+                id: tagId,
+                label: `tag number ${index}`,
+            })
+        );
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany(existingTag);
+        });
+
+        it(`should return them`, async () => {
+            const result = await testQueryRepository.count();
+
+            expect(result).toBe(existingTag.length);
+        });
+    });
+
+    describe(`tagResourceOrNote`, () => {
+        const targetResourceCompositeIdentifier = {
+            type: 'widget' as ResourceType,
+            id: buildDummyUuid(666),
+        };
+
+        const existingTags = tagIds.map((tagId) =>
+            buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+                id: tagId,
+            })
+        );
+
+        const targetTag = existingTags[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany(existingTags);
+        });
+
+        it(`should add the resource as a tag member`, async () => {
+            await testQueryRepository.tagResourceOrNote(
+                targetTag.id,
+                targetResourceCompositeIdentifier
+            );
+
+            const result = (await testQueryRepository.fetchById(
+                targetTag.id
+            )) as EventSourcedTagRecordForResourceViewModel;
+
+            expect(result.members).toHaveLength(1);
+
+            expect(result.members[0]).toEqual(targetResourceCompositeIdentifier);
         });
     });
 });

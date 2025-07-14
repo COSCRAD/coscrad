@@ -48,7 +48,7 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
     }
 
     async count(): Promise<number> {
-        throw new Error('Method not implemented.');
+        return this.database.getCount();
     }
 
     async create(tag: EventSourcedTagRecordForResourceViewModel): Promise<void> {
