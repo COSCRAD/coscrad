@@ -21,7 +21,7 @@ export class TranslateTermCommandHandler extends BaseUpdateCommandHandler<Term> 
         term: Term,
         { translation, languageCode }: TranslateTerm
     ): ResultOrError<Term> {
-        return term.translate(translation, languageCode);
+        return term.provideFreeTranslation(translation, languageCode);
     }
 
     protected validateExternalState(

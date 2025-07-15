@@ -182,6 +182,9 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
     translate(itemDto: DTO<MultilingualTextItem>): ResultOrError<this> {
         const item = new MultilingualTextItem(itemDto);
 
+        /**
+         * TODO We should allow having a free and literal translation in the same translation language.
+         */
         if (this.has(item.languageCode)) return new CannotAddDuplicateTranslationError(item, this);
 
         // TODO make this return an error if there is a conflict with existing items

@@ -12,6 +12,8 @@ import {
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
+import { ProvideLiteralTranslationOfTerm } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command';
+import { ProvideLiteralTranslationOfTermCommandHandler } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command-handler';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
 
@@ -27,12 +29,18 @@ import { PersistenceModule } from '../../persistence/persistence.module';
         TranslateTermCommandHandler,
         ElicitTermFromPromptCommandHandler,
         AddAudioForTermCommandHandler,
-        ...[CreateTerm, CreatePromptTerm, TranslateTerm, ElicitTermFromPrompt, AddAudioForTerm].map(
-            (Ctor) => ({
-                provide: Ctor,
-                useValue: Ctor,
-            })
-        ),
+        ProvideLiteralTranslationOfTermCommandHandler,
+        ...[
+            CreateTerm,
+            CreatePromptTerm,
+            TranslateTerm,
+            ElicitTermFromPrompt,
+            AddAudioForTerm,
+            ProvideLiteralTranslationOfTerm,
+        ].map((Ctor) => ({
+            provide: Ctor,
+            useValue: Ctor,
+        })),
     ],
     exports: [CreateTerm, CreatePromptTerm, TranslateTerm, ElicitTermFromPrompt, AddAudioForTerm],
 })

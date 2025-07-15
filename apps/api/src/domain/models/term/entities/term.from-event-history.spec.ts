@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { TestEventStream } from '../../../../test-data/events/test-event-stream';
@@ -19,6 +19,7 @@ import {
 } from '../commands';
 import { PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
+import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
 import { TERM_TRANSLATED } from '../commands/translate-term/constants';
 import { Term } from './term.entity';
 
@@ -113,6 +114,44 @@ describe(`Term.fromEventHistory`, () => {
                     const { eventHistory } = result as Term;
 
                     expect(eventHistory).toHaveLength(1);
+                });
+            });
+
+            describe(`when the term is created then a literal translation is provided`, () => {
+                it(`should add the literal translation`, () => {
+                    const literalTranslation = 'say you in what way is this';
+
+                    const result = Term.fromEventHistory(
+                        termCreated
+                            .andThen<LiteralTranslationOfTermProvided>({
+                                type: 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
+                                payload: {
+                                    literalTranslation,
+                                    translationLanguageCode,
+                                },
+                            })
+                            .as({
+                                type: AggregateType.term,
+                                id: termId,
+                            }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const { eventHistory } = result as Term;
+
+                    expect(eventHistory).toHaveLength(2);
+
+                    const { text: foundTranslationText, role: foundTranslationItemRole } = (
+                        result as Term
+                    ).text.getTranslation(translationLanguageCode) as MultilingualTextItem;
+
+                    expect(foundTranslationText).toBe(literalTranslation);
+
+                    expect(foundTranslationItemRole).toBe(
+                        MultilingualTextItemRole.literalTranslation
+                    );
                 });
             });
 
