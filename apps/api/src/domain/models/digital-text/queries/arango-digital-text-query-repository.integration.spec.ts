@@ -1014,9 +1014,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
     });
 
     describe(`importPages`, () => {
-        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-            pages: [],
-        });
+        let targetDigitalText: DigitalTextViewModel;
 
         const audioIds = [301, 302, 303, 304, 305, 306].map(buildDummyUuid);
 
@@ -1070,7 +1068,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             );
         });
 
-        it(`should import all page content`, async () => {
+        const assertPagesAdded = async () => {
             await testQueryRepository.importPages(targetDigitalText.id, pagesToImport);
 
             const { pages } = (await testQueryRepository.fetchById(
@@ -1078,6 +1076,26 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             )) as DigitalTextViewModel;
 
             expect(pages).toHaveLength(pagesToImport.length);
+        };
+
+        describe(`when the existing pages is an empty array`, () => {
+            targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: [],
+            });
+
+            it(`should import all page content`, async () => {
+                await assertPagesAdded();
+            });
+        });
+
+        describe(`when the existing pages is null`, () => {
+            targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                pages: null,
+            });
+
+            it(`should import all page content`, async () => {
+                await assertPagesAdded();
+            });
         });
     });
 

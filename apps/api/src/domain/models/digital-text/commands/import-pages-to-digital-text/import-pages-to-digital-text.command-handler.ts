@@ -12,7 +12,7 @@ import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMet
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { DigitalText } from '../../entities';
 import { ImportPagesToDigitalText } from './import-pages-to-digital-text.command';
-import { PagesImportedToDigitalText } from './import-pages-to-digital-text.event';
+import { PagesImportedToDigitalText } from './pages-imported-to-digital-text.event';
 
 @CommandHandler(ImportPagesToDigitalText)
 export class ImportPagesToDigitalTextCommandHandler extends BaseUpdateCommandHandler<DigitalText> {
