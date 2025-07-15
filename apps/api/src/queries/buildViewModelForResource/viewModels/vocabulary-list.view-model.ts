@@ -33,7 +33,7 @@ import { DTO } from '../../../types/DTO';
 import { ConnectionRecordForResourceViewModel } from './connection-record-for-resource.view-model';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 import { TermViewModel } from './term.view-model';
 
 @CoscradDataExample<TermViewForVocabularyListEntry>({
@@ -219,7 +219,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         description: 'a summary of the tags that have been applied to this resource',
         isArray: true,
     })
-    tags: EventSourcedTagRecordForResourceViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
@@ -319,9 +319,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
 
         this.accessControlList = new AccessControlList(accessControlList);
 
-        this.tags = Array.isArray(tags)
-            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
-            : [];
+        this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));

@@ -267,7 +267,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": true,
         "isOptional": false,
         "label": "tags",
-        "name": "EventSourcedTagRecordForResourceViewModel",
+        "name": "EventSourcedTagViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -2535,7 +2535,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": true,
         "isOptional": false,
         "label": "tags",
-        "name": "EventSourcedTagRecordForResourceViewModel",
+        "name": "EventSourcedTagViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",
@@ -3153,7 +3153,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "isArray": true,
         "isOptional": false,
         "label": "tags",
-        "name": "EventSourcedTagRecordForResourceViewModel",
+        "name": "EventSourcedTagViewModel",
         "schema": {
           "id": {
             "coscradDataType": "NON_EMPTY_STRING",

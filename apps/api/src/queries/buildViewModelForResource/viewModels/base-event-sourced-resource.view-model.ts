@@ -10,7 +10,7 @@ import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { DTO } from '../../../types/DTO';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 /**
  * We are slowly phasing out the `BaseResourceViewModel`, which is state-based,
@@ -62,7 +62,7 @@ export abstract class BaseEventSourcedResourceViewModel
         description: 'a summary of the tags that have been applied to this resource',
         isArray: true,
     })
-    tags: EventSourcedTagRecordForResourceViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     constructor(dto: DTO<BaseEventSourcedResourceViewModel>) {
         if (!dto) return;
@@ -83,9 +83,7 @@ export abstract class BaseEventSourcedResourceViewModel
 
         this.accessControlList = new AccessControlList(accessControlList);
 
-        this.tags = Array.isArray(tags)
-            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
-            : [];
+        this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));

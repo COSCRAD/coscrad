@@ -3,7 +3,7 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { TagCreated } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { TestEventStream } from '../../../test-data/events/test-event-stream';
 import { DTO } from '../../../types/DTO';
-import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 describe(`EventSourcedTagViewModel.fromEventHistory`, () => {
     const tagId = buildDummyUuid(1);
@@ -24,9 +24,9 @@ describe(`EventSourcedTagViewModel.fromEventHistory`, () => {
     describe(`when a tag is first created`, () => {
         const eventHistory = tagCreated;
 
-        const result = new EventSourcedTagRecordForResourceViewModel({
+        const result = new EventSourcedTagViewModel({
             id: tagId,
-        } as DTO<EventSourcedTagRecordForResourceViewModel>).applyStream(eventHistory);
+        } as DTO<EventSourcedTagViewModel>).applyStream(eventHistory);
 
         it(`should apply the appropriate label and name`, () => {
             const { name } = result;

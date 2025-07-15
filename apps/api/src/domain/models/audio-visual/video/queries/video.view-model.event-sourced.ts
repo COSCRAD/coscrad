@@ -13,7 +13,7 @@ import {
     TagViewModel,
 } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextFromBilingualText } from '../../../../common/build-multilingual-text-from-bilingual-text';
@@ -88,7 +88,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
         description: 'a summary of the tags that have been applied to this resource',
         isArray: true,
     })
-    tags: EventSourcedTagRecordForResourceViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
@@ -142,9 +142,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
 
         this.accessControlList = new AccessControlList(accessControlList);
 
-        this.tags = Array.isArray(tags)
-            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
-            : [];
+        this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));

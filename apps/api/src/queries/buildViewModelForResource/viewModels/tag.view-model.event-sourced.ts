@@ -1,4 +1,8 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CategorizableCompositeIdentifier,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
@@ -7,16 +11,18 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { TagCreatedPayload } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { Tag } from '../../../domain/models/tag/tag.entity';
 import { AggregateId } from '../../../domain/types/AggregateId';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { BaseEvent } from '../../event-sourcing';
 
-@CoscradDataExample<EventSourcedTagRecordForResourceViewModel>({
+@CoscradDataExample<EventSourcedTagViewModel>({
     example: {
         type: AggregateType.tag,
         id: buildDummyUuid(3),
         label: 'trees',
         name: buildMultilingualTextWithSingleItem('trees'),
+        members: [],
     },
 })
 /**
@@ -26,7 +32,7 @@ import { BaseEvent } from '../../event-sourcing';
  * can help us create a denormalized representation of the tags for a given
  * resource. Hence the redundancy between this class and `TagViewModel`.
  */
-export class EventSourcedTagRecordForResourceViewModel {
+export class EventSourcedTagViewModel {
     readonly type = AggregateType.tag;
 
     @FromDomainModel(Tag)
@@ -45,15 +51,21 @@ export class EventSourcedTagRecordForResourceViewModel {
     })
     name: MultilingualText;
 
-    constructor({ id, label }: DTO<EventSourcedTagRecordForResourceViewModel>) {
+    // TODO add decorator
+    members: CategorizableCompositeIdentifier[];
+
+    constructor({ id, label, members }: DTO<EventSourcedTagViewModel>) {
         this.id = id;
 
         this.label = label;
 
         this.name = buildMultilingualTextWithSingleItem(this.label);
+
+        // TODO clone
+        this.members = members;
     }
 
-    apply(event: BaseEvent): EventSourcedTagRecordForResourceViewModel {
+    apply(event: BaseEvent): EventSourcedTagViewModel {
         const { payload, type: eventType } = event;
 
         if (this.isForMe(payload)) {
@@ -104,7 +116,11 @@ export class EventSourcedTagRecordForResourceViewModel {
         return type === this.type && id === this.id;
     }
 
-    public static fromDto(dto: DTO<EventSourcedTagRecordForResourceViewModel>) {
-        return new EventSourcedTagRecordForResourceViewModel(dto);
+    public toDto(): DTO<EventSourcedTagViewModel> {
+        return cloneToPlainObject(this);
+    }
+
+    public static fromDto(dto: DTO<EventSourcedTagViewModel>) {
+        return new EventSourcedTagViewModel(dto);
     }
 }

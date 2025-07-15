@@ -27,7 +27,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedTagRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -183,7 +183,7 @@ describe(`ArangoVideoQueryRepository`, () => {
     describe(`tag`, () => {
         const existingTagLabel = 'plants';
 
-        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+        const existingTag = buildTestInstance(EventSourcedTagViewModel, {
             id: buildDummyUuid(90),
             label: existingTagLabel,
             name: buildMultilingualTextWithSingleItem(existingTagLabel),

@@ -33,7 +33,7 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { ConnectionRecordForResourceViewModel } from './connection-record-for-resource.view-model';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from './tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 export class VocabularyListRecordForTerm {
     @UUID({
@@ -125,12 +125,12 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     contributions: ContributionSummary[];
 
-    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
+    @NestedDataType(EventSourcedTagViewModel, {
         label: 'tags',
         description: 'a summary of the tags that have been applied to this resource',
         isArray: true,
     })
-    tags: EventSourcedTagRecordForResourceViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     @NestedDataType(NoteRecordForResourceViewModel, {
         label: 'notes',
@@ -235,9 +235,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         this.accessControlList = new AccessControlList(accessControlList);
 
-        this.tags = Array.isArray(tags)
-            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
-            : [];
+        this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
