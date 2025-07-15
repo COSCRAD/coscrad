@@ -183,7 +183,8 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
         const item = new MultilingualTextItem(itemDto);
 
         /**
-         * TODO We should allow having a free and literal translation in the same translation language.
+         * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-214?atlOrigin=eyJpIjoiOWU0OGNhMjQ5ODFiNDMzZWIyNGQ4MTk1NTE5YjY3OTEiLCJwIjoiaiJ9]
+         * We should allow having a free and literal translation in the same translation language.
          */
         if (this.has(item.languageCode)) return new CannotAddDuplicateTranslationError(item, this);
 
