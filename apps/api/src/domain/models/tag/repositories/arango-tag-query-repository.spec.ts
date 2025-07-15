@@ -172,4 +172,28 @@ describe(`ArangoTagQueryRepository`, () => {
             expect(result.members[0]).toEqual(targetResourceCompositeIdentifier);
         });
     });
+
+    describe(`relabel`, () => {
+        const targetTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            label: 'old label',
+        });
+
+        const newLabel = 'new label';
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createMany([targetTag]);
+        });
+
+        it(`should update the tag label`, async () => {
+            await testQueryRepository.relabel(targetTag.id, newLabel);
+
+            const result = (await testQueryRepository.fetchById(
+                targetTag.id
+            )) as EventSourcedTagRecordForResourceViewModel;
+
+            expect(result.label).toEqual(newLabel);
+        });
+    });
 });

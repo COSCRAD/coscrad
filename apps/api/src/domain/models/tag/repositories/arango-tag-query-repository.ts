@@ -64,8 +64,10 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
         throw new Error('Method not implemented.');
     }
 
-    async relabel(_tagId: string, _newLabel: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async relabel(tagId: string, newLabel: string): Promise<void> {
+        await this.database.update(tagId, {
+            label: newLabel,
+        });
     }
 
     async tagResourceOrNote(
