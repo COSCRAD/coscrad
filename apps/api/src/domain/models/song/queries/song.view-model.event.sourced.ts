@@ -10,7 +10,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -53,7 +53,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
     contributions: ContributionSummary[];
     notes: NoteRecordForResourceViewModel[];
     connections: ConnectionRecordForResourceViewModel[];
-    tags: EventSourcedTagRecordForResourceViewModel[];
+    tags: EventSourcedTagViewModel[];
 
     @FromSong
     readonly lyrics?: MultilingualText;
@@ -122,9 +122,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
             ? new AccessControlList(accessControlList)
             : new AccessControlList();
 
-        this.tags = Array.isArray(tags)
-            ? tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t))
-            : [];
+        this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
         if (Array.isArray(notes))
             this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));

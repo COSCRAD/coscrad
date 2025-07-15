@@ -62,9 +62,15 @@ describe(`ArangoTagQueryRepository`, () => {
     });
 
     describe(`fetchById`, () => {
+        const existingMember = {
+            type: 'widget' as ResourceType,
+            id: buildDummyUuid(5),
+        };
+
         const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
             id: tagIds[0],
             label: 'birds',
+            members: [existingMember],
         });
 
         beforeEach(async () => {
@@ -117,7 +123,7 @@ describe(`ArangoTagQueryRepository`, () => {
     });
 
     describe(`count`, () => {
-        const existingTag = tagIds.map((tagId, index) =>
+        const existingTags = tagIds.map((tagId, index) =>
             buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
                 id: tagId,
                 label: `tag number ${index}`,
@@ -127,13 +133,13 @@ describe(`ArangoTagQueryRepository`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
-            await testQueryRepository.createMany(existingTag);
+            await testQueryRepository.createMany(existingTags);
         });
 
-        it(`should return them`, async () => {
+        it(`should return the correct count`, async () => {
             const result = await testQueryRepository.count();
 
-            expect(result).toBe(existingTag.length);
+            expect(result).toBe(existingTags.length);
         });
     });
 

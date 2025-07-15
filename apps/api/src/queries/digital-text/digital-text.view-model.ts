@@ -26,7 +26,7 @@ import { CoscradDataExample } from '../../test-data/utilities';
 import { DTO } from '../../types/DTO';
 import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { BaseEvent } from '../event-sourcing';
 import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 
@@ -48,7 +48,7 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
 export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     accessControlList: AccessControlList = new AccessControlList();
 
-    #allTags: EventSourcedTagRecordForResourceViewModel[] = [];
+    #allTags: EventSourcedTagViewModel[] = [];
 
     public readonly type = AggregateType.digitalText;
 
@@ -70,12 +70,12 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     public isPublished = false;
 
-    @NestedDataType(EventSourcedTagRecordForResourceViewModel, {
+    @NestedDataType(EventSourcedTagViewModel, {
         label: 'tags',
         description: 'tags that apply to this resource',
         isArray: true,
     })
-    public tags: EventSourcedTagRecordForResourceViewModel[] = [];
+    public tags: EventSourcedTagViewModel[] = [];
 
     @NestedDataType(DigitalTextPage, {
         label: 'pages',
@@ -143,7 +143,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         this.isPublished = isBoolean(isPublished) ? isPublished : false;
 
         if (Array.isArray(tags)) {
-            this.tags = tags.map((t) => new EventSourcedTagRecordForResourceViewModel(t));
+            this.tags = tags.map((t) => new EventSourcedTagViewModel(t));
         } else {
             this.tags = [];
         }
@@ -321,9 +321,9 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
                 aggregateCompositeIdentifier: { id },
             } = payload as TagCreated['payload'];
 
-            const emptyTag = new EventSourcedTagRecordForResourceViewModel({
+            const emptyTag = new EventSourcedTagViewModel({
                 id,
-            } as DTO<EventSourcedTagRecordForResourceViewModel>);
+            } as DTO<EventSourcedTagViewModel>);
 
             // TODO Do we need to update this.tags as well? Do we duplicate some tags between the two lists?
             this.#allTags = [...this.#allTags, emptyTag.apply(event)];
