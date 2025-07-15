@@ -12,6 +12,7 @@ import {
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
     PageAddedToDigitalText,
+    PagesImportedToDigitalText,
     TranslateDigitalTextPageContent,
     TranslateDigitalTextTitle,
 } from '../../domain/models/digital-text/commands';
@@ -28,6 +29,7 @@ import { CreateDigitalText } from '../../domain/models/digital-text/commands/cre
 import { CreateDigitalTextCommandHandler } from '../../domain/models/digital-text/commands/create-digital-text.command-handler';
 import { DigitalTextCreated } from '../../domain/models/digital-text/commands/digital-text-created.event';
 import { DigitalTextCreatedEventHandler } from '../../domain/models/digital-text/commands/digital-text-created.event-handler';
+import { PagesImportedToDigitalTextEventHandler } from '../../domain/models/digital-text/commands/import-pages-to-digital-text/pages-imported-to-digital-text.event-handler';
 import { DigitalTextPageContentTranslatedEventHandler } from '../../domain/models/digital-text/commands/translate-digital-text-page-content/digital-text-page-content-translated.event-handler';
 import { DigitalTextTitleTranslatedEventHandler } from '../../domain/models/digital-text/commands/translate-digital-text-title/digital-text-title-translated.event-handler';
 import { DigitalText } from '../../domain/models/digital-text/entities/digital-text.entity';
@@ -59,6 +61,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         DigitalTextPageContentTranslatedEventHandler,
         AudioAddedForDigitalTextPageEventHandler,
         AudioAddedForDigitalTextTitleEventHandler,
+        PagesImportedToDigitalTextEventHandler,
         ...[
             // Domain Model
             DigitalText,
@@ -79,6 +82,7 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
             AudioAddedForDigitalTextPage,
             AudioAddedForDigitalTextTitle,
             DigitalTextTitleTranslated,
+            PagesImportedToDigitalText,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
