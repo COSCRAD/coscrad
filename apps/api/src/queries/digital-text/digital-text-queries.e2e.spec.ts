@@ -28,7 +28,7 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import { buildTestInstance } from '../../test-data/utilities';
 import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 const indexEndpoint = `/resources/digitalTexts`;
@@ -53,7 +53,7 @@ const publicDigitalText = buildTestInstance(DigitalTextViewModel, {
     name: buildMultilingualTextWithSingleItem('published text'),
     isPublished: true,
     accessControlList: new AccessControlList(),
-    tags: [buildTestInstance(EventSourcedTagRecordForResourceViewModel)],
+    tags: [buildTestInstance(EventSourcedTagViewModel)],
 });
 
 const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
@@ -62,7 +62,7 @@ const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
     isPublished: false,
     // empty
     accessControlList: new AccessControlList(),
-    tags: [buildTestInstance(EventSourcedTagRecordForResourceViewModel)],
+    tags: [buildTestInstance(EventSourcedTagViewModel)],
     notes: [buildTestInstance(NoteRecordForResourceViewModel, {})],
     connections: [buildTestInstance(ConnectionRecordForResourceViewModel)],
     pages: ['i', 'ii', 'iii'].map((pageId) =>

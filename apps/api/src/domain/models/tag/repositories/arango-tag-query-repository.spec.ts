@@ -10,7 +10,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ArangoTagQueryRepository } from './arango-tag-query-repository';
@@ -67,7 +67,7 @@ describe(`ArangoTagQueryRepository`, () => {
             id: buildDummyUuid(5),
         };
 
-        const existingTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+        const existingTag = buildTestInstance(EventSourcedTagViewModel, {
             id: tagIds[0],
             label: 'birds',
             members: [existingMember],
@@ -85,7 +85,7 @@ describe(`ArangoTagQueryRepository`, () => {
 
                 expect(result).not.toBe(NotFound);
 
-                const { label } = result as EventSourcedTagRecordForResourceViewModel;
+                const { label } = result as EventSourcedTagViewModel;
 
                 // TODO check members
                 expect(label).toBe(existingTag.label);
@@ -103,7 +103,7 @@ describe(`ArangoTagQueryRepository`, () => {
 
     describe(`fetchMany`, () => {
         const existingTags = tagIds.map((tagId, index) =>
-            buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            buildTestInstance(EventSourcedTagViewModel, {
                 id: tagId,
                 label: `tag number: ${index}`,
             })
@@ -124,7 +124,7 @@ describe(`ArangoTagQueryRepository`, () => {
 
     describe(`count`, () => {
         const existingTags = tagIds.map((tagId, index) =>
-            buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            buildTestInstance(EventSourcedTagViewModel, {
                 id: tagId,
                 label: `tag number ${index}`,
             })
@@ -150,7 +150,7 @@ describe(`ArangoTagQueryRepository`, () => {
         };
 
         const existingTags = tagIds.map((tagId) =>
-            buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+            buildTestInstance(EventSourcedTagViewModel, {
                 id: tagId,
             })
         );
@@ -171,7 +171,7 @@ describe(`ArangoTagQueryRepository`, () => {
 
             const result = (await testQueryRepository.fetchById(
                 targetTag.id
-            )) as EventSourcedTagRecordForResourceViewModel;
+            )) as EventSourcedTagViewModel;
 
             expect(result.members).toHaveLength(1);
 
@@ -180,7 +180,7 @@ describe(`ArangoTagQueryRepository`, () => {
     });
 
     describe(`relabel`, () => {
-        const targetTag = buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+        const targetTag = buildTestInstance(EventSourcedTagViewModel, {
             label: 'old label',
         });
 
@@ -197,7 +197,7 @@ describe(`ArangoTagQueryRepository`, () => {
 
             const result = (await testQueryRepository.fetchById(
                 targetTag.id
-            )) as EventSourcedTagRecordForResourceViewModel;
+            )) as EventSourcedTagViewModel;
 
             expect(result.label).toEqual(newLabel);
         });

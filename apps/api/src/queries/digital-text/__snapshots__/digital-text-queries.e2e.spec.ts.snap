@@ -191,6 +191,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
       "label": "trees",
+      "members": [],
       "name": {
         "items": [
           {
@@ -300,6 +301,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
           "label": "trees",
+          "members": [],
           "name": {
             "items": [
               {
@@ -504,6 +506,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
           "label": "trees",
+          "members": [],
           "name": {
             "items": [
               {
@@ -787,6 +790,7 @@ exports[`When querying for a digital text when the user is a project admin detai
     {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
       "label": "trees",
+      "members": [],
       "name": {
         "items": [
           {
@@ -896,6 +900,7 @@ exports[`When querying for a digital text when the user is a project admin index
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
           "label": "trees",
+          "members": [],
           "name": {
             "items": [
               {
@@ -1100,6 +1105,7 @@ exports[`When querying for a digital text when the user is a project admin index
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
           "label": "trees",
+          "members": [],
           "name": {
             "items": [
               {

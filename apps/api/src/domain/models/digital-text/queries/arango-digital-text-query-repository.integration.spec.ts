@@ -26,7 +26,7 @@ import {
     TagViewModel,
 } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { EventSourcedTagRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
@@ -146,7 +146,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
         const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
             id: digitalTextId,
             tags: ['plants', 'animals'].map((label) =>
-                buildTestInstance(EventSourcedTagRecordForResourceViewModel, {
+                buildTestInstance(EventSourcedTagViewModel, {
                     label,
                 })
             ),

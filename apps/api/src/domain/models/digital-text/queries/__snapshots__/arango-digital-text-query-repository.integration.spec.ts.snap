@@ -180,9 +180,10 @@ DigitalTextViewModel {
     },
   ],
   "tags": [
-    EventSourcedTagRecordForResourceViewModel {
+    EventSourcedTagViewModel {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
       "label": "plants",
+      "members": [],
       "name": MultilingualText {
         "items": [
           MultilingualTextItem {
@@ -194,9 +195,10 @@ DigitalTextViewModel {
       },
       "type": "tag",
     },
-    EventSourcedTagRecordForResourceViewModel {
+    EventSourcedTagViewModel {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
       "label": "animals",
+      "members": [],
       "name": MultilingualText {
         "items": [
           MultilingualTextItem {
