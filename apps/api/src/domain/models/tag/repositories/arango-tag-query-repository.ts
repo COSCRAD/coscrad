@@ -69,9 +69,23 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
     }
 
     async tagResourceOrNote(
-        _tagId: string,
-        _categorizableCompositeIdentifier: CategorizableCompositeIdentifier
+        tagId: string,
+        categorizableCompositeIdentifier: CategorizableCompositeIdentifier
     ): Promise<void> {
-        throw new Error('Method not implemented.');
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+            members: doc.members == null ? [@newMember] : APPEND(doc.members,@newMember)
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'tag__VIEWS',
+            id: tagId,
+            newMember: categorizableCompositeIdentifier,
+        };
+
+        await this.database.query({ query, bindVars });
     }
 }
