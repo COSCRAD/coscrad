@@ -29,7 +29,6 @@ const languageCodeForTitle = LanguageCode.Chilcotin;
 
 const existingDigitalTextView = buildTestInstance(DigitalTextViewModel, {
     id: digitalTextId,
-    // double check that the queries is robust to this
     audioForTitle: null,
     name: buildMultilingualTextWithSingleItem('existing title', languageCodeForTitle),
 });
