@@ -1125,38 +1125,76 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
         const audioItemIdForOtherLanguage = buildDummyUuid(99);
 
         describe(`when there is no audio for the title yet`, () => {
-            const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-                name: buildMultilingualTextWithSingleItem(
-                    'digital text name',
-                    languageCodeForTitle
-                ),
-                audioForTitle: MultilingualAudio.buildEmpty(),
+            describe(`when the existing audioForTitle is a DTO for an empty multilingual audio`, () => {
+                const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                    name: buildMultilingualTextWithSingleItem(
+                        'digital text name',
+                        languageCodeForTitle
+                    ),
+                    audioForTitle: MultilingualAudio.buildEmpty(),
+                });
+
+                beforeEach(async () => {
+                    await databaseProvider.clearViews();
+
+                    await testQueryRepository.create(targetDigitalText);
+
+                    await testAudioRepository.create(targetAudioItem);
+                });
+
+                it(`should add the audio for the title`, async () => {
+                    await testQueryRepository.addAudioForTitle(
+                        targetDigitalText.id,
+                        targetAudioItem.id,
+                        languageCodeForTitle
+                    );
+
+                    const { audioForTitle } = (await testQueryRepository.fetchById(
+                        targetDigitalText.id
+                    )) as DigitalTextViewModel;
+
+                    expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+
+                    expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(
+                        targetAudioItem.id
+                    );
+                });
             });
 
-            beforeEach(async () => {
-                await databaseProvider.clearViews();
+            describe(`when the existing audioForTitle is null`, () => {
+                const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
+                    name: buildMultilingualTextWithSingleItem(
+                        'digital text name',
+                        languageCodeForTitle
+                    ),
+                    audioForTitle: null,
+                });
 
-                await testQueryRepository.create(targetDigitalText);
+                beforeEach(async () => {
+                    await databaseProvider.clearViews();
 
-                await testAudioRepository.create(targetAudioItem);
-            });
+                    await testQueryRepository.create(targetDigitalText);
 
-            it(`should add the audio for the title`, async () => {
-                await testQueryRepository.addAudioForTitle(
-                    targetDigitalText.id,
-                    targetAudioItem.id,
-                    languageCodeForTitle
-                );
+                    await testAudioRepository.create(targetAudioItem);
+                });
 
-                const { audioForTitle } = (await testQueryRepository.fetchById(
-                    targetDigitalText.id
-                )) as DigitalTextViewModel;
+                it(`should add the audio for the title`, async () => {
+                    await testQueryRepository.addAudioForTitle(
+                        targetDigitalText.id,
+                        targetAudioItem.id,
+                        languageCodeForTitle
+                    );
 
-                expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+                    const { audioForTitle } = (await testQueryRepository.fetchById(
+                        targetDigitalText.id
+                    )) as DigitalTextViewModel;
 
-                expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(
-                    targetAudioItem.id
-                );
+                    expect(audioForTitle.hasAudioIn(languageCodeForTitle)).toBe(true);
+
+                    expect(audioForTitle.getIdForAudioIn(languageCodeForTitle)).toBe(
+                        targetAudioItem.id
+                    );
+                });
             });
         });
 
