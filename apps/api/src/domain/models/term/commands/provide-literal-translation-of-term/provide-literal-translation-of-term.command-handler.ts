@@ -37,6 +37,9 @@ export class ProvideLiteralTranslationOfTermCommandHandler extends BaseUpdateCom
         payload: ProvideLiteralTranslationOfTerm,
         eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new LiteralTranslationOfTermProvided(payload, eventMeta);
+        return LiteralTranslationOfTermProvided.fromProvideLiteralTranslationOfTermCommand(
+            payload,
+            eventMeta
+        );
     }
 }

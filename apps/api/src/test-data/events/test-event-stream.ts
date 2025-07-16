@@ -67,7 +67,10 @@ import {
 import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
-import { LiteralTranslationOfTermProvided } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
+import {
+    LiteralTranslationOfTermProvided,
+    LiteralTranslationOfTermProvidedPayload,
+} from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
     EntriesImportedToVocabularyList,
@@ -408,14 +411,20 @@ const buildTermTranslated = (
 };
 
 const buildLiteralTranslationProvidedForTerm = (
-    payloadOverrides: DeepPartial<TermTranslatedPayload>,
+    payloadOverrides: DeepPartial<LiteralTranslationOfTermProvidedPayload>,
     buildMetadata: EventMetadataBuilder
 ) => {
-    return buildTestInstance(LiteralTranslationOfTermProvided, {
+    const defaultPayload: LiteralTranslationOfTermProvidedPayload = buildTestInstance(
+        LiteralTranslationOfTermProvided
+    ).payload;
+
+    const result = buildTestInstance(LiteralTranslationOfTermProvided, {
         type: 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
-        payload: payloadOverrides,
+        payload: clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         meta: buildMetadata(),
     });
+
+    return result;
 };
 
 const buildPromptTermCreated = (

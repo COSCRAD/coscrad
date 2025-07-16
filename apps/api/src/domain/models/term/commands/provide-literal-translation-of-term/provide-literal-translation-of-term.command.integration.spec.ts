@@ -4,8 +4,6 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
-import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
-import { Environment } from '../../../../../app/config/constants/environment';
 import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
@@ -95,13 +93,9 @@ describe(commandType, () => {
         })
             .overrideProvider(ConfigService)
             .useValue(
-                buildMockConfigService(
-                    {
-                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                    },
-                    // can't we make this default?
-                    buildConfigFilePath(Environment.test)
-                )
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
             )
             .compile();
 

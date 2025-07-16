@@ -1,4 +1,3 @@
-import { MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
@@ -13,14 +12,9 @@ export class LiteralTranslationOfTermProvidedEventHandler implements ICoscradEve
     async handle({
         payload: {
             aggregateCompositeIdentifier: { id: termId },
-            literalTranslation,
-            translationLanguageCode,
+            translationItem,
         },
     }: LiteralTranslationOfTermProvided): Promise<void> {
-        await this.queryRepository.translate(termId, {
-            text: literalTranslation,
-            languageCode: translationLanguageCode,
-            role: MultilingualTextItemRole.literalTranslation,
-        });
+        await this.queryRepository.translate(termId, translationItem);
     }
 }

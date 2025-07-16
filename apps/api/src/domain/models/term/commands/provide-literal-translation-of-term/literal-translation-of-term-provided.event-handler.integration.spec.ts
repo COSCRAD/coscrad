@@ -38,8 +38,11 @@ const literalTranslationProvided =
             aggregateCompositeIdentifier: {
                 id: existingTermView.id,
             },
-            literalTranslation,
-            translationLanguageCode,
+            translationItem: new MultilingualTextItem({
+                text: literalTranslation,
+                languageCode: translationLanguageCode,
+                role: MultilingualTextItemRole.literalTranslation,
+            }),
         },
     });
 

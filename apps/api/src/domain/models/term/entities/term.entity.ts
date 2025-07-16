@@ -287,7 +287,9 @@ export class Term extends Resource {
     }
 
     handleLiteralTranslationOfTermProvided({
-        payload: { literalTranslation, translationLanguageCode },
+        payload: {
+            translationItem: { text: literalTranslation, languageCode: translationLanguageCode },
+        },
     }: LiteralTranslationOfTermProvided) {
         return this.provideLiteralTranslation(literalTranslation, translationLanguageCode);
     }

@@ -126,8 +126,11 @@ describe(`Term.fromEventHistory`, () => {
                             .andThen<LiteralTranslationOfTermProvided>({
                                 type: 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
                                 payload: {
-                                    literalTranslation,
-                                    translationLanguageCode,
+                                    translationItem: new MultilingualTextItem({
+                                        text: literalTranslation,
+                                        languageCode: translationLanguageCode,
+                                        role: MultilingualTextItemRole.literalTranslation,
+                                    }),
                                 },
                             })
                             .as({
