@@ -25,6 +25,21 @@ type SetUpIntegrationTestOptions = {
     testUserWithGroups?: CoscradUserWithGroups;
 };
 
+/**
+ * @deprecated This legacy test setup helper is no longer necessary. It was a
+ * nightmare to maintain, and also gave us false confidence by mocking
+ * bypassing modules. While `e2e` tests are more important for the latter point,
+ * the maintenance issue is real.
+ *
+ * Use the lower level `Test` module from `NestJS` to set up command and event handler
+ * and query tests.
+ *
+ * See `literal-translation-of-term-provided.event-handler.integration.spec.ts` or
+ * `provide-literal-translation-of-term.command.integration.spec.ts` for examples.
+ *
+ * We will not bother to refactor existing uses in tests except when we have a
+ * productive reason to touch said test files.
+ */
 export default async (
     configOverrides: Partial<DTO<EnvironmentVariables>>,
     userOptions: Partial<SetUpIntegrationTestOptions> = {}
