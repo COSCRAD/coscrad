@@ -10,6 +10,7 @@ import {
     IQueryRepositoryProvider,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { SONG_QUERY_REPOSITORY_TOKEN } from '../../song/queries/song-query-repository.interface';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../vocabulary-list/queries';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
 
@@ -32,7 +33,9 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         @Inject(SONG_QUERY_REPOSITORY_TOKEN)
         private readonly songQueryRepository,
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly digitalTextRepository
+        private readonly digitalTextQueryRepository,
+        @Inject(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly tagQueryRepository
     ) {}
 
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
@@ -65,7 +68,7 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         }
 
         if (resourceType === ResourceType.digitalText) {
-            return this.digitalTextRepository;
+            return this.digitalTextQueryRepository;
         }
 
         /**

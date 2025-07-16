@@ -9,6 +9,7 @@ import {
     TagResourceOrNote,
     TagResourceOrNoteCommandHandler,
 } from '../../domain/models/tag/commands';
+import { TagCreatedEventHandler } from '../../domain/models/tag/commands/create-tag/tag-created-event-handler';
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { ResourceOrNoteTaggedEventHandler } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
@@ -32,6 +33,7 @@ import { TagController } from '../controllers/tag.controller';
         TagResourceOrNote,
         TagResourceOrNoteCommandHandler,
         ResourceOrNoteTaggedEventHandler,
+        TagCreatedEventHandler,
         // Does this belong here?
         ArangoEventRepository,
         CoscradEventFactory,
