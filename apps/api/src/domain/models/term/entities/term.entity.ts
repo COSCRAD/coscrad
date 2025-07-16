@@ -5,6 +5,7 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -20,6 +21,7 @@ import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeI
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -39,6 +41,7 @@ import {
 } from '../commands';
 import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
+import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
 import { TRANSLATE_TERM } from '../commands/translate-term/constants';
 import {
     CannotElicitTermWithoutPromptError,
@@ -48,6 +51,16 @@ import {
 
 const isOptional = true;
 
+@CoscradDataExample<Term>({
+    example: {
+        type: AggregateType.term,
+        id: buildDummyUuid(1),
+        isPromptTerm: false,
+        text: buildMultilingualTextWithSingleItem('test term turtle!'),
+        audio: MultilingualAudio.buildEmpty(),
+        published: false,
+    },
+})
 @AggregateRoot(AggregateType.term)
 @RegisterIndexScopedCommands([CREATE_TERM, CREATE_PROMPT_TERM])
 export class Term extends Resource {
@@ -125,7 +138,7 @@ export class Term extends Resource {
     }
 
     @UpdateMethod()
-    translate(text: string, languageCode: LanguageCode): ResultOrError<Term> {
+    provideFreeTranslation(text: string, languageCode: LanguageCode): ResultOrError<Term> {
         const textUpdateResult = this.text.translate(
             new MultilingualTextItem({
                 role: MultilingualTextItemRole.freeTranslation,
@@ -189,6 +202,26 @@ export class Term extends Resource {
         return this;
     }
 
+    @UpdateMethod()
+    provideLiteralTranslation(
+        translation: string,
+        languageCodeForTranslation: LanguageCode
+    ): ResultOrError<Term> {
+        const textUpdateResult = this.text.translate({
+            text: translation,
+            languageCode: languageCodeForTranslation,
+            role: MultilingualTextItemRole.literalTranslation,
+        });
+
+        if (isInternalError(textUpdateResult)) {
+            return textUpdateResult;
+        }
+
+        this.text = textUpdateResult;
+
+        return this;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [TRANSLATE_TERM];
     }
@@ -242,7 +275,7 @@ export class Term extends Resource {
      * Event handlers
      */
     handleTermTranslated({ payload: { translation, languageCode } }: TermTranslated) {
-        return this.translate(translation, languageCode);
+        return this.provideFreeTranslation(translation, languageCode);
     }
 
     handleTermElicitedFromPrompt({ payload: { text, languageCode } }: TermElicitedFromPrompt) {
@@ -251,6 +284,14 @@ export class Term extends Resource {
 
     handleAudioAddedForTerm({ payload: { audioItemId, languageCode } }: AudioAddedForTerm) {
         return this.addAudio(audioItemId, languageCode);
+    }
+
+    handleLiteralTranslationOfTermProvided({
+        payload: {
+            translationItem: { text: literalTranslation, languageCode: translationLanguageCode },
+        },
+    }: LiteralTranslationOfTermProvided) {
+        return this.provideLiteralTranslation(literalTranslation, translationLanguageCode);
     }
 
     private static createTermFromTermCreated(event: TermCreated) {

@@ -113,12 +113,15 @@ describe(`@CoscradDataExample`, () => {
             public name: string;
         }
 
-        it(`should throw`, () => {
-            const tryIt = () => {
-                buildTestInstance(TodoItem);
-            };
+        // we now use class transformer
+        it(`should still succeed`, () => {
+            const result = buildTestInstance(TodoItem);
 
-            expect(tryIt).toThrow();
+            expect(result).toBeInstanceOf(TodoItem);
+
+            expect(result.name).toBe('shop');
+
+            expect(result.priority).toBe(1);
         });
     });
 });

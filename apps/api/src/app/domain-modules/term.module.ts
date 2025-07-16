@@ -15,6 +15,8 @@ import {
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
+import { LiteralTranslationOfTermProvided } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
+import { LiteralTranslationOfTermProvidedEventHandler } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event-handler';
 import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
@@ -72,6 +74,7 @@ import { TermCommandsModule } from './term.commands.module';
             TermTranslated,
             TermElicitedFromPrompt,
             AudioAddedForTerm,
+            LiteralTranslationOfTermProvided,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -82,6 +85,7 @@ import { TermCommandsModule } from './term.commands.module';
         PromptTermCreatedEventHandler,
         TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
+        LiteralTranslationOfTermProvidedEventHandler,
     ],
     exports: [TermQueryService],
 })

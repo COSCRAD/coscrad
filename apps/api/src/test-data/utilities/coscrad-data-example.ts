@@ -1,4 +1,5 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { plainToClass } from 'class-transformer';
 import 'reflect-metadata';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
@@ -31,16 +32,21 @@ export const buildTestInstance = <T = unknown>(
         throw new InternalError(`No test data has been registered for: ${target}`);
     }
 
+    // @ts-expect-error TODO fix the type issue with this utility
+    const dto = clonePlainObjectWithOverrides<DTO<T>>(testMetadata[0], overrides);
+
     if (!isFromDto(target)) {
-        throw new InternalError(
-            `In order to build a test instance of: ${
-                Object.getPrototypeOf(target).name
-            }, it must have a static factory method called "fromDto"`
-        );
+        // TODO check if it has an empty constructor?
+        return plainToClass(target, dto);
+
+        // throw new InternalError(
+        //     `In order to build a test instance of: ${
+        //         Object.getPrototypeOf(target).name
+        //     }, it must have a static factory method called "fromDto"`
+        // );
     }
 
-    // @ts-expect-error TODO fix the type issue with this utility
-    return target.fromDto(clonePlainObjectWithOverrides<DTO<T>>(testMetadata[0], overrides)) as T;
+    return target.fromDto(dto) as T;
 };
 
 interface CoscradDataExampleOptions<T = unknown> {

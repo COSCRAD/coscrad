@@ -67,6 +67,10 @@ import {
 import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
+import {
+    LiteralTranslationOfTermProvided,
+    LiteralTranslationOfTermProvidedPayload,
+} from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
     EntriesImportedToVocabularyList,
@@ -93,6 +97,7 @@ import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObj
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { BaseEvent } from '../../queries/event-sourcing';
 import { DeepPartial } from '../../types/DeepPartial';
+import { buildTestInstance } from '../utilities';
 
 type EventRecordMetadataOverrides = DeepPartial<EventRecordMetadata>;
 
@@ -403,6 +408,23 @@ const buildTermTranslated = (
         clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         buildMetadata()
     );
+};
+
+const buildLiteralTranslationProvidedForTerm = (
+    payloadOverrides: DeepPartial<LiteralTranslationOfTermProvidedPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: LiteralTranslationOfTermProvidedPayload = buildTestInstance(
+        LiteralTranslationOfTermProvided
+    ).payload;
+
+    const result = buildTestInstance(LiteralTranslationOfTermProvided, {
+        type: 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
+        payload: clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        meta: buildMetadata(),
+    });
+
+    return result;
 };
 
 const buildPromptTermCreated = (
@@ -787,6 +809,11 @@ export class TestEventStream {
             )
             .registerBuilder(TERM_CREATED, buildTermCreated)
             .registerBuilder(TERM_TRANSLATED, buildTermTranslated)
+            // TODO can we avoid this pattern now?
+            .registerBuilder(
+                'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
+                buildLiteralTranslationProvidedForTerm
+            )
             .registerBuilder(PROMPT_TERM_CREATED, buildPromptTermCreated)
             .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt)
             .registerBuilder(`SONG_CREATED`, buildSongCreated)

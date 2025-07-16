@@ -34,6 +34,12 @@ export class UnionFactory<T = unknown, UProduct = unknown> {
             );
         }
 
+        // @ts-expect-error use a typeguard here
+        if (typeof UnionMemberCtor?.fromDto === 'function') {
+            // @ts-expect-error use a typeguard here
+            return UnionMemberCtor.fromDto(...args);
+        }
+
         return new UnionMemberCtor(...args) as unknown as UProduct;
     }
 }

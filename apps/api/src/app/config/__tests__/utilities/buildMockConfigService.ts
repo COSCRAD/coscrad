@@ -1,11 +1,16 @@
 import { parse } from 'dotenv';
 import { readFileSync } from 'fs';
 import { DTO } from '../../../../types/DTO';
+import buildConfigFilePath from '../../buildConfigFilePath';
+import { Environment } from '../../constants/environment';
 import { EnvironmentVariables } from '../../env.validation';
 
 type ConfigOverrides = Partial<DTO<EnvironmentVariables>>;
 
-export default (configOverrides: ConfigOverrides, envFilePath: string) => {
+export default (
+    configOverrides: ConfigOverrides,
+    envFilePath: string = buildConfigFilePath(Environment.test)
+) => {
     const realConfig = parse(readFileSync(envFilePath));
 
     // TODO Fall back to real environment variables in a more extensible way

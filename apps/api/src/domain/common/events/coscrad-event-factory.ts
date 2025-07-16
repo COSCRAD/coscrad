@@ -24,8 +24,7 @@ export class CoscradEventFactory {
          */
         return this.dynamicDataTypeFinderService.unionFactory.build(
             eventDocument.type,
-            eventDocument.payload,
-            eventDocument.meta
+            eventDocument
         ) as T;
     }
 }

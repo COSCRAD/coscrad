@@ -196,7 +196,10 @@ describe(commandType, () => {
                     ),
                 });
 
-                existingTerm.translate(`existing translation`, translationLanguageCode) as Term;
+                existingTerm.provideFreeTranslation(
+                    `existing translation`,
+                    translationLanguageCode
+                ) as Term;
 
                 const translation = 'duplicated translation';
 
