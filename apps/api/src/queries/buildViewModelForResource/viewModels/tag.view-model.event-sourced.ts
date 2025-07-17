@@ -1,6 +1,7 @@
 import {
     AggregateType,
     CategorizableCompositeIdentifier,
+    CategorizableType,
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
@@ -63,6 +64,25 @@ export class EventSourcedTagViewModel {
 
         // TODO clone
         this.members = members;
+    }
+
+    /**
+     *
+     * @returns A `Map` whose keys are categorizable types and whose values
+     * are arrays of `UUIDs` for entities of the given type to which this tag has
+     * been applied.
+     */
+    groupMembers(): Map<CategorizableType, AggregateId[]> {
+        return this.members.reduce((acc, { type: categorizableType, id }) => {
+            if (!acc.has(categorizableType)) {
+                // initialize an empty array to hold IDs for categorizables of this type
+                acc.set(categorizableType, []);
+            }
+
+            acc.get(categorizableType).push(id);
+
+            return acc;
+        }, new Map<CategorizableType, AggregateId[]>());
     }
 
     apply(event: BaseEvent): EventSourcedTagViewModel {

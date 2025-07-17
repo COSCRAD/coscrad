@@ -4,7 +4,7 @@ import {
     ICommandBase,
 } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { ExternalEnum, NestedDataType, UUID } from '@coscrad/data-types';
+import { ExternalEnum, FullReference, NestedDataType, UUID } from '@coscrad/data-types';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { AggregateId } from '../../../../types/AggregateId';
 import { TagCompositeIdentifier } from '../tag-composite-identifier';
@@ -45,6 +45,7 @@ export class TagResourceOrNote implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: AggregateCompositeIdentifier;
 
+    @FullReference()
     @NestedDataType(CategorizableCompositeIdentifier, {
         label: "Tagged Member's Composite Identifier",
         description: 'system-wide unique identifier for the resource or note being tagged',
