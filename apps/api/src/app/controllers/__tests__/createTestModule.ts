@@ -222,6 +222,8 @@ import {
 } from '../../../domain/models/tag/commands';
 import { TagCreated } from '../../../domain/models/tag/commands/create-tag/tag-created.event';
 import { ResourceOrNoteTagged } from '../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
+import { ArangoTagQueryRepository } from '../../../domain/models/tag/repositories/arango-tag-query-repository';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../domain/models/tag/repositories/tag-query-repository.interface';
 import {
     AddAudioForTerm,
     AddAudioForTermCommandHandler,
@@ -664,6 +666,12 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoTagQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
@@ -674,7 +682,8 @@ export default async (
                     vocabularyListQueryRepository: ArangoVocabularyListQueryRepository,
                     playlistQueryRepository: ArangoPlaylistQueryRepository,
                     songQueryRepository: ArangoSongQueryRepository,
-                    digitalTextQueryRepository: ArangoDigitalTextQueryRepository
+                    digitalTextQueryRepository: ArangoDigitalTextQueryRepository,
+                    tagQueryRepository: ArangoTagQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
@@ -684,7 +693,8 @@ export default async (
                         vocabularyListQueryRepository,
                         playlistQueryRepository,
                         songQueryRepository,
-                        digitalTextQueryRepository
+                        digitalTextQueryRepository,
+                        tagQueryRepository
                     );
                 },
                 inject: [
@@ -696,6 +706,7 @@ export default async (
                     PLAYLIST_QUERY_REPOSITORY_TOKEN,
                     SONG_QUERY_REPOSITORY_TOKEN,
                     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                    TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
                 ],
             },
             {
