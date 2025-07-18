@@ -11,6 +11,7 @@ import { NotFoundPresenter } from '../components/not-found';
 import { NoteDetailPageContainer } from '../components/notes/note-detail-page.container';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
+import { DiscoverAudioForTermsPage } from '../components/resources/terms/audio-discovery/discover-audio-for-term.page';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
@@ -150,6 +151,12 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
         {
             path: '*',
             element: <NotFoundPresenter />,
+        },
+        // TODO only if admin is enabled
+        {
+            path: '/DiscoverAudio',
+            label: 'Discover Audio for Terms',
+            element: <DiscoverAudioForTermsPage />,
         },
     ];
 

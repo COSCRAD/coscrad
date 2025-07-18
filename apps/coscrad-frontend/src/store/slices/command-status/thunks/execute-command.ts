@@ -12,6 +12,8 @@ export const executeCommand = createAsyncThunk(
     async (commandFSA: FluxStandardAction<unknown, string>, thunkApi) => {
         const { getState } = thunkApi;
 
+        console.log('GOING TO SEND COMMAND SOON');
+
         const token = selectAuthToken(getState() as RootState);
 
         const response = await fetch(`${getConfig().apiUrl}/commands`, {
@@ -19,6 +21,8 @@ export const executeCommand = createAsyncThunk(
             headers: buildAuthenticationHeaders(token),
             body: JSON.stringify(commandFSA),
         });
+
+        console.log({ response: await response.json() });
 
         // The command failed or there was some other network / authorization error
         if (response.status !== HttpStatusCode.ok) {

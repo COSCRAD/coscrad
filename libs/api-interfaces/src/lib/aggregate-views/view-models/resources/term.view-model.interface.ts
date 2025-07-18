@@ -45,4 +45,6 @@ export interface ITermViewModel extends IBaseResourceViewModel {
     vocabularyLists: IVocabularyListRecordForTerm[];
 
     tokens: IToken[];
+
+    possibleAudioFilenames: string[];
 }
