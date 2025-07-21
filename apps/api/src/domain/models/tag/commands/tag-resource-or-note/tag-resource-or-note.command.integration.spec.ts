@@ -156,11 +156,15 @@ describe(commandType, () => {
                         it('should fail with the expected error', async () => {
                             await assertCommandError(commandAssertionDependencies, {
                                 buildCommandFSA,
-                                initialState: new DeluxeInMemoryStore({
-                                    // the categorizable (aggregate) to tag does not exist
-                                    [categorizableType]: [],
-                                    [AggregateType.tag]: [tagToUpdate],
-                                }).fetchFullSnapshotInLegacyFormat(),
+                                seedInitialState: async () => {
+                                    await commandAssertionDependencies.testRepositoryProvider.addFullSnapshot(
+                                        new DeluxeInMemoryStore({
+                                            // the categorizable (aggregate) to tag does not exist
+                                            [categorizableType]: [],
+                                            [AggregateType.tag]: [tagToUpdate],
+                                        }).fetchFullSnapshotInLegacyFormat()
+                                    );
+                                },
                                 systemUserId: dummySystemUserId,
                                 checkError: (error: InternalError) => {
                                     const { innerErrors } = error;
@@ -171,7 +175,7 @@ describe(commandType, () => {
                                          * Alternatively, we could call `.toString`
                                          * and check the message.
                                          **/
-                                        innerErrors[0].innerErrors[0],
+                                        innerErrors[0],
                                         new InvalidExternalReferenceByAggregateError(
                                             tagToUpdate.getCompositeIdentifier(),
                                             [categorizableToTag.getCompositeIdentifier()]
