@@ -3,6 +3,7 @@ import { Ack } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
@@ -73,6 +74,8 @@ describe(`When creating a full digital text`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+
+        // TODO We need to generate the UUID \ use a mock ID generator
     });
 
     afterEach(async () => {
@@ -120,23 +123,27 @@ describe(`When creating a full digital text`, () => {
 
             expect(res.status).toBe(HttpStatusCode.badRequest);
 
-            expect(res.body).toEqual({
-                results: [
-                    {
-                        fsa: validCreateCommandFsa,
-                        result: Ack,
-                    },
-                    {
-                        fsa: invalidTranslateFsa,
-                        result: new CommandExecutionError([
-                            new DuplicateDigitalTextTitleError(
-                                invalidTranslateFsa.payload.translation,
-                                languageCodeForTitle
-                            ),
-                        ]),
-                    },
-                ],
+            const { results } = res.body;
+
+            expect(results[0]).toEqual({
+                fsa: cloneToPlainObject(validCreateCommandFsa),
+                result: Ack,
             });
+
+            expect(results[1].fsa).toEqual(cloneToPlainObject(invalidTranslateFsa));
+
+            const errorMessage = results[1].result.toString();
+
+            expect(errorMessage.toLowerCase()).toContain('failed at command [1]');
+
+            expect(errorMessage.toLowerCase()).toContain(
+                new CommandExecutionError([
+                    new DuplicateDigitalTextTitleError(
+                        invalidTranslateFsa.payload.translation,
+                        languageCodeForTitle
+                    ),
+                ]).toString()
+            );
         });
     });
 });

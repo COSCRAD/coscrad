@@ -138,14 +138,14 @@ export class CommandController {
                 (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
             )
         ) {
-            return res.status(httpStatusCodes.badRequest).send(
-                resultsForAllCommands.map(({ fsa, result }) => {
+            return res.status(httpStatusCodes.badRequest).send({
+                results: resultsForAllCommands.map(({ fsa, result }) => {
                     return {
                         fsa,
                         result: result instanceof Error ? result.toString() : 'ACK',
                     };
-                })
-            );
+                }),
+            });
         }
 
         return res.status(httpStatusCodes.ok).send(resultsForAllCommands);
