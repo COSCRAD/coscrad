@@ -180,9 +180,11 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     ): ValidationResult {
         const CommandCtor: Object = Object.getPrototypeOf(command).constructor;
 
+        const references = buildReferenceTree(CommandCtor, command);
+
         const unmatchedCompositeIdentifiers = new DeluxeInMemoryStore(snapshot)
             .fetchReferences()
-            .compare(buildReferenceTree(CommandCtor, command));
+            .compare(references);
 
         return unmatchedCompositeIdentifiers.length > 0
             ? new InvalidExternalReferenceByAggregateError(

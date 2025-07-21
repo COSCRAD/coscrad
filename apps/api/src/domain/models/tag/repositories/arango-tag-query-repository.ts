@@ -1,4 +1,6 @@
 import { CategorizableCompositeIdentifier } from '@coscrad/api-interfaces';
+import { AqlQuery } from 'arangojs/aql';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -62,9 +64,84 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
     }
 
     async relabel(tagId: string, newLabel: string): Promise<void> {
-        await this.database.update(tagId, {
-            label: newLabel,
+        const existingTagDto = await this.database.fetchById(tagId);
+
+        if (isNotFound(existingTagDto)) {
+            // TODO log this system error
+            return;
+        }
+
+        const existingTag = EventSourcedTagViewModel.fromDto(
+            mapDatabaseDocumentToAggregateDTO(existingTagDto)
+        );
+
+        const categorizablesRequiringACascadingUpdate = existingTag.groupMembers();
+
+        const collectionNames = Array.from(categorizablesRequiringACascadingUpdate.keys()).map(
+            (categorizableType) => `${categorizableType}__VIEWS`
+        );
+
+        collectionNames.push('tag__VIEWS');
+
+        const queries: AqlQuery[] = [];
+
+        const categorizableTypeAndIdsOfAffectedEntitites = Array.from(
+            categorizablesRequiringACascadingUpdate.entries()
+        );
+
+        for (const typeAndDocIds of categorizableTypeAndIdsOfAffectedEntitites) {
+            const [categorizableType, docIds] = typeAndDocIds;
+
+            const cascadeQuery = `
+                FOR doc IN @@collectionName
+                FILTER CONTAINS_ARRAY(@docIds,doc._key)
+                LET newTags = (
+                    FOR t IN doc.tags
+                    RETURN t.id == @tagId ? MERGE(t,{ label: @newLabel }) : t
+                )
+                UPDATE doc with {
+                    tags: newTags
+                } in @@collectionName
+
+                return newTags
+            `;
+
+            // TODO update `name` prop as well
+
+            const bindVars = {
+                '@collectionName': `${categorizableType}__VIEWS`,
+                docIds,
+                tagId,
+                newLabel,
+            };
+
+            queries.push({ query: cascadeQuery, bindVars });
+        }
+
+        const tagUpdateQuery = `
+            FOR t IN tag__VIEWS
+            FILTER t._key == @tagId
+            UPDATE t WITH {
+                label: @newLabel
+            } IN tag__VIEWS
+        `;
+
+        queries.push({
+            query: tagUpdateQuery,
+            bindVars: {
+                tagId,
+                newLabel,
+            },
         });
+
+        await this.database
+            .getDb()
+            .transaction(queries, collectionNames)
+            .catch((e) => {
+                throw new InternalError(`Failed to relabel tag ${tagId} in query database`, [
+                    new InternalError(e?.message || 'unknown Arango error'),
+                ]);
+            });
     }
 
     async tagResourceOrNote(

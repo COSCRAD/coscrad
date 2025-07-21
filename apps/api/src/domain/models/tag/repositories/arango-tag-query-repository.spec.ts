@@ -7,16 +7,71 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { DTO } from '../../../../types/DTO';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ArangoTagQueryRepository } from './arango-tag-query-repository';
 import { ITagQueryRepository } from './tag-query-repository.interface';
 
+const widgetCollectionName = 'widget__VIEWS';
+
 const tagIds = [1, 2, 3].map(buildDummyUuid);
+
+class Widget {
+    id: string;
+
+    name: string;
+
+    tags: EventSourcedTagViewModel[];
+
+    constructor(id: string, name: string) {
+        this.id = id;
+
+        this.name = name;
+
+        this.tags = [];
+    }
+
+    static fromDto({ id, name, tags }: DTO<Widget>) {
+        const widget = new Widget(id, name);
+
+        widget.addTags(tags.map((t) => EventSourcedTagViewModel.fromDto(t)));
+
+        return widget;
+    }
+
+    addTags(tags: EventSourcedTagViewModel[]) {
+        this.tags.push(...tags);
+
+        return this;
+    }
+}
+
+const widgetSequenceNumbers = [22, 23, 24];
+
+const widgetIds = widgetSequenceNumbers.map(buildDummyUuid);
+
+const targetTag = buildTestInstance(EventSourcedTagViewModel, {
+    label: 'old label',
+});
+
+const widgets = widgetIds.map((id) =>
+    new Widget(id, `Widget #${widgetSequenceNumbers} `).addTags([targetTag])
+);
+
+targetTag.members.push(
+    ...widgets.map(({ id }) => ({
+        type: 'widget' as ResourceType,
+        id,
+    }))
+);
 
 describe(`ArangoTagQueryRepository`, () => {
     let testQueryRepository: ITagQueryRepository;
@@ -26,6 +81,8 @@ describe(`ArangoTagQueryRepository`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
+
+    let widgetDatabase: ArangoDatabaseForCollection<Widget>;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -48,9 +105,16 @@ describe(`ArangoTagQueryRepository`, () => {
 
         connectionProvider = app.get(ArangoConnectionProvider);
 
+        connectionProvider.createCollectionIfNotExists(widgetCollectionName);
+
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
         testQueryRepository = new ArangoTagQueryRepository(connectionProvider);
+
+        widgetDatabase = new ArangoDatabaseForCollection<Widget>(
+            new ArangoDatabase(connectionProvider.getConnection()),
+            widgetCollectionName
+        );
     });
 
     beforeEach(async () => {
@@ -180,26 +244,38 @@ describe(`ArangoTagQueryRepository`, () => {
     });
 
     describe(`relabel`, () => {
-        const targetTag = buildTestInstance(EventSourcedTagViewModel, {
-            label: 'old label',
-        });
-
         const newLabel = 'new label';
 
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
+            await widgetDatabase.clear();
+
             await testQueryRepository.createMany([targetTag]);
+
+            await widgetDatabase.createMany(widgets.map(mapEntityDTOToDatabaseDocument));
+
+            await testQueryRepository.relabel(targetTag.id, newLabel);
         });
 
         it(`should update the tag label`, async () => {
-            await testQueryRepository.relabel(targetTag.id, newLabel);
-
             const result = (await testQueryRepository.fetchById(
                 targetTag.id
             )) as EventSourcedTagViewModel;
 
             expect(result.label).toEqual(newLabel);
+        });
+
+        it(`should cascade updates to resources`, async () => {
+            const updatedWidgets = await widgetDatabase.fetchMany();
+
+            updatedWidgets.forEach(({ tags }) => {
+                expect(tags).toHaveLength(1);
+
+                const { label } = tags[0];
+
+                expect(label).toBe(newLabel);
+            });
         });
     });
 });
