@@ -321,7 +321,9 @@ describe('The Command Controller', () => {
 
                 expect(result.status).toBe(HttpStatusCode.badRequest);
 
-                const resultsForFsas = result.body as BulkCommandExecutionResult[];
+                const { results: resultsForFsas } = result.body as {
+                    results: BulkCommandExecutionResult[];
+                };
 
                 const resultForInvalidTypeCommand = resultsForFsas.find(
                     ({ fsa }) => fsa.type === commandWithInvalidType.type

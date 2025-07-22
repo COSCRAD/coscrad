@@ -5,11 +5,11 @@ import {
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
-import { buildMultilingualTextWithSingleItem } from 'apps/api/src/domain/common/build-multilingual-text-with-single-item';
-import { CannotAddDuplicateTranslationError } from 'apps/api/src/domain/common/entities/errors';
-import { MultilingualTextItem } from 'apps/api/src/domain/common/entities/multilingual-text';
 import * as request from 'supertest';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { CannotAddDuplicateTranslationError } from '../../../../../domain/common/entities/errors';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import {
     ID_MANAGER_TOKEN,
     IIdManager,
@@ -19,7 +19,7 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { buildTestInstance } from '../../../../../test-data/utilities';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
@@ -33,7 +33,7 @@ const digitalTextTitle = 'A wondeful book!';
 const languageCodeForTitle = LanguageCode.English;
 
 const testAdminUser = buildTestInstance(CoscradUser, {
-    id: buildDummyUuid(44),
+    id: dummySystemUserId,
     roles: [CoscradUserRole.projectAdmin],
 });
 
@@ -83,8 +83,7 @@ describe(`When creating a full digital text`, () => {
                     languageCodeForTitle,
                 }),
                 meta: {
-                    // shouldn't this come off the request?
-                    userId: testAdminUser.id,
+                    contributorIds: [],
                 },
             };
 
@@ -94,7 +93,22 @@ describe(`When creating a full digital text`, () => {
 
             expect(res.status).toBe(HttpStatusCode.ok);
 
-            // todo check response body
+            const { body } = res;
+
+            const { results } = body;
+
+            expect(results).toHaveLength(1);
+
+            expect(results[0]).toEqual({
+                fsa: {
+                    ...cloneToPlainObject(validCreateCommandFsa),
+                    meta: {
+                        ...validCreateCommandFsa.meta,
+                        userId: dummySystemUserId,
+                    },
+                },
+                result: 'ACK',
+            });
         });
     });
 

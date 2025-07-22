@@ -26,6 +26,8 @@ import { NoCommandHandlerForCommandTypeFilter } from './exception-handling/excep
 
 export const AdminJwtGuard = AuthGuard('jwt');
 
+const COMMAND_ACKNOWLEDGEMENT_BODY_TEXT = 'ACK';
+
 @ApiTags('commands')
 @Controller('commands')
 /**
@@ -38,6 +40,8 @@ export const AdminJwtGuard = AuthGuard('jwt');
  *
  * TODO [https://www.pivotaltracker.com/story/show/182785593]
  * We may want to do this in a pipe in the future.
+ *
+ * We might want to use returned errors intead of throwing in these situations.
  */
 @UseFilters(new CommandWithGivenTypeNotFoundExceptionFilter())
 @UseFilters(new NoCommandHandlerForCommandTypeFilter())
@@ -66,14 +70,16 @@ export class CommandController {
          * logic. If we want to drive commands via a CLI, it shouldn't need
          * to know about http.
          */
-        const { type, payload } = commandFSA;
+        const { type, payload, meta } = commandFSA;
+
+        const { contributorIds } = meta || { contributorIds: [] };
 
         const result = await this.commandHandlerService.execute(
             { type, payload },
             /**
-             * TODO We need to populate the rest of the meta from the fsa
+             * TODO Validate contributor existence in middleware
              */
-            { userId: user.id }
+            { userId: user.id, contributorIds }
         );
 
         if (result !== Ack) {
@@ -101,7 +107,7 @@ export class CommandController {
             },
         });
 
-        return res.status(httpStatusCodes.ok).send();
+        return res.status(httpStatusCodes.ok).send(COMMAND_ACKNOWLEDGEMENT_BODY_TEXT);
     }
 
     @ApiBearerAuth('JWT')
@@ -122,13 +128,14 @@ export class CommandController {
             throw new UnauthorizedException();
         }
 
-        // TODO validate that additional meta comes through
+        // TODO[test-coverage] validate that additional meta comes through at the integration level (we have e2e tests of this)
         const resultsForAllCommands = await this.commandHandlerService.executeStream(
-            commandStream.map(({ type, payload }) => ({
+            commandStream.map(({ type, payload, meta }) => ({
                 type,
                 payload,
                 meta: {
                     userId: user.id,
+                    contributorIds: meta?.contributorIds || [],
                 },
             }))
         );
@@ -142,13 +149,21 @@ export class CommandController {
                 results: resultsForAllCommands.map(({ fsa, result }) => {
                     return {
                         fsa,
-                        result: result instanceof Error ? result.toString() : 'ACK',
+                        result:
+                            result instanceof Error
+                                ? result.toString()
+                                : COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
                     };
                 }),
             });
         }
 
-        return res.status(httpStatusCodes.ok).send(resultsForAllCommands);
+        return res.status(httpStatusCodes.ok).send({
+            results: resultsForAllCommands.map(({ fsa }) => ({
+                fsa,
+                result: COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+            })),
+        });
     }
 
     @Sse('notifications')
