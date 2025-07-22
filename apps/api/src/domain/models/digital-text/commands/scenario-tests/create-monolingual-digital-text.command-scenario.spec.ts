@@ -141,7 +141,6 @@ describe(`When creating a full digital text`, () => {
                     languageCode: languageCodeForTitle,
                 }),
                 meta: {
-                    // shouldn't this come off the request?
                     userId: testAdminUser.id,
                 },
             };
@@ -155,11 +154,23 @@ describe(`When creating a full digital text`, () => {
             const { results } = res.body;
 
             expect(results[0]).toEqual({
-                fsa: cloneToPlainObject(validCreateCommandFsa),
+                fsa: cloneToPlainObject({
+                    ...validCreateCommandFsa,
+                    meta: {
+                        ...validCreateCommandFsa.meta,
+                        contributorIds: [],
+                    },
+                }),
                 result: 'ACK',
             });
 
-            expect(results[1].fsa).toEqual(cloneToPlainObject(invalidTranslateFsa));
+            expect(results[1].fsa).toEqual({
+                ...cloneToPlainObject(invalidTranslateFsa),
+                meta: {
+                    ...invalidTranslateFsa.meta,
+                    contributorIds: [],
+                },
+            });
 
             const errorMessage = results[1].result.toString();
 
