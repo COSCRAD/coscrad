@@ -1,8 +1,19 @@
-import { CoscradUserRole, HttpStatusCode, LanguageCode } from '@coscrad/api-interfaces';
-import { Ack } from '@coscrad/commands';
+import {
+    CoscradUserRole,
+    HttpStatusCode,
+    LanguageCode,
+    MultilingualTextItemRole,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
+import { buildMultilingualTextWithSingleItem } from 'apps/api/src/domain/common/build-multilingual-text-with-single-item';
+import { CannotAddDuplicateTranslationError } from 'apps/api/src/domain/common/entities/errors';
+import { MultilingualTextItem } from 'apps/api/src/domain/common/entities/multilingual-text';
 import * as request from 'supertest';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import {
+    ID_MANAGER_TOKEN,
+    IIdManager,
+} from '../../../../../domain/interfaces/id-manager.interface';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -12,13 +23,10 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
-import { DuplicateDigitalTextTitleError } from '../../errors';
 import { CreateDigitalText } from '../create-digital-text.command';
 import { TranslateDigitalTextTitle } from '../translate-digital-text-title';
 
 const endpoint = '/commands/bulk';
-
-const digitalTextId = buildDummyUuid(1);
 
 const digitalTextTitle = 'A wondeful book!';
 
@@ -29,31 +37,12 @@ const testAdminUser = buildTestInstance(CoscradUser, {
     roles: [CoscradUserRole.projectAdmin],
 });
 
-const validCreateCommandFsa = {
-    type: 'CREATE_DIGITAL_TEXT',
-    payload: buildTestInstance(CreateDigitalText, {
-        aggregateCompositeIdentifier: {
-            id: digitalTextId,
-        },
-        title: digitalTextTitle,
-        languageCodeForTitle,
-    }),
-    meta: {
-        // shouldn't this come off the request?
-        userId: testAdminUser.id,
-    },
-};
-
 describe(`When creating a full digital text`, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
     let app: INestApplication;
 
     let databaseProvider: ArangoDatabaseProvider;
-
-    // let idManager: IIdManager;
-
-    // let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
         ({ testRepositoryProvider, app, databaseProvider } = await setUpIntegrationTest(
@@ -64,18 +53,10 @@ describe(`When creating a full digital text`, () => {
                 testUserWithGroups: new CoscradUserWithGroups(testAdminUser, []),
             }
         ));
-
-        // assertionHelperDependencies = {
-        //     testRepositoryProvider,
-        //     commandHandlerService,
-        //     idManager,
-        // };
     });
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
-
-        // TODO We need to generate the UUID \ use a mock ID generator
     });
 
     afterEach(async () => {
@@ -90,6 +71,23 @@ describe(`When creating a full digital text`, () => {
 
     describe(`when the bulk command stream is valid`, () => {
         it(`should return the expected result`, async () => {
+            const digitalTextId = await app.get<IIdManager>(ID_MANAGER_TOKEN).generate();
+
+            const validCreateCommandFsa = {
+                type: 'CREATE_DIGITAL_TEXT',
+                payload: buildTestInstance(CreateDigitalText, {
+                    aggregateCompositeIdentifier: {
+                        id: digitalTextId,
+                    },
+                    title: digitalTextTitle,
+                    languageCodeForTitle,
+                }),
+                meta: {
+                    // shouldn't this come off the request?
+                    userId: testAdminUser.id,
+                },
+            };
+
             const stream = [validCreateCommandFsa];
 
             const res = await request(app.getHttpServer()).post(endpoint).send({ stream });
@@ -101,22 +99,39 @@ describe(`When creating a full digital text`, () => {
     });
 
     describe(`when the command is invalid`, () => {
-        const invalidTranslateFsa = {
-            type: 'TRANSLATE_DIGITAL_TEXT_TITLE',
-            payload: buildTestInstance(TranslateDigitalTextTitle, {
-                aggregateCompositeIdentifier: {
-                    id: digitalTextId,
-                },
-                // This is the original langauge code, so this command should fail
-                languageCode: languageCodeForTitle,
-            }),
-            meta: {
-                // shouldn't this come off the request?
-                userId: testAdminUser.id,
-            },
-        };
-
         it(`should return the expected result`, async () => {
+            const digitalTextId = await app.get<IIdManager>(ID_MANAGER_TOKEN).generate();
+
+            const validCreateCommandFsa = {
+                type: 'CREATE_DIGITAL_TEXT',
+                payload: buildTestInstance(CreateDigitalText, {
+                    aggregateCompositeIdentifier: {
+                        id: digitalTextId,
+                    },
+                    title: digitalTextTitle,
+                    languageCodeForTitle,
+                }),
+                meta: {
+                    // shouldn't this come off the request?
+                    userId: testAdminUser.id,
+                },
+            };
+
+            const invalidTranslateFsa = {
+                type: 'TRANSLATE_DIGITAL_TEXT_TITLE',
+                payload: buildTestInstance(TranslateDigitalTextTitle, {
+                    aggregateCompositeIdentifier: {
+                        id: digitalTextId,
+                    },
+                    // This is the original langauge code, so this command should fail
+                    languageCode: languageCodeForTitle,
+                }),
+                meta: {
+                    // shouldn't this come off the request?
+                    userId: testAdminUser.id,
+                },
+            };
+
             const stream = [validCreateCommandFsa, invalidTranslateFsa];
 
             const res = await request(app.getHttpServer()).post(endpoint).send({ stream });
@@ -127,7 +142,7 @@ describe(`When creating a full digital text`, () => {
 
             expect(results[0]).toEqual({
                 fsa: cloneToPlainObject(validCreateCommandFsa),
-                result: Ack,
+                result: 'ACK',
             });
 
             expect(results[1].fsa).toEqual(cloneToPlainObject(invalidTranslateFsa));
@@ -138,11 +153,20 @@ describe(`When creating a full digital text`, () => {
 
             expect(errorMessage.toLowerCase()).toContain(
                 new CommandExecutionError([
-                    new DuplicateDigitalTextTitleError(
-                        invalidTranslateFsa.payload.translation,
-                        languageCodeForTitle
+                    new CannotAddDuplicateTranslationError(
+                        new MultilingualTextItem({
+                            text: invalidTranslateFsa.payload.translation,
+                            languageCode: invalidTranslateFsa.payload.languageCode,
+                            role: MultilingualTextItemRole.freeTranslation,
+                        }),
+                        buildMultilingualTextWithSingleItem(
+                            validCreateCommandFsa.payload.title,
+                            validCreateCommandFsa.payload.languageCodeForTitle
+                        )
                     ),
-                ]).toString()
+                ])
+                    .toString()
+                    .toLowerCase()
             );
         });
     });

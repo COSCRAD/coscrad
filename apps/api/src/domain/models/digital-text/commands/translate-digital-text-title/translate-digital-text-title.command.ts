@@ -3,7 +3,6 @@ import { Command } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
-import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { DigitalTextCompositeId } from '../create-digital-text.command';
 
@@ -40,12 +39,4 @@ export class TranslateDigitalTextTitle implements ICommandBase {
         description: `the language in which you are translating the digital text's title`,
     })
     readonly languageCode: LanguageCode;
-
-    public static fromDto(dto: DTO<TranslateDigitalTextTitle>) {
-        const instance = new DigitalTextCompositeId();
-
-        Object.assign(instance, dto);
-
-        return instance;
-    }
 }
