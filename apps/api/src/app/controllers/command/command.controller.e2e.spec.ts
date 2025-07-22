@@ -34,6 +34,7 @@ import { buildTestInstance } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
 
 const commandEndpoint = `/commands`;
 
@@ -294,61 +295,93 @@ describe('The Command Controller', () => {
     });
 
     describe(`when executing a stream of commands (/commands/bulk)`, () => {
-        describe(`when some commands are valid, some have type errors, and some have execution errors`, () => {
-            it(`should return the expected result`, async () => {
-                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+        describe(`when creating a new bulk job: POST /bulk`, () => {
+            describe(`when there is no existing job with the same name`, () => {
+                it(`should create the job`, async () => {
+                    const validCommandFSA = buildValidCommandFSA(buildDummyUuid(123));
 
-                const id = idResponse.text;
+                    const jobName = 'Import Counting Vocabulary';
 
-                const validCommandFSA = buildValidCommandFSA(id);
+                    const stream = [validCommandFSA];
 
-                const missingSongId = buildDummyUuid(404);
+                    const createDto: CoscradBulkImportJobCreateDto = {
+                        name: jobName,
+                        stream,
+                    };
 
-                const invalidUpdateFsa = {
-                    type: 'TRANSLATE_SONG_TITLE',
-                    payload: buildTestInstance(TranslateSongTitle, {
-                        aggregateCompositeIdentifier: {
-                            id: missingSongId,
-                        },
-                    }),
-                };
+                    const result = await request(app.getHttpServer())
+                        .post(`${commandEndpoint}/bulk`)
+                        .send(createDto);
 
-                const commandStream = [commandWithInvalidType, validCommandFSA, invalidUpdateFsa];
+                    expect(result.status).toBe(HttpStatusCode.ok);
 
-                const result = await request(app.getHttpServer())
-                    .post(`${commandEndpoint}/bulk`)
-                    .send({ stream: commandStream });
+                    // TODO check body of response
+                    // TODO check that state is persisted
+                });
+            });
+        });
 
-                expect(result.status).toBe(HttpStatusCode.badRequest);
+        describe(`when a bulk job exists and is ready to be executed`, () => {
+            describe(`when some commands are valid, some have type errors, and some have execution errors`, () => {
+                it(`should return the expected result`, async () => {
+                    const idResponse = await request(app.getHttpServer()).post(`/ids`);
 
-                const { results: resultsForFsas } = result.body as {
-                    results: BulkCommandExecutionResult[];
-                };
+                    const id = idResponse.text;
 
-                const resultForInvalidTypeCommand = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === commandWithInvalidType.type
-                );
+                    const validCommandFSA = buildValidCommandFSA(id);
 
-                expect(resultForInvalidTypeCommand.result).toContain('DO_BAD_THINGS');
+                    const missingSongId = buildDummyUuid(404);
 
-                expect(resultForInvalidTypeCommand.result).toContain('no handler registered');
+                    const invalidUpdateFsa = {
+                        type: 'TRANSLATE_SONG_TITLE',
+                        payload: buildTestInstance(TranslateSongTitle, {
+                            aggregateCompositeIdentifier: {
+                                id: missingSongId,
+                            },
+                        }),
+                    };
 
-                const resultForValidFsa = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === validCommandFSA.type
-                );
+                    const commandStream = [
+                        commandWithInvalidType,
+                        validCommandFSA,
+                        invalidUpdateFsa,
+                    ];
 
-                // TODO `ACK` string constant?
-                expect(resultForValidFsa.result).toBe('ACK');
+                    const result = await request(app.getHttpServer())
+                        .post(`${commandEndpoint}/bulk`)
+                        .send({ stream: commandStream });
 
-                const resultForInvalidUpdateFsa = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === invalidUpdateFsa.type
-                );
+                    expect(result.status).toBe(HttpStatusCode.badRequest);
 
-                expect(resultForInvalidUpdateFsa.result).toContain('no Song with that ID');
+                    const { results: resultsForFsas } = result.body as {
+                        results: BulkCommandExecutionResult[];
+                    };
 
-                expect(resultForInvalidUpdateFsa.result).toContain(
-                    invalidUpdateFsa.payload.aggregateCompositeIdentifier.id
-                );
+                    const resultForInvalidTypeCommand = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === commandWithInvalidType.type
+                    );
+
+                    expect(resultForInvalidTypeCommand.result).toContain('DO_BAD_THINGS');
+
+                    expect(resultForInvalidTypeCommand.result).toContain('no handler registered');
+
+                    const resultForValidFsa = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === validCommandFSA.type
+                    );
+
+                    // TODO `ACK` string constant?
+                    expect(resultForValidFsa.result).toBe('ACK');
+
+                    const resultForInvalidUpdateFsa = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === invalidUpdateFsa.type
+                    );
+
+                    expect(resultForInvalidUpdateFsa.result).toContain('no Song with that ID');
+
+                    expect(resultForInvalidUpdateFsa.result).toContain(
+                        invalidUpdateFsa.payload.aggregateCompositeIdentifier.id
+                    );
+                });
             });
         });
     });

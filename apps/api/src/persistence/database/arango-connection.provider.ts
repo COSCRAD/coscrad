@@ -86,6 +86,8 @@ export class ArangoConnectionProvider {
 
         await this.#createAllMissingCollections();
 
+        await this.createCollectionIfNotExists('bulk-import-jobs');
+
         /**
          * TODO[https://www.pivotaltracker.com/story/show/187960041]
          * Discover view collections dynamically.
