@@ -16,6 +16,13 @@ export type CommandConstructorAndMeta<TCommandMeta extends CommandMetadataBase> 
     meta: TCommandMeta;
 };
 
+type CommandResult = Error | Ack;
+
+export type BulkCommandExecutionResult = {
+    fsa: FluxStandardAction & { meta?: Record<string, unknown> };
+    result: CommandResult;
+};
+
 export class CommandHandlerService {
     #handlers: Map<string, ICommandHandler> = new Map();
 
@@ -29,14 +36,44 @@ export class CommandHandlerService {
          * TODO We should use a data class and schema validation for metadata.
          */
         meta?: Record<string, unknown>
-    ): Promise<Error | Ack> {
+    ): Promise<CommandResult> {
         const handler = this.#handlers.get(type);
 
-        if (!handler) throw new NoCommandHandlerRegisteredForCommandException(type);
+        if (!handler) {
+            return new NoCommandHandlerRegisteredForCommandException(type);
+        }
 
         const commandInstance = this.#buildCommand({ type, payload });
 
         return handler.execute(commandInstance, type, meta);
+    }
+
+    async executeStream(
+        commandFsas: (FluxStandardAction & { meta?: Record<string, unknown> })[]
+    ): Promise<BulkCommandExecutionResult[]> {
+        const allResults: BulkCommandExecutionResult[] = [];
+
+        for (const fsa of commandFsas) {
+            const result = await this.execute(fsa, fsa.meta);
+
+            if (result !== Ack) {
+                const e = new Error(
+                    // note that we have yet to push, so the current length will become the index for this command result
+                    `Failed at command [${allResults.length}] (${
+                        fsa.type
+                    }). \n ${result.toString()}`
+                );
+
+                allResults.push({
+                    fsa,
+                    result: e,
+                });
+            } else {
+                allResults.push({ fsa, result: Ack });
+            }
+        }
+
+        return allResults;
     }
 
     #buildCommand({ type, payload }: FluxStandardAction): ICommand {

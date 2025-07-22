@@ -26,6 +26,16 @@ describe('CommandsService', () => {
         }
     }
 
+    const validAddWidgetFsa = {
+        type: 'ADD_WIDGET',
+        payload: { widgetName: 'ok name' },
+    };
+
+    const invalidAddWidgetFsa = {
+        type: 'ADD_WIDGET',
+        payload: { widgetName: 'fail' },
+    };
+
     beforeAll(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [CommandHandlerService, AddWidget, HandleAddWidget],
@@ -71,6 +81,38 @@ describe('CommandsService', () => {
                 });
 
                 expect(result).toBeInstanceOf(Error);
+            });
+        });
+    });
+
+    describe('CommandHandlerService.executeCommandStream', () => {
+        describe(`when the command stream is valid`, () => {
+            it(`should succeed`, async () => {
+                const result = await service.executeStream([validAddWidgetFsa]);
+
+                expect(result[0].fsa).toEqual(validAddWidgetFsa);
+
+                expect(result[0].result).toBe(Ack);
+            });
+        });
+
+        describe(`when the command stream is invalid`, () => {
+            it(`should fail with the expected message`, async () => {
+                const result = await service.executeStream([
+                    validAddWidgetFsa,
+                    // comand at index 1 fails
+                    invalidAddWidgetFsa,
+                ]);
+
+                expect(result).not.toEqual([Ack, Ack]);
+
+                expect(result[0].fsa).toEqual(validAddWidgetFsa);
+
+                expect(result[0].result).toEqual(Ack);
+
+                expect((result[1].result as Error).message).toContain('[1]');
+
+                expect((result[1].result as Error).message).toContain('ADD_WIDGET');
             });
         });
     });

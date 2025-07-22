@@ -15,7 +15,9 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, Subject } from 'rxjs';
+import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
@@ -23,6 +25,8 @@ import { CommandWithGivenTypeNotFoundExceptionFilter } from './exception-handlin
 import { NoCommandHandlerForCommandTypeFilter } from './exception-handling/exception-filters/no-command-handler-for-command-type.filter';
 
 export const AdminJwtGuard = AuthGuard('jwt');
+
+const COMMAND_ACKNOWLEDGEMENT_BODY_TEXT = 'ACK';
 
 @ApiTags('commands')
 @Controller('commands')
@@ -36,6 +40,8 @@ export const AdminJwtGuard = AuthGuard('jwt');
  *
  * TODO [https://www.pivotaltracker.com/story/show/182785593]
  * We may want to do this in a pipe in the future.
+ *
+ * We might want to use returned errors intead of throwing in these situations.
  */
 @UseFilters(new CommandWithGivenTypeNotFoundExceptionFilter())
 @UseFilters(new NoCommandHandlerForCommandTypeFilter())
@@ -64,17 +70,26 @@ export class CommandController {
          * logic. If we want to drive commands via a CLI, it shouldn't need
          * to know about http.
          */
-        const { type, payload } = commandFSA;
+        const { type, payload, meta } = commandFSA;
+
+        const { contributorIds } = meta || { contributorIds: [] };
 
         const result = await this.commandHandlerService.execute(
             { type, payload },
             /**
-             * TODO We need to populate the rest of the meta from the fsa
+             * TODO Validate contributor existence in middleware
              */
-            { userId: user.id }
+            { userId: user.id, contributorIds }
         );
 
-        if (result !== Ack) return sendInternalResultAsHttpResponse(res, result);
+        if (result !== Ack) {
+            return sendInternalResultAsHttpResponse(
+                res,
+                isInternalError(result)
+                    ? result
+                    : new CommandExecutionError([new InternalError(result.message)])
+            );
+        }
 
         this.commandResultSubject.next({
             data: {
@@ -92,7 +107,63 @@ export class CommandController {
             },
         });
 
-        return res.status(httpStatusCodes.ok).send();
+        return res.status(httpStatusCodes.ok).send(COMMAND_ACKNOWLEDGEMENT_BODY_TEXT);
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Post('bulk')
+    async executeCommandStream(
+        @Request() req,
+        @Res() res,
+        @Body() { stream: commandStream }: { stream: CommandFSA[] }
+    ) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        // TODO[test-coverage] validate that additional meta comes through at the integration level (we have e2e tests of this)
+        const resultsForAllCommands = await this.commandHandlerService.executeStream(
+            commandStream.map(({ type, payload, meta }) => ({
+                type,
+                payload,
+                meta: {
+                    userId: user.id,
+                    contributorIds: meta?.contributorIds || [],
+                },
+            }))
+        );
+
+        if (
+            resultsForAllCommands.some(
+                (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
+            )
+        ) {
+            return res.status(httpStatusCodes.badRequest).send({
+                results: resultsForAllCommands.map(({ fsa, result }) => {
+                    return {
+                        fsa,
+                        result:
+                            result instanceof Error
+                                ? result.toString()
+                                : COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+                    };
+                }),
+            });
+        }
+
+        return res.status(httpStatusCodes.ok).send({
+            results: resultsForAllCommands.map(({ fsa }) => ({
+                fsa,
+                result: COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+            })),
+        });
     }
 
     @Sse('notifications')

@@ -2,18 +2,22 @@ import { FluxStandardAction } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { dummyUuid } from '../../../domain/models/__tests__/utilities/dummyUuid';
 import { PublishResource } from '../../../domain/models/shared/common-commands';
+import { SongCreated } from '../../../domain/models/song/commands';
+import { Song } from '../../../domain/models/song/song.entity';
+import { CoscradUserGroup } from '../../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
-import { ResourceType } from '../../../domain/types/ResourceType';
+import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import buildTestData from '../../../test-data/buildTestData';
-import httpStatusCodes from '../../constants/httpStatusCodes';
+import { TestEventStream } from '../../../test-data/events';
+import { buildTestInstance } from '../../../test-data/utilities';
+import httpStatusCodes, { HttpStatusCode } from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
 
 const databaseName = generateDatabaseNameForTestSuite();
@@ -31,10 +35,16 @@ describe('Role Based Access Control for commands', () => {
 
     let databaseProvider: ArangoDatabaseProvider;
 
-    const existingSong = getValidAggregateInstanceForTest(ResourceType.song).clone({
-        id: dummyUuid,
-        published: false,
+    const songCreated = new TestEventStream().buildSingle<SongCreated>({
+        type: 'SONG_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: {
+                id: dummyUuid,
+            },
+        },
     });
+
+    const existingSong = Song.fromEventHistory([songCreated], dummyUuid) as Song;
 
     const validCommandFSA: FluxStandardAction<PublishResource> = {
         type: 'PUBLISH_RESOURCE',
@@ -44,11 +54,11 @@ describe('Role Based Access Control for commands', () => {
     };
 
     describe('when the user does not have an admin role', () => {
-        const ordinaryUser = buildTestData().user[0].clone({
+        const ordinaryUser = buildTestInstance(CoscradUser, {
             roles: [CoscradUserRole.viewer],
         });
 
-        const userGroup = buildTestData().userGroup[0].clone({
+        const userGroup = buildTestInstance(CoscradUserGroup, {
             userIds: [ordinaryUser.id],
         });
 
@@ -82,9 +92,17 @@ describe('Role Based Access Control for commands', () => {
 
             databaseProvider.close();
         });
-        it('should return an unauthroized error', async () => {
+        it('should return an unauthroized error from the single commands endpoint "/commands"', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
+                .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthroized error from the bulk job endpoint "/commands/bulk"', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk`)
                 .send(validCommandFSA)
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
@@ -114,10 +132,18 @@ describe('Role Based Access Control for commands', () => {
         afterAll(async () => {
             await app.close();
         });
-        it('should return an unauthroized error', async () => {
+        it('should return an unauthroized error when executing a single command via /commands', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthroized error when executing a single command via /commands/bulk', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk`)
+                .send({ stream: [validCommandFSA] })
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
@@ -130,17 +156,17 @@ describe('Role Based Access Control for commands', () => {
         ] as const
     ).forEach(([role, description]) => {
         describe(description, () => {
-            const adminUser = buildTestData().user[0].clone({
+            const adminUser = buildTestInstance(CoscradUser, {
                 roles: [role],
             });
 
-            const userGroup = buildTestData().userGroup[0].clone({
+            const userGroup = buildTestInstance(CoscradUserGroup, {
                 userIds: [adminUser.id],
             });
 
             const testUserWithGroups = new CoscradUserWithGroups(adminUser, [userGroup]);
 
-            beforeAll(async () => {
+            beforeEach(async () => {
                 ({ testRepositoryProvider, app } = await setUpIntegrationTest(
                     {
                         ARANGO_DB_NAME: databaseName,
@@ -151,23 +177,31 @@ describe('Role Based Access Control for commands', () => {
                 await testRepositoryProvider.testSetup();
 
                 await testRepositoryProvider.addFullSnapshot(
-                    buildInMemorySnapshot({
+                    new DeluxeInMemoryStore({
                         user: [adminUser],
                         userGroup: [userGroup],
-                        resources: {
-                            song: [existingSong],
-                        },
-                    })
+                        song: [existingSong],
+                    }).fetchFullSnapshotInLegacyFormat()
                 );
             });
 
             afterAll(async () => {
                 await app.close();
             });
-            it('should return ok', async () => {
-                const result = request(app.getHttpServer()).post(`/commands`).send(validCommandFSA);
+            it('should return ok for a single command via /commands', async () => {
+                const result = await request(app.getHttpServer())
+                    .post(`/commands`)
+                    .send(validCommandFSA);
 
-                result.expect(httpStatusCodes.ok);
+                expect(result.status).toBe(HttpStatusCode.ok);
+            });
+
+            it('should return ok for a bulk job via /commands/bulk', async () => {
+                const res = await request(app.getHttpServer())
+                    .post(`/commands/bulk`)
+                    .send({ stream: [validCommandFSA] });
+
+                expect(res.status).toBe(HttpStatusCode.ok);
             });
         });
     });
