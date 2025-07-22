@@ -111,5 +111,19 @@ describe(`TagRelabelledEventHandler`, () => {
 
             expect(label).toBe(newTaggedLabel);
         });
+
+        /**
+         * Currently, cascading updates to the resource view is the job of the `TagRelabelled` event consumer.
+         * We are working to establish an extensible and reliable approach
+         * to cascading updates, so this may change.
+         *
+         * We have test coverage for this behaviour in the concrete `ArangoTagQueryRepository`
+         * implementation. We will also cover this with scenario \ e2e tests.
+         *
+         * If we add this test coverage here, we should use a toy `Widget` resource
+         * model to ensure this test remains decoupled from the concrete
+         * resource view models for easy maintenance.
+         */
+        it.todo(`should cascade updates to the corresponding resource documents`);
     });
 });
