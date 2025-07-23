@@ -4,8 +4,10 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { CommandFSA } from '../command-fsa/command-fsa.entity';
 import { BulkCommandExecutionResult, CoscradBulkImportJob } from './bulk-import-job.entity';
 
+export const BULK_JOB_REPOSITORY_INJECTION_TOKEN = 'BULK_JOB_REPOSITORY_INJECTION_TOKEN';
+
 export interface IBulkJobRepository {
-    create(job: CoscradBulkImportJob): Promise<void>;
+    create(job: CoscradBulkImportJob): Promise<AggregateId>;
 
     fetchById(id: AggregateId): Promise<Maybe<CoscradBulkImportJob>>;
 

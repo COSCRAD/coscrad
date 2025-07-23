@@ -332,6 +332,8 @@ import { Environment } from '../../config/constants/environment';
 import { EnvironmentVariables } from '../../config/env.validation';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
+import { ArangoBulkJobRepository } from '../command/bulk-imports/arango-bulk-job-repository';
+import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from '../command/bulk-imports/bulk-job-repository.interface';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
 import { CoscradUserGroupController } from '../coscrad-user-group.controller';
@@ -543,6 +545,10 @@ export default async (
                     CoscradEventFactory,
                     DynamicDataTypeFinderService,
                 ],
+            },
+            {
+                provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+                useClass: ArangoBulkJobRepository,
             },
             {
                 provide: EdgeConnectionQueryService,

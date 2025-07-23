@@ -1,4 +1,5 @@
 import { Ack } from '@coscrad/commands';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { AggregateId } from '../../../../domain/types/AggregateId';
@@ -30,10 +31,39 @@ export class ArangoBulkJobRepository implements IBulkJobRepository {
         this.db = new ArangoDatabaseForCollection(arangoDb, ARANGO_BULK_JOB_COLLECTION_NAME);
     }
 
-    async create(bulkJob: CoscradBulkImportJob): Promise<void> {
+    async create(bulkJob: CoscradBulkImportJob): Promise<AggregateId> {
         const doc = this.instanceToArangoDoc(bulkJob);
 
-        await this.db.create(doc);
+        const query = `
+            insert @newDoc in @@collectionName
+            return NEW._key
+        `;
+
+        const bindVars = {
+            '@collectionName': ARANGO_BULK_JOB_COLLECTION_NAME,
+            newDoc: doc,
+        };
+
+        const cursor = await this.db.query({ query, bindVars });
+
+        const result = await cursor.all();
+
+        if (result.length !== 1) {
+            // this is a system error and should never happen, but is a logical possiblity
+            throw new InternalError(
+                `Request to create a single bulk job returned multiple update records.`
+            );
+        }
+
+        const returnedId = result[0] as unknown;
+
+        if (!isNonEmptyString(returnedId)) {
+            throw new InternalError(
+                `Request to create a single bulk job returned an invalid ID: ${returnedId} (expected non-empty string)`
+            );
+        }
+
+        return returnedId;
     }
 
     async fetchById(id: AggregateId): Promise<Maybe<CoscradBulkImportJob>> {

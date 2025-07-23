@@ -1,9 +1,12 @@
-import { AGGREGATE_COMPOSITE_IDENTIFIER } from '@coscrad/api-interfaces';
+import { AGGREGATE_COMPOSITE_IDENTIFIER, HttpStatusCode } from '@coscrad/api-interfaces';
 import { Ack, CommandHandlerService } from '@coscrad/commands';
 import {
     Body,
     Controller,
+    Get,
+    Inject,
     MessageEvent,
+    Param,
     Post,
     Request,
     Res,
@@ -15,11 +18,23 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, Subject } from 'rxjs';
+import {
+    ID_MANAGER_TOKEN,
+    IIdManager,
+    UniquelyIdentifiableType,
+} from '../../../domain/interfaces/id-manager.interface';
 import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
+import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
+import { CoscradBulkImportJob } from './bulk-imports/bulk-import-job.entity';
+import {
+    BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+    IBulkJobRepository,
+} from './bulk-imports/bulk-job-repository.interface';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
 import { CommandWithGivenTypeNotFoundExceptionFilter } from './exception-handling/exception-filters/command-with-given-type-not-found.filter';
 import { NoCommandHandlerForCommandTypeFilter } from './exception-handling/exception-filters/no-command-handler-for-command-type.filter';
@@ -48,7 +63,13 @@ const COMMAND_ACKNOWLEDGEMENT_BODY_TEXT = 'ACK';
 export class CommandController {
     private readonly commandResultSubject = new Subject<MessageEvent>();
 
-    constructor(private readonly commandHandlerService: CommandHandlerService) {}
+    constructor(
+        private readonly commandHandlerService: CommandHandlerService,
+        @Inject(BULK_JOB_REPOSITORY_INJECTION_TOKEN)
+        private readonly bulkJobRepo: IBulkJobRepository,
+        @Inject(ID_MANAGER_TOKEN)
+        private readonly idManager: IIdManager
+    ) {}
 
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
@@ -113,10 +134,11 @@ export class CommandController {
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Post('bulk')
-    async executeCommandStream(
+    async createBulkJob(
         @Request() req,
         @Res() res,
-        @Body() { stream: commandStream }: { stream: CommandFSA[] }
+        // TODO pipe validation?
+        @Body() createDto: CoscradBulkImportJobCreateDto
     ) {
         const { user } = req;
 
@@ -127,6 +149,108 @@ export class CommandController {
         if (!user.isAdmin()) {
             throw new UnauthorizedException();
         }
+
+        // TODO invariant validation
+
+        const newId = await this.idManager.generate();
+
+        const instanceOrError = CoscradBulkImportJob.fromCreateDto({ ...createDto, id: newId });
+
+        if (isInternalError(instanceOrError)) {
+            // TODO use response mapping instead
+            return res.status(HttpStatusCode.badRequest).send(instanceOrError);
+        }
+
+        /**
+         * TODO consider wrapping the next 2 repo calls in a transaction. Without
+         * doing this, we choose to mark the ID as used as it's better to have
+         * an ID that is unavailable but not actually in use than an entity
+         * with an ID that is still available. That said, within the normal
+         * flow of the situation, UUIDs will be impossible to reuse, but with
+         * manual service \ API calls, this situation could be created.
+         */
+        // TODO Will we track the bulk job as an aggregate root? Maybe we don't need it on the big enum, which is being phased out.
+        await this.idManager.use({ type: 'bulkJob' as UniquelyIdentifiableType, id: newId });
+
+        const result = await this.bulkJobRepo.create(instanceOrError);
+
+        return res.status(HttpStatusCode.ok).send({ id: result });
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Get('bulk/:id')
+    async fetchBulkJobById(@Request() req, @Res() res, @Param('id') id: string) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        const searchResult = await this.bulkJobRepo.fetchById(id);
+
+        if (isNotFound(searchResult)) {
+            return res.status(HttpStatusCode.notFound).send();
+        }
+
+        return res.status(HttpStatusCode.ok).send(searchResult);
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Get('bulk')
+    // TODO support filters
+    async fetchManyBulkJobs(@Request() req, @Res() res) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        const searchResult = await this.bulkJobRepo.fetchMany();
+
+        return res.status(HttpStatusCode.ok).send(searchResult);
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Post('bulk/:id')
+    async executeCommandStream(@Request() req, @Res() res, @Param('id') id: string) {
+        const { user } = req;
+
+        if (!user || !(user instanceof CoscradUserWithGroups)) {
+            throw new UnauthorizedException();
+        }
+
+        if (!user.isAdmin()) {
+            throw new UnauthorizedException();
+        }
+
+        const fetchResult = await this.bulkJobRepo.fetchById(id);
+
+        if (isNotFound(fetchResult)) {
+            return res.status(HttpStatusCode.notFound).send(NotFound);
+        }
+
+        if (!fetchResult.isDraft()) {
+            return res
+                .status(HttpStatusCode.badRequest)
+                .send(
+                    new InternalError(
+                        `You cannot execute bulk job: ${id} as it has already been initiated`
+                    )
+                );
+        }
+
+        const { stream: commandStream } = fetchResult;
 
         // TODO[test-coverage] validate that additional meta comes through at the integration level (we have e2e tests of this)
         const resultsForAllCommands = await this.commandHandlerService.executeStream(
@@ -145,24 +269,34 @@ export class CommandController {
                 (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
             )
         ) {
+            const results = resultsForAllCommands.map(({ fsa, result }) => {
+                return {
+                    fsa,
+                    result:
+                        result instanceof Error
+                            ? result.toString()
+                            : COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+                };
+            });
+
+            // @ts-expect-error fix this
+            await this.bulkJobRepo.registerResults(id, results, Date.now());
+
             return res.status(httpStatusCodes.badRequest).send({
-                results: resultsForAllCommands.map(({ fsa, result }) => {
-                    return {
-                        fsa,
-                        result:
-                            result instanceof Error
-                                ? result.toString()
-                                : COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
-                    };
-                }),
+                results,
             });
         }
 
+        const results = resultsForAllCommands.map(({ fsa }) => ({
+            fsa,
+            result: COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+        }));
+
+        // @ts-expect-error fix this
+        await this.bulkJobRepo.registerResults(id, results, Date.now());
+
         return res.status(httpStatusCodes.ok).send({
-            results: resultsForAllCommands.map(({ fsa }) => ({
-                fsa,
-                result: COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
-            })),
+            results,
         });
     }
 

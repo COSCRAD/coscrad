@@ -84,7 +84,7 @@ describe(`ArangoBulkJobRepository`, () => {
 
     describe(`fetchById`, () => {
         describe(`when there is a bulk job with the given ID`, () => {
-            const testJob = buildTestInstance(CoscradBulkImportJob);
+            const testJob = buildTestInstance(CoscradBulkImportJob, {});
 
             beforeEach(async () => {
                 await testRepo.create(testJob);
