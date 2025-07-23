@@ -1,3 +1,4 @@
+import { Ack } from '@coscrad/commands';
 import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../domain/models/__tests__/utilities/dummyDateNow';
 import { AggregateId } from '../../../../domain/types/AggregateId';
@@ -10,7 +11,7 @@ import { CoscradBulkImportJobCreateDto } from './bulk-import-job.create-dto.enti
 export class BulkCommandExecutionResult {
     fsa: CommandFSA;
 
-    result: string;
+    result: Ack | string;
 }
 
 @CoscradDataExample<CoscradBulkImportJob>({
@@ -38,7 +39,7 @@ export class CoscradBulkImportJob {
 
     // calculate a status instead- draft, pending, success, failure?
     public didSucceed() {
-        return this.results.length > 0 && this.results.every(({ result }) => result === 'ACK');
+        return this.results.length > 0 && this.results.every(({ result }) => result === Ack);
     }
 
     public validateInvariants(): InternalError[] {

@@ -4,8 +4,8 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import {
-    BulkCommandExecutionResult,
     CommandHandlerService,
+    CommandStreamExecutionResult,
     FluxStandardAction,
 } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
@@ -354,7 +354,7 @@ describe('The Command Controller', () => {
                     expect(result.status).toBe(HttpStatusCode.badRequest);
 
                     const { results: resultsForFsas } = result.body as {
-                        results: BulkCommandExecutionResult[];
+                        results: CommandStreamExecutionResult[];
                     };
 
                     const resultForInvalidTypeCommand = resultsForFsas.find(
