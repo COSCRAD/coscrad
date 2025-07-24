@@ -14,25 +14,15 @@ We have adopted the monorepo approach to allow our members to maximize opportuni
 
 #### Apps
 
-Our apps are of two kinds:
-
-**core coscrad applications**
+**core COSCRAD applications**
 
 -   [`api`](./apps/api/README.md) (core back-end for the COSCRAD `web of knowledge`)
+    `api` currenlty includes our back-end, the REST API binding, and a CLI binding (provided as a separate build, `coscrad-cli` of the `api` app).
+
 -   [`coscrad-frontend`](./apps/coscrad-frontend/README.md) (standard front-end for the COSCRAD `web of knowledge`)
+    `coscrad-frontend` is the web client for the COSCRAD platform. It is currently highly configurable via the `Content Config`, which is the seed of a future CMS system.
 
-**community projects**
-
--   `tng-dictionary` (maintained by Justin Bambrick, TNG)
--   `tsilqotin-language-hub` (maintained by Justin Bambrick, TNG)
--   `tng-radio-hub` (maintained by Blake Sellars, TNG)
-
-The core apps are developed and maintained by the core COSCRAD team. These projects
-are subject to strict guidelines for code quality and automated test coverage.
-
-The community projects currently consist of several prototypes of front-end clients
-that leverage the COSCRAD API. The Many ideas explored in the community projects
-will eventually find their way into Coscrad's core.
+-   [`coscrad-frontend-e2e`](./apps/coscrad-frontend-e2e/README.md) includes `Cypress` `e2e` tests for `coscrad-frontend`.
 
 **COSCRAD CLI**
 The `coscrad-cli` is a command line tool for data administration tasks. Its use is documented [here](./apps/api/cli.README.md)
@@ -40,7 +30,7 @@ The `coscrad-cli` is a command line tool for data administration tasks. Its use 
 In the future, once our domain has been moved to a separate lib, we will move
 the `COSCRAD CLI` to a standalone app in the mono-repo.
 
-#### libs
+#### Internal Libraries
 
 We maintain several libraries, which allow us to share code between applications in the monorepo.
 For example, we share validation constraints between the back-end and client to allow
