@@ -17,6 +17,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import validateCommandPayloadType from 'apps/api/src/domain/models/shared/command-handlers/utilities/validateCommandPayloadType';
 import { Observable, Subject } from 'rxjs';
 import {
     ID_MANAGER_TOKEN,
@@ -301,6 +302,16 @@ export class CommandController {
         return res.status(httpStatusCodes.ok).send({
             results,
         });
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Post('bulk')
+    validateCommandTypes(@Body() { stream: commandStream }: { stream: CommandFSA[] }) {
+        const validationResult = commandStream.map((fsa) => ({
+            fsa,
+            result: validateCommandPayloadType(fsa.payload, fsa.type),
+        }));
     }
 
     @Sse('notifications')
