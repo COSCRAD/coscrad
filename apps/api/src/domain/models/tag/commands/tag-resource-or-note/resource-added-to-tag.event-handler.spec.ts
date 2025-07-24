@@ -1,4 +1,4 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
+import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -27,11 +27,15 @@ const label = 'the label for this tag';
 const existingTag = buildTestInstance(EventSourcedTagViewModel, {
     id: tagId,
     label,
+    members: [],
 });
+
+const taggedMemberCompositeIdentifier = { id: tagId, type: CategorizableType.term };
 
 const resourceAddedToTagEvent = buildTestInstance(ResourceOrNoteTagged, {
     payload: {
-        taggedMemberCompositeIdentifier: { id: tagId, type: CategorizableType.term },
+        aggregateCompositeIdentifier: { type: AggregateType.tag, id: tagId },
+        taggedMemberCompositeIdentifier,
     },
 });
 
@@ -95,6 +99,20 @@ describe(`ResourceAddedToTagEventHandler`, () => {
     });
 
     describe(`when handing a resource or note tagged`, () => {
-        it(`should tag the resource or note`, async () => {});
+        it(`should tag the resource or note`, async () => {
+            await handler.handle(resourceAddedToTagEvent);
+
+            const updatedTag = (await testQueryRepository.fetchById(
+                existingTag.id
+            )) as EventSourcedTagViewModel;
+
+            const { members } = updatedTag;
+
+            expect(members).toHaveLength(1);
+
+            const firstMember = members[0];
+
+            expect(firstMember).toEqual(taggedMemberCompositeIdentifier);
+        });
     });
 });
