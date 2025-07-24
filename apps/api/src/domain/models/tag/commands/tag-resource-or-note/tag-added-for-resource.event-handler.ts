@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
 
@@ -12,7 +12,7 @@ interface IQueryRepositoryProvider {
 }
 
 @CoscradEventConsumer('RESOURCE_OR_NOTE_TAGGED')
-export class ResourceOrNoteTaggedEventHandler implements ICoscradEventHandler {
+export class TagAddedForResourceEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly repositoryProvider: IQueryRepositoryProvider

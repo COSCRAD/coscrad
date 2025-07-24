@@ -13,7 +13,7 @@ import { TagCreatedEventHandler } from '../../domain/models/tag/commands/create-
 import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-created.event';
 import { TagRelabelledEventHandler } from '../../domain/models/tag/commands/relabel-tag/tag-relabelled.event-handler';
 import { ResourceOrNoteTagged } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
-import { ResourceOrNoteTaggedEventHandler } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
+import { TagAddedForResourceEventHandler } from '../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
@@ -33,7 +33,7 @@ import { TagController } from '../controllers/tag.controller';
         RelabelTagCommandHandler,
         TagResourceOrNote,
         TagResourceOrNoteCommandHandler,
-        ResourceOrNoteTaggedEventHandler,
+        TagAddedForResourceEventHandler,
         TagCreatedEventHandler,
         TagRelabelledEventHandler,
         // Does this belong here?

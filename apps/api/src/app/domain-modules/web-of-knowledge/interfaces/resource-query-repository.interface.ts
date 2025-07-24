@@ -6,7 +6,7 @@ import {
     IPublishable,
 } from '../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
-import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event-handler';
+import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { Maybe } from '../../../../lib/types/maybe';
 
 export interface IResourceQueryRepository<T = unknown>
