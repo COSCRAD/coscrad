@@ -1,6 +1,19 @@
 import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Query,
+    Request,
+    Res,
+    UploadedFiles,
+    UseFilters,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
@@ -144,6 +157,14 @@ export class MediaItemController {
         );
 
         return clonePlainObjectWithOverrides(result, { entities });
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @Post('/upload')
+    @UseInterceptors(AnyFilesInterceptor())
+    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+        console.log(files);
     }
 
     private buildHeaders({

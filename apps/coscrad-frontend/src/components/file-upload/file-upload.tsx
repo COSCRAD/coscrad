@@ -22,6 +22,9 @@ import {
     Typography,
 } from '@mui/material';
 import { ChangeEvent, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getConfig } from '../../config';
+import { selectAuthToken } from '../../store/slices/utils/select-token';
 import LinearProgressWithLabel from '../linear-progress-with-label/linear-progress-with-label';
 
 const VisuallyHiddenInput = styled('input')({
@@ -68,17 +71,68 @@ export const FileUpload = () => {
         }
     };
 
-    async function handleUpload() {
-        console.log('Upload Not Implemented');
-    }
+    const token = useSelector(selectAuthToken);
 
-    function removeFile(id: string) {
+    const handleUpload = async () => {
+        if (files.length === 0 || uploading) {
+            return;
+        }
+
+        setUploading(true);
+
+        const uploadPromises = files.map(async (fileWithProgress) => {
+            const formData = new FormData();
+            formData.append('file', fileWithProgress.file);
+
+            const request = new XMLHttpRequest();
+
+            request.open('POST', `${getConfig().apiUrl}/resources/mediaItems/upload`);
+
+            request.setRequestHeader('Authorization', 'Bearer ' + token);
+
+            // upload progress event
+            request.upload.addEventListener('progress', function (e) {
+                // upload progress as percentage
+                const progress = (e.loaded / e.total) * 100;
+
+                setFiles((prevFiles) =>
+                    prevFiles.map((file) =>
+                        file.id === fileWithProgress.id ? { ...file, progress } : file
+                    )
+                );
+            });
+
+            // request finished event
+            request.addEventListener('load', function (e) {
+                // HTTP status message (200, 404 etc)
+                console.log(request.status);
+
+                // request.response holds response from the server
+                console.log(request.response);
+
+                setFiles((prevFiles) =>
+                    prevFiles.map((file) =>
+                        file.id === fileWithProgress.id ? { ...file, uploaded: true } : file
+                    )
+                );
+            });
+
+            // send POST request to server
+            request.send(formData);
+        });
+
+        await Promise.all(uploadPromises);
+
+        setUploading(false);
+    };
+
+    const removeFile = (id: string) => {
         setFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
-    }
+    };
 
-    function handleClear() {
+    const handleClear = () => {
         setFiles([]);
-    }
+    };
 
     return (
         <Stack spacing={2}>
