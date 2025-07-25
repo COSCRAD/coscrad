@@ -26,7 +26,7 @@ import {
 import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
-import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { isNotFound } from '../../../lib/types/not-found';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
@@ -223,7 +223,7 @@ export class CommandController {
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Post('bulk/:id')
-    async executeCommandStream(@Request() req, @Res() res, @Param('id') id: string) {
+    async executeBulkJob(@Request() req, @Res() res, @Param('id') id: string) {
         const { user } = req;
 
         if (!user || !(user instanceof CoscradUserWithGroups)) {
@@ -237,7 +237,10 @@ export class CommandController {
         const fetchResult = await this.bulkJobRepo.fetchById(id);
 
         if (isNotFound(fetchResult)) {
-            return res.status(HttpStatusCode.notFound).send(NotFound);
+            return res
+                .status(HttpStatusCode.notFound)
+                .send(new InternalError(`There is no bulk job with the ID: ${id}`))
+                .toString();
         }
 
         if (!fetchResult.isDraft()) {

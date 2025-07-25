@@ -89,7 +89,16 @@ describe(`When creating a full digital text`, () => {
 
             const stream = [validCreateCommandFsa];
 
-            const res = await request(app.getHttpServer()).post(endpoint).send({ stream });
+            // We first schedule the bulk job
+            const jobCreationResponse = await request(app.getHttpServer())
+                .post(endpoint)
+                .send({ stream });
+
+            const {
+                body: { id: jobId },
+            } = jobCreationResponse;
+
+            const res = await request(app.getHttpServer()).post(`${endpoint}/${jobId}`);
 
             expect(res.status).toBe(HttpStatusCode.ok);
 
@@ -147,7 +156,15 @@ describe(`When creating a full digital text`, () => {
 
             const stream = [validCreateCommandFsa, invalidTranslateFsa];
 
-            const res = await request(app.getHttpServer()).post(endpoint).send({ stream });
+            const jobCreationResponse = await request(app.getHttpServer())
+                .post(endpoint)
+                .send({ stream });
+
+            const {
+                body: { id: jobId },
+            } = jobCreationResponse;
+
+            const res = await request(app.getHttpServer()).post(`${endpoint}/${jobId}`);
 
             expect(res.status).toBe(HttpStatusCode.badRequest);
 
