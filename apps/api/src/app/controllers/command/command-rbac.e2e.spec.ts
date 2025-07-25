@@ -19,6 +19,7 @@ import { TestEventStream } from '../../../test-data/events';
 import { buildTestInstance } from '../../../test-data/utilities';
 import httpStatusCodes, { HttpStatusCode } from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+import { ARANGO_BULK_JOB_COLLECTION_NAME } from './bulk-imports/arango-bulk-job-repository';
 
 const databaseName = generateDatabaseNameForTestSuite();
 
@@ -107,6 +108,14 @@ describe('Role Based Access Control for commands', () => {
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
+
+        it('should return an unauthroized error from the bulk job endpoint "/commands/bulk/:id"', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk/123`)
+                .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
     });
 
     describe('when there is no user on the request (public request)', () => {
@@ -147,6 +156,14 @@ describe('Role Based Access Control for commands', () => {
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
+
+        it('should return an unauthroized error when executing a single command via /commands/bulk/:id', async () => {
+            await request(app.getHttpServer())
+                .post(`/commands/bulk/123`)
+                .send({ stream: [validCommandFSA] })
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
     });
 
     (
@@ -155,6 +172,12 @@ describe('Role Based Access Control for commands', () => {
             [CoscradUserRole.superAdmin, 'when the user is a COSCRAD admin'],
         ] as const
     ).forEach(([role, description]) => {
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ARANGO_BULK_JOB_COLLECTION_NAME)
+                .clear();
+        });
+
         describe(description, () => {
             const adminUser = buildTestInstance(CoscradUser, {
                 roles: [role],
@@ -196,12 +219,22 @@ describe('Role Based Access Control for commands', () => {
                 expect(result.status).toBe(HttpStatusCode.ok);
             });
 
-            it('should return ok for a bulk job via /commands/bulk', async () => {
-                const res = await request(app.getHttpServer())
+            it('should return ok when creating a bulk job via /commands/bulk and executing it via /commands/bulk/:id', async () => {
+                const jobCreationResponse = await request(app.getHttpServer())
                     .post(`/commands/bulk`)
                     .send({ stream: [validCommandFSA] });
 
-                expect(res.status).toBe(HttpStatusCode.ok);
+                expect(jobCreationResponse.status).toBe(HttpStatusCode.ok);
+
+                const {
+                    body: { id: jobId },
+                } = jobCreationResponse;
+
+                const jobExecutionResponse = await await request(app.getHttpServer()).post(
+                    `/commands/bulk/${jobId}`
+                );
+
+                expect(jobExecutionResponse.status).toBe(HttpStatusCode.ok);
             });
         });
     });

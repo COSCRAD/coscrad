@@ -18,7 +18,7 @@ export type CommandConstructorAndMeta<TCommandMeta extends CommandMetadataBase> 
 
 type CommandResult = Error | Ack;
 
-export type BulkCommandExecutionResult = {
+export type CommandStreamExecutionResult = {
     fsa: FluxStandardAction & { meta?: Record<string, unknown> };
     result: CommandResult;
 };
@@ -50,8 +50,8 @@ export class CommandHandlerService {
 
     async executeStream(
         commandFsas: (FluxStandardAction & { meta?: Record<string, unknown> })[]
-    ): Promise<BulkCommandExecutionResult[]> {
-        const allResults: BulkCommandExecutionResult[] = [];
+    ): Promise<CommandStreamExecutionResult[]> {
+        const allResults: CommandStreamExecutionResult[] = [];
 
         for (const fsa of commandFsas) {
             const result = await this.execute(fsa, fsa.meta);

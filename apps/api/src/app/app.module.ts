@@ -8,6 +8,7 @@ import { MediaItemModule } from '../domain/models/media-item';
 import { PhotographModule } from '../domain/models/photograph/photograph.module';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../lib/nlp';
+import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ArangoRepositoryProvider } from '../persistence/repositories/arango-repository.provider';
@@ -16,6 +17,8 @@ import { AppController } from './app.controller';
 import buildConfigFilePath from './config/buildConfigFilePath';
 import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
+import { ArangoBulkJobRepository } from './controllers/command/bulk-imports/arango-bulk-job-repository';
+import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from './controllers/command/bulk-imports/bulk-job-repository.interface';
 import { CommandController } from './controllers/command/command.controller';
 import { GameController } from './controllers/command/game.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
@@ -40,6 +43,12 @@ import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge/web-of-k
         CommandInfoService,
         // This one is global. It is used by all resource modules.
         CoscradNLPModule,
+        {
+            provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+            useFactory: (connectionProvider: ArangoConnectionProvider) =>
+                new ArangoBulkJobRepository(connectionProvider),
+            inject: [ArangoConnectionProvider],
+        },
     ],
     imports: [
         ConfigModule.forRoot({

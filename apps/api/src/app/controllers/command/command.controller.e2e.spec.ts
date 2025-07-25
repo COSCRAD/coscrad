@@ -4,11 +4,12 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import {
-    BulkCommandExecutionResult,
     CommandHandlerService,
+    CommandStreamExecutionResult,
     FluxStandardAction,
 } from '@coscrad/commands';
 import { CoscradUserRole } from '@coscrad/data-types';
+import { isUUID } from '@coscrad/validation-constraints';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
@@ -16,14 +17,23 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { buildFakeTimersConfig } from '../../../domain/models/__tests__/utilities/buildFakeTimersConfig';
 import { AudioItemCreated } from '../../../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../../../domain/models/audio-visual/audio-item/entities/audio-item.entity';
-import { TranslateSongTitle } from '../../../domain/models/song/commands';
+import {
+    AddLyricsForSong,
+    SongCreated,
+    TranslateSongTitle,
+} from '../../../domain/models/song/commands';
 import { CreateSong } from '../../../domain/models/song/commands/create-song.command';
 import { CreateSongCommandHandler } from '../../../domain/models/song/commands/create-song.command-handler';
 import { Song } from '../../../domain/models/song/song.entity';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { AggregateId } from '../../../domain/types/AggregateId';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import { NotFound } from '../../../lib/types/not-found';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { ArangoDatabase } from '../../../persistence/database/arango-database';
+import { ArangoDatabaseForCollection } from '../../../persistence/database/arango-database-for-collection';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -34,6 +44,13 @@ import { buildTestInstance } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import setUpIntegrationTest from '../__tests__/setUpIntegrationTest';
+import { ARANGO_BULK_JOB_COLLECTION_NAME } from './bulk-imports/arango-bulk-job-repository';
+import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
+import { CoscradBulkImportJob } from './bulk-imports/bulk-import-job.entity';
+import {
+    BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+    IBulkJobRepository,
+} from './bulk-imports/bulk-job-repository.interface';
 
 const commandEndpoint = `/commands`;
 
@@ -89,6 +106,8 @@ describe('The Command Controller', () => {
 
     let commandHandlerService: CommandHandlerService;
 
+    let bulkJobRepo: IBulkJobRepository;
+
     beforeAll(async () => {
         ({ testRepositoryProvider, app, commandHandlerService, databaseProvider } =
             await setUpIntegrationTest(
@@ -106,6 +125,8 @@ describe('The Command Controller', () => {
         commandHandlerService.registerHandler('CREATE_SONG', app.get(CreateSongCommandHandler));
 
         jest.useFakeTimers(buildFakeTimersConfig());
+
+        bulkJobRepo = app.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN);
     });
 
     beforeEach(async () => {
@@ -115,6 +136,11 @@ describe('The Command Controller', () => {
         await testRepositoryProvider.getUserRepository().create(dummyAdminUser);
 
         await app.get(ArangoEventRepository).appendEvents(eventHistoryForAudioItem);
+
+        await new ArangoDatabaseForCollection(
+            new ArangoDatabase(app.get(ArangoConnectionProvider).getConnection()),
+            ARANGO_BULK_JOB_COLLECTION_NAME
+        ).clear();
     });
 
     afterEach(async () => {
@@ -294,61 +320,309 @@ describe('The Command Controller', () => {
     });
 
     describe(`when executing a stream of commands (/commands/bulk)`, () => {
-        describe(`when some commands are valid, some have type errors, and some have execution errors`, () => {
-            it(`should return the expected result`, async () => {
-                const idResponse = await request(app.getHttpServer()).post(`/ids`);
+        describe(`when creating a new bulk job: POST /bulk`, () => {
+            let jobCreationResult: any;
 
-                const id = idResponse.text;
+            const jobName = 'Import Counting Vocabulary';
 
-                const validCommandFSA = buildValidCommandFSA(id);
+            const songId = buildDummyUuid(133);
 
-                const missingSongId = buildDummyUuid(404);
-
-                const invalidUpdateFsa = {
-                    type: 'TRANSLATE_SONG_TITLE',
-                    payload: buildTestInstance(TranslateSongTitle, {
-                        aggregateCompositeIdentifier: {
-                            id: missingSongId,
+            const existingSong = Song.fromEventHistory(
+                new TestEventStream()
+                    .andThen<SongCreated>({
+                        type: 'SONG_CREATED',
+                        payload: {
+                            languageCodeForTitle: LanguageCode.Chilcotin,
                         },
+                    })
+                    .as({
+                        type: AggregateType.song,
+                        id: songId,
                     }),
-                };
+                songId
+            ) as Song;
 
-                const commandStream = [commandWithInvalidType, validCommandFSA, invalidUpdateFsa];
+            const validTranslateTitle = {
+                type: 'TRANSLATE_SONG_TITLE',
+                payload: buildTestInstance(TranslateSongTitle, {
+                    aggregateCompositeIdentifier: {
+                        id: songId,
+                    },
+                    languageCode: LanguageCode.English,
+                }),
+            };
 
-                const result = await request(app.getHttpServer())
+            const missingSongId = buildDummyUuid(404);
+
+            const invalidUpdateFsa = {
+                type: 'ADD_LYRICS_FOR_SONG',
+                payload: buildTestInstance(AddLyricsForSong, {
+                    aggregateCompositeIdentifier: {
+                        id: missingSongId,
+                    },
+                }),
+            };
+
+            const stream = [validTranslateTitle, invalidUpdateFsa, commandWithInvalidType];
+
+            const createDto: CoscradBulkImportJobCreateDto = {
+                name: jobName,
+                stream,
+            };
+
+            beforeEach(async () => {
+                jobCreationResult = await request(app.getHttpServer())
                     .post(`${commandEndpoint}/bulk`)
-                    .send({ stream: commandStream });
+                    .send(createDto);
 
-                expect(result.status).toBe(HttpStatusCode.badRequest);
+                await testRepositoryProvider.forResource(AggregateType.song).create(existingSong);
+            });
 
-                const { results: resultsForFsas } = result.body as {
-                    results: BulkCommandExecutionResult[];
+            describe(`when there is no existing job with the same name`, () => {
+                it(`should create the job`, async () => {
+                    expect(jobCreationResult.status).toBe(HttpStatusCode.ok);
+
+                    // TODO use mock ID generator to check actual value
+                    expect(isUUID(jobCreationResult.body.id)).toBe(true);
+
+                    const jobRecord = (await bulkJobRepo.fetchById(
+                        jobCreationResult.body.id
+                    )) as CoscradBulkImportJob;
+
+                    expect(jobRecord.isDraft()).toBe(true);
+                });
+            });
+        });
+
+        describe(`when a bulk job exists and is ready to be executed`, () => {
+            let generatedId: AggregateId;
+
+            let jobCreationResult: any;
+
+            const jobName = 'Import Counting Vocabulary';
+
+            const songId = buildDummyUuid(133);
+
+            const existingSong = Song.fromEventHistory(
+                new TestEventStream()
+                    .andThen<SongCreated>({
+                        type: 'SONG_CREATED',
+                        payload: {
+                            languageCodeForTitle: LanguageCode.Chilcotin,
+                        },
+                    })
+                    .as({
+                        type: AggregateType.song,
+                        id: songId,
+                    }),
+                songId
+            ) as Song;
+
+            const validTranslateTitle = {
+                type: 'TRANSLATE_SONG_TITLE',
+                payload: buildTestInstance(TranslateSongTitle, {
+                    aggregateCompositeIdentifier: {
+                        id: songId,
+                    },
+                    languageCode: LanguageCode.English,
+                }),
+            };
+
+            const missingSongId = buildDummyUuid(404);
+
+            const invalidUpdateFsa = {
+                type: 'ADD_LYRICS_FOR_SONG',
+                payload: buildTestInstance(AddLyricsForSong, {
+                    aggregateCompositeIdentifier: {
+                        id: missingSongId,
+                    },
+                }),
+            };
+
+            const stream = [validTranslateTitle, invalidUpdateFsa, commandWithInvalidType];
+
+            const createDto: CoscradBulkImportJobCreateDto = {
+                name: jobName,
+                stream,
+            };
+
+            beforeEach(async () => {
+                jobCreationResult = await request(app.getHttpServer())
+                    .post(`${commandEndpoint}/bulk`)
+                    .send(createDto);
+
+                generatedId = jobCreationResult.body.id;
+
+                await testRepositoryProvider.forResource(AggregateType.song).create(existingSong);
+            });
+
+            describe(`when some commands are valid, some have type errors, and some have execution errors`, () => {
+                it(`should return the expected result`, async () => {
+                    const result = await request(app.getHttpServer()).post(
+                        `${commandEndpoint}/bulk/${generatedId}`
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.badRequest);
+
+                    const { results: resultsForFsas } = result.body as {
+                        results: CommandStreamExecutionResult[];
+                    };
+
+                    const resultForInvalidTypeCommand = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === commandWithInvalidType.type
+                    );
+
+                    expect(resultForInvalidTypeCommand.result).toContain('DO_BAD_THINGS');
+
+                    expect(resultForInvalidTypeCommand.result).toContain('no handler registered');
+
+                    const resultForValidFsa = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === validTranslateTitle.type
+                    );
+
+                    // TODO `ACK` string constant?
+                    expect(resultForValidFsa.result).toBe('ACK');
+
+                    const resultForInvalidUpdateFsa = resultsForFsas.find(
+                        ({ fsa }) => fsa.type === invalidUpdateFsa.type
+                    );
+
+                    expect(resultForInvalidUpdateFsa.result).toContain('no Song with that ID');
+
+                    expect(resultForInvalidUpdateFsa.result).toContain(
+                        invalidUpdateFsa.payload.aggregateCompositeIdentifier.id
+                    );
+                });
+            });
+
+            describe(`when all commands are valid`, () => {
+                it(`should return an OK response`, async () => {
+                    const createDto: CoscradBulkImportJobCreateDto = {
+                        name: jobName,
+                        stream: [validTranslateTitle],
+                    };
+
+                    const creationResult = await request(app.getHttpServer())
+                        .post(`${commandEndpoint}/bulk`)
+                        .send(createDto);
+
+                    const {
+                        body: { id: validJobId },
+                    } = creationResult;
+
+                    const result = await request(app.getHttpServer()).post(
+                        `${commandEndpoint}/bulk/${validJobId}`
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.ok);
+                });
+            });
+        });
+
+        describe(`when a bulk job has already been executed`, () => {
+            const jobName = `You can't execute this job twice!`;
+
+            const songId = buildDummyUuid(133);
+
+            const existingSong = Song.fromEventHistory(
+                new TestEventStream()
+                    .andThen<SongCreated>({
+                        type: 'SONG_CREATED',
+                        payload: {
+                            languageCodeForTitle: LanguageCode.Chilcotin,
+                        },
+                    })
+                    .as({
+                        type: AggregateType.song,
+                        id: songId,
+                    }),
+                songId
+            ) as Song;
+
+            const validTranslateTitle = {
+                type: 'TRANSLATE_SONG_TITLE',
+                payload: buildTestInstance(TranslateSongTitle, {
+                    aggregateCompositeIdentifier: {
+                        id: songId,
+                    },
+                    languageCode: LanguageCode.English,
+                }),
+            };
+
+            beforeEach(async () => {
+                await testRepositoryProvider.testSetup();
+
+                await testRepositoryProvider.forResource(AggregateType.song).create(existingSong);
+            });
+
+            it(`should reject a second attempt to execute the job`, async () => {
+                const createDto: CoscradBulkImportJobCreateDto = {
+                    name: jobName,
+                    stream: [validTranslateTitle],
                 };
 
-                const resultForInvalidTypeCommand = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === commandWithInvalidType.type
+                const creationResult = await request(app.getHttpServer())
+                    .post(`${commandEndpoint}/bulk`)
+                    .send(createDto);
+
+                const {
+                    body: { id: validJobId },
+                } = creationResult;
+
+                const result = await request(app.getHttpServer()).post(
+                    `${commandEndpoint}/bulk/${validJobId}`
                 );
 
-                expect(resultForInvalidTypeCommand.result).toContain('DO_BAD_THINGS');
+                expect(result.status).toBe(HttpStatusCode.ok);
 
-                expect(resultForInvalidTypeCommand.result).toContain('no handler registered');
+                const updatedJobDoc = await bulkJobRepo.fetchById(validJobId);
 
-                const resultForValidFsa = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === validCommandFSA.type
+                expect(updatedJobDoc).not.toBe(NotFound);
+
+                expect((updatedJobDoc as CoscradBulkImportJob).isDraft()).toBe(false);
+
+                const resultOfSecondTry = await request(app.getHttpServer()).post(
+                    `${commandEndpoint}/bulk/${validJobId}`
                 );
 
-                // TODO `ACK` string constant?
-                expect(resultForValidFsa.result).toBe('ACK');
+                expect(resultOfSecondTry.status).toBe(HttpStatusCode.badRequest);
 
-                const resultForInvalidUpdateFsa = resultsForFsas.find(
-                    ({ fsa }) => fsa.type === invalidUpdateFsa.type
+                const fetchResponse = await request(app.getHttpServer()).get(
+                    `${commandEndpoint}/bulk/${validJobId}`
                 );
 
-                expect(resultForInvalidUpdateFsa.result).toContain('no Song with that ID');
+                expect(fetchResponse.status).toBe(HttpStatusCode.ok);
 
-                expect(resultForInvalidUpdateFsa.result).toContain(
-                    invalidUpdateFsa.payload.aggregateCompositeIdentifier.id
+                // contract test for client
+                expect(fetchResponse.body).toMatchSnapshot();
+            });
+        });
+    });
+
+    describe(`when fetching a list of existing bulk jobs`, () => {
+        describe(`when no filters are provided`, () => {
+            const dummyJobs = [1, 2, 3].map((n) =>
+                buildTestInstance(CoscradBulkImportJob, {
+                    id: buildDummyUuid(n),
+                    name: `Test bulk job #${n}`,
+                })
+            );
+
+            beforeEach(async () => {
+                for (const j of dummyJobs) {
+                    // TODO use `createMany` once supported
+                    await bulkJobRepo.create(j);
+                }
+            });
+
+            it(`should return the expected result`, async () => {
+                const searchResult = await request(app.getHttpServer()).get(
+                    `${commandEndpoint}/bulk`
                 );
+
+                expect(searchResult.status).toBe(HttpStatusCode.ok);
+
+                expect(searchResult.body).toHaveLength(dummyJobs.length);
             });
         });
     });
