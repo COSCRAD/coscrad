@@ -23,6 +23,4 @@ export interface IBulkJobRepository {
         results: BulkCommandExecutionResult[],
         dateExecuted: number
     ): Promise<ResultOrError<AggregateId>>;
-
-    // delete(id: AggregateId): Promise<void>;
 }

@@ -86,6 +86,14 @@ export class ArangoBulkJobRepository implements IBulkJobRepository {
         id: AggregateId,
         ...additionalCommands: CommandFSA[]
     ): Promise<ResultOrError<AggregateId>> {
+        /**
+         * NOTE that we are moving to all lower case keywords instead of upper
+         * case in AQL queries. We'll "strangle out" the old pattern as we have
+         * occasion. Capital keywords are slow to type.
+         *
+         * TODO Use [`aql` tempate tag](https://arangodb.github.io/arangojs/devel/functions/aql.aql.html)
+         * TODO Install [LSP support for AQL snippets](https://marketplace.visualstudio.com/items?itemName=monotykamary.vscode-aql)
+         */
         const query = `
             for doc in @@collectionName
             filter doc._key == @id
