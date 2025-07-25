@@ -19,6 +19,7 @@ import { validate } from './config/env.validation';
 import { CategoryController } from './controllers/category.controller';
 import { ArangoBulkJobRepository } from './controllers/command/bulk-imports/arango-bulk-job-repository';
 import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from './controllers/command/bulk-imports/bulk-job-repository.interface';
+import { CommandExecutionService } from './controllers/command/command-execution.service';
 import { CommandController } from './controllers/command/command.controller';
 import { GameController } from './controllers/command/game.controller';
 import { CommandInfoService } from './controllers/command/services/command-info-service';
@@ -40,7 +41,9 @@ import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge/web-of-k
     providers: [
         ArangoDatabaseProvider,
         ArangoRepositoryProvider,
+        // TODO group command helpers into a module
         CommandInfoService,
+        CommandExecutionService,
         // This one is global. It is used by all resource modules.
         CoscradNLPModule,
         {
