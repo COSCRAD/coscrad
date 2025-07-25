@@ -1,6 +1,5 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, HttpStatusCode } from '@coscrad/api-interfaces';
 import { Ack, CommandHandlerService } from '@coscrad/commands';
-import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import {
     Body,
     Controller,
@@ -12,38 +11,32 @@ import {
     Request,
     Res,
     Sse,
-    UnauthorizedException,
     UseFilters,
     UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Observable, Subject } from 'rxjs';
-import {
-    ID_MANAGER_TOKEN,
-    IIdManager,
-    UniquelyIdentifiableType,
-} from '../../../domain/interfaces/id-manager.interface';
-import validateCommandPayloadType from '../../../domain/models/shared/command-handlers/utilities/validateCommandPayloadType';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
-import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { isNotFound } from '../../../lib/types/not-found';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
 import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
-import { CoscradBulkImportJob } from './bulk-imports/bulk-import-job.entity';
 import {
     BULK_JOB_REPOSITORY_INJECTION_TOKEN,
     IBulkJobRepository,
 } from './bulk-imports/bulk-job-repository.interface';
+import {
+    COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+    CommandExecutionService,
+} from './command-execution.service';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
 import { CommandWithGivenTypeNotFoundExceptionFilter } from './exception-handling/exception-filters/command-with-given-type-not-found.filter';
 import { NoCommandHandlerForCommandTypeFilter } from './exception-handling/exception-filters/no-command-handler-for-command-type.filter';
 
 export const AdminJwtGuard = AuthGuard('jwt');
-
-const COMMAND_ACKNOWLEDGEMENT_BODY_TEXT = 'ACK';
 
 @ApiTags('commands')
 @Controller('commands')
@@ -70,7 +63,8 @@ export class CommandController {
         @Inject(BULK_JOB_REPOSITORY_INJECTION_TOKEN)
         private readonly bulkJobRepo: IBulkJobRepository,
         @Inject(ID_MANAGER_TOKEN)
-        private readonly idManager: IIdManager
+        private readonly idManager: IIdManager,
+        private readonly commandExecutor: CommandExecutionService
     ) {}
 
     @ApiBearerAuth('JWT')
@@ -78,14 +72,6 @@ export class CommandController {
     @Post('')
     async executeCommand(@Request() req, @Res() res, @Body() commandFSA: CommandFSA) {
         const { user } = req;
-
-        if (!user || !(user instanceof CoscradUserWithGroups)) {
-            throw new UnauthorizedException();
-        }
-
-        if (!user.isAdmin()) {
-            throw new UnauthorizedException();
-        }
 
         /**
          * Note that we defer command type validation to the command handler.
@@ -97,14 +83,13 @@ export class CommandController {
 
         const { contributorIds } = meta || { contributorIds: [] };
 
-        const result = await this.commandHandlerService.execute(
-            { type, payload },
-            /**
-             * TODO Validate contributor existence in middleware
-             */
-            { userId: user.id, contributorIds }
-        );
+        const result = await this.commandExecutor.executeCommand(user, {
+            type,
+            payload,
+            meta: { contributorIds },
+        });
 
+        // TODO use response mapping
         if (result !== Ack) {
             return sendInternalResultAsHttpResponse(
                 res,
@@ -130,51 +115,23 @@ export class CommandController {
             },
         });
 
-        return res.status(httpStatusCodes.ok).send(COMMAND_ACKNOWLEDGEMENT_BODY_TEXT);
+        return res.status(httpStatusCodes.ok).send('Ack');
     }
 
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Post('bulk')
     async createBulkJob(
-        @Request() req,
         @Res() res,
         // TODO pipe validation?
         @Body() createDto: CoscradBulkImportJobCreateDto
     ) {
-        const { user } = req;
+        const result = await this.commandExecutor.createBulkJob(createDto);
 
-        if (!user || !(user instanceof CoscradUserWithGroups)) {
-            throw new UnauthorizedException();
+        // TODO response mapping
+        if (isInternalError(result)) {
+            return res.status(HttpStatusCode.badRequest).send(result);
         }
-
-        if (!user.isAdmin()) {
-            throw new UnauthorizedException();
-        }
-
-        // TODO invariant validation
-
-        const newId = await this.idManager.generate();
-
-        const instanceOrError = CoscradBulkImportJob.fromCreateDto({ ...createDto, id: newId });
-
-        if (isInternalError(instanceOrError)) {
-            // TODO use response mapping instead
-            return res.status(HttpStatusCode.badRequest).send(instanceOrError);
-        }
-
-        /**
-         * TODO consider wrapping the next 2 repo calls in a transaction. Without
-         * doing this, we choose to mark the ID as used as it's better to have
-         * an ID that is unavailable but not actually in use than an entity
-         * with an ID that is still available. That said, within the normal
-         * flow of the situation, UUIDs will be impossible to reuse, but with
-         * manual service \ API calls, this situation could be created.
-         */
-        // TODO Will we track the bulk job as an aggregate root? Maybe we don't need it on the big enum, which is being phased out.
-        await this.idManager.use({ type: 'bulkJob' as UniquelyIdentifiableType, id: newId });
-
-        const result = await this.bulkJobRepo.create(instanceOrError);
 
         return res.status(HttpStatusCode.ok).send({ id: result });
     }
@@ -182,19 +139,10 @@ export class CommandController {
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Get('bulk/:id')
-    async fetchBulkJobById(@Request() req, @Res() res, @Param('id') id: string) {
-        const { user } = req;
+    async fetchBulkJobById(@Res() res, @Param('id') id: string) {
+        const searchResult = await this.commandExecutor.fetchBulkJobById(id);
 
-        if (!user || !(user instanceof CoscradUserWithGroups)) {
-            throw new UnauthorizedException();
-        }
-
-        if (!user.isAdmin()) {
-            throw new UnauthorizedException();
-        }
-
-        const searchResult = await this.bulkJobRepo.fetchById(id);
-
+        // TODO response mapping
         if (isNotFound(searchResult)) {
             return res.status(HttpStatusCode.notFound).send();
         }
@@ -206,18 +154,8 @@ export class CommandController {
     @UseGuards(AdminJwtGuard)
     @Get('bulk')
     // TODO support filters
-    async fetchManyBulkJobs(@Request() req, @Res() res) {
-        const { user } = req;
-
-        if (!user || !(user instanceof CoscradUserWithGroups)) {
-            throw new UnauthorizedException();
-        }
-
-        if (!user.isAdmin()) {
-            throw new UnauthorizedException();
-        }
-
-        const searchResult = await this.bulkJobRepo.fetchMany();
+    async fetchManyBulkJobs(@Res() res) {
+        const searchResult = await this.commandExecutor.fetchManyBulkJobs();
 
         return res.status(HttpStatusCode.ok).send(searchResult);
     }
@@ -228,77 +166,24 @@ export class CommandController {
     async executeBulkJob(@Request() req, @Res() res, @Param('id') id: string) {
         const { user } = req;
 
-        if (!user || !(user instanceof CoscradUserWithGroups)) {
-            throw new UnauthorizedException();
+        const results = await this.commandExecutor.executeBulkJob(user, id);
+
+        if (isInternalError(results)) {
+            return res.status(HttpStatusCode.badRequest).send({
+                results: results,
+            });
         }
-
-        if (!user.isAdmin()) {
-            throw new UnauthorizedException();
-        }
-
-        const fetchResult = await this.bulkJobRepo.fetchById(id);
-
-        if (isNotFound(fetchResult)) {
-            return res
-                .status(HttpStatusCode.notFound)
-                .send(new InternalError(`There is no bulk job with the ID: ${id}`))
-                .toString();
-        }
-
-        if (!fetchResult.isDraft()) {
-            return res
-                .status(HttpStatusCode.badRequest)
-                .send(
-                    new InternalError(
-                        `You cannot execute bulk job: ${id} as it has already been initiated`
-                    )
-                );
-        }
-
-        const { stream: commandStream } = fetchResult;
-
-        // TODO[test-coverage] validate that additional meta comes through at the integration level (we have e2e tests of this)
-        const resultsForAllCommands = await this.commandHandlerService.executeStream(
-            commandStream.map(({ type, payload, meta }) => ({
-                type,
-                payload,
-                meta: {
-                    userId: user.id,
-                    contributorIds: meta?.contributorIds || [],
-                },
-            }))
-        );
 
         if (
-            resultsForAllCommands.some(
-                (singleCommandResultRecord) => singleCommandResultRecord.result !== Ack
+            results.some(
+                (singleCommandResultRecord) =>
+                    singleCommandResultRecord.result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT
             )
         ) {
-            const results = resultsForAllCommands.map(({ fsa, result }) => {
-                return {
-                    fsa,
-                    result:
-                        result instanceof Error
-                            ? result.toString()
-                            : COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
-                };
-            });
-
-            // @ts-expect-error fix this
-            await this.bulkJobRepo.registerResults(id, results, Date.now());
-
             return res.status(httpStatusCodes.badRequest).send({
                 results,
             });
         }
-
-        const results = resultsForAllCommands.map(({ fsa }) => ({
-            fsa,
-            result: COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
-        }));
-
-        // @ts-expect-error fix this
-        await this.bulkJobRepo.registerResults(id, results, Date.now());
 
         return res.status(httpStatusCodes.ok).send({
             results,
@@ -308,69 +193,23 @@ export class CommandController {
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Get('validate')
-    validateCommandTypes(
-        @Request() req,
-        @Res() res,
-        @Body() { stream: commandStream }: { stream: CommandFSA[] }
-    ) {
-        if (!(commandStream.length > 0)) {
-            return res.status(HttpStatusCode.badRequest).send({
-                message: new InternalError(
-                    `You must provide at least one command FSA to validate`
-                ).toString(),
-            });
+    validateCommandTypes(@Res() res, @Body() { stream: commandStream }: { stream: CommandFSA[] }) {
+        const validationResults = this.commandExecutor.validateCommandStream(commandStream);
+
+        if (isInternalError(validationResults)) {
+            return res
+                .status(HttpStatusCode.badRequest)
+                .send({ message: validationResults.toString() });
         }
 
-        const validationResults = commandStream.map((fsa, index) => {
-            // TODO use schema validation for this
-            if (!isNonEmptyString(fsa.type)) {
-                return {
-                    fsa,
-                    result: new InternalError(`You must specify the type of command to execute`),
-                };
-            }
-
-            // TODO allow both payload and type errors to come through for easier troubleshooting
-            if (!isNonEmptyObject(fsa.payload)) {
-                return {
-                    fsa,
-                    result: new InternalError(
-                        `You must provide a payload for ${fsa.type ? fsa.type : 'this command'}`
-                    ),
-                };
-            }
-
-            const commandBuildResult = this.commandHandlerService.buildCommandInstance(fsa);
-
-            const result =
-                // be careful, the command handler service does not package errors inside of `InternalError`
-                commandBuildResult instanceof Error
-                    ? new InternalError(
-                          `Encountered an invalid command stream at index [${index}]`,
-                          [new InternalError(commandBuildResult.message)]
-                      )
-                    : validateCommandPayloadType(commandBuildResult, fsa.type);
-
-            return {
-                fsa,
-                result,
-            };
-        });
-
-        if (validationResults.some(({ result }) => isInternalError(result))) {
+        if (validationResults.some(({ result }) => result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT)) {
             return res.status(HttpStatusCode.badRequest).send({
-                results: validationResults.map(({ fsa, result }) => ({
-                    fsa,
-                    result: isInternalError(result) ? result.toString() : 'Ack',
-                })),
+                results: validationResults,
             });
         }
 
         return res.status(HttpStatusCode.ok).send({
-            results: validationResults.map(({ fsa }) => ({
-                fsa,
-                result: 'Ack',
-            })),
+            results: validationResults,
         });
     }
 
