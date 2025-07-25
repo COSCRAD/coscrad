@@ -44,7 +44,11 @@ export class ArangoBulkJobRepository implements IBulkJobRepository {
             newDoc: doc,
         };
 
-        const cursor = await this.db.query({ query, bindVars });
+        const cursor = await this.db.query({ query, bindVars }).catch((e) => {
+            throw new InternalError(`Failed to create bulk job in Arango`, [
+                new InternalError(e?.message || 'unknown Arango failure'),
+            ]);
+        });
 
         const result = await cursor.all();
 

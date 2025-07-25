@@ -3,6 +3,11 @@ import { TestingModule } from '@nestjs/testing';
 import { CommandTestFactory } from 'nest-commander-testing';
 import { AppModule } from '../app/app.module';
 import createTestModule from '../app/controllers/__tests__/createTestModule';
+import { ARANGO_BULK_JOB_COLLECTION_NAME } from '../app/controllers/command/bulk-imports/arango-bulk-job-repository';
+import {
+    BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+    IBulkJobRepository,
+} from '../app/controllers/command/bulk-imports/bulk-job-repository.interface';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { TermCreated } from '../domain/models/term/commands';
@@ -38,6 +43,8 @@ const invalidDataFile = `apps/api/src/coscrad-cli/execute-command-stream.cli-com
 const dataFileWithExistingUuidNoSlugs = `apps/api/src/coscrad-cli/execute-command-stream.cli-command.uuid-not-slugs.SAMPLE.json`;
 
 describe(`CLI Command: ${cliCommandName}`, () => {
+    let bulkJobRepo: IBulkJobRepository;
+
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
@@ -48,6 +55,12 @@ describe(`CLI Command: ${cliCommandName}`, () => {
     let databaseProvider: ArangoDatabaseProvider;
 
     const mockLogger = buildMockLogger({ isEnabled: true });
+
+    const assertBulkJobPersisted = async () => {
+        const allJobs = await bulkJobRepo.fetchMany();
+
+        expect(allJobs).toHaveLength(1);
+    };
 
     beforeEach(async () => {
         const testAppModule = await createTestModule(
@@ -79,6 +92,9 @@ describe(`CLI Command: ${cliCommandName}`, () => {
             .useValue(DynamicDataTypeModule)
             .overrideProvider(REPOSITORY_PROVIDER_TOKEN)
             .useValue(testRepositoryProvider)
+            // TODO remove use of `createTestModule` here. It really causes problems.
+            .overrideProvider(BULK_JOB_REPOSITORY_INJECTION_TOKEN)
+            .useValue(testAppModule.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN))
             .overrideProvider(COSCRAD_LOGGER_TOKEN)
             .useValue(mockLogger)
             .compile();
@@ -88,6 +104,10 @@ describe(`CLI Command: ${cliCommandName}`, () => {
         idGenerator = testAppModule.get(ID_MANAGER_TOKEN);
 
         await testRepositoryProvider.testTeardown();
+
+        await databaseProvider.getDatabaseForCollection(ARANGO_BULK_JOB_COLLECTION_NAME).clear();
+
+        bulkJobRepo = testAppModule.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN);
 
         jest.clearAllMocks();
     });
@@ -107,6 +127,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                         .getCount();
 
                     expect(numberOfUsers).toBeGreaterThan(0);
+
+                    await assertBulkJobPersisted();
                 });
             });
         });
@@ -126,6 +148,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                         .getCount();
 
                     expect(numberOfTerms).toBeGreaterThan(0);
+
+                    await assertBulkJobPersisted();
                 });
             });
 
@@ -155,6 +179,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     const numberOfEntries = (foundList as VocabularyList).entries.length;
 
                     expect(numberOfEntries).toBe(1);
+
+                    await assertBulkJobPersisted();
                 });
             });
 
@@ -214,6 +240,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                         .getCount();
 
                     expect(numberOfTerms).toBe(1);
+
+                    await assertBulkJobPersisted();
                 });
             });
 
@@ -236,6 +264,8 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                         .getCount();
 
                     expect(numberOfTerms).toEqual(1);
+
+                    await assertBulkJobPersisted();
                 });
             });
         });

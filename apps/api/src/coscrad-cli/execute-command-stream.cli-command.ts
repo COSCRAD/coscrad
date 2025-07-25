@@ -14,6 +14,11 @@ import {
 } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
+import { CoscradBulkImportJobCreateDto } from '../app/controllers/command/bulk-imports/bulk-import-job.create-dto.entity';
+import {
+    COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+    CommandExecutionService,
+} from '../app/controllers/command/command-execution.service';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import {
     CreateAudioItem,
@@ -22,6 +27,8 @@ import {
 import { CreateMediaItem } from '../domain/models/media-item/commands';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
@@ -46,12 +53,6 @@ type CommandFsa = {
 
 type CommandFsaWithMeta = CommandFsa & {
     meta?: Record<string, unknown>;
-};
-
-type CommandResult = {
-    index: number;
-    fsa: CommandFsa;
-    errors: string[];
 };
 
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
@@ -215,6 +216,7 @@ const parseSlugDefinition = (
 export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
+        private readonly commandExecutor: CommandExecutionService,
         @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
@@ -253,11 +255,9 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             throw new InternalError(msg);
         }
 
-        const commandFsasToExecute = commandFsasFromDataFile || commandFsasFromFixture;
+        const resolvedCommandFsasFromParams = commandFsasFromDataFile || commandFsasFromFixture;
 
-        const commandResults: CommandResult[] = [];
-
-        const userDefinedSlugParseResult = commandFsasToExecute
+        const userDefinedSlugParseResult = resolvedCommandFsasFromParams
             .map(
                 ({
                     payload: {
@@ -306,7 +306,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             new Map<string, Ctor<unknown>>()
         );
 
-        const commandTypeToReferentialPropertyPaths = commandFsasToExecute.reduce(
+        const commandTypeToReferentialPropertyPaths = resolvedCommandFsasFromParams.reduce(
             (acc, { type }) => {
                 if (acc.has(type)) {
                     return acc;
@@ -339,7 +339,10 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             new Map<string, string[]>()
         );
 
-        for (const [index, fsa] of commandFsasToExecute.entries()) {
+        const commandFsasToExecute = [];
+
+        // TODO remove unused var
+        for (const [_index, fsa] of resolvedCommandFsasFromParams.entries()) {
             const {
                 type: commandType,
                 payload: {
@@ -441,23 +444,74 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             const contributorIds = fsaToExecute?.meta?.contributorIds || [];
 
-            const commandResult = await this.commandHandlerService.execute(fsaToExecute, {
-                userId: 'COSCRAD Admin',
-                /**
-                 * This allows the user to inject `contributorIds`. We do not
-                 * want the user to override timestamps, though.
-                 */
-                contributorIds,
+            commandFsasToExecute.push({
+                ...fsaToExecute,
+                meta: {
+                    userId: 'COSCRAD Admin',
+                    /**
+                     * This allows the user to inject `contributorIds`. We do not
+                     * want the user to override timestamps, though.
+                     */
+                    contributorIds,
+                },
             });
 
-            commandResults.push({
-                index,
-                fsa,
-                errors: commandResult instanceof Error ? [commandResult.toString()] : [],
-            });
+            // commandResults.push({
+            //     index,
+            //     fsa,
+            //     errors: commandResult instanceof Error ? [commandResult.toString()] : [],
+            // });
         }
 
-        const failures = commandResults.filter(({ errors }) => errors.length > 0);
+        const bulkJob: CoscradBulkImportJobCreateDto = {
+            name: `execute-command-stream [${Date.now()}]`,
+            stream: commandFsasToExecute,
+        };
+
+        const jobId = await this.commandExecutor.createBulkJob(bulkJob).catch((e) => {
+            throw new InternalError(
+                `Failed to create bulk job for command stream execution in CLI`,
+                [new InternalError(e?.message || 'unknown reason')]
+            );
+        });
+
+        if (isInternalError(jobId)) {
+            throw new InternalError(`Failed to create bulk job for command execution via CLI`, [
+                jobId,
+            ]);
+        }
+
+        const commandResults = await this.commandExecutor.executeBulkJob(
+            new CoscradUserWithGroups(
+                new CoscradUser({
+                    type: AggregateType.user,
+                    username: 'coscrad-admin',
+                    id: 'COSCRAD_ADMIN',
+                    authProviderUserId: '',
+
+                    roles: [CoscradUserRole.superAdmin],
+                    profile: {
+                        name: {
+                            firstName: 'CLI',
+                            lastName: 'User',
+                        },
+                        email: 'cli-user@cosrad.org',
+                    },
+                }),
+                []
+            ),
+            jobId
+        );
+
+        if (isInternalError(commandResults)) {
+            throw new InternalError(`Invalidly formatted request for bulk job execution`, [
+                commandResults,
+            ]);
+        }
+
+        const failures = commandResults.filter(
+            ({ result }) => result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT
+        );
 
         const wasSuccess = failures.length === 0;
 
