@@ -34,6 +34,7 @@ import { buildTestInstance } from '../../../test-data/utilities';
 import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
 import { ArangoBulkJobRepository } from './bulk-imports/arango-bulk-job-repository';
 import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from './bulk-imports/bulk-job-repository.interface';
+import { CommandExecutionService } from './command-execution.service';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
 import { AdminJwtGuard, CommandController } from './command.controller';
 
@@ -116,6 +117,7 @@ describe(`Command execution: validate command stream`, () => {
                         new ArangoBulkJobRepository(connectionProvider),
                     inject: [ArangoConnectionProvider],
                 },
+                CommandExecutionService,
             ],
             controllers: [CommandController],
         })
@@ -249,7 +251,7 @@ describe(`Command execution: validate command stream`, () => {
 
                 expect(results[0].fsa).toEqual(validCreateCommand);
 
-                expect(results[0].result).toEqual('Ack');
+                expect(results[0].result).toEqual('ACK');
 
                 expect(results).toHaveLength(stream.length);
 
@@ -279,7 +281,7 @@ describe(`Command execution: validate command stream`, () => {
 
                 expect(results[0].fsa).toEqual(validCreateCommand);
 
-                expect(results[0].result).toEqual('Ack');
+                expect(results[0].result).toEqual('ACK');
 
                 expect(results).toHaveLength(stream.length);
 
