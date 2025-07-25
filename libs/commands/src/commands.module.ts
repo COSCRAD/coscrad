@@ -7,7 +7,7 @@ import getCommandTypeFromMetadata from './services/utilities/getCommandTypeFromM
 @Module({
     providers: [CommandHandlerService, CommandFinderService],
     imports: [DiscoveryModule],
-    exports: [CommandHandlerService, CommandFinderService],
+    exports: [CommandHandlerService],
 })
 export class CommandModule implements OnApplicationBootstrap {
     constructor(

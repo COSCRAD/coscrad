@@ -16,6 +16,7 @@ import {
 } from '@coscrad/commands';
 import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { JwtStrategy } from '../../../authorization/jwt.strategy';
@@ -25,7 +26,14 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { AggregateTypeProperty } from '../../../domain/models/shared/common-commands';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../domain/models/user-management/user/entities/user/coscrad-user.entity';
+import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
+import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
+import { PersistenceModule } from '../../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../test-data/utilities';
+import buildMockConfigService from '../../config/__tests__/utilities/buildMockConfigService';
+import { ArangoBulkJobRepository } from './bulk-imports/arango-bulk-job-repository';
+import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from './bulk-imports/bulk-job-repository.interface';
 import { CommandFSA } from './command-fsa/command-fsa.entity';
 import { AdminJwtGuard, CommandController } from './command.controller';
 
@@ -96,15 +104,27 @@ describe(`Command execution: validate command stream`, () => {
 
     beforeAll(async () => {
         const module = await Test.createTestingModule({
-            imports: [CommandModule],
+            imports: [PersistenceModule.forRootAsync(), IdGenerationModule, CommandModule],
             providers: [
                 {
                     provide: JwtStrategy,
                     useFactory: () => new MockJwtStrategy(testUserWithGroups),
                 },
+                {
+                    provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+                    useFactory: (connectionProvider: ArangoConnectionProvider) =>
+                        new ArangoBulkJobRepository(connectionProvider),
+                    inject: [ArangoConnectionProvider],
+                },
             ],
             controllers: [CommandController],
         })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
+            )
             .overrideGuard(AdminJwtGuard)
             .useValue(new MockJwtAdminAuthGuard(testUserWithGroups))
             .compile();
@@ -113,9 +133,10 @@ describe(`Command execution: validate command stream`, () => {
 
         await app.init();
 
-        await app
-            .get(CommandHandlerService)
-            .registerHandler(CREATE_WIDGET, new CreateWidgetCommandHandler());
+        app.get(CommandHandlerService).registerHandler(
+            CREATE_WIDGET,
+            new CreateWidgetCommandHandler()
+        );
     });
 
     describe(`when the command stream is valid`, () => {
@@ -136,7 +157,38 @@ describe(`Command execution: validate command stream`, () => {
 
     describe(`when the command stream is invalid`, () => {
         describe(`when there is no command with the given type for one of the command FSAS`, () => {
-            it.todo(`should return the expected error message`);
+            const unknownCommandType = 'BOOCUS_WIGGLED';
+
+            const commandFsaWithInvalidType = {
+                type: unknownCommandType,
+                payload: validCreateCommand.payload,
+            };
+
+            it(`should return the expected error message`, async () => {
+                const response = await request(app.getHttpServer())
+                    .get(endpointUnderTest)
+                    .send({
+                        stream: [commandFsaWithInvalidType],
+                    });
+
+                expect(response.status).toBe(HttpStatusCode.badRequest);
+
+                const {
+                    body: { results },
+                } = response;
+
+                expect(results).toHaveLength(1);
+
+                const { fsa, result } = results[0];
+
+                expect(fsa).toEqual(commandFsaWithInvalidType);
+
+                expect(result).toContain(`index [0]`);
+
+                expect(result).toContain(`There is no handler registered for the command`);
+
+                expect(result).toContain(unknownCommandType);
+            });
         });
 
         describe(`when one of the command FSAs has an invalid type`, () => {
