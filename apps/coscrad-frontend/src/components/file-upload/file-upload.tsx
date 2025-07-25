@@ -216,12 +216,14 @@ function FileList({ files, onRemove, uploading }: FileListProps) {
     }
 
     return (
-        <Stack spacing={1}>
+        <>
             <Typography variant="h3">Files:</Typography>
-            {files.map((file) => (
-                <FileItem key={file.id} file={file} onRemove={onRemove} uploading={uploading} />
-            ))}
-        </Stack>
+            <Stack spacing={1} data-testid="uploads-queue">
+                {files.map((file) => (
+                    <FileItem key={file.id} file={file} onRemove={onRemove} uploading={uploading} />
+                ))}
+            </Stack>
+        </>
     );
 }
 
@@ -235,7 +237,7 @@ function FileItem({ file, onRemove, uploading }: FileItemProps) {
     const Icon = getFileIcon(file.file.type);
 
     return (
-        <Card data-testid={file.id}>
+        <Card>
             <CardContent>
                 <Grid
                     container
@@ -254,7 +256,12 @@ function FileItem({ file, onRemove, uploading }: FileItemProps) {
                     {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
                         Seems like it's still broken in @material-ui/core ^4.12.3 */}
                     <Grid item zeroMinWidth xs>
-                        <Typography variant="h6" color="primary" fontWeight="bold">
+                        <Typography
+                            variant="h6"
+                            color="primary"
+                            fontWeight="bold"
+                            data-testid="file-name"
+                        >
                             {file.file.name}
                         </Typography>
                         <Typography component="div">

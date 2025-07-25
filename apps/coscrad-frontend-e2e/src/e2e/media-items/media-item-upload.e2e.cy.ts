@@ -1,5 +1,11 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 
+const fileDir = `${__dirname}/files`;
+
+const files = ['station.png', 'desk-593327_640.jpg'];
+
+const filePaths = files.map((file) => `${fileDir}/${file}`);
+
 describe(`when the user is not logged in and the media item index page is loaded`, () => {
     beforeEach(() => {
         cy.visit('/');
@@ -23,9 +29,17 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         cy.navigateToResourceIndex(ResourceType.mediaItem);
     });
 
-    it(`should display the file upload form element `, () => {
-        cy.contains('Media');
+    it.only(`should allow the user to select files to upload and add them to the uploads list`, () => {
+        cy.get('input[type=file]').selectFile(filePaths, { force: true });
 
-        cy.get('input[type=file]').should('be.visible');
+        cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
+
+        cy.getByDataAttribute('uploads-queue')
+            .children()
+            .each(($fileItem, index) => {
+                cy.wrap($fileItem).within(() => {
+                    cy.getByDataAttribute('file-name').contains(files[index]);
+                });
+            });
     });
 });
