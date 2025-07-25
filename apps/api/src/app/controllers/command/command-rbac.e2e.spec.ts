@@ -23,6 +23,10 @@ import { ARANGO_BULK_JOB_COLLECTION_NAME } from './bulk-imports/arango-bulk-job-
 
 const databaseName = generateDatabaseNameForTestSuite();
 
+const routes = {
+    validate: '/commands/validate',
+};
+
 /**
  * This is a high level test that checks the Role Base Access Control for
  * the commands endpoint. It mocks out the auth strategy / guard.
@@ -116,6 +120,13 @@ describe('Role Based Access Control for commands', () => {
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
+
+        it(`should return an untauthorized error from the validation endpoint "/commands/bulk/:id"`, async () => {
+            await request(app.getHttpServer())
+                .get(routes.validate)
+                .send({})
+                .expect(HttpStatusCode.forbidden);
+        });
     });
 
     describe('when there is no user on the request (public request)', () => {
@@ -163,6 +174,13 @@ describe('Role Based Access Control for commands', () => {
                 .send({ stream: [validCommandFSA] })
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
+        });
+
+        it(`should return an untauthorized error from the validation endpoint "/commands/bulk/:id"`, async () => {
+            await request(app.getHttpServer())
+                .get(routes.validate)
+                .send({})
+                .expect(HttpStatusCode.forbidden);
         });
     });
 
@@ -235,6 +253,15 @@ describe('Role Based Access Control for commands', () => {
                 );
 
                 expect(jobExecutionResponse.status).toBe(HttpStatusCode.ok);
+            });
+
+            it(`should return an bad input error from the validation endpoint "/commands/bulk/:id" for an empty stream`, async () => {
+                await request(app.getHttpServer())
+                    .get(routes.validate)
+                    .send({
+                        stream: [],
+                    })
+                    .expect(HttpStatusCode.badRequest);
             });
         });
     });
