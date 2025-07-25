@@ -15,7 +15,7 @@ export default (command: ICommand, commandType: string): Valid | InternalError =
     ).map((simpleError) => new InternalError(`invalid payload type: ${simpleError.toString()}`));
 
     if (payloadTypeErrors.length > 0) {
-        // TODO PAss through the command type
+        // TODO Pass through the command type
         return new InvalidCommandPayloadTypeError(commandType, payloadTypeErrors);
     }
 

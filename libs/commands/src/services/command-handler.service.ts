@@ -37,6 +37,19 @@ export class CommandHandlerService {
          */
         meta?: Record<string, unknown>
     ): Promise<CommandResult> {
+        const commandInstance = this.buildCommandInstance({ type, payload });
+
+        // TODO share this logic with `buildCommandInstance`
+        const handler = this.#handlers.get(type);
+
+        if (!handler) {
+            return new NoCommandHandlerRegisteredForCommandException(type);
+        }
+
+        return handler.execute(commandInstance, type, meta);
+    }
+
+    buildCommandInstance({ type, payload }: FluxStandardAction): Error | ICommand {
         const handler = this.#handlers.get(type);
 
         if (!handler) {
@@ -45,7 +58,7 @@ export class CommandHandlerService {
 
         const commandInstance = this.#buildCommand({ type, payload });
 
-        return handler.execute(commandInstance, type, meta);
+        return commandInstance;
     }
 
     async executeStream(

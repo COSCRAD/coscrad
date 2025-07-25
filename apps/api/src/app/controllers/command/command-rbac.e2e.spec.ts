@@ -23,6 +23,11 @@ import { ARANGO_BULK_JOB_COLLECTION_NAME } from './bulk-imports/arango-bulk-job-
 
 const databaseName = generateDatabaseNameForTestSuite();
 
+const routes = {
+    validate: '/commands/validate',
+    bulkJobIndex: '/commands/bulk',
+};
+
 /**
  * This is a high level test that checks the Role Base Access Control for
  * the commands endpoint. It mocks out the auth strategy / guard.
@@ -93,7 +98,7 @@ describe('Role Based Access Control for commands', () => {
 
             databaseProvider.close();
         });
-        it('should return an unauthroized error from the single commands endpoint "/commands"', async () => {
+        it('should return an unauthorized error from the single commands endpoint "/commands"', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
@@ -101,20 +106,43 @@ describe('Role Based Access Control for commands', () => {
                 .expect(httpStatusCodes.forbidden);
         });
 
-        it('should return an unauthroized error from the bulk job endpoint "/commands/bulk"', async () => {
+        it('should return an unauthorized error from the bulk job endpoint "POST /commands/bulk"', async () => {
             await request(app.getHttpServer())
-                .post(`/commands/bulk`)
+                .post(routes.bulkJobIndex)
                 .send(validCommandFSA)
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
 
-        it('should return an unauthroized error from the bulk job endpoint "/commands/bulk/:id"', async () => {
+        it('should return an unauthorized error from the bulk job index endpoint "GET /commands/bulk"', async () => {
             await request(app.getHttpServer())
-                .post(`/commands/bulk/123`)
+                .get(routes.bulkJobIndex)
                 .send(validCommandFSA)
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthorized error from the bulk job endpoint "POST /commands/bulk/:id"', async () => {
+            await request(app.getHttpServer())
+                .post(`${routes.bulkJobIndex}/123`)
+                .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthorized error from the bulk job endpoint "GET ${routes.bulkJobIndex}/:id"', async () => {
+            await request(app.getHttpServer())
+                .get(`${routes.bulkJobIndex}/123`)
+                .send(validCommandFSA)
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it(`should return an untauthorized error from the validation endpoint "/commands/bulk/:id"`, async () => {
+            await request(app.getHttpServer())
+                .get(routes.validate)
+                .send({})
+                .expect(HttpStatusCode.forbidden);
         });
     });
 
@@ -141,7 +169,7 @@ describe('Role Based Access Control for commands', () => {
         afterAll(async () => {
             await app.close();
         });
-        it('should return an unauthroized error when executing a single command via /commands', async () => {
+        it('should return an unauthorized error when executing a single command via /commands', async () => {
             await request(app.getHttpServer())
                 .post(`/commands`)
                 .send(validCommandFSA)
@@ -149,20 +177,43 @@ describe('Role Based Access Control for commands', () => {
                 .expect(httpStatusCodes.forbidden);
         });
 
-        it('should return an unauthroized error when executing a single command via /commands/bulk', async () => {
+        it('should return an unauthorized error when creating a bulk job via POST /commands/bulk', async () => {
             await request(app.getHttpServer())
-                .post(`/commands/bulk`)
+                .post(routes.bulkJobIndex)
                 .send({ stream: [validCommandFSA] })
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
         });
 
-        it('should return an unauthroized error when executing a single command via /commands/bulk/:id', async () => {
+        it('should return an unauthorized error when fetching all bulk jobs (index) via GET /commands/bulk', async () => {
             await request(app.getHttpServer())
-                .post(`/commands/bulk/123`)
+                .get(routes.bulkJobIndex)
                 .send({ stream: [validCommandFSA] })
                 //  A non-admin user cannot even activate the route
                 .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthorized error when executing a bulk job via POST /commands/bulk/:id', async () => {
+            await request(app.getHttpServer())
+                .post(`${routes.bulkJobIndex}/123`)
+                .send({ stream: [validCommandFSA] })
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it('should return an unauthorized error when fetching a bulk job via GET /commands/bulk/:id', async () => {
+            await request(app.getHttpServer())
+                .get(`${routes.bulkJobIndex}/123`)
+                .send({ stream: [validCommandFSA] })
+                //  A non-admin user cannot even activate the route
+                .expect(httpStatusCodes.forbidden);
+        });
+
+        it(`should return an untauthorized error from the validation endpoint "/commands/validate"`, async () => {
+            await request(app.getHttpServer())
+                .get(routes.validate)
+                .send({})
+                .expect(HttpStatusCode.forbidden);
         });
     });
 
@@ -219,7 +270,7 @@ describe('Role Based Access Control for commands', () => {
                 expect(result.status).toBe(HttpStatusCode.ok);
             });
 
-            it('should return ok when creating a bulk job via /commands/bulk and executing it via /commands/bulk/:id', async () => {
+            it('should allow access to the bulk job management endpoints', async () => {
                 const jobCreationResponse = await request(app.getHttpServer())
                     .post(`/commands/bulk`)
                     .send({ stream: [validCommandFSA] });
@@ -230,11 +281,30 @@ describe('Role Based Access Control for commands', () => {
                     body: { id: jobId },
                 } = jobCreationResponse;
 
-                const jobExecutionResponse = await await request(app.getHttpServer()).post(
+                const jobExecutionResponse = await request(app.getHttpServer()).post(
                     `/commands/bulk/${jobId}`
                 );
 
                 expect(jobExecutionResponse.status).toBe(HttpStatusCode.ok);
+
+                const indexResponse = await request(app.getHttpServer()).get(routes.bulkJobIndex);
+
+                expect(indexResponse.status).toBe(HttpStatusCode.ok);
+
+                const detailResponse = await request(app.getHttpServer()).get(
+                    `${routes.bulkJobIndex}/${jobId}`
+                );
+
+                expect(detailResponse.status).toBe(HttpStatusCode.ok);
+            });
+
+            it(`should return an bad input error from the validation endpoint "/commands/bulk/:id" for an empty stream`, async () => {
+                await request(app.getHttpServer())
+                    .get(routes.validate)
+                    .send({
+                        stream: [],
+                    })
+                    .expect(HttpStatusCode.badRequest);
             });
         });
     });

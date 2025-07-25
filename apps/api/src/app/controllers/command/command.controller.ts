@@ -1,5 +1,6 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, HttpStatusCode } from '@coscrad/api-interfaces';
 import { Ack, CommandHandlerService } from '@coscrad/commands';
+import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import {
     Body,
     Controller,
@@ -23,6 +24,7 @@ import {
     IIdManager,
     UniquelyIdentifiableType,
 } from '../../../domain/interfaces/id-manager.interface';
+import validateCommandPayloadType from '../../../domain/models/shared/command-handlers/utilities/validateCommandPayloadType';
 import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
@@ -300,6 +302,75 @@ export class CommandController {
 
         return res.status(httpStatusCodes.ok).send({
             results,
+        });
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Get('validate')
+    validateCommandTypes(
+        @Request() req,
+        @Res() res,
+        @Body() { stream: commandStream }: { stream: CommandFSA[] }
+    ) {
+        if (!(commandStream.length > 0)) {
+            return res.status(HttpStatusCode.badRequest).send({
+                message: new InternalError(
+                    `You must provide at least one command FSA to validate`
+                ).toString(),
+            });
+        }
+
+        const validationResults = commandStream.map((fsa, index) => {
+            // TODO use schema validation for this
+            if (!isNonEmptyString(fsa.type)) {
+                return {
+                    fsa,
+                    result: new InternalError(`You must specify the type of command to execute`),
+                };
+            }
+
+            // TODO allow both payload and type errors to come through for easier troubleshooting
+            if (!isNonEmptyObject(fsa.payload)) {
+                return {
+                    fsa,
+                    result: new InternalError(
+                        `You must provide a payload for ${fsa.type ? fsa.type : 'this command'}`
+                    ),
+                };
+            }
+
+            const commandBuildResult = this.commandHandlerService.buildCommandInstance(fsa);
+
+            const result =
+                // be careful, the command handler service does not package errors inside of `InternalError`
+                commandBuildResult instanceof Error
+                    ? new InternalError(
+                          `Encountered an invalid command stream at index [${index}]`,
+                          [new InternalError(commandBuildResult.message)]
+                      )
+                    : validateCommandPayloadType(commandBuildResult, fsa.type);
+
+            return {
+                fsa,
+                result,
+            };
+        });
+
+        if (validationResults.some(({ result }) => isInternalError(result))) {
+            return res.status(HttpStatusCode.badRequest).send({
+                results: validationResults.map(({ fsa, result }) => ({
+                    fsa,
+                    result: isInternalError(result) ? result.toString() : 'Ack',
+                })),
+            });
+        }
+
+        return res.status(HttpStatusCode.ok).send({
+            results: validationResults.map(({ fsa }) => ({
+                fsa,
+                result: 'Ack',
+            })),
         });
     }
 
