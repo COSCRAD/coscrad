@@ -9,8 +9,20 @@ import {
     InsertDriveFile as InsertDriveFileIcon,
     VideoCameraBack as VideoCameraBackIcon,
 } from '@mui/icons-material';
-import { Button, Grid, styled, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    Grid,
+    IconButton,
+    Stack,
+    styled,
+    Tooltip,
+    Typography,
+} from '@mui/material';
 import { ChangeEvent, useRef, useState } from 'react';
+import LinearProgressWithLabel from '../linear-progress-with-label/linear-progress-with-label';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -69,19 +81,24 @@ export const FileUpload = () => {
     }
 
     return (
-        <Grid container spacing={2}>
-            <Grid item>
+        <Stack spacing={2}>
+            <Box>
                 <Typography variant="h3">Media Item Upload</Typography>
                 <FileInput
                     inputRef={inputRef}
                     disabled={uploading}
                     onFileSelect={handleFileSelect}
                 />
-            </Grid>
-            <Grid item>
+                <ActionButtons
+                    disabled={files.length === 0 || uploading}
+                    onUpload={handleUpload}
+                    onClear={handleClear}
+                />
+            </Box>
+            <Box>
                 <FileList files={files} onRemove={removeFile} uploading={uploading} />
-            </Grid>
-        </Grid>
+            </Box>
+        </Stack>
     );
 };
 
@@ -100,7 +117,7 @@ const FileInput = ({ inputRef, disabled, onFileSelect }: FileInputProps) => {
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
         >
-            Upload files
+            Add Media Items
             <VisuallyHiddenInput
                 type="file"
                 ref={inputRef}
@@ -145,14 +162,12 @@ function FileList({ files, onRemove, uploading }: FileListProps) {
     }
 
     return (
-        <Grid container spacing={2}>
+        <Stack spacing={1}>
             <Typography variant="h3">Files:</Typography>
-            <Grid item>
-                {files.map((file) => (
-                    <FileItem key={file.id} file={file} onRemove={onRemove} uploading={uploading} />
-                ))}
-            </Grid>
-        </Grid>
+            {files.map((file) => (
+                <FileItem key={file.id} file={file} onRemove={onRemove} uploading={uploading} />
+            ))}
+        </Stack>
     );
 }
 
@@ -166,45 +181,49 @@ function FileItem({ file, onRemove, uploading }: FileItemProps) {
     const Icon = getFileIcon(file.file.type);
 
     return (
-        <div className="space-y-2 rounded-md bg-grayscale-700 p-4">
-            <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                    <Icon />
-                    <div className="flex flex-col">
-                        <span className="font-medium">{file.file.name}</span>
-                        <div className="flex items-center gap-2 text-xs text-grayscale-400">
-                            <span>{formatFileSize(file.file.size)}</span>
-                            <span>•</span>
-                            <span>{file.file.type || 'Unknown type'}</span>
-                        </div>
-                    </div>
-                </div>
-                {!uploading && (
-                    <button onClick={() => onRemove(file.id)} className="bg-none p-0">
-                        <ClearIcon />
-                    </button>
-                )}
-            </div>
-            <div className="text-right text-xs">
-                {file.uploaded ? 'Completed' : `${Math.round(file.progress)}%`}
-            </div>
-            <ProgressBar progress={file.progress} />
-        </div>
-    );
-}
-
-type ProgressBarProps = {
-    progress: number;
-};
-
-function ProgressBar({ progress }: ProgressBarProps) {
-    return (
-        <div className="h-2 w-full overflow-hidden rounded-full bg-grayscale-800">
-            <div
-                className="h-full bg-primary-500 transition-all duration-300"
-                style={{ width: `${progress}%` }}
-            />
-        </div>
+        <Card data-testid={file.id}>
+            <CardContent>
+                <Grid
+                    container
+                    sx={{
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        display: 'flex',
+                    }}
+                    spacing="10"
+                    direction="row"
+                    mb={2}
+                >
+                    <Grid item sx={{ fontSize: '60px', maxHeight: '60px' }}>
+                        <Icon fontSize="inherit" color="primary" />
+                    </Grid>
+                    {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
+                        Seems like it's still broken in @material-ui/core ^4.12.3 */}
+                    <Grid item zeroMinWidth xs>
+                        <Typography variant="h6" color="primary" fontWeight="bold">
+                            {file.file.name}
+                        </Typography>
+                        <Typography component="div">
+                            {formatFileSize(file.file.size)}
+                            &nbsp;•&nbsp;
+                            {file.file.type || 'Unknown type'}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs sx={{ textAlign: 'right' }}>
+                        {!uploading && (
+                            <Tooltip title="Remove File">
+                                <IconButton onClick={() => onRemove(file.id)}>
+                                    <ClearIcon />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <LinearProgressWithLabel value={file.progress} />
+                </Grid>
+            </CardContent>
+        </Card>
     );
 }
 
