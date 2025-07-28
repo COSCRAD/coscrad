@@ -20,7 +20,7 @@ import { CommandFSA } from '../command-fsa/command-fsa.entity';
 import { BulkCommandExecutionResult, CoscradBulkImportJob } from './bulk-import-job.entity';
 import { IBulkJobRepository } from './bulk-job-repository.interface';
 
-export const ARANGO_BULK_JOB_COLLECTION_NAME = 'bulk-import-jobs';
+export const ARANGO_BULK_JOB_COLLECTION_NAME = 'bulk_import_jobs';
 
 export class ArangoBulkJobRepository implements IBulkJobRepository {
     private readonly db: ArangoDatabaseForCollection<DTO<CoscradBulkImportJob>>;
@@ -195,6 +195,9 @@ export class ArangoBulkJobRepository implements IBulkJobRepository {
         const instance = plainToClass(CoscradBulkImportJob, mapDatabaseDocumentToAggregateDTO(doc));
 
         instance.results = hydratedResults.length > 0 ? hydratedResults : null;
+
+        // @ts-expect-error It's awkward that we side step the usual mapping to deal with results in an exceptional way, which breaks our type safety
+        delete instance._id;
 
         return instance;
     }
