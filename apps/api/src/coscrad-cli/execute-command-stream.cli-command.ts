@@ -209,6 +209,12 @@ const parseSlugDefinition = (
     return [prefix, slug];
 };
 
+interface ExecuteCommandStreamCliCommandOptions {
+    name: CommandFsaWithMeta[];
+    dataFile: CommandFsaWithMeta[];
+    now: boolean;
+}
+
 @CliCommand({
     name: 'execute-command-stream',
     description: 'executes one or more command FSAs in sequence',
@@ -224,14 +230,15 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     }
 
     /**
-     * TODO Move this logic into a service we can reuse. Maybe CommandHandlerService.executeStream()
+     * TODO Move the slug generation logic into a separate service.
      */
     async run(
         _passedParams: string[],
         {
             name: commandFsasFromFixture,
             dataFile: commandFsasFromDataFile,
-        }: { name: CommandFsaWithMeta[]; dataFile: CommandFsaWithMeta[] }
+            now: shouldExecuteNow,
+        }: ExecuteCommandStreamCliCommandOptions
     ): Promise<void> {
         // console.time('command-performance');
 
@@ -457,6 +464,26 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             });
         }
 
+        const typeValidationResult =
+            this.commandExecutor.validateCommandStream(commandFsasToExecute);
+
+        if (isInternalError(typeValidationResult)) {
+            throw new InternalError(
+                `Failed to create bulk job. One or more commands was invalidly formatted`
+            );
+        }
+
+        const failures = typeValidationResult.flatMap(({ result }) =>
+            result === COMMAND_ACKNOWLEDGEMENT_BODY_TEXT ? [] : [new InternalError(result)]
+        );
+
+        // TODO return an instance with this method from the validation service
+        if (failures.length > 0) {
+            throw new InternalError(
+                `Failed to create bulk job. One or more commands has failed schema validation.`
+            );
+        }
+
         const bulkJob: CoscradBulkImportJobCreateDto = {
             name: `execute-command-stream [${Date.now()}]`,
             stream: commandFsasToExecute,
@@ -475,47 +502,51 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             ]);
         }
 
-        const commandResults = await this.commandExecutor.executeBulkJob(
-            new CoscradUserWithGroups(
-                new CoscradUser({
-                    type: AggregateType.user,
-                    username: 'coscrad-admin',
-                    id: 'COSCRAD_ADMIN',
-                    authProviderUserId: '',
+        // TODO log successful job creation
 
-                    roles: [CoscradUserRole.superAdmin],
-                    profile: {
-                        name: {
-                            firstName: 'CLI',
-                            lastName: 'User',
+        if (shouldExecuteNow) {
+            const commandResults = await this.commandExecutor.executeBulkJob(
+                new CoscradUserWithGroups(
+                    new CoscradUser({
+                        type: AggregateType.user,
+                        username: 'coscrad-admin',
+                        id: 'COSCRAD_ADMIN',
+                        authProviderUserId: '',
+
+                        roles: [CoscradUserRole.superAdmin],
+                        profile: {
+                            name: {
+                                firstName: 'CLI',
+                                lastName: 'User',
+                            },
+                            email: 'cli-user@cosrad.org',
                         },
-                        email: 'cli-user@cosrad.org',
-                    },
-                }),
-                []
-            ),
-            jobId
-        );
+                    }),
+                    []
+                ),
+                jobId
+            );
 
-        if (isInternalError(commandResults)) {
-            throw new InternalError(`Invalidly formatted request for bulk job execution`, [
-                commandResults,
-            ]);
+            if (isInternalError(commandResults)) {
+                throw new InternalError(`Invalidly formatted request for bulk job execution`, [
+                    commandResults,
+                ]);
+            }
+
+            const failures = commandResults.filter(
+                ({ result }) => result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT
+            );
+
+            const wasSuccess = failures.length === 0;
+
+            if (!wasSuccess) {
+                this.logger.log(`One or more commands failed. \n ${JSON.stringify(failures)}`);
+
+                throw new Error(`Bulk command execution completed but with errors`);
+            }
+
+            this.logger.log(`Success`);
         }
-
-        const failures = commandResults.filter(
-            ({ result }) => result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT
-        );
-
-        const wasSuccess = failures.length === 0;
-
-        if (!wasSuccess) {
-            this.logger.log(`One or more commands failed. \n ${JSON.stringify(failures)}`);
-
-            throw new Error(`Bulk command execution completed but with errors`);
-        }
-
-        this.logger.log(`Success`);
     }
 
     @CliCommandOption({
@@ -559,5 +590,14 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             throw customError;
         }
+    }
+
+    @CliCommandOption({
+        flags: '-n, --now [now]',
+        description: 'when set, executes the bulk job immediately',
+        required: false,
+    })
+    parseNow(value: string): boolean {
+        return JSON.parse(value);
     }
 }

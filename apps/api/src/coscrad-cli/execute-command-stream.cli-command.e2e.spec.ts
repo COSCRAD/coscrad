@@ -120,6 +120,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                     await CommandTestFactory.run(commandInstance, [
                         cliCommandName,
                         `--name=${fixtureName}`,
+                        `--now`,
                     ]);
 
                     const numberOfUsers = await testRepositoryProvider
@@ -136,8 +137,153 @@ describe(`CLI Command: ${cliCommandName}`, () => {
 
     describe(`when the [data-file] option is specified`, () => {
         describe(`when the command is valid`, () => {
-            describe(`when there are generated IDs, but no joins`, () => {
-                it(`should succeed with the expected updates`, async () => {
+            describe(`when the "now" flag is set`, () => {
+                describe(`when there are generated IDs, but no joins`, () => {
+                    it(`should succeed with the expected updates`, async () => {
+                        await CommandTestFactory.run(commandInstance, [
+                            cliCommandName,
+                            `--data-file=${dataFile}`,
+                            `--now`,
+                        ]);
+
+                        const numberOfTerms = await testRepositoryProvider
+                            .forResource(ResourceType.term)
+                            .getCount();
+
+                        expect(numberOfTerms).toBeGreaterThan(0);
+
+                        const allJobs = await bulkJobRepo.fetchMany();
+
+                        expect(allJobs).toHaveLength(1);
+
+                        const foundJob = allJobs[0];
+
+                        expect(foundJob.isDraft()).toBe(false);
+                    });
+                });
+
+                describe(`when there are generated IDs and joins (i.e., referential properties with APPEND_THIS_ID)`, () => {
+                    it(`should succeed with the expected updates`, async () => {
+                        await CommandTestFactory.run(commandInstance, [
+                            cliCommandName,
+                            `--data-file=${dataFileWithJoin}`,
+                            `--now`,
+                        ]);
+
+                        const numberOfTerms = await testRepositoryProvider
+                            .forResource(ResourceType.term)
+                            .getCount();
+
+                        expect(numberOfTerms).toBeGreaterThan(0);
+
+                        const vocabularyLists = await testRepositoryProvider
+                            .forResource(ResourceType.vocabularyList)
+                            .fetchMany();
+
+                        expect(vocabularyLists).toHaveLength(1);
+
+                        const foundList = vocabularyLists[0];
+
+                        expect(foundList).toBeInstanceOf(VocabularyList);
+
+                        const numberOfEntries = (foundList as VocabularyList).entries.length;
+
+                        expect(numberOfEntries).toBe(1);
+
+                        await assertBulkJobPersisted();
+                    });
+                });
+
+                describe(`when there are deep references using pre-existing UUIDs and not generated or appended IDs`, () => {
+                    /**
+                     * The following 2 IDs are magic strings in the test FSAs file.
+                     */
+                    const vocabularyListId = buildDummyUuid(1);
+
+                    const termId = buildDummyUuid(2);
+
+                    const vocabularyListEvents = new TestEventStream()
+                        .andThen<VocabularyListCreated>({
+                            type: 'VOCABULARY_LIST_CREATED',
+                        })
+                        .andThen<VocabularyListFilterPropertyRegistered>({
+                            type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
+                            // this magically lines up with the fixture file
+                            payload: {
+                                name: 'number',
+                                allowedValuesAndLabels: [
+                                    {
+                                        value: '1',
+                                        label: 'one',
+                                    },
+                                ],
+                            },
+                        })
+                        .as({
+                            type: AggregateType.vocabularyList,
+                            id: vocabularyListId,
+                        });
+
+                    const termEvents = new TestEventStream()
+                        .andThen<TermCreated>({
+                            type: 'TERM_CREATED',
+                        })
+                        .as({
+                            type: AggregateType.term,
+                            id: termId,
+                        });
+
+                    beforeEach(async () => {
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents([...vocabularyListEvents, ...termEvents]);
+                    });
+
+                    it(`should succeed`, async () => {
+                        await CommandTestFactory.run(commandInstance, [
+                            cliCommandName,
+                            `--data-file=${dataFileWithExistingUuids}`,
+                            `--now`,
+                        ]);
+
+                        const numberOfTerms = await testRepositoryProvider
+                            .forResource(ResourceType.term)
+                            .getCount();
+
+                        expect(numberOfTerms).toBe(1);
+
+                        await assertBulkJobPersisted();
+                    });
+                });
+
+                describe(`when only existing IDs are used (no slugs)`, () => {
+                    it(`should succeed`, async () => {
+                        /**
+                         * The data file holds the UUID `41fb2d7f-c483-4e09-a1f0-e9909a6b0001`
+                         * which is a very magic number. We know this is the first ID
+                         * to be generated by the `MockIdGenerator`.
+                         */
+                        await idGenerator.generate();
+
+                        await CommandTestFactory.run(commandInstance, [
+                            cliCommandName,
+                            `--data-file=${dataFileWithExistingUuidNoSlugs}`,
+                            `--now`,
+                        ]);
+
+                        const numberOfTerms = await testRepositoryProvider
+                            .forResource(ResourceType.term)
+                            .getCount();
+
+                        expect(numberOfTerms).toEqual(1);
+
+                        await assertBulkJobPersisted();
+                    });
+                });
+            });
+
+            describe(`when the "now" flag is not set`, () => {
+                it(`should create the bulk job in a draft state`, async () => {
                     await CommandTestFactory.run(commandInstance, [
                         cliCommandName,
                         `--data-file=${dataFile}`,
@@ -147,123 +293,7 @@ describe(`CLI Command: ${cliCommandName}`, () => {
                         .forResource(ResourceType.term)
                         .getCount();
 
-                    expect(numberOfTerms).toBeGreaterThan(0);
-
-                    await assertBulkJobPersisted();
-                });
-            });
-
-            describe(`when there are generated IDs and joins (i.e., referential properties with APPEND_THIS_ID)`, () => {
-                it(`should succeed with the expected updates`, async () => {
-                    await CommandTestFactory.run(commandInstance, [
-                        cliCommandName,
-                        `--data-file=${dataFileWithJoin}`,
-                    ]);
-
-                    const numberOfTerms = await testRepositoryProvider
-                        .forResource(ResourceType.term)
-                        .getCount();
-
-                    expect(numberOfTerms).toBeGreaterThan(0);
-
-                    const vocabularyLists = await testRepositoryProvider
-                        .forResource(ResourceType.vocabularyList)
-                        .fetchMany();
-
-                    expect(vocabularyLists).toHaveLength(1);
-
-                    const foundList = vocabularyLists[0];
-
-                    expect(foundList).toBeInstanceOf(VocabularyList);
-
-                    const numberOfEntries = (foundList as VocabularyList).entries.length;
-
-                    expect(numberOfEntries).toBe(1);
-
-                    await assertBulkJobPersisted();
-                });
-            });
-
-            describe(`when there are deep references using pre-existing UUIDs and not generated or appended IDs`, () => {
-                /**
-                 * The following 2 IDs are magic strings in the test FSAs file.
-                 */
-                const vocabularyListId = buildDummyUuid(1);
-
-                const termId = buildDummyUuid(2);
-
-                const vocabularyListEvents = new TestEventStream()
-                    .andThen<VocabularyListCreated>({
-                        type: 'VOCABULARY_LIST_CREATED',
-                    })
-                    .andThen<VocabularyListFilterPropertyRegistered>({
-                        type: 'VOCABULARY_LIST_PROPERTY_FILTER_REGISTERED',
-                        // this magically lines up with the fixture file
-                        payload: {
-                            name: 'number',
-                            allowedValuesAndLabels: [
-                                {
-                                    value: '1',
-                                    label: 'one',
-                                },
-                            ],
-                        },
-                    })
-                    .as({
-                        type: AggregateType.vocabularyList,
-                        id: vocabularyListId,
-                    });
-
-                const termEvents = new TestEventStream()
-                    .andThen<TermCreated>({
-                        type: 'TERM_CREATED',
-                    })
-                    .as({
-                        type: AggregateType.term,
-                        id: termId,
-                    });
-
-                beforeEach(async () => {
-                    await testRepositoryProvider
-                        .getEventRepository()
-                        .appendEvents([...vocabularyListEvents, ...termEvents]);
-                });
-
-                it(`should succeed`, async () => {
-                    await CommandTestFactory.run(commandInstance, [
-                        cliCommandName,
-                        `--data-file=${dataFileWithExistingUuids}`,
-                    ]);
-
-                    const numberOfTerms = await testRepositoryProvider
-                        .forResource(ResourceType.term)
-                        .getCount();
-
-                    expect(numberOfTerms).toBe(1);
-
-                    await assertBulkJobPersisted();
-                });
-            });
-
-            describe(`when only existing IDs are used (no slugs)`, () => {
-                it(`should succeed`, async () => {
-                    /**
-                     * The data file holds the UUID `41fb2d7f-c483-4e09-a1f0-e9909a6b0001`
-                     * which is a very magic number. We know this is the first ID
-                     * to be generated by the `MockIdGenerator`.
-                     */
-                    await idGenerator.generate();
-
-                    await CommandTestFactory.run(commandInstance, [
-                        cliCommandName,
-                        `--data-file=${dataFileWithExistingUuidNoSlugs}`,
-                    ]);
-
-                    const numberOfTerms = await testRepositoryProvider
-                        .forResource(ResourceType.term)
-                        .getCount();
-
-                    expect(numberOfTerms).toEqual(1);
+                    expect(numberOfTerms).toBe(0);
 
                     await assertBulkJobPersisted();
                 });
