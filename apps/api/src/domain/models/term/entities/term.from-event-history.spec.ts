@@ -178,7 +178,7 @@ describe(`Term.fromEventHistory`, () => {
                 });
             });
 
-            describe(`When a translated term is pulbished`, () => {
+            describe(`When a translated term is published`, () => {
                 it(`should return the appropriate term`, () => {
                     const result = Term.fromEventHistory(
                         termTranslated

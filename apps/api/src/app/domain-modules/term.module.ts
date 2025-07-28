@@ -13,6 +13,7 @@ import {
     TermTranslated,
 } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
+import { PhotographAddedForTerm } from '../../domain/models/term/commands/add-image-for-term/photograph-added-for-term.event';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
 import { LiteralTranslationOfTermProvided } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
@@ -75,6 +76,7 @@ import { TermCommandsModule } from './term.commands.module';
             TermElicitedFromPrompt,
             AudioAddedForTerm,
             LiteralTranslationOfTermProvided,
+            PhotographAddedForTerm,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

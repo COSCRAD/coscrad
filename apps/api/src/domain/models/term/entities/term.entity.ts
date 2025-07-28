@@ -1,5 +1,11 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
-import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonEmptyString,
+    ReferenceTo,
+    UUID,
+} from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -48,6 +54,7 @@ import {
     CannotOverrideAudioForTermError,
     PromptLanguageMustBeUniqueError,
 } from '../errors';
+import { CannotOverridePhotographForTermError } from '../errors/cannot-override-photograph-for-term.error';
 
 const isOptional = true;
 
@@ -96,6 +103,14 @@ export class Term extends Resource {
     })
     readonly sourceProject?: string;
 
+    @ReferenceTo(AggregateType.photograph)
+    @UUID({
+        label: 'photograph ID',
+        description: 'reference to a photograph for this term',
+        isOptional: true,
+    })
+    photographId?: AggregateId;
+
     // The constructor should only be called after validating the input DTO
     constructor(dto: DTO<Term>) {
         super({ ...dto, type: ResourceType.term });
@@ -103,7 +118,7 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { audio: audioDto, sourceProject, text, isPromptTerm } = dto;
+        const { audio: audioDto, sourceProject, text, isPromptTerm, photographId } = dto;
 
         this.text = new MultilingualText(text);
 
@@ -113,6 +128,8 @@ export class Term extends Resource {
 
         // we default to false for pre existing data
         this.isPromptTerm = isNullOrUndefined(isPromptTerm) ? false : isPromptTerm;
+
+        this.photographId = photographId;
     }
 
     getName(): MultilingualText {
@@ -174,6 +191,21 @@ export class Term extends Resource {
         if (isInternalError(audioUpdateResult)) return audioUpdateResult;
 
         this.audio = audioUpdateResult;
+
+        return this;
+    }
+
+    @UpdateMethod()
+    addPhotophraph(photograpgId: AggregateId): ResultOrError<Term> {
+        if (!isNullOrUndefined(this.photographId)) {
+            return new CannotOverridePhotographForTermError(
+                this.id,
+                photograpgId,
+                this.photographId
+            );
+        }
+
+        this.photographId = photograpgId;
 
         return this;
     }
