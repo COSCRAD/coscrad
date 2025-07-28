@@ -55,6 +55,11 @@ type CommandFsaWithMeta = CommandFsa & {
     meta?: Record<string, unknown>;
 };
 
+type DataFilenameAndCommandStream = {
+    filename: string;
+    stream: CommandFsaWithMeta[];
+};
+
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
 
 const APPEND_THIS_ID = 'APPEND_THIS_ID';
@@ -211,7 +216,7 @@ const parseSlugDefinition = (
 
 interface ExecuteCommandStreamCliCommandOptions {
     name: CommandFsaWithMeta[];
-    dataFile: CommandFsaWithMeta[];
+    dataFile: DataFilenameAndCommandStream;
     now: boolean;
 }
 
@@ -236,13 +241,13 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         _passedParams: string[],
         {
             name: commandFsasFromFixture,
-            dataFile: commandFsasFromDataFile,
+            dataFile: dataFilenamesAndCommandFsas,
             now: shouldExecuteNow,
         }: ExecuteCommandStreamCliCommandOptions
     ): Promise<void> {
         // console.time('command-performance');
 
-        if (commandFsasFromDataFile && commandFsasFromFixture) {
+        if (dataFilenamesAndCommandFsas && commandFsasFromFixture) {
             const msg = `You must only specify one of [name, data-file]`;
 
             this.logger.log(msg);
@@ -252,7 +257,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             throw new InternalError(msg);
         }
 
-        if (!commandFsasFromDataFile && !commandFsasFromFixture) {
+        if (!dataFilenamesAndCommandFsas && !commandFsasFromFixture) {
             const msg = `You must specify exactly one of [name, data-file]`;
 
             this.logger.log(msg);
@@ -262,7 +267,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             throw new InternalError(msg);
         }
 
-        const resolvedCommandFsasFromParams = commandFsasFromDataFile || commandFsasFromFixture;
+        const resolvedCommandFsasFromParams =
+            commandFsasFromFixture || dataFilenamesAndCommandFsas.stream;
 
         const userDefinedSlugParseResult = resolvedCommandFsasFromParams
             .map(
@@ -485,7 +491,9 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         }
 
         const bulkJob: CoscradBulkImportJobCreateDto = {
-            name: `execute-command-stream [${Date.now()}]`,
+            name: commandFsasFromFixture
+                ? `execute-command-stream [${Date.now()}]`
+                : dataFilenamesAndCommandFsas.filename,
             stream: commandFsasToExecute,
         };
 
@@ -573,13 +581,15 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         description: 'path to the (local) JSON data file with an array of command FSAs',
         required: false,
     })
-    parseDataFile(value: string): CommandFsaWithMeta[] {
+    parseDataFile(value: string): DataFilenameAndCommandStream {
         if (!isNonEmptyString(value)) return undefined;
 
         try {
-            const parsedCommandFsaStream = JSON.parse(readFileSync(value, { encoding: 'utf-8' }));
+            const parsedCommandFsaStream = JSON.parse(
+                readFileSync(value, { encoding: 'utf-8' })
+            ) as CommandFsaWithMeta[];
 
-            return parsedCommandFsaStream;
+            return { filename: value, stream: parsedCommandFsaStream };
         } catch (error) {
             const customError = new InternalError(
                 `Failed to parse command stream from JSON file`,
