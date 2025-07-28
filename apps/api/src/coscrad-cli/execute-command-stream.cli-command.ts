@@ -455,12 +455,6 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
                     contributorIds,
                 },
             });
-
-            // commandResults.push({
-            //     index,
-            //     fsa,
-            //     errors: commandResult instanceof Error ? [commandResult.toString()] : [],
-            // });
         }
 
         const bulkJob: CoscradBulkImportJobCreateDto = {
