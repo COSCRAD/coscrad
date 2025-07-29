@@ -35,7 +35,6 @@ export class ResourceAddedToTagEventHandler implements ICoscradEventHandler {
             taggedMemberCompositeIdentifier: { type: categorizableType, id: categorizableId },
         },
     }: ResourceOrNoteTagged): Promise<void> {
-        // TODO wrap in a transaction
         const categorizableRepo =
             this.categorizableRepositoryProvider.forResource<CategorizableCompositeIdentifier>(
                 categorizableType

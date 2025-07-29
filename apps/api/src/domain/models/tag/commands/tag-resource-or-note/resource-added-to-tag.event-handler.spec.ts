@@ -1,4 +1,4 @@
-import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
+import { AggregateType, CategorizableType, ResourceType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -30,12 +30,6 @@ const WIDGET = 'WIDGET' as CategorizableType;
 const tagId = buildDummyUuid(12);
 
 const label = 'the label for this tag';
-
-const existingTag = buildTestInstance(EventSourcedTagViewModel, {
-    id: tagId,
-    label,
-    members: [],
-});
 
 class Widget {
     readonly type = WIDGET;
@@ -157,27 +151,68 @@ describe(`ResourceAddedToTagEventHandler`, () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
-
-        await testQueryRepository.create(existingTag);
     });
 
     describe(`when handing a resource or note tagged`, () => {
         describe(`when a resource has been tagged`, () => {
-            it(`should tag the resource or note`, async () => {
-                await handler.handle(resourceAddedToTagEvent);
+            describe(`when the tag has no existing members`, () => {
+                const existingTag = buildTestInstance(EventSourcedTagViewModel, {
+                    id: tagId,
+                    label,
+                    members: [],
+                });
 
-                const updatedTag = (await testQueryRepository.fetchById(
-                    existingTag.id
-                )) as EventSourcedTagViewModel;
+                beforeEach(async () => {
+                    await testQueryRepository.create(existingTag);
+                });
 
-                const { members } = updatedTag;
+                it(`should tag the resource or note`, async () => {
+                    await handler.handle(resourceAddedToTagEvent);
 
-                expect(members).toHaveLength(1);
+                    const updatedTag = (await testQueryRepository.fetchById(
+                        existingTag.id
+                    )) as EventSourcedTagViewModel;
 
-                const firstMember = members[0];
+                    const { members } = updatedTag;
 
-                // TODO Ensure that all resource views have a type property
-                expect(firstMember).toEqual(testWidget);
+                    expect(members).toHaveLength(1);
+
+                    const firstMember = members[0];
+
+                    // TODO Ensure that all resource views have a type property
+                    expect(firstMember).toEqual(testWidget);
+                });
+            });
+
+            describe(`when the tag has some existing members`, () => {
+                const existingMembers = [{ type: ResourceType.term, id: buildDummyUuid(1) }];
+
+                const existingTag = buildTestInstance(EventSourcedTagViewModel, {
+                    id: tagId,
+                    label,
+                    members: existingMembers,
+                });
+
+                beforeEach(async () => {
+                    await testQueryRepository.create(existingTag);
+                });
+
+                it(`should tag the resource or note`, async () => {
+                    await handler.handle(resourceAddedToTagEvent);
+
+                    const updatedTag = (await testQueryRepository.fetchById(
+                        existingTag.id
+                    )) as EventSourcedTagViewModel;
+
+                    const { members } = updatedTag;
+
+                    expect(members).toHaveLength(1 + existingMembers.length);
+
+                    const lastAddedMember = members[existingMembers.length];
+
+                    // TODO Ensure that all resource views have a type property
+                    expect(lastAddedMember).toEqual(testWidget);
+                });
             });
         });
 

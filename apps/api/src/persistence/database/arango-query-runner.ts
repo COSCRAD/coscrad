@@ -98,6 +98,6 @@ export class ArangoQueryRunner implements ICoscradQueryRunner {
      * abstraction as it has proven brittle with no real benefit.
      */
     getArangoDbInstance(): Database {
-        return this.arangoDatabase.getDatabaseIntance();
+        return this.arangoDatabase.getRawArangoDatabaseInstance();
     }
 }

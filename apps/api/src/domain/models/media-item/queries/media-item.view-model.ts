@@ -1,4 +1,4 @@
-import { IMediaItemViewModel } from '@coscrad/api-interfaces';
+import { IMediaItemViewModel, ResourceType } from '@coscrad/api-interfaces';
 import { FromDomainModel, MIMEType } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { BaseViewModel } from '../../../../queries/buildViewModelForResource/viewModels/base.view-model';
@@ -11,6 +11,8 @@ const FromMediaItem = FromDomainModel(MediaItem);
  * config to get the base url.
  */
 export class MediaItemViewModel extends BaseViewModel implements Omit<IMediaItemViewModel, 'url'> {
+    public readonly type = ResourceType.mediaItem;
+
     @FromMediaItem
     readonly mimeType: MIMEType;
 

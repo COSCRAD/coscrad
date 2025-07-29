@@ -36,6 +36,8 @@ import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-
 import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 export class VocabularyListRecordForTerm {
+    readonly type = ResourceType.term;
+
     @UUID({
         label: 'vocabulary list ID',
         description: 'system identifier for this vocabulary list',

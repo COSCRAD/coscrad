@@ -51,7 +51,7 @@ export class ArangoDatabase {
      * were brittle. We should refactor our ArangoDB implementation to clean up
      * these layers at some point.
      */
-    getDatabaseIntance(): Database {
+    getRawArangoDatabaseInstance(): Database {
         return this.db;
     }
 

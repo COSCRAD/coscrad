@@ -2,6 +2,7 @@ import {
     GeometricFeatureType,
     ISpatialFeatureProperties,
     ISpatialFeatureViewModel,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -17,6 +18,8 @@ type GeometryViewModel = {
  * discriminating the union client-side.
  */
 export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFeatureViewModel {
+    readonly type = ResourceType.spatialFeature;
+
     /**
      * We may need to make this a class so we can generate the API docs.
      */

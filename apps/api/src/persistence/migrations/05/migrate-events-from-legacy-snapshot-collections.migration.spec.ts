@@ -164,7 +164,7 @@ describe(`MigrateEventsFromLegacySnapshotCollections`, () => {
             await testRepositoryProvider.testTeardown();
 
             // We really need to clean up the Arango abstraction layers. The below chain is confusing.
-            const db = testDatabaseProvider.getDBInstance().getDatabaseIntance();
+            const db = testDatabaseProvider.getDBInstance().getRawArangoDatabaseInstance();
 
             const existing = db.collection('legacy-events-m5');
 
