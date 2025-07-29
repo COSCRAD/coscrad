@@ -47,6 +47,8 @@ upcoming release.
 
 #### Relevant Commits
 
+-   bc3e4ccc feat: introduce event consumer for TAG_RELABELLED (#748)
+-   3aaee6dc feat: cascade tag relabels to resource and note views (#743)
 -   10fdedb0 infra: introduce Arango tag query repository (#735)
 -   286f71d7 feat: introduce event consumer for TAG_CREATED (#742)
 
@@ -121,6 +123,7 @@ In the process of using the CLI to import data, we have hit the need to optimize
 
 #### Relevant Commits
 
+-   5341e85e feat: support bulk import jobs via the API (#739)
 -   54dfb92e refactor: optimize prompt term command flow (#702)
 -   33a5d9e6 refactor: optimize IMPORT_ENTRIES_TO_VOCABULARY_LIST (#708)
 -   dc148e6f refactor: optimize IMPORT_AUDIO_ITEMS_TO_PLAYLIST (#712)
@@ -132,6 +135,10 @@ In the process of using the CLI to import data, we have hit the need to optimize
 -   cbaeafd2 feat(api): introduce IMPORT_ENTRIES_TO_VOCABULARY_LIST (#597)
 -   fd7a6066 refactor: make performance enhancements for data ingestion (#595)
 -   b587bbbe feat(api): support .mov files in media ingestion flow (#588)
+-   84b3eb0d (origin/integration, integration) feat: support command type validation in **execute-command-stream** (#755)
+-   00c6a87a refactor: extract bulk job logic into service (#754)
+-   f1029387 feat: support bulk job validation via API (#752)
+-   a578e676 feat: persist bulk import jobs (#749)
 
 ### Song, audio item, playlist, and video query optimizations
 
@@ -198,6 +205,8 @@ There is always some work that is opaque to users, but prerequisite to building 
 
 #### Relevant Commits
 
+-   a5209903 build: remove mobile app projects (#750)
+-   50f70857 build: bump arango version in dev db startup script (#745)
 -   4e4cdd2d feat(api): dynamically configure allowed origins (#666)
 -   5b236b43 refactor(api): move media ingestion to the media service (#649)
 -   5cf931df refactor: isolate vertical slice for media item module (#648)
