@@ -1,6 +1,9 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { AppModule } from '../app/app.module';
+import { ArangoBulkJobRepository } from '../app/controllers/command/bulk-imports/arango-bulk-job-repository';
+import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from '../app/controllers/command/bulk-imports/bulk-job-repository.interface';
+import { CommandExecutionService } from '../app/controllers/command/command-execution.service';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import { TermModule } from '../app/domain-modules/term.module';
 import { VocabularyListModule } from '../app/domain-modules/vocabulary-list.module';
@@ -8,6 +11,7 @@ import { EventModule } from '../domain/common';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { MediaItemModule } from '../domain/models/media-item';
 import { IdGenerationModule } from '../lib/id-generation/id-generation.module';
+import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { MigrationModule } from '../persistence/migrations';
 import { PersistenceModule } from '../persistence/persistence.module';
 import { ClearDatabaseCliCommand } from './clear-database.cli-comand';
@@ -48,6 +52,14 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ExportSchemasCliCommand,
         RehydrateViewsCliCommand,
         DiscoverAudioItemsCliCommand,
+        {
+            provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+            useFactory: (connectionProvider: ArangoConnectionProvider) => {
+                return new ArangoBulkJobRepository(connectionProvider);
+            },
+            inject: [ArangoConnectionProvider],
+        },
+        CommandExecutionService,
         {
             provide: COSCRAD_LOGGER_TOKEN,
             useClass: ConsoleCoscradCliLogger,

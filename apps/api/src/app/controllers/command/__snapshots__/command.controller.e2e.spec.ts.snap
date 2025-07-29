@@ -2,7 +2,6 @@
 
 exports[`The Command Controller when executing a stream of commands (/commands/bulk) when a bulk job has already been executed should reject a second attempt to execute the job 1`] = `
 {
-  "_id": "bulk-import-jobs/41fb2d7f-c483-4e09-a1f0-e9909a6b0015",
   "dateCreated": 1664237194356,
   "dateExecuted": 1664237194356,
   "id": "41fb2d7f-c483-4e09-a1f0-e9909a6b0015",

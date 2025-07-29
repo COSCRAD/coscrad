@@ -13,7 +13,7 @@ import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import { CoscradEventFactory, CoscradEventUnion, EventModule } from '../../../domain/common';
 import { EVENT_PUBLISHER_TOKEN } from '../../../domain/common/events/interfaces';
 import { SyncInMemoryEventPublisher } from '../../../domain/common/events/sync-in-memory-event-publisher';
-import { ID_MANAGER_TOKEN } from '../../../domain/interfaces/id-manager.interface';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../../domain/interfaces/id-manager.interface';
 import { AudioItemController } from '../../../domain/models/audio-visual/application/audio-item.controller';
 import { VideoController } from '../../../domain/models/audio-visual/application/video.controller';
 import {
@@ -333,7 +333,10 @@ import { EnvironmentVariables } from '../../config/env.validation';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { ArangoBulkJobRepository } from '../command/bulk-imports/arango-bulk-job-repository';
-import { BULK_JOB_REPOSITORY_INJECTION_TOKEN } from '../command/bulk-imports/bulk-job-repository.interface';
+import {
+    BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+    IBulkJobRepository,
+} from '../command/bulk-imports/bulk-job-repository.interface';
 import { CommandExecutionService } from '../command/command-execution.service';
 import { AdminJwtGuard, CommandController } from '../command/command.controller';
 import { CommandInfoService } from '../command/services/command-info-service';
@@ -549,11 +552,23 @@ export default async (
             },
             {
                 provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
-                useClass: ArangoBulkJobRepository,
+                useFactory: (connectionProvider: ArangoConnectionProvider) => {
+                    return new ArangoBulkJobRepository(connectionProvider);
+                },
+                inject: [ArangoConnectionProvider],
             },
             {
                 provide: CommandExecutionService,
-                useClass: CommandExecutionService,
+                useFactory: (
+                    commandHandlerService: CommandHandlerService,
+                    bulkJobRepo: IBulkJobRepository,
+                    idManager: IIdManager
+                ) => new CommandExecutionService(commandHandlerService, bulkJobRepo, idManager),
+                inject: [
+                    CommandHandlerService,
+                    BULK_JOB_REPOSITORY_INJECTION_TOKEN,
+                    ID_MANAGER_TOKEN,
+                ],
             },
             {
                 provide: EdgeConnectionQueryService,

@@ -14,6 +14,11 @@ import {
 } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
+import { CoscradBulkImportJobCreateDto } from '../app/controllers/command/bulk-imports/bulk-import-job.create-dto.entity';
+import {
+    COMMAND_ACKNOWLEDGEMENT_BODY_TEXT,
+    CommandExecutionService,
+} from '../app/controllers/command/command-execution.service';
 import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
 import {
     CreateAudioItem,
@@ -22,6 +27,8 @@ import {
 import { CreateMediaItem } from '../domain/models/media-item/commands';
 import { GrantUserRole } from '../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command';
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
+import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
 import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
@@ -48,10 +55,9 @@ type CommandFsaWithMeta = CommandFsa & {
     meta?: Record<string, unknown>;
 };
 
-type CommandResult = {
-    index: number;
-    fsa: CommandFsa;
-    errors: string[];
+type DataFilenameAndCommandStream = {
+    filename: string;
+    stream: CommandFsaWithMeta[];
 };
 
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
@@ -208,6 +214,12 @@ const parseSlugDefinition = (
     return [prefix, slug];
 };
 
+interface ExecuteCommandStreamCliCommandOptions {
+    name: CommandFsaWithMeta[];
+    dataFile: DataFilenameAndCommandStream;
+    now: boolean;
+}
+
 @CliCommand({
     name: 'execute-command-stream',
     description: 'executes one or more command FSAs in sequence',
@@ -215,6 +227,7 @@ const parseSlugDefinition = (
 export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     constructor(
         private readonly commandHandlerService: CommandHandlerService,
+        private readonly commandExecutor: CommandExecutionService,
         @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
@@ -222,18 +235,19 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
     }
 
     /**
-     * TODO Move this logic into a service we can reuse. Maybe CommandHandlerService.executeStream()
+     * TODO Move the slug generation logic into a separate service.
      */
     async run(
         _passedParams: string[],
         {
             name: commandFsasFromFixture,
-            dataFile: commandFsasFromDataFile,
-        }: { name: CommandFsaWithMeta[]; dataFile: CommandFsaWithMeta[] }
+            dataFile: dataFilenamesAndCommandFsas,
+            now: shouldExecuteNow,
+        }: ExecuteCommandStreamCliCommandOptions
     ): Promise<void> {
         // console.time('command-performance');
 
-        if (commandFsasFromDataFile && commandFsasFromFixture) {
+        if (dataFilenamesAndCommandFsas && commandFsasFromFixture) {
             const msg = `You must only specify one of [name, data-file]`;
 
             this.logger.log(msg);
@@ -243,7 +257,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             throw new InternalError(msg);
         }
 
-        if (!commandFsasFromDataFile && !commandFsasFromFixture) {
+        if (!dataFilenamesAndCommandFsas && !commandFsasFromFixture) {
             const msg = `You must specify exactly one of [name, data-file]`;
 
             this.logger.log(msg);
@@ -253,11 +267,10 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             throw new InternalError(msg);
         }
 
-        const commandFsasToExecute = commandFsasFromDataFile || commandFsasFromFixture;
+        const resolvedCommandFsasFromParams =
+            commandFsasFromFixture || dataFilenamesAndCommandFsas.stream;
 
-        const commandResults: CommandResult[] = [];
-
-        const userDefinedSlugParseResult = commandFsasToExecute
+        const userDefinedSlugParseResult = resolvedCommandFsasFromParams
             .map(
                 ({
                     payload: {
@@ -306,7 +319,7 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             new Map<string, Ctor<unknown>>()
         );
 
-        const commandTypeToReferentialPropertyPaths = commandFsasToExecute.reduce(
+        const commandTypeToReferentialPropertyPaths = resolvedCommandFsasFromParams.reduce(
             (acc, { type }) => {
                 if (acc.has(type)) {
                     return acc;
@@ -339,7 +352,10 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
             new Map<string, string[]>()
         );
 
-        for (const [index, fsa] of commandFsasToExecute.entries()) {
+        const commandFsasToExecute = [];
+
+        // TODO remove unused var
+        for (const [_index, fsa] of resolvedCommandFsasFromParams.entries()) {
             const {
                 type: commandType,
                 payload: {
@@ -441,33 +457,104 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             const contributorIds = fsaToExecute?.meta?.contributorIds || [];
 
-            const commandResult = await this.commandHandlerService.execute(fsaToExecute, {
-                userId: 'COSCRAD Admin',
-                /**
-                 * This allows the user to inject `contributorIds`. We do not
-                 * want the user to override timestamps, though.
-                 */
-                contributorIds,
-            });
-
-            commandResults.push({
-                index,
-                fsa,
-                errors: commandResult instanceof Error ? [commandResult.toString()] : [],
+            commandFsasToExecute.push({
+                ...fsaToExecute,
+                meta: {
+                    userId: 'COSCRAD Admin',
+                    /**
+                     * This allows the user to inject `contributorIds`. We do not
+                     * want the user to override timestamps, though.
+                     */
+                    contributorIds,
+                },
             });
         }
 
-        const failures = commandResults.filter(({ errors }) => errors.length > 0);
+        const typeValidationResult =
+            this.commandExecutor.validateCommandStream(commandFsasToExecute);
 
-        const wasSuccess = failures.length === 0;
-
-        if (!wasSuccess) {
-            this.logger.log(`One or more commands failed. \n ${JSON.stringify(failures)}`);
-
-            throw new Error(`Bulk command execution completed but with errors`);
+        if (isInternalError(typeValidationResult)) {
+            throw new InternalError(
+                `Failed to create bulk job. One or more commands was invalidly formatted`
+            );
         }
 
-        this.logger.log(`Success`);
+        const failures = typeValidationResult.flatMap(({ result }) =>
+            result === COMMAND_ACKNOWLEDGEMENT_BODY_TEXT ? [] : [new InternalError(result)]
+        );
+
+        // TODO return an instance with this method from the validation service
+        if (failures.length > 0) {
+            throw new InternalError(
+                `Failed to create bulk job. One or more commands has failed schema validation.`
+            );
+        }
+
+        const bulkJob: CoscradBulkImportJobCreateDto = {
+            name: commandFsasFromFixture
+                ? `execute-command-stream [${Date.now()}]`
+                : dataFilenamesAndCommandFsas.filename,
+            stream: commandFsasToExecute,
+        };
+
+        const jobId = await this.commandExecutor.createBulkJob(bulkJob).catch((e) => {
+            throw new InternalError(
+                `Failed to create bulk job for command stream execution in CLI`,
+                [new InternalError(e?.message || 'unknown reason')]
+            );
+        });
+
+        if (isInternalError(jobId)) {
+            throw new InternalError(`Failed to create bulk job for command execution via CLI`, [
+                jobId,
+            ]);
+        }
+
+        // TODO log successful job creation
+
+        if (shouldExecuteNow) {
+            const commandResults = await this.commandExecutor.executeBulkJob(
+                new CoscradUserWithGroups(
+                    new CoscradUser({
+                        type: AggregateType.user,
+                        username: 'coscrad-admin',
+                        id: 'COSCRAD_ADMIN',
+                        authProviderUserId: '',
+
+                        roles: [CoscradUserRole.superAdmin],
+                        profile: {
+                            name: {
+                                firstName: 'CLI',
+                                lastName: 'User',
+                            },
+                            email: 'cli-user@cosrad.org',
+                        },
+                    }),
+                    []
+                ),
+                jobId
+            );
+
+            if (isInternalError(commandResults)) {
+                throw new InternalError(`Invalidly formatted request for bulk job execution`, [
+                    commandResults,
+                ]);
+            }
+
+            const failures = commandResults.filter(
+                ({ result }) => result !== COMMAND_ACKNOWLEDGEMENT_BODY_TEXT
+            );
+
+            const wasSuccess = failures.length === 0;
+
+            if (!wasSuccess) {
+                this.logger.log(`One or more commands failed. \n ${JSON.stringify(failures)}`);
+
+                throw new Error(`Bulk command execution completed but with errors`);
+            }
+
+            this.logger.log(`Success`);
+        }
     }
 
     @CliCommandOption({
@@ -494,13 +581,15 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         description: 'path to the (local) JSON data file with an array of command FSAs',
         required: false,
     })
-    parseDataFile(value: string): CommandFsaWithMeta[] {
+    parseDataFile(value: string): DataFilenameAndCommandStream {
         if (!isNonEmptyString(value)) return undefined;
 
         try {
-            const parsedCommandFsaStream = JSON.parse(readFileSync(value, { encoding: 'utf-8' }));
+            const parsedCommandFsaStream = JSON.parse(
+                readFileSync(value, { encoding: 'utf-8' })
+            ) as CommandFsaWithMeta[];
 
-            return parsedCommandFsaStream;
+            return { filename: value, stream: parsedCommandFsaStream };
         } catch (error) {
             const customError = new InternalError(
                 `Failed to parse command stream from JSON file`,
@@ -511,5 +600,14 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
             throw customError;
         }
+    }
+
+    @CliCommandOption({
+        flags: '-n, --now [now]',
+        description: 'when set, executes the bulk job immediately',
+        required: false,
+    })
+    parseNow(value: string): boolean {
+        return JSON.parse(value);
     }
 }
