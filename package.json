@@ -165,6 +165,8 @@
         "jest-circus": "^29.4.1",
         "jest-environment-jsdom": "29.4.3",
         "jest-react-native": "18.0.0",
+        "jsdom": "^26.1.0",
+        "markdown-it": "^14.1.0",
         "metro": "0.74.1",
         "metro-babel-register": "0.74.1",
         "metro-react-native-babel-preset": "0.74.1",

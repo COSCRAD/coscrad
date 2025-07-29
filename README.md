@@ -136,6 +136,16 @@ To build both the Coscrad front-end and back-end, run
 A project's build will appear in `/dist/<project-name>`. E.g., the build for the
 backend, whose project is called `api` will appear in `/dist/api`
 
+#### Changelog
+
+There is a small ad-hoc script for generating the HTML changelog from markdown and
+publishing the static assets to `dist/docs`. You can run this from the root
+directory as follows.
+
+> > > node scripts/build-changelog/changelog.mjs
+
+Note that you can update the CSS in `scripts/build-changelog/assets/styles.css`.
+
 ### Deployment
 
 #### API

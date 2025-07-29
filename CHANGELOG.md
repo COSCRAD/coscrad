@@ -238,7 +238,7 @@ Users can now add audio and translate notes. This makes it possible to create a 
 
 Sometimes users have materials that do not fit the mold for the available resource types. In this case, we support adding additional materials that can include audio, video, and PDF documents along with a description.
 
-We also now support a curratable list of links to external language resources on the web.
+We also now support a curatable list of links to external language resources on the web.
 
 #### Relevant Commits
 
