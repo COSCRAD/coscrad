@@ -24,7 +24,11 @@ const steps = new Steps()
             .click();
     });
 
-describe(`CREATE_VOCABULARY_LIST`, () => {
+/**
+ * TODO The command flow for vocabulary lists is not officially supported.
+ * We feature flag it out in prod. Opt-in once we are ready to support this.
+ */
+describe.skip(`CREATE_VOCABULARY_LIST`, () => {
     beforeEach(() => {
         cy.clearDatabase();
 
