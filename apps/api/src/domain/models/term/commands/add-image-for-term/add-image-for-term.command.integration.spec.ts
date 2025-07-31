@@ -3,11 +3,13 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { error } from 'console';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -21,6 +23,8 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { PhotographCreated } from '../../../photograph';
 import { Photograph } from '../../../photograph/entities/photograph.entity';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
 import { TermCreated } from '../create-term';
 import { AddImageForTerm } from './add-image-for-term.command';
@@ -148,6 +152,38 @@ describe(commandType, () => {
                     expect(updatedTerm.photographId).toBe(existingPhotograph.id);
                 },
             });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the photograph does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandSuccess(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await termRepository.create(existingTermWithoutPhotograph);
+                    },
+                    buildValidCommandFSA: () => validCommandFsa,
+                    checkStateOnSuccess: async () => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    validCommandFsa.payload.aggregateCompositeIdentifier
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the term does not exist`, () => {
+            it.todo('should return the expected errror');
+        });
+
+        describe(`when the term already has a photograph`, () => {
+            it.todo(`should fail with the expected`);
         });
     });
 });
