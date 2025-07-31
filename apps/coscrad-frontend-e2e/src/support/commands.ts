@@ -184,7 +184,7 @@ Cypress.Commands.add(`clearDatabase`, () =>
 );
 
 Cypress.Commands.add(`executeCommandStreamByName`, (name: string) => {
-    const cliCommand = `node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name}`;
+    const cliCommand = `node ../../dist/apps/coscrad-cli/main.js execute-command-stream --name=${name} --now`;
 
     cy.exec(cliCommand).then((_result) => {
         if (cliCommand.includes(`FOOBARBAZ`)) {

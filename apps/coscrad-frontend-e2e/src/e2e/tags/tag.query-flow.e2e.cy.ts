@@ -1,6 +1,10 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
 
+/**
+ * TODO Opt-in once we official support the tag views after optimizing all
+ * tag queries on the back-end.
+ */
 describe('Tags index-to-detail flow', () => {
     const textForTermAttachedToNote = 'Engl-term-2';
 

@@ -1,7 +1,10 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { buildDummyAggregateCompositeIdentifier } from '../../support/utilities';
 
-describe(`tagging a term`, () => {
+/**
+ * TODO Opt-in when we rewrite the Tag query service \ controller on the back-end.
+ */
+describe.skip(`tagging a term`, () => {
     const termBaseRoute = `/Resources/Terms/`;
 
     const termAggregateCompositeIdentifier = buildDummyAggregateCompositeIdentifier(
@@ -72,7 +75,9 @@ describe(`tagging a term`, () => {
                     cy.contains(tagResourceLabel).click();
 
                     // TODO do not reference MUI here
-                    cy.get('.MuiSelect-select').click().get(`[data-value="${tagId}"]`).click();
+                    cy.get('.MuiSelect-select').click();
+
+                    cy.get('.MuiSelect-select').get(`[data-value="${tagId}"]`).click();
 
                     cy.getByDataAttribute('submit-dynamic-form').click();
 

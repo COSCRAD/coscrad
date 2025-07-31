@@ -23,7 +23,6 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { isNotFound } from '../../../lib/types/not-found';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import sendInternalResultAsHttpResponse from '../resources/common/sendInternalResultAsHttpResponse';
-import { CoscradBulkImportJobCreateDto } from './bulk-imports/bulk-import-job.create-dto.entity';
 import {
     BULK_JOB_REPOSITORY_INJECTION_TOKEN,
     IBulkJobRepository,
@@ -124,7 +123,7 @@ export class CommandController {
     async createBulkJob(
         @Res() res,
         // TODO pipe validation?
-        @Body() createDto: CoscradBulkImportJobCreateDto
+        @Body() createDto: any
     ) {
         const result = await this.commandExecutor.createBulkJob(createDto);
 

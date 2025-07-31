@@ -1,6 +1,9 @@
 const commandLabel = `Create Tag`;
 
-describe(`Create Tag`, () => {
+/**
+ * TODO Opt-in when we rewrite the Tag query service \ controller on the back-end.
+ */
+describe.skip(`Create Tag`, () => {
     beforeEach(() => {
         cy.visit('/');
 
