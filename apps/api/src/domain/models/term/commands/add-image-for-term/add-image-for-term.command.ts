@@ -9,7 +9,7 @@ import { TermCompositeIdentifier } from '../create-term';
 @CoscradDataExample<AddImageForTerm>({
     example: {
         aggregateCompositeIdentifier: { type: AggregateType.term, id: buildDummyUuid(34) },
-        photograpgId: buildDummyUuid(43),
+        photographId: buildDummyUuid(43),
     },
 })
 @Command({
@@ -29,5 +29,5 @@ export class AddImageForTerm implements ICommandBase {
         label: 'photograph ID',
         description: 'system reference for photograph',
     })
-    readonly photograpgId: AggregateId;
+    readonly photographId: AggregateId;
 }

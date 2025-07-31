@@ -45,25 +45,25 @@ const existingTermWithoutPhotograph = Term.fromEventHistory(
     termId
 ) as Term;
 
-const photograpgId = buildDummyUuid(3);
+const photographId = buildDummyUuid(3);
 
 const existingPhotograph = Photograph.fromEventHistory(
     [
         new TestEventStream().buildSingle<PhotographCreated>({
             type: 'PHOTOGRAPH_CREATED',
             payload: {
-                aggregateCompositeIdentifier: { id: photograpgId },
+                aggregateCompositeIdentifier: { id: photographId },
             },
         }),
     ],
-    photograpgId
+    photographId
 ) as Photograph;
 
 const validCommandFsa = {
     type: commandType,
     payload: buildTestInstance(AddImageForTerm, {
         aggregateCompositeIdentifier: existingTermWithoutPhotograph.getCompositeIdentifier(),
-        photograpgId,
+        photographId,
     }),
 };
 

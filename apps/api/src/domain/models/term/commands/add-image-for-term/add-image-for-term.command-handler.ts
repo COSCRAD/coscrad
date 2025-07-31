@@ -14,12 +14,15 @@ import { PhotographAddedForTerm } from './photograph-added-for-term.event';
 
 @CommandHandler(AddImageForTerm)
 export class AddImageForTermCommandHandler extends BaseUpdateCommandHandler<Term> {
-    protected actOnInstance(term: Term, { photograpgId }: AddImageForTerm): ResultOrError<Term> {
-        return term.addPhotophraph(photograpgId);
+    protected actOnInstance(
+        term: Term,
+        { photographId: photographId }: AddImageForTerm
+    ): ResultOrError<Term> {
+        return term.addPhotophraph(photographId);
     }
 
     protected async fetchRequiredExternalState({
-        photograpgId,
+        photographId: photograpgId,
     }: AddImageForTerm): Promise<InMemorySnapshot> {
         const searchResult = await this.repositoryProvider
             .forResource(ResourceType.photograph)
