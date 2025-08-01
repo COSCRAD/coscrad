@@ -3,7 +3,6 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { error } from 'console';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
@@ -17,10 +16,12 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../../../validation';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { PhotographCreated } from '../../../photograph';
 import { Photograph } from '../../../photograph/entities/photograph.entity';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
@@ -158,15 +159,40 @@ describe(commandType, () => {
     describe(`when the command is invalid`, () => {
         describe(`when the photograph does not exist`, () => {
             it(`should fail with the expected error`, async () => {
-                await assertCommandSuccess(testAssertionDependencies, {
+                await assertCommandError(testAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
                         await termRepository.create(existingTermWithoutPhotograph);
                     },
-                    buildValidCommandFSA: () => validCommandFsa,
-                    checkStateOnSuccess: async () => {
+                    buildCommandFSA: () => validCommandFsa,
+                    checkError: (result) => {
                         assertErrorAsExpected(
-                            error,
+                            result,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    validCommandFsa.payload.aggregateCompositeIdentifier,
+                                    [existingPhotograph.getCompositeIdentifier()]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the term does not exist`, () => {
+            it('should return the expected errror', async () => {
+                await assertCommandError(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testAssertionDependencies.testRepositoryProvider
+                            .forResource(existingPhotograph.type)
+                            .create(existingPhotograph);
+                    },
+                    buildCommandFSA: () => validCommandFsa,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
                             new CommandExecutionError([
                                 new AggregateNotFoundError(
                                     validCommandFsa.payload.aggregateCompositeIdentifier
@@ -178,12 +204,34 @@ describe(commandType, () => {
             });
         });
 
-        describe(`when the term does not exist`, () => {
-            it.todo('should return the expected errror');
-        });
-
         describe(`when the term already has a photograph`, () => {
-            it.todo(`should fail with the expected`);
+            it(`should fail with the expected`, async () => {
+                await assertCommandError(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        // we run the command once, so that it will already have a photograph
+                        await assertCommandSuccess(testAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await termRepository.create(existingTermWithoutPhotograph);
+
+                                await testAssertionDependencies.testRepositoryProvider
+                                    .forResource(existingPhotograph.type)
+                                    .create(existingPhotograph);
+                            },
+                            buildValidCommandFSA: () => validCommandFsa,
+                            checkStateOnSuccess: async () => {
+                                const updatedTerm = (await termRepository.fetchById(
+                                    termId
+                                )) as Term;
+
+                                expect(updatedTerm.photographId).toBe(existingPhotograph.id);
+                            },
+                        });
+                    },
+                    buildCommandFSA: () => validCommandFsa,
+                });
+            });
         });
     });
 });
