@@ -5,9 +5,6 @@ import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { TermModule } from '../../../../../app/domain-modules/term.module';
-import { CoscradEventFactory } from '../../../../../domain/common';
-import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
-import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
@@ -16,6 +13,9 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../../../validation';
+import { CoscradEventFactory } from '../../../../common';
+import { ID_MANAGER_TOKEN } from '../../../../interfaces/id-manager.interface';
+import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
@@ -28,9 +28,9 @@ import AggregateNotFoundError from '../../../shared/common-command-errors/Aggreg
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
 import { TermCreated } from '../create-term';
-import { AddImageForTerm } from './add-image-for-term.command';
+import { AddPhotograhForTerm } from './add-photograph-for-term.command';
 
-const commandType = 'ADD_IMAGE_FOR_TERM';
+const commandType = 'ADD_PHOTOGRAPH_FOR_TERM';
 
 const termId = buildDummyUuid(2);
 
@@ -66,7 +66,7 @@ const existingPhotograph = Photograph.fromEventHistory(
 
 const validCommandFsa = {
     type: commandType,
-    payload: buildTestInstance(AddImageForTerm, {
+    payload: buildTestInstance(AddPhotograhForTerm, {
         aggregateCompositeIdentifier: existingTermWithoutPhotograph.getCompositeIdentifier(),
         photographId,
     }),

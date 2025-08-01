@@ -67,7 +67,7 @@ import {
 import {
     PhotographAddedForTerm,
     PhotographAddedForTermPayload,
-} from '../../domain/models/term/commands/add-image-for-term/photograph-added-for-term.event';
+} from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event';
 import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';

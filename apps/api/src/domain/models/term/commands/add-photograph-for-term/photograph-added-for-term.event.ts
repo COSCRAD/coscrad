@@ -1,12 +1,12 @@
 import { AggregateType } from '@coscrad/api-interfaces';
-import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { CoscradEvent } from '../../../../common';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
-import { AddImageForTerm } from './add-image-for-term.command';
+import { AddPhotograhForTerm } from './add-photograph-for-term.command';
 
-export type PhotographAddedForTermPayload = AddImageForTerm;
+export type PhotographAddedForTermPayload = AddPhotograhForTerm;
 
 const testEventId = buildDummyUuid(416);
 

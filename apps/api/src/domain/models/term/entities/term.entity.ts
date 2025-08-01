@@ -45,7 +45,7 @@ import {
     TermElicitedFromPrompt,
     TermTranslated,
 } from '../commands';
-import { PhotographAddedForTerm } from '../commands/add-image-for-term/photograph-added-for-term.event';
+import { PhotographAddedForTerm } from '../commands/add-photograph-for-term/photograph-added-for-term.event';
 import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
