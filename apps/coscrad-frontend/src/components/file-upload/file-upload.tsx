@@ -46,6 +46,22 @@ type FileWithProgress = {
     uploaded: boolean;
 };
 
+const getFileIcon = (mimeType: string) => {
+    if (mimeType.startsWith('image/')) return ImageIcon;
+    if (mimeType.startsWith('video/')) return VideoCameraBackIcon;
+    if (mimeType.startsWith('audio/')) return AudioFileIcon;
+    if (mimeType === 'application/pdf') return ArticleIcon;
+    return InsertDriveFileIcon;
+};
+
+const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+};
+
 export const FileUpload = () => {
     const [files, setFiles] = useState<FileWithProgress[]>([]);
     const [uploading, setUploading] = useState(false);
@@ -105,10 +121,10 @@ export const FileUpload = () => {
             // request finished event
             request.addEventListener('load', function (e) {
                 // HTTP status message (200, 404 etc)
-                console.log(request.status);
+                console.log({ status: request.status });
 
                 // request.response holds response from the server
-                console.log(request.response);
+                console.log({ response: request.response });
 
                 setFiles((prevFiles) =>
                     prevFiles.map((file) =>
@@ -189,7 +205,7 @@ type ActionButtonsProps = {
     onClear: () => void;
 };
 
-function ActionButtons({ onUpload, onClear, disabled }: ActionButtonsProps) {
+const ActionButtons = ({ onUpload, onClear, disabled }: ActionButtonsProps) => {
     return (
         <>
             <Button onClick={onUpload} disabled={disabled}>
@@ -202,7 +218,7 @@ function ActionButtons({ onUpload, onClear, disabled }: ActionButtonsProps) {
             </Button>
         </>
     );
-}
+};
 
 type FileListProps = {
     files: FileWithProgress[];
@@ -210,7 +226,7 @@ type FileListProps = {
     uploading: boolean;
 };
 
-function FileList({ files, onRemove, uploading }: FileListProps) {
+const FileList = ({ files, onRemove, uploading }: FileListProps) => {
     if (files.length === 0) {
         return null;
     }
@@ -225,7 +241,7 @@ function FileList({ files, onRemove, uploading }: FileListProps) {
             </Stack>
         </>
     );
-}
+};
 
 type FileItemProps = {
     file: FileWithProgress;
@@ -233,7 +249,7 @@ type FileItemProps = {
     uploading: boolean;
 };
 
-function FileItem({ file, onRemove, uploading }: FileItemProps) {
+const FileItem = ({ file, onRemove, uploading }: FileItemProps) => {
     const Icon = getFileIcon(file.file.type);
 
     return (
@@ -286,20 +302,4 @@ function FileItem({ file, onRemove, uploading }: FileItemProps) {
             </CardContent>
         </Card>
     );
-}
-
-const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return ImageIcon;
-    if (mimeType.startsWith('video/')) return VideoCameraBackIcon;
-    if (mimeType.startsWith('audio/')) return AudioFileIcon;
-    if (mimeType === 'application/pdf') return ArticleIcon;
-    return InsertDriveFileIcon;
-};
-
-const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 };

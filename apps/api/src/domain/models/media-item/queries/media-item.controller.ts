@@ -163,8 +163,12 @@ export class MediaItemController {
     @UseGuards(OptionalJwtAuthGuard)
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
-    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-        console.log(files);
+    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Res() res) {
+        const fileMeta = files.map((file) => {
+            file.filename, file.mimetype;
+        });
+
+        return sendInternalResultAsHttpResponse(res, fileMeta);
     }
 
     private buildHeaders({
