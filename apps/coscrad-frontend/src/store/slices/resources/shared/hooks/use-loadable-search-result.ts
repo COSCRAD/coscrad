@@ -7,9 +7,9 @@ export const useLoadableSearchResult = <T extends IBaseViewModel>(
     useLoadableItems: () => ILoadable<IIndexQueryResult<T>>,
     idToFind: string
 ): IMaybeLoadable<IDetailQueryResult<T>> => {
-    const loadableTranscribedAudioItems = useLoadableItems();
+    const loadableItems = useLoadableItems();
 
-    const { data: allItems, isLoading, errorInfo } = loadableTranscribedAudioItems;
+    const { data: allItems, isLoading, errorInfo } = loadableItems;
 
     if (isLoading || !isNull(errorInfo) || isNull(allItems))
         return {
