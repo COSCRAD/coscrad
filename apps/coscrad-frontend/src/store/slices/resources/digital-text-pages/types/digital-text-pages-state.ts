@@ -1,3 +1,6 @@
-import { IDigitalTextPagesViewModel } from '@coscrad/api-interfaces';
+import {
+    ICategorizableIndexQueryResult,
+    IDigitalTextPagesViewModel,
+} from '@coscrad/api-interfaces';
 
-export type DigitalTextPagesState = IDigitalTextPagesViewModel;
+export type DigitalTextPagesState = ICategorizableIndexQueryResult<IDigitalTextPagesViewModel>;

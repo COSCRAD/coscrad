@@ -33,6 +33,7 @@ import {
     VOCABULARY_LISTS,
     vocabularyListReducer,
 } from './slices/resources';
+import { DIGITAL_TEXT_PAGES, DigitalTextPageReducer } from './slices/resources/digital-text-pages';
 import { tagReducer, TAGS } from './slices/tagSlice';
 
 export const rootReducer = combineReducers({
@@ -51,6 +52,7 @@ export const rootReducer = combineReducers({
     [VOCABULARY_LISTS]: vocabularyListReducer,
     [BIBLIOGRAPHIC_CITATIONS]: bibliographicCitationReducer,
     [DIGITAL_TEXTS]: DigitalTextReducer,
+    [DIGITAL_TEXT_PAGES]: DigitalTextPageReducer,
     [SPATIAL_FEATURES]: spatialFeatureReducer,
     [SONGS]: songReducer,
     [MEDIA_ITEMS]: mediaItemReducer,

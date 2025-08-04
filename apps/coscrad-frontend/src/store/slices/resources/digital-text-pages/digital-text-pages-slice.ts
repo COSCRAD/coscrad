@@ -16,4 +16,4 @@ const DigitalTextPagesSlice = createSlice({
     },
 });
 
-export const DigitalTextReducer = DigitalTextPagesSlice.reducer;
+export const DigitalTextPageReducer = DigitalTextPagesSlice.reducer;

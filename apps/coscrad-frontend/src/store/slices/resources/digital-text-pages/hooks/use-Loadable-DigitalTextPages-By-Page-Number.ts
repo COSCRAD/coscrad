@@ -1,5 +1,5 @@
 import { useLoadableSearchResult } from '../../shared/hooks';
-import { useLoadableDigitalTexts } from './use-Loadable-DigitalTextPages';
+import { useLoadableDigitalTextPages } from './use-Loadable-DigitalTextPages';
 
-export const useLoadableDigitalTextsById = (id: string) =>
-    useLoadableSearchResult(useLoadableDigitalTexts, id);
+export const useLoadableDigitalTextPagesByDigitalTextId = (id: string) =>
+    useLoadableSearchResult(useLoadableDigitalTextPages, id);
