@@ -18,6 +18,7 @@ import {
     TermTranslated,
 } from '../commands';
 import { PhotographAddedForTerm } from '../commands/add-photograph-for-term/photograph-added-for-term.event';
+import { VideoAddedForTerm } from '../commands/add-video-for-term/video-added-for-term.event';
 import { PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
@@ -143,6 +144,34 @@ describe(`Term.fromEventHistory`, () => {
                     const updatedTerm = result as Term;
 
                     expect(updatedTerm.photographId).toEqual(photographId);
+                });
+            });
+
+            describe(`when the term is created and then a video is added`, () => {
+                it(`should add the video`, () => {
+                    const videoId = buildDummyUuid(34);
+
+                    const result = Term.fromEventHistory(
+                        termCreated
+                            .andThen<VideoAddedForTerm>({
+                                type: 'VIDEO_ADDED_FOR_TERM',
+                                payload: {
+                                    aggregateCompositeIdentifier: { id: termId },
+                                    videoId,
+                                },
+                            })
+                            .as({
+                                type: AggregateType.term,
+                                id: termId,
+                            }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.videoId).toEqual(videoId);
                 });
             });
 

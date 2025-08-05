@@ -4,6 +4,7 @@ import { CommandInfoService } from '../../../../app/controllers/command/services
 import { IdGenerationModule } from '../../../../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../../../../lib/nlp';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
+import { EventModule } from '../../../common';
 import { AudioItemQueryService } from '../../../services/query-services/audio-item-query.service';
 import { VideoQueryService } from '../../../services/query-services/video-query.service';
 import {
@@ -60,7 +61,7 @@ import { AudioItemController } from './audio-item.controller';
 import { VideoController } from './video.controller';
 
 @Module({
-    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
+    imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule, EventModule],
     controllers: [AudioItemController, VideoController],
     providers: [
         CommandInfoService,
