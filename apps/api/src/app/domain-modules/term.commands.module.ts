@@ -12,6 +12,8 @@ import {
     TranslateTerm,
     TranslateTermCommandHandler,
 } from '../../domain/models/term/commands';
+import { AddPhotograhForTerm } from '../../domain/models/term/commands/add-photograph-for-term/add-photograph-for-term.command';
+import { AddPhotographForTermCommandHandler } from '../../domain/models/term/commands/add-photograph-for-term/add-photograph-for-term.command-handler';
 import { ProvideLiteralTranslationOfTerm } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command';
 import { ProvideLiteralTranslationOfTermCommandHandler } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command-handler';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -30,6 +32,7 @@ import { PersistenceModule } from '../../persistence/persistence.module';
         ElicitTermFromPromptCommandHandler,
         AddAudioForTermCommandHandler,
         ProvideLiteralTranslationOfTermCommandHandler,
+        AddPhotographForTermCommandHandler,
         ...[
             CreateTerm,
             CreatePromptTerm,
@@ -37,11 +40,19 @@ import { PersistenceModule } from '../../persistence/persistence.module';
             ElicitTermFromPrompt,
             AddAudioForTerm,
             ProvideLiteralTranslationOfTerm,
+            AddPhotograhForTerm,
         ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,
         })),
     ],
-    exports: [CreateTerm, CreatePromptTerm, TranslateTerm, ElicitTermFromPrompt, AddAudioForTerm],
+    exports: [
+        CreateTerm,
+        CreatePromptTerm,
+        TranslateTerm,
+        ElicitTermFromPrompt,
+        AddAudioForTerm,
+        AddPhotograhForTerm,
+    ],
 })
 export class TermCommandsModule {}

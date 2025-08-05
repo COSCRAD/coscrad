@@ -17,6 +17,7 @@ import {
     TermElicitedFromPrompt,
     TermTranslated,
 } from '../commands';
+import { PhotographAddedForTerm } from '../commands/add-photograph-for-term/photograph-added-for-term.event';
 import { PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
@@ -117,6 +118,34 @@ describe(`Term.fromEventHistory`, () => {
                 });
             });
 
+            describe(`when the term is created then adding a photograph to the term`, () => {
+                it(`should add the photograph`, () => {
+                    const photographId = buildDummyUuid(43);
+
+                    const result = Term.fromEventHistory(
+                        termCreated
+                            .andThen<PhotographAddedForTerm>({
+                                type: 'PHOTOGRAPH_ADDED_FOR_TERM',
+                                payload: {
+                                    aggregateCompositeIdentifier: { id: termId },
+                                    photographId,
+                                },
+                            })
+                            .as({
+                                type: AggregateType.term,
+                                id: termId,
+                            }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.photographId).toEqual(photographId);
+                });
+            });
+
             describe(`when the term is created then a literal translation is provided`, () => {
                 it(`should add the literal translation`, () => {
                     const literalTranslation = 'say you in what way is this';
@@ -178,7 +207,7 @@ describe(`Term.fromEventHistory`, () => {
                 });
             });
 
-            describe(`When a translated term is pulbished`, () => {
+            describe(`When a translated term is published`, () => {
                 it(`should return the appropriate term`, () => {
                     const result = Term.fromEventHistory(
                         termTranslated
@@ -324,7 +353,7 @@ describe(`Term.fromEventHistory`, () => {
                 });
             });
 
-            describe(`When a prompted term is pulbished`, () => {
+            describe(`When a prompted term is published`, () => {
                 it(`should return the appropriate term`, () => {
                     const publishTermEvents = [
                         ...termElicitedFromPrompt
