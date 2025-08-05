@@ -2285,6 +2285,14 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "photographId": {
+    "coscradDataType": "UUID",
+    "description": "reference to a photograph for this term",
+    "isArray": false,
+    "isOptional": true,
+    "label": "photograph ID",
+    "referenceTo": "photograph",
+  },
   "sourceProject": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "the name of the project through which the term was collected",
