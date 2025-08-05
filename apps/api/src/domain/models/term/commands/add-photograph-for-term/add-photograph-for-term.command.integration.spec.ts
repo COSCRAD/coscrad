@@ -18,6 +18,7 @@ import { ID_MANAGER_TOKEN } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -151,6 +152,12 @@ describe(commandType, () => {
                     const updatedTerm = (await termRepository.fetchById(termId)) as Term;
 
                     expect(updatedTerm.photographId).toBe(existingPhotograph.id);
+
+                    assertEventRecordPersisted(
+                        updatedTerm,
+                        'PHOTOGRAPH_ADDED_FOR_TERM',
+                        dummySystemUserId
+                    );
                 },
             });
         });

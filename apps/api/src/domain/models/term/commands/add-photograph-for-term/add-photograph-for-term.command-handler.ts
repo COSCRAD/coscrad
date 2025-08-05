@@ -13,7 +13,7 @@ import { AddPhotograhForTerm } from './add-photograph-for-term.command';
 import { PhotographAddedForTerm } from './photograph-added-for-term.event';
 
 @CommandHandler(AddPhotograhForTerm)
-export class AddImageForTermCommandHandler extends BaseUpdateCommandHandler<Term> {
+export class AddPhotographForTermCommandHandler extends BaseUpdateCommandHandler<Term> {
     protected actOnInstance(
         term: Term,
         { photographId: photographId }: AddPhotograhForTerm
