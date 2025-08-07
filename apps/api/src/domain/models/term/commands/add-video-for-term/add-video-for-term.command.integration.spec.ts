@@ -10,6 +10,7 @@ import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -17,6 +18,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../../../validation';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -24,6 +26,9 @@ import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserI
 import { AudioVisualModule } from '../../../audio-visual/application/audio-visual.module';
 import { VideoCreated } from '../../../audio-visual/video';
 import { Video } from '../../../audio-visual/video/entities/video.entity';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { Term } from '../../entities/term.entity';
 import { TermCreated } from '../create-term';
 import { AddVideoForTerm } from './add-video-for-term.command';
@@ -161,6 +166,84 @@ describe(commandType, () => {
 
                     expect(updatedTerm.videoId).toBe(existingVideo.id);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the term does not exist`, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testAssertionDependencies.testRepositoryProvider
+                            .forResource(existingVideo.type)
+                            .create(existingVideo);
+                    },
+                    buildCommandFSA: () => validCommandFsa,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    validCommandFsa.payload.aggregateCompositeIdentifier
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the video does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await termRepository.create(existingTermWithoutVideo);
+                    },
+                    buildCommandFSA: () => validCommandFsa,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    validCommandFsa.payload.aggregateCompositeIdentifier,
+                                    [existingVideo.getCompositeIdentifier()]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the term already has a video`, () => {
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(testAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await assertCommandSuccess(testAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await termRepository.create(existingTermWithoutVideo);
+
+                                await testAssertionDependencies.testRepositoryProvider
+                                    .forResource(existingVideo.type)
+                                    .create(existingVideo);
+                            },
+                            buildValidCommandFSA: () => validCommandFsa,
+                            checkStateOnSuccess: async () => {
+                                const updatedTerm = (await termRepository.fetchById(
+                                    termId
+                                )) as Term;
+
+                                expect(updatedTerm.videoId).toBe(existingVideo.id);
+                            },
+                        });
+                    },
+                    buildCommandFSA: () => validCommandFsa,
+                });
             });
         });
     });
