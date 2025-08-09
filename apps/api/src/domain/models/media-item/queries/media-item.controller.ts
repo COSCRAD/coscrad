@@ -29,7 +29,12 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
 import { isPhotographMimeType } from '../../photograph/entities/photograph.entity';
-import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
+import {
+    getExpectedMimeTypeFromExtension,
+    getExtensionForMimeType,
+} from '../entities/get-extension-for-mime-type';
+import { MediaFileUploadResponse } from '../entities/media-file-upload-response';
+import { UploadedMediaFile } from '../entities/uploaded-media-file';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
 
@@ -163,12 +168,29 @@ export class MediaItemController {
     @UseGuards(OptionalJwtAuthGuard)
     @Post('/upload')
     @UseInterceptors(AnyFilesInterceptor())
-    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Res() res) {
-        const fileMeta = files.map((file) => {
-            file.filename, file.mimetype;
+    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
+        const uploadedMediaFiles: UploadedMediaFile[] = files.map(({ originalname }) => {
+            const nameAndExtension = originalname.split('.');
+
+            console.log({ nameAndExtension });
+
+            if (nameAndExtension.length !== 2) {
+                throw new InternalError(`Failed to parse filename: ${originalname}`);
+            }
+
+            const [name, extension] = nameAndExtension;
+
+            return new UploadedMediaFile({
+                filename: name,
+                mimeType: getExpectedMimeTypeFromExtension(extension),
+            });
         });
 
-        return sendInternalResultAsHttpResponse(res, fileMeta);
+        console.log({ uploadedMediaFiles });
+
+        return new MediaFileUploadResponse({
+            uploadedMediaFiles: uploadedMediaFiles,
+        });
     }
 
     private buildHeaders({
