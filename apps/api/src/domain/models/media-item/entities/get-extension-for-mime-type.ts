@@ -22,6 +22,7 @@ const lookupTable: { [K in MIMEType]: string } = {
     [MIMEType.csv]: 'csv',
     [MIMEType.docx]: 'docx',
     [MIMEType.pptx]: 'pptx',
+    [MIMEType.txt]: 'txt',
 } as const;
 
 // TODO Reuse this in CLI commands

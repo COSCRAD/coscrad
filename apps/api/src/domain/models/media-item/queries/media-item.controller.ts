@@ -15,6 +15,8 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import httpStatusCodes from '../../../../app/constants/httpStatusCodes';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from '../../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
@@ -35,8 +37,12 @@ import {
 } from '../entities/get-extension-for-mime-type';
 import { MediaFileUploadResponse } from '../entities/media-file-upload-response';
 import { UploadedMediaFile } from '../entities/uploaded-media-file';
+import { FilenameEditor } from '../utils/filename-editor';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
+
+// TODO Make this configurable
+const STATIC_DIR = `__static__`;
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
@@ -167,30 +173,57 @@ export class MediaItemController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Post('/upload')
-    @UseInterceptors(AnyFilesInterceptor())
-    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>) {
-        const uploadedMediaFiles: UploadedMediaFile[] = files.map(({ originalname }) => {
-            const nameAndExtension = originalname.split('.');
+    @UseInterceptors(
+        AnyFilesInterceptor({
+            storage: diskStorage({
+                filename: FilenameEditor,
+                destination: STATIC_DIR,
+            }),
+            limits: { fileSize: 1000 * 1000 * 10 },
+        })
+    )
+    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Res() res) {
+        const uploadedMediaFiles: UploadedMediaFile[] = files.map(
+            ({ originalname, mimetype: browserMimeType }) => {
+                const filenameSplit = originalname.split('.');
 
-            console.log({ nameAndExtension });
+                // account for filenames with `.` in the name portion of the file (xxx.xx.xx.pdf)
+                const extension = filenameSplit.pop();
 
-            if (nameAndExtension.length !== 2) {
-                throw new InternalError(`Failed to parse filename: ${originalname}`);
+                const name = filenameSplit.join('_');
+
+                console.log({ extension, name, browserMimeType });
+
+                const acceptedFileExtensions = Object.keys(MIMEType);
+
+                const acceptedMimeTypes = Object.values(MIMEType).map((mimeType) =>
+                    mimeType.toString()
+                );
+
+                if (
+                    !acceptedFileExtensions.includes(extension) ||
+                    !acceptedMimeTypes.includes(browserMimeType)
+                )
+                    return res
+                        .status(httpStatusCodes.badRequest)
+                        .send(
+                            new InternalError(
+                                `File with extension ${extension} not accepted for upload`
+                            )
+                        );
+
+                return new UploadedMediaFile({
+                    filename: name,
+                    mimeType: getExpectedMimeTypeFromExtension(extension),
+                });
             }
+        );
 
-            const [name, extension] = nameAndExtension;
-
-            return new UploadedMediaFile({
-                filename: name,
-                mimeType: getExpectedMimeTypeFromExtension(extension),
-            });
-        });
-
-        console.log({ uploadedMediaFiles });
-
-        return new MediaFileUploadResponse({
+        const mediaFileUploadResponse = new MediaFileUploadResponse({
             uploadedMediaFiles: uploadedMediaFiles,
         });
+
+        return sendInternalResultAsHttpResponse(res, mediaFileUploadResponse);
     }
 
     private buildHeaders({

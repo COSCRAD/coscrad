@@ -3,6 +3,7 @@ export enum MIMEType {
     // documents
     pdf = 'application/pdf',
     csv = 'text/csv',
+    txt = 'text/plain',
     xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     // doc = 'application/msword',
     docx = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
