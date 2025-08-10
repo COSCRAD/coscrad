@@ -21,7 +21,13 @@ const testFileName = `station`;
 
 const extension = 'png';
 
+const mimeType = 'image/png';
+
 const testFilePath = `${inputDir}/${testFileName}.${extension}`;
+
+const largeTestFile = 'trees-reflect-into-the-lake.mp4';
+
+const largeTestFilePath = `${inputDir}/${largeTestFile}`;
 
 const staticAssetDestinationDirectory = '__static__';
 
@@ -81,9 +87,10 @@ describe(`File Upload`, () => {
             databaseProvider.close();
         });
 
-        it(`should return 200`, async () => {
+        // Break this up?
+        it(`should return 200 and the file should be uploaded with correct the response`, async () => {
             if (!existsSync(testFilePath)) {
-                throw new InternalError(`File does not exist`);
+                throw new InternalError(`Test file not present in fixtures`);
             }
 
             const res = await request(app.getHttpServer())
@@ -91,6 +98,32 @@ describe(`File Upload`, () => {
                 .attach(testFileName, testFilePath);
 
             expect(res.status).toBe(HttpStatusCode.ok);
+
+            const uploadedFileInfo = res.body.uploadedMediaFiles[0];
+
+            expect(uploadedFileInfo.uploadedFilename).toEqual(testFileName);
+
+            expect(uploadedFileInfo.mimeType).toEqual(mimeType);
+
+            const fileUploadedInSystem = `${staticAssetDestinationDirectory}/${uploadedFileInfo.systemFilename}`;
+
+            const result = existsSync(fileUploadedInSystem);
+
+            expect(result).toBe(true);
+        });
+
+        describe(`when a file exceeds the upload size limit`, () => {
+            it(`should return a 400 and the upload should fail`, async () => {
+                if (!existsSync(largeTestFilePath)) {
+                    throw new InternalError(`Test file not present in fixtures`);
+                }
+
+                const res = await request(app.getHttpServer())
+                    .post(mediaItemUploadEndpoint)
+                    .attach(largeTestFile, largeTestFilePath);
+
+                expect(res.status).toBe(HttpStatusCode.contentTooLarge);
+            });
         });
     });
 });

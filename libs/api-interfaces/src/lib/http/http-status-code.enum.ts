@@ -4,5 +4,6 @@ export enum HttpStatusCode {
     unauthorized = 401,
     forbidden = 403,
     notFound = 404,
+    contentTooLarge = 413,
     internalError = 500,
 }

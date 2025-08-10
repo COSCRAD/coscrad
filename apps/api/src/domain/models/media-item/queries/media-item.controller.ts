@@ -179,20 +179,20 @@ export class MediaItemController {
                 filename: FilenameEditor,
                 destination: STATIC_DIR,
             }),
-            limits: { fileSize: 1000 * 1000 * 10 },
+            // This does not allow for large images or video files
+            limits: { fileSize: 1000 * 1000 * 5 }, // 5 MB
         })
     )
     uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Res() res) {
         const uploadedMediaFiles: UploadedMediaFile[] = files.map(
-            ({ originalname, mimetype: browserMimeType }) => {
+            ({ originalname, filename, mimetype: browserMimeType }) => {
                 const filenameSplit = originalname.split('.');
 
                 // account for filenames with `.` in the name portion of the file (xxx.xx.xx.pdf)
+                // there are built-in Nest JS validators in the Interceptor we could use
                 const extension = filenameSplit.pop();
 
                 const name = filenameSplit.join('_');
-
-                console.log({ extension, name, browserMimeType });
 
                 const acceptedFileExtensions = Object.keys(MIMEType);
 
@@ -213,8 +213,10 @@ export class MediaItemController {
                         );
 
                 return new UploadedMediaFile({
-                    filename: name,
+                    uploadedFilename: name,
+                    systemFilename: filename,
                     mimeType: getExpectedMimeTypeFromExtension(extension),
+                    mimeTypeFromBrowser: browserMimeType,
                 });
             }
         );
