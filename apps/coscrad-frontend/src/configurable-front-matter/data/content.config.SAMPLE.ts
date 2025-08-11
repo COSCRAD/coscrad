@@ -122,6 +122,7 @@ export const contentConfig: ConfigurableContent = {
         alphabetChartName: 'alphabet',
         baseDigitalAssetUrl: 'https://www.mediafortests.com/api',
     },
+    shouldEnableMemoryMatch: false,
     additionalMaterials: [
         {
             media: {

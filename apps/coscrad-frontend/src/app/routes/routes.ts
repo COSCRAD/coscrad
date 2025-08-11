@@ -20,4 +20,5 @@ export const routes = {
     },
     siteCredits: 'Credits',
     listenLive: 'Live',
+    memoryMatach: `Games/MemoryMatch`,
 };

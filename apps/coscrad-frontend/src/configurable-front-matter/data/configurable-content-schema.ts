@@ -96,6 +96,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     externalLinks: ExternalLink[];
     socialMediaLinks: SocialMediaLinks;
     alphabetConfig?: AlphabetConfig;
+    shouldEnableMemoryMatch: boolean;
     additionalMaterials: AdditionalMaterialItem[];
     landingPage?: string;
 };
@@ -132,6 +133,7 @@ export const configurableContentPropertiesAndConstraints: {
     externalLinks: [],
     socialMediaLinks: [CoscradConstraint.isObject],
     alphabetConfig: [CoscradConstraint.isObject],
+    shouldEnableMemoryMatch: [CoscradConstraint.isBoolean],
     additionalMaterials: [],
 };
 

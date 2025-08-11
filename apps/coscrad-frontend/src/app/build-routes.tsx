@@ -3,6 +3,7 @@ import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constra
 import { About } from '../components/about/about';
 import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
+import { MemoryMatchIndexPage } from '../components/games/memory-match/memory-match-index.page';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
 import { Home } from '../components/home/home';
 import { Links } from '../components/links/links';
@@ -122,6 +123,14 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 path: 'Alphabet',
                 label: 'Alphabet',
                 element: <AlphabetPage />,
+            }),
+        ],
+        [
+            contentConfig.shouldEnableMemoryMatch,
+            (_contentConfig: ConfigurableContent) => ({
+                path: 'MemoryMatch',
+                label: 'Memory Match',
+                element: <MemoryMatchIndexPage />,
             }),
         ],
         [
