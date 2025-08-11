@@ -1,4 +1,4 @@
-import { MIMEType } from '@coscrad/api-interfaces';
+import { MIMEType, ResourceType } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
@@ -10,6 +10,8 @@ import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-nu
 import { BaseResourceViewModel } from '../base-resource.view-model';
 
 export class VideoViewModel extends BaseResourceViewModel {
+    public readonly type = ResourceType.video;
+
     @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name of the video',

@@ -20,8 +20,10 @@ export interface ITagQueryRepository {
 
     relabel(tagId: string, newLabel: string): Promise<void>;
 
-    tagResourceOrNote(
+    tagResourceOrNote<
+        TCategorizable extends CategorizableCompositeIdentifier = CategorizableCompositeIdentifier
+    >(
         tagId: string,
-        categorizableCompositeIdentifier: CategorizableCompositeIdentifier
+        categorizableCompositeIdentifier: TCategorizable
     ): Promise<void>;
 }

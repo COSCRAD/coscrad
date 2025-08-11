@@ -5,8 +5,6 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { isNotFound } from '../../../../../lib/types/not-found';
@@ -23,9 +21,11 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DTO } from '../../../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
-import { ResourceOrNoteTaggedEventHandler } from './resource-or-note-tagged.event-handler';
+import { TagAddedForResourceEventHandler } from './tag-added-for-resource.event-handler';
 
 const WIDGET_COLLECTION = 'widgets';
 
@@ -131,14 +131,14 @@ const existingWidgetView = new WidgetViewModel({
     tags: [],
 });
 
-describe(`ResourceOrNoteTaggedEventHandler`, () => {
+describe(`TagAddedForResourceEventHandler`, () => {
     let testQueryRepository: IWidgetQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
 
-    let resourceOrNoteTaggedEventHandler: ResourceOrNoteTaggedEventHandler;
+    let resourceOrNoteTaggedEventHandler: TagAddedForResourceEventHandler;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -165,7 +165,7 @@ describe(`ResourceOrNoteTaggedEventHandler`, () => {
 
         testQueryRepository = new WidgetQueryRepository(connectionProvider);
 
-        resourceOrNoteTaggedEventHandler = new ResourceOrNoteTaggedEventHandler({
+        resourceOrNoteTaggedEventHandler = new TagAddedForResourceEventHandler({
             forResource: (resourceType) => {
                 if (resourceType !== ('widget' as ResourceType)) {
                     throw new InternalError(`this test only supports resources of type 'widget'`);

@@ -46,11 +46,11 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
     },
 })
 export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
+    public readonly type = AggregateType.digitalText;
+
     accessControlList: AccessControlList = new AccessControlList();
 
     #allTags: EventSourcedTagViewModel[] = [];
-
-    public readonly type = AggregateType.digitalText;
 
     @UUID({
         label: 'ID',

@@ -171,6 +171,10 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
             newMember: categorizableCompositeIdentifier,
         };
 
-        await this.database.query({ query, bindVars });
+        await this.database.query({ query, bindVars }).catch((e) => {
+            throw new InternalError(`Arango failed to add a member for tag view: ${tagId}`, [
+                new InternalError(e?.message || 'unknown reason'),
+            ]);
+        });
     }
 }

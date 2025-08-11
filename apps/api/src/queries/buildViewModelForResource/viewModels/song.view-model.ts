@@ -1,3 +1,4 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { FromDomainModel, NonNegativeFiniteNumber, URL } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
@@ -10,6 +11,8 @@ import { BaseResourceViewModel } from './base-resource.view-model';
 const FromSong = FromDomainModel(Song);
 
 export class SongViewModel extends BaseResourceViewModel {
+    readonly type = ResourceType.song;
+
     @FromSong
     readonly lyrics?: MultilingualText;
 
