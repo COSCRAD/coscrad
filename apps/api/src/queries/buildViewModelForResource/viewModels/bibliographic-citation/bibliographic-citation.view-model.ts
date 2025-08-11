@@ -9,7 +9,6 @@ import { BaseResourceViewModel } from '../base-resource.view-model';
 export class BibliographicCitationViewModel extends BaseResourceViewModel {
     readonly type = ResourceType.bibliographicCitation;
 
-    // TODO expose data types to swagger
     @ApiProperty()
     @BibliographicCitationDataUnionType({
         label: 'citation data',

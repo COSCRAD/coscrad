@@ -216,7 +216,10 @@ describe(`ResourceAddedToTagEventHandler`, () => {
             });
         });
 
-        // TODO Do this once we support `note__VIEWS`
+        /**
+         * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-273]
+         * Do this once we support `note__VIEWS`.
+         */
         describe(`when a note has been tagged`, () => {
             it.todo(`should add the note document as a tag member`);
         });

@@ -16,7 +16,7 @@ interface QueryRepositoryForTaggable<T = unknown> {
 }
 
 interface IQueryRepositoryProvider {
-    // TODO note test case
+    // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-273] note test case
     forResource<T = unknown>(categorizableType: CategorizableType): QueryRepositoryForTaggable<T>;
 }
 
