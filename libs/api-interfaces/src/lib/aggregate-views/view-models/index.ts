@@ -5,6 +5,7 @@ export * from './categorizable-composite-identifier';
 export * from './categorizable-type.enum';
 export * from './category-tree';
 export * from './composite-identifier.interface';
+export * from './games';
 export * from './has-id.interface';
 export * from './multilingual-text';
 export * from './note';
