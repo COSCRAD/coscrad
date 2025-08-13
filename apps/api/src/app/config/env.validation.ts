@@ -2,6 +2,7 @@ import {
     ExternalEnum,
     getCoscradDataSchema,
     NonEmptyString,
+    NonNegativeFiniteNumber,
     PositiveInteger,
     String,
     URL,
@@ -117,6 +118,28 @@ export class EnvironmentVariables {
         isOptional: true,
     })
     ALLOWED_CLIENT_ORIGINS: string;
+
+    @NonNegativeFiniteNumber({
+        label: 'maximum file upload size in MB',
+        description:
+            'the size in MB of the largest file an admin user is allowed to upload via the media management API',
+    })
+    MAX_FILE_UPLOAD_SIZE_MB: number;
+
+    // TODO non-negative finite integer
+    @NonNegativeFiniteNumber({
+        label: 'maximum number of attached files per media upload',
+        description: 'the maximum number of individual media files that can be uploaded at once',
+    })
+    MAX_FILE_UPLOAD_COUNT: number;
+
+    // TODO Support bucket storage as an alternative
+    @NonEmptyString({
+        label: 'on disk binary asset storage directory',
+        description:
+            'the path on the server (or mounted volume) in which to store binary files for the media management system',
+    })
+    ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY: string;
 }
 
 // this is tested in config.spec.ts

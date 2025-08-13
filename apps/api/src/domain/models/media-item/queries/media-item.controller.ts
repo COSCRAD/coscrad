@@ -2,8 +2,10 @@ import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import {
     Controller,
+    FileTypeValidator,
     Get,
     Param,
+    ParseFilePipe,
     Post,
     Query,
     Request,
@@ -15,12 +17,12 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import httpStatusCodes from '../../../../app/constants/httpStatusCodes';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from '../../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from '../../../../app/controllers/resources/constants';
+import { CoscradInvalidUserInputException } from '../../../../app/controllers/response-mapping/CoscradExceptions';
+import { CoscradInvalidUserInputFilter } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import buildViewModelPathForResourceType from '../../../../app/controllers/utilities/buildIndexPathForResourceType';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -36,17 +38,15 @@ import {
     getExtensionForMimeType,
 } from '../entities/get-extension-for-mime-type';
 import { MediaFileUploadResponse } from '../entities/media-file-upload-response';
-import { UploadedMediaFile } from '../entities/uploaded-media-file';
-import { FilenameEditor } from '../utils/filename-editor';
+import { SuccessfulMediaUploadRecord } from '../entities/uploaded-media-file';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
 
 // TODO Make this configurable
-const STATIC_DIR = `__static__`;
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
-@UseFilters(new InternalErrorFilter())
+@UseFilters(new InternalErrorFilter(), new CoscradInvalidUserInputFilter())
 export class MediaItemController {
     constructor(private readonly mediaItemQueryService: MediaItemQueryService) {}
 
@@ -174,17 +174,36 @@ export class MediaItemController {
     @UseGuards(OptionalJwtAuthGuard)
     @Post('/upload')
     @UseInterceptors(
-        AnyFilesInterceptor({
-            storage: diskStorage({
-                filename: FilenameEditor,
-                destination: STATIC_DIR,
-            }),
-            // This does not allow for large images or video files
-            limits: { fileSize: 1000 * 1000 * 5 }, // 5 MB
-        })
+        /**
+         * Note that the configuration has already been set from the config using
+         * `MulterModule.registerAsync()` at the level of the module.
+         */
+        AnyFilesInterceptor()
     )
-    uploadFile(@UploadedFiles() files: Array<Express.Multer.File>, @Res() res) {
-        const uploadedMediaFiles: UploadedMediaFile[] = files.map(
+    uploadFiles(
+        @UploadedFiles(
+            new ParseFilePipe({
+                validators: [
+                    new FileTypeValidator({
+                        // This allows all MIME Types registered within COSCRAD
+                        fileType: new RegExp(Object.values(MIMEType).join('|'), 'i'),
+                    }),
+                    // TODO validate content type against actual extension
+                    // new CoscradBinaryFileTypeValidator({}),
+                ],
+                exceptionFactory: (msg: string) => {
+                    const uploadError = new InternalError(
+                        `Failed to upload media item. MIME Type is not allowed, or is inconsistent with content type`,
+                        [new InternalError(msg)]
+                    );
+
+                    return new CoscradInvalidUserInputException(uploadError);
+                },
+            })
+        )
+        files: Array<Express.Multer.File>
+    ) {
+        const uploadedMediaFiles: SuccessfulMediaUploadRecord[] = files.map(
             ({ originalname, filename, mimetype: browserMimeType }) => {
                 const filenameSplit = originalname.split('.');
 
@@ -194,25 +213,7 @@ export class MediaItemController {
 
                 const name = filenameSplit.join('_');
 
-                const acceptedFileExtensions = Object.keys(MIMEType);
-
-                const acceptedMimeTypes = Object.values(MIMEType).map((mimeType) =>
-                    mimeType.toString()
-                );
-
-                if (
-                    !acceptedFileExtensions.includes(extension) ||
-                    !acceptedMimeTypes.includes(browserMimeType)
-                )
-                    return res
-                        .status(httpStatusCodes.badRequest)
-                        .send(
-                            new InternalError(
-                                `File with extension ${extension} not accepted for upload`
-                            )
-                        );
-
-                return new UploadedMediaFile({
+                return new SuccessfulMediaUploadRecord({
                     uploadedFilename: name,
                     systemFilename: filename,
                     mimeType: getExpectedMimeTypeFromExtension(extension),
@@ -225,7 +226,7 @@ export class MediaItemController {
             uploadedMediaFiles: uploadedMediaFiles,
         });
 
-        return sendInternalResultAsHttpResponse(res, mediaFileUploadResponse);
+        return mediaFileUploadResponse;
     }
 
     private buildHeaders({

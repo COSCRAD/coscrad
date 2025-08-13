@@ -1,16 +1,16 @@
 import { NestedDataType } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../base-domain-model.entity';
-import { UploadedMediaFile } from './uploaded-media-file';
+import { SuccessfulMediaUploadRecord } from './uploaded-media-file';
 
 export class MediaFileUploadResponse extends BaseDomainModel {
-    @NestedDataType(UploadedMediaFile, {
+    @NestedDataType(SuccessfulMediaUploadRecord, {
         isOptional: false,
         isArray: true,
         label: 'uploaded media files',
         description: 'an array of uploaded media file metadata',
     })
-    public readonly uploadedMediaFiles: UploadedMediaFile[];
+    public readonly uploadedMediaFiles: SuccessfulMediaUploadRecord[];
 
     constructor(dto: DTO<MediaFileUploadResponse>) {
         super();
@@ -21,7 +21,7 @@ export class MediaFileUploadResponse extends BaseDomainModel {
 
         this.uploadedMediaFiles = Array.isArray(uploadedMediaFileDTOs)
             ? uploadedMediaFileDTOs.map(
-                  (uploadedMediaFileDTO) => new UploadedMediaFile(uploadedMediaFileDTO)
+                  (uploadedMediaFileDTO) => new SuccessfulMediaUploadRecord(uploadedMediaFileDTO)
               )
             : undefined;
     }

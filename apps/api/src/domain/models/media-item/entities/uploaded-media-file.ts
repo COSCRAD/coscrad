@@ -1,8 +1,7 @@
 import { ExternalEnum, MIMEType, NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
-import BaseDomainModel from '../../base-domain-model.entity';
 
-export class UploadedMediaFile extends BaseDomainModel {
+export class SuccessfulMediaUploadRecord {
     @NonEmptyString({
         label: 'filename',
         description: 'the original name of the uploaded media item file',
@@ -36,9 +35,7 @@ export class UploadedMediaFile extends BaseDomainModel {
     })
     readonly mimeTypeFromBrowser: string;
 
-    constructor(dto: DTO<UploadedMediaFile>) {
-        super();
-
+    constructor(dto: DTO<SuccessfulMediaUploadRecord>) {
         if (!dto) return;
 
         const { uploadedFilename, systemFilename, mimeType, mimeTypeFromBrowser } = dto;

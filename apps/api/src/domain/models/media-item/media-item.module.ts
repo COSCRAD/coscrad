@@ -1,10 +1,12 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { CreateMediaItem, MediaItemCreated } from './commands';
@@ -16,9 +18,34 @@ import { NodeMediaManagementService } from './node-media-management.service';
 import { MediaItemController, MediaItemQueryService } from './queries';
 
 @Module({
-    imports: [ConfigModule, PersistenceModule, IdGenerationModule, CommandModule],
+    imports: [
+        ConfigModule,
+        // Can we avoid calling `forRootAsync` here?
+        PersistenceModule.forRootAsync(),
+        IdGenerationModule,
+        CommandModule,
+        MulterModule.registerAsync({
+            imports: [ConfigModule],
+            useFactory: (configService: ConfigService) => {
+                const options = {
+                    // TODO persist the file
+                    // dest: configService.get('ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY'),
+                    limits: {
+                        fileSize:
+                            configService.get<number>('MAX_FILE_UPLOAD_SIZE_MB') * 1000 * 1000,
+                        files: configService.get<number>('MAX_FILE_UPLOAD_COUNT'),
+                    },
+                };
+
+                return options;
+            },
+            inject: [ConfigService],
+        }),
+    ],
     controllers: [MediaItemController],
     providers: [
+        // TODO Can we remove this?
+        ArangoDatabaseProvider,
         MediaItemQueryService,
         CommandInfoService,
         CreateMediaItem,
