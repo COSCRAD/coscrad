@@ -14,4 +14,22 @@ export class MemoryMatchRound {
     compiledBy: AggregateId[];
     contributors: AggregateId[];
     size: number = NUMBER_OF_PAIRS_IN_A_ROUND;
+
+    addAudioForCard(cardSquenceNumber: number, mediaItemId: AggregateId) {}
+
+    hasAudio() {
+        return;
+    }
+
+    hasCard() {
+        return;
+    }
+
+    getCard() {
+        return;
+    }
+
+    addAudio() {
+        return;
+    }
 }

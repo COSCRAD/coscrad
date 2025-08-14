@@ -17,7 +17,23 @@ describe(`MemoryMatchRound`, () => {
         });
 
         describe(`when the update is invalid`, () => {
-            describe(`when there is already audio for the card`, () => {
+            describe(`When there is no card with the given sequence number.`, () => {
+                it.todo(`should return the expected error`);
+            });
+        });
+    });
+
+    describe(`addCardBackImage`, () => {
+        describe(`when the update is valid`, () => {
+            it.todo(`should add the card back image`);
+        });
+
+        describe(`when the update is invalid`, () => {
+            describe(`the round already has a card back image`, () => {
+                it.todo(`should return the expected error`);
+            });
+
+            describe(`when there is no card with the given sequence number`, () => {
                 it.todo(`should return the expected error`);
             });
         });
@@ -29,7 +45,7 @@ describe(`MemoryMatchRound`, () => {
         });
 
         describe(`when the update is invalid`, () => {
-            describe(`when the card already has original text`, () => {
+            describe(`When there is no card with the given sequence number.`, () => {
                 it.todo(`should return the expected error`);
             });
         });
