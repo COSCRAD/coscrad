@@ -1,12 +1,76 @@
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
+import {
+    CannotOverwriteImageForMemoryMatchCardError,
+    FailedToUpdateMissingMemoryMatchCardError,
+} from '../errors';
+import { MemoryMatchCard } from './memory-match-card.entity';
+import { MemoryMatchRound } from './memory-match-round.entity';
+
+const testMediaItemId = buildDummyUuid(1);
+
+const testRoundId = buildDummyUuid(3);
+
 describe(`MemoryMatchRound`, () => {
     describe(`addImageForCard`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should add the image to the card`);
+            it(`should add the image to the card`, () => {
+                const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                const sequenceNumber = testRound.addCard() as number;
+
+                testRound.addImageForCard(sequenceNumber, testMediaItemId);
+
+                const targetCard = testRound.get(sequenceNumber) as MemoryMatchCard;
+
+                expect(targetCard.imageId).toEqual(testMediaItemId);
+            });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`when the card already has a image`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const sequenceNumber = testRound.addCard() as number;
+
+                    const firstUpdate = testRound.addImageForCard(
+                        sequenceNumber,
+                        testMediaItemId
+                    ) as MemoryMatchRound;
+
+                    const secondMediaItemId = buildDummyUuid(2);
+
+                    const result = firstUpdate.addImageForCard(sequenceNumber, secondMediaItemId);
+
+                    assertErrorAsExpected(
+                        result,
+                        new CannotOverwriteImageForMemoryMatchCardError(
+                            testRound.id,
+                            sequenceNumber,
+                            testMediaItemId,
+                            secondMediaItemId
+                        )
+                    );
+                });
+            });
+
+            describe(`when there is no card with the given sequence number`, () => {
+                it(`should return the expected error`, () => {
+                    const bogusSequenceNumber = 123;
+
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const result = testRound.addImageForCard(123, testMediaItemId);
+
+                    assertErrorAsExpected(
+                        result,
+                        new FailedToUpdateMissingMemoryMatchCardError(
+                            testRoundId,
+                            bogusSequenceNumber
+                        )
+                    );
+                });
             });
         });
     });
