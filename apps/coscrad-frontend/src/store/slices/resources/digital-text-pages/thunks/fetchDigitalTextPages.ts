@@ -1,35 +1,49 @@
-import { isNull } from '@coscrad/validation-constraints';
+import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../../..';
-import { NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
+import { buildAuthenticationHeaders } from '../../../utils/build-authentication-headers';
 import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
-import { selectLoadableDigitalTexts } from '../../digital-texts/selectors';
+import { createFetchThunk } from '../../../utils/create-fetch-thunk';
+import { selectAuthToken } from '../../../utils/select-token';
+import { getApiResourcesBaseRoute } from '../../shared';
 import { DIGITAL_TEXT_PAGES } from '../constants';
+import { DigitalTextPagesIndexState } from '../types';
 
-export const fetchDigitalTextPages = createAsyncThunk(
-    buildResourceFetchActionPrefix(DIGITAL_TEXT_PAGES),
-    async (digitalTextId: string, thunkAPI) => {
-        const { getState } = thunkAPI;
+export const fetchDigitalTextPages = (id: string) =>
+    createFetchThunk<DigitalTextPagesIndexState>(
+        buildResourceFetchActionPrefix(DIGITAL_TEXT_PAGES),
+        `${getApiResourcesBaseRoute()}/digitalTexts/pages/${id}`
+    );
 
-        const digitalTexts = selectLoadableDigitalTexts(getState() as RootState);
+export const fetchDigitalTextPagesByDigitalTextId = <DigitalTextPagesIndexState>(
+    id: string,
+    actionTypePrefix: string,
+    mapResponseJsonToActionPayload: (responseJson: unknown) => DigitalTextPagesIndexState = (
+        responseJson
+    ) => responseJson as DigitalTextPagesIndexState
+) =>
+    createAsyncThunk(actionTypePrefix, async (_, thunkApi) => {
+        const { getState } = thunkApi;
 
-        const { data: allItems, isLoading, errorInfo } = digitalTexts;
+        const token = selectAuthToken(getState() as RootState);
 
-        if (isLoading || !isNull(errorInfo) || isNull(allItems))
-            return {
-                isLoading,
-                errorInfo,
-                data: null,
-            };
+        const response = await fetch(`${getApiResourcesBaseRoute()}/digitalTexts/pages/${id}`, {
+            headers: buildAuthenticationHeaders(token),
+        });
+        const responseJson = await response.json();
 
-        const searchResult = allItems.entities.find(({ id }) => id === digitalTextId) || NOT_FOUND;
+        if (response.status !== HttpStatusCode.ok)
+            /**
+             * TODO [https://www.pivotaltracker.com/story/show/183619131]
+             *
+             * We need more specific error handling that considers the format of
+             * and difference between a returned error, a system error (backend runtime exception),
+             * and other errors (e.g. not found, not authorized).
+             */
+            return thunkApi.rejectWithValue({
+                code: responseJson.statusCode,
+                message: responseJson.error,
+            } as IHttpErrorInfo);
 
-        if (searchResult !== NOT_FOUND) {
-            const { pages } = searchResult;
-
-            return pages;
-        }
-
-        return NOT_FOUND;
-    }
-);
+        return mapResponseJsonToActionPayload(responseJson);
+    });

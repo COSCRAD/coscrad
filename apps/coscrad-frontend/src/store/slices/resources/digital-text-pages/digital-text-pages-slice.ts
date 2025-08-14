@@ -3,9 +3,9 @@ import { buildInitialLoadableState } from '../../utils';
 import { buildReducersForThunk } from '../../utils/build-reducers-for-thunk';
 import { DIGITAL_TEXT_PAGES } from './constants';
 import { fetchDigitalTextPages } from './thunks';
-import { DigitalTextPagesState } from './types';
+import { DigitalTextPagesIndexState } from './types';
 
-const initialState = buildInitialLoadableState<DigitalTextPagesState>();
+const initialState = buildInitialLoadableState<DigitalTextPagesIndexState>();
 
 const DigitalTextPagesSlice = createSlice({
     name: DIGITAL_TEXT_PAGES,

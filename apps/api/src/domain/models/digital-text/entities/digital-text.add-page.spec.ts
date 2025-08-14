@@ -8,6 +8,12 @@ import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-
 import { CannotAddPageWithDuplicateIdentifierError } from '../errors/cannot-add-page-with-duplicate-identifier.error';
 import DigitalTextPage from './digital-text-page.entity';
 
+const existingDigitalTextWithNoPages = getValidAggregateInstanceForTest(
+    AggregateType.digitalText
+).clone({
+    pages: undefined,
+});
+
 const existingDigitalTextWithPages = getValidAggregateInstanceForTest(
     AggregateType.digitalText
 ).clone({
@@ -33,6 +39,18 @@ const newDuplicatePageIdentifier: PageIdentifier = 'IV';
 const newValidPageIdentifier: PageIdentifier = '23';
 
 describe('When a new page is added to an existing digital text', () => {
+    describe(`when there are no pages`, () => {
+        it(`should succeed`, () => {
+            const result = existingDigitalTextWithNoPages.addPage(newValidPageIdentifier);
+
+            expect(result).not.toBe(InternalError);
+
+            const digitalTextWithPageAdded = result as DigitalText;
+
+            expect(digitalTextWithPageAdded.hasPage(newValidPageIdentifier)).toBe(true);
+        });
+    });
+
     describe(`When there is no duplicate page identifier`, () => {
         it(`should succeed`, () => {
             const result = existingDigitalTextWithPages.addPage(newValidPageIdentifier);

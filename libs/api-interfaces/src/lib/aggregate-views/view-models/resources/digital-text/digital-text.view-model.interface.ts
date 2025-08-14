@@ -1,6 +1,5 @@
 import { IBaseResourceViewModel } from '../../base.view-model.interface';
 import { ITagViewModel } from '../../tag.view-model.interface';
-import { IDigitalTextPage } from './digital-text-page.interface';
 
 export interface IDigitalTextViewModel extends IBaseResourceViewModel {
     type: 'digitalText';
@@ -8,6 +7,4 @@ export interface IDigitalTextViewModel extends IBaseResourceViewModel {
     isPublished: boolean;
 
     tags: Pick<ITagViewModel, 'label' | 'id'>[];
-
-    pages: IDigitalTextPage[];
 }

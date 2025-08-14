@@ -4,8 +4,7 @@ import {
     IDigitalTextViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useState } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { executeCommand } from '../../../store/slices/command-status';
@@ -13,16 +12,12 @@ import {
     CommaSeparatedList,
     ResourceDetailFullViewPresenter,
 } from '../../../utils/generic-components';
-import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
 import { ImmersiveCreateNoteForm } from '../shared/immersive-create-note-form';
-import { NewPageForm } from './new-page-form';
 import { PublicationForm } from './page-publication-form';
-import { PagesPresenter } from './pages-presenter';
 
 export const DigitalTextDetailFullViewPresenter = ({
     id,
     name,
-    pages,
     isPublished,
     tags,
 }: ICategorizableDetailQueryResult<IDigitalTextViewModel>): JSX.Element => {
@@ -30,9 +25,9 @@ export const DigitalTextDetailFullViewPresenter = ({
 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-    const selectedPageIdentifier = pages.length > 0 ? pages[currentIndex].identifier : undefined;
+    // const selectedPageIdentifier = pages.length > 0 ? pages[currentIndex].identifier : undefined;
 
-    const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
+    // const allExistingPageIdentifiers = pages.map(({ identifier }) => identifier);
 
     const aggregateCompositeIdentifier = {
         type: AggregateType.digitalText,
@@ -47,7 +42,7 @@ export const DigitalTextDetailFullViewPresenter = ({
             // TODO [https://www.pivotaltracker.com/story/show/187668980] flow through the contributions
             contributions={[]}
         >
-            {pages.length > 0 ? (
+            {/* {pages.length > 0 ? (
                 <PagesPresenter
                     pages={pages}
                     currentPageIdentifier={selectedPageIdentifier}
@@ -82,10 +77,10 @@ export const DigitalTextDetailFullViewPresenter = ({
                 }}
             >
                 {'NEXT >>'}
-            </Button>
+            </Button> */}
             {/* TODO I am a back-end developer */}
             <br />
-            <NewPageForm
+            {/* <NewPageForm
                 existingPageIdentifiers={allExistingPageIdentifiers}
                 onSubmitPageIdentifier={(pageIdentifier) => {
                     dispatch(
@@ -98,7 +93,7 @@ export const DigitalTextDetailFullViewPresenter = ({
                         })
                     );
                 }}
-            />
+            /> */}
             {!isPublished ? (
                 <PublicationForm
                     onSubmitForPublication={() => {
@@ -139,12 +134,13 @@ export const DigitalTextDetailFullViewPresenter = ({
                                 },
                                 text,
                                 languageCode,
-                                resourceContext: isNonEmptyString(selectedPageIdentifier)
-                                    ? {
-                                          type: 'pageRange',
-                                          pageIdentifiers: [selectedPageIdentifier],
-                                      }
-                                    : { type: 'general' },
+                                resourceContext: { type: 'general' },
+                                // resourceContext: isNonEmptyString(selectedPageIdentifier)
+                                // ? {
+                                //       type: 'pageRange',
+                                //       pageIdentifiers: [selectedPageIdentifier],
+                                //   }
+                                // : { type: 'general' },
                             },
                         })
                     );

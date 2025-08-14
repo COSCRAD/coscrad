@@ -2,8 +2,8 @@ import { useLoadable } from '../../shared/hooks';
 import { selectLoadableDigitalTextPages } from '../selectors';
 import { fetchDigitalTextPages } from '../thunks/fetchDigitalTextPages';
 
-export const useLoadableDigitalTextPages = (id: string) =>
+export const useLoadableDigitalTextPages = () =>
     useLoadable({
         selector: selectLoadableDigitalTextPages,
-        fetchThunk: fetchDigitalTextPages(id),
+        fetchThunk: fetchDigitalTextPages,
     });
