@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import { MediaItemIndexState } from '../../../store/slices/resources/media-items/types';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { FileUpload } from '../../file-upload/file-upload';
+import { FileUploadForm } from '../../file-upload/file-upload';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 
 export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndexState) => {
@@ -46,7 +46,7 @@ export const MediaItemIndexPresenter = ({ entities: mediaItems }: MediaItemIndex
                 heading={'Media'}
                 filterableProperties={['title']}
             />
-            {isAuthenticated ? <FileUpload /> : null}
+            {isAuthenticated ? <FileUploadForm /> : null}
         </>
     );
 };

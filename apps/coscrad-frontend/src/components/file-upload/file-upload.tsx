@@ -1,31 +1,17 @@
+import { HttpStatusCode } from '@coscrad/api-interfaces';
 import {
-    Article as ArticleIcon,
-    AudioFile as AudioFileIcon,
-    Clear as ClearIcon,
     CloudUpload as CloudUploadIcon,
     Delete as DeleteIcon,
     FileUpload as FileUploadIcon,
-    Image as ImageIcon,
-    InsertDriveFile as InsertDriveFileIcon,
-    VideoCameraBack as VideoCameraBackIcon,
 } from '@mui/icons-material';
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Grid,
-    IconButton,
-    Stack,
-    styled,
-    Tooltip,
-    Typography,
-} from '@mui/material';
+import { Box, Button, Stack, styled, Typography } from '@mui/material';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getConfig } from '../../config';
 import { selectAuthToken } from '../../store/slices/utils/select-token';
-import LinearProgressWithLabel from '../linear-progress-with-label/linear-progress-with-label';
+import { ErrorDisplay } from '../error-display/error-display';
+import { FileUploadList } from './file-upload-list';
+import { FileUploadStatus, FileWithProgress } from './types/file-with-progress';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -39,32 +25,59 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-type FileWithProgress = {
-    id: string;
-    file: File;
-    progress: number;
-    uploaded: boolean;
+type FileInputProps = {
+    inputRef: React.RefObject<HTMLInputElement>;
+    disabled: boolean;
+    onFileSelect: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const getFileIcon = (mimeType: string) => {
-    if (mimeType.startsWith('image/')) return ImageIcon;
-    if (mimeType.startsWith('video/')) return VideoCameraBackIcon;
-    if (mimeType.startsWith('audio/')) return AudioFileIcon;
-    if (mimeType === 'application/pdf') return ArticleIcon;
-    return InsertDriveFileIcon;
+const FileInput = ({ inputRef, disabled, onFileSelect }: FileInputProps) => {
+    return (
+        <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+        >
+            Add Media Items
+            <VisuallyHiddenInput
+                type="file"
+                ref={inputRef}
+                onChange={onFileSelect}
+                multiple
+                disabled={disabled}
+            />
+        </Button>
+    );
 };
 
-const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+type ActionButtonsProps = {
+    disabled: boolean;
+    onUpload: () => void;
+    onClear: () => void;
 };
 
-export const FileUpload = () => {
+const ActionButtons = ({ onUpload, onClear, disabled }: ActionButtonsProps) => {
+    return (
+        <>
+            <Button data-testid="mediaItem:upload:submit" onClick={onUpload} disabled={disabled}>
+                <FileUploadIcon />
+                Upload
+            </Button>
+            <Button data-testid="mediaItem:upload:clear" onClick={onClear} disabled={disabled}>
+                <DeleteIcon />
+                Clear All
+            </Button>
+        </>
+    );
+};
+
+export const FileUploadForm = () => {
     const [files, setFiles] = useState<FileWithProgress[]>([]);
     const [uploading, setUploading] = useState(false);
+
+    const [systemErrorMessage, setSystemErrorMessage] = useState<string | null>(null);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -78,6 +91,7 @@ export const FileUpload = () => {
             progress: 0,
             uploaded: false,
             id: file.name,
+            status: FileUploadStatus.pending,
         }));
 
         setFiles([...files, ...newFiles]);
@@ -119,18 +133,63 @@ export const FileUpload = () => {
             });
 
             // request finished event
-            request.addEventListener('load', function (e) {
-                // HTTP status message (200, 404 etc)
-                console.log({ status: request.status });
+            request.addEventListener('load', function (_e) {
+                // request.status holds the HTTP status message (200, 404 etc)
 
                 // request.response holds response from the server
-                console.log({ response: request.response });
 
-                setFiles((prevFiles) =>
-                    prevFiles.map((file) =>
-                        file.id === fileWithProgress.id ? { ...file, uploaded: true } : file
-                    )
+                if (request.status === HttpStatusCode.createdResource) {
+                    setFiles((prevFiles) =>
+                        prevFiles.map(
+                            (file): FileWithProgress =>
+                                file.id === fileWithProgress.id
+                                    ? { ...file, status: FileUploadStatus.success }
+                                    : file
+                        )
+                    );
+
+                    return;
+                }
+
+                const { message } = JSON.parse(request.response) as { message: string };
+
+                const prettyErrorMessage = message.split('Inner Errors')[0];
+
+                if (request.status === HttpStatusCode.badRequest) {
+                    setFiles((prevFiles) =>
+                        prevFiles.map((file): FileWithProgress => {
+                            if (file.id !== fileWithProgress.id) {
+                                return file;
+                            }
+
+                            return {
+                                ...file,
+                                status: FileUploadStatus.error,
+                                errorInfo: {
+                                    code: request.status,
+                                    message: prettyErrorMessage,
+                                },
+                            };
+                        })
+                    );
+
+                    return;
+                }
+
+                if (request.status === HttpStatusCode.internalError) {
+                    // throw new Error(`The system encountered an error.`);
+                    setSystemErrorMessage(prettyErrorMessage);
+
+                    return;
+                }
+
+                setSystemErrorMessage(
+                    `Unexpected response code from media server: ${request.status}`
                 );
+            });
+
+            request.addEventListener('error', (_e) => {
+                setSystemErrorMessage(`The back-end is unavailable. Please try again later.`);
             });
 
             // send POST request to server
@@ -150,6 +209,10 @@ export const FileUpload = () => {
         setFiles([]);
     };
 
+    if (systemErrorMessage !== null) {
+        return <ErrorDisplay code={HttpStatusCode.internalError} message={systemErrorMessage} />;
+    }
+
     return (
         <Stack spacing={2}>
             <Box>
@@ -166,140 +229,8 @@ export const FileUpload = () => {
                 />
             </Box>
             <Box>
-                <FileList files={files} onRemove={removeFile} uploading={uploading} />
+                <FileUploadList files={files} onRemove={removeFile} isUploading={uploading} />
             </Box>
         </Stack>
-    );
-};
-
-type FileInputProps = {
-    inputRef: React.RefObject<HTMLInputElement>;
-    disabled: boolean;
-    onFileSelect: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-
-const FileInput = ({ inputRef, disabled, onFileSelect }: FileInputProps) => {
-    return (
-        <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-        >
-            Add Media Items
-            <VisuallyHiddenInput
-                type="file"
-                ref={inputRef}
-                onChange={onFileSelect}
-                multiple
-                disabled={disabled}
-            />
-        </Button>
-    );
-};
-
-type ActionButtonsProps = {
-    disabled: boolean;
-    onUpload: () => void;
-    onClear: () => void;
-};
-
-const ActionButtons = ({ onUpload, onClear, disabled }: ActionButtonsProps) => {
-    return (
-        <>
-            <Button onClick={onUpload} disabled={disabled}>
-                <FileUploadIcon />
-                Upload
-            </Button>
-            <Button onClick={onClear} disabled={disabled}>
-                <DeleteIcon />
-                Clear All
-            </Button>
-        </>
-    );
-};
-
-type FileListProps = {
-    files: FileWithProgress[];
-    onRemove: (id: string) => void;
-    uploading: boolean;
-};
-
-const FileList = ({ files, onRemove, uploading }: FileListProps) => {
-    if (files.length === 0) {
-        return null;
-    }
-
-    return (
-        <>
-            <Typography variant="h3">Files:</Typography>
-            <Stack spacing={1} data-testid="uploads-queue">
-                {files.map((file) => (
-                    <FileItem key={file.id} file={file} onRemove={onRemove} uploading={uploading} />
-                ))}
-            </Stack>
-        </>
-    );
-};
-
-type FileItemProps = {
-    file: FileWithProgress;
-    onRemove: (id: string) => void;
-    uploading: boolean;
-};
-
-const FileItem = ({ file, onRemove, uploading }: FileItemProps) => {
-    const Icon = getFileIcon(file.file.type);
-
-    return (
-        <Card>
-            <CardContent>
-                <Grid
-                    container
-                    sx={{
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-start',
-                        display: 'flex',
-                    }}
-                    spacing="10"
-                    direction="row"
-                    mb={2}
-                >
-                    <Grid item sx={{ fontSize: '60px', maxHeight: '60px' }}>
-                        <Icon fontSize="inherit" color="primary" />
-                    </Grid>
-                    {/* For the `xs` see https://github.com/mui/material-ui/issues/11339
-                        Seems like it's still broken in @material-ui/core ^4.12.3 */}
-                    <Grid item zeroMinWidth xs>
-                        <Typography
-                            variant="h6"
-                            color="primary"
-                            fontWeight="bold"
-                            data-testid="file-name"
-                        >
-                            {file.file.name}
-                        </Typography>
-                        <Typography component="div">
-                            {formatFileSize(file.file.size)}
-                            &nbsp;•&nbsp;
-                            {file.file.type || 'Unknown type'}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs sx={{ textAlign: 'right' }}>
-                        {!uploading && (
-                            <Tooltip title="Remove File">
-                                <IconButton onClick={() => onRemove(file.id)}>
-                                    <ClearIcon />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                    </Grid>
-                </Grid>
-                <Grid item>
-                    <LinearProgressWithLabel value={file.progress} />
-                </Grid>
-            </CardContent>
-        </Card>
     );
 };

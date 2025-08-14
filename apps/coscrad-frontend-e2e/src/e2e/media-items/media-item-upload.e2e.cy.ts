@@ -1,10 +1,22 @@
-import { ResourceType } from '@coscrad/api-interfaces';
+import { HttpStatusCode, ResourceType } from '@coscrad/api-interfaces';
 
 const fileDir = `${__dirname}/files`;
 
+const buildFullMediaPath = (filename: string) => `${fileDir}/${filename}`;
+
 const files = ['station.png', 'desk-593327_640.jpg'];
 
-const filePaths = files.map((file) => `${fileDir}/${file}`);
+const filePaths = files.map(buildFullMediaPath);
+
+const fileWithUnsupportedMimeType = 'test.md';
+
+// TODO `fileWithPngContentButWaveExtension`
+
+// TODO `fileWithBogusExtension` foo.xxx
+
+const uploadButtonDataTestId = 'mediaItem:upload:submit';
+
+const clearButtonDataTestId = 'mediaItem:upload:clear';
 
 describe(`when the user is not logged in and the media item index page is loaded`, () => {
     beforeEach(() => {
@@ -27,19 +39,181 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         cy.login();
 
         cy.navigateToResourceIndex(ResourceType.mediaItem);
+
+        cy.getLoading().should('not.exist');
     });
 
-    it.only(`should allow the user to select files to upload and add them to the uploads list`, () => {
-        cy.get('input[type=file]').selectFile(filePaths, { force: true });
+    describe(`when the user has selected several files`, () => {
+        beforeEach(() => {
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
 
-        cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
+            cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
 
-        cy.getByDataAttribute('uploads-queue')
-            .children()
-            .each(($fileItem, index) => {
-                cy.wrap($fileItem).within(() => {
-                    cy.getByDataAttribute('file-name').contains(files[index]);
+            cy.getByDataAttribute('uploads-queue')
+                .children()
+                .each(($fileItem, index) => {
+                    cy.wrap($fileItem).within(() => {
+                        cy.getByDataAttribute('file-name').contains(files[index]);
+                    });
+                });
+        });
+
+        describe(`when the user has submitted these files`, () => {
+            describe(`when clearing the screen using the "clear all button"`, () => {
+                it(`should clear the upload queue`, () => {
+                    cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+                    cy.getByDataAttribute(uploadButtonDataTestId).click();
+
+                    cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
+
+                    cy.getByDataAttribute(clearButtonDataTestId).click();
+
+                    cy.getByDataAttribute('uploads-queue').should('not.exist');
                 });
             });
+
+            describe(`when clearing the upload queue one item at a time`, () => {
+                it(`should clear the upload queue`, () => {
+                    cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+                    cy.getByDataAttribute(uploadButtonDataTestId).click();
+
+                    cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
+
+                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click();
+
+                    cy.contains(files[0]).should('not.exist');
+
+                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click();
+
+                    cy.getByDataAttribute('uploads-queue').should('not.exist');
+                });
+            });
+        });
+
+        describe(`when clearing the upload queue one item at a time`, () => {
+            it(`should clear the upload queue`, () => {
+                cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+                cy.getByDataAttribute(uploadButtonDataTestId).click();
+
+                cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
+
+                cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click();
+
+                cy.contains(files[0]).should('not.exist');
+
+                cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click();
+
+                cy.getByDataAttribute('uploads-queue').should('not.exist');
+            });
+        });
+    });
+
+    describe.skip(`when the user has selected more than the maximum number of files`, () => {
+        beforeEach(() => {
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+            cy.getByDataAttribute(uploadButtonDataTestId).click();
+        });
+
+        it(`should display the expected error message`, () => {
+            cy.getByDataAttribute('error');
+
+            cy.contains('Too many files');
+        });
+    });
+
+    // TODO pull the supported MIME Types from the back-end and prevent this possibility for better UX
+    describe(`when the user has selected a file with an unsupported MIME type`, () => {
+        beforeEach(() => {
+            cy.get('input[type=file]').selectFile(buildFullMediaPath(fileWithUnsupportedMimeType), {
+                force: true,
+            });
+
+            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+            cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
+        });
+
+        it(`should display the expected error message`, () => {
+            cy.contains('MIME Type is not allowed');
+        });
+    });
+
+    describe(`when the back-end has an internal error`, () => {
+        const testErrorMessage = 'Cannot destructure property length of undefined.';
+
+        beforeEach(() => {
+            cy.intercept('http://localhost:3131/api/resources/mediaItems/upload', {
+                statusCode: HttpStatusCode.internalError,
+                body: {
+                    message: testErrorMessage,
+                },
+            });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
+
+            cy.getByDataAttribute('uploads-queue')
+                .children()
+                .each(($fileItem, index) => {
+                    cy.wrap($fileItem).within(() => {
+                        cy.getByDataAttribute('file-name').contains(files[index]);
+                    });
+                });
+        });
+
+        it(`should report the issue`, () => {
+            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+            cy.getByDataAttribute(uploadButtonDataTestId).click();
+
+            cy.getByDataAttribute('error');
+
+            cy.contains(testErrorMessage);
+        });
+    });
+
+    describe(`when the back-end is unavailable`, () => {
+        beforeEach(() => {
+            cy.intercept('http://localhost:3131/api/resources/mediaItems/upload', {
+                forceNetworkError: true,
+            });
+
+            cy.get('input[type=file]').selectFile(filePaths, { force: true });
+
+            cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
+
+            cy.getByDataAttribute('uploads-queue')
+                .children()
+                .each(($fileItem, index) => {
+                    cy.wrap($fileItem).within(() => {
+                        cy.getByDataAttribute('file-name').contains(files[index]);
+                    });
+                });
+        });
+
+        it(`should report the issue`, () => {
+            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+
+            cy.getByDataAttribute(uploadButtonDataTestId).click();
+
+            cy.getByDataAttribute('error');
+
+            cy.contains('try again later', { matchCase: false });
+        });
     });
 });
