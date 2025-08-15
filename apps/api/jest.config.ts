@@ -13,7 +13,6 @@ export default {
         '^.+\\.(ts|tsx)$': 'ts-jest',
         '^.+\\.(js|jsx)$': 'babel-jest',
     },
-    transformIgnorePatterns: ['/node_modules/(?!file-type/)'],
     moduleFileExtensions: ['ts', 'js', 'html'],
     setupFilesAfterEnv: ['./jest.setup.ts'],
 };

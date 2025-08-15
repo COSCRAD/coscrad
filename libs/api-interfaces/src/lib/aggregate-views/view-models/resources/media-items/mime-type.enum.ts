@@ -3,11 +3,11 @@ export enum MIMEType {
     // documents
     pdf = 'application/pdf',
     csv = 'text/csv',
-    txt = 'text/plain',
+    // TODO txt = 'text/plain',
     xlsx = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    // doc = 'application/msword',
+    // TODO doc = 'application/msword',
     docx = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    // ppt = 'application/vnd.ms-powerpoint',
+    // TODO ppt = 'application/vnd.ms-powerpoint',
     pptx = 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     // images
     png = 'image/png',

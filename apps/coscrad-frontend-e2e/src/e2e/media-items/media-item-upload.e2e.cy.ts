@@ -10,7 +10,7 @@ const filePaths = files.map(buildFullMediaPath);
 
 const fileWithUnsupportedMimeType = 'test.md';
 
-// TODO `fileWithPngContentButWaveExtension`
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] `fileWithPngContentButWaveExtension`
 
 // TODO `fileWithBogusExtension` foo.xxx
 

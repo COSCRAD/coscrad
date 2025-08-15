@@ -18,6 +18,10 @@ const getFileIcon = (mimeType: string) => {
     return InsertDriveFileIcon;
 };
 
+/**
+ * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-298] break this out and unit test it
+ * TODO Move to `@coscrad/math` lib?
+ */
 const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 B';
     const k = 1024;

@@ -4,6 +4,10 @@ import path = require('path');
 
 type Options = {};
 
+/**
+ * TODO [Linked to [this story](https://coscrad.atlassian.net/browse/CWEBJIRA-283).]
+ * Use this in the media upload method in the media item controller.
+ */
 export class CoscradBinaryFileTypeValidator extends FileValidator<Options> {
     // This is someone else's abstraction. I am including empty options to satisfy their API
     constructor(validationOptions: Record<string, unknown>) {

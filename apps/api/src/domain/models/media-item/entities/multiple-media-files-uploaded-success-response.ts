@@ -3,7 +3,7 @@ import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../base-domain-model.entity';
 import { SuccessfulMediaUploadRecord } from './successful-media-upload-record';
 
-export class MediaFileUploadResponse extends BaseDomainModel {
+export class MultipleMediaFilesUploadedSuccessResponse extends BaseDomainModel {
     @NestedDataType(SuccessfulMediaUploadRecord, {
         isOptional: false,
         isArray: true,
@@ -12,7 +12,7 @@ export class MediaFileUploadResponse extends BaseDomainModel {
     })
     public readonly uploadedMediaFiles: SuccessfulMediaUploadRecord[];
 
-    constructor(dto: DTO<MediaFileUploadResponse>) {
+    constructor(dto: DTO<MultipleMediaFilesUploadedSuccessResponse>) {
         super();
 
         if (!dto) return;

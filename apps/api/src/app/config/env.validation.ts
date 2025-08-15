@@ -126,7 +126,7 @@ export class EnvironmentVariables {
     })
     MAX_FILE_UPLOAD_SIZE_MB: number;
 
-    // TODO non-negative finite integer
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-295] counting number (non-negative, non-zero, finite integer)
     @NonNegativeFiniteNumber({
         label: 'maximum number of attached files per media upload',
         description: 'the maximum number of individual media files that can be uploaded at once',

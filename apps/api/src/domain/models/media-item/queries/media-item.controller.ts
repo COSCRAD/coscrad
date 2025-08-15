@@ -37,10 +37,11 @@ import {
     getExpectedMimeTypeFromExtension,
     getExtensionForMimeType,
 } from '../entities/get-extension-for-mime-type';
-import { MediaFileUploadResponse } from '../entities/media-file-upload-response';
+import { MultipleMediaFilesUploadedSuccessResponse } from '../entities/multiple-media-files-uploaded-success-response';
 import { SuccessfulMediaUploadRecord } from '../entities/successful-media-upload-record';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
+import path = require('node:path');
 
 // TODO Make this configurable
 
@@ -188,7 +189,7 @@ export class MediaItemController {
                         // This allows all MIME Types registered within COSCRAD
                         fileType: new RegExp(Object.values(MIMEType).join('|'), 'i'),
                     }),
-                    // TODO validate content type against actual extension
+                    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] validate content type against actual extension
                     // new CoscradBinaryFileTypeValidator({}),
                 ],
                 exceptionFactory: (msg: string) => {
@@ -205,13 +206,12 @@ export class MediaItemController {
     ) {
         const uploadedMediaFiles: SuccessfulMediaUploadRecord[] = files.map(
             ({ originalname, filename }) => {
-                const filenameSplit = originalname.split('.');
-
                 // account for filenames with `.` in the name portion of the file (xxx.xx.xx.pdf)
                 // there are built-in Nest JS validators in the Interceptor we could use
-                const extension = filenameSplit.pop();
+                const extension = path.extname(originalname);
 
-                const name = filenameSplit.join('_');
+                // TODO is there a better place to do this?
+                const name = path.basename(originalname, extension).replace('.', '_');
 
                 return new SuccessfulMediaUploadRecord({
                     uploadedFilename: name,
@@ -227,7 +227,7 @@ export class MediaItemController {
             }
         );
 
-        const mediaFileUploadResponse = new MediaFileUploadResponse({
+        const mediaFileUploadResponse = new MultipleMediaFilesUploadedSuccessResponse({
             uploadedMediaFiles,
         });
 

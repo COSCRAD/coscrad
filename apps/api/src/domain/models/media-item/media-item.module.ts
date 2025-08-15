@@ -20,15 +20,14 @@ import { MediaItemController, MediaItemQueryService } from './queries';
 @Module({
     imports: [
         ConfigModule,
-        // Can we avoid calling `forRootAsync` here?
-        PersistenceModule.forRootAsync(),
+        PersistenceModule,
         IdGenerationModule,
         CommandModule,
         MulterModule.registerAsync({
             imports: [ConfigModule],
             useFactory: (configService: ConfigService) => {
                 const options = {
-                    // TODO persist the file
+                    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-284] persist the file
                     // dest: configService.get('ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY'),
                     limits: {
                         fileSize:

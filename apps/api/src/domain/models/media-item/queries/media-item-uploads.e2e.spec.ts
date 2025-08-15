@@ -14,6 +14,7 @@ import { MockJwtAuthGuard } from '../../../../authorization/mock-jwt-auth-guard'
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { DynamicDataTypeModule } from '../../../../validation';
@@ -25,7 +26,10 @@ import { MediaItemModule } from '../media-item.module';
 
 const mediaItemUploadEndpoint = `/resources/mediaItems/upload`;
 
-const inputDir = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
+// we reuse test cases from the `ingest-media-items` CLI command here
+const validInputDir = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
+
+const invalidInputDir = `/home/aplahn/Apps/open-source-language-apps/COSCRAD/coscrad/__cli-command-test-inputs__`;
 
 const testFileName = `station`;
 
@@ -33,7 +37,7 @@ const extension = 'png';
 
 const mimeType = 'image/png';
 
-const validPngFilePath = `${inputDir}/${testFileName}.${extension}`;
+const validPngFilePath = `${validInputDir}/${testFileName}.${extension}`;
 ('/node_modules/(?!(foo|bar)/)');
 const largeTestFile = 'trees-reflect-into-the-lake.mp4'; // roughly 5 MB in size
 
@@ -41,15 +45,15 @@ const testMaxFileUploadSizeMb = 4;
 
 const testMaxNumberOfFileAttachments = 10;
 
-const largeTestFilePath = `${inputDir}/${largeTestFile}`;
+const largeTestFilePath = `${validInputDir}/${largeTestFile}`;
 
 const pngFileWithWavExtension = 'i-am-actually-a-png.wav';
 
-// TODO add a case with an invalid extension `.xxx`
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] add a case with an invalid extension `.xxx`
 
-const pngWithWavExtensionFilepath = `${inputDir}/${pngFileWithWavExtension}`;
+const pngWithWavExtensionFilepath = `${invalidInputDir}/${pngFileWithWavExtension}`;
 
-const pngWithXxxExtensionFilepath = `${inputDir}/i-am-actually-a-png.xxx`;
+const pngWithXxxExtensionFilepath = `${invalidInputDir}/i-am-actually-a-png.xxx`;
 
 const staticAssetDestinationDirectory = '__static__';
 
@@ -108,6 +112,7 @@ describe(`File Upload (/upload)`, () => {
                             envFilePath: buildConfigFilePath(Environment.test),
                             cache: false,
                         }),
+                        PersistenceModule.forRootAsync(),
                         MediaItemModule,
                         DynamicDataTypeModule,
                     ],
@@ -136,7 +141,7 @@ describe(`File Upload (/upload)`, () => {
 
             describe(`when the uploaded file is valid`, () => {
                 describe(`when uploading a single file`, () => {
-                    // TODO one test case for each allowed MIME Type
+                    // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-297] one test case for each allowed MIME Type
                     describe(`when the uploaded file is a png`, () => {
                         it(`should return the expected response and status code (201)`, async () => {
                             if (!existsSync(validPngFilePath)) {
