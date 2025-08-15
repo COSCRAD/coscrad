@@ -1,7 +1,7 @@
 import { NestedDataType } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import BaseDomainModel from '../../base-domain-model.entity';
-import { SuccessfulMediaUploadRecord } from './uploaded-media-file';
+import { SuccessfulMediaUploadRecord } from './successful-media-upload-record';
 
 export class MediaFileUploadResponse extends BaseDomainModel {
     @NestedDataType(SuccessfulMediaUploadRecord, {

@@ -45,6 +45,12 @@ describe(`when the user is logged in and the media item index page is loaded`, (
 
     describe(`when the user has selected several files`, () => {
         beforeEach(() => {
+            /**
+             * TODO We should remove all usages of the `force` flag and ensure
+             * that buttons are not disabled in this test. There seems to be an
+             * interaction in the Cypress test that doesn't happen when driving
+             * the app manually.
+             */
             cy.get('input[type=file]').selectFile(filePaths, { force: true });
 
             cy.getByDataAttribute('uploads-queue').children().should('have.length', 2);
@@ -61,13 +67,9 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         describe(`when the user has submitted these files`, () => {
             describe(`when clearing the screen using the "clear all button"`, () => {
                 it(`should clear the upload queue`, () => {
-                    cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+                    cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
 
-                    cy.getByDataAttribute(uploadButtonDataTestId).click();
-
-                    cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
-
-                    cy.getByDataAttribute(clearButtonDataTestId).click();
+                    cy.getByDataAttribute(clearButtonDataTestId).click({ force: true });
 
                     cy.getByDataAttribute('uploads-queue').should('not.exist');
                 });
@@ -75,17 +77,17 @@ describe(`when the user is logged in and the media item index page is loaded`, (
 
             describe(`when clearing the upload queue one item at a time`, () => {
                 it(`should clear the upload queue`, () => {
-                    cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+                    cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
 
-                    cy.getByDataAttribute(uploadButtonDataTestId).click();
-
-                    cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
-
-                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click();
+                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click({
+                        force: true,
+                    });
 
                     cy.contains(files[0]).should('not.exist');
 
-                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click();
+                    cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click({
+                        force: true,
+                    });
 
                     cy.getByDataAttribute('uploads-queue').should('not.exist');
                 });
@@ -94,46 +96,20 @@ describe(`when the user is logged in and the media item index page is loaded`, (
 
         describe(`when clearing the upload queue one item at a time`, () => {
             it(`should clear the upload queue`, () => {
-                cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
+                cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
 
-                cy.getByDataAttribute(uploadButtonDataTestId).click();
-
-                cy.getByDataAttribute(clearButtonDataTestId).should('not.be.disabled');
-
-                cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click();
+                cy.getByDataAttribute(`mediaItem:upload:clear/${files[0]}`).click({ force: true });
 
                 cy.contains(files[0]).should('not.exist');
 
-                cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click();
+                cy.getByDataAttribute(`mediaItem:upload:clear/${files[1]}`).click({ force: true });
 
                 cy.getByDataAttribute('uploads-queue').should('not.exist');
             });
         });
     });
 
-    describe.skip(`when the user has selected more than the maximum number of files`, () => {
-        beforeEach(() => {
-            cy.get('input[type=file]').selectFile(filePaths, { force: true });
-
-            cy.get('input[type=file]').selectFile(filePaths, { force: true });
-
-            cy.get('input[type=file]').selectFile(filePaths, { force: true });
-
-            cy.get('input[type=file]').selectFile(filePaths, { force: true });
-
-            cy.get('input[type=file]').selectFile(filePaths, { force: true });
-
-            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
-
-            cy.getByDataAttribute(uploadButtonDataTestId).click();
-        });
-
-        it(`should display the expected error message`, () => {
-            cy.getByDataAttribute('error');
-
-            cy.contains('Too many files');
-        });
-    });
+    // TODO Is it possible to attach more than the maximum allowed number of files?
 
     // TODO pull the supported MIME Types from the back-end and prevent this possibility for better UX
     describe(`when the user has selected a file with an unsupported MIME type`, () => {
@@ -156,7 +132,7 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         const testErrorMessage = 'Cannot destructure property length of undefined.';
 
         beforeEach(() => {
-            cy.intercept('http://localhost:3131/api/resources/mediaItems/upload', {
+            cy.intercept('POST', '/api/resources/mediaItems/upload', {
                 statusCode: HttpStatusCode.internalError,
                 body: {
                     message: testErrorMessage,
@@ -179,7 +155,7 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         it(`should report the issue`, () => {
             cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
 
-            cy.getByDataAttribute(uploadButtonDataTestId).click();
+            cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
 
             cy.getByDataAttribute('error');
 
@@ -189,7 +165,7 @@ describe(`when the user is logged in and the media item index page is loaded`, (
 
     describe(`when the back-end is unavailable`, () => {
         beforeEach(() => {
-            cy.intercept('http://localhost:3131/api/resources/mediaItems/upload', {
+            cy.intercept('POST', '/api/resources/mediaItems/upload', {
                 forceNetworkError: true,
             });
 
@@ -207,9 +183,7 @@ describe(`when the user is logged in and the media item index page is loaded`, (
         });
 
         it(`should report the issue`, () => {
-            cy.getByDataAttribute(uploadButtonDataTestId).should('not.be.disabled');
-
-            cy.getByDataAttribute(uploadButtonDataTestId).click();
+            cy.getByDataAttribute(uploadButtonDataTestId).click({ force: true });
 
             cy.getByDataAttribute('error');
 

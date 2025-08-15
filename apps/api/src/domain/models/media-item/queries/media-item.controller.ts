@@ -38,7 +38,7 @@ import {
     getExtensionForMimeType,
 } from '../entities/get-extension-for-mime-type';
 import { MediaFileUploadResponse } from '../entities/media-file-upload-response';
-import { SuccessfulMediaUploadRecord } from '../entities/uploaded-media-file';
+import { SuccessfulMediaUploadRecord } from '../entities/successful-media-upload-record';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
 
@@ -204,7 +204,7 @@ export class MediaItemController {
         files: Array<Express.Multer.File>
     ) {
         const uploadedMediaFiles: SuccessfulMediaUploadRecord[] = files.map(
-            ({ originalname, filename, mimetype: browserMimeType }) => {
+            ({ originalname, filename }) => {
                 const filenameSplit = originalname.split('.');
 
                 // account for filenames with `.` in the name portion of the file (xxx.xx.xx.pdf)
@@ -216,14 +216,19 @@ export class MediaItemController {
                 return new SuccessfulMediaUploadRecord({
                     uploadedFilename: name,
                     systemFilename: filename,
+                    /**
+                     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283]
+                     *  Should we use the `browserMimeType` property from `file` (`Multer.File`)?
+                     * Let's ensure that all possible `MIMETypes` (from browser, from extension, from content)
+                     * are mutually consistent.
+                     */
                     mimeType: getExpectedMimeTypeFromExtension(extension),
-                    mimeTypeFromBrowser: browserMimeType,
                 });
             }
         );
 
         const mediaFileUploadResponse = new MediaFileUploadResponse({
-            uploadedMediaFiles: uploadedMediaFiles,
+            uploadedMediaFiles,
         });
 
         return mediaFileUploadResponse;

@@ -168,7 +168,7 @@ Cypress.Commands.add('grantPermissions', (permissionsToAdd: CoscradBrowserPermis
 Cypress.Commands.add('navigateToResourceIndex', (resourceType: string) => {
     cy.getByDataAttribute('nav-menu-icon').click();
 
-    cy.get('[href="/Resources"] > .MuiButtonBase-root').click();
+    cy.get('[href="/Resources"] > .MuiButtonBase-root').click({ force: true });
 
     cy.getByDataAttribute(resourceType).click();
 });

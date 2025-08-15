@@ -27,18 +27,10 @@ export class SuccessfulMediaUploadRecord {
     )
     readonly mimeType: MIMEType;
 
-    // Probably superfluous?  Or maybe this goes in the rawData?
-    @NonEmptyString({
-        label: 'MIME type from browser',
-        description:
-            'technical specification of the format of the media item provided by the browser',
-    })
-    readonly mimeTypeFromBrowser: string;
-
     constructor(dto: DTO<SuccessfulMediaUploadRecord>) {
         if (!dto) return;
 
-        const { uploadedFilename, systemFilename, mimeType, mimeTypeFromBrowser } = dto;
+        const { uploadedFilename, systemFilename, mimeType, mimeType: mimeTypeFromBrowser } = dto;
 
         this.uploadedFilename = uploadedFilename;
 
@@ -46,6 +38,6 @@ export class SuccessfulMediaUploadRecord {
 
         this.mimeType = mimeType;
 
-        this.mimeTypeFromBrowser = mimeTypeFromBrowser;
+        this.mimeType = mimeTypeFromBrowser;
     }
 }

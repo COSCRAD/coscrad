@@ -189,6 +189,8 @@ export const FileUploadForm = () => {
             });
 
             request.addEventListener('error', (_e) => {
+                console.log(`ERRRRORRRR!!!!!!!!!!!!!!!11`);
+
                 setSystemErrorMessage(`The back-end is unavailable. Please try again later.`);
             });
 
