@@ -29,7 +29,7 @@ pipeline {
                 AUTH0_AUDIENCE = 'https://bar.mydomain.ca'
                 BASE_URL="http://localhost"
                 GLOBAL_PREFIX = 'api'
-                SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false',
+                SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT = 'false'
                 MAX_FILE_UPLOAD_SIZE_MB=1024
                 MAX_FILE_UPLOAD_COUNT=5
                 ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY="__static__"
