@@ -1,4 +1,6 @@
 import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
+import { isDeepStrictEqual } from 'util';
+import { MemoryMatchIndexPage } from '../components/games/memory-match/memory-match-index.page';
 import { Home } from '../components/home/home';
 import { ListenLivePage } from '../components/listen-live-page/listen-live-page';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
@@ -166,6 +168,40 @@ describe(`dynamic routes`, () => {
                 const baseRoute = result.find(({ path }) => path === '/');
 
                 expect(baseRoute.element).toEqual(<Home />);
+            });
+        });
+
+        describe(`Memory Match`, () => {
+            describe(`when memory match is enabled via the Content Config`, () => {
+                it(`should include the route`, () => {
+                    const contentConfig = buildDummyConfig({
+                        shouldEnableMemoryMatch: true,
+                    });
+
+                    const result = buildRoutes(contentConfig);
+
+                    const hasRoute = result.some(
+                        ({ path, element }) =>
+                            path.includes('MemoryMatch') &&
+                            isDeepStrictEqual(element, <MemoryMatchIndexPage />)
+                    );
+
+                    expect(hasRoute).toBe(true);
+                });
+            });
+
+            describe(`when memory match is not enabled via the Content Config`, () => {
+                it(`should include the route`, () => {
+                    const contentConfig = buildDummyConfig({
+                        shouldEnableMemoryMatch: false,
+                    });
+
+                    const result = buildRoutes(contentConfig);
+
+                    const hasRoute = result.some(({ path }) => path.includes('MemoryMatch'));
+
+                    expect(hasRoute).toBe(false);
+                });
             });
         });
     });

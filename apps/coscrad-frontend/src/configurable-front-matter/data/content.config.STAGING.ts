@@ -116,4 +116,5 @@ export const contentConfig: ConfigurableContent = {
         baseDigitalAssetUrl:
             'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=',
     },
+    shouldEnableMemoryMatch: false,
 };
