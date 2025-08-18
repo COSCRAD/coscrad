@@ -29,7 +29,7 @@ const mediaItemUploadEndpoint = `/resources/mediaItems/upload`;
 // we reuse test cases from the `ingest-media-items` CLI command here
 const validInputDir = `__cli-command-test-inputs__/ingest-media-items/mediaItemsOnly`;
 
-const invalidInputDir = `/home/aplahn/Apps/open-source-language-apps/COSCRAD/coscrad/__cli-command-test-inputs__`;
+const invalidInputDir = `__cli-command-test-inputs__`;
 
 const testFileName = `station`;
 
@@ -48,8 +48,6 @@ const testMaxNumberOfFileAttachments = 10;
 const largeTestFilePath = `${validInputDir}/${largeTestFile}`;
 
 const pngFileWithWavExtension = 'i-am-actually-a-png.wav';
-
-// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] add a case with an invalid extension `.xxx`
 
 const pngWithWavExtensionFilepath = `${invalidInputDir}/${pngFileWithWavExtension}`;
 
