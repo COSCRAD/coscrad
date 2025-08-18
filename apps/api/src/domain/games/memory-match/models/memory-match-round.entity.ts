@@ -14,10 +14,14 @@ import {
     CannotOverwriteCardbackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
     CannotOverwriteTextForMemoryMatchCardError,
+    DuplicateSequeneceNumberForCardsError,
     FailedToRepublishMemoryMatchRoundError,
     FailedToUnpublishDraftMemoryMatchRoundError,
     FailedToUpdateMissingMemoryMatchCardError,
+    InsufficientNumberOfCardsForPublicationError,
     MemoryMatchRoundCapacityReachedError,
+    MemoryRoundIsNotReadyForPublicationError,
+    MissingCardbackErrorForMemoryMatchRound,
 } from '../errors';
 import { MemoryMatchCard } from './memory-match-card.entity';
 
@@ -38,9 +42,13 @@ export class MemoryMatchRound {
     constructor(dto: DeepPartial<DTO<MemoryMatchRound>>) {
         if (!dto) return;
 
-        const { id, cards } = dto;
+        const { id, cards, isPublished, cardBackImageId } = dto;
 
         this.id = id;
+
+        this.isPublished = isPublished;
+
+        this.cardBackImageId = cardBackImageId;
 
         if (Array.isArray(cards)) {
             this.cards = cards.map((c) => new MemoryMatchCard(c));
@@ -181,6 +189,10 @@ export class MemoryMatchRound {
         return this.cards.some((card) => card.sequenceNumber === sequenceNumber);
     }
 
+    count(): number {
+        return this.cards.length;
+    }
+
     hasCardback(): boolean {
         return !isNullOrUndefined(this.cardBackImageId);
     }
@@ -192,6 +204,64 @@ export class MemoryMatchRound {
             allErrors.push(
                 new CannotExceedMemoryMatchRoundCapacityError(this.id, this.size, this.cards.length)
             );
+        }
+
+        const duplicates = this.cards.reduce(
+            (
+                acc: { seen: Set<number>; duplicates: Set<number> },
+                { sequenceNumber: nextSequenceNumber }
+            ) => {
+                if (acc.seen.has(nextSequenceNumber)) {
+                    acc.duplicates.add(nextSequenceNumber);
+
+                    return acc;
+                }
+
+                acc.seen.add(nextSequenceNumber);
+
+                return acc;
+            },
+            {
+                seen: new Set<number>(),
+                duplicates: new Set<number>(),
+            }
+        ).duplicates;
+
+        const duplicateSequenceNumberErrors = Array.from(duplicates).map((n) => {
+            return new DuplicateSequeneceNumberForCardsError(this.id, n);
+        });
+
+        duplicateSequenceNumberErrors.forEach((e) => allErrors.push(e));
+
+        if (this.isPublished) {
+            const publicationStatusErrors = [];
+
+            // A published round must have an image for the back of its cards
+            if (isNullOrUndefined(this.cardBackImageId)) {
+                publicationStatusErrors.push(new MissingCardbackErrorForMemoryMatchRound());
+            }
+
+            if (this.count() < this.size) {
+                publicationStatusErrors.push(
+                    new InsufficientNumberOfCardsForPublicationError(this.size, this.count())
+                );
+            }
+
+            const cardPublicationErrors = this.cards.flatMap((c) => {
+                const errorsForCard = c.validatePubicationStatus();
+
+                return errorsForCard;
+            });
+
+            cardPublicationErrors.forEach((e) => {
+                publicationStatusErrors.push(e);
+            });
+
+            if (publicationStatusErrors.length > 0) {
+                allErrors.push(
+                    new MemoryRoundIsNotReadyForPublicationError(this.id, publicationStatusErrors)
+                );
+            }
         }
 
         return allErrors;
