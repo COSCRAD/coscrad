@@ -1,5 +1,18 @@
 # COSCRAD/coscrad Change Log
 
+## <next>
+
+### Photographs and Video for Terms
+
+It is now possible to add a featured photograph and \ or video for a term. This
+allows you to demonstrate the meaning of a term with an image or video. Photograph or video
+resources are linked in such away that their own notes and connections from the
+web of knowledge will "come along for the ride".
+
+#### Relevant PRs
+
+-   feat: introduce ADD_VIDEO_FOR_TERM (#758)
+
 ## v0.1.0.beta1
 
 ### Literal translation of terms
