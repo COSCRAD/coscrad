@@ -13,7 +13,7 @@ export default (filePath: string): string => {
 
     const withoutKeywords = fileName
         .replace(new RegExp('\\.', 'g'), '-')
-        .replace(new RegExp('(integration|e2e|spec)', 'g'), '');
+        .replace(new RegExp('(integration|e2e|spec|migration|event-handler)', 'g'), '');
 
     let result = withoutKeywords;
 
