@@ -1,9 +1,16 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import {
     CannotOverwriteAudioForMemoryMatchCardError,
+    CannotOverwriteCardbackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
+    CannotOverwriteTextForMemoryMatchCardError,
+    FailedToRepublishMemoryMatchRoundError,
+    FailedToUnpublishDraftMemoryMatchRoundError,
     FailedToUpdateMissingMemoryMatchCardError,
+    MemoryMatchRoundCapacityReachedError,
 } from '../errors';
 import { MemoryMatchCard } from './memory-match-card.entity';
 import { MemoryMatchRound } from './memory-match-round.entity';
@@ -13,6 +20,45 @@ const testMediaItemId = buildDummyUuid(1);
 const testRoundId = buildDummyUuid(3);
 
 describe(`MemoryMatchRound`, () => {
+    describe(`addCardBackImage`, () => {
+        describe(`when the update is valid`, () => {
+            it(`should add the cardback image`, () => {
+                const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                const result = testRound.addCardbackImage(testMediaItemId);
+
+                expect(result).not.toBeInstanceOf(Error);
+
+                const updatedRound = result as MemoryMatchRound;
+
+                expect(updatedRound.cardBackImageId).toBe(testMediaItemId);
+            });
+        });
+
+        describe(`when the update is invalid`, () => {
+            describe(`the round already has a card back image`, () => {
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId }).addCardbackImage(
+                        testMediaItemId
+                    ) as MemoryMatchRound;
+
+                    const secondMediaItemId = buildDummyUuid(5);
+
+                    const updateResult = testRound.addCardbackImage(secondMediaItemId);
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new CannotOverwriteCardbackImageForMemoryMatchRoundError(
+                            testRound.id,
+                            testMediaItemId,
+                            secondMediaItemId
+                        )
+                    );
+                });
+            });
+        });
+    });
+
     describe(`addImageForCard`, () => {
         describe(`when the update is valid`, () => {
             it(`should add the image to the card`, () => {
@@ -152,30 +198,107 @@ describe(`MemoryMatchRound`, () => {
         });
     });
 
-    describe(`addCardBackImage`, () => {
-        describe(`when the update is valid`, () => {
-            it.todo(`should add the card back image`);
-        });
-
-        describe(`when the update is invalid`, () => {
-            describe(`the round already has a card back image`, () => {
-                it.todo(`should return the expected error`);
-            });
-
-            describe(`when there is no card with the given sequence number`, () => {
-                it.todo(`should return the expected error`);
-            });
-        });
-    });
-
     describe(`addTextForCard`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should add the text`);
+            it(`should add the text`, () => {
+                const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                const sequenceNumber = testRound.addCard() as number;
+
+                const testText = 'bird';
+
+                const testLanguageCode = LanguageCode.English;
+
+                const updateResult = testRound.addTextForCard(
+                    sequenceNumber,
+                    testText,
+                    testLanguageCode
+                );
+
+                expect(updateResult).toBeInstanceOf(MemoryMatchRound);
+
+                const updatedRound = updateResult as MemoryMatchRound;
+
+                const targetCard = updatedRound.get(sequenceNumber) as MemoryMatchCard;
+
+                expect(targetCard.text).toBeTruthy();
+
+                const { text, languageCode, role } = targetCard.text.getOriginalTextItem();
+
+                expect(text).toBe(testText);
+
+                expect(languageCode).toBe(testLanguageCode);
+
+                expect(role).toBe(MultilingualTextItemRole.original);
+            });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`When there is no card with the given sequence number.`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const bogusSequenceNumber = 5;
+
+                    const updateResult = testRound.addTextForCard(
+                        bogusSequenceNumber,
+                        'foo',
+                        LanguageCode.English
+                    );
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new FailedToUpdateMissingMemoryMatchCardError(
+                            testRound.id,
+                            bogusSequenceNumber
+                        )
+                    );
+                });
+            });
+
+            describe(`when the card already has text`, () => {
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const sequenceNumber = testRound.addCard() as number;
+
+                    const existingText = 'bird';
+
+                    const testLanguageCode = LanguageCode.English;
+
+                    const roundWithTextForCard = testRound.addTextForCard(
+                        sequenceNumber,
+                        existingText,
+                        testLanguageCode
+                    ) as MemoryMatchRound;
+
+                    const duplicateText = 'bla bla bla part II';
+
+                    const updateResult = roundWithTextForCard.addTextForCard(
+                        sequenceNumber,
+                        duplicateText,
+                        testLanguageCode
+                    );
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new CannotOverwriteTextForMemoryMatchCardError(
+                            testRound.id,
+                            sequenceNumber,
+                            new MultilingualText({
+                                items: [
+                                    {
+                                        text: existingText,
+                                        languageCode: testLanguageCode,
+                                        role: MultilingualTextItemRole.original,
+                                    },
+                                ],
+                            }),
+                            duplicateText,
+                            testLanguageCode
+                        )
+                    );
+                });
             });
         });
     });
@@ -183,43 +306,110 @@ describe(`MemoryMatchRound`, () => {
     describe(`addCard`, () => {
         describe(`when the update is valid`, () => {
             describe(`when the round doesn't have any cards`, () => {
-                it.todo(`should add a new card with the expected sequenece number`);
-            });
+                it(`should add a new card with the expected sequenece number`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
 
-            describe(`when the round has one card`, () => {
-                it.todo(`should add a new card with the expected sequenece number`);
-            });
+                    const sequenceNumber = testRound.addCard();
 
-            describe(`when the round has one less than a full set of cards`, () => {
-                it.todo(`should add a new card with the expected sequenece number`);
+                    expect(sequenceNumber).toBe(1);
+                });
             });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`when the round already has the maximum number of cards`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const MAX_NUMBER_OF_CARDS = 12;
+
+                    for (let i = 1; i <= MAX_NUMBER_OF_CARDS; i++) {
+                        const sequenceNumber = testRound.addCard();
+
+                        expect(sequenceNumber).toBe(i);
+                    }
+
+                    // the round is now full
+                    const resultOfAddingOneTooManyCards = testRound.addCard();
+
+                    assertErrorAsExpected(
+                        resultOfAddingOneTooManyCards,
+                        new MemoryMatchRoundCapacityReachedError(testRound.id, MAX_NUMBER_OF_CARDS)
+                    );
+                });
             });
         });
     });
 
     describe(`publish`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should update the round's publication status`);
+            it(`should update the round's publication status`, () => {
+                const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-278] build a complete round before publication
+
+                const updateResult = testRound.publish();
+
+                expect(updateResult).not.toBeInstanceOf(Error);
+
+                const updatedRound = updateResult as MemoryMatchRound;
+
+                expect(updatedRound.isPublished).toBe(true);
+            });
         });
 
         describe(`when the update is invalid`, () => {
-            it.todo(`should have test cases`);
+            describe(`when the memory round is already published`, () => {
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({
+                        id: testRoundId,
+                    }).publish() as MemoryMatchRound;
+
+                    const updateResult = testRound.publish();
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new FailedToRepublishMemoryMatchRoundError(testRound.id)
+                    );
+                });
+            });
+
+            describe(`when the memory round does not satisfy publication rules`, () => {
+                // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-278] Ensure that invariant validation is respected here
+                it.todo(`should have test cases`);
+            });
         });
     });
 
     describe(`unpublish`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should update the publication status`);
+            it(`should update the publication status`, () => {
+                const testRound = new MemoryMatchRound({
+                    id: testRoundId,
+                }).publish() as MemoryMatchRound;
+
+                const updateResult = testRound.unpublish();
+
+                expect(updateResult).toBeInstanceOf(MemoryMatchRound);
+
+                expect((updateResult as MemoryMatchRound).isPublished).toBe(false);
+            });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`when the round is not published to begin with`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({
+                        id: testRoundId,
+                    });
+
+                    const updateResult = testRound.unpublish();
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new FailedToUnpublishDraftMemoryMatchRoundError(testRound.id)
+                    );
+                });
             });
         });
     });

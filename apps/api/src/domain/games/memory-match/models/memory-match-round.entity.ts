@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
@@ -7,8 +9,13 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     CannotOverwriteAudioForMemoryMatchCardError,
+    CannotOverwriteCardbackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
+    CannotOverwriteTextForMemoryMatchCardError,
+    FailedToRepublishMemoryMatchRoundError,
+    FailedToUnpublishDraftMemoryMatchRoundError,
     FailedToUpdateMissingMemoryMatchCardError,
+    MemoryMatchRoundCapacityReachedError,
 } from '../errors';
 import { MemoryMatchCard } from './memory-match-card.entity';
 
@@ -24,6 +31,7 @@ export class MemoryMatchRound {
     compiledBy: AggregateId[];
     contributors: AggregateId[];
     size: number = NUMBER_OF_PAIRS_IN_A_ROUND;
+    isPublished = false;
 
     constructor(dto: DeepPartial<DTO<MemoryMatchRound>>) {
         if (!dto) return;
@@ -39,10 +47,27 @@ export class MemoryMatchRound {
         }
     }
 
+    addCardbackImage(newMediaItemId: AggregateId): ResultOrError<MemoryMatchRound> {
+        if (this.hasCardback()) {
+            return new CannotOverwriteCardbackImageForMemoryMatchRoundError(
+                this.id,
+                this.cardBackImageId,
+                newMediaItemId
+            );
+        }
+
+        this.cardBackImageId = newMediaItemId;
+
+        return this;
+    }
+
     addCard(): ResultOrError<number> {
         const nextSequenceNumber = this.cards.length + 1;
 
-        // TODO check size
+        if (nextSequenceNumber > this.size) {
+            return new MemoryMatchRoundCapacityReachedError(this.id, this.size);
+        }
+
         this.cards.push(
             new MemoryMatchCard({
                 sequenceNumber: nextSequenceNumber,
@@ -100,6 +125,48 @@ export class MemoryMatchRound {
         return this;
     }
 
+    addTextForCard(cardSequenceNumber: number, text: string, languageCode: LanguageCode) {
+        if (!this.has(cardSequenceNumber)) {
+            return new FailedToUpdateMissingMemoryMatchCardError(this.id, cardSequenceNumber);
+        }
+
+        const targetCard = this.get(cardSequenceNumber) as MemoryMatchCard;
+
+        if (!isNullOrUndefined(targetCard.text)) {
+            return new CannotOverwriteTextForMemoryMatchCardError(
+                this.id,
+                cardSequenceNumber,
+                targetCard.text,
+                text,
+                languageCode
+            );
+        }
+
+        targetCard.addText(text, languageCode);
+
+        return this;
+    }
+
+    publish(): ResultOrError<MemoryMatchRound> {
+        if (this.isPublished) {
+            return new FailedToRepublishMemoryMatchRoundError(this.id);
+        }
+
+        this.isPublished = true;
+
+        return this;
+    }
+
+    unpublish(): ResultOrError<MemoryMatchRound> {
+        if (!this.isPublished) {
+            return new FailedToUnpublishDraftMemoryMatchRoundError(this.id);
+        }
+
+        this.isPublished = false;
+
+        return this;
+    }
+
     get(sequenceNumber: Number): Maybe<MemoryMatchCard> {
         if (!this.has(sequenceNumber)) {
             return NotFound;
@@ -110,5 +177,9 @@ export class MemoryMatchRound {
 
     has(sequenceNumber: Number): boolean {
         return this.cards.some((card) => card.sequenceNumber === sequenceNumber);
+    }
+
+    hasCardback(): boolean {
+        return !isNullOrUndefined(this.cardBackImageId);
     }
 }
