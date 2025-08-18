@@ -1,11 +1,28 @@
 import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Controller, Get, Param, Query, Request, Res, UseFilters, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    FileTypeValidator,
+    Get,
+    Param,
+    ParseFilePipe,
+    Post,
+    Query,
+    Request,
+    Res,
+    UploadedFiles,
+    UseFilters,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { InternalErrorFilter } from '../../../../app/controllers/command/exception-handling/exception-filters/internal-error.filter';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from '../../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from '../../../../app/controllers/resources/constants';
+import { CoscradInvalidUserInputException } from '../../../../app/controllers/response-mapping/CoscradExceptions';
+import { CoscradInvalidUserInputFilter } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import buildViewModelPathForResourceType from '../../../../app/controllers/utilities/buildIndexPathForResourceType';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
@@ -16,13 +33,21 @@ import { ResourceType } from '../../../types/ResourceType';
 import { isAudioMimeType } from '../../audio-visual/audio-item/entities/audio-item.entity';
 import { isVideoMimeType } from '../../audio-visual/video/entities/video.entity';
 import { isPhotographMimeType } from '../../photograph/entities/photograph.entity';
-import { getExtensionForMimeType } from '../entities/get-extension-for-mime-type';
+import {
+    getExpectedMimeTypeFromExtension,
+    getExtensionForMimeType,
+} from '../entities/get-extension-for-mime-type';
+import { MultipleMediaFilesUploadedSuccessResponse } from '../entities/multiple-media-files-uploaded-success-response';
+import { SuccessfulMediaUploadRecord } from '../entities/successful-media-upload-record';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
+import path = require('node:path');
+
+// TODO Make this configurable
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
-@UseFilters(new InternalErrorFilter())
+@UseFilters(new InternalErrorFilter(), new CoscradInvalidUserInputFilter())
 export class MediaItemController {
     constructor(private readonly mediaItemQueryService: MediaItemQueryService) {}
 
@@ -144,6 +169,69 @@ export class MediaItemController {
         );
 
         return clonePlainObjectWithOverrides(result, { entities });
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @Post('/upload')
+    @UseInterceptors(
+        /**
+         * Note that the configuration has already been set from the config using
+         * `MulterModule.registerAsync()` at the level of the module.
+         */
+        AnyFilesInterceptor()
+    )
+    uploadFiles(
+        @UploadedFiles(
+            new ParseFilePipe({
+                validators: [
+                    new FileTypeValidator({
+                        // This allows all MIME Types registered within COSCRAD
+                        fileType: new RegExp(Object.values(MIMEType).join('|'), 'i'),
+                    }),
+                    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] validate content type against actual extension
+                    // new CoscradBinaryFileTypeValidator({}),
+                ],
+                exceptionFactory: (msg: string) => {
+                    const uploadError = new InternalError(
+                        `Failed to upload media item. MIME Type is not allowed, or is inconsistent with content type`,
+                        [new InternalError(msg)]
+                    );
+
+                    return new CoscradInvalidUserInputException(uploadError);
+                },
+            })
+        )
+        files: Array<Express.Multer.File>
+    ) {
+        const uploadedMediaFiles: SuccessfulMediaUploadRecord[] = files.map(
+            ({ originalname, filename }) => {
+                // account for filenames with `.` in the name portion of the file (xxx.xx.xx.pdf)
+                // there are built-in Nest JS validators in the Interceptor we could use
+                const extension = path.extname(originalname);
+
+                // TODO is there a better place to do this?
+                const name = path.basename(originalname, extension).replace('.', '_');
+
+                return new SuccessfulMediaUploadRecord({
+                    uploadedFilename: name,
+                    systemFilename: filename,
+                    /**
+                     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283]
+                     *  Should we use the `browserMimeType` property from `file` (`Multer.File`)?
+                     * Let's ensure that all possible `MIMETypes` (from browser, from extension, from content)
+                     * are mutually consistent.
+                     */
+                    mimeType: getExpectedMimeTypeFromExtension(extension),
+                });
+            }
+        );
+
+        const mediaFileUploadResponse = new MultipleMediaFilesUploadedSuccessResponse({
+            uploadedMediaFiles,
+        });
+
+        return mediaFileUploadResponse;
     }
 
     private buildHeaders({
