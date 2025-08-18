@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import { DeepPartial } from '../../../../types/DeepPartial';
@@ -8,6 +9,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import {
+    CannotExceedMemoryMatchRoundCapacityError,
     CannotOverwriteAudioForMemoryMatchCardError,
     CannotOverwriteCardbackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
@@ -181,5 +183,17 @@ export class MemoryMatchRound {
 
     hasCardback(): boolean {
         return !isNullOrUndefined(this.cardBackImageId);
+    }
+
+    validateInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        if (this.cards.length > this.size) {
+            allErrors.push(
+                new CannotExceedMemoryMatchRoundCapacityError(this.id, this.size, this.cards.length)
+            );
+        }
+
+        return allErrors;
     }
 }
