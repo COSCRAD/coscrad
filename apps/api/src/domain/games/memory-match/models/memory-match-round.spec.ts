@@ -1,6 +1,7 @@
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import {
+    CannotOverwriteAudioForMemoryMatchCardError,
     CannotOverwriteImageForMemoryMatchCardError,
     FailedToUpdateMissingMemoryMatchCardError,
 } from '../errors';
@@ -77,12 +78,76 @@ describe(`MemoryMatchRound`, () => {
 
     describe(`addAudioForCard`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should add the audio`);
+            it(`should add the audio`, () => {
+                const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                //TODO should we return the entire card?
+                const sequenceNumber = testRound.addCard() as number;
+
+                const updateResult = testRound.addAudioForCard(sequenceNumber, testMediaItemId);
+
+                expect(updateResult).toBeInstanceOf(MemoryMatchRound);
+
+                const updatedRound = updateResult as MemoryMatchRound;
+
+                const updatedCard = updatedRound.get(sequenceNumber) as MemoryMatchCard;
+
+                expect(updatedCard.hasAudio()).toBe(true);
+
+                expect(updatedCard.audioId).toBe(testMediaItemId);
+            });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`When there is no card with the given sequence number.`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const bogusSequenceNumber = 1;
+
+                    const updateResult = testRound.addAudioForCard(
+                        bogusSequenceNumber,
+                        testMediaItemId
+                    );
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new FailedToUpdateMissingMemoryMatchCardError(
+                            testRoundId,
+                            bogusSequenceNumber
+                        )
+                    );
+                });
+            });
+
+            describe(`when the card already has audio`, () => {
+                it(`should return the expected error`, () => {
+                    const testRound = new MemoryMatchRound({ id: testRoundId });
+
+                    const sequenceNumber = testRound.addCard() as number;
+
+                    const roundWithAudio = testRound.addAudioForCard(
+                        sequenceNumber,
+                        testMediaItemId
+                    ) as MemoryMatchRound;
+
+                    const secondMediaItemId = buildDummyUuid(5);
+
+                    const updateResult = roundWithAudio.addAudioForCard(
+                        sequenceNumber,
+                        secondMediaItemId
+                    );
+
+                    assertErrorAsExpected(
+                        updateResult,
+                        new CannotOverwriteAudioForMemoryMatchCardError(
+                            testRound.id,
+                            sequenceNumber,
+                            testMediaItemId,
+                            secondMediaItemId
+                        )
+                    );
+                });
             });
         });
     });

@@ -6,6 +6,7 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import {
+    CannotOverwriteAudioForMemoryMatchCardError,
     CannotOverwriteImageForMemoryMatchCardError,
     FailedToUpdateMissingMemoryMatchCardError,
 } from '../errors';
@@ -38,10 +39,6 @@ export class MemoryMatchRound {
         }
     }
 
-    addAudioForCard(_cardSquenceNumber: number, _mediaItemId: AggregateId) {
-        throw new Error(`not implemented`);
-    }
-
     addCard(): ResultOrError<number> {
         const nextSequenceNumber = this.cards.length + 1;
 
@@ -53,6 +50,30 @@ export class MemoryMatchRound {
         );
 
         return nextSequenceNumber;
+    }
+
+    addAudioForCard(
+        cardSquenceNumber: number,
+        mediaItemId: AggregateId
+    ): ResultOrError<MemoryMatchRound> {
+        if (!this.has(cardSquenceNumber)) {
+            return new FailedToUpdateMissingMemoryMatchCardError(this.id, cardSquenceNumber);
+        }
+
+        const targetCard = this.get(cardSquenceNumber) as MemoryMatchCard;
+
+        if (targetCard.hasAudio()) {
+            return new CannotOverwriteAudioForMemoryMatchCardError(
+                this.id,
+                cardSquenceNumber,
+                targetCard.audioId,
+                mediaItemId
+            );
+        }
+
+        targetCard.audioId = mediaItemId;
+
+        return this;
     }
 
     addImageForCard(
