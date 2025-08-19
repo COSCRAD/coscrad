@@ -120,6 +120,7 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             AggregateType.playlist,
             AggregateType.audioItem,
             AggregateType.video,
+            // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-281] add photograph here
         ];
 
         if (eventSourcedAggregateTypes.includes(resourceType)) {

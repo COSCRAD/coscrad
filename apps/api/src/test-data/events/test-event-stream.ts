@@ -68,6 +68,10 @@ import {
     PhotographAddedForTerm,
     PhotographAddedForTermPayload,
 } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event';
+import {
+    VideoAddedForTerm,
+    VideoAddedForTermPayload,
+} from '../../domain/models/term/commands/add-video-for-term/video-added-for-term.event';
 import { PROMPT_TERM_CREATED } from '../../domain/models/term/commands/create-prompt-term/constants';
 import { TERM_CREATED } from '../../domain/models/term/commands/create-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../../domain/models/term/commands/elicit-term-from-prompt/constants';
@@ -424,6 +428,21 @@ const buildLiteralTranslationProvidedForTerm = (
 
     const result = buildTestInstance(LiteralTranslationOfTermProvided, {
         type: 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
+        payload: clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        meta: buildMetadata(),
+    });
+
+    return result;
+};
+
+const buildVideoAddedForTerm = (
+    payloadOverrides: DeepPartial<VideoAddedForTermPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload = buildTestInstance(VideoAddedForTerm).payload;
+
+    const result = buildTestInstance(VideoAddedForTerm, {
+        type: 'VIDEO_ADDED_FOR_TERM',
         payload: clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
         meta: buildMetadata(),
     });
@@ -834,6 +853,7 @@ export class TestEventStream {
                 'LITERAL_TRANSLATION_OF_TERM_PROVIDED',
                 buildLiteralTranslationProvidedForTerm
             )
+            .registerBuilder('VIDEO_ADDED_FOR_TERM', buildVideoAddedForTerm)
             .registerBuilder('PHOTOGRAPH_ADDED_FOR_TERM', buildPhotographAddedForTerm)
             .registerBuilder(PROMPT_TERM_CREATED, buildPromptTermCreated)
             .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt)

@@ -46,6 +46,7 @@ import {
     TermTranslated,
 } from '../commands';
 import { PhotographAddedForTerm } from '../commands/add-photograph-for-term/photograph-added-for-term.event';
+import { VideoAddedForTerm } from '../commands/add-video-for-term/video-added-for-term.event';
 import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
@@ -56,6 +57,7 @@ import {
     PromptLanguageMustBeUniqueError,
 } from '../errors';
 import { CannotOverridePhotographForTermError } from '../errors/cannot-override-photograph-for-term.error';
+import { CannotOverrideVideoForTermError } from '../errors/cannot-override-video-for-term.error';
 
 const isOptional = true;
 
@@ -112,6 +114,13 @@ export class Term extends Resource {
     })
     photographId?: AggregateId;
 
+    @UUID({
+        label: 'video ID',
+        description: 'reference to a viedo for this term',
+        isOptional: true,
+    })
+    videoId?: AggregateId;
+
     // The constructor should only be called after validating the input DTO
     constructor(dto: DTO<Term>) {
         super({ ...dto, type: ResourceType.term });
@@ -119,7 +128,7 @@ export class Term extends Resource {
         // This should only happen in the validation context
         if (isNullOrUndefined(dto)) return;
 
-        const { audio: audioDto, sourceProject, text, isPromptTerm, photographId } = dto;
+        const { audio: audioDto, sourceProject, text, isPromptTerm, photographId, videoId } = dto;
 
         this.text = new MultilingualText(text);
 
@@ -131,6 +140,8 @@ export class Term extends Resource {
         this.isPromptTerm = isNullOrUndefined(isPromptTerm) ? false : isPromptTerm;
 
         this.photographId = photographId;
+
+        this.videoId = videoId;
     }
 
     getName(): MultilingualText {
@@ -207,6 +218,17 @@ export class Term extends Resource {
         }
 
         this.photographId = photograpgId;
+
+        return this;
+    }
+
+    @UpdateMethod()
+    addVideo(videoId: AggregateId): ResultOrError<Term> {
+        if (!isNullOrUndefined(this.videoId)) {
+            return new CannotOverrideVideoForTermError(this.id, videoId, this.videoId);
+        }
+
+        this.videoId = videoId;
 
         return this;
     }
@@ -329,6 +351,10 @@ export class Term extends Resource {
 
     handlePhotographAddedForTerm({ payload: { photographId } }: PhotographAddedForTerm) {
         return this.addPhotophraph(photographId);
+    }
+
+    handleVideoAddedForTerm({ payload: { videoId } }: VideoAddedForTerm) {
+        return this.addVideo(videoId);
     }
 
     private static createTermFromTermCreated(event: TermCreated) {

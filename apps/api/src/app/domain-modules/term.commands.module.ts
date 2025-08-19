@@ -14,6 +14,8 @@ import {
 } from '../../domain/models/term/commands';
 import { AddPhotograhForTerm } from '../../domain/models/term/commands/add-photograph-for-term/add-photograph-for-term.command';
 import { AddPhotographForTermCommandHandler } from '../../domain/models/term/commands/add-photograph-for-term/add-photograph-for-term.command-handler';
+import { AddVideoForTerm } from '../../domain/models/term/commands/add-video-for-term/add-video-for-term.command';
+import { AddVideoForTermCommandHandler } from '../../domain/models/term/commands/add-video-for-term/add-video-for-term.command-handler';
 import { ProvideLiteralTranslationOfTerm } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command';
 import { ProvideLiteralTranslationOfTermCommandHandler } from '../../domain/models/term/commands/provide-literal-translation-of-term/provide-literal-translation-of-term.command-handler';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -33,6 +35,7 @@ import { PersistenceModule } from '../../persistence/persistence.module';
         AddAudioForTermCommandHandler,
         ProvideLiteralTranslationOfTermCommandHandler,
         AddPhotographForTermCommandHandler,
+        AddVideoForTermCommandHandler,
         ...[
             CreateTerm,
             CreatePromptTerm,
@@ -41,6 +44,7 @@ import { PersistenceModule } from '../../persistence/persistence.module';
             AddAudioForTerm,
             ProvideLiteralTranslationOfTerm,
             AddPhotograhForTerm,
+            AddVideoForTerm,
         ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,
@@ -53,6 +57,7 @@ import { PersistenceModule } from '../../persistence/persistence.module';
         ElicitTermFromPrompt,
         AddAudioForTerm,
         AddPhotograhForTerm,
+        AddVideoForTerm,
     ],
 })
 export class TermCommandsModule {}
