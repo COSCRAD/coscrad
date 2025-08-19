@@ -29,7 +29,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
     const { entities: terms } = termsIndexResult;
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
-        { propertyKey: 'id', headingLabel: 'Link' },
+        { propertyKey: 'id', headingLabel: 'Literm-detail.spec.tsxnk' },
         // TODO We need to determine the `term` and `termEnglish` from a multilingual text property
         { propertyKey: 'name', headingLabel: 'Term' },
         { propertyKey: 'audioURL', headingLabel: 'Audio URL' },
