@@ -1,5 +1,5 @@
 import { IIndexQueryResult, ITermViewModel, WithTags } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { getConfig } from '../../../../../config';
 import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
 import { createFetchThunk } from '../../../utils/create-fetch-thunk';

@@ -44,16 +44,24 @@ export class SeedDatabaseCliCommand extends CliCommandRunner {
             if (!Array.isArray(parseResult)) {
                 // TODO clean up this logic
                 // TODO make this a returned error
-                throw new InternalError(
+                const error = new InternalError(
                     `failed to parse command fsa from user input, docs: ${rawValue}`
                 );
+
+                this.logger.log(error.message);
+
+                throw error;
             }
 
             return parseResult;
         } catch (error) {
-            throw new InternalError(
+            const internalError = new InternalError(
                 `failed to parse command fsa from user input, docs: ${rawValue}`
             );
+
+            this.logger.log(internalError.message);
+
+            throw internalError;
         }
     }
 
@@ -62,5 +70,11 @@ export class SeedDatabaseCliCommand extends CliCommandRunner {
         { collectionName, docs }: SeedDatabaseOptions
     ): Promise<void> {
         await this.databaseProvider.getDatabaseForCollection(collectionName).createMany(docs);
+
+        this.logger.log(
+            `Successfully updated: ${collectionName} in database: ${this.databaseProvider
+                .getDBInstance()
+                .getDatabaseName()}`
+        );
     }
 }
