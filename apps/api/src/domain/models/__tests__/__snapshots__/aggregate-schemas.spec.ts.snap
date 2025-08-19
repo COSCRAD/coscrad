@@ -2397,6 +2397,13 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "videoId": {
+    "coscradDataType": "UUID",
+    "description": "reference to a viedo for this term",
+    "isArray": false,
+    "isOptional": true,
+    "label": "video ID",
+  },
 }
 `;
 
