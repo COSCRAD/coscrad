@@ -52,7 +52,7 @@ This monorepo workspace is managed using [Nx](https://nx.dev). See the `README` 
 
 ### Requirements
 
-You'll need Node v18.12.0. It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
+You'll need Node v24.6.0. It is recommended that you install node using [nvm](https://github.com/nvm-sh/nvm)).
 
 You'll also need an instance of [ArangoDB](https://www.arangodb.com/).
 
