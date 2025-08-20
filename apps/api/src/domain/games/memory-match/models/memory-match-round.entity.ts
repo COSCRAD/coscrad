@@ -1,4 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
+import { UUID } from '@coscrad/data-types';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -29,14 +30,54 @@ import { MemoryMatchCard } from './memory-match-card.entity';
 const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
 
 export class MemoryMatchRound {
+    @UUID({
+        label: 'round ID',
+        description: 'A unique system identifier for this memory match round',
+    })
     id: AggregateId;
+
+    @UUID({
+        label: 'the back image for a card',
+        description: 'A image for the back of a card',
+    })
     cardBackImageId: AggregateId;
+
+    @UUID({
+        label: 'cards identifier',
+        description: 'Identifier for the cards',
+    })
     cards: MemoryMatchCard[];
+
+    @UUID({
+        label: 'name',
+        description: 'A name for the card',
+    })
     name: MultilingualText;
+
+    @UUID({
+        label: 'description',
+        description: 'The descripton',
+    })
     description: MultilingualText;
+
+    @UUID({
+        label: 'compiled by',
+        description: 'Reference to who compiled this',
+    })
     compiledBy: AggregateId[];
+
+    @UUID({
+        label: 'contributors',
+        description: 'A reference to the contributors',
+    })
     contributors: AggregateId[];
+
+    @UUID({
+        label: 'size',
+        description: 'The size',
+    })
     size: number = NUMBER_OF_PAIRS_IN_A_ROUND;
+
     isPublished = false;
 
     constructor(dto: DeepPartial<DTO<MemoryMatchRound>>) {

@@ -1,4 +1,6 @@
+import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import {
@@ -238,7 +240,41 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
         });
 
         describe(`when the schema is invalid`, () => {
-            it.todo(`should have a fuzz test`); // TODO Blake
+            describe(`fuzz test:`, () => {
+                const dataSchema = getCoscradDataSchema(MemoryMatchRound);
+
+                const testCases = Object.entries(dataSchema).flatMap(
+                    ([propertyName, propertySchema]) =>
+                        new FuzzGenerator(propertySchema)
+                            .generateInvalidValues()
+                            .map(({ value, description }) => ({
+                                propertyName,
+                                invalidValue: value,
+                                description,
+                            }))
+                            .concat({
+                                propertyName: 'bogusProperty',
+                                invalidValue: ['I am oh so bogus!'],
+                                description: 'superfluous (bogus) property key',
+                            })
+                );
+
+                testCases.forEach(({ propertyName, invalidValue, description }) => {
+                    describe(description, () => {
+                        it(`should return a type error`, () => {
+                            const invalidInstance = buildTestInstance(MemoryMatchRound, {
+                                [propertyName]: invalidValue,
+                            });
+
+                            const result = invalidInstance.validateInvariants();
+
+                            expect(result).toHaveLength(1);
+
+                            expect(result[0].toString()).toContain(propertyName);
+                        });
+                    });
+                });
+            });
         });
     });
 });

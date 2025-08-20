@@ -1,4 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { UUID } from '@coscrad/data-types';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { DeepPartial } from '../../../../types/DeepPartial';
@@ -11,9 +12,28 @@ import {
 } from '../errors';
 
 export class MemoryMatchCard {
+    @UUID({
+        label: 'sequence number',
+        description: 'a series of sequence numbers',
+    })
     sequenceNumber: number;
+
+    @UUID({
+        label: 'image iD',
+        description: 'an ID for the image',
+    })
     imageId?: AggregateId;
+
+    @UUID({
+        label: 'audio iD',
+        description: 'an ID for the audio',
+    })
     audioId?: AggregateId;
+
+    @UUID({
+        label: 'text',
+        description: 'the text',
+    })
     text?: MultilingualText; // build empty by default ?
     // sources: ResourceCompositeIdentifer[]
 
