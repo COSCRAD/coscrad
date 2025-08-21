@@ -12,7 +12,6 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
-import { MultilingualAudio } from '../../../models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     CannotExceedMemoryMatchRoundCapacityError,
@@ -34,11 +33,17 @@ import { MemoryMatchCard } from './memory-match-card.entity';
 // TODO make this configurable
 const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
 
-@CoscradDataExample({
+@CoscradDataExample<MemoryMatchRound>({
     example: {
         id: buildDummyUuid(2),
-        text: buildMultilingualTextWithSingleItem('test round text'),
-        audio: MultilingualAudio.buildEmpty(),
+        cardBackImageId: buildDummyUuid(3),
+        cards: [],
+        name: buildMultilingualTextWithSingleItem('test memory match round name'),
+        description: buildMultilingualTextWithSingleItem('the best memory match round ever!'),
+        compiledBy: [],
+        contributors: [],
+        size: NUMBER_OF_PAIRS_IN_A_ROUND,
+        isPublished: false,
     },
 })
 export class MemoryMatchRound {
