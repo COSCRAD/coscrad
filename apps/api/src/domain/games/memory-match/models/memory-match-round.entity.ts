@@ -4,10 +4,14 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
+import { MultilingualAudio } from '../../../models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     CannotExceedMemoryMatchRoundCapacityError,
@@ -29,6 +33,13 @@ import { MemoryMatchCard } from './memory-match-card.entity';
 // TODO make this configurable
 const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
 
+@CoscradDataExample({
+    example: {
+        id: buildDummyUuid(2),
+        text: buildMultilingualTextWithSingleItem('test round text'),
+        audio: MultilingualAudio.buildEmpty(),
+    },
+})
 export class MemoryMatchRound {
     @UUID({
         label: 'round ID',
