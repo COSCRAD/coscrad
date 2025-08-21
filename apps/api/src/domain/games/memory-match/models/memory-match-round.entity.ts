@@ -10,6 +10,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { MultilingualAudio } from '../../../models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateId } from '../../../types/AggregateId';
@@ -250,6 +251,24 @@ export class MemoryMatchRound {
     }
 
     validateInvariants(): InternalError[] {
+        const simpleValidationResult = validateSimpleInvariants(
+            Object.getPrototypeOf(this).constructor,
+            this
+        );
+
+        /**
+         * If simple invariant validation fails, the instance is ill-formed,
+         * and we would likely run into null check errors or other unexpected
+         * run-time issues when attempting to validate complex invariants. So
+         * we return early when simple invariant validation fails.
+         *
+         * TODO Share this logic with the base `Aggregate` (root) class or inherit
+         * from that class.
+         */
+        if (simpleValidationResult.length > 0) {
+            return simpleValidationResult;
+        }
+
         const allErrors: InternalError[] = [];
 
         if (this.cards.length > this.size) {
