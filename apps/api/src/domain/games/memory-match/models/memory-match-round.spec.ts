@@ -1,5 +1,8 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { buildTestInstance } from '../../../../test-data/utilities';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import {
@@ -19,11 +22,29 @@ const testMediaItemId = buildDummyUuid(1);
 
 const testRoundId = buildDummyUuid(3);
 
+const testRoundSize = 12;
+
+const dtoForPublishableRound = {
+    id: testRoundId,
+    cardBackImageId: buildDummyUuid(120),
+    cards: Array(testRoundSize).map((_, i) =>
+        buildTestInstance(MemoryMatchCard, {
+            sequenceNumber: i + 1,
+            text: buildMultilingualTextWithSingleItem(`card #${i + 1}`),
+            audioId: buildDummyUuid(101 + i),
+            imageId: buildDummyUuid(201 + i),
+        })
+    ),
+};
+
 describe(`MemoryMatchRound`, () => {
     describe(`addCardBackImage`, () => {
         describe(`when the update is valid`, () => {
             it(`should add the cardback image`, () => {
-                const testRound = new MemoryMatchRound({ id: testRoundId });
+                const testRound = buildTestInstance(MemoryMatchRound, {
+                    id: testRoundId,
+                    cardBackImageId: null,
+                });
 
                 const result = testRound.addCardbackImage(testMediaItemId);
 
@@ -38,9 +59,10 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`the round already has a card back image`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId }).addCardbackImage(
-                        testMediaItemId
-                    ) as MemoryMatchRound;
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: testRoundId,
+                        cardBackImageId: null,
+                    }).addCardbackImage(testMediaItemId) as MemoryMatchRound;
 
                     const secondMediaItemId = buildDummyUuid(5);
 
@@ -62,7 +84,7 @@ describe(`MemoryMatchRound`, () => {
     describe(`addImageForCard`, () => {
         describe(`when the update is valid`, () => {
             it(`should add the image to the card`, () => {
-                const testRound = new MemoryMatchRound({ id: testRoundId });
+                const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                 const sequenceNumber = testRound.addCard() as number;
 
@@ -77,7 +99,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`when the card already has a image`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const sequenceNumber = testRound.addCard() as number;
 
@@ -106,7 +128,7 @@ describe(`MemoryMatchRound`, () => {
                 it(`should return the expected error`, () => {
                     const bogusSequenceNumber = 123;
 
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const result = testRound.addImageForCard(123, testMediaItemId);
 
@@ -125,7 +147,7 @@ describe(`MemoryMatchRound`, () => {
     describe(`addAudioForCard`, () => {
         describe(`when the update is valid`, () => {
             it(`should add the audio`, () => {
-                const testRound = new MemoryMatchRound({ id: testRoundId });
+                const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                 //TODO should we return the entire card?
                 const sequenceNumber = testRound.addCard() as number;
@@ -147,7 +169,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`When there is no card with the given sequence number.`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const bogusSequenceNumber = 1;
 
@@ -168,7 +190,7 @@ describe(`MemoryMatchRound`, () => {
 
             describe(`when the card already has audio`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const sequenceNumber = testRound.addCard() as number;
 
@@ -201,7 +223,7 @@ describe(`MemoryMatchRound`, () => {
     describe(`addTextForCard`, () => {
         describe(`when the update is valid`, () => {
             it(`should add the text`, () => {
-                const testRound = new MemoryMatchRound({ id: testRoundId });
+                const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                 const sequenceNumber = testRound.addCard() as number;
 
@@ -236,7 +258,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`When there is no card with the given sequence number.`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const bogusSequenceNumber = 5;
 
@@ -258,7 +280,7 @@ describe(`MemoryMatchRound`, () => {
 
             describe(`when the card already has text`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const sequenceNumber = testRound.addCard() as number;
 
@@ -307,7 +329,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is valid`, () => {
             describe(`when the round doesn't have any cards`, () => {
                 it(`should add a new card with the expected sequenece number`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const sequenceNumber = testRound.addCard();
 
@@ -319,7 +341,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`when the round already has the maximum number of cards`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({ id: testRoundId });
+                    const testRound = buildTestInstance(MemoryMatchRound, { id: testRoundId });
 
                     const MAX_NUMBER_OF_CARDS = 12;
 
@@ -344,9 +366,7 @@ describe(`MemoryMatchRound`, () => {
     describe(`publish`, () => {
         describe(`when the update is valid`, () => {
             it(`should update the round's publication status`, () => {
-                const testRound = new MemoryMatchRound({ id: testRoundId });
-
-                // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-278] build a complete round before publication
+                const testRound = buildTestInstance(MemoryMatchRound, dtoForPublishableRound);
 
                 const updateResult = testRound.publish();
 
@@ -361,9 +381,10 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`when the memory round is already published`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({
-                        id: testRoundId,
-                    }).publish() as MemoryMatchRound;
+                    const testRound = buildTestInstance(
+                        MemoryMatchRound,
+                        dtoForPublishableRound
+                    ).publish() as MemoryMatchRound;
 
                     const updateResult = testRound.publish();
 
@@ -375,8 +396,21 @@ describe(`MemoryMatchRound`, () => {
             });
 
             describe(`when the memory round does not satisfy publication rules`, () => {
-                // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-278] Ensure that invariant validation is respected here
-                it.todo(`should have test cases`);
+                it(`should have test cases`, () => {
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: testRoundId,
+                        cardBackImageId: null,
+                        cards: [
+                            buildTestInstance(MemoryMatchCard, {
+                                sequenceNumber: 1,
+                            }),
+                        ],
+                    });
+
+                    const result = testRound.publish();
+
+                    expect(result).toBeInstanceOf(InternalError);
+                });
             });
         });
     });
@@ -384,9 +418,10 @@ describe(`MemoryMatchRound`, () => {
     describe(`unpublish`, () => {
         describe(`when the update is valid`, () => {
             it(`should update the publication status`, () => {
-                const testRound = new MemoryMatchRound({
-                    id: testRoundId,
-                }).publish() as MemoryMatchRound;
+                const testRound = buildTestInstance(
+                    MemoryMatchRound,
+                    dtoForPublishableRound
+                ).publish() as MemoryMatchRound;
 
                 const updateResult = testRound.unpublish();
 
@@ -399,7 +434,7 @@ describe(`MemoryMatchRound`, () => {
         describe(`when the update is invalid`, () => {
             describe(`when the round is not published to begin with`, () => {
                 it(`should return the expected error`, () => {
-                    const testRound = new MemoryMatchRound({
+                    const testRound = buildTestInstance(MemoryMatchRound, {
                         id: testRoundId,
                     });
 

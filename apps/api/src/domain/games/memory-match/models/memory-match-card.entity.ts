@@ -25,7 +25,7 @@ export class MemoryMatchCard {
     // TODO `@SequentialId`
     @NonNegativeFiniteNumber({
         label: 'sequence number',
-        description: 'a series of sequence numbers',
+        description: 'uniquely identifies a pair of matching cards',
     })
     sequenceNumber: number;
 

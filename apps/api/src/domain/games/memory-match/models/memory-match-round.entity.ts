@@ -268,6 +268,13 @@ export class MemoryMatchRound {
 
         this.isPublished = true;
 
+        // Can't we just call validate invariants? Can we just wrap this in?
+        const publicationStatusErrors = this.validatePublicationStatus();
+
+        if (publicationStatusErrors.length > 0) {
+            return new MemoryRoundIsNotReadyForPublicationError(this.id, publicationStatusErrors);
+        }
+
         return this;
     }
 
