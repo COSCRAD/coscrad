@@ -24,6 +24,7 @@ import {
 } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { IPhotographQueryRepository } from '../../photograph/queries';
 import { ContributionSummary } from '../../user-management';
 import { AudioCandidatesForTerm, ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
@@ -38,6 +39,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         // AUDIO_ITEM_QUERY_REPOSITORY?
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         private readonly audioItemQueryRepository: IAudioItemQueryRepository,
+        private readonly photgraphQueryRepository: IPhotographQueryRepository,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         this.database = new ArangoDatabaseForCollection(
@@ -236,6 +238,31 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             ],
             ['term__VIEWS', 'audioItem__VIEWS', 'vocabularyList__VIEWS']
         );
+    }
+
+    async addPhotograph(id: AggregateId, photographId: AggregateId) {
+        const query = `
+        FOR term IN @@collectionName
+        FILTER term._key == @id
+        FOR p IN photograph__VIEWS
+        FILTER p._key == @photographId
+        UPDATE term WITH {
+            mediaItemId: p.mediaItemIdForPhotograph
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id,
+            photographId,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
+        });
+
+        await cursor.all();
     }
 
     // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array

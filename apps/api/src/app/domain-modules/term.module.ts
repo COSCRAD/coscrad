@@ -4,6 +4,7 @@ import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
 import { EventModule } from '../../domain/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { ArangoPhotographQueryRepository } from '../../domain/models/photograph/repositories';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -14,6 +15,7 @@ import {
 } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
 import { PhotographAddedForTerm } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event';
+import { PhotographAddedForTermEventHandler } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event-handler';
 import { VideoAddedForTerm } from '../../domain/models/term/commands/add-video-for-term/video-added-for-term.event';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
@@ -57,11 +59,13 @@ import { TermCommandsModule } from './term.commands.module';
             provide: TERM_QUERY_REPOSITORY_TOKEN,
             useFactory: (
                 arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository
+                audioItemQueryRepository: ArangoAudioItemQueryRepository,
+                photographQueryRepository: ArangoPhotographQueryRepository
             ) =>
                 new ArangoTermQueryRepository(
                     arangoConnectionProvider,
                     audioItemQueryRepository,
+                    photographQueryRepository,
                     new ConsoleCoscradCliLogger()
                 ),
             inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
@@ -89,6 +93,7 @@ import { TermCommandsModule } from './term.commands.module';
         PromptTermCreatedEventHandler,
         TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
+        PhotographAddedForTermEventHandler,
         LiteralTranslationOfTermProvidedEventHandler,
     ],
     exports: [TermQueryService],

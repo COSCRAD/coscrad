@@ -146,9 +146,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     connections: ConnectionRecordForResourceViewModel[];
     // end TODO extend base
-
+    // TODO rename this to mediaItemId for audio
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
+
+    // TODO update the api interfaces
+    @ReferenceTo(AggregateType.mediaItem)
+    mediaItemIdForPhotograph?: string;
 
     @NestedDataType(VocabularyListRecordForTerm, {
         label: 'vocabulary lists including this term',
@@ -169,6 +173,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         const {
             actions,
             mediaItemId,
+            mediaItemIdForPhotograph,
             vocabularyLists,
             tokens,
             possibleAudioFilenames: possibleAudioFilenames,
@@ -258,6 +263,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         if (!isNullOrUndefined(mediaItemId)) {
             this.mediaItemId = mediaItemId;
+        }
+
+        if (!isNullOrUndefined(mediaItemIdForPhotograph)) {
+            this.mediaItemIdForPhotograph = mediaItemIdForPhotograph;
         }
 
         this.actions = actions;

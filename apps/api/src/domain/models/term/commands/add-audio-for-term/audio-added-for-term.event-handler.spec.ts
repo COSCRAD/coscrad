@@ -20,6 +20,10 @@ import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
 } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import {
+    IPhotographQueryRepository,
+    PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
+} from '../../../photograph/queries';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from '../create-term';
@@ -81,6 +85,8 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
     let audioRepository: IAudioItemQueryRepository;
 
+    let photographRepository: IPhotographQueryRepository;
+
     let databaseProvider: ArangoDatabaseProvider;
 
     let app: INestApplication;
@@ -112,9 +118,12 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
         audioRepository = app.get(AUDIO_QUERY_REPOSITORY_TOKEN);
 
+        photographRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
+
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
             audioRepository,
+            photographRepository,
             new ConsoleCoscradCliLogger()
         );
 
