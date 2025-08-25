@@ -88,6 +88,7 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('bulk_import_jobs');
 
+        // TODO make a jira story for this
         /**
          * TODO[https://www.pivotaltracker.com/story/show/187960041]
          * Discover view collections dynamically.
@@ -109,6 +110,8 @@ export class ArangoConnectionProvider {
         await this.createCollectionIfNotExists('digitalText__VIEWS');
 
         await this.createCollectionIfNotExists('tag__VIEWS');
+
+        await this.createCollectionIfNotExists('memory_match_rounds');
 
         this.isInitialized = true;
     }
