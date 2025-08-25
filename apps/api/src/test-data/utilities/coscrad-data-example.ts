@@ -37,7 +37,9 @@ export const buildTestInstance = <T = unknown>(
 
     if (!isFromDto(target)) {
         // TODO check if it has an empty constructor?
-        return plainToClass(target, dto);
+        const instance = plainToClass(target, dto);
+
+        return instance;
 
         // throw new InternalError(
         //     `In order to build a test instance of: ${

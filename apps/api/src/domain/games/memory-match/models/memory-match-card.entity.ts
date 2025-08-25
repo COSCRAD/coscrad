@@ -1,48 +1,63 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { UUID } from '@coscrad/data-types';
+import { NestedDataType, NonNegativeFiniteNumber, UUID } from '@coscrad/data-types';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     MissingAudioForMemoryMatchCardError,
     MissingImageForMemoryMatchCardError,
 } from '../errors';
 
+@CoscradDataExample<MemoryMatchCard>({
+    example: {
+        sequenceNumber: 1,
+        imageId: buildDummyUuid(1),
+        audioId: buildDummyUuid(2),
+        // you must add text if needed
+    },
+})
 export class MemoryMatchCard {
-    @UUID({
+    // TODO `@SequentialId`
+    @NonNegativeFiniteNumber({
         label: 'sequence number',
         description: 'a series of sequence numbers',
     })
     sequenceNumber: number;
 
     @UUID({
-        label: 'image iD',
-        description: 'an ID for the image',
+        label: 'image ID',
+        description: 'system reference to the image for this memory match card',
+        isOptional: true,
     })
     imageId?: AggregateId;
 
     @UUID({
-        label: 'audio iD',
-        description: 'an ID for the audio',
+        label: 'audio ID',
+        description: 'system reference to the audio for this memory match card',
+        isOptional: true,
     })
     audioId?: AggregateId;
 
-    @UUID({
+    @NestedDataType(MultilingualText, {
         label: 'text',
-        description: 'the text',
+        description: 'text to appear on the card',
+        isOptional: true,
     })
     text?: MultilingualText; // build empty by default ?
     // sources: ResourceCompositeIdentifer[]
 
-    constructor({
-        sequenceNumber,
-        imageId,
-        audioId,
-        text: textDto,
-    }: DeepPartial<DTO<MemoryMatchCard>>) {
+    constructor(dto: DeepPartial<DTO<MemoryMatchCard>>) {
+        if (!dto) {
+            return;
+        }
+
+        const { sequenceNumber, imageId, audioId, text: textDto } = dto;
+
         this.sequenceNumber = sequenceNumber;
 
         this.imageId = imageId;
@@ -100,5 +115,9 @@ export class MemoryMatchCard {
                 }),
             ],
         });
+    }
+
+    public static fromDto(dto: DTO<MemoryMatchCard>) {
+        return new MemoryMatchCard(dto);
     }
 }

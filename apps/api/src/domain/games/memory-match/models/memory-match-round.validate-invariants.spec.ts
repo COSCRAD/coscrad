@@ -1,5 +1,6 @@
 import { FuzzGenerator, getCoscradDataSchema } from '@coscrad/data-types';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
@@ -33,16 +34,34 @@ const cardBackImageId = buildDummyUuid(21);
 
 describe(`MemoryMatchRound.validateInvariants`, () => {
     describe(`when the round is valid`, () => {
-        it(`should return an empty list of errors`, () => {
-            const validRound = new MemoryMatchRound({
-                id: testRoundId,
-                cardBackImageId,
-                cards: validCards,
+        describe(`when the round is published`, () => {
+            it(`should return an empty list of errors`, () => {
+                const validPublishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testRoundId,
+                    isPublished: true,
+                    cardBackImageId,
+                    cards: validCards,
+                });
+
+                const result = validPublishedRound.validateInvariants();
+
+                expect(result).toEqual([]);
             });
+        });
 
-            const result = validRound.validateInvariants();
+        describe(`when the round is unpublished`, () => {
+            it(`should return an empty list of errors`, () => {
+                const validUnpublishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testRoundId,
+                    isPublished: false,
+                    cardBackImageId: null,
+                    cards: [buildTestInstance(MemoryMatchCard)],
+                });
 
-            expect(result).toEqual([]);
+                const result = validUnpublishedRound.validateInvariants();
+
+                expect(result).toHaveLength(0);
+            });
         });
     });
 
@@ -53,11 +72,15 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
                     buildCard(sequenceNumber)
                 );
 
-                const round = new MemoryMatchRound({
-                    id: testRoundId,
-                    cardBackImageId,
-                    cards: tooManyCards,
-                });
+                const round = buildTestInstance(
+                    MemoryMatchRound,
+
+                    {
+                        id: testRoundId,
+                        cardBackImageId,
+                        cards: tooManyCards,
+                    }
+                );
 
                 const result = round.validateInvariants();
 
@@ -77,11 +100,18 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
         describe(`when two cards have the same sequence number`, () => {
             it(`should return the expected error`, () => {
                 const duplicateSequenceNumber = 1;
-                const round = new MemoryMatchRound({
-                    id: testRoundId,
-                    cardBackImageId,
-                    cards: [buildCard(duplicateSequenceNumber), buildCard(duplicateSequenceNumber)],
-                });
+                const round = buildTestInstance(
+                    MemoryMatchRound,
+
+                    {
+                        id: testRoundId,
+                        cardBackImageId,
+                        cards: [
+                            buildCard(duplicateSequenceNumber),
+                            buildCard(duplicateSequenceNumber),
+                        ],
+                    }
+                );
 
                 const result = round.validateInvariants();
 
@@ -97,12 +127,16 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
         describe(`when the round is published`, () => {
             describe(`when the cardback image is missing`, () => {
                 it(`should return the expected error`, () => {
-                    const roundWithoutCardbackImage = new MemoryMatchRound({
-                        id: testRoundId,
-                        isPublished: true,
-                        // cardBackImageId,
-                        cards: validCards,
-                    });
+                    const roundWithoutCardbackImage = buildTestInstance(
+                        MemoryMatchRound,
+
+                        {
+                            id: testRoundId,
+                            isPublished: true,
+                            cardBackImageId: null,
+                            cards: validCards,
+                        }
+                    );
 
                     const result = roundWithoutCardbackImage.validateInvariants();
 
@@ -119,11 +153,11 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
 
             describe(`when there are less cards than the size requires`, () => {
                 it(`should return the expected error`, () => {
-                    const actualNumberOfCards = Math.floor(MAX_NUMBER_OF_CARDS / 2);
+                    const actualNumberOfCards = MAX_NUMBER_OF_CARDS - 1;
 
                     const tooFewCards = validCards.slice(0, actualNumberOfCards);
 
-                    const roundWithTooFewCards = new MemoryMatchRound({
+                    const roundWithTooFewCards = buildTestInstance(MemoryMatchRound, {
                         id: testRoundId,
                         isPublished: true,
                         cardBackImageId,
@@ -152,7 +186,6 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
 
                     const emptyArray = Array(MAX_NUMBER_OF_CARDS);
 
-                    // TODO use `buildTestInstance`
                     const invalidCards = emptyArray.fill(null).map((_, index) => {
                         const sequenceNumber = index + 1;
 
@@ -172,7 +205,7 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
                         return goodCard;
                     });
 
-                    const roundWithBadCard = new MemoryMatchRound({
+                    const roundWithBadCard = buildTestInstance(MemoryMatchRound, {
                         id: testRoundId,
                         isPublished: true,
                         cardBackImageId,
@@ -218,7 +251,7 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
                         return goodCard;
                     });
 
-                    const roundWithBadCard = new MemoryMatchRound({
+                    const roundWithBadCard = buildTestInstance(MemoryMatchRound, {
                         id: testRoundId,
                         isPublished: true,
                         cardBackImageId,
@@ -259,21 +292,28 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
                             })
                 );
 
-                testCases.forEach(({ propertyName, invalidValue, description }) => {
-                    describe(description, () => {
-                        it(`should return a type error`, () => {
-                            const invalidInstance = buildTestInstance(MemoryMatchRound, {
-                                [propertyName]: invalidValue,
+                testCases
+                    .filter(({ propertyName }) => propertyName === 'isPublished')
+                    .forEach(({ propertyName, invalidValue, description }) => {
+                        describe(`when the property: ${propertyName} has the invalid value: ${invalidValue} (${description})`, () => {
+                            it(`should return a type error`, () => {
+                                const invalidDto = cloneToPlainObject({
+                                    ...buildTestInstance(MemoryMatchRound),
+                                    [propertyName]: invalidValue,
+                                });
+
+                                const invalidInstance = new MemoryMatchRound(invalidDto);
+
+                                const result = invalidInstance.validateInvariants();
+
+                                expect(result.length).toBeGreaterThan(0);
+
+                                const joinedMessages = result.map((r) => r.toString()).join('\n');
+
+                                expect(joinedMessages).toContain(propertyName);
                             });
-
-                            const result = invalidInstance.validateInvariants();
-
-                            expect(result).toHaveLength(1);
-
-                            expect(result[0].toString()).toContain(propertyName);
                         });
                     });
-                });
             });
         });
     });

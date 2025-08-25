@@ -1,6 +1,11 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { UUID } from '@coscrad/data-types';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import {
+    BooleanDataType,
+    NestedDataType,
+    NonNegativeFiniteNumber,
+    UUID,
+} from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -56,22 +61,25 @@ export class MemoryMatchRound {
     @UUID({
         label: 'the back image for a card',
         description: 'A image for the back of a card',
+        isOptional: true,
     })
-    cardBackImageId: AggregateId;
+    cardBackImageId?: AggregateId;
 
-    @UUID({
+    @NestedDataType(MemoryMatchCard, {
         label: 'cards identifier',
         description: 'Identifier for the cards',
+        isArray: true,
+        isOptional: true, // i.e., can be empty
     })
     cards: MemoryMatchCard[];
 
-    @UUID({
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'A name for the card',
     })
     name: MultilingualText;
 
-    @UUID({
+    @NestedDataType(MultilingualText, {
         label: 'description',
         description: 'The descripton',
     })
@@ -79,39 +87,77 @@ export class MemoryMatchRound {
 
     @UUID({
         label: 'compiled by',
-        description: 'Reference to who compiled this',
+        description: 'Reference to the contributors who compiled this memory match round',
+        isArray: true,
+        isOptional: true, // i.e., can be empty
     })
     compiledBy: AggregateId[];
 
     @UUID({
         label: 'contributors',
-        description: 'A reference to the contributors',
+        description:
+            'A reference to the contributors who provided audio, photographs, or text for this round',
+        isArray: true,
+        isOptional: true, // i.e., can be empty
     })
+    // TODO should this be `contributions` instead?
     contributors: AggregateId[];
 
-    @UUID({
+    // TODO This should be a counting number
+    @NonNegativeFiniteNumber({
         label: 'size',
         description: 'The size',
     })
     size: number = NUMBER_OF_PAIRS_IN_A_ROUND;
 
-    isPublished = false;
+    @BooleanDataType({
+        label: 'is published',
+        description: 'Is this memory match round published?',
+    })
+    isPublished: boolean;
 
     constructor(dto: DeepPartial<DTO<MemoryMatchRound>>) {
         if (!dto) return;
 
-        const { id, cards, isPublished, cardBackImageId } = dto;
+        const {
+            id,
+            cards,
+            isPublished,
+            cardBackImageId,
+            contributors,
+            compiledBy,
+            name,
+            description,
+        } = dto;
 
         this.id = id;
 
-        this.isPublished = isPublished;
+        if (isBoolean(isPublished)) {
+            this.isPublished = isPublished;
+        }
 
         this.cardBackImageId = cardBackImageId;
 
         if (Array.isArray(cards)) {
             this.cards = cards.map((c) => new MemoryMatchCard(c));
-        } else {
-            this.cards = [];
+        }
+
+        if (Array.isArray(contributors)) {
+            // shallow clone
+            this.contributors = contributors.map((c) => c);
+        }
+
+        if (Array.isArray(compiledBy)) {
+            // shallow clone
+            this.compiledBy = compiledBy.map((c) => c);
+        }
+
+        if (isNonEmptyObject(name)) {
+            this.name = new MultilingualText(name as DTO<MultilingualText>);
+        }
+
+        if (isNonEmptyObject(description)) {
+            this.description = new MultilingualText(description as DTO<MultilingualText>);
         }
     }
 
@@ -283,10 +329,7 @@ export class MemoryMatchRound {
         }
 
         const duplicates = this.cards.reduce(
-            (
-                acc: { seen: Set<number>; duplicates: Set<number> },
-                { sequenceNumber: nextSequenceNumber }
-            ) => {
+            (acc, { sequenceNumber: nextSequenceNumber }) => {
                 if (acc.seen.has(nextSequenceNumber)) {
                     acc.duplicates.add(nextSequenceNumber);
 
@@ -310,28 +353,7 @@ export class MemoryMatchRound {
         duplicateSequenceNumberErrors.forEach((e) => allErrors.push(e));
 
         if (this.isPublished) {
-            const publicationStatusErrors = [];
-
-            // A published round must have an image for the back of its cards
-            if (isNullOrUndefined(this.cardBackImageId)) {
-                publicationStatusErrors.push(new MissingCardbackErrorForMemoryMatchRound());
-            }
-
-            if (this.count() < this.size) {
-                publicationStatusErrors.push(
-                    new InsufficientNumberOfCardsForPublicationError(this.size, this.count())
-                );
-            }
-
-            const cardPublicationErrors = this.cards.flatMap((c) => {
-                const errorsForCard = c.validatePubicationStatus();
-
-                return errorsForCard;
-            });
-
-            cardPublicationErrors.forEach((e) => {
-                publicationStatusErrors.push(e);
-            });
+            const publicationStatusErrors = this.validatePublicationStatus();
 
             if (publicationStatusErrors.length > 0) {
                 allErrors.push(
@@ -341,5 +363,36 @@ export class MemoryMatchRound {
         }
 
         return allErrors;
+    }
+
+    private validatePublicationStatus(): InternalError[] {
+        const publicationStatusErrors = [];
+
+        // A published round must have an image for the back of its cards
+        if (isNullOrUndefined(this.cardBackImageId)) {
+            publicationStatusErrors.push(new MissingCardbackErrorForMemoryMatchRound());
+        }
+
+        if (this.count() < this.size) {
+            publicationStatusErrors.push(
+                new InsufficientNumberOfCardsForPublicationError(this.size, this.count())
+            );
+        }
+
+        const cardPublicationErrors = this.cards.flatMap((c) => {
+            const errorsForCard = c.validatePubicationStatus();
+
+            return errorsForCard;
+        });
+
+        cardPublicationErrors.forEach((e) => {
+            publicationStatusErrors.push(e);
+        });
+
+        return publicationStatusErrors;
+    }
+
+    public static fromDto(dto: DTO<MemoryMatchRound>) {
+        return new MemoryMatchRound(dto);
     }
 }
