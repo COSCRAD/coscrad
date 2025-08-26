@@ -14,6 +14,17 @@ web of knowledge will "come along for the ride".
 -   feat: introduce ADD_VIDEO_FOR_TERM (#758)
 -   feat: introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
 
+### Audio Discovery
+
+In case a term is to be linked with an audio item whose name originates from a
+sequential ID such as "123", we now return only exact matches. In the example given,
+this means "123" will no longer match an audio item with the name "12344". This
+improves performance and minimizes false positives.
+
+#### Relevant PRs
+
+-   perf: optimize audio discovery (#744)
+
 ## v0.1.0.beta1
 
 ### Literal translation of terms

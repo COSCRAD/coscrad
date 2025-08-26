@@ -102,63 +102,129 @@ describe(`when querying terms`, () => {
 
     describe(`to discover audio items for unmatched terms`, () => {
         describe(`when no terms have audio, but all have possible audio filenames`, () => {
-            const audioItemSequentialIds = [1, 2, 3, 4, 5];
+            describe(`when the possible filenames are not text representations of sequence numbers`, () => {
+                const audioItemSequentialIds = [1, 2, 3, 4, 5];
 
-            const termSequentialIds = [11, 12, 13, 14, 15];
+                const termSequentialIds = [11, 12, 13, 14, 15];
 
-            const audioItems = audioItemSequentialIds.map((sequentialId) =>
-                buildTestInstance(EventSourcedAudioItemViewModel, {
-                    id: buildDummyUuid(sequentialId),
-                    name: buildMultilingualTextWithSingleItem(`audio item #${sequentialId}`),
-                })
-            );
+                const audioItems = audioItemSequentialIds.map((sequentialId) =>
+                    buildTestInstance(EventSourcedAudioItemViewModel, {
+                        id: buildDummyUuid(sequentialId),
+                        name: buildMultilingualTextWithSingleItem(`audio item #${sequentialId}`),
+                    })
+                );
 
-            const terms = termSequentialIds.map((sequentialId, index) =>
-                buildTestInstance(TermViewModel, {
-                    id: buildDummyUuid(sequentialId),
-                    name: buildMultilingualTextWithSingleItem(`term #${sequentialId}`),
-                    possibleAudioFilenames: [audioItems[index].name.getOriginalTextItem().text],
-                })
-            );
+                const terms = termSequentialIds.map((sequentialId, index) =>
+                    buildTestInstance(TermViewModel, {
+                        id: buildDummyUuid(sequentialId),
+                        name: buildMultilingualTextWithSingleItem(`term #${sequentialId}`),
+                        possibleAudioFilenames: [audioItems[index].name.getOriginalTextItem().text],
+                    })
+                );
 
-            beforeEach(async () => {
-                await termQueryRepository.createMany(terms);
+                beforeEach(async () => {
+                    await termQueryRepository.createMany(terms);
 
-                await audioQueryRepository.createMany(audioItems);
-            });
-
-            it(`should return the expected result`, async () => {
-                const result = await termQueryService.discoverAudio({
-                    shouldPublishTerms: true,
-                    languageCodeForAudio,
+                    await audioQueryRepository.createMany(audioItems);
                 });
 
-                expect(result.byTerm).toHaveLength(audioItems.length);
-
-                result.byTerm
-                    .flatMap(({ importOptions }) => importOptions.map(({ actions }) => actions))
-                    .forEach((commands, index) => {
-                        // add audio for term, publish audio
-                        expect(commands).toHaveLength(2);
-
-                        const target = commands[0];
-
-                        expect(target.type).toBe('ADD_AUDIO_FOR_TERM');
-
-                        const {
-                            languageCode: foundLanguageCode,
-                            audioItemId: foundAudioItemId,
-                            aggregateCompositeIdentifier: { id: foundTermId },
-                        } = target.payload as AddAudioForTerm;
-
-                        expect(foundLanguageCode).toBe(languageCodeForAudio);
-
-                        expect(foundAudioItemId).toBe(audioItems[index].id);
-
-                        expect(foundTermId).toBe(terms[index].id);
+                it(`should return the expected result`, async () => {
+                    const result = await termQueryService.discoverAudio({
+                        shouldPublishTerms: true,
+                        languageCodeForAudio,
                     });
 
-                expect(result.bulkCommandStream).toHaveLength(2 * terms.length);
+                    expect(result.byTerm).toHaveLength(audioItems.length);
+
+                    result.byTerm
+                        .flatMap(({ importOptions }) => importOptions.map(({ actions }) => actions))
+                        .forEach((commands, index) => {
+                            // add audio for term, publish audio
+                            expect(commands).toHaveLength(2);
+
+                            const target = commands[0];
+
+                            expect(target.type).toBe('ADD_AUDIO_FOR_TERM');
+
+                            const {
+                                languageCode: foundLanguageCode,
+                                audioItemId: foundAudioItemId,
+                                aggregateCompositeIdentifier: { id: foundTermId },
+                            } = target.payload as AddAudioForTerm;
+
+                            expect(foundLanguageCode).toBe(languageCodeForAudio);
+
+                            expect(foundAudioItemId).toBe(audioItems[index].id);
+
+                            expect(foundTermId).toBe(terms[index].id);
+                        });
+
+                    expect(result.bulkCommandStream).toHaveLength(2 * terms.length);
+                });
+            });
+
+            describe(`when the possible filenames are text representations of sequence numbers (e.g. "123")`, () => {
+                const targetTermId = buildDummyUuid(1);
+
+                const targetSlugSequenceNumberForAudio = 11;
+
+                /**
+                 * Searching for `11` should not find `111`, for example. This is
+                 * because false positives overwhelm the query when searching for
+                 * sequential IDs.
+                 */
+                const audioItemSequentialIds = [targetSlugSequenceNumberForAudio, 111, 1111, 11111];
+
+                const audioItems = audioItemSequentialIds.map((sequentialId) =>
+                    buildTestInstance(EventSourcedAudioItemViewModel, {
+                        id: buildDummyUuid(sequentialId),
+                        // this is just a sequential ID
+                        name: buildMultilingualTextWithSingleItem(`${sequentialId}`),
+                    })
+                );
+
+                // TODO share common setup with other test cases
+                const termToFind = buildTestInstance(TermViewModel, {
+                    id: targetTermId,
+                    name: buildMultilingualTextWithSingleItem(
+                        `test term that uses audio: ${targetSlugSequenceNumberForAudio}`
+                    ),
+                    // here we use the sequence number (converted to a string) as an audio candidate
+                    possibleAudioFilenames: [`${targetSlugSequenceNumberForAudio}`],
+                });
+
+                beforeEach(async () => {
+                    await termQueryRepository.create(termToFind);
+
+                    await audioQueryRepository.createMany(audioItems);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const result = await termQueryService.discoverAudio({
+                        shouldPublishTerms: true,
+                        languageCodeForAudio,
+                    });
+
+                    expect(result.byTerm).toHaveLength(1);
+
+                    const { term, importOptions } = result.byTerm[0];
+
+                    expect(term.id).toBe(targetTermId);
+
+                    /**
+                     * This is the crucial part of the test. We created one
+                     * term that should be linked to audio named "11" and we want
+                     * to ensure that "111" and so on are not also returned
+                     * due to partial matches.
+                     */
+                    expect(importOptions).toHaveLength(1);
+
+                    const { name: foundAudioItemName } = importOptions[0].audioItem;
+
+                    expect(foundAudioItemName.getOriginalTextItem().text).toBe(
+                        `${targetSlugSequenceNumberForAudio}`
+                    );
+                });
             });
         });
 

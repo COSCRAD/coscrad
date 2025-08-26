@@ -375,8 +375,16 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     async discoverAudio(): Promise<AudioCandidatesForTerm[]> {
         /**
          * TODO
-         * - filter out terms with no known `possibleAudioFilenames`
-         * - include pagination
+         * - include pagination **tag with story now
+         *
+         * Note that in the query below it is important to check if the possible audio filename
+         * parses to a number. In that case, we want an exact match, because there are
+         * likely to be many matches in this case. E.g., "12" matches "123", "12293" and so on. Returning
+         * all such matches makes the query uselessly slow.
+         *
+         * However, when the possible audio filename contains non-numeric characters,
+         * partial matches are the desired behaviour, because it was common to introduce
+         * ad-hoc prefixes and suffixes when naming audio. E.g. "cat" should find "JD_cat_120334".
          */
         const query = `
             FOR t IN term__VIEWS
@@ -384,7 +392,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             LET possibleAudioItems = (
                 FOR a in audioItem__VIEWS
                 FOR pfn in t.possibleAudioFilenames
-                FILTER CONTAINS(a.name.items[0],pfn)
+                FILTER TO_NUMBER(pfn) == 0 ? CONTAINS(a.name.items[0].text,pfn) : a.name.items[0].text == pfn
                 return a
             )
             return { term: t, possibleAudioItems }
