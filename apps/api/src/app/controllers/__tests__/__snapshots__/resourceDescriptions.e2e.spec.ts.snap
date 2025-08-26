@@ -155,6 +155,9 @@ exports[`GET /resources should return the expected result 1`] = `
       "mediaItemId": {
         "referenceTo": "mediaItem",
       },
+      "mediaItemIdForPhotograph": {
+        "referenceTo": "mediaItem",
+      },
       "name": {
         "complexDataType": "NESTED_TYPE",
         "description": "name (text) includes the text as well as any translations for this term",
