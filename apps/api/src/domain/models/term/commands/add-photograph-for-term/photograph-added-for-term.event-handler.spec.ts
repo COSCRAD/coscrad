@@ -14,10 +14,6 @@ import { TermViewModel } from '../../../../../queries/buildViewModelForResource/
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
-import {
     IPhotographQueryRepository,
     PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
 } from '../../../photograph/queries';
@@ -50,8 +46,6 @@ describe(`PhotographAddedForTermEventHandler`, () => {
 
         let photographRepository: IPhotographQueryRepository;
 
-        let audioRepository: IAudioItemQueryRepository;
-
         let databaseProvider: ArangoDatabaseProvider;
 
         let app: INestApplication;
@@ -83,14 +77,10 @@ describe(`PhotographAddedForTermEventHandler`, () => {
 
             photographRepository = new ArangoPhotographQueryRepository(connectionProvider);
 
-            audioRepository = app.get(AUDIO_QUERY_REPOSITORY_TOKEN);
-
             photographRepository = app.get(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN);
 
             testQueryRepository = new ArangoTermQueryRepository(
                 connectionProvider,
-                audioRepository,
-                photographRepository,
                 new ConsoleCoscradCliLogger()
             );
 

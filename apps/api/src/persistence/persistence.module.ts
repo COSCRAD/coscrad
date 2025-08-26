@@ -168,25 +168,15 @@ export class PersistenceModule implements OnApplicationShutdown {
 
         const termQueryRepositoryProvider = {
             provide: TERM_QUERY_REPOSITORY_TOKEN,
-            useFactory: (
-                arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository,
-                photgraphQueryRepository: ArangoPhotographQueryRepository
-            ) => {
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
                 const singleton = new ArangoTermQueryRepository(
                     arangoConnectionProvider,
-                    audioItemQueryRepository,
-                    photgraphQueryRepository,
                     new ConsoleCoscradCliLogger()
                 );
 
                 return singleton;
             },
-            inject: [
-                ArangoConnectionProvider,
-                AUDIO_QUERY_REPOSITORY_TOKEN,
-                PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
-            ],
+            inject: [ArangoConnectionProvider],
         };
 
         const vocabularyListQueryRepository = {

@@ -18,13 +18,9 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
-import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
-import { IPhotographQueryRepository } from '../../photograph/queries';
 import { ContributionSummary } from '../../user-management';
 import { AudioCandidatesForTerm, ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
@@ -38,9 +34,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         arangoConnectionProvider: ArangoConnectionProvider,
         // AUDIO_ITEM_QUERY_REPOSITORY?
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
-        private readonly audioItemQueryRepository: IAudioItemQueryRepository,
-        private readonly photgraphQueryRepository: IPhotographQueryRepository,
-        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+        @Inject(COSCRAD_LOGGER_TOKEN)
+        private readonly logger: ICoscradLogger
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),

@@ -641,16 +641,12 @@ export default async (
             },
             {
                 provide: TERM_QUERY_REPOSITORY_TOKEN,
-                useFactory: (
-                    arangoConnectionProvider: ArangoConnectionProvider,
-                    audioItemQueryRepository: IAudioItemQueryRepository
-                ) =>
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                     new ArangoTermQueryRepository(
                         arangoConnectionProvider,
-                        audioItemQueryRepository,
                         new ConsoleCoscradCliLogger()
                     ),
-                inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+                inject: [ArangoConnectionProvider],
             },
             {
                 provide: VIDEO_QUERY_REPOSITORY_TOKEN,

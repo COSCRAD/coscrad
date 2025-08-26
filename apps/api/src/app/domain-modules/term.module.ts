@@ -4,7 +4,6 @@ import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
 import { EventModule } from '../../domain/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
-import { ArangoPhotographQueryRepository } from '../../domain/models/photograph/repositories';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -57,18 +56,12 @@ import { TermCommandsModule } from './term.commands.module';
         },
         {
             provide: TERM_QUERY_REPOSITORY_TOKEN,
-            useFactory: (
-                arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository,
-                photographQueryRepository: ArangoPhotographQueryRepository
-            ) =>
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                 new ArangoTermQueryRepository(
                     arangoConnectionProvider,
-                    audioItemQueryRepository,
-                    photographQueryRepository,
                     new ConsoleCoscradCliLogger()
                 ),
-            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+            inject: [ArangoConnectionProvider],
         },
         // Data Classes
         ...[

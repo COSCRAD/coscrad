@@ -44,7 +44,6 @@ import buildInstanceFactory from '../../../factories/utilities/buildInstanceFact
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import idEquals from '../../shared/functional/idEquals';
@@ -196,7 +195,6 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
         termQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider),
             new ConsoleCoscradCliLogger()
         );
 
