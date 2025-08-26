@@ -392,7 +392,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             LET possibleAudioItems = (
                 FOR a in audioItem__VIEWS
                 FOR pfn in t.possibleAudioFilenames
-                FILTER TO_NUMBER(pfn) == 0 ? CONTAINS(a.name.items[0],pfn) : a.name.items[0].text == pfn
+                FILTER TO_NUMBER(pfn) == 0 ? CONTAINS(a.name.items[0].text,pfn) : a.name.items[0].text == pfn
                 return a
             )
             return { term: t, possibleAudioItems }
