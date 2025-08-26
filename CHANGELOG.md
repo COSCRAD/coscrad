@@ -21,6 +21,10 @@ sequential ID such as "123", we now return only exact matches. In the example gi
 this means "123" will no longer match an audio item with the name "12344". This
 improves performance and minimizes false positives.
 
+#### Relevant PRs
+
+-   perf: optimize audio discovery (#744)
+
 ## v0.1.0.beta1
 
 ### Literal translation of terms
