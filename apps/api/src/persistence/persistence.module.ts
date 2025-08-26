@@ -299,6 +299,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 digitalTextQueryRepositoryProvider,
                 audioQueryRepositoryProvider,
                 videoQueryRepositoryProvider,
+                photographQueryRepository,
                 termQueryRepositoryProvider,
                 playlistQueryRepository,
                 songQueryRepository,
