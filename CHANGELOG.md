@@ -12,6 +12,7 @@ web of knowledge will "come along for the ride".
 #### Relevant PRs
 
 -   feat: introduce ADD_VIDEO_FOR_TERM (#758)
+-   feat: introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
 
 ## v0.1.0.beta1
 
