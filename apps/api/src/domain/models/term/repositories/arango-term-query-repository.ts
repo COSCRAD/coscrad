@@ -18,10 +18,7 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
-import {
-    AUDIO_QUERY_REPOSITORY_TOKEN,
-    IAudioItemQueryRepository,
-} from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ContributionSummary } from '../../user-management';
@@ -37,8 +34,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         arangoConnectionProvider: ArangoConnectionProvider,
         // AUDIO_ITEM_QUERY_REPOSITORY?
         @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
-        private readonly audioItemQueryRepository: IAudioItemQueryRepository,
-        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+        @Inject(COSCRAD_LOGGER_TOKEN)
+        private readonly logger: ICoscradLogger
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
@@ -236,6 +233,31 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             ],
             ['term__VIEWS', 'audioItem__VIEWS', 'vocabularyList__VIEWS']
         );
+    }
+
+    async addPhotograph(id: AggregateId, photographId: AggregateId) {
+        const query = `
+        FOR term IN @@collectionName
+        FILTER term._key == @id
+        FOR p IN photograph__VIEWS
+        FILTER p._key == @photographId
+        UPDATE term WITH {
+            mediaItemId: p.mediaItemIdForPhotograph
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id,
+            photographId,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
+        });
+
+        await cursor.all();
     }
 
     // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array

@@ -12,7 +12,6 @@ import { TermModule } from '../app/domain-modules/term.module';
 import { UserManagementModule } from '../app/domain-modules/user-management.module';
 import { CoscradEventFactory, EventModule } from '../domain/common';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../domain/models/audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ResourcePublished } from '../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { TermCreated, TermTranslated } from '../domain/models/term/commands';
 import { ArangoTermQueryRepository } from '../domain/models/term/repositories/arango-term-query-repository';
@@ -62,8 +61,6 @@ describe.skip(`CLI Command: **${CLI_COMMAND_NAME}**`, () => {
 
     let termQueryRepository: ArangoTermQueryRepository;
 
-    let audioQueryRepository: ArangoAudioItemQueryRepository;
-
     const mockLogger = buildMockLogger({ isEnabled: true });
 
     beforeAll(async () => {
@@ -101,11 +98,8 @@ describe.skip(`CLI Command: **${CLI_COMMAND_NAME}**`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(arangoConnectionProvider);
 
-        audioQueryRepository = new ArangoAudioItemQueryRepository(arangoConnectionProvider);
-
         termQueryRepository = new ArangoTermQueryRepository(
             arangoConnectionProvider,
-            audioQueryRepository,
             new ConsoleCoscradCliLogger()
         );
 

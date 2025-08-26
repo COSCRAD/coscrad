@@ -14,6 +14,7 @@ import {
 } from '../../domain/models/term/commands';
 import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands/add-audio-for-term/audio-added-for-term.event-handler';
 import { PhotographAddedForTerm } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event';
+import { PhotographAddedForTermEventHandler } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event-handler';
 import { VideoAddedForTerm } from '../../domain/models/term/commands/add-video-for-term/video-added-for-term.event';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
@@ -55,16 +56,12 @@ import { TermCommandsModule } from './term.commands.module';
         },
         {
             provide: TERM_QUERY_REPOSITORY_TOKEN,
-            useFactory: (
-                arangoConnectionProvider: ArangoConnectionProvider,
-                audioItemQueryRepository: ArangoAudioItemQueryRepository
-            ) =>
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
                 new ArangoTermQueryRepository(
                     arangoConnectionProvider,
-                    audioItemQueryRepository,
                     new ConsoleCoscradCliLogger()
                 ),
-            inject: [ArangoConnectionProvider, AUDIO_QUERY_REPOSITORY_TOKEN],
+            inject: [ArangoConnectionProvider],
         },
         // Data Classes
         ...[
@@ -89,6 +86,7 @@ import { TermCommandsModule } from './term.commands.module';
         PromptTermCreatedEventHandler,
         TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
+        PhotographAddedForTermEventHandler,
         LiteralTranslationOfTermProvidedEventHandler,
     ],
     exports: [TermQueryService],

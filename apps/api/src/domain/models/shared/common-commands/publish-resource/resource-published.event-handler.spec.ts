@@ -15,7 +15,6 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { TermCreated } from '../../../term/commands';
 import { ITermQueryRepository } from '../../../term/queries';
 import { ArangoTermQueryRepository } from '../../../term/repositories/arango-term-query-repository';
@@ -83,7 +82,6 @@ describe(`ResourcePublishedEventHandler`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            new ArangoAudioItemQueryRepository(connectionProvider),
             new ConsoleCoscradCliLogger()
         );
 

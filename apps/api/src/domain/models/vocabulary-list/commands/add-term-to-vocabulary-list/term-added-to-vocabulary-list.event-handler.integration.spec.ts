@@ -14,7 +14,6 @@ import { TermViewModel } from '../../../../../queries/buildViewModelForResource/
 import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { TermCreated } from '../../../term/commands';
 import { ITermQueryRepository } from '../../../term/queries';
 import { ArangoTermQueryRepository } from '../../../term/repositories';
@@ -146,11 +145,8 @@ describe(`TermAddedToVocabularyListEventHandler.handle`, () => {
             new ConsoleCoscradCliLogger()
         );
 
-        const audioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
-
         termQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioRepository,
             new ConsoleCoscradCliLogger()
         );
 

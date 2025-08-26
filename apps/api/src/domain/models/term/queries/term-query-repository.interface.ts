@@ -40,6 +40,8 @@ export interface ITermQueryRepository extends IResourceQueryRepository<TermViewM
     // TODO Is it the ID that we want here or the URL?
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 
+    addPhotograph(id: AggregateId, photographId: AggregateId);
+
     indexVocabularyList(id: string, vocabularyListId: string): Promise<void>;
 
     indexVocabularyLists(termIds: string[], vocabularyListId: string): Promise<void>;

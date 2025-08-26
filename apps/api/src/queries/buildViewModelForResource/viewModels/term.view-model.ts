@@ -146,9 +146,18 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     connections: ConnectionRecordForResourceViewModel[];
     // end TODO extend base
-
+    /**
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-300]
+     * We really want to have a full nested view of the multilingual audio,
+     * including one media item id per language. At very least, we should
+     * rename this property `mediaItemIdForAudio`.
+     */
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
+
+    // TODO update the api interfaces
+    @ReferenceTo(AggregateType.mediaItem)
+    mediaItemIdForPhotograph?: string;
 
     @NestedDataType(VocabularyListRecordForTerm, {
         label: 'vocabulary lists including this term',
@@ -169,6 +178,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
         const {
             actions,
             mediaItemId,
+            mediaItemIdForPhotograph,
             vocabularyLists,
             tokens,
             possibleAudioFilenames: possibleAudioFilenames,
@@ -258,6 +268,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         if (!isNullOrUndefined(mediaItemId)) {
             this.mediaItemId = mediaItemId;
+        }
+
+        if (!isNullOrUndefined(mediaItemIdForPhotograph)) {
+            this.mediaItemIdForPhotograph = mediaItemIdForPhotograph;
         }
 
         this.actions = actions;

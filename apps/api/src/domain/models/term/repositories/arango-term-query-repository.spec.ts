@@ -96,7 +96,6 @@ describe(`ArangoTermQueryRepository`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioItemQueryRepository,
             new ConsoleCoscradCliLogger()
         );
 

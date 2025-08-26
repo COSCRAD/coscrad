@@ -14,7 +14,6 @@ import { TermViewModel } from '../../../../../queries/buildViewModelForResource/
 import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../../term/queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from '../../../term/repositories';
 import { IVocabularyListQueryRepository } from '../../queries/vocabulary-list-query-repository.interface';
@@ -91,11 +90,8 @@ describe('IndexEntriesImportedToVocabularyListOnTermViewEventHandler', () => {
             new ConsoleCoscradCliLogger()
         );
 
-        const audioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
-
         termQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioRepository,
             new ConsoleCoscradCliLogger()
         );
 

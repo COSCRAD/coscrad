@@ -19,7 +19,6 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { PromptTermCreated } from './prompt-term-created.event';
@@ -82,7 +81,6 @@ describe(`PromptTermCreatedEventHandler.handle`, () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            app.get(AUDIO_QUERY_REPOSITORY_TOKEN),
             new ConsoleCoscradCliLogger()
         );
     });

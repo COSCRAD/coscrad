@@ -17,7 +17,6 @@ import { buildTestInstance } from '../../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { ITermQueryRepository } from '../../../term/queries';
 import { ArangoTermQueryRepository } from '../../../term/repositories';
 import { IVocabularyListQueryRepository } from '../../queries';
@@ -100,11 +99,8 @@ describe(`IndexTermAddedToVocabularyListEventHandlerOnTermView.handle`, () => {
             new ConsoleCoscradCliLogger()
         );
 
-        const audioRepository = new ArangoAudioItemQueryRepository(connectionProvider);
-
         termQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioRepository,
             new ConsoleCoscradCliLogger()
         );
 

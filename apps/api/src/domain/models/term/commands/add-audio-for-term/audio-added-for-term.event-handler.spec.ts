@@ -114,7 +114,6 @@ describe('AudioAddedForTermEventHandler.handle', () => {
 
         testQueryRepository = new ArangoTermQueryRepository(
             connectionProvider,
-            audioRepository,
             new ConsoleCoscradCliLogger()
         );
 
