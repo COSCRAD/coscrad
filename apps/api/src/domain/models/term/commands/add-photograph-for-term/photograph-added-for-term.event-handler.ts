@@ -1,12 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { ICoscradEventHandler } from '../../../../../domain/common';
-import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../../photograph/queries';
-import { ITermQueryRepository } from '../../queries';
+import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
 import { PhotographAddedForTerm } from './photograph-added-for-term.event';
 
 export class PhotographAddedForTermEventHandler implements ICoscradEventHandler {
     constructor(
-        @Inject(PHOTOGRAPH_QUERY_REPOSITORY_TOKEN) private readonly repository: ITermQueryRepository
+        @Inject(TERM_QUERY_REPOSITORY_TOKEN) private readonly repository: ITermQueryRepository
     ) {}
 
     async handle({

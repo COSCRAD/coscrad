@@ -146,7 +146,12 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     connections: ConnectionRecordForResourceViewModel[];
     // end TODO extend base
-    // TODO rename this to mediaItemId for audio
+    /**
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-300]
+     * We really want to have a full nested view of the multilingual audio,
+     * including one media item id per language. At very least, we should
+     * rename this property `mediaItemIdForAudio`.
+     */
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemId?: string;
 

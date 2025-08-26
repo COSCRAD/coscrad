@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
@@ -54,7 +55,7 @@ describe(`PhotographAddedForTermEventHandler`, () => {
 
         beforeAll(async () => {
             const moduleRef = await Test.createTestingModule({
-                imports: [PersistenceModule.forRootAsync()],
+                imports: [PersistenceModule.forRootAsync(), TermModule],
             })
                 .overrideProvider(ConfigService)
                 .useValue(
@@ -84,9 +85,7 @@ describe(`PhotographAddedForTermEventHandler`, () => {
                 new ConsoleCoscradCliLogger()
             );
 
-            photographAddedForTermEventHandler = new PhotographAddedForTermEventHandler(
-                testQueryRepository
-            );
+            photographAddedForTermEventHandler = app.get(PhotographAddedForTermEventHandler);
         });
 
         afterAll(async () => {
