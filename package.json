@@ -39,6 +39,7 @@
     "private": true,
     "dependencies": {
         "@auth0/auth0-react": "^1.10.1",
+        "@babel/helpers": "7.27.0",
         "@emotion/react": "11.10.5",
         "@emotion/styled": "11.10.5",
         "@fortawesome/fontawesome-svg-core": "^6.6.0",
