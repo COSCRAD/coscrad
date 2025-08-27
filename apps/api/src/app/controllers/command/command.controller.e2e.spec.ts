@@ -124,6 +124,10 @@ describe('The Command Controller', () => {
          */
         commandHandlerService.registerHandler('CREATE_SONG', app.get(CreateSongCommandHandler));
 
+        Object.defineProperty(global, 'performance', {
+            writable: true,
+        });
+
         jest.useFakeTimers(buildFakeTimersConfig());
 
         bulkJobRepo = app.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN);
