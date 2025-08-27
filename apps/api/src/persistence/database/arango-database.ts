@@ -218,8 +218,7 @@ export class ArangoDatabase {
         }
     };
 
-    // TODO rename this method to `count`
-    getCount = async (collectionName: string): Promise<number> => {
+    count = async (collectionName: string): Promise<number> => {
         const query = `
          for t in @@collectionName 
          filter t.__isDeleted == null

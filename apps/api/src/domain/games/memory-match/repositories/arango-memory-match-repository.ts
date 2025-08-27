@@ -5,12 +5,13 @@ import { ArangoDatabase } from '../../../../persistence/database/arango-database
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { IMemoryMatchRepository } from '../memory-match.repository.interface';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
-    private readonly database: ArangoDatabaseForCollection<MemoryMatchRound>;
+    private readonly database: ArangoDatabaseForCollection<DTO<MemoryMatchRound>>;
 
     constructor(arangoConnectionProvider: ArangoConnectionProvider) {
         this.database = new ArangoDatabaseForCollection(
@@ -20,8 +21,7 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
     }
 
     async create(round: MemoryMatchRound): Promise<void> {
-        // TODO should we call toDTO here?
-        await this.database.create(mapEntityDTOToDatabaseDocument(round));
+        await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
     }
 
     async createMany(rounds: MemoryMatchRound[]): Promise<void> {

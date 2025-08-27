@@ -71,6 +71,6 @@ export default class ArangoCategoryRepository implements ICategoryRepository {
     }
 
     async count(): Promise<number> {
-        return await this.#arangoDB.getCount(ArangoCollectionId.categories);
+        return await this.#arangoDB.count(ArangoCollectionId.categories);
     }
 }

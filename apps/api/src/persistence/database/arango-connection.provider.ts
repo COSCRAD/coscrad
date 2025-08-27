@@ -88,9 +88,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('bulk_import_jobs');
 
-        // TODO make a jira story for this
         /**
-         * TODO[https://www.pivotaltracker.com/story/show/187960041]
+         * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-301]
          * Discover view collections dynamically.
          */
         await this.createCollectionIfNotExists('photograph__VIEWS');
