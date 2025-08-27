@@ -9,6 +9,8 @@ import { isBoolean, isNonEmptyObject, isNullOrUndefined } from '@coscrad/validat
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DeepPartial } from '../../../../types/DeepPartial';
 import { DTO } from '../../../../types/DTO';
@@ -401,5 +403,9 @@ export class MemoryMatchRound {
 
     public static fromDto(dto: DTO<MemoryMatchRound>) {
         return new MemoryMatchRound(dto);
+    }
+
+    toDTO(): DTO<MemoryMatchRound> {
+        return cloneToPlainObject(this);
     }
 }

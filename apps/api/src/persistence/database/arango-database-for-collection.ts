@@ -15,6 +15,7 @@ import { InternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
+import { ArangoDatabaseError } from './errors/ArangoDatabaseError';
 import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
 
 /**
@@ -81,7 +82,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }
 
     getCount(): Promise<number> {
-        return this.#arangoDatabase.getCount(this.collectionID);
+        return this.#arangoDatabase.count(this.collectionID);
     }
 
     // Commands (mutate state)
@@ -110,6 +111,23 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                     error?.message ? [new InternalError(error.message)] : []
                 );
             });
+    }
+
+    async softDelete(id: string) {
+        await this.#arangoDatabase.softDelete(id, this.collectionID).catch((error) => {
+            throw new ArangoDatabaseError(
+                `failed to soft delete ${this.collectionID}/${id}`,
+                error
+            );
+        });
+
+        if (this.isDatabaseForView) {
+            this.viewWriteHookSubject.next({
+                data: {
+                    type: this.collectionID,
+                },
+            });
+        }
     }
 
     async delete(id: string) {

@@ -65,7 +65,7 @@ export class ArangoDatabase {
 
         const aqlQuery = `
         FOR doc in @@collectionName
-        FILTER doc._key == @id
+        FILTER doc._key == @id && doc.__isDeleted == null
         return doc
         `;
 
@@ -113,9 +113,11 @@ export class ArangoDatabase {
             ? `
       FOR t IN @@collectionName 
         ${filterQuery}
+        filter t.__isDeleted == null
         return t
       `
             : `FOR t IN @@collectionName 
+                    filter t.__isDeleted == null
       return t
     `;
 
@@ -216,12 +218,24 @@ export class ArangoDatabase {
         }
     };
 
-    // TODO renamme this method to `count`
-    getCount = async (collectionName: string): Promise<number> => {
-        // TODO Use direct count query instead for efficiency
-        const results = await this.fetchMany(collectionName);
+    count = async (collectionName: string): Promise<number> => {
+        const query = `
+         for t in @@collectionName 
+         filter t.__isDeleted == null
+         collect with count into l
+         return l
+    `;
 
-        return isNotFound(results) ? 0 : results.length;
+        const bindVars = {
+            '@collectionName': collectionName,
+        };
+
+        // TODO Use direct count query instead for efficiency
+        const cursor = await this.db.query({ query, bindVars });
+
+        const result = await cursor.all();
+
+        return result[0];
     };
 
     create = async <TEntityDTO>(dto: TEntityDTO, collectionName: string): Promise<void> => {
@@ -375,7 +389,10 @@ export class ArangoDatabase {
             });
     };
 
-    // TODO Add Soft Delete
+    softDelete = async (id: string, collectionName: string) => {
+        // TODO return an error if the document is already deleted
+        await this.update(id, { __isDeleted: true }, collectionName);
+    };
 
     // We only allow hard-deletes for non-aggregate root collections (e.g. migrations)
     delete = async (id: string, collectionName: string): Promise<void> => {
