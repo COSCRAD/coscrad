@@ -69,6 +69,10 @@ describe(`ArangoMemoryMatchRepository`, () => {
         testRepository = new ArangoMemoryMatchRepository(connectionProvider);
     });
 
+    beforeEach(async () => {
+        await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+    });
+
     afterAll(async () => {
         databaseProvider.close();
     });
@@ -77,8 +81,6 @@ describe(`ArangoMemoryMatchRepository`, () => {
         const testRound = testRounds[0];
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
-
             await testRepository.create(testRound);
         });
 
@@ -107,6 +109,58 @@ describe(`ArangoMemoryMatchRepository`, () => {
 
         describe(`when there is no round with the given ID`, () => {
             it.todo(`should have a test`);
+        });
+    });
+
+    describe(`fetchMany`, () => {
+        describe(`when there are some existing rounds`, () => {
+            beforeEach(async () => {
+                await testRepository.createMany(testRounds);
+            });
+
+            it(`should fetch the rounds`, async () => {
+                const result = await testRepository.fetchMany();
+
+                expect(result).toHaveLength(testRounds.length);
+            });
+        });
+    });
+
+    describe(`count`, () => {
+        beforeEach(async () => {
+            await testRepository.createMany(testRounds);
+        });
+        it(`should have a test`, async () => {
+            const result = await testRepository.count();
+
+            expect(result).toBe(testRounds.length);
+        });
+    });
+
+    describe(`delete`, () => {
+        const roundToDelete = testRounds[0];
+
+        beforeEach(async () => {
+            await testRepository.createMany(testRounds);
+        });
+
+        it(`should have a test`, async () => {
+            await testRepository.delete(roundToDelete.id);
+
+            const searchResult = await testRepository.fetchById(roundToDelete.id);
+
+            expect(searchResult).toBe(NotFound);
+
+            const allRounds = await testRepository.fetchMany();
+
+            expect(allRounds).toHaveLength(testRounds.length - 1);
+
+            // make sure the deleted round doesn't come through via fetchMany
+            expect(allRounds.filter((round) => round.id === roundToDelete.id)).toHaveLength(0);
+
+            const count = await testRepository.count();
+
+            expect(count).toBe(testRounds.length - 1);
         });
     });
 });

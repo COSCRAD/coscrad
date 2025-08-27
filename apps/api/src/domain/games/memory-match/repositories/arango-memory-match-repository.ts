@@ -24,12 +24,14 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         await this.database.create(mapEntityDTOToDatabaseDocument(round));
     }
 
-    async createMany(_rounds: MemoryMatchRound[]): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createMany(rounds: MemoryMatchRound[]): Promise<void> {
+        const documents = rounds.map(mapEntityDTOToDatabaseDocument);
+
+        await this.database.createMany(documents);
     }
 
-    async delete(_roundId: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
+    async delete(roundId: AggregateId): Promise<void> {
+        await this.database.delete(roundId);
     }
 
     async fetchById(roundId: AggregateId): Promise<Maybe<MemoryMatchRound>> {
@@ -45,10 +47,18 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
     }
 
     async fetchMany(): Promise<MemoryMatchRound[]> {
-        throw new Error('Method not implemented.');
+        const documents = await this.database.fetchMany();
+
+        return documents.map((doc) => {
+            const dto = mapDatabaseDocumentToAggregateDTO(doc);
+
+            const instance = MemoryMatchRound.fromDto(dto);
+
+            return instance;
+        });
     }
 
     async count(): Promise<number> {
-        throw new Error('Method not implemented.');
+        return this.database.getCount();
     }
 }
