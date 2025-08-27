@@ -112,6 +112,22 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             });
     }
 
+    async softDelete(id: string) {
+        await this.#arangoDatabase.softDelete(id, this.collectionID).catch((error) => {
+            throw new InternalError(`failed to soft delete ${this.collectionID}/${id}`, [
+                new InternalError(error?.message || 'unknown arango error'),
+            ]);
+        });
+
+        if (this.isDatabaseForView) {
+            this.viewWriteHookSubject.next({
+                data: {
+                    type: this.collectionID,
+                },
+            });
+        }
+    }
+
     async delete(id: string) {
         const cursor = await this.#arangoDatabase.delete(id, this.collectionID);
 

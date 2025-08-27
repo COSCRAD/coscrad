@@ -31,7 +31,21 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
     }
 
     async delete(roundId: AggregateId): Promise<void> {
-        await this.database.delete(roundId);
+        /**
+         * Memory match rounds are not event-sourced. Therefore, unlike
+         * resource views, it is crucial to use soft deletes to avoid information
+         * loss. If a memory match round needs to be truly deleted (perhaps sensitive
+         * info was contained in a draft), an admin must delete the corresponding
+         * document in the database manually.
+         *
+         * If we need to recover data from a soft delete, it is available
+         * on a document with flag `__isDeleted: true`.
+         *
+         * In the future, we may want to perform queries on behalf of a user,
+         * in which case the soft deleted records can be returned for admin. But
+         * for now, these are affectively hidden from the system.
+         */
+        await this.database.softDelete(roundId);
     }
 
     async fetchById(roundId: AggregateId): Promise<Maybe<MemoryMatchRound>> {
