@@ -2335,17 +2335,6 @@
     dotenv "~10.0.0"
     semver "7.3.4"
 
-"@nrwl/detox@15.8.7":
-  version "15.8.7"
-  resolved "https://registry.npmjs.org/@nrwl/detox/-/detox-15.8.7.tgz"
-  dependencies:
-    "@nrwl/devkit" "15.8.7"
-    "@nrwl/jest" "15.8.7"
-    "@nrwl/js" "15.8.7"
-    "@nrwl/linter" "15.8.7"
-    "@nrwl/react" "15.8.7"
-    "@nrwl/workspace" "15.8.7"
-
 "@nrwl/devkit@15.8.7":
   version "15.8.7"
   resolved "https://registry.npmjs.org/@nrwl/devkit/-/devkit-15.8.7.tgz"
@@ -5734,7 +5723,7 @@ detect-node@^2.0.4:
   version "2.1.0"
   resolved "https://registry.npmjs.org/detect-node/-/detect-node-2.1.0.tgz"
 
-detox@*, detox@^20.13.5:
+detox@*:
   version "20.13.5"
   resolved "https://registry.npmjs.org/detox/-/detox-20.13.5.tgz"
   dependencies:
