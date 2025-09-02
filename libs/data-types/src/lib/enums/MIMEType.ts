@@ -8,4 +8,4 @@ import { MIMEType } from '@coscrad/api-interfaces';
 export { MIMEType };
 
 export const isMIMEType = (input: unknown): input is MIMEType =>
-    Object.entries(MIMEType).some((mimeType) => mimeType === input);
+    Object.values(MIMEType).some((mimeType) => mimeType === input);
