@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MemoryMatchService } from '../services/memory-match.service';
 
@@ -8,8 +8,8 @@ export class MemoryMatchController {
     constructor(private readonly memoryMatchService: MemoryMatchService) {}
 
     @Get(`/:id`)
-    async fetchById() {
-        throw new Error('not implemented');
+    async fetchById(@Param('id') id: string) {
+        return this.memoryMatchService.fetchById(id);
     }
 
     @Get('')
