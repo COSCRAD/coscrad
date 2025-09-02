@@ -43,12 +43,6 @@ import { MediaItemViewModel } from './media-item.view-model';
 import { CoscradBinaryFileTypeValidator } from './validation-pipes/coscrad-binary-file.validator';
 import path = require('node:path');
 
-// TODO Make this configurable
-
-// const allowedMimeTypeRegExpPattern = `(${Object.values(MIMEType)
-//     .map((s) => s.replace('/', '\\/'))
-//     .join('|')})`;
-
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
 @UseFilters(new InternalErrorFilter(), new CoscradInvalidUserInputFilter())
