@@ -5,24 +5,26 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/libs/validation-constraints",
                 "tsConfig": "libs/validation-constraints/tsconfig.lib.json",
                 "packageJson": "libs/validation-constraints/package.json",
-                "main": "libs/validation-constraints/src/index.ts"
+                "main": "libs/validation-constraints/src/index.ts",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["libs/validation-constraints/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
             "options": {
                 "jestConfig": "libs/validation-constraints/jest.config.ts",

@@ -1,4 +1,4 @@
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { FluxStandardAction as GenericFSA } from '@coscrad/api-interfaces';
 import { ICommand } from './command.interface';
 

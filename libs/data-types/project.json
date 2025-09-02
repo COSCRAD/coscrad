@@ -5,24 +5,26 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/libs/data-types",
                 "main": "libs/data-types/src/index.ts",
                 "tsConfig": "libs/data-types/tsconfig.lib.json",
-                "packageJson": "libs/data-types/package.json"
+                "packageJson": "libs/data-types/package.json",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": ["libs/data-types/**/*.ts"]
             }
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/data-types"],
             "options": {
                 "jestConfig": "libs/data-types/jest.config.ts",

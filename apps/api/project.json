@@ -18,7 +18,7 @@
             }
         },
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/apps/api",
@@ -32,7 +32,9 @@
                             "dtoFilenameSuffix": [".entity.ts", ".view-model.ts"]
                         }
                     }
-                ]
+                ],
+                "compiler": "tsc",
+                "target": "node"
             },
             "configurations": {
                 "production": {
@@ -56,20 +58,20 @@
             }
         },
         "serve": {
-            "executor": "@nrwl/node:node",
+            "executor": "@nx/js:node",
             "options": {
                 "buildTarget": "api:build"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": ["apps/api/**/*.ts"]
             },
             "outputs": ["{options.outputFile}"]
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/apps/api"],
             "options": {
                 "jestConfig": "apps/api/jest.config.ts",

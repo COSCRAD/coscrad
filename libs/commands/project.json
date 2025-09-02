@@ -6,24 +6,26 @@
     "projectType": "library",
     "targets": {
         "build": {
-            "executor": "@nrwl/node:webpack",
+            "executor": "@nx/webpack:webpack",
             "outputs": ["{options.outputPath}"],
             "options": {
                 "outputPath": "dist/libs/commands",
                 "tsConfig": "libs/commands/tsconfig.lib.json",
                 "packageJson": "libs/commands/package.json",
-                "main": "libs/commands/src/index.ts"
+                "main": "libs/commands/src/index.ts",
+                "compiler": "tsc",
+                "target": "node"
             }
         },
         "lint": {
-            "executor": "@nrwl/linter:eslint",
+            "executor": "@nx/linter:eslint",
             "options": {
                 "lintFilePatterns": ["libs/commands/**/*.ts"]
             },
             "outputs": ["{options.outputFile}"]
         },
         "test": {
-            "executor": "@nrwl/jest:jest",
+            "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/commands"],
             "options": {
                 "jestConfig": "libs/commands/jest.config.ts",
