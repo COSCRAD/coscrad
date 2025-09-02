@@ -34,7 +34,8 @@
                     }
                 ],
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "webpackConfig": "apps/api/webpack.config.js"
             },
             "configurations": {
                 "production": {
@@ -64,18 +65,14 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "options": {
-                "lintFilePatterns": ["apps/api/**/*.ts"]
-            },
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/apps/api"],
             "options": {
-                "jestConfig": "apps/api/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "apps/api/jest.config.ts"
             }
         }
     },

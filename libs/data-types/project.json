@@ -13,22 +13,19 @@
                 "tsConfig": "libs/data-types/tsconfig.lib.json",
                 "packageJson": "libs/data-types/package.json",
                 "compiler": "tsc",
-                "target": "node"
+                "target": "node",
+                "webpackConfig": "libs/data-types/webpack.config.js"
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["libs/data-types/**/*.ts"]
-            }
+            "executor": "@nx/eslint:lint",
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/data-types"],
             "options": {
-                "jestConfig": "libs/data-types/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "libs/data-types/jest.config.ts"
             }
         }
     },

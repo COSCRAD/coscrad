@@ -1,16 +1,6 @@
 {
-    "npmScope": "coscrad",
     "affected": {
         "defaultBase": "main"
-    },
-    "tasksRunnerOptions": {
-        "default": {
-            "runner": "nx/tasks-runners/default",
-            "options": {
-                "cacheableOperations": ["build", "lint", "test", "e2e", "component-test"],
-                "parallel": 3
-            }
-        }
     },
     "generators": {
         "@nx/react": {
@@ -33,19 +23,33 @@
     "targetDefaults": {
         "build": {
             "dependsOn": ["^build"],
-            "inputs": ["production", "^production"]
+            "inputs": ["production", "^production"],
+            "cache": true
         },
         "e2e": {
-            "inputs": ["default", "^production"]
-        },
-        "test": {
-            "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"]
-        },
-        "lint": {
-            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+            "inputs": ["default", "^production"],
+            "cache": true
         },
         "component-test": {
-            "inputs": ["default", "^production"]
+            "inputs": ["default", "^production"],
+            "cache": true
+        },
+        "@nx/jest:jest": {
+            "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+            "cache": true,
+            "options": {
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "@nx/eslint:lint": {
+            "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+            "cache": true
         }
     },
     "namedInputs": {
@@ -62,5 +66,6 @@
             "!{projectRoot}/cypress.config.[jt]s",
             "!{projectRoot}/src/test-setup.[jt]s"
         ]
-    }
+    },
+    "parallel": 3
 }

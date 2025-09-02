@@ -26,18 +26,14 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": ["libs/media-player/**/*.{ts,tsx,js,jsx}"]
-            }
+            "executor": "@nx/eslint:lint",
+            "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nx/jest:jest",
             "outputs": ["{workspaceRoot}/coverage/libs/media-player"],
             "options": {
-                "jestConfig": "libs/media-player/jest.config.ts",
-                "passWithNoTests": true
+                "jestConfig": "libs/media-player/jest.config.ts"
             }
         },
         "component-test": {
