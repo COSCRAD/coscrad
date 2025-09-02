@@ -2,7 +2,6 @@ import { IDetailQueryResult, MIMEType } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import {
     Controller,
-    FileTypeValidator,
     Get,
     Param,
     ParseFilePipe,
@@ -41,9 +40,8 @@ import { MultipleMediaFilesUploadedSuccessResponse } from '../entities/multiple-
 import { SuccessfulMediaUploadRecord } from '../entities/successful-media-upload-record';
 import { MediaItemQueryService } from './media-item-query.service';
 import { MediaItemViewModel } from './media-item.view-model';
+import { CoscradBinaryFileTypeValidator } from './validation-pipes/coscrad-binary-file.validator';
 import path = require('node:path');
-
-// TODO Make this configurable
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.mediaItem))
@@ -185,12 +183,8 @@ export class MediaItemController {
         @UploadedFiles(
             new ParseFilePipe({
                 validators: [
-                    new FileTypeValidator({
-                        // This allows all MIME Types registered within COSCRAD
-                        fileType: new RegExp(Object.values(MIMEType).join('|'), 'i'),
-                    }),
                     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-283] validate content type against actual extension
-                    // new CoscradBinaryFileTypeValidator({}),
+                    new CoscradBinaryFileTypeValidator({}),
                 ],
                 exceptionFactory: (msg: string) => {
                     const uploadError = new InternalError(

@@ -6,7 +6,7 @@ import { InternalError } from '../lib/errors/InternalError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 
 type ExportSchemasOptions = {
-    directory: string;
+    exportDirectory: string;
 };
 
 // TODO How does this relate to our types in @coscrad/data-types?
@@ -39,7 +39,7 @@ export class ExportSchemasCliCommand extends CliCommandRunner {
             })
         );
 
-        const { directory } = options;
+        const { exportDirectory: directory } = options;
 
         // TODO Inject a file management service instead so we can write to S3 buckets instead of local file system easily
         const commandsFile = `${directory}/command.coscrad-data-schemas.json`;

@@ -157,6 +157,7 @@ export const validate = (config: Record<string, unknown>): EnvironmentVariables 
     );
 
     if (errors.length > 0) {
+        // TODO We should ensure that we don't log the actual value, even if it's invalid, as these could include credentials
         throw new Error(errors.toString());
     }
 

@@ -33,8 +33,6 @@ const createAppModule = (configFileName: string) =>
     }).compile();
 
 describe('ConfigService', () => {
-    let app: INestApplication;
-
     beforeEach(async () => {
         /**
          * HACK We have experienced annoying side-effect issues with the way the
@@ -43,8 +41,6 @@ describe('ConfigService', () => {
          * `process.env` apparently takes priority over these locally defined files.
          * Forcing the local values to take precedence in the test environment has
          * been an exercise in frustration.
-         *
-         * https://github.com/nestjs/config/issues/168
          *
          * https://github.com/nestjs/config/issues/168
          */
@@ -66,11 +62,19 @@ describe('ConfigService', () => {
                     expect(attemptToCreateAppModule).not.toThrow();
                 });
             });
+
             describe('when reading environment variables', () => {
+                let app: INestApplication;
+
+                afterAll(async () => {
+                    await app.close();
+                });
+
                 beforeAll(async () => {
                     const moduleRef = await createAppModule('sample');
 
                     app = moduleRef.createNestApplication();
+
                     await app.init();
                 });
 
@@ -95,13 +99,11 @@ describe('ConfigService', () => {
         const attemptToCreateAppModule = () => createAppModule('invalid');
 
         // We might want to check that the promise rejects here instead
-        it('should throw', () => {
-            expect(attemptToCreateAppModule).toThrow();
-
+        it('should throw', async () => {
             let configErrorMessage;
 
             try {
-                attemptToCreateAppModule();
+                await attemptToCreateAppModule();
             } catch (error) {
                 configErrorMessage = error;
             }
@@ -122,13 +124,11 @@ describe('ConfigService', () => {
         const attemptToCreateAppModule = () => createAppModule('sample');
 
         // We might want to check that the promise rejects here instead
-        it('should throw', () => {
-            expect(attemptToCreateAppModule).toThrow();
-
+        it('should throw', async () => {
             let configErrorMessage;
 
             try {
-                attemptToCreateAppModule();
+                await attemptToCreateAppModule();
             } catch (error) {
                 configErrorMessage = error;
             }
@@ -139,9 +139,5 @@ describe('ConfigService', () => {
 
     afterEach(() => {
         process.env = originalEnv;
-    });
-
-    afterAll(async () => {
-        await app.close();
     });
 });
