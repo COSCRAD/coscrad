@@ -108,6 +108,10 @@ describe(`Arango Event Repository`, () => {
 
         dynamicDataTypeFinderService = testingModule.get(DynamicDataTypeFinderService);
 
+        Object.defineProperty(global, 'performance', {
+            writable: true,
+        });
+
         jest.useFakeTimers(fakeTimersConfig);
     });
 

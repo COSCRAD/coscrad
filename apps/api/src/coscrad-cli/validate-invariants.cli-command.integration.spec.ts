@@ -68,6 +68,10 @@ describe.skip(`**${cliCommandName}**`, () => {
             .useValue(new ArangoQueryRunner(databaseProvider))
             .compile();
 
+        Object.defineProperty(global, 'performance', {
+            writable: true,
+        });
+
         jest.useFakeTimers(fakeTimersConfig);
     });
 

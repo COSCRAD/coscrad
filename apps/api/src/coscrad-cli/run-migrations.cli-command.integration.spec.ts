@@ -219,6 +219,10 @@ describe.skip(`run migrations`, () => {
             .useValue(new ArangoQueryRunner(databaseProvider))
             .compile();
 
+        Object.defineProperty(global, 'performance', {
+            writable: true,
+        });
+
         jest.useFakeTimers(fakeTimersConfig);
     });
 
