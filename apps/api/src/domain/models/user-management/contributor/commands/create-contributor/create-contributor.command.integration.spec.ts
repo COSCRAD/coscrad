@@ -84,6 +84,10 @@ describe('CreateContributor', () => {
             commandHandlerService,
         };
 
+        Object.defineProperty(global, 'performance', {
+            writable: true,
+        });
+
         jest.useFakeTimers(buildFakeTimersConfig());
     });
 
