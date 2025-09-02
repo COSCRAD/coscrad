@@ -1,7 +1,4 @@
 {
-    "affected": {
-        "defaultBase": "main"
-    },
     "generators": {
         "@nx/react": {
             "application": {
@@ -67,5 +64,7 @@
             "!{projectRoot}/src/test-setup.[jt]s"
         ]
     },
-    "parallel": 3
+    "parallel": 3,
+    "useInferencePlugins": false,
+    "defaultBase": "main"
 }
