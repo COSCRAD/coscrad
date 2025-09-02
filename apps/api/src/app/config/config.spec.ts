@@ -62,6 +62,7 @@ describe('ConfigService', () => {
                     expect(attemptToCreateAppModule).not.toThrow();
                 });
             });
+
             describe('when reading environment variables', () => {
                 let app: INestApplication;
 
@@ -123,13 +124,11 @@ describe('ConfigService', () => {
         const attemptToCreateAppModule = () => createAppModule('sample');
 
         // We might want to check that the promise rejects here instead
-        it('should throw', () => {
-            expect(attemptToCreateAppModule).toThrow();
-
+        it('should throw', async () => {
             let configErrorMessage;
 
             try {
-                attemptToCreateAppModule();
+                await attemptToCreateAppModule();
             } catch (error) {
                 configErrorMessage = error;
             }
