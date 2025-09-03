@@ -1,10 +1,11 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import formatArrayAsList from '../../../../queries/presentation/shared/formatArrayAsList';
+import { AggregateId } from '../../../types/AggregateId';
 
 type CompositeId = {
     type: string;
-    id: string;
+    id: AggregateId;
 };
 
 export default class InvalidExternalReferenceByAggregateError extends InternalError {

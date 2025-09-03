@@ -1,3 +1,4 @@
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -20,8 +21,38 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         );
     }
 
-    async create(round: MemoryMatchRound): Promise<void> {
+    async create(round: MemoryMatchRound): Promise<InternalError | undefined> {
+        const aql = `
+            for doc in @@collectionName
+            for textItem in doc.name.items
+            filter textItem.languageCode == @languageCode && textItem.text == @text
+            return textItem
+        `;
+
+        const { text, languageCode } = round.name.getOriginalTextItem();
+
+        const bindVars = {
+            '@collectionName': 'memory_match_rounds',
+            text,
+            languageCode,
+        };
+
+        const possibleDuplicatesCursor = await this.database.query({
+            query: aql,
+            bindVars,
+        });
+
+        const possibleDuplicates = await possibleDuplicatesCursor.all();
+
+        if (possibleDuplicates.length > 0) {
+            return new InternalError(
+                `Duplicate names for memory match rounds are not permitted. Name: ${text} is already in use.`
+            );
+        }
+
         await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
+
+        return;
     }
 
     async createMany(rounds: MemoryMatchRound[]): Promise<void> {

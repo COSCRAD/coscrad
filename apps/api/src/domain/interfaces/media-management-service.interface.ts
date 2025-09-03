@@ -1,11 +1,12 @@
+import { MIMEType } from '@coscrad/api-interfaces';
 import { Maybe } from '../../lib/types/maybe';
 import { MediaItem } from '../models/media-item/entities/media-item.entity';
 import { AggregateId } from '../types/AggregateId';
 
 export interface IMediaManagementService {
-    exists(mediaItemId: AggregateId): Promise<Boolean>;
+    exists(mediaItemId: AggregateId, allowedMimeTypes?: MIMEType[]): Promise<Boolean>;
 
-    fetchById(): Promise<Maybe<MediaItem>>;
+    fetchById(id: AggregateId): Promise<Maybe<MediaItem>>;
 
     fetchMany(): Promise<MediaItem[]>;
 

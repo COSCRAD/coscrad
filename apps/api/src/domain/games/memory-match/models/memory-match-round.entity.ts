@@ -407,11 +407,18 @@ export class MemoryMatchRound {
     }
 
     public static fromCreationDto(id: AggregateId, dto: MemoryMatchRoundCreationDto) {
-        const { name, languageCodeForName, description, languageCodeForDescription } = dto;
+        const {
+            name,
+            languageCodeForName,
+            description,
+            languageCodeForDescription,
+            cardBackImageId,
+        } = dto;
 
         return new MemoryMatchRound({
             id,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            cardBackImageId,
             description: buildMultilingualTextWithSingleItem(
                 description,
                 languageCodeForDescription

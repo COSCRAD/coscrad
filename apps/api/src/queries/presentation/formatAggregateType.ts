@@ -27,7 +27,7 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.playlist]: 'Playlist',
 };
 
-export default (aggregateType: AggregateType): string => {
+export default (aggregateType: string): string => {
     const label = resourceTypeAndLabel[aggregateType];
 
     if (!isNonEmptyString(label)) {
