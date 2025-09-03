@@ -10,6 +10,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { AggregateId } from '../../../types/AggregateId';
 import { MemoryMatchModule } from '../memory-match.module';
@@ -17,11 +18,36 @@ import {
     IMemoryMatchRepository,
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
+import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 const buildDetailEndpoint = (id: AggregateId) => `/games/memory-match/${id}`;
 
 const roundId = buildDummyUuid(34);
+
+const MAX_NUMBER_OF_CARDS = 12;
+
+const testCards = Array(MAX_NUMBER_OF_CARDS)
+    .fill(null)
+    .map((_, index) => {
+        const sequenceNumber = index + 1;
+
+        const buildResult = buildTestInstance(MemoryMatchCard, {
+            sequenceNumber,
+            text: buildMultilingualTextWithSingleItem(`Card #${sequenceNumber}`),
+            imageId: buildDummyUuid(sequenceNumber + 100),
+            audioId: buildDummyUuid(sequenceNumber + 200),
+        });
+
+        return buildResult;
+    });
+
+const publishedRound = buildTestInstance(MemoryMatchRound, {
+    id: roundId,
+    cardBackImageId: buildDummyUuid(testCards.length + 10),
+    isPublished: true,
+    cards: testCards,
+});
 
 describe(`when querying for a memory match: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
@@ -36,12 +62,7 @@ describe(`when querying for a memory match: fetch by Id`, () => {
         // TODO use a constant for the collection name
         await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
 
-        await memoryMatchRepository.create(
-            buildTestInstance(MemoryMatchRound, {
-                id: roundId,
-                isPublished: true,
-            })
-        );
+        await memoryMatchRepository.create(publishedRound);
     });
 
     afterAll(async () => {
@@ -84,6 +105,8 @@ describe(`when querying for a memory match: fetch by Id`, () => {
                     );
 
                     expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body).toMatchSnapshot();
                 });
             });
 

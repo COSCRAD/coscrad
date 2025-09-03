@@ -34,16 +34,14 @@ export class MemoryMatchService {
 
         // finally return a published round
 
-        const round = searchResult;
-
-        const view = cloneToPlainObject(round) as unknown as IMemoryMatchRound;
+        const view = cloneToPlainObject(searchResult) as unknown as IMemoryMatchRound;
 
         // convert media item IDs to Urls
 
         view.cardbackImageUrl = `${this.configService.get('BASE_URL')}:${this.configService.get(
             'NODE_PORT'
         )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download/${
-            round.cardBackImageId
+            searchResult.cardBackImageId
         }`;
 
         // TODO build all media item urls
