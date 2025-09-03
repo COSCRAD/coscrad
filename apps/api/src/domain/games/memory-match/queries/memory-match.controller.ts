@@ -1,7 +1,9 @@
 import {
+    Body,
     Controller,
     Get,
     Param,
+    Post,
     Request,
     UseFilters,
     UseGuards,
@@ -16,7 +18,10 @@ import {
     CoscradNotFoundFilter,
 } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
+import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchService } from '../services/memory-match.service';
+
+const malone = '';
 
 @ApiTags('games')
 @Controller('games/memory-match')
@@ -44,5 +49,18 @@ export class MemoryMatchController {
     async fetchMany(@Request() req) {
         // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305] send back unpublished rounds to admin users in the future
         return this.memoryMatchService.fetchMany(req.user || undefined);
+    }
+
+    @Post(malone)
+    async create(@Body() dto: MemoryMatchRoundCreationDto) {
+        const result = await this.memoryMatchService.create(dto);
+
+        if (result instanceof Error) {
+            return result;
+        }
+
+        return {
+            id: result,
+        };
     }
 }

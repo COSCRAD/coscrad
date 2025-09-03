@@ -35,6 +35,7 @@ import {
     MemoryRoundIsNotReadyForPublicationError,
     MissingCardbackErrorForMemoryMatchRound,
 } from '../errors';
+import { MemoryMatchRoundCreationDto } from './dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from './memory-match-card.entity';
 
 // TODO make this configurable
@@ -403,6 +404,27 @@ export class MemoryMatchRound {
 
     public static fromDto(dto: DTO<MemoryMatchRound>) {
         return new MemoryMatchRound(dto);
+    }
+
+    public static fromCreationDto(id: AggregateId, dto: MemoryMatchRoundCreationDto) {
+        const { name, languageCodeForName, description, languageCodeForDescription } = dto;
+
+        return new MemoryMatchRound({
+            id,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            description: buildMultilingualTextWithSingleItem(
+                description,
+                languageCodeForDescription
+            ),
+            isPublished: false,
+            contributors: [],
+            compiledBy: [], // TODO support this
+            /**
+             * There are no cards at creation time- you need to add them one at
+             * a time. Alternatively, you can use a bulk import.
+             */
+            cards: [],
+        });
     }
 
     toDTO(): DTO<MemoryMatchRound> {

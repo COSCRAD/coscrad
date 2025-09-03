@@ -18,6 +18,10 @@ export class QueryResponseTransformInterceptor<T> implements NestInterceptor<T, 
                     throw new CoscradNotFoundException();
                 }
 
+                if (result instanceof CoscradInvalidUserInputException) {
+                    throw result;
+                }
+
                 /**
                  * This will need to be updated to support
                  * - users passing query params for filtering in queries

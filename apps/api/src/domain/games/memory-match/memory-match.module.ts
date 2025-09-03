@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { IdGenerationModule } from '../../../lib/id-generation/id-generation.module';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN } from './memory-match.repository.interface';
@@ -7,7 +8,7 @@ import { ArangoMemoryMatchRepository } from './repositories/arango-memory-match-
 import { MemoryMatchService } from './services/memory-match.service';
 
 @Module({
-    imports: [PersistenceModule],
+    imports: [PersistenceModule, IdGenerationModule],
     providers: [
         {
             provide: MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
