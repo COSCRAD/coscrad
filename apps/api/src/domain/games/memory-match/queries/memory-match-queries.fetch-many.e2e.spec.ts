@@ -75,7 +75,12 @@ describe(`when querying for a memory match round: fetch many`, () => {
             })
                 .overrideProvider(ConfigService)
                 .useValue(
-                    buildMockConfigService({ ARANGO_DB_NAME: generateDatabaseNameForTestSuite() })
+                    buildMockConfigService({
+                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                        BASE_URL: 'http://localhost',
+                        NODE_PORT: 1234,
+                        GLOBAL_PREFIX: 'awesome-api',
+                    })
                 )
                 .compile();
 

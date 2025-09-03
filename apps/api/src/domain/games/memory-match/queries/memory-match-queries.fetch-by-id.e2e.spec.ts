@@ -85,7 +85,14 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 ],
             })
                 .overrideProvider(ConfigService)
-                .useValue(buildMockConfigService({ ARANGO_DB_NAME: testDatabaseName }))
+                .useValue(
+                    buildMockConfigService({
+                        ARANGO_DB_NAME: testDatabaseName,
+                        BASE_URL: 'http://localhost',
+                        NODE_PORT: 1234,
+                        GLOBAL_PREFIX: 'awesome-api',
+                    })
+                )
                 .compile();
 
             app = testModule.createNestApplication();
