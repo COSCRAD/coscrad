@@ -1,13 +1,14 @@
 import { IMemoryMatchRound } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Maybe } from '../../../../lib/types/maybe';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     IMemoryMatchRepository,
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
-import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 export class MemoryMatchService {
     constructor(
@@ -16,16 +17,24 @@ export class MemoryMatchService {
         private readonly configService: ConfigService
     ) {}
 
-    async fetchById(roundId: AggregateId): Promise<IMemoryMatchRound> {
+    async fetchById(roundId: AggregateId): Promise<Maybe<IMemoryMatchRound>> {
         // we need to call this.memorymatchRepository.fetchById(roundId)
         const searchResult = await this.memoryMatchRepository.fetchById(roundId);
+
         // handle not found or use intercepter
+        if (isNotFound(searchResult)) {
+            return NotFound;
+        }
 
         // be sure to return not found if the round is unpublished
 
+        if (!searchResult.isPublished) {
+            return NotFound;
+        }
+
         // finally return a published round
 
-        const round = searchResult as MemoryMatchRound;
+        const round = searchResult;
 
         const view = cloneToPlainObject(round) as unknown as IMemoryMatchRound;
 

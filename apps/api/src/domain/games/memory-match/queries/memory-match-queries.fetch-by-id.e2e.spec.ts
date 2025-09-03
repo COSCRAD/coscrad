@@ -35,6 +35,13 @@ describe(`when querying for a memory match: fetch by Id`, () => {
     beforeEach(async () => {
         // TODO use a constant for the collection name
         await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+
+        await memoryMatchRepository.create(
+            buildTestInstance(MemoryMatchRound, {
+                id: roundId,
+                isPublished: true,
+            })
+        );
     });
 
     afterAll(async () => {
@@ -71,15 +78,6 @@ describe(`when querying for a memory match: fetch by Id`, () => {
 
         describe(`when there is a memory match round with the given ID`, () => {
             describe(`when the round is public`, () => {
-                beforeEach(async () => {
-                    await memoryMatchRepository.create(
-                        buildTestInstance(MemoryMatchRound, {
-                            id: roundId,
-                            isPublished: true,
-                        })
-                    );
-                });
-
                 it(`should return the expected response`, async () => {
                     const res = await request(app.getHttpServer()).get(
                         buildDetailEndpoint(roundId)
@@ -87,6 +85,33 @@ describe(`when querying for a memory match: fetch by Id`, () => {
 
                     expect(res.status).toBe(HttpStatusCode.ok);
                 });
+            });
+
+            describe(`when the memory match round is private`, () => {
+                const privateRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(123),
+                    isPublished: false,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(privateRound);
+                });
+
+                it(`should return not found`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(privateRound.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+        });
+
+        describe(`when there is no memory match round with the given ID`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).get(buildDetailEndpoint('bogus-Id'));
+
+                expect(res.status).toBe(HttpStatusCode.notFound);
             });
         });
     });
