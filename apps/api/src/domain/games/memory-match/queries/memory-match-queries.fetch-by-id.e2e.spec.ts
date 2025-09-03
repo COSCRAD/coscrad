@@ -49,7 +49,7 @@ const publishedRound = buildTestInstance(MemoryMatchRound, {
     cards: testCards,
 });
 
-describe(`when querying for a memory match: fetch by Id`, () => {
+describe(`when querying for a memory match round: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
     let app: INestApplication;

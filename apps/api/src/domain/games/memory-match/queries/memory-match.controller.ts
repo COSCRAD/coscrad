@@ -26,6 +26,7 @@ export class MemoryMatchController {
 
     @Get('')
     async fetchMany() {
-        throw new Error('not implemented');
+        // TODO send back unpublished rounds to admin users in the future
+        return this.memoryMatchService.fetchMany();
     }
 }

@@ -9,6 +9,7 @@ import {
     IMemoryMatchRepository,
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
+import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 export class MemoryMatchService {
     constructor(
@@ -33,28 +34,37 @@ export class MemoryMatchService {
         }
 
         // finally return a published round
+        return this.buildView(searchResult);
+    }
 
-        const view = cloneToPlainObject(searchResult) as unknown as IMemoryMatchRound;
+    async fetchMany(): Promise<{ entities: IMemoryMatchRound[] }> {
+        const searchResult = await this.memoryMatchRepository.fetchMany();
+
+        // filter out unpublished rounds
+
+        // return an object with these rounds as the entities property
+
+        return {
+            // we use `flatMap` to achievev map + filter
+            entities: searchResult.flatMap((domainModel) =>
+                domainModel.isPublished ? [this.buildView(domainModel)] : []
+            ),
+        };
+    }
+
+    // TODO should we rename `IMemoryMatchRound` to `IMemoryMatchRoundViewModel` for consistency in naming?
+    private buildView(memoryMatchRound: MemoryMatchRound): IMemoryMatchRound {
+        const view = cloneToPlainObject(memoryMatchRound) as unknown as IMemoryMatchRound;
 
         // convert media item IDs to Urls
 
         view.cardbackImageUrl = `${this.configService.get('BASE_URL')}:${this.configService.get(
             'NODE_PORT'
         )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download/${
-            searchResult.cardBackImageId
+            memoryMatchRound.cardBackImageId
         }`;
 
         // TODO build all media item urls
         return view;
-    }
-
-    async fetchMany(): Promise<{ entities: IMemoryMatchRound[] }> {
-        // we need to call this.memoryMatchRepo.fetchMany()
-
-        // filter out unpublished rounds
-
-        // return an object with these rounds as the entities property
-
-        throw new Error('not implemented');
     }
 }
