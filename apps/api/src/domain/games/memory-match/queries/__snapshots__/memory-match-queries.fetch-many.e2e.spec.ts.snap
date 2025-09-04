@@ -193,6 +193,7 @@ exports[`when querying for a memory match round: fetch many when the user is una
           "languageCode": "en",
           "role": "original",
           "text": "test memory match round name",
+          "text": "Published Memory Match Round",
         },
       ],
     },
