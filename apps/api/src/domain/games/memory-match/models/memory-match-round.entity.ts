@@ -425,7 +425,7 @@ export class MemoryMatchRound {
             ),
             isPublished: false,
             contributors: [],
-            compiledBy: [], // TODO support this
+            compiledBy: [], // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-308] support this
             /**
              * There are no cards at creation time- you need to add them one at
              * a time. Alternatively, you can use a bulk import.

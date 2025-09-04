@@ -24,6 +24,7 @@ by leveraging resources from the web-of-knowledge as data sources.
 
 #### Relevant PRs
 
+-   feat: support creating a memory match round via the API (#770)
 -   feat: support memory match queries (#767)
 -   introduce memory match repository (#765)
 -   introduce memory match round invariant validation (#762)

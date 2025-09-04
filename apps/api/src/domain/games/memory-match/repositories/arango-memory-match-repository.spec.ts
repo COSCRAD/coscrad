@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -190,6 +191,72 @@ describe(`ArangoMemoryMatchRepository`, () => {
 
         describe(`when the round does not exist`, () => {
             it.todo(`should reject`);
+        });
+    });
+
+    describe(`create`, () => {
+        const testRound = buildTestInstance(MemoryMatchRound, {
+            id: buildDummyUuid(123),
+        });
+
+        describe(`when there is no existing memory match round with the given ID or nameb`, () => {
+            it(`should create the round`, async () => {
+                await testRepository.create(testRound);
+
+                const searchResult = await testRepository.fetchById(testRound.id);
+
+                expect(searchResult).toBeInstanceOf(MemoryMatchRound);
+            });
+        });
+
+        describe(`when there is already a memory match round with the given ID`, () => {
+            it(`should return the expected error`, async () => {
+                await testRepository.create(testRound);
+
+                const result = await testRepository.create(testRound);
+
+                const fullMessage = result.toString();
+
+                expect(result).toBeInstanceOf(InternalError);
+
+                expect(fullMessage).toContain(`There is already a memory match round with the ID`);
+
+                expect(fullMessage).toContain(testRound.id);
+            });
+        });
+
+        describe(`when there is already a memory match round with the given Name`, () => {
+            it(`should return the expected error`, async () => {
+                const duplicateName = 'fooBarBaz';
+
+                await testRepository.create(
+                    buildTestInstance(MemoryMatchRound, {
+                        id: buildDummyUuid(89),
+                        name: buildMultilingualTextWithSingleItem(duplicateName),
+                    })
+                );
+
+                const result = await testRepository.create(
+                    buildTestInstance(MemoryMatchRound, {
+                        // distinct
+                        id: buildDummyUuid(90),
+                        // duplicated
+                        name: buildMultilingualTextWithSingleItem(duplicateName),
+                    })
+                );
+
+                expect(result).toBeInstanceOf(InternalError);
+
+                const fullMessage = result.toString();
+
+                // as part of the message
+                expect(fullMessage).toContain(
+                    `There is already a memory match round with the name`
+                );
+
+                // the actual value of the duplicated name
+                expect(fullMessage).toContain(duplicateName);
+            });
         });
     });
 });

@@ -112,6 +112,12 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('memory_match_rounds');
 
+        await this.connection.collection('memory_match_rounds').ensureIndex({
+            type: 'persistent',
+            fields: ['name.items[*].text'],
+            unique: true,
+        });
+
         this.isInitialized = true;
     }
 

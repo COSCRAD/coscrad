@@ -44,8 +44,6 @@ export class MemoryMatchService {
 
         const validationResult = newRound.validateInvariants();
 
-        // TODO check that the media item exists for the card back image
-
         if (validationResult.length > 0) {
             return new CoscradInvalidUserInputException(
                 new InternalError(
@@ -86,7 +84,6 @@ export class MemoryMatchService {
             }
         }
 
-        // TODO make the `create` method here potentially return a unique name violation error
         const creationResult = await this.memoryMatchRepository.create(newRound);
 
         if (isInternalError(creationResult)) {

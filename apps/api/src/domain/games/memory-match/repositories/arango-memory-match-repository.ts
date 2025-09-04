@@ -4,6 +4,7 @@ import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoDatabaseError } from '../../../../persistence/database/errors/ArangoDatabaseError';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DTO } from '../../../../types/DTO';
@@ -21,38 +22,35 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         );
     }
 
-    async create(round: MemoryMatchRound): Promise<InternalError | undefined> {
-        const aql = `
-            for doc in @@collectionName
-            for textItem in doc.name.items
-            filter textItem.languageCode == @languageCode && textItem.text == @text
-            return textItem
-        `;
+    async create(round: MemoryMatchRound): Promise<InternalError | AggregateId> {
+        try {
+            await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
 
-        const { text, languageCode } = round.name.getOriginalTextItem();
+            return round.id;
+        } catch (error) {
+            /**
+             * This is a bit of a hack.
+             */
+            if (error.message.includes(`persistent over 'name`)) {
+                return new InternalError(
+                    `There is already a memory match round with the name: ${
+                        round.name.getOriginalTextItem().text
+                    }`
+                );
+            }
 
-        const bindVars = {
-            '@collectionName': 'memory_match_rounds',
-            text,
-            languageCode,
-        };
+            if (
+                error.message.includes(
+                    `unique constraint violated - in index primary of type primary over '_key'`
+                )
+            ) {
+                return new InternalError(
+                    `There is already a memory match round with the ID: ${round.id}`
+                );
+            }
 
-        const possibleDuplicatesCursor = await this.database.query({
-            query: aql,
-            bindVars,
-        });
-
-        const possibleDuplicates = await possibleDuplicatesCursor.all();
-
-        if (possibleDuplicates.length > 0) {
-            return new InternalError(
-                `Duplicate names for memory match rounds are not permitted. Name: ${text} is already in use.`
-            );
+            return new ArangoDatabaseError('failed to create memory match round', error);
         }
-
-        await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
-
-        return;
     }
 
     async createMany(rounds: MemoryMatchRound[]): Promise<void> {

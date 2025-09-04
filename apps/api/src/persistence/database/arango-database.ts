@@ -259,11 +259,7 @@ export class ArangoDatabase {
                 bindVars,
             })
             .catch((error) => {
-                throw new InternalError(
-                    `failed to create in Arango database: ${JSON.stringify(
-                        dto
-                    )}. Arango error: \n ${error}"`
-                );
+                throw error;
             });
 
         await cursor.all();

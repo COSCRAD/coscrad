@@ -22,8 +22,6 @@ import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-aut
 import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchService } from '../services/memory-match.service';
 
-const malone = '';
-
 @ApiTags('games')
 @Controller('games/memory-match')
 @UseFilters(
@@ -54,7 +52,7 @@ export class MemoryMatchController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
-    @Post(malone)
+    @Post('')
     async create(@Body() dto: MemoryMatchRoundCreationDto) {
         const result = await this.memoryMatchService.create(dto);
 

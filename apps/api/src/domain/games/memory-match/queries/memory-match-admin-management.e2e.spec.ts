@@ -177,7 +177,7 @@ describe(`when using the REST API to create a memory match round`, () => {
                         const { message } = res.body;
 
                         expect(message).toContain(
-                            `Duplicate names for memory match rounds are not permitted`
+                            `There is already a memory match round with the name: ${repeatedName}`
                         );
 
                         expect(message).toContain(repeatedName);

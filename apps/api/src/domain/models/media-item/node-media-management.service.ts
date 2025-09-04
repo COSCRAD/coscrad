@@ -1,4 +1,4 @@
-import { AggregateType, MIMEType } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import {
     isNonEmptyObject,
@@ -172,7 +172,7 @@ export class NodeMediaManagementService implements IMediaManager {
         };
     }
 
-    async exists(id: AggregateId, allowedMimeTypes?: MIMEType[]): Promise<boolean> {
+    async exists(id: AggregateId): Promise<boolean> {
         const targetMediaItem = await this.commandRepository.fetchById(id);
 
         if (isInternalError(targetMediaItem)) {
@@ -185,11 +185,7 @@ export class NodeMediaManagementService implements IMediaManager {
             return false;
         }
 
-        if (!Array.isArray(allowedMimeTypes) || allowedMimeTypes.length === 0) {
-            return true;
-        }
-
-        return allowedMimeTypes.includes(targetMediaItem.mimeType);
+        return true;
     }
 
     /**
