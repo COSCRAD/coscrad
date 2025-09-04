@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@coscrad/api-interfaces';
 
+// TODO review this
 const httpStatusCodes = HttpStatusCode;
 
 // @deprecated use `HttpStatusCode` as a value and a type instead
