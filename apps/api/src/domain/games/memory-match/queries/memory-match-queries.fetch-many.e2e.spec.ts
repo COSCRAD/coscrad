@@ -60,6 +60,10 @@ describe(`when querying for a memory match round: fetch many`, () => {
         await memoryMatchRepository.createMany([publishedRound, unpublishedRound]);
     });
 
+    /**
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305]
+     * Return unpublished rounds to admin users.
+     */
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
             const testModule = await Test.createTestingModule({
@@ -93,6 +97,10 @@ describe(`when querying for a memory match round: fetch many`, () => {
             memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
         });
 
+        /**
+         * TODO[https://github.com/COSCRAD/coscrad/pull/767#discussion_r2322689102]
+         * Support custom user-defined filters and an active-search flow.
+         */
         describe(`when no filters are provided`, () => {
             it(`should return all published rounds`, async () => {
                 const res = await request(app.getHttpServer()).get(indexEndpoint);

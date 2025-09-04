@@ -49,6 +49,10 @@ const publishedRound = buildTestInstance(MemoryMatchRound, {
     cards: testCards,
 });
 
+/**
+ * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305]
+ * Return unpublished rounds to admin users.
+ */
 describe(`when querying for a memory match round: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 

@@ -26,7 +26,7 @@ export class MemoryMatchController {
 
     @Get('')
     async fetchMany() {
-        // TODO send back unpublished rounds to admin users in the future
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305] send back unpublished rounds to admin users in the future
         return this.memoryMatchService.fetchMany();
     }
 }
