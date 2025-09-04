@@ -1,4 +1,4 @@
-import { HttpStatusCode, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
+import { CoscradUserRole, HttpStatusCode, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -6,6 +6,8 @@ import * as request from 'supertest';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
+import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
 import { NotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
@@ -16,6 +18,8 @@ import generateDatabaseNameForTestSuite from '../../../../persistence/repositori
 import { buildTestInstance } from '../../../../test-data/utilities';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
+import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
 import { MemoryMatchModule } from '../memory-match.module';
 import {
     IMemoryMatchRepository,
@@ -41,49 +45,58 @@ describe(`when using the REST API to create a memory match round`, () => {
 
     let memoryMatchRepository: IMemoryMatchRepository;
 
+    const setItUp = async (user?: CoscradUserWithGroups) => {
+        const testModule = await Test.createTestingModule({
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                MemoryMatchModule,
+            ],
+        })
+            .overrideGuard(AdminJwtGuard)
+            .useValue(new MockJwtAdminAuthGuard(user))
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    // is this necessary?
+                    BASE_URL: 'http://localhost',
+                    NODE_PORT: 1234,
+                    GLOBAL_PREFIX: 'awesome-api',
+                })
+            )
+            .compile();
+
+        app = testModule.createNestApplication();
+
+        await app.init();
+
+        memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+    };
+
+    beforeEach(async () => {
+        const databaseProvider = app.get(ArangoDatabaseProvider);
+
+        await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+
+        await databaseProvider.getDatabaseForCollection(ArangoCollectionId.media_items).clear();
+
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.media_items)
+            .create(mapEntityDTOToDatabaseDocument(testMediaItem.toDTO()));
+    });
+
     describe(`when the user is a COSCRAD admin`, () => {
-        beforeAll(async () => {
-            const testModule = await Test.createTestingModule({
-                imports: [
-                    ConfigModule.forRoot({
-                        isGlobal: true,
-                        envFilePath: buildConfigFilePath(Environment.test),
-                        cache: false,
-                    }),
-                    PersistenceModule.forRootAsync(),
-                    MemoryMatchModule,
-                ],
-            })
-                // TODO inject admin user on request scope
-                .overrideProvider(ConfigService)
-                .useValue(
-                    buildMockConfigService({
-                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                        // is this necessary?
-                        BASE_URL: 'http://localhost',
-                        NODE_PORT: 1234,
-                        GLOBAL_PREFIX: 'awesome-api',
-                    })
-                )
-                .compile();
-
-            app = testModule.createNestApplication();
-
-            await app.init();
-
-            memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+        const coscradAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.superAdmin],
         });
 
-        beforeEach(async () => {
-            const databaseProvider = app.get(ArangoDatabaseProvider);
-
-            await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
-
-            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.media_items).clear();
-
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.media_items)
-                .create(mapEntityDTOToDatabaseDocument(testMediaItem.toDTO()));
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
         });
 
         describe(`when creating a memory match round`, () => {
@@ -305,6 +318,63 @@ describe(`when using the REST API to create a memory match round`, () => {
                         expect(message).toContain('must be an image');
                     });
                 });
+            });
+        });
+    });
+
+    describe(`when the user is a project admin`, () => {
+        const projectAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.projectAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(projectAdminUser, []));
+        });
+
+        describe(`when the request is valid`, () => {
+            it(`should succeed`, async () => {
+                const res = await request(app.getHttpServer())
+                    .post(endpointUnderTest)
+                    .send(validCreationDto);
+
+                expect(res.status).toBe(HttpStatusCode.createdResource);
+            });
+        });
+    });
+
+    describe(`when the user is unauthenticated (public)`, () => {
+        beforeAll(async () => {
+            // no user here
+            await setItUp();
+        });
+
+        describe(`POST ${endpointUnderTest}`, () => {
+            it(`should return forbidden`, async () => {
+                const res = await request(app.getHttpServer())
+                    .post(endpointUnderTest)
+                    .send(validCreationDto);
+
+                expect(res.status).toBe(HttpStatusCode.forbidden);
+            });
+        });
+    });
+
+    describe(`when the user is an ordinary user (non-admin)`, () => {
+        const ordinaryUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.viewer],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(ordinaryUser, []));
+        });
+
+        describe(`POST ${endpointUnderTest}`, () => {
+            it(`should return forbidden`, async () => {
+                const res = await request(app.getHttpServer())
+                    .post(endpointUnderTest)
+                    .send(validCreationDto);
+
+                expect(res.status).toBe(HttpStatusCode.forbidden);
             });
         });
     });

@@ -10,6 +10,7 @@ import {
     UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import { QueryResponseTransformInterceptor } from '../../../../app/controllers/response-mapping';
 import {
@@ -51,6 +52,8 @@ export class MemoryMatchController {
         return this.memoryMatchService.fetchMany(req.user || undefined);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
     @Post(malone)
     async create(@Body() dto: MemoryMatchRoundCreationDto) {
         const result = await this.memoryMatchService.create(dto);
