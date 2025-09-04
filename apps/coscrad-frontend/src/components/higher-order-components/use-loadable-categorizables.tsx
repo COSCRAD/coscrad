@@ -95,7 +95,6 @@ export const useLoadableCategorizables = (
                 [key]: {
                     isLoading: false,
                     errorInfo: null,
-                    // @ts-expect-error fix me
                     data: data?.entities.filter(
                         ({ id }: ICategorizableDetailQueryResult<IBaseViewModel>) =>
                             idMap

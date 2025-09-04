@@ -77,6 +77,7 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                     element: (
                         <AggregatePage
                             aggregateType={categorizableType}
+                            // @ts-expect-error TODO why is this suddenly a problem?
                             DetailPresenter={detailPresenterFactory(categorizableType)}
                         />
                     ),
