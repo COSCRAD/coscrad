@@ -7,6 +7,8 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { IMediaManagementService } from '../../../interfaces';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../interfaces/id-manager.interface';
 import InvalidExternalReferenceByAggregateError from '../../../models/categories/errors/InvalidExternalReferenceByAggregateError';
@@ -20,6 +22,7 @@ import {
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
 import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
+import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
@@ -161,6 +164,52 @@ export class MemoryMatchService {
                 return doesUserHaveAccess ? [this.buildView(domainModel)] : [];
             }),
         };
+    }
+
+    async import(importDto: MemoryMatchRoundImportDto): Promise<ResultOrError<AggregateId>> {
+        const {
+            name,
+            languageCodeForName,
+            cards: cardDtos,
+            contributorId,
+            // TODO should the following two properties be part of a single object?
+            description,
+            languageCodeForDescription,
+        } = importDto;
+
+        // TODO check for text
+        const cards = cardDtos.map(({ mediaItemIdForAudio, mediaItemIdForImage }, index) => {
+            return new MemoryMatchCard({
+                audioId: mediaItemIdForAudio,
+                imageId: mediaItemIdForImage,
+                sequenceNumber: index + 1,
+            });
+        });
+
+        const id = await this.idManager.generate();
+
+        const importedRound = MemoryMatchRound.fromDto({
+            id,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            cards,
+            description: buildMultilingualTextWithSingleItem(
+                description,
+                languageCodeForDescription
+            ),
+            compiledBy: [],
+            //  TODO should we support multiple contributors
+            contributors: [contributorId],
+            // TODO omit this property
+            size: 12,
+            // an admin must explcitly publish the round
+            isPublished: false,
+        });
+
+        // TODO validate invariants
+
+        await this.memoryMatchRepository.create(importedRound);
+
+        return id;
     }
 
     // TODO should we rename `IMemoryMatchRound` to `IMemoryMatchRoundViewModel` for consistency in naming?

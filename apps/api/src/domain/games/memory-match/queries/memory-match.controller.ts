@@ -21,6 +21,7 @@ import {
 } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
+import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
 import { MemoryMatchService } from '../services/memory-match.service';
 
 @ApiTags('games')
@@ -73,6 +74,13 @@ export class MemoryMatchController {
     @Patch(':id/publish')
     async publish(@Param('id') id: string) {
         const result = await this.memoryMatchService.publish(id);
+
+        return result;
+    }
+
+    @Post('import')
+    async import(@Body() dto: MemoryMatchRoundImportDto) {
+        const result = await this.memoryMatchService.import(dto);
 
         return result;
     }
