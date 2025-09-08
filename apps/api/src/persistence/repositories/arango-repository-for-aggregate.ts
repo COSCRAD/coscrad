@@ -111,7 +111,9 @@ export class ArangoRepositoryForAggregate<TEntity extends Aggregate>
         if (entities.length === 0) return;
 
         const createDTOs = entities
-            .map((entity) => entity.toDTO())
+            .map((entity) => {
+                return entity.toDTO();
+            })
             .map((dto) => this.mapEntityDTOToDocument(dto));
 
         /**

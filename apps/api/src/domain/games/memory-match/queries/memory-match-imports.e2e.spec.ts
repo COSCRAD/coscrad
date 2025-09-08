@@ -1,18 +1,28 @@
-import { CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CoscradUserRole,
+    HttpStatusCode,
+    LanguageCode,
+    MIMEType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import * as request from 'supertest';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
 import { NotFound } from '../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
+import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
 import { MemoryMatchModule } from '../memory-match.module';
@@ -21,23 +31,70 @@ import {
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
 import { MemoryMatchCardImportDto } from '../models/dtos/memory-match-card-import.dto';
+import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
-import supertest = require('supertest');
 
 const endpointUnderTest = '/games/memory-match/import';
 
-const validCardDtos = Array(12)
+const NUMBER_OF_CARDS = 12;
+
+const numberOfImagesUsedInCompleteRound = NUMBER_OF_CARDS + 1; // includes cardback image
+
+const IMAGE_MEDIA_ITEM_ID_OFFSET = 100;
+
+const AUDIO_MEDIA_ITEM_ID_OFFSET = 200;
+
+const allMediaItems: MediaItem[] = [];
+
+const validTestImageMediaItems = Array(numberOfImagesUsedInCompleteRound)
+    .fill(null)
+    .map((_, index) =>
+        buildTestInstance(MediaItem, {
+            id: buildDummyUuid(IMAGE_MEDIA_ITEM_ID_OFFSET + index),
+            mimeType: MIMEType.png,
+        })
+    );
+
+allMediaItems.push(...validTestImageMediaItems);
+
+// there is one audio item per card
+const validTestAudioMediaItems = Array(NUMBER_OF_CARDS)
+    .fill(null)
+    .map((_, index) =>
+        buildTestInstance(MediaItem, {
+            id: buildDummyUuid(AUDIO_MEDIA_ITEM_ID_OFFSET + index),
+            mimeType: MIMEType.mp3,
+        })
+    );
+
+/**
+ * We use this to test MIME Type validation for all images and audio
+ */
+const pdfMediaItem = buildTestInstance(MediaItem, {
+    id: buildDummyUuid(501),
+    mimeType: MIMEType.pdf,
+});
+
+allMediaItems.push(...validTestAudioMediaItems, pdfMediaItem);
+
+const validCardDtos = Array(NUMBER_OF_CARDS)
     .fill(null)
     .map((_, index) =>
         buildTestInstance(MemoryMatchCardImportDto, {
             text: `card #${index + 1}`,
+            mediaItemIdForAudio: validTestAudioMediaItems[index].id,
+            mediaItemIdForImage: validTestImageMediaItems[index].id,
         })
     );
 
 const validDto = buildTestInstance(MemoryMatchRoundImportDto, {
+    mediaItemIdForCardbackImage: buildDummyUuid(IMAGE_MEDIA_ITEM_ID_OFFSET + NUMBER_OF_CARDS),
     cards: validCardDtos,
 });
+
+// this is to signal that we never put a media item with this ID in the db
+const missingMediaItemId = buildDummyUuid(404);
 
 describe(endpointUnderTest, () => {
     let app: INestApplication;
@@ -83,6 +140,11 @@ describe(endpointUnderTest, () => {
         await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
 
         await databaseProvider.getDatabaseForCollection(ArangoCollectionId.media_items).clear();
+
+        await app
+            .get(REPOSITORY_PROVIDER_TOKEN)
+            .forResource(AggregateType.mediaItem)
+            .createMany(allMediaItems);
     });
 
     describe(`when the user is a COSCRAD admin`, () => {
@@ -97,7 +159,7 @@ describe(endpointUnderTest, () => {
         describe(`when the imported round is valid`, () => {
             it(`should return ok and persist the imported round`, async () => {
                 // TODO add test for when a request body is not provided
-                const res = await supertest(app.getHttpServer())
+                const res = await request(app.getHttpServer())
                     .post(endpointUnderTest)
                     .send(validDto);
 
@@ -134,6 +196,226 @@ describe(endpointUnderTest, () => {
                 expect(cardBackImageId).toBe(validDto.mediaItemIdForCardbackImage);
 
                 expect(isPublished).toBe(false);
+            });
+        });
+
+        describe(`when the round is invalid`, () => {
+            describe(`when the creation DTO has an invalid type`, () => {
+                describe(`when required properties are missing`, () => {
+                    const dtoWithMissingProperties = buildTestInstance(MemoryMatchRoundCreationDto);
+
+                    delete dtoWithMissingProperties.cardBackImageId;
+
+                    delete dtoWithMissingProperties.name;
+
+                    delete dtoWithMissingProperties.languageCodeForName;
+
+                    delete dtoWithMissingProperties.description;
+
+                    delete dtoWithMissingProperties.languageCodeForDescription;
+
+                    it(`should return the expected error response`, async () => {
+                        const res = await request(app.getHttpServer())
+                            .post(endpointUnderTest)
+                            .send(dtoWithMissingProperties);
+
+                        expect(res.status).toBe(HttpStatusCode.badRequest);
+                    });
+                });
+
+                describe(`when the body of the request is omitted`, () => {
+                    it(`should return the expected error response`, async () => {
+                        const res = await request(app.getHttpServer())
+                            .post(endpointUnderTest)
+                            .send();
+
+                        expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                        const {
+                            body: { message },
+                        } = res;
+
+                        expect(message).toContain('must provide a round import record');
+                    });
+                });
+
+                describe(`when one of the cards is empty`, () => {
+                    const dtoWithEmptyCard = buildTestInstance(MemoryMatchRoundImportDto, {
+                        cards: validCardDtos.map((c, index) => (index === 0 ? {} : c)),
+                    });
+
+                    it(`should return the expected error response`, async () => {
+                        const res = await request(app.getHttpServer())
+                            .post(endpointUnderTest)
+                            .send(dtoWithEmptyCard);
+
+                        expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                        const {
+                            body: { message },
+                        } = res;
+
+                        expect(message).toContain('Property card');
+                    });
+                });
+
+                describe(`when one of the cards has invalid multilingual text`, () => {
+                    const invalidText = '';
+
+                    const invalidLanguageCode = 'NaN' as LanguageCode;
+
+                    const dtoWithCardWithInvalidText = buildTestInstance(
+                        MemoryMatchRoundImportDto,
+                        {
+                            cards: validCardDtos.map((c, index) =>
+                                index === 0
+                                    ? buildTestInstance(MemoryMatchCardImportDto, {
+                                          text: invalidText,
+                                          languageCodeForText: invalidLanguageCode,
+                                      })
+                                    : c
+                            ),
+                        }
+                    );
+
+                    it(`should return the expected error response`, async () => {
+                        const res = await request(app.getHttpServer())
+                            .post(endpointUnderTest)
+                            .send(dtoWithCardWithInvalidText);
+
+                        expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                        const {
+                            body: { message },
+                        } = res;
+
+                        expect(message).toContain('Property cards has failed nested validation');
+                    });
+                });
+
+                describe(`when the external state is inconsistent with the request`, () => {
+                    describe(`when one of the contributors does not exist`, () => {
+                        // TODO Do this once we sort out the API for indicating contributions
+                        it.todo(`should return the expected error response`);
+                    });
+
+                    describe(`when one of the media items is missing`, () => {
+                        describe(`when the media item for the cardback image does not exist`, () => {
+                            const invalidDto = buildTestInstance(MemoryMatchRoundImportDto, {
+                                mediaItemIdForCardbackImage: missingMediaItemId,
+                                cards: validCardDtos,
+                            });
+
+                            it(`should return the expected error response`, async () => {
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(invalidDto);
+
+                                expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                                const {
+                                    body: { message },
+                                } = res;
+
+                                expect(message).toContain('there is no media item');
+
+                                expect(message).toContain(missingMediaItemId);
+                            });
+                        });
+
+                        describe(`when the audio for one of the cards is missing`, () => {
+                            const dtoWithMissingAudioForOneCard = buildTestInstance(
+                                MemoryMatchRoundImportDto,
+                                {
+                                    mediaItemIdForCardbackImage:
+                                        validDto.mediaItemIdForCardbackImage,
+                                    cards: validCardDtos.map((c, index) =>
+                                        index === 0
+                                            ? buildTestInstance(MemoryMatchCardImportDto, {
+                                                  mediaItemIdForAudio: missingMediaItemId,
+                                              })
+                                            : c
+                                    ),
+                                }
+                            );
+
+                            it(`should return the expected error response`, async () => {
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(dtoWithMissingAudioForOneCard);
+
+                                expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                                const {
+                                    body: { message },
+                                } = res;
+
+                                // the invalid sequence number
+                                expect(message).toContain(`card 1`);
+
+                                expect(message).toContain(`there is no media item`);
+
+                                expect(message).toContain(missingMediaItemId);
+                            });
+                        });
+
+                        describe(`when the image for one of the cards is missing`, () => {
+                            const dtoWithMissingImageForOneCard = buildTestInstance(
+                                MemoryMatchRoundImportDto,
+                                {
+                                    mediaItemIdForCardbackImage:
+                                        validDto.mediaItemIdForCardbackImage,
+                                    cards: validCardDtos.map((c, index) =>
+                                        index === 0
+                                            ? buildTestInstance(MemoryMatchCardImportDto, {
+                                                  ...c,
+                                                  mediaItemIdForImage: missingMediaItemId,
+                                              })
+                                            : c
+                                    ),
+                                }
+                            );
+
+                            it.only(`should return the expected error response`, async () => {
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(dtoWithMissingImageForOneCard);
+
+                                expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                                const {
+                                    body: { message },
+                                } = res;
+
+                                // the invalid sequence number
+                                expect(message).toContain(`card 1`);
+
+                                expect(message).toContain(`there is no media item`);
+
+                                expect(message).toContain(missingMediaItemId);
+                            });
+                        });
+                    });
+
+                    /**
+                     * TODO We can also add a single `pdfMediaItem` to the database
+                     * and try to link this one to invalidate the import for
+                     * each of the following cases.
+                     */
+                    describe(`when one of the media items is of the wrong type`, () => {
+                        describe(`when the card back image has the wrong MIME Type`, () => {
+                            it.todo(`should return the expected error response`);
+                        });
+
+                        describe(`when one of the cards has an image with the wrong MIME Type`, () => {
+                            it.todo(`should return the expected error response`);
+                        });
+
+                        describe(`when the audio for one of the card has the wrong MIME Type`, () => {
+                            it.todo(`should return the expected error response`);
+                        });
+                    });
+                });
             });
         });
     });

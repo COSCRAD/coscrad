@@ -1,5 +1,9 @@
 import { AggregateType, IMemoryMatchCard, IMemoryMatchRound } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import {
+    isNonEmptyObject,
+    isNonEmptyString,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CoscradInvalidUserInputException } from '../../../../app/controllers/response-mapping/CoscradExceptions';
@@ -7,11 +11,14 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { IMediaManagementService } from '../../../interfaces';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../interfaces/id-manager.interface';
 import InvalidExternalReferenceByAggregateError from '../../../models/categories/errors/InvalidExternalReferenceByAggregateError';
+import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../models/media-item/media-manager.interface';
 import { isPhotographMimeType } from '../../../models/photograph/entities/photograph.entity';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -167,6 +174,18 @@ export class MemoryMatchService {
     }
 
     async import(importDto: MemoryMatchRoundImportDto): Promise<ResultOrError<AggregateId>> {
+        const dtoTypeValidationErrors = validateSimpleInvariants(
+            MemoryMatchRoundImportDto,
+            importDto
+        );
+
+        if (dtoTypeValidationErrors.length > 0) {
+            return new InternalError(
+                `Encountered an invalid DTO for a Memory Match Round import`,
+                dtoTypeValidationErrors
+            );
+        }
+
         const {
             name,
             languageCodeForName,
@@ -209,6 +228,20 @@ export class MemoryMatchService {
 
         // TODO validate invariants
 
+        const mediaReferenceErrors = await this.validateMediaItemReferences(importedRound);
+
+        if (mediaReferenceErrors.length > 0) {
+            return new InternalError(
+                `One or more of the media items provided for use on ${formatAggregateCompositeIdentifier(
+                    {
+                        type: MEMORY_MATCH_ROUND,
+                        id: importedRound.id,
+                    }
+                )} is missing or of the incorrect type`,
+                mediaReferenceErrors
+            );
+        }
+
         await this.memoryMatchRepository.create(importedRound);
 
         return id;
@@ -249,6 +282,101 @@ export class MemoryMatchService {
         return `${this.configService.get('BASE_URL')}:${this.configService.get(
             'NODE_PORT'
         )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download/${mediaItemId}`;
+    }
+
+    private async validateMediaItemReferences(
+        memoryMatchRound: MemoryMatchRound
+    ): Promise<InternalError[]> {
+        if (!isNonEmptyObject(memoryMatchRound)) {
+            return [];
+        }
+
+        const { cardBackImageId } = memoryMatchRound;
+
+        const imageIds = memoryMatchRound.cards.map(({ imageId }) => imageId);
+
+        if (!isNullOrUndefined(cardBackImageId)) {
+            imageIds.push(cardBackImageId);
+        }
+
+        const audioIds = memoryMatchRound.cards.map(({ audioId }) => audioId);
+
+        const mediaItemIds = [...imageIds, ...audioIds];
+
+        /**
+         * TODO Optimize this to use a filter in-database
+         */
+        const allMediaItems = await this.mediaManagementService.fetchMany();
+
+        const relevantMediaItems = allMediaItems.filter(({ id }) => mediaItemIds.includes(id));
+
+        const mediaItemMap = relevantMediaItems.reduce(
+            // we already know that all IDs are unique, so the logic is simple here
+            (acc, mediaItem) => acc.set(mediaItem.id, mediaItem),
+            new Map<AggregateId, MediaItem>()
+        );
+
+        const allErrors: InternalError[] = [];
+
+        if (!isNullOrUndefined(cardBackImageId) && !mediaItemMap.has(cardBackImageId)) {
+            allErrors.push(
+                new InternalError(
+                    `${formatAggregateCompositeIdentifier({
+                        type: AggregateType.mediaItem,
+                        id: cardBackImageId,
+                    })} cannot be used as the cardback image for ${formatAggregateCompositeIdentifier(
+                        {
+                            type: MEMORY_MATCH_ROUND,
+                            id: memoryMatchRound.id,
+                        }
+                    )} as there is no media item with that ID`
+                )
+            );
+        }
+
+        const missingAudioItemErrorsForCards = memoryMatchRound.cards.flatMap(
+            ({ audioId, sequenceNumber }) =>
+                mediaItemMap.has(audioId)
+                    ? []
+                    : new InternalError(
+                          `${formatAggregateCompositeIdentifier({
+                              type: AggregateType.mediaItem,
+                              id: audioId,
+                          })} cannot be used as the audio for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
+                              {
+                                  type: MEMORY_MATCH_ROUND,
+                                  id: memoryMatchRound.id,
+                              }
+                          )} as there is no media item with that ID`
+                      )
+        );
+
+        if (missingAudioItemErrorsForCards.length > 0) {
+            allErrors.push(...missingAudioItemErrorsForCards);
+        }
+
+        const missingImageErrorsForCards = memoryMatchRound.cards.flatMap(
+            ({ imageId, sequenceNumber }) =>
+                mediaItemMap.has(imageId)
+                    ? []
+                    : new InternalError(
+                          `${formatAggregateCompositeIdentifier({
+                              type: AggregateType.mediaItem,
+                              id: imageId,
+                          })} cannot be used as the image for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
+                              {
+                                  type: MEMORY_MATCH_ROUND,
+                                  id: memoryMatchRound.id,
+                              }
+                          )} as there is no media item with that ID`
+                      )
+        );
+
+        if (missingImageErrorsForCards.length > 0) {
+            allErrors.push(...missingImageErrorsForCards);
+        }
+
+        return allErrors;
     }
 
     private buildBadUserInputError(innerError: InternalError) {
