@@ -111,9 +111,29 @@ describe(endpointUnderTest, () => {
 
                 const round = searchResult as MemoryMatchRound;
 
-                const { cards } = round;
+                const { cards, description, name, cardBackImageId, isPublished } = round;
+
+                const {
+                    text: descriptionTextFromDb,
+                    languageCode: langaugeCodeForDescriptionFromDb,
+                } = description.getOriginalTextItem();
+
+                expect(descriptionTextFromDb).toBe(validDto.description);
+
+                expect(langaugeCodeForDescriptionFromDb).toBe(validDto.languageCodeForDescription);
+
+                const { text: nameTextFromDb, languageCode: languageCodeForNameFromDb } =
+                    name.getOriginalTextItem();
+
+                expect(nameTextFromDb).toBe(validDto.name);
+
+                expect(languageCodeForNameFromDb).toBe(validDto.languageCodeForName);
 
                 expect(cards).toHaveLength(validDto.cards.length);
+
+                expect(cardBackImageId).toBe(validDto.mediaItemIdForCardbackImage);
+
+                expect(isPublished).toBe(false);
             });
         });
     });

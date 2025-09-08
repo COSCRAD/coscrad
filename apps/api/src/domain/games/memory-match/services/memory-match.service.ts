@@ -175,6 +175,7 @@ export class MemoryMatchService {
             // TODO should the following two properties be part of a single object?
             description,
             languageCodeForDescription,
+            mediaItemIdForCardbackImage,
         } = importDto;
 
         // TODO check for text
@@ -190,6 +191,7 @@ export class MemoryMatchService {
 
         const importedRound = MemoryMatchRound.fromDto({
             id,
+            cardBackImageId: mediaItemIdForCardbackImage,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
             cards,
             description: buildMultilingualTextWithSingleItem(
