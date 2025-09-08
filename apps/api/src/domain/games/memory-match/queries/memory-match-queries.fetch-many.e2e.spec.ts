@@ -115,6 +115,8 @@ describe(`when querying for a memory match round: fetch many`, () => {
         await app.close();
 
         databaseProvider.close();
+
+        await app.close();
     });
 
     /**
