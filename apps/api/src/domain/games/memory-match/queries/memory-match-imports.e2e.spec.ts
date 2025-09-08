@@ -7,6 +7,7 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
+import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
@@ -21,6 +22,7 @@ import {
 } from '../memory-match.repository.interface';
 import { MemoryMatchCardImportDto } from '../models/dtos/memory-match-card-import.dto';
 import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
+import { MemoryMatchRound } from '../models/memory-match-round.entity';
 import supertest = require('supertest');
 
 const endpointUnderTest = '/games/memory-match/import';
@@ -40,7 +42,7 @@ const validDto = buildTestInstance(MemoryMatchRoundImportDto, {
 describe(endpointUnderTest, () => {
     let app: INestApplication;
 
-    let _memoryMatchRepository: IMemoryMatchRepository;
+    let memoryMatchRepository: IMemoryMatchRepository;
 
     const setItUp = async (user?: CoscradUserWithGroups) => {
         const testModule = await Test.createTestingModule({
@@ -72,7 +74,7 @@ describe(endpointUnderTest, () => {
 
         await app.init();
 
-        _memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+        memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
     };
 
     beforeEach(async () => {
@@ -100,6 +102,18 @@ describe(endpointUnderTest, () => {
                     .send(validDto);
 
                 expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                const { id: newId } = res.body;
+
+                const searchResult = await memoryMatchRepository.fetchById(newId);
+
+                expect(searchResult).not.toBe(NotFound);
+
+                const round = searchResult as MemoryMatchRound;
+
+                const { cards } = round;
+
+                expect(cards).toHaveLength(validDto.cards.length);
             });
         });
     });

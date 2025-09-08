@@ -82,6 +82,8 @@ export class MemoryMatchController {
     async import(@Body() dto: MemoryMatchRoundImportDto) {
         const result = await this.memoryMatchService.import(dto);
 
-        return result;
+        return {
+            id: result,
+        };
     }
 }
