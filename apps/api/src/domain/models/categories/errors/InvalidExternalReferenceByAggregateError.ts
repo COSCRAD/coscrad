@@ -1,7 +1,11 @@
 import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import formatArrayAsList from '../../../../queries/presentation/shared/formatArrayAsList';
-import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
+
+type CompositeId = {
+    type: string;
+    id: string;
+};
 
 export default class InvalidExternalReferenceByAggregateError extends InternalError {
     /**
@@ -10,8 +14,8 @@ export default class InvalidExternalReferenceByAggregateError extends InternalEr
      * `invalidReferences`? This is inconsistent.
      */
     constructor(
-        aggregateCompositeIdentifier: AggregateCompositeIdentifier,
-        invalidReferences: AggregateCompositeIdentifier[],
+        aggregateCompositeIdentifier: CompositeId,
+        invalidReferences: CompositeId[],
         /**
          * Sometimes the reference is invalid not because the related aggregate
          * doesn't exist, but because its state is wrong (e.g. media item has

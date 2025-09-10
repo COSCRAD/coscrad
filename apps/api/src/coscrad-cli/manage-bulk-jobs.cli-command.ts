@@ -36,10 +36,25 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
     }
 
     async run(
-        passedParams: string[],
+        _passedParams: string[],
         { dataFile: { bulkJob, filename } }: ManageBulkJobsCliCommandOptions
     ): Promise<void> {
-        const jobCreationResult = await this.commandExecutor.createBulkJob(bulkJob);
+        const uuidAcquisitionResult = await this.commandExecutor.acquireIdsForSlugsOnStream(
+            bulkJob.stream
+        );
+
+        if (isInternalError(uuidAcquisitionResult)) {
+            this.logger.log(uuidAcquisitionResult.toString());
+
+            throw uuidAcquisitionResult;
+        }
+
+        const { updatedStream: streamWithUuidsInPlaceOfSlugs } = uuidAcquisitionResult;
+
+        const jobCreationResult = await this.commandExecutor.createBulkJob({
+            ...bulkJob,
+            stream: streamWithUuidsInPlaceOfSlugs,
+        });
 
         if (isInternalError(jobCreationResult)) {
             const e = new InternalError(`failed to create bulk job with name: ${bulkJob.name}`);

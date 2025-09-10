@@ -1,5 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
-import { Ack } from '@coscrad/commands';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { TestingModule } from '@nestjs/testing';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { CommandTestFactory } from 'nest-commander-testing';
@@ -11,13 +10,17 @@ import {
     BULK_JOB_REPOSITORY_INJECTION_TOKEN,
     IBulkJobRepository,
 } from '../app/controllers/command/bulk-imports/bulk-job-repository.interface';
-import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
+import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
+import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { AddLyricsForSong, CreateSong } from '../domain/models/song/commands';
+import { IRepositoryProvider } from '../domain/repositories/interfaces/repository-provider.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
+import { TestEventStream } from '../test-data/events';
 import { buildTestInstance } from '../test-data/utilities';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -30,22 +33,38 @@ const testDataDir = `apps/api/src/coscrad-cli`;
 
 const dataFile = `${testDataDir}/manage-bulk-jobs.cli-command.SAMPLE.json`;
 
-const withMeta = (fsa) => ({
-    ...fsa,
-    meta: {
-        contributorIds: [],
-        userId: 'COSCRAD_ADMIN',
-    },
-});
+const withMetaAndUuid = (fsa, uuid) => {
+    fsa.payload.aggregateCompositeIdentifier.id = uuid;
+
+    return {
+        ...fsa,
+        meta: {
+            contributorIds: [],
+            userId: 'COSCRAD_ADMIN',
+        },
+    };
+};
+
+const testAudioItemId = buildDummyUuid(193);
+
+const testAudioItem = AudioItem.fromEventHistory(
+    new TestEventStream()
+        .andThen<AudioItemCreated>({
+            type: 'AUDIO_ITEM_CREATED',
+        })
+        .as({
+            type: AggregateType.audioItem,
+            id: testAudioItemId,
+        }),
+    testAudioItemId
+) as AudioItem; // event sourcing will not fail here
 
 describe(cliCommandName, () => {
-    let _bulkJobRepo: IBulkJobRepository;
+    let bulkJobRepo: IBulkJobRepository;
 
     let commandInstance: TestingModule;
 
     let testRepositoryProvider: TestRepositoryProvider;
-
-    let _idGenerator: IIdManager;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -90,13 +109,16 @@ describe(cliCommandName, () => {
 
         await testAppModule.get(DynamicDataTypeFinderService).bootstrapDynamicTypes();
 
-        _idGenerator = testAppModule.get(ID_MANAGER_TOKEN);
-
         await testRepositoryProvider.testTeardown();
 
         await databaseProvider.getDatabaseForCollection(ARANGO_BULK_JOB_COLLECTION_NAME).clear();
 
-        _bulkJobRepo = testAppModule.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN);
+        bulkJobRepo = testAppModule.get(BULK_JOB_REPOSITORY_INJECTION_TOKEN);
+
+        await testAppModule
+            .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
+            .forResource(ResourceType.audioItem)
+            .create(testAudioItem);
 
         jest.clearAllMocks();
 
@@ -127,6 +149,10 @@ describe(cliCommandName, () => {
                     type: AggregateType.song,
                     id: `GENERATE_THIS_ID:${slugId}`,
                 },
+                audioItemId: testAudioItemId,
+                rawData: {
+                    slug: slugId,
+                },
             }),
         };
 
@@ -156,7 +182,7 @@ describe(cliCommandName, () => {
                 `--data-file=${dataFile}`,
             ]);
 
-            const bulkJobs = await _bulkJobRepo.fetchMany();
+            const bulkJobs = await bulkJobRepo.fetchMany();
 
             const { name: foundName, results } = bulkJobs[0];
 
@@ -164,15 +190,24 @@ describe(cliCommandName, () => {
 
             const { fsa: foundFirstFsa, result: firstResult } = results[0];
 
-            expect(foundFirstFsa).toEqual(withMeta(validCreateCommand));
+            // TODO Why doesn't the MockIdGenerator use the same prefix as `buildDummyUuid` so we can compare to `buildDummyUuid(1)` ?
+            const dummyIdGeneratedForSong = '41fb2d7f-c483-4e09-a1f0-e9909a6b0001';
 
-            expect(firstResult).toBe(Ack);
+            expect(foundFirstFsa).toEqual(
+                withMetaAndUuid(validCreateCommand, dummyIdGeneratedForSong)
+            );
+
+            expect(firstResult).toBe('ACK');
 
             const { fsa: foundSecondFsa, result: secondResult } = results[1];
 
-            expect(foundSecondFsa).toEqual(withMeta(invalidUpdateCommand));
+            expect(foundSecondFsa).toEqual(
+                withMetaAndUuid(invalidUpdateCommand, dummyIdGeneratedForSong)
+            );
 
-            expect(secondResult).toContain('peace on you, bro!');
+            expect(secondResult).toContain(invalidUpdateCommand.type);
+
+            expect(secondResult).toContain('is enum LanguageCode');
         });
     });
 });
