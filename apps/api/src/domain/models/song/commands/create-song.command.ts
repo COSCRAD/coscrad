@@ -7,10 +7,12 @@ import {
     ReferenceTo,
     UUID,
 } from '@coscrad/data-types';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { AggregateTypeProperty } from '../../shared/common-commands';
 
 export class SongCompositeId {
@@ -24,6 +26,17 @@ export class SongCompositeId {
     id: string;
 }
 
+@CoscradDataExample<CreateSong>({
+    example: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.song,
+            id: buildDummyUuid(1),
+        },
+        title: 'I have a little lamb',
+        languageCodeForTitle: LanguageCode.English,
+        audioItemId: buildDummyUuid(2),
+    },
+})
 @Command({
     type: 'CREATE_SONG',
     label: 'Create Song',

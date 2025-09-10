@@ -25,6 +25,7 @@ import { ExportSchemasCliCommand } from './export-schemas.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
+import { ManageBulkJobsCliCommand } from './manage-bulk-jobs.cli-command';
 import { RehydrateViewsCliCommand } from './rehydrate-views.cli-command';
 import { RevertLatestMigrationCliCommand } from './revert-latest-migration';
 import { RunMigrationsCliCommand } from './run-migrations.cli-command';
@@ -43,6 +44,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ValidateInvariantsCliCommand,
         ClearDatabaseCliCommand,
         ExecuteCommandStreamCliCommand,
+        ManageBulkJobsCliCommand,
         SeedDatabaseCliCommand,
         SeedTestDataWithCommand,
         SeedTestUuids,
