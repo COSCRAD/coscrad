@@ -107,7 +107,11 @@ describe(`VideoAddedForTermEventHandler`, () => {
             it(`should update the database appropriately`, async () => {
                 await videoAddedForTermEventHandler.handle(videoAddedForTerm as VideoAddedForTerm);
 
-                throw new Error('not implemented');
+                const { mediaItemIdForVideo } = (await testQueryRepository.fetchById(
+                    existingTermView.id
+                )) as TermViewModel;
+
+                expect(mediaItemIdForVideo).toBe(videoId);
             });
         });
     });

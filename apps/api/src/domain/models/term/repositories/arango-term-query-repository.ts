@@ -267,7 +267,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         FOR v IN video__VIEWS
         FILTER v._key == @videoId
         UPDATE term WITH {
-            mediaItemId: v.mediaItemIdForVideo
+            mediaItemIdForVideo: @videoId
         } IN @@collectionName
         `;
 
