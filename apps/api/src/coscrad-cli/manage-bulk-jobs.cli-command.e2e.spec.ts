@@ -137,77 +137,79 @@ describe(cliCommandName, () => {
         }
     });
 
-    describe(`when the bulk job is invalid`, () => {
-        const testJobName = 'invalid bulk job (should have errors)';
+    describe(`when the request is well-formed`, () => {
+        describe(`when the bulk job is invalid`, () => {
+            const testJobName = 'invalid bulk job (should have errors)';
 
-        const slugId = 's123';
+            const slugId = 's123';
 
-        const validCreateCommand = {
-            type: 'CREATE_SONG',
-            payload: buildTestInstance(CreateSong, {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.song,
-                    id: `GENERATE_THIS_ID:${slugId}`,
-                },
-                audioItemId: testAudioItemId,
-                rawData: {
-                    slug: slugId,
-                },
-            }),
-        };
+            const validCreateCommand = {
+                type: 'CREATE_SONG',
+                payload: buildTestInstance(CreateSong, {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.song,
+                        id: `GENERATE_THIS_ID:${slugId}`,
+                    },
+                    audioItemId: testAudioItemId,
+                    rawData: {
+                        slug: slugId,
+                    },
+                }),
+            };
 
-        const invalidUpdateCommand = {
-            type: 'ADD_LYRICS_FOR_SONG',
-            payload: buildTestInstance(AddLyricsForSong, {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.song,
-                    id: `APPEND_THIS_ID:${slugId}`,
-                },
-                languageCode: 'foobarbaz (bad language code)' as LanguageCode,
-            }),
-        };
+            const invalidUpdateCommand = {
+                type: 'ADD_LYRICS_FOR_SONG',
+                payload: buildTestInstance(AddLyricsForSong, {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.song,
+                        id: `APPEND_THIS_ID:${slugId}`,
+                    },
+                    languageCode: 'foobarbaz (bad language code)' as LanguageCode,
+                }),
+            };
 
-        const bulkJobWithErrors = buildTestInstance(CoscradBulkImportJobCreateDto, {
-            name: testJobName,
-            stream: [validCreateCommand, invalidUpdateCommand],
-        });
+            const bulkJobWithErrors = buildTestInstance(CoscradBulkImportJobCreateDto, {
+                name: testJobName,
+                stream: [validCreateCommand, invalidUpdateCommand],
+            });
 
-        beforeEach(async () => {
-            writeFileSync(dataFile, JSON.stringify(bulkJobWithErrors, null, 4));
-        });
+            beforeEach(async () => {
+                writeFileSync(dataFile, JSON.stringify(bulkJobWithErrors, null, 4));
+            });
 
-        it(`should report the errors`, async () => {
-            await CommandTestFactory.run(commandInstance, [
-                cliCommandName,
-                `--data-file=${dataFile}`,
-            ]);
+            it(`should report the errors`, async () => {
+                await CommandTestFactory.run(commandInstance, [
+                    cliCommandName,
+                    `--data-file=${dataFile}`,
+                ]);
 
-            const bulkJobs = await bulkJobRepo.fetchMany();
+                const bulkJobs = await bulkJobRepo.fetchMany();
 
-            const { name: foundName, results } = bulkJobs[0];
+                const { name: foundName, results } = bulkJobs[0];
 
-            expect(foundName).toBe(testJobName);
+                expect(foundName).toBe(testJobName);
 
-            const { fsa: foundFirstFsa, result: firstResult } = results[0];
+                const { fsa: foundFirstFsa, result: firstResult } = results[0];
 
-            // TODO Why doesn't the MockIdGenerator use the same prefix as `buildDummyUuid` so we can compare to `buildDummyUuid(1)` ?
-            const dummyIdGeneratedForSong = '41fb2d7f-c483-4e09-a1f0-e9909a6b0001';
+                // TODO Why doesn't the MockIdGenerator use the same prefix as `buildDummyUuid` so we can compare to `buildDummyUuid(1)` ?
+                const dummyIdGeneratedForSong = '41fb2d7f-c483-4e09-a1f0-e9909a6b0001';
 
-            expect(foundFirstFsa).toEqual(
-                withMetaAndUuid(validCreateCommand, dummyIdGeneratedForSong)
-            );
+                expect(foundFirstFsa).toEqual(
+                    withMetaAndUuid(validCreateCommand, dummyIdGeneratedForSong)
+                );
 
-            expect(firstResult).toBe('ACK');
+                expect(firstResult).toBe('ACK');
 
-            const { fsa: foundSecondFsa, result: secondResult } = results[1];
+                const { fsa: foundSecondFsa, result: secondResult } = results[1];
 
-            expect(foundSecondFsa).toEqual(
-                withMetaAndUuid(invalidUpdateCommand, dummyIdGeneratedForSong)
-            );
+                expect(foundSecondFsa).toEqual(
+                    withMetaAndUuid(invalidUpdateCommand, dummyIdGeneratedForSong)
+                );
 
-            expect(secondResult).toContain(invalidUpdateCommand.type);
+                expect(secondResult).toContain(invalidUpdateCommand.type);
 
-            expect(secondResult).toContain('is enum LanguageCode');
+                expect(secondResult).toContain('is enum LanguageCode');
+            });
         });
     });
 });

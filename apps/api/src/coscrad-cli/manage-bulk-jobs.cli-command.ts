@@ -4,14 +4,14 @@ import { Inject } from '@nestjs/common';
 import { readFileSync, writeFileSync } from 'fs';
 import { CoscradBulkImportJobCreateDto } from '../app/controllers/command/bulk-imports/bulk-import-job.create-dto.entity';
 import { CommandExecutionService } from '../app/controllers/command/command-execution.service';
-import { ID_MANAGER_TOKEN, IIdManager } from '../domain/interfaces/id-manager.interface';
+import { CoscradInvalidUserInputException } from '../app/controllers/response-mapping/CoscradExceptions';
+import validateSimpleInvariants from '../domain/domainModelValidators/utilities/validateSimpleInvariants';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
-import path = require('path');
 
 type DataFileNameAndBulkJob = {
     filename: string;
@@ -29,7 +29,6 @@ interface ManageBulkJobsCliCommandOptions {
 export class ManageBulkJobsCliCommand extends CliCommandRunner {
     constructor(
         private readonly commandExecutor: CommandExecutionService,
-        @Inject(ID_MANAGER_TOKEN) private readonly idManager: IIdManager,
         @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
     ) {
         super();
@@ -50,6 +49,20 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
         }
 
         const { updatedStream: streamWithUuidsInPlaceOfSlugs } = uuidAcquisitionResult;
+
+        const validationResult = this.commandExecutor.validateCommandStream(
+            streamWithUuidsInPlaceOfSlugs
+        );
+
+        if (isInternalError(validationResult)) {
+            const e = new InternalError(`Failed to schedule bulk job with schema errors`, [
+                validationResult,
+            ]);
+
+            this.logger.log(e.message);
+
+            throw e;
+        }
 
         const jobCreationResult = await this.commandExecutor.createBulkJob({
             ...bulkJob,
@@ -98,7 +111,7 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
             throw e;
         }
 
-        const resultFilepath = path.join(filename, '.log.json');
+        const resultFilepath = `${filename}.log.json`;
 
         writeFileSync(resultFilepath, JSON.stringify(result, null, 4));
 
@@ -120,7 +133,7 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
     @CliCommandOption({
         flags: '--data-file [data-file]',
         description: 'path to the (local) JSON data file with an array of command FSAs',
-        required: false,
+        required: true,
     })
     parseDataFile(value: string): DataFileNameAndBulkJob {
         if (!isNonEmptyString(value)) return undefined;
@@ -129,6 +142,27 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
             const parsedBulkJobCreateDto = JSON.parse(
                 readFileSync(value, { encoding: 'utf-8' })
             ) as CoscradBulkImportJobCreateDto;
+
+            const dtoSchemaValidationErrors = validateSimpleInvariants(
+                // @ts-expect-error The type is too restrictive in the util
+                CoscradBulkImportJobCreateDto,
+                parsedBulkJobCreateDto
+            );
+
+            if (dtoSchemaValidationErrors.length > 0) {
+                const e = new CoscradInvalidUserInputException(
+                    new InternalError(
+                        `Encountered an invalid bulk job import record: ${
+                            parsedBulkJobCreateDto?.name || 'unknown name'
+                        }.`,
+                        dtoSchemaValidationErrors
+                    )
+                );
+
+                this.logger.log(e.message);
+
+                throw e;
+            }
 
             return { filename: value, bulkJob: parsedBulkJobCreateDto };
         } catch (error) {
