@@ -16,6 +16,7 @@ import { AudioAddedForTermEventHandler } from '../../domain/models/term/commands
 import { PhotographAddedForTerm } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event';
 import { PhotographAddedForTermEventHandler } from '../../domain/models/term/commands/add-photograph-for-term/photograph-added-for-term.event-handler';
 import { VideoAddedForTerm } from '../../domain/models/term/commands/add-video-for-term/video-added-for-term.event';
+import { VideoAddedForTermEventHandler } from '../../domain/models/term/commands/add-video-for-term/video-added-for-term.event-handler';
 import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands/create-prompt-term/prompt-term-created.event-handler';
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
 import { LiteralTranslationOfTermProvided } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
@@ -87,6 +88,7 @@ import { TermCommandsModule } from './term.commands.module';
         TermElicitedFromPromptEventHandler,
         AudioAddedForTermEventHandler,
         PhotographAddedForTermEventHandler,
+        VideoAddedForTermEventHandler,
         LiteralTranslationOfTermProvidedEventHandler,
     ],
     exports: [TermQueryService],

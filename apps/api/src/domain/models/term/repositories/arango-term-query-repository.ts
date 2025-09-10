@@ -260,6 +260,31 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
+    async addVideo(id: AggregateId, videoId: AggregateId) {
+        const query = `
+        FOR term IN @@collectionName
+        FILTER term._key == @id
+        FOR v IN video__VIEWS
+        FILTER v._key == @videoId
+        UPDATE term WITH {
+            mediaItemId: v.mediaItemIdForVideo
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id,
+            videoId,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
+        });
+
+        await cursor.all();
+    }
+
     // note that it is important to pass APPEND an array of items to append when appending a string value to an existing array
     async allowUser(termId: AggregateId, userId: AggregateId): Promise<void> {
         const aqlQuery = this.baseResourceQueryBuilder.allowUser(termId, userId);
