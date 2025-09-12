@@ -215,7 +215,17 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
         const slugGenerationResult = await this.commandExecutor.acquireIdsForSlugsOnStream(
             // @ts-expect-error TODO fix this type issue
-            resolvedCommandFsasFromParams
+            resolvedCommandFsasFromParams.map((fsa) => ({
+                ...fsa,
+                meta: {
+                    userId: 'COSCRAD Admin',
+                    /**
+                     * This allows the user to inject `contributorIds`. We do not
+                     * want the user to override timestamps, though.
+                     */
+                    contributorIds: fsa.meta?.contributorIds || [],
+                },
+            }))
         );
 
         if (isInternalError(slugGenerationResult)) {

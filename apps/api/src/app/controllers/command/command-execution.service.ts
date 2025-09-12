@@ -201,7 +201,7 @@ export class CommandExecutionService {
 
         const results = this.transformResults(resultsForAllCommands);
 
-        // @ts-expect-error fix this
+        // @ts-expect-error We are experiencing some friction with inconsistent `CommandFsa` type definitions
         await this.bulkJobRepo.registerResults(id, results, Date.now());
 
         return results;
@@ -445,19 +445,7 @@ export class CommandExecutionService {
                 });
             }
 
-            const contributorIds = fsaToExecute?.meta?.contributorIds || [];
-
-            commandFsasToExecute.push({
-                ...fsaToExecute,
-                meta: {
-                    userId: 'COSCRAD Admin',
-                    /**
-                     * This allows the user to inject `contributorIds`. We do not
-                     * want the user to override timestamps, though.
-                     */
-                    contributorIds,
-                },
-            });
+            commandFsasToExecute.push(fsaToExecute);
         }
 
         return {

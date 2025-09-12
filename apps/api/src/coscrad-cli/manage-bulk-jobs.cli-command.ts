@@ -39,7 +39,17 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
         { dataFile: { bulkJob, filename } }: ManageBulkJobsCliCommandOptions
     ): Promise<void> {
         const uuidAcquisitionResult = await this.commandExecutor.acquireIdsForSlugsOnStream(
-            bulkJob.stream
+            bulkJob.stream.map((fsa) => ({
+                ...fsa,
+                meta: {
+                    userId: 'COSCRAD Admin',
+                    /**
+                     * This allows the user to inject `contributorIds`. We do not
+                     * want the user to override timestamps, though.
+                     */
+                    contributorIds: fsa.meta?.contributorIds || [],
+                },
+            }))
         );
 
         if (isInternalError(uuidAcquisitionResult)) {
