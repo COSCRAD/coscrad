@@ -12,6 +12,7 @@ import { AggregateRoot, UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
@@ -21,6 +22,7 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -52,6 +54,16 @@ export type CoscradTimeStamp = number;
 export const isAudioMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.mp3, MIMEType.wav, MIMEType.audioOgg].includes(mimeType);
 
+@CoscradDataExample<AudioItem>({
+    example: {
+        id: buildDummyUuid(101),
+        type: AggregateType.audioItem,
+        name: buildMultilingualTextWithSingleItem(`Jammin' with the testers`),
+        mediaItemId: buildDummyUuid(192),
+        lengthMilliseconds: 1000,
+        published: false,
+    },
+})
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 // mixin the magic method event handlers for transcripts
 @EventSourcedTranscribable()
@@ -72,7 +84,6 @@ export class AudioItem extends Resource {
     })
     readonly transcript?: Transcript;
 
-    // TODO Make this UUID
     @UUID({
         label: 'media item ID',
         description: `ID of the transcript's media item`,

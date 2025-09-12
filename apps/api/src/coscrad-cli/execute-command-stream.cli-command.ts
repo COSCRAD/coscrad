@@ -1,17 +1,7 @@
 import { LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
-import {
-    COMPOSITE_IDENTIFIER,
-    CoscradUserRole,
-    getCoscradDataSchema,
-    getReferencesForCoscradDataSchema,
-} from '@coscrad/data-types';
-import {
-    isNonEmptyString,
-    isNullOrUndefined,
-    isString,
-    isUUID,
-} from '@coscrad/validation-constraints';
+import { CoscradUserRole } from '@coscrad/data-types';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { CoscradBulkImportJobCreateDto } from '../app/controllers/command/bulk-imports/bulk-import-job.create-dto.entity';
@@ -29,15 +19,8 @@ import { GrantUserRole } from '../domain/models/user-management/user/commands/gr
 import { RegisterUser } from '../domain/models/user-management/user/commands/register-user/register-user.command';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
-import { ImportEntriesToVocabularyList } from '../domain/models/vocabulary-list/commands';
-import { AggregateId } from '../domain/types/AggregateId';
 import { AggregateType } from '../domain/types/AggregateType';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
-import { Ctor } from '../lib/types/Ctor';
-import { clonePlainObjectWithOverrides } from '../lib/utilities/clonePlainObjectWithOverrides';
-import { cloneWithOverridesByDeepPath } from '../lib/utilities/cloneWithOverridesByDeepPath';
-import { getDeepPropertyFromObject } from '../lib/utilities/getDeepPropertyFromObject';
-import { ResultOrError } from '../types/ResultOrError';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
 
@@ -63,11 +46,6 @@ type DataFilenameAndCommandStream = {
 const GENERATE_THIS_ID = 'GENERATE_THIS_ID';
 
 const APPEND_THIS_ID = 'APPEND_THIS_ID';
-
-type SlugContext = typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID;
-
-const isSlugContext = (input: unknown): input is SlugContext =>
-    isString(input) && [GENERATE_THIS_ID, APPEND_THIS_ID].includes(input);
 
 const createAdminUserCommand: RegisterUser = {
     aggregateCompositeIdentifier: {
@@ -179,41 +157,6 @@ const createAdminUserCommandStream = [
     grantGeoffUserRoleCommandFsa,
 ];
 
-const parseSlugDefinition = (
-    input: string
-): ResultOrError<[typeof GENERATE_THIS_ID | typeof APPEND_THIS_ID, string]> => {
-    const DELIMITER = ':';
-
-    const splitOnDelimeter = input.split(DELIMITER);
-
-    const buildErrorMessage = (input: string, problem: string) =>
-        `Encountered an invalid slug definition [${problem}]: {${input}}`;
-
-    if (splitOnDelimeter.length !== 2) {
-        return new InternalError(buildErrorMessage(input, `missing colon (:)`));
-    }
-
-    const [prefix, slug] = splitOnDelimeter;
-
-    // This would happen if the input were `id: "9:GENERATE_THIS_ID"`, for example
-    if (isSlugContext(slug)) {
-        return new InternalError(
-            buildErrorMessage(input, `${GENERATE_THIS_ID} | ${APPEND_THIS_ID} must come first`)
-        );
-    }
-
-    if (!isSlugContext(prefix)) {
-        return new InternalError(
-            buildErrorMessage(
-                input,
-                `invalid slug context (must be ${GENERATE_THIS_ID} | ${APPEND_THIS_ID})`
-            )
-        );
-    }
-
-    return [prefix, slug];
-};
-
 interface ExecuteCommandStreamCliCommandOptions {
     name: CommandFsaWithMeta[];
     dataFile: DataFilenameAndCommandStream;
@@ -270,205 +213,28 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         const resolvedCommandFsasFromParams =
             commandFsasFromFixture || dataFilenamesAndCommandFsas.stream;
 
-        const userDefinedSlugParseResult = resolvedCommandFsasFromParams
-            .map(
-                ({
-                    payload: {
-                        aggregateCompositeIdentifier: { id },
-                    },
-                }) => id
-            )
-            .map((idFromPayload) => {
-                return isUUID(idFromPayload) ? idFromPayload : parseSlugDefinition(idFromPayload);
-            });
-
-        const invalidSlugDefinitions = userDefinedSlugParseResult.filter(isInternalError);
-
-        if (invalidSlugDefinitions.length > 0) {
-            const exception = new InternalError(
-                `Encountered invalid command stream definition`,
-                invalidSlugDefinitions
-            );
-
-            this.logger.log(exception.toString());
-
-            throw exception;
-        }
-
-        const userDefinedSlugs = (userDefinedSlugParseResult as [SlugContext, string][])
-            .filter(([slugContext, _]) => slugContext === GENERATE_THIS_ID)
-            .map(([_slugContext, slug]) => slug);
-
-        const generatedIds = await this.idManager.generateMany(userDefinedSlugs.length);
-
-        const idMap = generatedIds.reduce((acc, generatedId, index) => {
-            // We essentially zipping the slugs together with corresponding uuids
-            const slug = userDefinedSlugs[index];
-
-            // TODO: do we want to throw here?
-            if (acc.has(slug)) return acc;
-
-            return acc.set(slug, generatedId);
-        }, new Map<string, AggregateId>());
-
-        const commandCtorsAndMeta = this.commandHandlerService.getAllCommandCtorsAndMetadata();
-
-        const commandTypeToCtor = commandCtorsAndMeta.reduce(
-            (acc: Map<string, Ctor<unknown>>, { meta: { type }, constructor }) =>
-                acc.set(type, constructor),
-            new Map<string, Ctor<unknown>>()
-        );
-
-        const commandTypeToReferentialPropertyPaths = resolvedCommandFsasFromParams.reduce(
-            (acc, { type }) => {
-                if (acc.has(type)) {
-                    return acc;
-                }
-
-                if (!commandTypeToCtor.has(type)) {
-                    throw new InternalError(
-                        `Failed to find a constructor for command of type: ${type}`
-                    );
-                }
-
-                const ctor = commandTypeToCtor.get(type);
-
-                const referenceSpecifications = getReferencesForCoscradDataSchema(
-                    getCoscradDataSchema(ctor)
-                );
-
-                const referencePropertyPaths = referenceSpecifications.map(
-                    // If the reference is a full composite identifier, we need to access the nested ID property
-                    ({ type, path }) => {
-                        const nestedPath = type === COMPOSITE_IDENTIFIER ? `${path}.id` : path;
-
-                        // note that the COSCRAD Schema is for the payload, which is itself a nested FSA property
-                        return `payload.${nestedPath}`;
-                    }
-                );
-
-                return acc.set(type, referencePropertyPaths);
-            },
-            new Map<string, string[]>()
-        );
-
-        const commandFsasToExecute = [];
-
-        // TODO remove unused var
-        for (const [_index, fsa] of resolvedCommandFsasFromParams.entries()) {
-            const {
-                type: commandType,
-                payload: {
-                    aggregateCompositeIdentifier: { id: idOnPayload },
-                },
-            } = fsa;
-
-            const customIdParseResult = parseSlugDefinition(idOnPayload);
-
-            /**
-             * If parse fails, we take it to mean that the user has provided a
-             * standard UUID on the payload. If not, the command will fail for
-             * other reasons upstream.
-             */
-            const idToUse = isInternalError(customIdParseResult)
-                ? idOnPayload
-                : // look up the UUID corresponding to this slug
-                  idMap.get(customIdParseResult[1]);
-
-            let fsaToExecute = clonePlainObjectWithOverrides(fsa, {
-                payload: {
-                    aggregateCompositeIdentifier: {
-                        id: idToUse,
-                    },
-                },
-            });
-
-            if (fsa.type === 'IMPORT_ENTRIES_TO_VOCABULARY_LIST') {
-                const newEntries = (
-                    fsaToExecute.payload as ImportEntriesToVocabularyList
-                ).entries.map((entry) => {
-                    if (
-                        ![APPEND_THIS_ID, GENERATE_THIS_ID].some((prefix) =>
-                            entry.termId.includes(prefix)
-                        )
-                    ) {
-                        // nothing to do here
-                        return entry;
-                    }
-
-                    const customIdParseResult = parseSlugDefinition(entry.termId);
-
-                    const referenceIdToUse = isInternalError(customIdParseResult)
-                        ? idOnPayload
-                        : // look up the UUID corresponding to this slug
-                          idMap.get(customIdParseResult[1]);
-
-                    return {
-                        propertyValues: entry.propertyValues,
-                        termId: referenceIdToUse,
-                    };
-                });
-
-                fsaToExecute = cloneWithOverridesByDeepPath(
-                    fsaToExecute,
-                    // payload.entries
-                    'payload.entries',
-                    newEntries
-                );
-            } else if (commandTypeToReferentialPropertyPaths.has(commandType)) {
-                commandTypeToReferentialPropertyPaths.get(commandType).forEach((fullPath) => {
-                    const value = getDeepPropertyFromObject(fsaToExecute, fullPath);
-
-                    if (
-                        Array.isArray(value) &&
-                        [APPEND_THIS_ID, GENERATE_THIS_ID].some((prefix) => value.includes(prefix))
-                    ) {
-                        /**
-                         * This is a major hack. We need to find a better way
-                         * to deal with joining in slug references in general.
-                         */
-                        if (!['IMPORT_ENTRIES_TO_VOCABULARY_LIST'].includes(fsa.type)) {
-                            throw new InternalError(
-                                `Using slugs for arrays of references is not yet supported. Found array with references: ${
-                                    isNullOrUndefined(value) ? '' : JSON.stringify(value)
-                                } on command FSA: ${JSON.stringify(fsaToExecute)}`
-                            );
-                        }
-                    }
-
-                    if (isString(value) && value.includes(APPEND_THIS_ID)) {
-                        const customIdParseResult = parseSlugDefinition(value);
-
-                        const referenceIdToUse = isInternalError(customIdParseResult)
-                            ? idOnPayload
-                            : // look up the UUID corresponding to this slug
-                              idMap.get(customIdParseResult[1]);
-
-                        fsaToExecute = cloneWithOverridesByDeepPath(
-                            fsaToExecute,
-                            fullPath,
-                            referenceIdToUse
-                        );
-                    }
-                });
-            }
-
-            this.logger.log(`Attempting to execute command FSA: ${JSON.stringify(fsaToExecute)}`);
-
-            const contributorIds = fsaToExecute?.meta?.contributorIds || [];
-
-            commandFsasToExecute.push({
-                ...fsaToExecute,
+        const slugGenerationResult = await this.commandExecutor.acquireIdsForSlugsOnStream(
+            // @ts-expect-error TODO fix this type issue
+            resolvedCommandFsasFromParams.map((fsa) => ({
+                ...fsa,
                 meta: {
                     userId: 'COSCRAD Admin',
                     /**
                      * This allows the user to inject `contributorIds`. We do not
                      * want the user to override timestamps, though.
                      */
-                    contributorIds,
+                    contributorIds: fsa.meta?.contributorIds || [],
                 },
-            });
+            }))
+        );
+
+        if (isInternalError(slugGenerationResult)) {
+            this.logger.log(slugGenerationResult.toString());
+
+            throw slugGenerationResult;
         }
+
+        const { updatedStream: commandFsasToExecute } = slugGenerationResult;
 
         const typeValidationResult =
             this.commandExecutor.validateCommandStream(commandFsasToExecute);

@@ -2,6 +2,17 @@
 
 ## <next>
 
+### Bulk Imports
+
+We have exposed additional features via our CLI for use in bulk data ingestion.
+This is in conjunction with updates to our secondary [data-ingestion](https://github.com/COSCRAD/data-ingestion)
+Python codebase.
+
+#### Relevant Commits
+
+-   feat(cli): introduce **manage-bulk-jobs** (#772)
+-   infra: make env file optional (#774)
+
 ### Photographs and Video for Terms
 
 It is now possible to add a featured photograph and \ or video for a term. This

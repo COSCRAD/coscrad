@@ -126,7 +126,7 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 const privateRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(123),
                     isPublished: false,
-                    name: buildMultilingualTextWithSingleItem('private round'),
+                    name: buildMultilingualTextWithSingleItem('private memory match round'),
                 });
 
                 beforeEach(async () => {

@@ -53,6 +53,28 @@ export class MockIdManagementService extends IdManagementService {
         return newId;
     }
 
+    override async generateMany(numberOfIdsToGenerate: number): Promise<string[]> {
+        if (this.currentIndex + numberOfIdsToGenerate - 1 > maxIdIndex) {
+            throw new InternalError(
+                `You have surpassed the limit of: ${maxIdIndex} for number of IDs generated`
+            );
+        }
+
+        const generatedIds = [];
+
+        while (generatedIds.length < numberOfIdsToGenerate) {
+            this.currentIndex++;
+
+            const nextId = this.buildUuid();
+
+            generatedIds.push(nextId);
+        }
+
+        await this.idRepository.createMany(generatedIds);
+
+        return generatedIds;
+    }
+
     private buildUuid(): string {
         return buildId(this.currentIndex);
     }

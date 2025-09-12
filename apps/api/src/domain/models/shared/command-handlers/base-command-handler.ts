@@ -3,6 +3,7 @@ import {
     AggregateCompositeIdentifier,
     AggregateType,
     ICommandBase,
+    ResourceType,
 } from '@coscrad/api-interfaces';
 import { Ack, ICommand, ICommandHandler } from '@coscrad/commands';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
@@ -86,7 +87,7 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
          * generic handlers.
          */
         const searchResult = this.repositoryProvider.forResource(
-            aggregateType
+            aggregateType as ResourceType
         ) as unknown as IRepositoryForAggregate<T>;
 
         if (!isNullOrUndefined(searchResult)) {
