@@ -33,9 +33,10 @@ export class Attributor implements ICoscradEventHandler {
         const repo = this.provider.forResource(event.payload.aggregateCompositeIdentifier.type);
 
         if (!isFunction(repo?.attribute)) {
-            console.log(
-                `failed to attribute for: ${event.payload.aggregateCompositeIdentifier.type}`
-            );
+            // TODO this.logger.error(...)
+            // console.log(
+            //     `failed to attribute for: ${event.payload.aggregateCompositeIdentifier.type}`
+            // );
 
             return;
 

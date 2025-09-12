@@ -112,6 +112,8 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
 
         const jobId = jobCreationResult;
 
+        this.logger.log(`Created bulkJob/${jobId}`);
+
         await this.commandExecutor.executeBulkJob(
             new CoscradUserWithGroups(
                 new CoscradUser({
