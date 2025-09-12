@@ -12,6 +12,13 @@ import { ResultOrError } from '../../../../types/ResultOrError';
 import { CommandFSA } from '../command-fsa/command-fsa.entity';
 import { CoscradBulkImportJobCreateDto } from './bulk-import-job.create-dto.entity';
 
+@CoscradDataExample<BulkCommandExecutionResult>({
+    example: {
+        // you have to manually build one of these on the test data
+        fsa: undefined,
+        result: 'ACK',
+    },
+})
 export class BulkCommandExecutionResult {
     fsa: CommandFSA;
 
