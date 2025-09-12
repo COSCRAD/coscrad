@@ -47,6 +47,7 @@ const publishedRound = buildTestInstance(MemoryMatchRound, {
     cardBackImageId: buildDummyUuid(testCards.length + 10),
     isPublished: true,
     cards: testCards,
+    name: buildMultilingualTextWithSingleItem('published round'),
 });
 
 /**
@@ -125,6 +126,7 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 const privateRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(123),
                     isPublished: false,
+                    name: buildMultilingualTextWithSingleItem('private round'),
                 });
 
                 beforeEach(async () => {

@@ -191,7 +191,7 @@ exports[`when querying for a memory match round: fetch by Id when the user is un
       {
         "languageCode": "en",
         "role": "original",
-        "text": "test memory match round name",
+        "text": "published round",
       },
     ],
   },

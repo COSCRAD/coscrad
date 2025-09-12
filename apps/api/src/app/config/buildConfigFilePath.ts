@@ -1,5 +1,4 @@
 import { existsSync } from 'fs';
-import { InternalError } from '../../lib/errors/InternalError';
 import { Environment } from './constants/environment';
 
 const getTargetDirectoryForEnvironment = (environment: Environment): string => {
@@ -25,7 +24,13 @@ export default (envFilePrefix: string): string => {
     const path = `${process.cwd()}${baseDir}${envFilePrefix}.env`;
 
     if (!existsSync(path)) {
-        throw new InternalError(`Invalid .env file path: ${path}`);
+        /**
+         * We don't want to throw here. We **could** return not found
+         * and let the client explicitly decide what to do. But it's important
+         * for usability that the system fall back to existing environment variables
+         * if no `.env` file is provided.
+         */
+        return undefined;
     }
     return path;
 };
