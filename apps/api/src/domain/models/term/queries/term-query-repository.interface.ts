@@ -42,7 +42,7 @@ export interface ITermQueryRepository extends IResourceQueryRepository<TermViewM
 
     addPhotograph(id: AggregateId, photographId: AggregateId);
 
-    addVideo(id: AggregateId, videoId: AggregateId);
+    addVideo(id: AggregateId, videoId: AggregateId): Promise<void>;
 
     indexVocabularyList(id: string, vocabularyListId: string): Promise<void>;
 

@@ -28,9 +28,11 @@ const termId = buildDummyUuid(67);
 
 const videoId = buildDummyUuid(76);
 
+const mediaItemId = buildDummyUuid(77);
+
 const existingTermView = buildTestInstance(TermViewModel, {
     id: termId,
-    mediaItemIdForVideo: videoId,
+    mediaItemIdForVideo: undefined,
 });
 
 const videoAddedForTerm = buildTestInstance(VideoAddedForTerm, {
@@ -99,6 +101,7 @@ describe(`VideoAddedForTermEventHandler`, () => {
             await videoRepository.create(
                 buildTestInstance(EventSourcedVideoViewModel, {
                     id: videoId,
+                    mediaItemId,
                 })
             );
         });
@@ -111,7 +114,7 @@ describe(`VideoAddedForTermEventHandler`, () => {
                     existingTermView.id
                 )) as TermViewModel;
 
-                expect(mediaItemIdForVideo).toBe(videoId);
+                expect(mediaItemIdForVideo).toBe(mediaItemId);
             });
         });
     });

@@ -267,7 +267,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         FOR v IN video__VIEWS
         FILTER v._key == @videoId
         UPDATE term WITH {
-            mediaItemIdForVideo: @videoId
+            mediaItemIdForVideo: v.mediaItemId
         } IN @@collectionName
         `;
 
@@ -277,10 +277,14 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             videoId,
         };
 
-        const cursor = await this.database.query({
-            query,
-            bindVars,
-        });
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((e) => {
+                throw e;
+            });
 
         await cursor.all();
     }

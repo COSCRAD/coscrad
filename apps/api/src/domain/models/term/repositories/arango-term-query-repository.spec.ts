@@ -44,6 +44,12 @@ import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { VideoCreated } from '../../audio-visual/video';
+import {
+    EventSourcedVideoViewModel,
+    IVideoQueryRepository,
+    VIDEO_QUERY_REPOSITORY_TOKEN,
+} from '../../audio-visual/video/queries';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../tag/tag.entity';
@@ -61,6 +67,8 @@ describe(`ArangoTermQueryRepository`, () => {
     let vocabularyListQueryRepository: IVocabularyListQueryRepository;
 
     let audioItemQueryRepository: IAudioItemQueryRepository;
+
+    let videoQueryRepository: IVideoQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -91,6 +99,8 @@ describe(`ArangoTermQueryRepository`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
+        videoQueryRepository = app.get(VIDEO_QUERY_REPOSITORY_TOKEN);
+
         // TODO Use the DI system so this is more extensible to keep test maintenance lower
         audioItemQueryRepository = new ArangoAudioItemQueryRepository(connectionProvider);
 
@@ -114,6 +124,8 @@ describe(`ArangoTermQueryRepository`, () => {
             mapDatabaseDocumentToAggregateDTO,
             mapEntityDTOToDatabaseDocument
         );
+
+        app.init();
     });
 
     afterAll(async () => {
@@ -628,6 +640,58 @@ describe(`ArangoTermQueryRepository`, () => {
                 );
 
                 expect(targetEntry.term.mediaItemId).toBe(mediaItemId);
+            });
+        });
+    });
+
+    describe(`addVideo`, () => {
+        const vocabularyList = buildTestInstance(VocabularyListViewModel, {
+            id: buildDummyUuid(90),
+            entries: [],
+        });
+
+        const targetTerm = buildTestInstance(TermViewModel, {
+            id: termViews[0].id,
+            vocabularyLists: [vocabularyList],
+            mediaItemIdForVideo: undefined,
+        });
+
+        vocabularyList.entries.push(VocabularyListEntryViewModel.fromTermView(targetTerm));
+
+        const videoId = buildDummyUuid(91);
+
+        const mediaItemId = buildDummyUuid(19);
+
+        const videoCreationEvent = new TestEventStream()
+            .andThen<VideoCreated>({
+                type: 'VIDEO_CREATED',
+                payload: {
+                    mediaItemId,
+                },
+            })
+            .as({ type: AggregateType.video, id: videoId })[0] as VideoCreated;
+
+        const targetVideoView = EventSourcedVideoViewModel.fromVideoCreated(videoCreationEvent);
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetTerm);
+
+            await videoQueryRepository.create(targetVideoView);
+        });
+
+        describe(`when the term is not in the vocabulary list`, () => {
+            it(`should append the video`, async () => {
+                await testQueryRepository.addVideo(targetTerm.id, videoId);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetTerm.id
+                )) as TermViewModel;
+
+                expect(updatedView.mediaItemIdForVideo).toBe(mediaItemId);
+
+                expect(updatedView.actions).not.toContain('ADD_VIDEO_FOR_TERM');
             });
         });
     });

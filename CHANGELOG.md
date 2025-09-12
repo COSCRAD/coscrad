@@ -8,10 +8,13 @@ We have exposed additional features via our CLI for use in bulk data ingestion.
 This is in conjunction with updates to our secondary [data-ingestion](https://github.com/COSCRAD/data-ingestion)
 Python codebase.
 
+We are also working to allow media file uploads via the API.
+
 #### Relevant Commits
 
 -   feat(cli): introduce **manage-bulk-jobs** (#772)
 -   infra: make env file optional (#774)
+-   feat: introduce media upload dashboard (#753)
 
 ### Memory Match (backend)
 
@@ -42,8 +45,9 @@ web of knowledge will "come along for the ride".
 #### Relevant PRs
 
 -   introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
--   introduce ADD_VIDEO_FOR_TERM (#758)
--   feat: introduce media upload dashboard (#753)
+-   feat: introduce event consumer for VIDEO_ADDED_FOR_TERM (#773)
+-   feat: introduce ADD_VIDEO_FOR_TERM (#758)
+-   feat: introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
 
 ### Audio Discovery
 
