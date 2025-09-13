@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -6,12 +6,19 @@ import * as request from 'supertest';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
+import { AuthorizationModule } from '../../../../authorization/authorization.module';
+import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
+import { MockJwtAuthGuard } from '../../../../authorization/mock-jwt-auth-guard';
+import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
+import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../types/AggregateId';
 import { MemoryMatchModule } from '../memory-match.module';
 import {
@@ -22,6 +29,8 @@ import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 const buildDetailEndpoint = (id: AggregateId) => `/games/memory-match/${id}`;
+
+const dummyUserId = buildDummyUuid(1);
 
 const roundId = buildDummyUuid(34);
 
@@ -50,63 +59,86 @@ const publishedRound = buildTestInstance(MemoryMatchRound, {
     name: buildMultilingualTextWithSingleItem('published round'),
 });
 
+const unpublishedRound = buildTestInstance(MemoryMatchRound, {
+    id: buildDummyUuid(123),
+    isPublished: false,
+});
+
 /**
  * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305]
  * Return unpublished rounds to admin users.
  */
 describe(`when querying for a memory match round: fetch by Id`, () => {
-    const testDatabaseName = generateDatabaseNameForTestSuite();
-
     let app: INestApplication;
-
-    let databaseProvider: ArangoDatabaseProvider;
 
     let memoryMatchRepository: IMemoryMatchRepository;
 
-    beforeEach(async () => {
-        // TODO use a constant for the collection name
-        await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+    const setItUp = async (testUserWithGroups: CoscradUserWithGroups) => {
+        const mockConfigService = buildMockConfigService(
+            {
+                // TODO can we fix this?
+                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                GLOBAL_PREFIX: '',
+            },
+            buildConfigFilePath(Environment.test)
+        );
 
-        await memoryMatchRepository.create(publishedRound);
+        const testModuleRef = await Test.createTestingModule({
+            imports: [
+                PersistenceModule.forRootAsync(),
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(process.env.NODE_ENV),
+                    cache: false,
+                }),
+                AuthorizationModule,
+                MemoryMatchModule,
+            ],
+        })
+            .overrideGuard(OptionalJwtAuthGuard)
+            .useValue(new MockJwtAuthGuard(testUserWithGroups, true))
+            .overrideGuard(AdminJwtGuard)
+            .useValue(new MockJwtAdminAuthGuard(testUserWithGroups))
+            .overrideProvider(ConfigService)
+            .useValue(mockConfigService)
+            .compile();
+
+        app = testModuleRef.createNestApplication();
+
+        await app.init();
+
+        memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+    };
+
+    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
+        id: dummyUserId,
+        authProviderUserId: `autho|${dummyUserId}`,
     });
 
-    afterAll(async () => {
-        await app.close();
+    const nonAdminUser = dummyUser.clone({
+        roles: [CoscradUserRole.viewer],
+    });
 
-        databaseProvider.close();
+    const projectAdmin = dummyUser.clone({
+        roles: [CoscradUserRole.projectAdmin],
+    });
+
+    const coscradAdmin = dummyUser.clone({
+        roles: [CoscradUserRole.superAdmin],
+    });
+
+    beforeEach(async () => {
+        // TODO use a constant for the collection name
+        const databaseProvider = app.get(ArangoDatabaseProvider);
+
+        await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+
+        await memoryMatchRepository.createMany([publishedRound, unpublishedRound]);
     });
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
-            const testModule = await Test.createTestingModule({
-                imports: [
-                    ConfigModule.forRoot({
-                        isGlobal: true,
-                        envFilePath: buildConfigFilePath(Environment.test),
-                        cache: false,
-                    }),
-                    PersistenceModule.forRootAsync(),
-                    MemoryMatchModule,
-                ],
-            })
-                .overrideProvider(ConfigService)
-                .useValue(
-                    buildMockConfigService({
-                        ARANGO_DB_NAME: testDatabaseName,
-                        BASE_URL: 'http://localhost',
-                        NODE_PORT: 1234,
-                        GLOBAL_PREFIX: 'awesome-api',
-                    })
-                )
-                .compile();
-
-            app = testModule.createNestApplication();
-
-            await app.init();
-
-            databaseProvider = app.get(ArangoDatabaseProvider);
-
-            memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+            await setItUp(undefined);
         });
 
         describe(`when there is a memory match round with the given ID`, () => {
@@ -123,19 +155,9 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
             });
 
             describe(`when the memory match round is private`, () => {
-                const privateRound = buildTestInstance(MemoryMatchRound, {
-                    id: buildDummyUuid(123),
-                    isPublished: false,
-                    name: buildMultilingualTextWithSingleItem('private memory match round'),
-                });
-
-                beforeEach(async () => {
-                    await memoryMatchRepository.create(privateRound);
-                });
-
                 it(`should return not found`, async () => {
                     const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(privateRound.id)
+                        buildDetailEndpoint(unpublishedRound.id)
                     );
 
                     expect(res.status).toBe(HttpStatusCode.notFound);
@@ -148,6 +170,72 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 const res = await request(app.getHttpServer()).get(buildDetailEndpoint('bogus-Id'));
 
                 expect(res.status).toBe(HttpStatusCode.notFound);
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a viewer`, () => {
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(nonAdminUser, []));
+        });
+
+        describe(`when there is a memory match round with the given ID`, () => {
+            describe(`when the round is public`, () => {
+                it(`should return the expected response`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(roundId)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body).toMatchSnapshot();
+                });
+            });
+
+            describe(`when the memory match round is private`, () => {
+                it(`should return not found`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(unpublishedRound.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a coscrad admin`, () => {
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdmin, []));
+        });
+
+        describe(`when the memory match round is private`, () => {
+            it(`should return the expected result`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(unpublishedRound.id)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                expect(res.body).toMatchSnapshot();
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a project admin`, () => {
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(projectAdmin, []));
+        });
+
+        describe(`when the memory match round is private`, () => {
+            it(`should return the expected result`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(unpublishedRound.id)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                expect(res.body).toMatchSnapshot();
             });
         });
     });

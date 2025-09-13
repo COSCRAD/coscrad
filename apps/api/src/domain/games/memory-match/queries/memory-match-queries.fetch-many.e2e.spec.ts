@@ -160,9 +160,61 @@ describe(`when querying for a memory match round: fetch many`, () => {
 
     describe(`when the user is authenticated as a viewer`, () => {
         beforeAll(async () => {
-            // TODO test support for user groups
-
             await setItUp(new CoscradUserWithGroups(nonAdminUser, []));
+        });
+
+        describe(`when no filters are provided`, () => {
+            it(`should return all published rounds`, async () => {
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                const {
+                    body: { entities },
+                } = res;
+
+                // there should be two rounds visible to authenticated user
+                expect(entities).toHaveLength(1);
+
+                expect(entities[0].id).toBe(publishedRound.id);
+
+                // this is a contract test to ensure we don't break the client
+                expect(entities).toMatchSnapshot();
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a coscrad admin`, () => {
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdmin, []));
+        });
+
+        describe(`when no filters are provided`, () => {
+            it(`should return all published and unpublished rounds`, async () => {
+                const res = await request(app.getHttpServer()).get(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.ok);
+
+                const {
+                    body: { entities },
+                } = res;
+
+                // there should be two rounds visible to authenticated user
+                expect(entities).toHaveLength(2);
+
+                expect(entities[0].id).toBe(publishedRound.id);
+
+                expect(entities[1].id).toBe(unpublishedRound.id);
+
+                // this is a contract test to ensure we don't break the client
+                expect(entities).toMatchSnapshot();
+            });
+        });
+    });
+
+    describe(`when the user is authenticated as a project admin`, () => {
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(projectAdmin, []));
         });
 
         describe(`when no filters are provided`, () => {

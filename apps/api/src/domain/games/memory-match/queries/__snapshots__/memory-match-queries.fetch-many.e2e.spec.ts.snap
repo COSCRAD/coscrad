@@ -1,5 +1,662 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`when querying for a memory match round: fetch many when the user is authenticated as a coscrad admin when no filters are provided should return all published and unpublished rounds 1`] = `
+[
+  {
+    "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cards": [
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+        "sequenceNumber": 1,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #1",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100202",
+        "sequenceNumber": 2,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #2",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100203",
+        "sequenceNumber": 3,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #3",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100104",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100204",
+        "sequenceNumber": 4,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #4",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100205",
+        "sequenceNumber": 5,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #5",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100106",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100206",
+        "sequenceNumber": 6,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #6",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100107",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100207",
+        "sequenceNumber": 7,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #7",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100108",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100208",
+        "sequenceNumber": 8,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #8",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100109",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100209",
+        "sequenceNumber": 9,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #9",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100110",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100210",
+        "sequenceNumber": 10,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #10",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100111",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100211",
+        "sequenceNumber": 11,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #11",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100112",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100212",
+        "sequenceNumber": 12,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #12",
+            },
+          ],
+        },
+      },
+    ],
+    "compiledBy": [],
+    "contributors": [],
+    "description": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "the best memory match round ever!",
+        },
+      ],
+    },
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+    "isPublished": true,
+    "name": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "test memory match round name",
+        },
+      ],
+    },
+    "size": 12,
+  },
+  {
+    "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cards": [],
+    "compiledBy": [],
+    "contributors": [],
+    "description": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "the best memory match round ever!",
+        },
+      ],
+    },
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+    "isPublished": false,
+    "name": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "test memory match round name",
+        },
+      ],
+    },
+    "size": 12,
+  },
+]
+`;
+
+exports[`when querying for a memory match round: fetch many when the user is authenticated as a project admin when no filters are provided should return all published and unpublished rounds 1`] = `
+[
+  {
+    "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cards": [
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+        "sequenceNumber": 1,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #1",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100202",
+        "sequenceNumber": 2,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #2",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100203",
+        "sequenceNumber": 3,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #3",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100104",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100204",
+        "sequenceNumber": 4,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #4",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100205",
+        "sequenceNumber": 5,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #5",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100106",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100206",
+        "sequenceNumber": 6,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #6",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100107",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100207",
+        "sequenceNumber": 7,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #7",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100108",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100208",
+        "sequenceNumber": 8,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #8",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100109",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100209",
+        "sequenceNumber": 9,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #9",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100110",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100210",
+        "sequenceNumber": 10,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #10",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100111",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100211",
+        "sequenceNumber": 11,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #11",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100112",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100212",
+        "sequenceNumber": 12,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #12",
+            },
+          ],
+        },
+      },
+    ],
+    "compiledBy": [],
+    "contributors": [],
+    "description": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "the best memory match round ever!",
+        },
+      ],
+    },
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+    "isPublished": true,
+    "name": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "test memory match round name",
+        },
+      ],
+    },
+    "size": 12,
+  },
+  {
+    "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cards": [],
+    "compiledBy": [],
+    "contributors": [],
+    "description": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "the best memory match round ever!",
+        },
+      ],
+    },
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100002",
+    "isPublished": false,
+    "name": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "test memory match round name",
+        },
+      ],
+    },
+    "size": 12,
+  },
+]
+`;
+
+exports[`when querying for a memory match round: fetch many when the user is authenticated as a viewer when no filters are provided should return all published rounds 1`] = `
+[
+  {
+    "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cards": [
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+        "sequenceNumber": 1,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #1",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100202",
+        "sequenceNumber": 2,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #2",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100203",
+        "sequenceNumber": 3,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #3",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100104",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100204",
+        "sequenceNumber": 4,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #4",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100205",
+        "sequenceNumber": 5,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #5",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100106",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100206",
+        "sequenceNumber": 6,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #6",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100107",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100207",
+        "sequenceNumber": 7,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #7",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100108",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100208",
+        "sequenceNumber": 8,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #8",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100109",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100209",
+        "sequenceNumber": 9,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #9",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100110",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100210",
+        "sequenceNumber": 10,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #10",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100111",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100211",
+        "sequenceNumber": 11,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #11",
+            },
+          ],
+        },
+      },
+      {
+        "audioUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100112",
+        "imageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100212",
+        "sequenceNumber": 12,
+        "text": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Card #12",
+            },
+          ],
+        },
+      },
+    ],
+    "compiledBy": [],
+    "contributors": [],
+    "description": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "the best memory match round ever!",
+        },
+      ],
+    },
+    "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+    "isPublished": true,
+    "name": {
+      "items": [
+        {
+          "languageCode": "en",
+          "role": "original",
+          "text": "test memory match round name",
+        },
+      ],
+    },
+    "size": 12,
+  },
+]
+`;
+
 exports[`when querying for a memory match round: fetch many when the user is not-authenticated (public queries) when no filters are provided should return all published rounds 1`] = `
 [
   {

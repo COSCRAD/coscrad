@@ -1,4 +1,5 @@
 import { Maybe } from '../../../lib/types/maybe';
+import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
 import { MemoryMatchRound } from './models/memory-match-round.entity';
 
@@ -11,9 +12,12 @@ export interface IMemoryMatchRepository {
 
     delete(roundId: AggregateId): Promise<void>;
 
-    fetchById(roundId: AggregateId): Promise<Maybe<MemoryMatchRound>>;
+    fetchById(
+        roundId: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<MemoryMatchRound>>;
 
-    fetchMany(): Promise<MemoryMatchRound[]>;
+    fetchMany(userWithGroups?: CoscradUserWithGroups): Promise<MemoryMatchRound[]>;
 
     count(): Promise<number>;
 }
