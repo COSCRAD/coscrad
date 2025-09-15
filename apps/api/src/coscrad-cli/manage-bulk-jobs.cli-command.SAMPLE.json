@@ -1,0 +1,32 @@
+{
+    "name": "invalid bulk job (should have errors)",
+    "sourceProject": "2002 Legacy Collection",
+    "stream": [
+        {
+            "type": "CREATE_SONG",
+            "payload": {
+                "aggregateCompositeIdentifier": {
+                    "type": "song",
+                    "id": "GENERATE_THIS_ID:s123"
+                },
+                "title": "I have a little lamb",
+                "languageCodeForTitle": "en",
+                "audioItemId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100193",
+                "rawData": {
+                    "slug": "s123"
+                }
+            }
+        },
+        {
+            "type": "ADD_LYRICS_FOR_SONG",
+            "payload": {
+                "aggregateCompositeIdentifier": {
+                    "type": "song",
+                    "id": "APPEND_THIS_ID:s123"
+                },
+                "languageCode": "foobarbaz (bad language code)",
+                "lyrics": "la la la "
+            }
+        }
+    ]
+}

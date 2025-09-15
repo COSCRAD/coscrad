@@ -1,5 +1,5 @@
 import { AggregateType, CoscradUserRole } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { readFileSync, writeFileSync } from 'fs';
 import { CoscradBulkImportJobCreateDto } from '../app/controllers/command/bulk-imports/bulk-import-job.create-dto.entity';
@@ -8,6 +8,7 @@ import { CoscradInvalidUserInputException } from '../app/controllers/response-ma
 import validateSimpleInvariants from '../domain/domainModelValidators/utilities/validateSimpleInvariants';
 import { CoscradUserWithGroups } from '../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../domain/models/user-management/user/entities/user/coscrad-user.entity';
+import { AggregateId } from '../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../lib/errors/InternalError';
 import { isNotFound } from '../lib/types/not-found';
 import { CliCommand, CliCommandOption, CliCommandRunner } from './cli-command.decorator';
@@ -20,6 +21,7 @@ type DataFileNameAndBulkJob = {
 
 interface ManageBulkJobsCliCommandOptions {
     dataFile: DataFileNameAndBulkJob;
+    infoFor: AggregateId;
 }
 
 @CliCommand({
@@ -34,10 +36,31 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
         super();
     }
 
-    async run(
-        _passedParams: string[],
-        { dataFile: { bulkJob, filename } }: ManageBulkJobsCliCommandOptions
-    ): Promise<void> {
+    async run(_passedParams: string[], options: ManageBulkJobsCliCommandOptions): Promise<void> {
+        const { dataFile, infoFor: bulkJobIdForQuery } = options;
+
+        if (!isNullOrUndefined(dataFile) && !isNullOrUndefined(bulkJobIdForQuery)) {
+            throw new InternalError(`only one of **data-file** and **info-for** may be specified`);
+        }
+
+        if (isNullOrUndefined(dataFile) && isNullOrUndefined(bulkJobIdForQuery)) {
+            throw new InternalError(
+                `you must specify one and only one of **data-file** and **info-for**`
+            );
+        }
+
+        if (!isNullOrUndefined(dataFile)) {
+            await this.executeBulkJob({ dataFile });
+        }
+
+        if (!isNullOrUndefined(bulkJobIdForQuery)) {
+            await this.fetchBulkJobById(bulkJobIdForQuery);
+        }
+    }
+
+    private async executeBulkJob({ dataFile }: Pick<ManageBulkJobsCliCommandOptions, 'dataFile'>) {
+        const { bulkJob, filename } = dataFile;
+
         const uuidAcquisitionResult = await this.commandExecutor.acquireIdsForSlugsOnStream(
             bulkJob.stream.map((fsa) => ({
                 ...fsa,
@@ -89,6 +112,8 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
 
         const jobId = jobCreationResult;
 
+        this.logger.log(`Created bulkJob/${jobId}`);
+
         await this.commandExecutor.executeBulkJob(
             new CoscradUserWithGroups(
                 new CoscradUser({
@@ -121,7 +146,7 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
             throw e;
         }
 
-        const resultFilepath = `${filename}.log.json`;
+        const resultFilepath = `${filename}.log.data.json`;
 
         writeFileSync(resultFilepath, JSON.stringify(result, null, 4));
 
@@ -140,10 +165,24 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
         this.logger.log(`${bulkJobDescriptionForLog} has succeeded.`);
     }
 
+    private async fetchBulkJobById(id: AggregateId) {
+        const record = await this.commandExecutor.fetchBulkJobById(id);
+
+        this.logger.log(JSON.stringify(record));
+    }
+
+    /**
+     * TODO We want to reuse our REST API controllers in which case we will
+     * make it easy to generate one CLI Commanad per controller method. It's not ideal
+     * to shoehorn 2 method calls into one CLI command, but as long as we are
+     * manually creating CLI bindings, we want to keep the number of command classes
+     * small.
+     */
     @CliCommandOption({
         flags: '--data-file [data-file]',
         description: 'path to the (local) JSON data file with an array of command FSAs',
-        required: true,
+        // This param must be provided only when `info-for` is not
+        required: false,
     })
     parseDataFile(value: string): DataFileNameAndBulkJob {
         if (!isNonEmptyString(value)) return undefined;
@@ -185,5 +224,23 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
 
             throw customError;
         }
+    }
+
+    @CliCommandOption({
+        flags: '--info-for [info-for]',
+        description: 'Bulk ID job to obtain info for',
+        // This param must be provided only when `data-file` is not
+        required: false,
+    })
+    parseInfoFor(value: string): AggregateId {
+        if (isNullOrUndefined(value)) {
+            return undefined;
+        }
+
+        if (!isNonEmptyString(value)) {
+            throw new InternalError(`Encountered an invalid ID. Expected non-empty text.`);
+        }
+
+        return value;
     }
 }
