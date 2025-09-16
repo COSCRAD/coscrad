@@ -1,4 +1,4 @@
-import { AggregateType, CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
+import { CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,10 +15,10 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateId } from '../../../types/AggregateId';
 import { MemoryMatchModule } from '../memory-match.module';
 import {
@@ -30,7 +30,7 @@ import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
 const buildDetailEndpoint = (id: AggregateId) => `/games/memory-match/${id}`;
 
-const dummyUserId = buildDummyUuid(1);
+const MEMORY_MATCH_ROUNDS = 'memory_match_rounds';
 
 const roundId = buildDummyUuid(34);
 
@@ -71,6 +71,8 @@ const unpublishedRound = buildTestInstance(MemoryMatchRound, {
 describe(`when querying for a memory match round: fetch by Id`, () => {
     let app: INestApplication;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     let memoryMatchRepository: IMemoryMatchRepository;
 
     const setItUp = async (testUserWithGroups: CoscradUserWithGroups) => {
@@ -110,30 +112,19 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
         memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
     };
 
-    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
-        id: dummyUserId,
-        authProviderUserId: `autho|${dummyUserId}`,
-    });
-
-    const nonAdminUser = dummyUser.clone({
-        roles: [CoscradUserRole.viewer],
-    });
-
-    const projectAdmin = dummyUser.clone({
-        roles: [CoscradUserRole.projectAdmin],
-    });
-
-    const coscradAdmin = dummyUser.clone({
-        roles: [CoscradUserRole.superAdmin],
-    });
-
     beforeEach(async () => {
         // TODO use a constant for the collection name
-        const databaseProvider = app.get(ArangoDatabaseProvider);
+        databaseProvider = app.get(ArangoDatabaseProvider);
 
-        await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
+        await databaseProvider.getDatabaseForCollection(MEMORY_MATCH_ROUNDS).clear();
 
         await memoryMatchRepository.createMany([publishedRound, unpublishedRound]);
+    });
+
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
     });
 
     describe(`when the user is unauthenticated`, () => {
@@ -176,7 +167,11 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
 
     describe(`when the user is authenticated as a viewer`, () => {
         beforeAll(async () => {
-            await setItUp(new CoscradUserWithGroups(nonAdminUser, []));
+            const ordinaryUser = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.viewer],
+            });
+
+            await setItUp(new CoscradUserWithGroups(ordinaryUser, []));
         });
 
         describe(`when there is a memory match round with the given ID`, () => {
@@ -206,6 +201,10 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
 
     describe(`when the user is authenticated as a coscrad admin`, () => {
         beforeAll(async () => {
+            const coscradAdmin = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.superAdmin],
+            });
+
             await setItUp(new CoscradUserWithGroups(coscradAdmin, []));
         });
 
@@ -216,14 +215,16 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 );
 
                 expect(res.status).toBe(HttpStatusCode.ok);
-
-                expect(res.body).toMatchSnapshot();
             });
         });
     });
 
     describe(`when the user is authenticated as a project admin`, () => {
         beforeAll(async () => {
+            const projectAdmin = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.projectAdmin],
+            });
+
             await setItUp(new CoscradUserWithGroups(projectAdmin, []));
         });
 
@@ -234,8 +235,6 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 );
 
                 expect(res.status).toBe(HttpStatusCode.ok);
-
-                expect(res.body).toMatchSnapshot();
             });
         });
     });

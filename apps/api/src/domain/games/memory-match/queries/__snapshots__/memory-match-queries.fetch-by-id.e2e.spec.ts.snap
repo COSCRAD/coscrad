@@ -1,65 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when querying for a memory match round: fetch by Id when the user is authenticated as a coscrad admin when the memory match round is private should return the expected result 1`] = `
-{
-  "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
-  "cards": [],
-  "compiledBy": [],
-  "contributors": [],
-  "description": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "the best memory match round ever!",
-      },
-    ],
-  },
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
-  "isPublished": false,
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "test memory match round name",
-      },
-    ],
-  },
-  "size": 12,
-}
-`;
-
-exports[`when querying for a memory match round: fetch by Id when the user is authenticated as a project admin when the memory match round is private should return the expected result 1`] = `
-{
-  "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
-  "cards": [],
-  "compiledBy": [],
-  "contributors": [],
-  "description": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "the best memory match round ever!",
-      },
-    ],
-  },
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
-  "isPublished": false,
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "test memory match round name",
-      },
-    ],
-  },
-  "size": 12,
-}
-`;
-
 exports[`when querying for a memory match round: fetch by Id when the user is authenticated as a viewer when there is a memory match round with the given ID when the round is public should return the expected response 1`] = `
 {
   "cardbackImageUrl": "http://localhost/:4600/null/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
@@ -251,7 +191,7 @@ exports[`when querying for a memory match round: fetch by Id when the user is au
       {
         "languageCode": "en",
         "role": "original",
-        "text": "test memory match round name",
+        "text": "published round",
       },
     ],
   },

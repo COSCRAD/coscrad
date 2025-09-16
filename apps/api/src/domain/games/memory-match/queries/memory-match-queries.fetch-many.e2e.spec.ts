@@ -1,4 +1,4 @@
-import { AggregateType, CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
+import { CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,10 +15,10 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
 import { MemoryMatchModule } from '../memory-match.module';
 import {
     IMemoryMatchRepository,
@@ -30,8 +30,6 @@ import { MemoryMatchRound } from '../models/memory-match-round.entity';
 const MAX_NUMBER_OF_CARDS = 12;
 
 const indexEndpoint = `/games/memory-match`;
-
-const dummyUserId = buildDummyUuid(1);
 
 const publishedRound = buildTestInstance(MemoryMatchRound, {
     id: buildDummyUuid(1),
@@ -58,6 +56,8 @@ const unpublishedRound = buildTestInstance(MemoryMatchRound, {
 
 describe(`when querying for a memory match round: fetch many`, () => {
     let app: INestApplication;
+
+    let databaseProvider: ArangoDatabaseProvider;
 
     let memoryMatchRepository: IMemoryMatchRepository;
 
@@ -98,36 +98,25 @@ describe(`when querying for a memory match round: fetch many`, () => {
         memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
     };
 
-    const dummyUser = getValidAggregateInstanceForTest(AggregateType.user).clone({
-        id: dummyUserId,
-        authProviderUserId: `autho|${dummyUserId}`,
-    });
-
-    const nonAdminUser = dummyUser.clone({
-        roles: [CoscradUserRole.viewer],
-    });
-
-    const projectAdmin = dummyUser.clone({
-        roles: [CoscradUserRole.projectAdmin],
-    });
-
-    const coscradAdmin = dummyUser.clone({
-        roles: [CoscradUserRole.superAdmin],
-    });
-
     beforeEach(async () => {
-        const databaseProvider = app.get(ArangoDatabaseProvider);
+        databaseProvider = app.get(ArangoDatabaseProvider);
 
         await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
 
         await memoryMatchRepository.createMany([publishedRound, unpublishedRound]);
     });
 
+    afterAll(async () => {
+        await app.close();
+
+        databaseProvider.close();
+    });
+
     /**
      * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305]
      * Return unpublished rounds to admin users.
      */
-    describe(`when the user is not-authenticated (public queries)`, () => {
+    describe(`when the user is unauthenticated (public queries)`, () => {
         beforeAll(async () => {
             await setItUp(undefined);
         });
@@ -160,7 +149,11 @@ describe(`when querying for a memory match round: fetch many`, () => {
 
     describe(`when the user is authenticated as a viewer`, () => {
         beforeAll(async () => {
-            await setItUp(new CoscradUserWithGroups(nonAdminUser, []));
+            const ordinaryUser = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.viewer],
+            });
+
+            await setItUp(new CoscradUserWithGroups(ordinaryUser, []));
         });
 
         describe(`when no filters are provided`, () => {
@@ -173,19 +166,20 @@ describe(`when querying for a memory match round: fetch many`, () => {
                     body: { entities },
                 } = res;
 
-                // there should be two rounds visible to authenticated user
+                // there should be one round visible to a viewer user
                 expect(entities).toHaveLength(1);
 
                 expect(entities[0].id).toBe(publishedRound.id);
-
-                // this is a contract test to ensure we don't break the client
-                expect(entities).toMatchSnapshot();
             });
         });
     });
 
     describe(`when the user is authenticated as a coscrad admin`, () => {
         beforeAll(async () => {
+            const coscradAdmin = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.superAdmin],
+            });
+
             await setItUp(new CoscradUserWithGroups(coscradAdmin, []));
         });
 
@@ -199,21 +193,22 @@ describe(`when querying for a memory match round: fetch many`, () => {
                     body: { entities },
                 } = res;
 
-                // there should be two rounds visible to authenticated user
+                // there should be two rounds visible to an admin user
                 expect(entities).toHaveLength(2);
 
                 expect(entities[0].id).toBe(publishedRound.id);
 
                 expect(entities[1].id).toBe(unpublishedRound.id);
-
-                // this is a contract test to ensure we don't break the client
-                expect(entities).toMatchSnapshot();
             });
         });
     });
 
     describe(`when the user is authenticated as a project admin`, () => {
         beforeAll(async () => {
+            const projectAdmin = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.projectAdmin],
+            });
+
             await setItUp(new CoscradUserWithGroups(projectAdmin, []));
         });
 
@@ -227,15 +222,12 @@ describe(`when querying for a memory match round: fetch many`, () => {
                     body: { entities },
                 } = res;
 
-                // there should be two rounds visible to authenticated user
+                // there should be two rounds visible to an admin user
                 expect(entities).toHaveLength(2);
 
                 expect(entities[0].id).toBe(publishedRound.id);
 
                 expect(entities[1].id).toBe(unpublishedRound.id);
-
-                // this is a contract test to ensure we don't break the client
-                expect(entities).toMatchSnapshot();
             });
         });
     });

@@ -1,5 +1,5 @@
 import { IMemoryMatchCard, IMemoryMatchRound } from '@coscrad/api-interfaces';
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -33,15 +33,9 @@ export class MemoryMatchService {
         }
 
         // our convention is to return not published when a user does not have access to a particular resource
-        if (isNullOrUndefined(userWithGroups) && !searchResult.isPublished) {
-            return NotFound;
-        }
+        const doesUserHaveAccess = searchResult.isPublished || userWithGroups?.isAdmin() || false;
 
-        if (
-            !isNullOrUndefined(userWithGroups) &&
-            !userWithGroups.isAdmin() &&
-            !searchResult.isPublished
-        ) {
+        if (!doesUserHaveAccess) {
             return NotFound;
         }
 
@@ -55,16 +49,14 @@ export class MemoryMatchService {
         // TODO filter out unpublished round at the level of the database
         const searchResult = await this.memoryMatchRepository.fetchMany();
 
-        const availableEntities = searchResult.filter((entity) => {
-            if (entity.isPublished) return true;
-
-            if (isNullOrUndefined(userWithGroups)) return false;
-
-            if (userWithGroups.isAdmin()) return true;
-        });
-
         return {
-            entities: availableEntities.map((domainModel) => this.buildView(domainModel)),
+            // we use `flatMap` to achievev map + filter
+            entities: searchResult.flatMap((domainModel) => {
+                const doesUserHaveAccess =
+                    domainModel.isPublished || userWithGroups?.isAdmin() || false;
+
+                return doesUserHaveAccess ? [this.buildView(domainModel)] : [];
+            }),
         };
     }
 

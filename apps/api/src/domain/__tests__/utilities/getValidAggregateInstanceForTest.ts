@@ -4,6 +4,10 @@ import buildTestDataInFlatFormat from '../../../test-data/buildTestDataInFlatFor
 import { AggregateType, AggregateTypeToAggregateInstance } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 
+/**
+ * @deprecated This legacy test helper is no longer necessary. We now use `buildTestInstance`
+ * for our tests.
+ */
 export default <TAggregateType extends AggregateType>(
     aggregateType: TAggregateType
 ): AggregateTypeToAggregateInstance[TAggregateType] => {
