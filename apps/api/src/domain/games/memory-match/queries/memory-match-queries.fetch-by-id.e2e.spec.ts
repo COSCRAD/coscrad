@@ -78,9 +78,9 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
     const setItUp = async (testUserWithGroups: CoscradUserWithGroups) => {
         const mockConfigService = buildMockConfigService(
             {
-                // TODO can we fix this?
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                GLOBAL_PREFIX: '',
+                NODE_PORT: 5555,
+                GLOBAL_PREFIX: 'test_api',
             },
             buildConfigFilePath(Environment.test)
         );
