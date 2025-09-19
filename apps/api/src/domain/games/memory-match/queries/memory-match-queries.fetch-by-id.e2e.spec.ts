@@ -81,6 +81,7 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
                 NODE_PORT: 5555,
                 GLOBAL_PREFIX: 'test_api',
+                BASE_URL: 'http://localhost',
             },
             buildConfigFilePath(Environment.test)
         );
