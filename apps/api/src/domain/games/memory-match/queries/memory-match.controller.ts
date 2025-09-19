@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import {
     Body,
@@ -11,7 +12,7 @@ import {
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import { QueryResponseTransformInterceptor } from '../../../../app/controllers/response-mapping';
@@ -23,11 +24,13 @@ import {
 } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
+import { MemoryMatchRound } from '../models/memory-match-round.entity';
 import { MemoryMatchService } from '../services/memory-match.service';
 
-@ApiTags('games')
+@ApiTags('Game')
 @Controller('games/memory-match')
 @UseFilters(
     new CoscradNotFoundFilter(),
@@ -40,6 +43,12 @@ export class MemoryMatchController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
+    @ApiResponse({
+        status: HttpStatusCode.ok,
+        type: MemoryMatchRound,
+        description: 'returns a single memory match round',
+        example: buildTestInstance(MemoryMatchRound),
+    })
     @ApiParam(buildByIdApiParamMetadata())
     @Get(`/:id`)
     async fetchById(@Param('id') id: string, @Request() req) {
@@ -49,6 +58,14 @@ export class MemoryMatchController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
+    // TODO this should be an entities property on a response object
+    @ApiResponse({
+        status: HttpStatusCode.ok,
+        type: MemoryMatchRound,
+        description: 'returns multiple memory match rounds',
+        example: buildTestInstance(MemoryMatchRound),
+        isArray: true,
+    })
     @Get('')
     async fetchMany(@Request() req) {
         // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305] send back unpublished rounds to admin users in the future
