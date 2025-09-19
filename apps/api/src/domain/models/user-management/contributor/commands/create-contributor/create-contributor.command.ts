@@ -1,6 +1,6 @@
 import { AggregateCompositeIdentifier, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject } from '@coscrad/data-types';
 import { ContributorCompositeIdentifier } from '../contributor-composite-identifier';
 
 @Command({
@@ -40,4 +40,11 @@ export class CreateContributor implements ICommandBase {
         isOptional: true,
     })
     readonly dateOfBirth?: string;
+
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description: 'additional data from a legacy \\ third-party system source of the data',
+    })
+    readonly rawData?: Record<string, unknown>;
 }

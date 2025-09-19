@@ -2228,6 +2228,13 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isOptional": false,
         "label": "the contributor's last name",
       },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "additional data from a legacy \\ third-party system source of the data",
+        "isArray": false,
+        "isOptional": true,
+        "label": "raw data",
+      },
       "shortBio": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a brief biography to help uniquely identify this contributor",

@@ -40,6 +40,10 @@ const expectedMonth = Month.May;
 
 const expectedYear = 1949;
 
+const rawData = {
+    id: 'slug-x-123',
+};
+
 const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateContributor>> => ({
     type: commandType,
 
@@ -49,6 +53,7 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateCon
         lastName,
         shortBio,
         dateOfBirth,
+        rawData,
     },
 });
 
