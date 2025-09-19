@@ -15,6 +15,7 @@ import { Environment } from '../../../../app/config/constants/environment';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -55,6 +56,8 @@ const validTestImageMediaItems = Array(numberOfImagesUsedInCompleteRound)
             mimeType: MIMEType.png,
         })
     );
+
+const testMediaItemForCardback = validTestImageMediaItems[validTestImageMediaItems.length - 1].id;
 
 allMediaItems.push(...validTestImageMediaItems);
 
@@ -296,6 +299,7 @@ describe(endpointUnderTest, () => {
                 describe(`when the external state is inconsistent with the request`, () => {
                     describe(`when one of the contributors does not exist`, () => {
                         // TODO Do this once we sort out the API for indicating contributions
+                        // should we do this now?
                         it.todo(`should return the expected error response`);
                     });
 
@@ -376,7 +380,7 @@ describe(endpointUnderTest, () => {
                                 }
                             );
 
-                            it.only(`should return the expected error response`, async () => {
+                            it(`should return the expected error response`, async () => {
                                 const res = await request(app.getHttpServer())
                                     .post(endpointUnderTest)
                                     .send(dtoWithMissingImageForOneCard);
@@ -404,15 +408,126 @@ describe(endpointUnderTest, () => {
                      */
                     describe(`when one of the media items is of the wrong type`, () => {
                         describe(`when the card back image has the wrong MIME Type`, () => {
-                            it.todo(`should return the expected error response`);
+                            it(`should return the expected error response`, async () => {
+                                const memoryMatchImportWithBadCardbackImage = buildTestInstance(
+                                    MemoryMatchRoundImportDto,
+                                    {
+                                        // Why do we name this prop differently than on the model?
+                                        mediaItemIdForCardbackImage: pdfMediaItem.id,
+                                    }
+                                );
+
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(memoryMatchImportWithBadCardbackImage);
+
+                                const {
+                                    body: { message },
+                                    status,
+                                } = res;
+
+                                expect(status).toBe(HttpStatusCode.badRequest);
+
+                                expect(message).toContain(pdfMediaItem.id);
+
+                                expect(message).toContain(`not an image`);
+                            });
                         });
 
                         describe(`when one of the cards has an image with the wrong MIME Type`, () => {
-                            it.todo(`should return the expected error response`);
+                            it(`should return the expected error response`, async () => {
+                                const invalidCardIndex = 0;
+
+                                const invalidCard = buildTestInstance(MemoryMatchCardImportDto, {
+                                    // you can't use a pdf as an image!
+                                    mediaItemIdForImage: pdfMediaItem.id,
+                                    // we need to make sure the audio **does** exist for this card
+                                    mediaItemIdForAudio:
+                                        validTestAudioMediaItems[invalidCardIndex].id,
+                                });
+
+                                const invalidCards = validCardDtos.map((card, index) =>
+                                    index == invalidCardIndex
+                                        ? invalidCard
+                                        : cloneToPlainObject(card)
+                                );
+
+                                const roundWithInvalidCard = buildTestInstance(
+                                    MemoryMatchRoundImportDto,
+                                    {
+                                        mediaItemIdForCardbackImage:
+                                            // TODO save a reference to this above
+                                            testMediaItemForCardback,
+                                        cards: invalidCards,
+                                    }
+                                );
+
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(roundWithInvalidCard);
+
+                                const {
+                                    body: { message },
+                                    status,
+                                } = res;
+
+                                expect(status).toBe(HttpStatusCode.badRequest);
+
+                                expect(message).toContain('not an image');
+
+                                // the invalid media item ID
+                                expect(message).toContain(pdfMediaItem.id);
+
+                                // it should reference the actual, invalid MIME type
+                                expect(message).toContain(pdfMediaItem.mimeType);
+                            });
                         });
 
                         describe(`when the audio for one of the card has the wrong MIME Type`, () => {
-                            it.todo(`should return the expected error response`);
+                            it(`should return the expected error response`, async () => {
+                                const invalidCardIndex = 0;
+
+                                const invalidCard = buildTestInstance(MemoryMatchCardImportDto, {
+                                    // you can't use a pdf as audio!
+                                    mediaItemIdForAudio: pdfMediaItem.id,
+                                    // we need to make sure the immage **does** exist
+                                    mediaItemIdForImage:
+                                        validTestImageMediaItems[invalidCardIndex].id,
+                                });
+
+                                const invalidCards = validCardDtos.map((card, index) =>
+                                    index === invalidCardIndex
+                                        ? invalidCard
+                                        : cloneToPlainObject(card)
+                                );
+
+                                const roundWithInvalidCard = buildTestInstance(
+                                    MemoryMatchRoundImportDto,
+                                    {
+                                        mediaItemIdForCardbackImage: testMediaItemForCardback,
+                                        cards: invalidCards,
+                                    }
+                                );
+
+                                const res = await request(app.getHttpServer())
+                                    .post(endpointUnderTest)
+                                    .send(roundWithInvalidCard);
+
+                                const {
+                                    body: { message },
+                                    status,
+                                } = res;
+
+                                expect(status).toBe(HttpStatusCode.badRequest);
+
+                                expect(message).toContain('not an audio file');
+
+                                // the invalid media item ID
+                                expect(message).toContain(pdfMediaItem.id);
+
+                                // the invalid media item's MIME type
+                                expect(message).toContain(pdfMediaItem.mimeType);
+                            });
                         });
                     });
                 });

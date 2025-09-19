@@ -5,7 +5,12 @@ import {
     NonNegativeFiniteNumber,
     UUID,
 } from '@coscrad/data-types';
-import { isBoolean, isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
+import {
+    isBoolean,
+    isNonEmptyObject,
+    isNonEmptyString,
+    isNullOrUndefined,
+} from '@coscrad/validation-constraints';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
@@ -40,6 +45,11 @@ import { MemoryMatchCard } from './memory-match-card.entity';
 
 // TODO make this configurable
 const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
+
+interface MediaItemReference {
+    type: 'IMAGE' | 'AUDIO';
+    id: AggregateId;
+}
 
 @CoscradDataExample<MemoryMatchRound>({
     example: {
@@ -400,6 +410,42 @@ export class MemoryMatchRound {
         });
 
         return publicationStatusErrors;
+    }
+
+    public getMediaItemReferences(): MediaItemReference[] {
+        const references: MediaItemReference[] = [];
+
+        // TODO be sure the prop is defined before including it in the array
+        const imageIds = this.cards.map(({ imageId }) => imageId);
+
+        references.push(
+            ...imageIds.map(
+                (id): MediaItemReference => ({
+                    type: 'IMAGE',
+                    id,
+                })
+            )
+        );
+
+        if (isNonEmptyString(this.cardBackImageId)) {
+            references.push({
+                type: 'IMAGE',
+                id: this.cardBackImageId,
+            });
+        }
+
+        const audioIds = this.cards.map(({ audioId }) => audioId);
+
+        references.push(
+            ...audioIds.map(
+                (id): MediaItemReference => ({
+                    type: 'AUDIO',
+                    id,
+                })
+            )
+        );
+
+        return references;
     }
 
     public static fromDto(dto: DTO<MemoryMatchRound>) {

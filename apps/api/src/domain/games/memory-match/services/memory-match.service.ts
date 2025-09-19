@@ -17,6 +17,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import { IMediaManagementService } from '../../../interfaces';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../interfaces/id-manager.interface';
+import { isAudioMimeType } from '../../../models/audio-visual/audio-item/entities/audio-item.entity';
 import InvalidExternalReferenceByAggregateError from '../../../models/categories/errors/InvalidExternalReferenceByAggregateError';
 import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../models/media-item/media-manager.interface';
@@ -291,17 +292,9 @@ export class MemoryMatchService {
             return [];
         }
 
-        const { cardBackImageId } = memoryMatchRound;
+        const mediaReferences = memoryMatchRound.getMediaItemReferences();
 
-        const imageIds = memoryMatchRound.cards.map(({ imageId }) => imageId);
-
-        if (!isNullOrUndefined(cardBackImageId)) {
-            imageIds.push(cardBackImageId);
-        }
-
-        const audioIds = memoryMatchRound.cards.map(({ audioId }) => audioId);
-
-        const mediaItemIds = [...imageIds, ...audioIds];
+        const mediaItemIds = mediaReferences.map(({ id }) => id);
 
         /**
          * TODO Optimize this to use a filter in-database
@@ -318,59 +311,120 @@ export class MemoryMatchService {
 
         const allErrors: InternalError[] = [];
 
-        if (!isNullOrUndefined(cardBackImageId) && !mediaItemMap.has(cardBackImageId)) {
-            allErrors.push(
-                new InternalError(
+        const { cards, cardBackImageId } = memoryMatchRound;
+
+        if (!isNullOrUndefined(cardBackImageId)) {
+            if (!mediaItemMap.has(cardBackImageId)) {
+                allErrors.push(
+                    new InternalError(
+                        `${formatAggregateCompositeIdentifier({
+                            type: AggregateType.mediaItem,
+                            id: cardBackImageId,
+                        })} cannot be used as the cardback image for ${formatAggregateCompositeIdentifier(
+                            {
+                                type: MEMORY_MATCH_ROUND,
+                                id: memoryMatchRound.id,
+                            }
+                        )} as there is no media item with that ID`
+                    )
+                );
+            } else {
+                const { mimeType } = mediaItemMap.get(cardBackImageId);
+
+                // should we have a separate definition of allowed MIME types for memory match artwork?
+                if (!isPhotographMimeType(mimeType)) {
+                    allErrors.push(
+                        new InternalError(
+                            `${formatAggregateCompositeIdentifier({
+                                type: AggregateType.mediaItem,
+                                id: cardBackImageId,
+                            })} cannot be used as the cardback image for ${formatAggregateCompositeIdentifier(
+                                {
+                                    type: MEMORY_MATCH_ROUND,
+                                    id: memoryMatchRound.id,
+                                }
+                            )} as it is not an image.`
+                        )
+                    );
+                }
+            }
+        }
+
+        const missingAudioItemErrorsForCards = cards.flatMap(({ audioId, sequenceNumber }) => {
+            if (!mediaItemMap.has(audioId)) {
+                return new InternalError(
                     `${formatAggregateCompositeIdentifier({
                         type: AggregateType.mediaItem,
-                        id: cardBackImageId,
-                    })} cannot be used as the cardback image for ${formatAggregateCompositeIdentifier(
+                        id: audioId,
+                    })} cannot be used as the audio for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
                         {
                             type: MEMORY_MATCH_ROUND,
                             id: memoryMatchRound.id,
                         }
                     )} as there is no media item with that ID`
-                )
-            );
-        }
+                );
+            }
 
-        const missingAudioItemErrorsForCards = memoryMatchRound.cards.flatMap(
-            ({ audioId, sequenceNumber }) =>
-                mediaItemMap.has(audioId)
-                    ? []
-                    : new InternalError(
-                          `${formatAggregateCompositeIdentifier({
-                              type: AggregateType.mediaItem,
-                              id: audioId,
-                          })} cannot be used as the audio for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
-                              {
-                                  type: MEMORY_MATCH_ROUND,
-                                  id: memoryMatchRound.id,
-                              }
-                          )} as there is no media item with that ID`
-                      )
-        );
+            const { mimeType } = mediaItemMap.get(audioId);
+
+            if (!isAudioMimeType(mimeType)) {
+                return new InternalError(
+                    `${formatAggregateCompositeIdentifier({
+                        type: AggregateType.mediaItem,
+                        id: audioId,
+                    })} cannot be used as the audio for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
+                        {
+                            type: MEMORY_MATCH_ROUND,
+                            id: memoryMatchRound.id,
+                        }
+                    )} as it is not an audio file. It has MIME type: ${mimeType}`
+                );
+            }
+
+            return [];
+        });
 
         if (missingAudioItemErrorsForCards.length > 0) {
             allErrors.push(...missingAudioItemErrorsForCards);
         }
 
-        const missingImageErrorsForCards = memoryMatchRound.cards.flatMap(
-            ({ imageId, sequenceNumber }) =>
-                mediaItemMap.has(imageId)
-                    ? []
-                    : new InternalError(
-                          `${formatAggregateCompositeIdentifier({
-                              type: AggregateType.mediaItem,
-                              id: imageId,
-                          })} cannot be used as the image for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
-                              {
-                                  type: MEMORY_MATCH_ROUND,
-                                  id: memoryMatchRound.id,
-                              }
-                          )} as there is no media item with that ID`
-                      )
-        );
+        const missingImageErrorsForCards = cards.flatMap(({ imageId, sequenceNumber }) => {
+            if (!mediaItemMap.has(imageId)) {
+                return [
+                    new InternalError(
+                        `${formatAggregateCompositeIdentifier({
+                            type: AggregateType.mediaItem,
+                            id: imageId,
+                        })} cannot be used as the image for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
+                            {
+                                type: MEMORY_MATCH_ROUND,
+                                id: memoryMatchRound.id,
+                            }
+                        )} as there is no media item with that ID`
+                    ),
+                ];
+            }
+
+            const { mimeType } = mediaItemMap.get(imageId);
+
+            if (!isPhotographMimeType(mimeType)) {
+                return [
+                    new InternalError(
+                        `${formatAggregateCompositeIdentifier({
+                            type: AggregateType.mediaItem,
+                            id: imageId,
+                        })} cannot be used as the image for card ${sequenceNumber} on ${formatAggregateCompositeIdentifier(
+                            {
+                                type: MEMORY_MATCH_ROUND,
+                                id: memoryMatchRound.id,
+                            }
+                        )} as it is not an image. It has the mime Type: ${mimeType}`
+                    ),
+                ];
+            }
+
+            return [];
+        });
 
         if (missingImageErrorsForCards.length > 0) {
             allErrors.push(...missingImageErrorsForCards);
