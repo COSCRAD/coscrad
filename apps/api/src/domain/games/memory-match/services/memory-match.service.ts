@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../types/AggregateId';
 import {
     IMemoryMatchRepository,
@@ -20,7 +21,10 @@ export class MemoryMatchService {
         private readonly configService: ConfigService
     ) {}
 
-    async fetchById(roundId: AggregateId): Promise<Maybe<IMemoryMatchRound>> {
+    async fetchById(
+        roundId: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<IMemoryMatchRound>> {
         const searchResult = await this.memoryMatchRepository.fetchById(roundId);
 
         // handle not found or use intercepter
@@ -29,7 +33,9 @@ export class MemoryMatchService {
         }
 
         // our convention is to return not published when a user does not have access to a particular resource
-        if (!searchResult.isPublished) {
+        const doesUserHaveAccess = searchResult.isPublished || userWithGroups?.isAdmin() || false;
+
+        if (!doesUserHaveAccess) {
             return NotFound;
         }
 
@@ -37,15 +43,20 @@ export class MemoryMatchService {
         return this.buildView(searchResult);
     }
 
-    async fetchMany(): Promise<{ entities: IMemoryMatchRound[] }> {
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<{ entities: IMemoryMatchRound[] }> {
         // TODO filter out unpublished round at the level of the database
         const searchResult = await this.memoryMatchRepository.fetchMany();
 
         return {
             // we use `flatMap` to achievev map + filter
-            entities: searchResult.flatMap((domainModel) =>
-                domainModel.isPublished ? [this.buildView(domainModel)] : []
-            ),
+            entities: searchResult.flatMap((domainModel) => {
+                const doesUserHaveAccess =
+                    domainModel.isPublished || userWithGroups?.isAdmin() || false;
+
+                return doesUserHaveAccess ? [this.buildView(domainModel)] : [];
+            }),
         };
     }
 

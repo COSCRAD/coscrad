@@ -1,11 +1,21 @@
-import { Controller, Get, Param, UseFilters, UseInterceptors } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+    Controller,
+    Get,
+    Param,
+    Request,
+    UseFilters,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import buildByIdApiParamMetadata from '../../../../app/controllers/resources/common/buildByIdApiParamMetadata';
 import { QueryResponseTransformInterceptor } from '../../../../app/controllers/response-mapping';
 import {
     CoscradInternalErrorFilter,
     CoscradInvalidUserInputFilter,
     CoscradNotFoundFilter,
 } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
+import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { MemoryMatchService } from '../services/memory-match.service';
 
 @ApiTags('games')
@@ -19,14 +29,20 @@ import { MemoryMatchService } from '../services/memory-match.service';
 export class MemoryMatchController {
     constructor(private readonly memoryMatchService: MemoryMatchService) {}
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @ApiParam(buildByIdApiParamMetadata())
     @Get(`/:id`)
-    async fetchById(@Param('id') id: string) {
-        return this.memoryMatchService.fetchById(id);
+    async fetchById(@Param('id') id: string, @Request() req) {
+        return this.memoryMatchService.fetchById(id, req.user || undefined);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @ApiParam(buildByIdApiParamMetadata())
     @Get('')
-    async fetchMany() {
+    async fetchMany(@Request() req) {
         // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-305] send back unpublished rounds to admin users in the future
-        return this.memoryMatchService.fetchMany();
+        return this.memoryMatchService.fetchMany(req.user || undefined);
     }
 }
