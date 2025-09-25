@@ -28,7 +28,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import {
     CannotExceedMemoryMatchRoundCapacityError,
     CannotOverwriteAudioForMemoryMatchCardError,
-    CannotOverwriteCardbackImageForMemoryMatchRoundError,
+    CannotOverwriteCardBackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
     CannotOverwriteTextForMemoryMatchCardError,
     DuplicateSequeneceNumberForCardsError,
@@ -38,7 +38,7 @@ import {
     InsufficientNumberOfCardsForPublicationError,
     MemoryMatchRoundCapacityReachedError,
     MemoryRoundIsNotReadyForPublicationError,
-    MissingCardbackErrorForMemoryMatchRound,
+    MissingCardBackErrorForMemoryMatchRound,
 } from '../errors';
 import { MemoryMatchRoundCreationDto } from './dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from './memory-match-card.entity';
@@ -176,7 +176,7 @@ export class MemoryMatchRound {
 
     addCardbackImage(newMediaItemId: AggregateId): ResultOrError<MemoryMatchRound> {
         if (this.hasCardback()) {
-            return new CannotOverwriteCardbackImageForMemoryMatchRoundError(
+            return new CannotOverwriteCardBackImageForMemoryMatchRoundError(
                 this.id,
                 this.cardBackImageId,
                 newMediaItemId
@@ -390,7 +390,7 @@ export class MemoryMatchRound {
 
         // A published round must have an image for the back of its cards
         if (isNullOrUndefined(this.cardBackImageId)) {
-            publicationStatusErrors.push(new MissingCardbackErrorForMemoryMatchRound());
+            publicationStatusErrors.push(new MissingCardBackErrorForMemoryMatchRound());
         }
 
         if (this.count() < this.size) {

@@ -3,7 +3,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import formatAggregateCompositeIdentifier from '../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 
-export class CannotOverwriteCardbackImageForMemoryMatchRoundError extends InternalError {
+export class CannotOverwriteCardBackImageForMemoryMatchRoundError extends InternalError {
     constructor(
         roundId: AggregateId,
         existingCardbackImageId: AggregateId,
@@ -16,7 +16,7 @@ export class CannotOverwriteCardbackImageForMemoryMatchRoundError extends Intern
                 id: newImageId,
             }),
             `for memory match round: ${roundId}`,
-            `as this round already has the cardback image`,
+            `as this round already has the card back image`,
             formatAggregateCompositeIdentifier({
                 type: AggregateType.mediaItem,
                 id: existingCardbackImageId,

@@ -7,7 +7,7 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import {
     CannotOverwriteAudioForMemoryMatchCardError,
-    CannotOverwriteCardbackImageForMemoryMatchRoundError,
+    CannotOverwriteCardBackImageForMemoryMatchRoundError,
     CannotOverwriteImageForMemoryMatchCardError,
     CannotOverwriteTextForMemoryMatchCardError,
     FailedToRepublishMemoryMatchRoundError,
@@ -40,7 +40,7 @@ const dtoForPublishableRound = {
 describe(`MemoryMatchRound`, () => {
     describe(`addCardBackImage`, () => {
         describe(`when the update is valid`, () => {
-            it(`should add the cardback image`, () => {
+            it(`should add the card back image`, () => {
                 const testRound = buildTestInstance(MemoryMatchRound, {
                     id: testRoundId,
                     cardBackImageId: null,
@@ -70,7 +70,7 @@ describe(`MemoryMatchRound`, () => {
 
                     assertErrorAsExpected(
                         updateResult,
-                        new CannotOverwriteCardbackImageForMemoryMatchRoundError(
+                        new CannotOverwriteCardBackImageForMemoryMatchRoundError(
                             testRound.id,
                             testMediaItemId,
                             secondMediaItemId

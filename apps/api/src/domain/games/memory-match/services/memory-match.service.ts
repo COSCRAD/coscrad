@@ -1,9 +1,5 @@
-import { AggregateType, IMemoryMatchCard, IMemoryMatchRound } from '@coscrad/api-interfaces';
-import {
-    isNonEmptyObject,
-    isNonEmptyString,
-    isNullOrUndefined,
-} from '@coscrad/validation-constraints';
+import { AggregateType, IMemoryMatchRound } from '@coscrad/api-interfaces';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CoscradInvalidUserInputException } from '../../../../app/controllers/response-mapping/CoscradExceptions';
@@ -33,6 +29,7 @@ import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-c
 import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
+import { MemoryMatchRoundViewModel } from '../models/memory-match-round.view-model';
 
 export class MemoryMatchService {
     constructor(
@@ -284,32 +281,18 @@ export class MemoryMatchService {
     // TODO should we rename `IMemoryMatchRound` to `IMemoryMatchRoundViewModel` for consistency in naming?
     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-307] Introduce a dedicated `MemoryMatchRoundViewModel` to handle this mapping layer
     private buildView(memoryMatchRound: MemoryMatchRound): IMemoryMatchRound {
-        const view = cloneToPlainObject(memoryMatchRound) as unknown as IMemoryMatchRound &
-            MemoryMatchRound;
+        const baseUrl = `${this.configService.get('BASE_URL')}:${this.configService.get(
+            'NODE_PORT'
+        )}/${this.configService.get('GLOBAL_PREFIX')}/resources/mediaItems/download`;
 
-        // convert media item IDs to Urls
-
-        view.cardbackImageUrl = this.buildMediaUrl(memoryMatchRound.cardBackImageId);
-
-        delete view.cardBackImageId;
-
-        view.cards = view.cards.map((card: IMemoryMatchCard & MemoryMatchCard) => {
-            const cardView = cloneToPlainObject(card) as IMemoryMatchCard & MemoryMatchCard;
-
-            if (isNonEmptyString(cardView.audioId))
-                cardView.audioUrl = this.buildMediaUrl(cardView.audioId);
-
-            delete cardView.audioId;
-
-            if (isNonEmptyString(cardView.imageId))
-                cardView.imageUrl = this.buildMediaUrl(cardView.imageId);
-
-            delete cardView.imageId;
-
-            return cardView;
+        const view = new MemoryMatchRoundViewModel(memoryMatchRound, {
+            build: (mediaItemId: AggregateId) => {
+                return `${baseUrl}/${mediaItemId}`;
+            },
         });
 
-        return view;
+        // remove methods
+        return cloneToPlainObject(view);
     }
 
     private buildMediaUrl(mediaItemId: AggregateId): string {

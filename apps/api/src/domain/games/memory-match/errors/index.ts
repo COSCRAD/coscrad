@@ -1,6 +1,6 @@
 export * from './cannot-exceed-memory-match-round-capacity.error';
 export * from './cannot-overwrite-audio-for-memory-match-card.error';
-export * from './cannot-overwrite-cardback-image-for-memory-match-round.error';
+export * from './cannot-overwrite-card-back-image-for-memory-match-round.error';
 export * from './cannot-overwrite-image-for-memory-match-card.error';
 export * from './cannot-overwrite-text-for-memory-match-card.error';
 export * from './duplicate-sequence-number-for-cards.error';
@@ -11,5 +11,5 @@ export * from './insufficient-number-of-cards-for-publication.error';
 export * from './memory-match-round-capacity-reached.error';
 export * from './memory-round-is-not-ready-for-publication.error';
 export * from './missing-audio-for-memory-match-card.error';
-export * from './missing-cardback-image-for-memory-match-round.error';
+export * from './missing-card-back-image-for-memory-match-round.error';
 export * from './missing-image-for-memory-card.error';
