@@ -34,6 +34,7 @@ const indexEndpoint = `/games/memory-match`;
 const publishedRound = buildTestInstance(MemoryMatchRound, {
     id: buildDummyUuid(1),
     isPublished: true,
+    name: buildMultilingualTextWithSingleItem('published round'),
     cards: Array(MAX_NUMBER_OF_CARDS)
         .fill(null)
         .map((_, index) => {
@@ -51,6 +52,7 @@ const publishedRound = buildTestInstance(MemoryMatchRound, {
 const unpublishedRound = buildTestInstance(MemoryMatchRound, {
     id: buildDummyUuid(2),
     isPublished: false,
+    name: buildMultilingualTextWithSingleItem('unpublished round'),
     cards: [],
 });
 
