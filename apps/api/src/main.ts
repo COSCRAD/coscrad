@@ -7,6 +7,9 @@ import 'reflect-metadata';
 import { AppModule } from './app/app.module';
 import { DynamicDataTypeFinderService } from './validation';
 
+/**
+ * TODO Remove this comment. Delete this PR. It's just to test if a new PR triggers the Jenkins CI job.
+ */
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
