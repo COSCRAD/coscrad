@@ -14,6 +14,9 @@ pipeline {
             agent {
                 label 'jenkins-build-agent'
             }
+            triggers{
+                gitHubPush()
+            }
             tools { nodejs nodeInstallationName }
             environment {
                 NODE_ENV = 'test'
