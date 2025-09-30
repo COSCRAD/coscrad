@@ -56,7 +56,8 @@ const unpublishedRound = buildTestInstance(MemoryMatchRound, {
     cards: [],
 });
 
-// TODO we should opt-back in once we diagnose why this fails on the CI but not locally
+// TODO
+// we should opt-back in once we diagnose why this fails on the CI but not locally
 describe.skip(`when querying for a memory match round: fetch many`, () => {
     let app: INestApplication;
 
