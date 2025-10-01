@@ -56,8 +56,7 @@ const unpublishedRound = buildTestInstance(MemoryMatchRound, {
     cards: [],
 });
 
-// TODO Diagnose why this test fails on the CI but not locally and opt-in
-describe.skip(`when querying for a memory match round: fetch many`, () => {
+describe(`when querying for a memory match round: fetch many`, () => {
     let app: INestApplication;
 
     let databaseProvider: ArangoDatabaseProvider;
