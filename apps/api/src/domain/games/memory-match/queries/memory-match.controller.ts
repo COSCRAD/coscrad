@@ -3,6 +3,7 @@ import {
     Controller,
     Get,
     Param,
+    Patch,
     Post,
     Request,
     UseFilters,
@@ -65,5 +66,14 @@ export class MemoryMatchController {
         return {
             id: result,
         };
+    }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Patch(':id/publish')
+    async publish(@Param('id') id: string) {
+        const result = await this.memoryMatchService.publish(id);
+
+        return result;
     }
 }

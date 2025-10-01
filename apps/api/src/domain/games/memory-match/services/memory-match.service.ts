@@ -7,6 +7,7 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { IMediaManagementService } from '../../../interfaces';
 import { ID_MANAGER_TOKEN, IIdManager } from '../../../interfaces/id-manager.interface';
 import InvalidExternalReferenceByAggregateError from '../../../models/categories/errors/InvalidExternalReferenceByAggregateError';
@@ -91,6 +92,17 @@ export class MemoryMatchService {
         }
 
         return id;
+    }
+
+    async publish(id: AggregateId): Promise<ResultOrError<AggregateId>> {
+        const targetRound = await this.fetchById(id);
+
+        if (isNotFound(targetRound)) {
+            throw new Error('todo');
+        }
+
+        // TODO add a repository method for this
+        // this.memoryMatchRepository.publish(id)
     }
 
     async fetchById(
