@@ -1,8 +1,10 @@
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoDatabaseError } from '../../../../persistence/database/errors/ArangoDatabaseError';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DTO } from '../../../../types/DTO';
@@ -20,8 +22,35 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         );
     }
 
-    async create(round: MemoryMatchRound): Promise<void> {
-        await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
+    async create(round: MemoryMatchRound): Promise<InternalError | AggregateId> {
+        try {
+            await this.database.create(mapEntityDTOToDatabaseDocument(round.toDTO()));
+
+            return round.id;
+        } catch (error) {
+            /**
+             * This is a bit of a hack.
+             */
+            if (error.message.includes(`persistent over 'name`)) {
+                return new InternalError(
+                    `There is already a memory match round with the name: ${
+                        round.name.getOriginalTextItem().text
+                    }`
+                );
+            }
+
+            if (
+                error.message.includes(
+                    `unique constraint violated - in index primary of type primary over '_key'`
+                )
+            ) {
+                return new InternalError(
+                    `There is already a memory match round with the ID: ${round.id}`
+                );
+            }
+
+            return new ArangoDatabaseError('failed to create memory match round', error);
+        }
     }
 
     async createMany(rounds: MemoryMatchRound[]): Promise<void> {

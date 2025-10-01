@@ -1,16 +1,25 @@
-import { IMemoryMatchCard, IMemoryMatchRound } from '@coscrad/api-interfaces';
+import { AggregateType, IMemoryMatchCard, IMemoryMatchRound } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CoscradInvalidUserInputException } from '../../../../app/controllers/response-mapping/CoscradExceptions';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { IMediaManagementService } from '../../../interfaces';
+import { ID_MANAGER_TOKEN, IIdManager } from '../../../interfaces/id-manager.interface';
+import InvalidExternalReferenceByAggregateError from '../../../models/categories/errors/InvalidExternalReferenceByAggregateError';
+import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../models/media-item/media-manager.interface';
+import { isPhotographMimeType } from '../../../models/photograph/entities/photograph.entity';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../../types/AggregateId';
+import { MEMORY_MATCH_ROUND } from '../constants';
 import {
     IMemoryMatchRepository,
     MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN,
 } from '../memory-match.repository.interface';
+import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
@@ -18,8 +27,71 @@ export class MemoryMatchService {
     constructor(
         @Inject(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN)
         private readonly memoryMatchRepository: IMemoryMatchRepository,
+        @Inject(ID_MANAGER_TOKEN)
+        private readonly idManager: IIdManager,
+        @Inject(MEDIA_MANGAER_INJECTION_TOKEN)
+        private readonly mediaManagementService: IMediaManagementService,
         private readonly configService: ConfigService
     ) {}
+
+    async create(
+        dto: MemoryMatchRoundCreationDto
+    ): Promise<AggregateId | CoscradInvalidUserInputException> {
+        // TODO release the ID if not used or don't generate until you know the round is valid
+        const id = await this.idManager.generate();
+
+        const newRound = MemoryMatchRound.fromCreationDto(id, dto);
+
+        const validationResult = newRound.validateInvariants();
+
+        if (validationResult.length > 0) {
+            return new CoscradInvalidUserInputException(
+                new InternalError(
+                    `Failed to create memory match round: ${dto.name}.`,
+                    validationResult
+                )
+            );
+        }
+
+        if (newRound.hasCardback()) {
+            const cardbackImage = await this.mediaManagementService.fetchById(
+                newRound.cardBackImageId
+            );
+
+            if (isNotFound(cardbackImage)) {
+                return new CoscradInvalidUserInputException(
+                    new InvalidExternalReferenceByAggregateError(
+                        {
+                            type: MEMORY_MATCH_ROUND,
+                            id: newRound.id,
+                        },
+                        [
+                            {
+                                type: AggregateType.mediaItem,
+                                id: newRound.cardBackImageId,
+                            },
+                        ]
+                    )
+                );
+            }
+
+            if (!isPhotographMimeType(cardbackImage.mimeType)) {
+                return new CoscradInvalidUserInputException(
+                    new InternalError(
+                        `Media item for card back must be an image. Found MIME Type: ${cardbackImage.mimeType}`
+                    )
+                );
+            }
+        }
+
+        const creationResult = await this.memoryMatchRepository.create(newRound);
+
+        if (isInternalError(creationResult)) {
+            return new CoscradInvalidUserInputException(creationResult);
+        }
+
+        return id;
+    }
 
     async fetchById(
         roundId: AggregateId,

@@ -27,7 +27,13 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.playlist]: 'Playlist',
 };
 
-export default (aggregateType: AggregateType): string => {
+/**
+ * Note that we have expanded the type here from `AggregateType` to string. We
+ * are phasing out lookup tables in favor of dynamic registration here. Also, we
+ * want to be robust to unknown `aggregateType`s in general for flexibility
+ * and easy testing (without casting).
+ */
+export default (aggregateType: string): string => {
     const label = resourceTypeAndLabel[aggregateType];
 
     if (!isNonEmptyString(label)) {

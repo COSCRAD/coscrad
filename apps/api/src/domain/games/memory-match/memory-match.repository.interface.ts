@@ -1,3 +1,4 @@
+import { InternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
@@ -6,7 +7,7 @@ import { MemoryMatchRound } from './models/memory-match-round.entity';
 export const MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN = 'MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN';
 
 export interface IMemoryMatchRepository {
-    create(round: MemoryMatchRound): Promise<void>;
+    create(round: MemoryMatchRound): Promise<InternalError | AggregateId>;
 
     createMany(rounds: MemoryMatchRound[]): Promise<void>;
 

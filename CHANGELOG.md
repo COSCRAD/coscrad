@@ -13,6 +13,25 @@ Python codebase.
 -   feat(cli): introduce **manage-bulk-jobs** (#772)
 -   infra: make env file optional (#774)
 
+### Memory Match (backend)
+
+We have introduced backend support for managing and publishing rounds of a
+memory match game. In a future release, we will provide a web-client to play
+the memory match game.
+
+Memory match rounds can be built from raw text and media resources or optionally
+by leveraging resources from the web-of-knowledge as data sources.
+
+#### Relevant PRs
+
+-   feat: support creating a memory match round via the API (#770)
+-   feat: support memory match queries (#767)
+-   introduce memory match repository (#765)
+-   introduce memory match round invariant validation (#762)
+-   feat: add configuration flag for memory match in client (#760)
+-   feat: introduce memory match round domain model (#761)
+-   introduce contract interfaces for memory match (#759)
+
 ### Photographs and Video for Terms
 
 It is now possible to add a featured photograph and \ or video for a term. This
@@ -22,8 +41,9 @@ web of knowledge will "come along for the ride".
 
 #### Relevant PRs
 
--   feat: introduce ADD_VIDEO_FOR_TERM (#758)
--   feat: introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
+-   introduce event consumer for PHOTOGRAPH_ADDED_FOR_TERM (#764)
+-   introduce ADD_VIDEO_FOR_TERM (#758)
+-   feat: introduce media upload dashboard (#753)
 
 ### Audio Discovery
 
@@ -35,6 +55,18 @@ improves performance and minimizes false positives.
 #### Relevant PRs
 
 -   perf: optimize audio discovery (#744)
+
+### Chores
+
+In this iteration, we have moved to the latest version of `nestjs` and also
+moved to the latest LTS version of NodeJS. We also upgrade several of our
+core dependencies and removed dependencies no longer in use.
+
+#### Relevant PRs
+
+-   bump nestjs from 9 to 11 (#768)
+-   bump several dependencies (#766)
+-   build: bump node to 24.6.0 (#763)
 
 ## v0.1.0.beta1
 

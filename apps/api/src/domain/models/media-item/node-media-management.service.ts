@@ -175,7 +175,17 @@ export class NodeMediaManagementService implements IMediaManager {
     async exists(id: AggregateId): Promise<boolean> {
         const targetMediaItem = await this.commandRepository.fetchById(id);
 
-        return !isNotFound(targetMediaItem);
+        if (isInternalError(targetMediaItem)) {
+            throw new InternalError(`Invalid media item encountered in database`, [
+                targetMediaItem,
+            ]);
+        }
+
+        if (isNotFound(targetMediaItem)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

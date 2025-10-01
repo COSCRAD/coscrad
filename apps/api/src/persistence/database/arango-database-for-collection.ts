@@ -87,7 +87,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
     // Commands (mutate state)
     async create(databaseDocument: ArangoDatabaseDocument<TEntity>) {
-        await this.#arangoDatabase.create(databaseDocument, this.collectionID);
+        await this.#arangoDatabase.create(databaseDocument, this.collectionID).catch((error) => {
+            throw error;
+        });
 
         if (this.isDatabaseForView) {
             this.viewWriteHookSubject.next({
@@ -102,14 +104,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         return this.#arangoDatabase
             .createMany(databaseDocuments, this.collectionID)
             .catch((error) => {
-                throw new InternalError(
-                    `Failed to create many in Arango collection: ${
-                        this.collectionID
-                    } \n documents: ${JSON.stringify(databaseDocuments)} \n ids: ${databaseDocuments
-                        .map(({ _key }) => _key)
-                        .join(' , ')} `,
-                    error?.message ? [new InternalError(error.message)] : []
-                );
+                throw error;
             });
     }
 

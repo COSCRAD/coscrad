@@ -76,6 +76,6 @@ import { MediaItemController, MediaItemQueryService } from './queries';
             inject: [REPOSITORY_PROVIDER_TOKEN],
         },
     ],
-    exports: [MediaItemQueryService, MEDIA_PROBER_TOKEN],
+    exports: [MediaItemQueryService, MEDIA_PROBER_TOKEN, MEDIA_MANGAER_INJECTION_TOKEN],
 })
 export class MediaItemModule {}
