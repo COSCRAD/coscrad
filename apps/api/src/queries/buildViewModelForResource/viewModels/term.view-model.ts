@@ -159,6 +159,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     @ReferenceTo(AggregateType.mediaItem)
     mediaItemIdForPhotograph?: string;
 
+    @ReferenceTo(AggregateType.mediaItem)
+    mediaItemIdForVideo?: string;
+
     @NestedDataType(VocabularyListRecordForTerm, {
         label: 'vocabulary lists including this term',
         description: 'a list of all the vocabulary lists that contain this term as an entry',
@@ -179,6 +182,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             actions,
             mediaItemId,
             mediaItemIdForPhotograph,
+            mediaItemIdForVideo,
             vocabularyLists,
             tokens,
             possibleAudioFilenames: possibleAudioFilenames,
@@ -272,6 +276,10 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         if (!isNullOrUndefined(mediaItemIdForPhotograph)) {
             this.mediaItemIdForPhotograph = mediaItemIdForPhotograph;
+        }
+
+        if (!isNullOrUndefined(mediaItemIdForVideo)) {
+            this.mediaItemIdForVideo = mediaItemIdForVideo;
         }
 
         this.actions = actions;
