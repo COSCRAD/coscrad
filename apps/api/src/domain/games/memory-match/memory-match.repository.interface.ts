@@ -7,12 +7,6 @@ import { MemoryMatchRound } from './models/memory-match-round.entity';
 export const MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN = 'MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN';
 
 export interface IMemoryMatchRepository {
-    create(round: MemoryMatchRound): Promise<InternalError | AggregateId>;
-
-    createMany(rounds: MemoryMatchRound[]): Promise<void>;
-
-    delete(roundId: AggregateId): Promise<void>;
-
     fetchById(
         roundId: AggregateId,
         userWithGroups?: CoscradUserWithGroups
@@ -21,4 +15,12 @@ export interface IMemoryMatchRepository {
     fetchMany(userWithGroups?: CoscradUserWithGroups): Promise<MemoryMatchRound[]>;
 
     count(): Promise<number>;
+
+    create(round: MemoryMatchRound): Promise<InternalError | AggregateId>;
+
+    createMany(rounds: MemoryMatchRound[]): Promise<void>;
+
+    delete(roundId: AggregateId): Promise<void>;
+
+    publish(roundId: AggregateId): Promise<InternalError | AggregateId>;
 }

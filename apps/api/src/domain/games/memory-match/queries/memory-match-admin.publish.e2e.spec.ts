@@ -8,6 +8,7 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
+import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
@@ -64,7 +65,6 @@ describe(`when using the REST API to publish a memory match round`, () => {
         memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
     };
 
-    // TODO test tear down in an after all
     describe(`when the user is a COSCRAD admin`, () => {
         const coscradAdminUser = buildTestInstance(CoscradUser, {
             roles: [CoscradUserRole.superAdmin],
@@ -74,8 +74,25 @@ describe(`when using the REST API to publish a memory match round`, () => {
             await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
         });
 
+        beforeEach(async () => {
+            await app
+                .get(ArangoDatabaseProvider)
+                .getDatabaseForCollection('memory_match_rounds')
+                .clear();
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close();
+        });
+
         describe(`when there is an existing round`, () => {
             describe(`when the round is not published`, () => {
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedMemoryRound);
+                });
+
                 it(`should publish the round`, async () => {
                     const res = await request(app.getHttpServer()).patch(
                         buildEndpoint(testMemoryRoundId)
@@ -89,6 +106,245 @@ describe(`when using the REST API to publish a memory match round`, () => {
 
                     expect(updatedRound.isPublished).toBe(true);
                 });
+            });
+
+            describe(`when the round is already published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(888),
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should return an error`, async () => {
+                    const result = await request(app.getHttpServer()).patch(
+                        buildEndpoint(publishedRound.id)
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.badRequest);
+                });
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).patch(
+                    buildEndpoint('there-is-no-round-with-this-id!')
+                );
+
+                // Consider returning a 404 instead
+                expect(res.status).toBe(HttpStatusCode.badRequest);
+            });
+        });
+    });
+
+    describe(`when the user is a proect admin`, () => {
+        const projectAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.projectAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(projectAdminUser, []));
+        });
+
+        beforeEach(async () => {
+            await app
+                .get(ArangoDatabaseProvider)
+                .getDatabaseForCollection('memory_match_rounds')
+                .clear();
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close();
+        });
+
+        describe(`when there is an existing round`, () => {
+            describe(`when the round is not published`, () => {
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedMemoryRound);
+                });
+
+                it(`should publish the round`, async () => {
+                    const res = await request(app.getHttpServer()).patch(
+                        buildEndpoint(testMemoryRoundId)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    const updatedRound = (await memoryMatchRepository.fetchById(
+                        testMemoryRoundId
+                    )) as MemoryMatchRound;
+
+                    expect(updatedRound.isPublished).toBe(true);
+                });
+            });
+
+            describe(`when the round is already published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(888),
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should return an error`, async () => {
+                    const result = await request(app.getHttpServer()).patch(
+                        buildEndpoint(publishedRound.id)
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.badRequest);
+                });
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).patch(
+                    buildEndpoint('there-is-no-round-with-this-id!')
+                );
+
+                // Consider returning a 404 instead
+                expect(res.status).toBe(HttpStatusCode.badRequest);
+            });
+        });
+    });
+
+    describe(`when the user is an ordinary user (viewer)`, () => {
+        const viewerUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.viewer],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(viewerUser, []));
+        });
+
+        beforeEach(async () => {
+            await app
+                .get(ArangoDatabaseProvider)
+                .getDatabaseForCollection('memory_match_rounds')
+                .clear();
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close();
+        });
+
+        describe(`when there is an existing round`, () => {
+            describe(`when the round is not published`, () => {
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedMemoryRound);
+                });
+
+                it(`should return unauthorized`, async () => {
+                    const res = await request(app.getHttpServer()).patch(
+                        buildEndpoint(testMemoryRoundId)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round is already published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(888),
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should return an error`, async () => {
+                    const result = await request(app.getHttpServer()).patch(
+                        buildEndpoint(publishedRound.id)
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should return unauthorized`, async () => {
+                const res = await request(app.getHttpServer()).patch(
+                    buildEndpoint('there-is-no-round-with-this-id!')
+                );
+
+                // Consider returning a 404 instead
+                expect(res.status).toBe(HttpStatusCode.forbidden);
+            });
+        });
+    });
+
+    describe(`when the user is not authenticated`, () => {
+        beforeAll(async () => {
+            await setItUp(undefined);
+        });
+
+        beforeEach(async () => {
+            await app
+                .get(ArangoDatabaseProvider)
+                .getDatabaseForCollection('memory_match_rounds')
+                .clear();
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close();
+        });
+
+        describe(`when there is an existing round`, () => {
+            describe(`when the round is not published`, () => {
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedMemoryRound);
+                });
+
+                it(`should return unauthorized`, async () => {
+                    const res = await request(app.getHttpServer()).patch(
+                        buildEndpoint(testMemoryRoundId)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round is already published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(888),
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should return an error`, async () => {
+                    const result = await request(app.getHttpServer()).patch(
+                        buildEndpoint(publishedRound.id)
+                    );
+
+                    expect(result.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should return unauthorized`, async () => {
+                const res = await request(app.getHttpServer()).patch(
+                    buildEndpoint('there-is-no-round-with-this-id!')
+                );
+
+                // Consider returning a 404 instead
+                expect(res.status).toBe(HttpStatusCode.forbidden);
             });
         });
     });

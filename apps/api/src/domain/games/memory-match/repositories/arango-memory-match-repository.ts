@@ -59,6 +59,31 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         await this.database.createMany(documents);
     }
 
+    async publish(roundId: AggregateId): Promise<InternalError | AggregateId> {
+        /**
+         * TODO Wrap the 2 queries in a transaction.
+         */
+        const searchResult = await this.fetchById(roundId);
+
+        if (isNotFound(searchResult)) {
+            return new InternalError(
+                `You cannot update memory match round: ${roundId} as there is no memory match round with that ID.`
+            );
+        }
+
+        if (searchResult.isPublished) {
+            return new InternalError(
+                `You cannot publish memory match round: ${roundId} as it is already published.`
+            );
+        }
+
+        await this.database.update(roundId, {
+            isPublished: true,
+        });
+
+        return roundId;
+    }
+
     async delete(roundId: AggregateId): Promise<void> {
         /**
          * Memory match rounds are not event-sourced. Therefore, unlike
