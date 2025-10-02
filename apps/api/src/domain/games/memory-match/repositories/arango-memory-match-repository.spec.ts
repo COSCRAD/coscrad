@@ -186,28 +186,7 @@ describe(`ArangoMemoryMatchRepository`, () => {
                 });
             });
 
-            describe(`when the round is already published`, () => {
-                const alreadyPublishedRound = buildTestInstance(MemoryMatchRound, {
-                    id: buildDummyUuid(11),
-                    isPublished: true,
-                });
-
-                beforeEach(async () => {
-                    await testRepository.create(alreadyPublishedRound);
-                });
-
-                it(`should return the expected error`, async () => {
-                    const result = await testRepository.publish(alreadyPublishedRound.id);
-
-                    expect(result).toBeInstanceOf(InternalError);
-
-                    const { message: errorMessage } = result as InternalError;
-
-                    expect(errorMessage).toContain(alreadyPublishedRound.id);
-
-                    expect(errorMessage).toContain(`already published`);
-                });
-            });
+            // Note that the repository doesn't validate that the resource isn't already published, but publication is idempotent.
         });
 
         describe(`when the round does not exist`, () => {

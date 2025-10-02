@@ -22,5 +22,5 @@ export interface IMemoryMatchRepository {
 
     delete(roundId: AggregateId): Promise<void>;
 
-    publish(roundId: AggregateId): Promise<InternalError | AggregateId>;
+    publish(roundId: AggregateId): Promise<Error | AggregateId>;
 }

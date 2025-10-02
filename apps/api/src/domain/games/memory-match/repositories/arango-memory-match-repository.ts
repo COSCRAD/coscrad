@@ -61,27 +61,29 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
 
     async publish(roundId: AggregateId): Promise<InternalError | AggregateId> {
         /**
-         * TODO Wrap the 2 queries in a transaction.
+         * Ideally, we would check if the resource is already published
+         * directly in the database. It is awkward to do this check and keep
+         * the update query transactional in Arango. So we leave it to the
+         * client to do an extra check. This doesn't cause trouble because
+         * publication is idempotent and so it's more a matter of intentionality
+         * not consistency.
          */
-        const searchResult = await this.fetchById(roundId);
 
-        if (isNotFound(searchResult)) {
-            return new InternalError(
-                `You cannot update memory match round: ${roundId} as there is no memory match round with that ID.`
+        try {
+            await this.database.update(roundId, { isPublished: true });
+            return roundId;
+        } catch (error) {
+            if (error?.message.includes('no document with that id')) {
+                return new InternalError(
+                    `You cannot publish memory match round: ${roundId}, as there is no memory match round with that ID.`
+                );
+            }
+
+            throw new InternalError(
+                `Encountered the following unknown error state from Arango update query:`,
+                [error]
             );
         }
-
-        if (searchResult.isPublished) {
-            return new InternalError(
-                `You cannot publish memory match round: ${roundId} as it is already published.`
-            );
-        }
-
-        await this.database.update(roundId, {
-            isPublished: true,
-        });
-
-        return roundId;
     }
 
     async delete(roundId: AggregateId): Promise<void> {
