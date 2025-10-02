@@ -161,6 +161,51 @@ describe(`ArangoMemoryMatchRepository`, () => {
         });
     });
 
+    describe(`publish`, () => {
+        const roundToPublish = buildTestInstance(MemoryMatchRound, {
+            id: buildDummyUuid(1),
+            isPublished: false,
+        });
+
+        describe(`when the round exists`, () => {
+            describe(`when the round is not yet published`, () => {
+                beforeEach(async () => {
+                    await testRepository.create(roundToPublish);
+                });
+
+                it(`should publish the round`, async () => {
+                    const result = await testRepository.publish(roundToPublish.id);
+
+                    const updatedRound = (await testRepository.fetchById(
+                        roundToPublish.id
+                    )) as MemoryMatchRound;
+
+                    expect(updatedRound.isPublished).toBe(true);
+
+                    expect(result).toBe(roundToPublish.id);
+                });
+            });
+
+            // Note that the repository doesn't validate that the resource isn't already published, but publication is idempotent.
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should return the expected error`, async () => {
+                const bogusId = 'there-is-no-round-with-this-id';
+
+                const result = await testRepository.publish(bogusId);
+
+                expect(result).toBeInstanceOf(InternalError);
+
+                const { message: errorMessage } = result as InternalError;
+
+                expect(errorMessage).toContain(`as there is no memory match round with`);
+
+                expect(errorMessage).toContain(bogusId);
+            });
+        });
+    });
+
     describe(`delete`, () => {
         describe(`when the round exists`, () => {
             const roundToDelete = testRounds[0];
@@ -199,7 +244,7 @@ describe(`ArangoMemoryMatchRepository`, () => {
             id: buildDummyUuid(123),
         });
 
-        describe(`when there is no existing memory match round with the given ID or nameb`, () => {
+        describe(`when there is no existing memory match round with the given ID or name`, () => {
             it(`should create the round`, async () => {
                 await testRepository.create(testRound);
 
