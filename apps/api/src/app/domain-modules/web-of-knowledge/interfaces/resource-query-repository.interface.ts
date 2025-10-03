@@ -7,7 +7,12 @@ import {
 } from '../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
 import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
+import { CoscradUserQuery } from '../../../../lib/coscrad-query-language';
 import { Maybe } from '../../../../lib/types/maybe';
+
+export type FetchManyQueryOptions = {
+    userQuery?: CoscradUserQuery;
+};
 
 export interface IResourceQueryRepository<T = unknown>
     extends ICountable,
@@ -20,5 +25,5 @@ export interface IResourceQueryRepository<T = unknown>
     create(view: T): Promise<void>;
     createMany(views: T[]): Promise<void>;
     fetchById(id: string): Promise<Maybe<T>>;
-    fetchMany(): Promise<T[]>;
+    fetchMany(options?: FetchManyQueryOptions): Promise<T[]>;
 }

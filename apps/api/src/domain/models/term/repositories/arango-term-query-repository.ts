@@ -4,8 +4,10 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -322,8 +324,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(): Promise<TermViewModel[]> {
-        const result = await this.database.fetchMany();
+    async fetchMany(queryOptions?: FetchManyQueryOptions): Promise<TermViewModel[]> {
+        if (isNonEmptyObject(queryOptions)) {
+            throw new InternalError(`User defined queries are not yet supported for terms.`);
+        }
+
+        const result = await this.database.fetchMany(queryOptions);
 
         const buildResult = result.map((doc) => {
             const dto = mapDatabaseDocumentToAggregateDTO(doc);
