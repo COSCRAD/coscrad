@@ -8,10 +8,13 @@ import { IViewUpdateNotification } from '@coscrad/api-interfaces';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
+import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
-import { InternalError } from '../../lib/errors/InternalError';
+import { compileAqlFilterBlock } from '../../lib/coscrad-query-language/aql/compile-aql-filter-block';
+import { CoscradFilterCondition } from '../../lib/coscrad-query-language/models/coscrad-filter-condition';
+import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
 import { ArangoDatabase } from './arango-database';
@@ -71,6 +74,51 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                     } \n ${innerErrors.map((e) => e.toString()).join(' \n ')}`
                 );
             });
+    }
+
+    async fetchForUser(options?: {
+        user?: CoscradUserWithGroups;
+        filter?: CoscradFilterCondition;
+    }): Promise<ArangoDatabaseDocument<TEntity>[]> {
+        const docRef = 'doc';
+
+        // TODO Filter for user access
+        const { filter: filterCondition = null } = options;
+
+        let filterBlock: string;
+
+        const bindVars = {
+            '@collectionName': this.collectionID,
+        };
+
+        if (filterCondition) {
+            const compileResult = compileAqlFilterBlock(filterCondition, docRef);
+
+            if (isInternalError(compileResult)) {
+                // TODO make this a returned error
+                throw new InternalError(`Failed to compile user query`);
+            }
+
+            const { bindVars: subqueryBindVars, statement } = compileResult;
+
+            filterBlock = statement;
+
+            Object.assign(bindVars, subqueryBindVars);
+        } else {
+            filterBlock = '';
+        }
+
+        const aqlQueryString = `
+            for ${docRef} in @@collectionName
+            ${filterBlock}
+            return ${docRef}
+        `;
+
+        const cursor = await this.#arangoDatabase.query({ query: aqlQueryString, bindVars });
+
+        const result = await cursor.all();
+
+        return result;
     }
 
     fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {
