@@ -86,6 +86,10 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         }
     }
 
+    async unpublish(_roundId: AggregateId): Promise<Error | AggregateId> {
+        throw new Error('Method not implemented.');
+    }
+
     async delete(roundId: AggregateId): Promise<void> {
         /**
          * Memory match rounds are not event-sourced. Therefore, unlike

@@ -135,6 +135,10 @@ export class MemoryMatchService {
         return isInternalError(result) ? this.buildBadUserInputError(result) : result;
     }
 
+    async unpublish(_id: AggregateId): Promise<Error | AggregateId> {
+        throw new Error('not implemented');
+    }
+
     async fetchById(
         roundId: AggregateId,
         userWithGroups?: CoscradUserWithGroups

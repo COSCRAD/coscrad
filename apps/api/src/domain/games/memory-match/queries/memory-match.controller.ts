@@ -81,6 +81,15 @@ export class MemoryMatchController {
         return result;
     }
 
+    @ApiBearerAuth(`JWT`)
+    @UseGuards(AdminJwtGuard)
+    @Patch(`:id/unpublish`)
+    async unpublish(id: string) {
+        const result = await this.memoryMatchService.unpublish(id);
+
+        return result;
+    }
+
     @Post('import')
     async import(@Body() dto: MemoryMatchRoundImportDto) {
         if (!isNonEmptyObject(dto)) {
