@@ -5,9 +5,10 @@
 
 import { HttpStatusCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
+import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { TermModule } from '../../app/domain-modules/term.module';
 import { MockJwtAuthGuard } from '../../authorization/mock-jwt-auth-guard';
@@ -18,8 +19,14 @@ import {
     ITermQueryRepository,
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/term/queries';
+import {
+    CoscradBooleanOperator,
+    CoscradConditionBlockType,
+    CoscradSimpleCondition,
+} from '../../lib/coscrad-query-language/models/coscrad-filter-condition';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../test-data/utilities';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
@@ -61,6 +68,12 @@ describe(`term index queries`, () => {
                 TermModule,
             ],
         })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
+            )
             .overrideGuard(OptionalJwtAuthGuard)
             .useValue(new MockJwtAuthGuard(undefined, true))
             .compile();
@@ -72,6 +85,8 @@ describe(`term index queries`, () => {
         termRepository = app.get(TERM_QUERY_REPOSITORY_TOKEN);
 
         databaseProvider = app.get(ArangoDatabaseProvider);
+
+        databaseProvider.clearViews();
 
         /**
          * Note that queries don't write to the database, so if we share a
@@ -95,21 +110,17 @@ describe(`term index queries`, () => {
     describe(`when user-defined filters are provided`, () => {
         describe(`when searching the property: **name**`, () => {
             describe(`when one of the name's multilingual text items matches the search text`, () => {
-                it(`should find the expected term`, async () => {
-                    const userQuery = {
-                        operator: 'or',
-                        conditions: [
-                            {
-                                operator: 'MULTILINGUAL_TEXT_CONTAINS',
-                                parameters: [searchTermsWithNoSpecialChar],
-                                field: 'name',
-                            },
-                        ],
+                it.only(`should find the expected term`, async () => {
+                    const userQueryCondition: CoscradSimpleCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                        field: 'name',
+                        params: [searchTermsWithNoSpecialChar],
                     };
 
-                    const res = await request(app.getHttpServer())
-                        .get(indexEndpoint)
-                        .send(userQuery);
+                    const res = await request(app.getHttpServer()).get(indexEndpoint).send({
+                        filter: userQueryCondition,
+                    });
 
                     expect(res.status).toBe(HttpStatusCode.ok);
 

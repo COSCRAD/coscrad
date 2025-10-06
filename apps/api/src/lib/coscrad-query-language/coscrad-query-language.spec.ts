@@ -1,7 +1,8 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
 import { Environment } from '../../app/config/constants/environment';
 import { buildMultilingualTextFromBilingualText } from '../../domain/common/build-multilingual-text-from-bilingual-text';
@@ -13,8 +14,10 @@ import { ArangoDatabaseForCollection } from '../../persistence/database/arango-d
 import mapDatabaseDocumentToAggregateDTO from '../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
+import { Token } from '../nlp';
 import { clonePlainObjectWithOverrides } from '../utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../utilities/cloneToPlainObject';
 import {
@@ -22,10 +25,19 @@ import {
     CoscradBooleanOperator,
     CoscradConditionBlockType,
     CoscradFilterCondition,
+    CoscradNotCondition,
     CoscradSimpleCondition,
 } from './models/coscrad-filter-condition';
 
 const WIDGETS_COLLECTION_ID = 'widgets';
+
+class Location {
+    id: string;
+
+    constructor({ id }: { id: string }) {
+        this.id = id;
+    }
+}
 
 class Widget {
     id: string;
@@ -34,7 +46,26 @@ class Widget {
 
     description: MultilingualText;
 
-    constructor({ id, yearBuilt, description }: DTO<Widget>) {
+    location?: Location;
+
+    nickname?: string;
+
+    rating?: number;
+
+    tags: string[];
+
+    tokens: Token[];
+
+    constructor({
+        id,
+        yearBuilt,
+        description,
+        location,
+        nickname,
+        rating,
+        tags,
+        tokens,
+    }: DTO<Widget>) {
         this.id = id;
 
         this.yearBuilt = yearBuilt;
@@ -42,6 +73,18 @@ class Widget {
         if (isNonEmptyObject(description)) {
             this.description = new MultilingualText(description);
         }
+
+        if (isNonEmptyObject(location)) {
+            this.location = location;
+        }
+
+        this.nickname = nickname;
+
+        this.rating = rating;
+
+        this.tags = [...tags];
+
+        this.tokens = tokens.map((t) => cloneToPlainObject(t));
     }
 
     clone(overrides?: DeepPartial<this>) {
@@ -57,6 +100,8 @@ const dummyWidget = new Widget({
     id: '123',
     yearBuilt: 2023,
     description: buildMultilingualTextWithSingleItem('Awesome Widget'),
+    tags: [],
+    tokens: [],
 });
 
 class WidgetRepository {
@@ -156,7 +201,14 @@ describe(`Coscrad Query Language`, () => {
                 }),
                 PersistenceModule.forRootAsync(),
             ],
-        }).compile();
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
+            )
+            .compile();
 
         const app = moduleRef.createNestApplication();
 
@@ -214,6 +266,265 @@ describe(`Coscrad Query Language`, () => {
                         });
                     });
                 });
+
+                describe(`HAS_PROPERTY`, () => {
+                    describe(`when the property is object-valued`, () => {
+                        const widgetWithLocation = dummyWidget.clone({
+                            id: '101',
+                            location: new Location({ id: '44' }),
+                        });
+
+                        const widgetWithoutALocation = dummyWidget.clone({
+                            id: '102',
+                        });
+
+                        const anotherWidgetWithALoaction = dummyWidget.clone({
+                            id: '103',
+                            location: new Location({ id: '46' }),
+                        });
+
+                        const widgetThatExplicitlyDoesNotHaveALocation = new Widget({
+                            id: '104',
+                            // Aaron wuz here
+                            yearBuilt: 2025,
+                            description: buildMultilingualTextWithSingleItem(
+                                'widget with null location'
+                            ),
+                            location: null,
+                            tags: [],
+                            tokens: [],
+                        });
+
+                        const hasLocation: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.HAS_PROPERTY,
+                            field: 'location',
+                            params: [],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWithLocation,
+                                // -
+                                widgetWithoutALocation,
+                                // +
+                                anotherWidgetWithALoaction,
+                                // -
+                                widgetThatExplicitlyDoesNotHaveALocation,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: hasLocation,
+                            });
+
+                            expect(result).toHaveLength(2);
+                        });
+                    });
+
+                    describe(`when the property is string valued`, () => {
+                        const widgetWithEmptyStringNickname = dummyWidget.clone({
+                            id: '101',
+                            nickname: '',
+                        });
+
+                        const widgetWithNoNickname = dummyWidget.clone({
+                            id: '102',
+                        });
+
+                        const widgetWithFullNickname = dummyWidget.clone({
+                            id: '103',
+                            nickname: `Nicolas' Name`,
+                        });
+
+                        const hasNickname: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.HAS_PROPERTY,
+                            field: 'nickname',
+                            params: [],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWithEmptyStringNickname,
+                                // -
+                                widgetWithNoNickname,
+                                // +
+                                widgetWithFullNickname,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: hasNickname,
+                            });
+
+                            expect(result).toHaveLength(2);
+                        });
+                    });
+
+                    describe(`when the property is number valued`, () => {
+                        const widgetFromYearZero = dummyWidget.clone({
+                            id: '101',
+                            // This property is defined, although "falsey"
+                            rating: 0,
+                        });
+
+                        const widgetWithHighRating = dummyWidget.clone({
+                            id: '102',
+                            rating: 10,
+                        });
+
+                        const widgetWithLowRating = dummyWidget.clone({
+                            id: '103',
+                            rating: -10,
+                        });
+
+                        const widgetWithoutARating = dummyWidget.clone({
+                            id: '104',
+                            // rating: 10
+                        });
+
+                        const hasRating: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.HAS_PROPERTY,
+                            field: 'rating',
+                            params: [],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetFromYearZero,
+                                // +
+                                widgetWithHighRating,
+                                // +
+                                widgetWithLowRating,
+                                // -
+                                widgetWithoutARating,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: hasRating,
+                            });
+
+                            expect(result).toHaveLength(3);
+                        });
+                    });
+                });
+
+                describe(`HAS_LENGTH_GREATER_THAN`, () => {
+                    const widgetWithTenTags = dummyWidget.clone({
+                        id: '101',
+                        tags: Array(10)
+                            .fill(null)
+                            .map((_, index) => `tag #${index}`),
+                    });
+
+                    const widgetWithNineTags = dummyWidget.clone({
+                        id: '102',
+                        tags: Array(9)
+                            .fill(null)
+                            .map((_, index) => `tag #${index}`),
+                    });
+
+                    const widgetWithNoTags = dummyWidget.clone({
+                        id: '103',
+                        tags: [],
+                    });
+
+                    const hasMoreThanNineTags: CoscradSimpleCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.HAS_LENGTH_GREATER_THAN,
+                        field: 'tags',
+                        params: [9],
+                    };
+
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            widgetWithNineTags,
+                            widgetWithTenTags,
+                            widgetWithNoTags,
+                        ]);
+                    });
+
+                    it(`should return the expected results`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: hasMoreThanNineTags,
+                        });
+
+                        expect(result).toHaveLength(1);
+                    });
+                });
+
+                describe(`MULTILINGUAL_TEXT_INCLUDES_LETTER`, () => {
+                    const targetLetter = 'ts';
+
+                    const buildToken = (...chars: string[]) => ({
+                        text: chars.join(''),
+                        characters: chars.map((c) => ({
+                            text: c,
+                            isPunctuationOrWhiteSpace: false,
+                            isOutOfAlphabet: false,
+                            isUpperCase: false,
+                        })),
+                        languageCode: LanguageCode.Chilcotin,
+                        isSpace: false,
+                        isPunct: false,
+                        isStop: false,
+                    });
+
+                    const widgetWithLetter = dummyWidget.clone({
+                        id: '101',
+                        tokens: [buildToken('z'), buildToken(targetLetter, 'i', 'd')],
+                    });
+
+                    const widgetWithoutLetter = dummyWidget.clone({
+                        id: '102',
+                        tokens: [buildToken('r', 'o', 'b')],
+                    });
+
+                    const widgetWithLetterInWrongLanguage = dummyWidget.clone({
+                        id: '103',
+                        tokens: [
+                            {
+                                ...buildToken(targetLetter, 'a'),
+                                languageCode: LanguageCode.English,
+                            },
+                        ],
+                    });
+
+                    const hasLetterTs: CoscradSimpleCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                        field: 'tokens',
+                        params: [targetLetter, LanguageCode.Chilcotin],
+                    };
+
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            // +
+                            widgetWithLetter,
+                            // -
+                            widgetWithoutLetter,
+                            // +
+                            widgetWithLetterInWrongLanguage,
+                        ]);
+                    });
+
+                    it(`should return the expected result`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: hasLetterTs,
+                        });
+
+                        expect(result).toHaveLength(1);
+                    });
+                });
             });
 
             describe(`AND`, () => {
@@ -248,9 +559,83 @@ describe(`Coscrad Query Language`, () => {
                         conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
                     };
 
-                    it.only(`should return the expected results`, async () => {
+                    it(`should return the expected results`, async () => {
                         const result = await widgetRepository.fetchForUser({
                             filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
+                        });
+
+                        expect(result).toHaveLength(1);
+                    });
+                });
+            });
+
+            describe(`OR`, () => {
+                describe(`when the OR's conditions are all simple conditions`, () => {
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            // 4 / 5 should match the `OR`
+                            // +
+                            widgetThatMatchesInOriginalText.clone({
+                                id: '1',
+                                yearBuilt: cutoffYearExclusive + 1,
+                            }),
+                            // +
+                            widgetThatMatchesInTranslatedText.clone({
+                                id: '2',
+                                yearBuilt: cutoffYearExclusive - 1,
+                            }),
+                            // -
+                            widgetThatDoesNotMachSearchText.clone({
+                                id: '3',
+                                yearBuilt: cutoffYearExclusive - 1,
+                            }),
+                            // +
+                            widgetThatComesAfterCutoffYear.clone({
+                                id: '4',
+                                description: buildMultilingualTextWithSingleItem('no text match!'),
+                            }),
+                            // +
+                            widgetThatComesBeforeCutoffYear.clone({
+                                id: '5',
+                                description: buildMultilingualTextWithSingleItem(
+                                    `H${searchText} to all!`
+                                ),
+                            }),
+                        ]);
+                    });
+
+                    const doesAnyTextIncludeElloAndGreaterThanCutoffYear: CoscradAndCondition = {
+                        type: CoscradConditionBlockType.OR,
+                        conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
+                    };
+
+                    it(`should return the expected results`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
+                        });
+
+                        expect(result).toHaveLength(4);
+                    });
+                });
+            });
+
+            describe(`NOT`, () => {
+                describe(`when the not's condition is a simple condition`, () => {
+                    const isNotGreaterThanCutoffYear: CoscradNotCondition = {
+                        type: CoscradConditionBlockType.NOT,
+                        condition: greaterThanCutoffYear,
+                    };
+
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            widgetThatComesAfterCutoffYear,
+                            widgetThatComesBeforeCutoffYear,
+                        ]);
+                    });
+
+                    it(`should return the expected results`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: isNotGreaterThanCutoffYear,
                         });
 
                         expect(result).toHaveLength(1);

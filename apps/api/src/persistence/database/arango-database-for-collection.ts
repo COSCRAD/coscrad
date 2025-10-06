@@ -5,6 +5,7 @@
  * provided to the client.
  */
 import { IViewUpdateNotification } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
@@ -87,6 +88,8 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         let filterBlock: string;
 
+        let letStatements = '';
+
         const bindVars = {
             '@collectionName': this.collectionID,
         };
@@ -99,17 +102,22 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 throw new InternalError(`Failed to compile user query`);
             }
 
-            const { bindVars: subqueryBindVars, statement } = compileResult;
+            const { bindVars: subqueryBindVars, statement: filterStatements } = compileResult;
 
-            filterBlock = statement;
+            filterBlock = `filter ${filterStatements}`;
 
             Object.assign(bindVars, subqueryBindVars);
+
+            letStatements = isNonEmptyString(compileResult.letStatements)
+                ? compileResult.letStatements
+                : '';
         } else {
             filterBlock = '';
         }
 
         const aqlQueryString = `
             for ${docRef} in @@collectionName
+            ${letStatements}
             ${filterBlock}
             return ${docRef}
         `;
