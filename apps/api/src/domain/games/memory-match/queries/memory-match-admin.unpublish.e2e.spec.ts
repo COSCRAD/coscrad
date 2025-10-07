@@ -14,6 +14,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { DynamicDataTypeFinderService } from '../../../../validation';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
@@ -24,7 +25,7 @@ import {
 } from '../memory-match.repository.interface';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
-const buildEndpoint = (id: string) => `games/memory-match/${id}/unpublish`;
+const buildEndpoint = (id: string) => `/games/memory-match/${id}/unpublish`;
 
 const testMemoryRoundId = buildDummyUuid(432);
 
@@ -62,18 +63,26 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 MemoryMatchModule,
             ],
         })
-            .overrideGuard(AdminJwtGuard)
-            .useValue(new MockJwtAdminAuthGuard(user))
-            .overrideProvider(UnionFactory)
-            .useValue(mockUnionFactory)
-            .overrideProvider(DiscoveryService)
-            .useValue(mockDiscoveryService)
             .overrideProvider(ConfigService)
             .useValue(
                 buildMockConfigService({
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    NODE_PORT: 3131,
                 })
             )
+            .overrideGuard(AdminJwtGuard)
+            .useValue(new MockJwtAdminAuthGuard(user))
+            .overrideProvider(DynamicDataTypeFinderService)
+            .useValue({
+                bootstrapDynamicTypes: async () => {
+                    Promise.resolve();
+                },
+            })
+            .overrideProvider(UnionFactory)
+            .useValue(mockUnionFactory)
+            .overrideProvider(DiscoveryService)
+            .useValue(mockDiscoveryService)
+
             .compile();
 
         app = testModule.createNestApplication();
@@ -83,6 +92,13 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
         memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
     };
 
+    beforeEach(async () => {
+        await app
+            .get(ArangoDatabaseProvider)
+            .getDatabaseForCollection('memory_match_rounds')
+            .clear();
+    });
+
     describe(`when the user is a COSCRAD admin`, () => {
         const coscradAdminUser = buildTestInstance(CoscradUser, {
             roles: [CoscradUserRole.superAdmin],
@@ -90,13 +106,6 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
 
         beforeAll(async () => {
             await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
-        });
-
-        beforeEach(async () => {
-            await app
-                .get(ArangoDatabaseProvider)
-                .getDatabaseForCollection('memory-match-rounds')
-                .clear();
         });
 
         afterAll(async () => {
@@ -112,9 +121,9 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 });
 
                 it(`should unpublish the round`, async () => {
-                    const res = await request(app.getHttpServer()).patch(
-                        buildEndpoint(testMemoryRoundId)
-                    );
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).patch(buildEndpoint(testMemoryRoundId));
 
                     expect(res.status).toBe(HttpStatusCode.ok);
 
