@@ -84,7 +84,7 @@ export class MemoryMatchController {
     @ApiBearerAuth(`JWT`)
     @UseGuards(AdminJwtGuard)
     @Patch(`:id/unpublish`)
-    async unpublish(id: string) {
+    async unpublish(@Param('id') id: string) {
         const result = await this.memoryMatchService.unpublish(id);
 
         return result;

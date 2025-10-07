@@ -99,6 +99,12 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                     );
 
                     expect(res.status).toBe(HttpStatusCode.ok);
+
+                    const updatedRound = (await memoryMatchRepository.fetchById(
+                        testMemoryRoundId
+                    )) as MemoryMatchRound;
+
+                    expect(updatedRound.isPublished).toBe(false);
                 });
             });
         });
