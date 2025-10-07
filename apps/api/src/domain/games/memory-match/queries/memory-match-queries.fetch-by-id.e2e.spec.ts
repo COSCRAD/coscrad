@@ -123,7 +123,6 @@ describe(`when querying for a memory match round: fetch by Id`, () => {
     };
 
     beforeEach(async () => {
-        // TODO use a constant for the collection name
         databaseProvider = app.get(ArangoDatabaseProvider);
 
         await databaseProvider.getDatabaseForCollection(MEMORY_MATCH_ROUNDS).clear();
