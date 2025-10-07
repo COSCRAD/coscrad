@@ -135,7 +135,7 @@ export class MemoryMatchService {
         return isInternalError(result) ? this.buildBadUserInputError(result) : result;
     }
 
-    async unpublish(_id: AggregateId): Promise<Error | AggregateId> {
+    async unpublish(id: AggregateId): Promise<Error | AggregateId> {
         // const searchResult = await this.memoryMatchRepository.fetchById(id);
 
         // if (isNotFound(searchResult)) {
@@ -146,8 +146,11 @@ export class MemoryMatchService {
         //     );
         // }
 
-        // const {isPublished} = searchResult
-        throw new Error('not implmented');
+        // const { isPublished } = searchResult;
+
+        await this.memoryMatchRepository.unpublish(id);
+
+        return id;
     }
 
     async fetchById(

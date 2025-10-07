@@ -37,6 +37,11 @@ const testRoundSequentialIds = [1, 2, 3];
 
 const testRounds = testRoundSequentialIds.map((s) => buildRound(s + 1));
 
+const unpublishedRound = buildTestInstance(MemoryMatchRound, {
+    id: buildDummyUuid(1),
+    isPublished: false,
+});
+
 describe(`ArangoMemoryMatchRepository`, () => {
     let testRepository: IMemoryMatchRepository;
 
@@ -162,27 +167,22 @@ describe(`ArangoMemoryMatchRepository`, () => {
     });
 
     describe(`publish`, () => {
-        const roundToPublish = buildTestInstance(MemoryMatchRound, {
-            id: buildDummyUuid(1),
-            isPublished: false,
-        });
-
         describe(`when the round exists`, () => {
             describe(`when the round is not yet published`, () => {
                 beforeEach(async () => {
-                    await testRepository.create(roundToPublish);
+                    await testRepository.create(unpublishedRound);
                 });
 
                 it(`should publish the round`, async () => {
-                    const result = await testRepository.publish(roundToPublish.id);
+                    const result = await testRepository.publish(unpublishedRound.id);
 
                     const updatedRound = (await testRepository.fetchById(
-                        roundToPublish.id
+                        unpublishedRound.id
                     )) as MemoryMatchRound;
 
                     expect(updatedRound.isPublished).toBe(true);
 
-                    expect(result).toBe(roundToPublish.id);
+                    expect(result).toBe(unpublishedRound.id);
                 });
             });
 
@@ -202,6 +202,38 @@ describe(`ArangoMemoryMatchRepository`, () => {
                 expect(errorMessage).toContain(`as there is no memory match round with`);
 
                 expect(errorMessage).toContain(bogusId);
+            });
+        });
+    });
+
+    describe(`unpublish`, () => {
+        const publishedRound = buildTestInstance(MemoryMatchRound, {
+            id: buildDummyUuid(1),
+            isPublished: true,
+        });
+
+        describe(`when the round is published`, () => {
+            beforeEach(async () => {
+                await testRepository.create(publishedRound);
+            });
+
+            it(`should unpublish the round`, async () => {
+                await testRepository.unpublish(publishedRound.id);
+
+                const updatedRound = (await testRepository.fetchById(
+                    publishedRound.id
+                )) as MemoryMatchRound;
+
+                expect(updatedRound.isPublished).toBe(false);
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            //    no data is added in a beforeEach
+            it(`should fail with the expected error`, async () => {
+                const result = await testRepository.unpublish(unpublishedRound.id);
+
+                expect(result).toBeInstanceOf(InternalError);
             });
         });
     });
