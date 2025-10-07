@@ -136,17 +136,25 @@ export class MemoryMatchService {
     }
 
     async unpublish(id: AggregateId): Promise<Error | AggregateId> {
-        // const searchResult = await this.memoryMatchRepository.fetchById(id);
+        const searchResult = await this.memoryMatchRepository.fetchById(id);
 
-        // if (isNotFound(searchResult)) {
-        //     return this.buildBadUserInputError(
-        //         new InternalError(
-        //             `You cannot unpublish memory match round ${id} as there is no memory match round with that ID`
-        //         )
-        //     );
-        // }
+        if (isNotFound(searchResult)) {
+            return this.buildBadUserInputError(
+                new InternalError(
+                    `You cannot unpublish memory match round ${id} as there is no memory match round with that ID`
+                )
+            );
+        }
 
-        // const { isPublished } = searchResult;
+        const { isPublished } = searchResult;
+
+        if (!isPublished) {
+            return this.buildBadUserInputError(
+                new InternalError(
+                    `You cannot unpublish memory match round ${id} as it is not published.`
+                )
+            );
+        }
 
         await this.memoryMatchRepository.unpublish(id);
 

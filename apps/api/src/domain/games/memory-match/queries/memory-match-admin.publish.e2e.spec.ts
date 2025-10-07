@@ -140,7 +140,7 @@ describe(`when using the REST API to publish a memory match round`, () => {
         });
     });
 
-    describe(`when the user is a proect admin`, () => {
+    describe(`when the user is a project admin`, () => {
         const projectAdminUser = buildTestInstance(CoscradUser, {
             roles: [CoscradUserRole.projectAdmin],
         });
