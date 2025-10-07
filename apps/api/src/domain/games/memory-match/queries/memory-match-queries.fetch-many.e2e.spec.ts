@@ -99,11 +99,11 @@ describe(`when querying for a memory match round: fetch many`, () => {
         await app.init();
 
         memoryMatchRepository = app.get(MEMORY_MATCH_REPOSITORY_INJECTION_TOKEN);
+
+        databaseProvider = app.get(ArangoDatabaseProvider);
     };
 
     beforeEach(async () => {
-        databaseProvider = app.get(ArangoDatabaseProvider);
-
         await databaseProvider.getDatabaseForCollection('memory_match_rounds').clear();
 
         await memoryMatchRepository.createMany([publishedRound, unpublishedRound]);
@@ -113,8 +113,6 @@ describe(`when querying for a memory match round: fetch many`, () => {
         await app.close();
 
         databaseProvider.close();
-
-        await app.close();
     });
 
     /**
