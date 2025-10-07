@@ -18,7 +18,9 @@ interface IUnionFactory<_T = unknown, UProduct = unknown> {
 export class DynamicDataTypeFinderService {
     public unionFactory: IUnionFactory;
 
-    constructor(private readonly discoverService: DiscoveryService) {}
+    constructor(private readonly discoverService: DiscoveryService) {
+        console.log(discoverService);
+    }
 
     async bootstrapDynamicTypes() {
         const unionProviders = await this.getAllDataClassCtors();

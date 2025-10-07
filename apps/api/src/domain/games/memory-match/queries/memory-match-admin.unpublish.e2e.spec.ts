@@ -1,4 +1,6 @@
 import { CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
+import { UnionFactory } from '@coscrad/data-types';
+import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -36,6 +38,18 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
 
     let memoryMatchRepository: IMemoryMatchRepository;
 
+    const mockDiscoveryService = {
+        providers: (_: any) => {
+            return [];
+        },
+    };
+
+    const mockUnionFactory = {
+        build: (_in: any) => {
+            throw new Error('not implemented');
+        },
+    };
+
     const setItUp = async (user?: CoscradUserWithGroups) => {
         const testModule = await Test.createTestingModule({
             imports: [
@@ -50,6 +64,10 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
         })
             .overrideGuard(AdminJwtGuard)
             .useValue(new MockJwtAdminAuthGuard(user))
+            .overrideProvider(UnionFactory)
+            .useValue(mockUnionFactory)
+            .overrideProvider(DiscoveryService)
+            .useValue(mockDiscoveryService)
             .overrideProvider(ConfigService)
             .useValue(
                 buildMockConfigService({
