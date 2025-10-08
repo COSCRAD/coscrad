@@ -9,6 +9,7 @@ import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constrai
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
+import { PaginationOptions } from '../../app/controllers/resources/term.controller';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
@@ -80,6 +81,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     async fetchForUser(options?: {
         user?: CoscradUserWithGroups;
         filter?: CoscradFilterCondition;
+        pagination?: PaginationOptions;
     }): Promise<ArangoDatabaseDocument<TEntity>[]> {
         const docRef = 'doc';
 
@@ -114,10 +116,22 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             filterBlock = '';
         }
 
+        // TODO name these constants
+        const limitBlock = `
+            limit ${options?.pagination?.page || 0}, ${options?.pagination?.size || 100}
+        `;
+
+        const sortBlock = `
+            sort ${docRef}.name.items[0].text, ${docRef}._key
+        `;
+
+        // Should we ensure that the query returns the `next` page number \ offset?
         const aqlQueryString = `
             for ${docRef} in @@collectionName
             ${letStatements}
             ${filterBlock}
+            ${limitBlock}
+            ${sortBlock}
             return ${docRef}
         `;
 

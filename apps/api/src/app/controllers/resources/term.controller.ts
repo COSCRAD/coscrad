@@ -25,10 +25,15 @@ import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';
 
+export type PaginationOptions = {
+    size: number;
+    page: number;
+};
+
 // TODO Make this a DTO class
 export interface UserQueryOptions {
     filter: CoscradFilterCondition;
-    // limit
+    pagination: PaginationOptions;
     // sortBy
 }
 

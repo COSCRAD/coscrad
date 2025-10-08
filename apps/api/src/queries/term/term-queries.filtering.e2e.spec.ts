@@ -10,6 +10,7 @@ import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import buildMockConfigService from '../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../app/config/buildConfigFilePath';
+import { PaginationOptions } from '../../app/controllers/resources/term.controller';
 import { TermModule } from '../../app/domain-modules/term.module';
 import { MockJwtAuthGuard } from '../../authorization/mock-jwt-auth-guard';
 import { OptionalJwtAuthGuard } from '../../authorization/optional-jwt-auth-guard';
@@ -61,10 +62,12 @@ describe(`term index queries`, () => {
         matches,
         nonMatches,
         filter,
+        pagination,
     }: {
         matches: TermViewModel[];
         nonMatches: TermViewModel[];
         filter: CoscradFilterCondition;
+        pagination?: PaginationOptions;
     }) => {
         // Arrange
         await termRepository.createMany([...matches, ...nonMatches]);
@@ -72,6 +75,7 @@ describe(`term index queries`, () => {
         // Act
         const res = await request(app.getHttpServer()).get(indexEndpoint).send({
             filter,
+            pagination,
         });
 
         // Assert
@@ -148,18 +152,83 @@ describe(`term index queries`, () => {
     describe(`when user-defined filters are provided`, () => {
         describe(`when searching the property: **name**`, () => {
             describe(`when searching multilingual text for a search string`, () => {
-                it(`should find the expected term`, async () => {
-                    const multilingualTextIncludes: CoscradSimpleCondition = {
+                describe(`when the number of results does not exceed the page size`, () => {
+                    it(`should find the expected term`, async () => {
+                        const multilingualTextIncludes: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                            field: 'name',
+                            params: [searchTermsWithNoSpecialChar],
+                        };
+
+                        await assertFilterWorks({
+                            matches: [termWhoseEnglishMatchesSearch],
+                            nonMatches: [termThatShouldMatchNoSearches],
+                            filter: multilingualTextIncludes,
+                        });
+                    });
+                });
+
+                describe(`when the number of results exceeds the page size`, () => {
+                    const keyword = 'hello';
+
+                    const pageSize = 10;
+
+                    const targetPage = 2;
+
+                    const numberOfMatchingTerms = (targetPage + 1) * pageSize;
+
+                    const matches = Array(numberOfMatchingTerms)
+                        .fill(null)
+                        .map((_, index) =>
+                            buildTestInstance(TermViewModel, {
+                                id: buildDummyUuid(index),
+                                name: buildMultilingualTextWithSingleItem(keyword),
+                            })
+                        );
+
+                    const nonMatches = Array(numberOfMatchingTerms)
+                        .fill(null)
+                        .map((_, index) =>
+                            buildTestInstance(TermViewModel, {
+                                id: buildDummyUuid(100 + index),
+                                name: buildMultilingualTextWithSingleItem('zrzrzr'),
+                            })
+                        );
+
+                    const doesTextInclude: CoscradSimpleCondition = {
                         type: CoscradConditionBlockType.SIMPLE,
                         operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                        params: [keyword],
                         field: 'name',
-                        params: [searchTermsWithNoSpecialChar],
                     };
 
-                    await assertFilterWorks({
-                        matches: [termWhoseEnglishMatchesSearch],
-                        nonMatches: [termThatShouldMatchNoSearches],
-                        filter: multilingualTextIncludes,
+                    /**
+                     * This test case tests the interaction of filtering with
+                     * pagination. We should have a seaprate test suite that
+                     * tests filtering in isolation.
+                     */
+                    it.only(`should return a single page worth of results`, async () => {
+                        // Arrange
+                        await termRepository.createMany([...matches, ...nonMatches]);
+
+                        // Act
+                        const res = await request(app.getHttpServer())
+                            .get(indexEndpoint)
+                            .send({
+                                filter: doesTextInclude,
+                                pagination: {
+                                    size: pageSize,
+                                    page: targetPage,
+                                },
+                            });
+
+                        // Assert
+                        expect(res.status).toBe(HttpStatusCode.ok);
+
+                        const { entities } = res.body;
+
+                        expect(entities).toHaveLength(pageSize);
                     });
                 });
             });

@@ -11,6 +11,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { UserQueryOptions } from '../../../controllers/resources/term.controller';
 
 export type FetchManyQueryOptions = UserQueryOptions;
+
 export interface IResourceQueryRepository<T = unknown>
     extends ICountable,
         IPublishable,
