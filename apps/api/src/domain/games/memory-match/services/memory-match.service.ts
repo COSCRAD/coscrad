@@ -198,7 +198,7 @@ export class MemoryMatchService {
             mediaItemIdForCardbackImage,
         } = importDto;
 
-        // TODO check for text
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-324] check for text
         const cards = cardDtos.map(({ mediaItemIdForAudio, mediaItemIdForImage }, index) => {
             return new MemoryMatchCard({
                 audioId: mediaItemIdForAudio,
@@ -219,15 +219,22 @@ export class MemoryMatchService {
                 languageCodeForDescription
             ),
             compiledBy: [],
-            //  TODO should we support multiple contributors
+            //  TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-308] should we support multiple contributors
             contributors: [contributorId],
-            // TODO omit this property
+            // note that this is hard-wired for now. eventually, it could be configurable or passed by the user.
             size: 12,
             // an admin must explcitly publish the round
             isPublished: false,
         });
 
-        // TODO validate invariants
+        const invariantValidationErrors = importedRound.validateInvariants();
+
+        if (invariantValidationErrors.length > 0) {
+            return new InternalError(
+                `Encountered inconsistent import record for imported round: ${name}`,
+                invariantValidationErrors
+            );
+        }
 
         const mediaReferenceErrors = await this.validateMediaItemReferences(importedRound);
 
@@ -297,7 +304,7 @@ export class MemoryMatchService {
         const mediaItemIds = mediaReferences.map(({ id }) => id);
 
         /**
-         * TODO Optimize this to use a filter in-database
+         * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-325] Optimize this to use a filter in-database
          */
         const allMediaItems = await this.mediaManagementService.fetchMany();
 

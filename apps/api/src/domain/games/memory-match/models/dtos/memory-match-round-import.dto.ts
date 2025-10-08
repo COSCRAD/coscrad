@@ -34,7 +34,9 @@ export class MemoryMatchRoundImportDto {
     mediaItemIdForCardbackImage: AggregateId;
 
     /**
-     * TODO We need to support contributors for each individual resource, including
+     * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-308]
+     *
+     * We need to support contributors for each individual resource, including
      * - text
      * - images
      * - audio

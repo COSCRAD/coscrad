@@ -22,6 +22,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { DynamicDataTypeFinderService } from '../../../../validation';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { MediaItem } from '../../../models/media-item/entities/media-item.entity';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -118,11 +119,17 @@ describe(endpointUnderTest, () => {
         })
             .overrideGuard(AdminJwtGuard)
             .useValue(new MockJwtAdminAuthGuard(user))
+            .overrideProvider(DynamicDataTypeFinderService)
+            .useValue({
+                bootstrapDynamicTypes: async () => {
+                    Promise.resolve();
+                },
+            })
             .overrideProvider(ConfigService)
+
             .useValue(
                 buildMockConfigService({
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                    // is this necessary?
                     BASE_URL: 'http://localhost',
                     NODE_PORT: 1234,
                     GLOBAL_PREFIX: 'awesome-api',
@@ -161,7 +168,6 @@ describe(endpointUnderTest, () => {
 
         describe(`when the imported round is valid`, () => {
             it(`should return ok and persist the imported round`, async () => {
-                // TODO add test for when a request body is not provided
                 const res = await request(app.getHttpServer())
                     .post(endpointUnderTest)
                     .send(validDto);
@@ -203,6 +209,18 @@ describe(endpointUnderTest, () => {
         });
 
         describe(`when the round is invalid`, () => {
+            describe(`when the required request body is not provided`, () => {
+                it(`should return the expected error`, async () => {
+                    const res = await request(app.getHttpServer()).post(endpointUnderTest);
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                    expect(res.body.message).toContain(
+                        'You must provide a round import record on the body of the request'
+                    );
+                });
+            });
+
             describe(`when the creation DTO has an invalid type`, () => {
                 describe(`when required properties are missing`, () => {
                     const dtoWithMissingProperties = buildTestInstance(MemoryMatchRoundCreationDto);
@@ -298,8 +316,7 @@ describe(endpointUnderTest, () => {
 
                 describe(`when the external state is inconsistent with the request`, () => {
                     describe(`when one of the contributors does not exist`, () => {
-                        // TODO Do this once we sort out the API for indicating contributions
-                        // should we do this now?
+                        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-308] Do this once we sort out the API for indicating contributions
                         it.todo(`should return the expected error response`);
                     });
 
@@ -401,11 +418,6 @@ describe(endpointUnderTest, () => {
                         });
                     });
 
-                    /**
-                     * TODO We can also add a single `pdfMediaItem` to the database
-                     * and try to link this one to invalidate the import for
-                     * each of the following cases.
-                     */
                     describe(`when one of the media items is of the wrong type`, () => {
                         describe(`when the card back image has the wrong MIME Type`, () => {
                             it(`should return the expected error response`, async () => {
