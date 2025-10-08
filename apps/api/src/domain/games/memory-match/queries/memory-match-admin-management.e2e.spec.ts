@@ -63,7 +63,6 @@ describe(`when using the REST API to create a memory match round`, () => {
             .useValue(
                 buildMockConfigService({
                     ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-                    // is this necessary?
                     BASE_URL: 'http://localhost',
                     NODE_PORT: 1234,
                     GLOBAL_PREFIX: 'awesome-api',

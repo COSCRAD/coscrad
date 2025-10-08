@@ -15,6 +15,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
+import { DynamicDataTypeFinderService } from '../../../../validation';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -56,7 +57,13 @@ const unpublishedRound = buildTestInstance(MemoryMatchRound, {
     cards: [],
 });
 
-// TODO Diagnose why this test fails on the CI but not locally and opt-in
+const mockDynamicDataTypeFinderService = {
+    async bootstrapDynamicTypes() {
+        return Promise.resolve();
+    },
+};
+
+// TODO opt back into this test once we diagnose why it fails on the CI but not locally
 describe.skip(`when querying for a memory match round: fetch many`, () => {
     let app: INestApplication;
 
@@ -93,6 +100,8 @@ describe.skip(`when querying for a memory match round: fetch many`, () => {
             .useValue(new MockJwtAdminAuthGuard(testUserWithGroups))
             .overrideProvider(ConfigService)
             .useValue(mockConfigService)
+            .overrideProvider(DynamicDataTypeFinderService)
+            .useValue(mockDynamicDataTypeFinderService)
             .compile();
 
         app = testModuleRef.createNestApplication();
@@ -114,8 +123,6 @@ describe.skip(`when querying for a memory match round: fetch many`, () => {
         await app.close();
 
         databaseProvider.close();
-
-        await app.close();
     });
 
     /**

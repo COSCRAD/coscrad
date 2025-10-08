@@ -193,7 +193,6 @@ export class ManageBulkJobsCliCommand extends CliCommandRunner {
             ) as CoscradBulkImportJobCreateDto;
 
             const dtoSchemaValidationErrors = validateSimpleInvariants(
-                // @ts-expect-error The type is too restrictive in the util
                 CoscradBulkImportJobCreateDto,
                 parsedBulkJobCreateDto
             );
