@@ -135,6 +135,32 @@ export class MemoryMatchService {
         return isInternalError(result) ? this.buildBadUserInputError(result) : result;
     }
 
+    async unpublish(id: AggregateId): Promise<Error | AggregateId> {
+        const searchResult = await this.memoryMatchRepository.fetchById(id);
+
+        if (isNotFound(searchResult)) {
+            return this.buildBadUserInputError(
+                new InternalError(
+                    `You cannot unpublish memory match round ${id} as there is no memory match round with that ID`
+                )
+            );
+        }
+
+        const { isPublished } = searchResult;
+
+        if (!isPublished) {
+            return this.buildBadUserInputError(
+                new InternalError(
+                    `You cannot unpublish memory match round ${id} as it is not published.`
+                )
+            );
+        }
+
+        await this.memoryMatchRepository.unpublish(id);
+
+        return id;
+    }
+
     async fetchById(
         roundId: AggregateId,
         userWithGroups?: CoscradUserWithGroups

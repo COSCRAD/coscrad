@@ -86,6 +86,24 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         }
     }
 
+    async unpublish(roundId: AggregateId): Promise<Error | AggregateId> {
+        try {
+            await this.database.update(roundId, { isPublished: false });
+            return roundId;
+        } catch (error) {
+            if (error?.message.includes('no document with that id')) {
+                return new InternalError(
+                    `You cannot publish memory match round: ${roundId}, as there is no memory match round with that ID.`
+                );
+            }
+
+            throw new InternalError(
+                `Encountered the following unknown error state from Arango update query:`,
+                [error]
+            );
+        }
+    }
+
     async delete(roundId: AggregateId): Promise<void> {
         /**
          * Memory match rounds are not event-sourced. Therefore, unlike
