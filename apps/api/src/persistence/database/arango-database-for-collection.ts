@@ -5,7 +5,7 @@
  * provided to the client.
  */
 import { IViewUpdateNotification } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
@@ -83,8 +83,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
     }): Promise<ArangoDatabaseDocument<TEntity>[]> {
         const docRef = 'doc';
 
-        // TODO Filter for user access
-        const { filter: filterCondition = null } = options;
+        const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
 
         let filterBlock: string;
 
@@ -122,7 +121,11 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             return ${docRef}
         `;
 
-        const cursor = await this.#arangoDatabase.query({ query: aqlQueryString, bindVars });
+        const cursor = await this.#arangoDatabase
+            .query({ query: aqlQueryString, bindVars })
+            .catch((e) => {
+                throw e;
+            });
 
         const result = await cursor.all();
 

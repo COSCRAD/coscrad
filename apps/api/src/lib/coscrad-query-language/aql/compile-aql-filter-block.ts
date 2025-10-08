@@ -17,6 +17,47 @@ interface CoscradAqlFilterBlock {
     bindVars: Record<string, unknown>;
 }
 
+const buildFieldref = (
+    docRef: string,
+    fieldPath: string,
+    startingArgIndex = 0
+): {
+    expression: string;
+    nestedFieldNames: string[];
+    isArray: boolean;
+} => {
+    const nestedFieldNames = fieldPath.split('.');
+
+    const expression = `${docRef}${nestedFieldNames
+        .map((_fieldName, fieldIndex) => `[@args[${startingArgIndex + fieldIndex}]]`)
+        .join('')}`;
+
+    if (nestedFieldNames.some((f, i) => i !== 0 && f.endsWith('[*]'))) {
+        throw new InternalError(
+            `Declaring filters nested arrayed-value fields is not yet supported.`
+        );
+    }
+
+    const isArray = nestedFieldNames[0].endsWith('[*]');
+
+    return {
+        expression,
+        nestedFieldNames: nestedFieldNames.map((f) => f.replace('[*]', '')), // the `[*]` must be added externally below
+        isArray,
+    };
+};
+
+/**
+ * TODO Support nested fields for all query operators.
+ */
+const forbidNestedFieldQuery = (field: string, operator: CoscradBooleanOperator) => {
+    if (field.includes('.') || field.includes('[*]')) {
+        throw new InternalError(
+            `You cannot use the query operator: ${operator} to filter by nested fields. Recieved field path: ${field}.`
+        );
+    }
+};
+
 const compileSimpleFilterCondition = (
     condition: CoscradSimpleCondition,
     docRef: string,
@@ -35,13 +76,24 @@ const compileSimpleFilterCondition = (
             throw new Error(`todo return param type user input error`);
         }
 
+        // TODO opt-in
+        forbidNestedFieldQuery(field, operator);
+
+        const { expression: fieldRef, nestedFieldNames } = buildFieldref(
+            docRef,
+            field,
+            startingArgIndex
+        );
+
+        startingArgIndex += nestedFieldNames.length;
+
         // field names are provided by the user and must be part of the bindVars
-        const statement = `${docRef}[@args[${startingArgIndex}]] > @args[${startingArgIndex + 1}]`;
+        const statement = `${fieldRef} > @args[${startingArgIndex}]`;
 
         return {
             statement,
             bindVars: {
-                args: [field, minExclusive],
+                args: [...nestedFieldNames, minExclusive],
             },
         };
     }
@@ -69,14 +121,49 @@ const compileSimpleFilterCondition = (
             };
         }
 
-        const statement = `contains(${docRef}[@args[${startingArgIndex}]],@args[${
-            startingArgIndex + 1
-        }])`;
+        const {
+            expression: fieldRef,
+            nestedFieldNames,
+            isArray,
+        } = buildFieldref(docRef, field, startingArgIndex);
+
+        if (!isArray) {
+            const statement = `contains(${fieldRef},@args[${
+                startingArgIndex + nestedFieldNames.length
+            }])`;
+
+            return {
+                statement,
+                bindVars: {
+                    args: [...nestedFieldNames, searchText],
+                },
+            };
+        }
+
+        /**
+         * Here we know that:
+         * - the top-level field is array valued
+         */
+        const letStatements = `
+            LET matches = (
+                for foo in ${docRef}[@args[${startingArgIndex}]]
+                filter contains(foo[@args[${startingArgIndex + 1}]],@args[${
+            startingArgIndex + nestedFieldNames.length
+        }])
+                limit 1
+                return "match"
+            )
+
+            LET hasMatch = LENGTH(matches)>0
+        `;
+
+        const statement = `hasMatch`;
 
         return {
             statement,
+            letStatements,
             bindVars: {
-                args: [field, searchText],
+                args: [...nestedFieldNames, searchText],
             },
         };
     }
@@ -87,6 +174,9 @@ const compileSimpleFilterCondition = (
                 `Expected 0 parameters for operator HAS_PROPERTY. Received: ${params}`
             );
         }
+
+        // TODO opt-in
+        forbidNestedFieldQuery(field, operator);
 
         // TODO let's deal carefully with `falsey` values here.
         const statement = `has(${docRef},@args[${startingArgIndex}])`;
@@ -111,6 +201,9 @@ const compileSimpleFilterCondition = (
         if (!isPositiveInteger(minLengthExclusive)) {
             throw new InternalError(`TODO return me`);
         }
+
+        // TODO opt-in
+        forbidNestedFieldQuery(field, operator);
 
         const statement = `length(${docRef}[@args[${startingArgIndex}]]) > @args[${
             startingArgIndex + 1
@@ -141,6 +234,9 @@ const compileSimpleFilterCondition = (
         if (!isString(languageCode)) {
             throw new InternalError(`TODO return this error- invalid param`);
         }
+
+        // TODO opt-in
+        forbidNestedFieldQuery(field, operator);
 
         const fieldRef = `${docRef}[@args[${startingArgIndex}]]`;
 
@@ -233,7 +329,7 @@ const compileAndFilterCondition = (
          * filter a && b && c
          * in AQL
          */
-        statement: statements.join('\n'),
+        statement: statements.join(' and '),
     };
 };
 

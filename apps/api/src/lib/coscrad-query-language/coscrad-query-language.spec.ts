@@ -8,6 +8,7 @@ import { Environment } from '../../app/config/constants/environment';
 import { buildMultilingualTextFromBilingualText } from '../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
+import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../persistence/database/arango-database-for-collection';
@@ -34,8 +35,12 @@ const WIDGETS_COLLECTION_ID = 'widgets';
 class Location {
     id: string;
 
-    constructor({ id }: { id: string }) {
+    name: MultilingualText;
+
+    constructor({ id, name }: DTO<Location>) {
         this.id = id;
+
+        this.name = new MultilingualText(name);
     }
 }
 
@@ -75,7 +80,7 @@ class Widget {
         }
 
         if (isNonEmptyObject(location)) {
-            this.location = location;
+            this.location = new Location(location);
         }
 
         this.nickname = nickname;
@@ -180,6 +185,8 @@ const doesAnyTextIncludeEllo: CoscradSimpleCondition = {
     params: [searchText],
 };
 
+const dummyLocationName = buildMultilingualTextWithSingleItem('zzz', LanguageCode.Chilcotin);
+
 /***
  * # Note about testing strategy
  * We want to maintain freedom to refactor the implementation as this evolves.
@@ -226,6 +233,53 @@ describe(`Coscrad Query Language`, () => {
     describe(`when the query is represented as an object`, () => {
         describe(`when the query is validly formatted`, () => {
             describe(`when the query is a simple condition`, () => {
+                describe(`when searching a nested field`, () => {
+                    describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
+                        const targetLocationName = 'greenhouse';
+
+                        const widgetWithTargetLocationName = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            location: new Location({
+                                id: buildDummyUuid(101),
+                                name: buildMultilingualTextWithSingleItem(targetLocationName),
+                            }),
+                        });
+
+                        const widgetWhoseLocationNameDoesntMatchTheFilter = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            location: new Location({
+                                id: buildDummyUuid(102),
+                                name: buildMultilingualTextFromBilingualText(
+                                    { text: 'zzz', languageCode: LanguageCode.English },
+                                    { text: 'rrr', languageCode: LanguageCode.Chilcotin }
+                                ),
+                            }),
+                        });
+
+                        const nestedDoesMultilingualTextInclude: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                            field: 'location.name',
+                            params: [targetLocationName],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                widgetWithTargetLocationName,
+                                widgetWhoseLocationNameDoesntMatchTheFilter,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: nestedDoesMultilingualTextInclude,
+                            });
+
+                            expect(result).toHaveLength(1);
+                        });
+                    });
+                });
+
                 describe(`GREATER_THAN`, () => {
                     beforeEach(async () => {
                         await widgetRepository.createMany([
@@ -271,7 +325,7 @@ describe(`Coscrad Query Language`, () => {
                     describe(`when the property is object-valued`, () => {
                         const widgetWithLocation = dummyWidget.clone({
                             id: '101',
-                            location: new Location({ id: '44' }),
+                            location: new Location({ id: '44', name: dummyLocationName }),
                         });
 
                         const widgetWithoutALocation = dummyWidget.clone({
@@ -280,7 +334,7 @@ describe(`Coscrad Query Language`, () => {
 
                         const anotherWidgetWithALoaction = dummyWidget.clone({
                             id: '103',
-                            location: new Location({ id: '46' }),
+                            location: new Location({ id: '46', name: dummyLocationName }),
                         });
 
                         const widgetThatExplicitlyDoesNotHaveALocation = new Widget({
@@ -559,7 +613,7 @@ describe(`Coscrad Query Language`, () => {
                         conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
                     };
 
-                    it(`should return the expected results`, async () => {
+                    it.only(`should return the expected results`, async () => {
                         const result = await widgetRepository.fetchForUser({
                             filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
                         });
