@@ -135,7 +135,7 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 });
             });
 
-            describe(`when the round is already unpublished`, () => {
+            describe(`when the round is not yet published`, () => {
                 const unpublishedRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(999),
                     isPublished: false,
@@ -202,7 +202,7 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 });
             });
 
-            describe(`when the round is already unpublished`, () => {
+            describe(`when the round is not yet published`, () => {
                 const unpublishedRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(999),
                     isPublished: false,
@@ -263,7 +263,7 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 });
             });
 
-            describe(`when the round is already unpublished`, () => {
+            describe(`when the round is not yet published`, () => {
                 const unpublishedRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(999),
                     isPublished: false,
@@ -320,7 +320,7 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
                 });
             });
 
-            describe(`when the round is already unpublished`, () => {
+            describe(`when the round is not yet published`, () => {
                 const unpublishedRound = buildTestInstance(MemoryMatchRound, {
                     id: buildDummyUuid(999),
                     isPublished: false,

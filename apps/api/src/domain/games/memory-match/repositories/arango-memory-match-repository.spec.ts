@@ -234,6 +234,12 @@ describe(`ArangoMemoryMatchRepository`, () => {
                 const result = await testRepository.unpublish(unpublishedRound.id);
 
                 expect(result).toBeInstanceOf(InternalError);
+
+                const { message: errorMessage } = result as InternalError;
+
+                expect(errorMessage).toContain('there is no memory match round');
+
+                expect(errorMessage).toContain(unpublishedRound.id);
             });
         });
     });
