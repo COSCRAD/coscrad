@@ -12,6 +12,8 @@ We are also working to allow media file uploads via the API.
 
 #### Relevant Commits
 
+-   feat: support data lineage for contributors (#777)
+-   feat(cli): support querying a particular bulk job by ID in the CLI (#775)
 -   feat(cli): introduce **manage-bulk-jobs** (#772)
 -   infra: make env file optional (#774)
 -   feat: introduce media upload dashboard (#753)
@@ -27,6 +29,10 @@ by leveraging resources from the web-of-knowledge as data sources.
 
 #### Relevant PRs
 
+-   feat: support unpublishing a memory match round via the API (#782)
+-   feat: support memory match round imports (#771)
+-   feat: support publication of memory match rounds via the API (#780)
+-   feat: show unpublished memory match rounds to admin users (#776)
 -   feat: support creating a memory match round via the API (#770)
 -   feat: support memory match queries (#767)
 -   introduce memory match repository (#765)
