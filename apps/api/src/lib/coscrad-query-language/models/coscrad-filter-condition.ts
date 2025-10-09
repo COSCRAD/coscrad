@@ -52,27 +52,3 @@ export type CoscradFilterCondition =
     | CoscradOrCondition
     | CoscradNotCondition
     | CoscradSimpleCondition;
-
-// const pageLengthGreaterThan10: CoscradSimpleCondition = {
-//     type: CoscradConditionBlockType.SIMPLE,
-//     field: 'size',
-//     operator: CoscradBooleanOperator.GREATER_THAN,
-//     params: [10],
-// };
-
-// const mlTextIncludes: CoscradSimpleCondition = {
-//     type: CoscradConditionBlockType.SIMPLE,
-//     field: 'name',
-//     operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
-//     params: ['text to search for'],
-// };
-
-// const andQueryExample: CoscradAndCondition = {
-//     type: CoscradConditionBlockType.AND,
-//     conditions: [pageLengthGreaterThan10, mlTextIncludes],
-// };
-
-// const orQueryExample: CoscradOrCondition = {
-//     type: CoscradConditionBlockType.OR,
-//     conditions: [pageLengthGreaterThan10, mlTextIncludes],
-// };

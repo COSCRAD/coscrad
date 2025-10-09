@@ -30,11 +30,11 @@ export type PaginationOptions = {
     page: number;
 };
 
-// TODO Make this a DTO class
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-327] Make this a DTO class
 export interface UserQueryOptions {
     filter: CoscradFilterCondition;
     pagination: PaginationOptions;
-    // sortBy
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-328] Support custom user-defined sort order
 }
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)

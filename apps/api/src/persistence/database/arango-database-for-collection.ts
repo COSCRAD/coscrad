@@ -105,22 +105,54 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 ]);
             }
 
-            const { bindVars: subqueryBindVars, statement: filterStatements } = compileResult;
+            const { bindVars: subqueryBindVars, filterStatement: filterStatements } = compileResult;
 
             filterBlock = `filter ${filterStatements}`;
 
             Object.assign(bindVars, subqueryBindVars);
 
-            letStatements = isNonEmptyString(compileResult.letStatements)
-                ? compileResult.letStatements
+            letStatements = isNonEmptyString(compileResult.letStatement)
+                ? compileResult.letStatement
                 : '';
         } else {
             filterBlock = '';
         }
 
-        // TODO name these constants
+        /**
+         * We may want to handle this at a higher level (controller \ middleware).
+         * This logic guarantees that we do not have the risk of AQL injection,
+         * even though the `offset` and `size` are not part of the `bindVars`.
+         *
+         * The one thing to be careful about is the UX \ DX associated with
+         * defaulting to a standard value when the value provided is invalid. It
+         * lacks inentionality. Maybe we can do an additional check in the
+         * controller \ middleware.
+         */
+
+        const DEFAULT_OFFSET = 0;
+
+        const userProvidedPage = options?.pagination?.page;
+
+        const offset =
+            Number.isInteger(userProvidedPage) && userProvidedPage >= 0
+                ? userProvidedPage
+                : DEFAULT_OFFSET;
+
+        const DEFAULT_SIZE = 100;
+
+        const MAX_SIZE = 1000;
+
+        const userProvidedSize = options?.pagination?.size;
+
+        const size =
+            Number.isInteger(userProvidedSize) &&
+            userProvidedSize > 0 &&
+            userProvidedSize <= MAX_SIZE
+                ? userProvidedSize
+                : DEFAULT_SIZE;
+
         const limitBlock = `
-            limit ${options?.pagination?.page || 0}, ${options?.pagination?.size || 100}
+            limit ${offset}, ${size}
         `;
 
         const sortBlock = `

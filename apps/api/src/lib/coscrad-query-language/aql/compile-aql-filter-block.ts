@@ -17,8 +17,8 @@ import {
 } from '../models/coscrad-filter-condition';
 
 interface CoscradAqlFilterBlock {
-    letStatements?: string;
-    statement: string;
+    letStatement?: string;
+    filterStatement: string;
     bindVars: Record<string, unknown>;
 }
 
@@ -53,7 +53,7 @@ const buildFieldref = (
 };
 
 /**
- * TODO Support nested fields for all query operators.
+ * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] Support nested fields for all query operators.
  */
 const forbidNestedFieldQuery = (field: string, operator: CoscradBooleanOperator) => {
     if (field.includes('.') || field.includes('[*]')) {
@@ -86,7 +86,7 @@ const compileSimpleFilterCondition = (
             );
         }
 
-        // TODO opt-in
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
         const { expression: fieldRef, nestedFieldNames } = buildFieldref(
@@ -101,7 +101,7 @@ const compileSimpleFilterCondition = (
         const statement = `${fieldRef} > @args[${startingArgIndex}]`;
 
         return {
-            statement,
+            filterStatement: statement,
             bindVars: {
                 args: [...nestedFieldNames, minExclusive],
             },
@@ -131,7 +131,7 @@ const compileSimpleFilterCondition = (
 
         if (searchText === '') {
             return {
-                statement: '',
+                filterStatement: '',
                 bindVars: {},
             };
         }
@@ -148,7 +148,7 @@ const compileSimpleFilterCondition = (
             }])`;
 
             return {
-                statement,
+                filterStatement: statement,
                 bindVars: {
                     args: [...nestedFieldNames, searchText],
                 },
@@ -175,8 +175,8 @@ const compileSimpleFilterCondition = (
         const statement = `hasMatch`;
 
         return {
-            statement,
-            letStatements,
+            filterStatement: statement,
+            letStatement: letStatements,
             bindVars: {
                 args: [...nestedFieldNames, searchText],
             },
@@ -188,14 +188,13 @@ const compileSimpleFilterCondition = (
             return new InvalidParameterListSizeForQueryOperator(0, params, operator);
         }
 
-        // TODO opt-in
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
-        // TODO let's deal carefully with `falsey` values here.
         const statement = `has(${docRef},@args[${startingArgIndex}])`;
 
         return {
-            statement,
+            filterStatement: statement,
             bindVars: {
                 args: [field],
             },
@@ -218,7 +217,7 @@ const compileSimpleFilterCondition = (
             );
         }
 
-        // TODO opt-in
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
         const statement = `length(${docRef}[@args[${startingArgIndex}]]) > @args[${
@@ -226,7 +225,7 @@ const compileSimpleFilterCondition = (
         }]`;
 
         return {
-            statement,
+            filterStatement: statement,
             bindVars: {
                 args: [field, minLengthExclusive],
             },
@@ -249,7 +248,6 @@ const compileSimpleFilterCondition = (
             );
         }
 
-        // TODO `isLanguageCode` ?
         if (!Object.values(LanguageCode).includes(languageCode as LanguageCode)) {
             return new InvalidParameterTypeForQueryOperator(
                 1,
@@ -259,7 +257,7 @@ const compileSimpleFilterCondition = (
             );
         }
 
-        // TODO opt-in
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
         const fieldRef = `${docRef}[@args[${startingArgIndex}]]`;
@@ -280,9 +278,8 @@ const compileSimpleFilterCondition = (
         `;
 
         return {
-            letStatements,
-            // TODO rename this `filterStatement`?
-            statement,
+            letStatement: letStatements,
+            filterStatement: statement,
             bindVars: {
                 args: [field, letterToFind, languageCode],
             },
@@ -296,7 +293,7 @@ const compileAndFilterCondition = (
     condition: CoscradAndCondition,
     docRef: string,
     startingArgIndex = 0
-) => {
+): ResultOrError<CoscradAqlFilterBlock> => {
     const { conditions } = condition;
 
     if (conditions.some((c) => c.type !== CoscradConditionBlockType.SIMPLE)) {
@@ -318,11 +315,10 @@ const compileAndFilterCondition = (
                 );
             }
 
-            const { bindVars, statement } = compileResult;
+            const { bindVars, filterStatement: statement } = compileResult;
 
             statements.push(statement);
 
-            // TODO Do we want type safety \ static key consistency
             context.args.push(...(bindVars['args'] as unknown[]));
 
             const newStartingIndex = index + (bindVars['args'] as unknown[]).length;
@@ -348,12 +344,14 @@ const compileAndFilterCondition = (
          * filter conditionA
          * filter conditionB
          * filter conditionC
-         * ``
+         * ```
          * vs.
+         * ```aql
          * filter a && b && c
          * in AQL
+         * ```
          */
-        statement: statements.join(' and '),
+        filterStatement: statements.join(' and '),
     };
 };
 
@@ -361,7 +359,7 @@ const compileOrFilterCondition = (
     condition: CoscradOrCondition,
     docRef: string,
     startingArgIndex = 0
-) => {
+): ResultOrError<CoscradAqlFilterBlock> => {
     const { conditions } = condition;
 
     if (conditions.some((c) => c.type !== CoscradConditionBlockType.SIMPLE)) {
@@ -383,11 +381,10 @@ const compileOrFilterCondition = (
                 );
             }
 
-            const { bindVars, statement } = compileResult;
+            const { bindVars, filterStatement: statement } = compileResult;
 
             statements.push(statement);
 
-            // TODO Do we want type safety \ static key consistency
             context.args.push(...(bindVars['args'] as unknown[]));
 
             const newStartingIndex = index + (bindVars['args'] as unknown[]).length;
@@ -407,7 +404,7 @@ const compileOrFilterCondition = (
 
     return {
         bindVars,
-        statement: statements.join(' or '),
+        filterStatement: statements.join(' or '),
     };
 };
 
@@ -416,7 +413,7 @@ const compileNotFilterCondition = (
     docRef: string,
     startingArgIndex = 0
 ): ResultOrError<CoscradAqlFilterBlock> => {
-    // TODO the naming is a bit off
+    // TODO should we rename this `block.condition` instead?
     if (condition.condition.type !== CoscradConditionBlockType.SIMPLE) {
         throw new InternalError(
             `Complex sub-queries with logical negation (NOT) are not yet supported.`
@@ -435,12 +432,12 @@ const compileNotFilterCondition = (
         ]);
     }
 
-    const { statement: childStatement, bindVars } = childCompileResult;
+    const { filterStatement: childStatement, bindVars } = childCompileResult;
 
     const negatedStatement = `!(${childStatement})`;
 
     return {
-        statement: negatedStatement,
+        filterStatement: negatedStatement,
         bindVars,
     };
 };
@@ -454,13 +451,12 @@ export const compileAqlFilterBlock = (
     startingArgIndex = 0
     // options? e.g., case-insensitive
 ): ResultOrError<CoscradAqlFilterBlock> => {
-    // TODO schmea-based type validation for the object?
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-327] schmea-based type validation for the object?
 
     const { type } = condition;
 
     if (type === CoscradConditionBlockType.SIMPLE) {
         const result = compileSimpleFilterCondition(
-            // TODO typeguard?
             condition as CoscradSimpleCondition,
             docRef,
             startingArgIndex

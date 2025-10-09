@@ -1,6 +1,10 @@
 /**
  * Note that we do not test the interaction of filtering with user access.
  * As such, this test uses public resources throughout.
+ *
+ * When we move ACL-based user access filtering to the database, we should
+ * test this carefully. At that point, we may need to use an admin user for the
+ * present test setup.
  */
 
 import { HttpStatusCode, LanguageCode } from '@coscrad/api-interfaces';

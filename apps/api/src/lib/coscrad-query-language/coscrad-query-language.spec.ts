@@ -375,7 +375,7 @@ describe(`Coscrad Query Language`, () => {
 
             describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
                 describe(`when the filter is well-formed`, () => {
-                    // TODO include case-sensitive option
+                    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-331] include case-sensitive option
                     describe(`when no language code is provided`, () => {
                         beforeEach(async () => {
                             await widgetRepository.createMany([
