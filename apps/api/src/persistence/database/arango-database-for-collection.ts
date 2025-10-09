@@ -5,15 +5,21 @@
  * provided to the client.
  */
 import { IViewUpdateNotification } from '@coscrad/api-interfaces';
+import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { AqlQuery } from 'arangojs/aql';
 import { isArangoDatabase } from 'arangojs/database';
 import { Subject } from 'rxjs';
+import { PaginationOptions } from '../../app/controllers/resources/term.controller';
+import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpecification } from '../../domain/repositories/interfaces/specification.interface';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { HasAggregateId } from '../../domain/types/HasAggregateId';
-import { InternalError } from '../../lib/errors/InternalError';
+import { compileAqlFilterBlock } from '../../lib/coscrad-query-language/aql/compile-aql-filter-block';
+import { CoscradFilterCondition } from '../../lib/coscrad-query-language/models/coscrad-filter-condition';
+import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
+import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseError } from './errors/ArangoDatabaseError';
 import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
@@ -71,6 +77,107 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                     } \n ${innerErrors.map((e) => e.toString()).join(' \n ')}`
                 );
             });
+    }
+
+    async fetchForUser(options?: {
+        user?: CoscradUserWithGroups;
+        filter?: CoscradFilterCondition;
+        pagination?: PaginationOptions;
+    }): Promise<ResultOrError<ArangoDatabaseDocument<TEntity>[]>> {
+        const docRef = 'doc';
+
+        const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
+
+        let filterBlock: string;
+
+        let letStatements = '';
+
+        const bindVars = {
+            '@collectionName': this.collectionID,
+        };
+
+        if (filterCondition) {
+            const compileResult = compileAqlFilterBlock(filterCondition, docRef);
+
+            if (isInternalError(compileResult)) {
+                return new InternalError(`The query you have provided is invalid.`, [
+                    compileResult,
+                ]);
+            }
+
+            const { bindVars: subqueryBindVars, filterStatement: filterStatements } = compileResult;
+
+            filterBlock = `filter ${filterStatements}`;
+
+            Object.assign(bindVars, subqueryBindVars);
+
+            letStatements = isNonEmptyString(compileResult.letStatement)
+                ? compileResult.letStatement
+                : '';
+        } else {
+            filterBlock = '';
+        }
+
+        /**
+         * We may want to handle this at a higher level (controller \ middleware).
+         * This logic guarantees that we do not have the risk of AQL injection,
+         * even though the `offset` and `size` are not part of the `bindVars`.
+         *
+         * The one thing to be careful about is the UX \ DX associated with
+         * defaulting to a standard value when the value provided is invalid. It
+         * lacks inentionality. Maybe we can do an additional check in the
+         * controller \ middleware.
+         */
+
+        const DEFAULT_OFFSET = 0;
+
+        const userProvidedPage = options?.pagination?.page;
+
+        const offset =
+            Number.isInteger(userProvidedPage) && userProvidedPage >= 0
+                ? userProvidedPage
+                : DEFAULT_OFFSET;
+
+        const DEFAULT_SIZE = 100;
+
+        const MAX_SIZE = 1000;
+
+        const userProvidedSize = options?.pagination?.size;
+
+        const size =
+            Number.isInteger(userProvidedSize) &&
+            userProvidedSize > 0 &&
+            userProvidedSize <= MAX_SIZE
+                ? userProvidedSize
+                : DEFAULT_SIZE;
+
+        const limitBlock = `
+            limit ${offset}, ${size}
+        `;
+
+        const sortBlock = `
+            sort ${docRef}.name.items[0].text, ${docRef}._key
+        `;
+
+        // Should we ensure that the query returns the `next` page number \ offset?
+        const aqlQueryString = `
+            for ${docRef} in @@collectionName
+            ${letStatements}
+            ${filterBlock}
+            ${limitBlock}
+            ${sortBlock}
+            return ${docRef}
+        `;
+
+        const cursor = await this.#arangoDatabase
+            .query({ query: aqlQueryString, bindVars })
+            .catch((e) => {
+                throw e;
+            });
+
+        const result = await cursor.all();
+
+        return result;
     }
 
     fetchMany(specification?: ISpecification<TEntity>): Promise<ArangoDatabaseDocument<TEntity>[]> {

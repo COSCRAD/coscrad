@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     Param,
@@ -12,6 +13,7 @@ import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { TermQueryService } from '../../../domain/services/query-services/term-query.service';
 import { ResourceType } from '../../../domain/types/ResourceType';
+import { CoscradFilterCondition } from '../../../lib/coscrad-query-language/models/coscrad-filter-condition';
 import { QueryResponseTransformInterceptor } from '../response-mapping';
 import {
     CoscradInternalErrorFilter,
@@ -22,6 +24,18 @@ import buildViewModelPathForResourceType from '../utilities/buildIndexPathForRes
 import buildByIdApiParamMetadata from './common/buildByIdApiParamMetadata';
 import sendInternalResultAsHttpResponse from './common/sendInternalResultAsHttpResponse';
 import { RESOURCES_ROUTE_PREFIX } from './constants';
+
+export type PaginationOptions = {
+    size: number;
+    page: number;
+};
+
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-327] Make this a DTO class
+export interface UserQueryOptions {
+    filter: CoscradFilterCondition;
+    pagination: PaginationOptions;
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-328] Support custom user-defined sort order
+}
 
 @ApiTags(RESOURCES_ROUTE_PREFIX)
 @Controller(buildViewModelPathForResourceType(ResourceType.term))
@@ -49,8 +63,12 @@ export class TermController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Get('')
-    async fetchMany(@Request() req) {
-        const result = await this.termQueryService.fetchMany(req.user || undefined);
+    async fetchMany(@Request() req, @Body() userQueryOptions?: UserQueryOptions) {
+        const result = await this.termQueryService.fetchMany(
+            // TODO combine these parameters
+            req.user || undefined,
+            userQueryOptions
+        );
 
         return result;
     }

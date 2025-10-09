@@ -6,8 +6,9 @@ import {
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { UserQueryOptions } from '../../../../app/controllers/resources/term.controller';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -322,8 +323,15 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(): Promise<TermViewModel[]> {
-        const result = await this.database.fetchMany();
+    async fetchMany(queryOptions?: UserQueryOptions): Promise<TermViewModel[]> {
+        const result = await this.database.fetchForUser(queryOptions);
+
+        if (isInternalError(result)) {
+            throw new InternalError(
+                `Encountered an unexpected database error when fetching all terms`,
+                []
+            );
+        }
 
         const buildResult = result.map((doc) => {
             const dto = mapDatabaseDocumentToAggregateDTO(doc);

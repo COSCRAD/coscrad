@@ -12,6 +12,7 @@ import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
+import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
 import { isNotFound, NotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
@@ -108,9 +109,10 @@ export class TermQueryService {
     }
 
     // TODO should we support specifications \ custom filters?
-    async fetchMany(userWithGroups?: CoscradUserWithGroups) {
+    async fetchMany(userWithGroups?: CoscradUserWithGroups, options?: UserQueryOptions) {
+        const entities = await this.termQueryRepository.fetchMany(options);
+
         // TODO consider filtering for user access in the DB
-        const entities = await this.termQueryRepository.fetchMany();
 
         // TODO use SSOT utility function \ method for this
         const availableEntities = entities.filter((entity) => {

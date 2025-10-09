@@ -8,6 +8,9 @@ import {
 import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
 import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { Maybe } from '../../../../lib/types/maybe';
+import { UserQueryOptions } from '../../../controllers/resources/term.controller';
+
+export type FetchManyQueryOptions = UserQueryOptions;
 
 export interface IResourceQueryRepository<T = unknown>
     extends ICountable,
@@ -20,5 +23,5 @@ export interface IResourceQueryRepository<T = unknown>
     create(view: T): Promise<void>;
     createMany(views: T[]): Promise<void>;
     fetchById(id: string): Promise<Maybe<T>>;
-    fetchMany(): Promise<T[]>;
+    fetchMany(options?: FetchManyQueryOptions): Promise<T[]>;
 }
