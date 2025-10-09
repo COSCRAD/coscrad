@@ -2,6 +2,17 @@
 
 ## <next>
 
+### API: User-Defined Filters and Query Optimizations
+
+Until now, when users search a list of resources on the front-end, we have been
+fetching the entire data set. For performance reasons, we are moving towards
+lazy loading data one page at a time. In order to achieve this, we have to
+filter and paginate data on the server. This means that user-defined filters,
+which were previously applied in the browser, must now be sent to the server.
+
+This will be aparent to users in the speed up of the initial load of all
+index pages (e.g. `/Terms`).
+
 ### Bulk Imports
 
 We have exposed additional features via our CLI for use in bulk data ingestion.
