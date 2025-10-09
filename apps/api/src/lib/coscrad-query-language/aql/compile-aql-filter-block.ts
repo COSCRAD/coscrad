@@ -1,6 +1,11 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNumber, isPositiveInteger, isString } from '@coscrad/validation-constraints';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { InternalError, isInternalError } from '../../errors/InternalError';
+import {
+    InvalidParameterListSizeForQueryOperator,
+    InvalidParameterTypeForQueryOperator,
+} from '../errors';
 import {
     CoscradAndCondition,
     CoscradBooleanOperator,
@@ -67,13 +72,18 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.GREATER_THAN) {
         if (params.length != 1) {
-            throw new Error(`todo returned error test case`);
+            return new InvalidParameterListSizeForQueryOperator(1, params, operator);
         }
 
         const minExclusive = params[0];
 
         if (!isNumber(minExclusive)) {
-            throw new Error(`todo return param type user input error`);
+            return new InvalidParameterTypeForQueryOperator(
+                0,
+                minExclusive,
+                'non-negative integer',
+                operator
+            );
         }
 
         // TODO opt-in
@@ -100,7 +110,7 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES) {
         if (params.length == 0 || params.length > 2) {
-            throw new Error(`todo return error for param length`);
+            return new InvalidParameterListSizeForQueryOperator(2, params, operator);
         }
 
         if (params.length === 2) {
@@ -111,7 +121,12 @@ const compileSimpleFilterCondition = (
         const searchText = params[0];
 
         if (!isString(searchText)) {
-            throw new Error(`Invalid param type`);
+            return new InvalidParameterTypeForQueryOperator(
+                0,
+                searchText,
+                'non-empty string',
+                operator
+            );
         }
 
         if (searchText === '') {
@@ -170,9 +185,7 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.HAS_PROPERTY) {
         if (params.length > 0) {
-            throw new InternalError(
-                `Expected 0 parameters for operator HAS_PROPERTY. Received: ${params}`
-            );
+            return new InvalidParameterListSizeForQueryOperator(0, params, operator);
         }
 
         // TODO opt-in
@@ -191,15 +204,18 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.HAS_LENGTH_GREATER_THAN) {
         if (params.length !== 1) {
-            throw new InternalError(
-                `Expected exactly one paramter of type [number] for operator HAS_LENGTH_GREATER_THAN`
-            );
+            return new InvalidParameterListSizeForQueryOperator(1, params, operator);
         }
 
         const minLengthExclusive = params[0];
 
         if (!isPositiveInteger(minLengthExclusive)) {
-            throw new InternalError(`TODO return me`);
+            return new InvalidParameterTypeForQueryOperator(
+                0,
+                minLengthExclusive,
+                'positive integer',
+                operator
+            );
         }
 
         // TODO opt-in
@@ -219,20 +235,28 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER) {
         if (params.length !== 2) {
-            throw new InternalError(
-                `Expected exactly two parameters of type [number, str (LanguageCode)]. Received: ${params}`
-            );
+            return new InvalidParameterListSizeForQueryOperator(2, params, operator);
         }
 
         const [letterToFind, languageCode] = params;
 
         if (!isString(letterToFind)) {
-            throw new InternalError(`TODO return me!`);
+            return new InvalidParameterTypeForQueryOperator(
+                0,
+                letterToFind,
+                'non-empty string',
+                CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER
+            );
         }
 
         // TODO `isLanguageCode` ?
-        if (!isString(languageCode)) {
-            throw new InternalError(`TODO return this error- invalid param`);
+        if (!Object.values(LanguageCode).includes(languageCode as LanguageCode)) {
+            return new InvalidParameterTypeForQueryOperator(
+                1,
+                languageCode,
+                'Language Code {enum}',
+                operator
+            );
         }
 
         // TODO opt-in

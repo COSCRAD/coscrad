@@ -18,6 +18,7 @@ import { PersistenceModule } from '../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
+import { InternalError, isInternalError } from '../errors/InternalError';
 import { Token } from '../nlp';
 import { clonePlainObjectWithOverrides } from '../utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../utilities/cloneToPlainObject';
@@ -130,6 +131,10 @@ class WidgetRepository {
     async fetchForUser({ filter }: { filter: CoscradFilterCondition }) {
         const result = await this.databaseForCollection.fetchForUser({ filter });
 
+        if (isInternalError(result)) {
+            return result;
+        }
+
         return result.map((doc) => new Widget(mapDatabaseDocumentToAggregateDTO(doc)));
     }
 }
@@ -230,11 +235,35 @@ describe(`Coscrad Query Language`, () => {
         await widgetRepository.clear();
     });
 
-    describe(`when the query is represented as an object`, () => {
-        describe(`when the query is validly formatted`, () => {
-            describe(`when the query is a simple condition`, () => {
-                describe(`when searching a nested field`, () => {
-                    describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
+    /**
+     * A query may fail due to being ill-formatted. For example, the
+     * paramers may be of the wrong type or number for the given operator.
+     */
+
+    const assertQueryError = async (
+        filter: CoscradFilterCondition,
+        expectedSnippetsInErrorMessage: string[]
+    ) => {
+        const result = await widgetRepository.fetchForUser({
+            filter,
+        });
+
+        expect(result).toBeInstanceOf(InternalError);
+
+        expect(expectedSnippetsInErrorMessage.length).toBeGreaterThan(0);
+
+        const errorMessage = result.toString();
+
+        expectedSnippetsInErrorMessage.forEach((snippet) => {
+            expect(errorMessage.toLowerCase()).toContain(snippet.toLowerCase());
+        });
+    };
+
+    describe(`when the query is validly formatted`, () => {
+        describe(`when the query is a simple condition`, () => {
+            describe(`when searching a nested field`, () => {
+                describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
+                    describe(`when the query is well-formed`, () => {
                         const targetLocationName = 'greenhouse';
 
                         const widgetWithTargetLocationName = dummyWidget.clone({
@@ -279,8 +308,10 @@ describe(`Coscrad Query Language`, () => {
                         });
                     });
                 });
+            });
 
-                describe(`GREATER_THAN`, () => {
+            describe(`GREATER_THAN`, () => {
+                describe(`when the query is well-formed`, () => {
                     beforeEach(async () => {
                         await widgetRepository.createMany([
                             widgetThatComesAfterCutoffYear,
@@ -297,7 +328,53 @@ describe(`Coscrad Query Language`, () => {
                     });
                 });
 
-                describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
+                describe(`when the query is invalid`, () => {
+                    describe(`when 0 parameters are provided`, () => {
+                        it(`should return the expected error`, () => {
+                            assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.GREATER_THAN,
+                                    field: 'foo',
+                                    params: [],
+                                },
+                                ['Expected 1 parameter, but received: 0']
+                            );
+                        });
+                    });
+
+                    describe(`when 2 parameters are provided`, () => {
+                        it(`should return the expected error`, () => {
+                            assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.GREATER_THAN,
+                                    field: 'foo',
+                                    params: [90, 100],
+                                },
+                                ['Expected 1 parameter, but received: 2']
+                            );
+                        });
+                    });
+
+                    describe(`when one parameter of type string is provided`, () => {
+                        it(`should return the expected error`, () => {
+                            assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.GREATER_THAN,
+                                    field: 'foo',
+                                    params: ['1'],
+                                },
+                                ['expected non-negative integer']
+                            );
+                        });
+                    });
+                });
+            });
+
+            describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
+                describe(`when the filter is well-formed`, () => {
                     // TODO include case-sensitive option
                     describe(`when no language code is provided`, () => {
                         beforeEach(async () => {
@@ -319,9 +396,68 @@ describe(`Coscrad Query Language`, () => {
                             expect(result).toHaveLength(2);
                         });
                     });
+
+                    describe(`when 2 parameters are provided`, () => {
+                        it.todo(`should have a test once language code is supported`);
+                    });
                 });
 
-                describe(`HAS_PROPERTY`, () => {
+                describe(`when the query has an invalid structure or type`, () => {
+                    describe(`when no parameters are provided`, () => {
+                        it(`should return the expected error`, async () => {
+                            assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                    params: [],
+                                    field: 'foo',
+                                },
+                                ['Expected 2 parameters, but received: 0']
+                            );
+                        });
+                    });
+
+                    describe(`when 3 parameters are provided`, () => {
+                        const filterWithThreeParams: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                            params: ['foobarbaz', LanguageCode.English, 'why am I here?'],
+                            field: 'foo',
+                        };
+
+                        it(`should return the expected error`, async () => {
+                            assertQueryError(filterWithThreeParams, [
+                                'Expected 2 parameters, but received: 3',
+                            ]);
+                        });
+                    });
+
+                    describe(`when 1 parameter is provided`, () => {
+                        describe(`when the first parameter is a number instead of a string`, () => {
+                            it(`should return the expected error`, async () => {
+                                const invalidParam = 15;
+
+                                assertQueryError(
+                                    {
+                                        type: CoscradConditionBlockType.SIMPLE,
+                                        operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                        params: [invalidParam],
+                                        field: 'foo',
+                                    },
+                                    [
+                                        'non-empty string',
+                                        CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                        invalidParam.toString(),
+                                    ]
+                                );
+                            });
+                        });
+                    });
+                });
+            });
+
+            describe(`HAS_PROPERTY`, () => {
+                describe(`when the query is well formed`, () => {
                     describe(`when the property is object-valued`, () => {
                         const widgetWithLocation = dummyWidget.clone({
                             id: '101',
@@ -472,7 +608,25 @@ describe(`Coscrad Query Language`, () => {
                     });
                 });
 
-                describe(`HAS_LENGTH_GREATER_THAN`, () => {
+                describe(`when the query is invalid`, () => {
+                    describe(`when a parameter is provided`, () => {
+                        it(`should return the expected error`, async () => {
+                            assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.HAS_PROPERTY,
+                                    params: ['bar'],
+                                    field: 'foo',
+                                },
+                                ['Expected 0 parameters, but received: 1']
+                            );
+                        });
+                    });
+                });
+            });
+
+            describe(`HAS_LENGTH_GREATER_THAN`, () => {
+                describe(`when the query is well-formed`, () => {
                     const widgetWithTenTags = dummyWidget.clone({
                         id: '101',
                         tags: Array(10)
@@ -516,7 +670,57 @@ describe(`Coscrad Query Language`, () => {
                     });
                 });
 
-                describe(`MULTILINGUAL_TEXT_INCLUDES_LETTER`, () => {
+                describe(`when the query is invalid`, () => {
+                    describe(`when 0 parameters are provided`, () => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.HAS_LENGTH_GREATER_THAN,
+                                    field: 'foo',
+                                    params: [],
+                                },
+                                ['expected 1 parameter, but received: 0']
+                            );
+                        });
+                    });
+
+                    describe(`when 2 parameters are provided`, () => {
+                        it(`should fail with the expected error`, async () => {
+                            await assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.HAS_LENGTH_GREATER_THAN,
+                                    field: 'foo',
+                                    params: [9, 11],
+                                },
+                                ['expected 1 parameter, but received: 2']
+                            );
+                        });
+                    });
+
+                    describe(`when 1 parameter is provided`, () => {
+                        describe(`when the parameter is of type string`, () => {
+                            it(`should return the expected error`, async () => {
+                                const invalidParam = '5';
+
+                                await assertQueryError(
+                                    {
+                                        type: CoscradConditionBlockType.SIMPLE,
+                                        operator: CoscradBooleanOperator.HAS_LENGTH_GREATER_THAN,
+                                        field: 'foo',
+                                        params: [invalidParam],
+                                    },
+                                    ['positive integer', invalidParam]
+                                );
+                            });
+                        });
+                    });
+                });
+            });
+
+            describe(`MULTILINGUAL_TEXT_INCLUDES_LETTER`, () => {
+                describe(`when the query is well-formed`, () => {
                     const targetLetter = 'ts';
 
                     const buildToken = (...chars: string[]) => ({
@@ -579,6 +783,105 @@ describe(`Coscrad Query Language`, () => {
                         expect(result).toHaveLength(1);
                     });
                 });
+
+                describe(`when the query is ill-formed`, () => {
+                    describe(`when 0 parameters are provided`, () => {
+                        it(`should return the expected error`, async () => {
+                            await assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator:
+                                        CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                    field: 'foo',
+                                    params: [],
+                                },
+                                ['expected 2 parameters, but received: 0']
+                            );
+                        });
+                    });
+
+                    describe(`when 1 parameter is provided`, () => {
+                        it(`should return the expected error`, async () => {
+                            await assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator:
+                                        CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                    field: 'foo',
+                                    params: ['n'],
+                                },
+                                ['expected 2 parameters, but received: 1']
+                            );
+                        });
+                    });
+
+                    describe(`when 3 parameters are provided`, () => {
+                        it(`should return the expected error`, async () => {
+                            await assertQueryError(
+                                {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator:
+                                        CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                    field: 'foo',
+                                    params: ['n', LanguageCode.English, 'a'],
+                                },
+                                ['expected 2 parameters, but received: 3']
+                            );
+                        });
+                    });
+
+                    describe(`when 2 parameters are provided`, () => {
+                        describe(`when they are passed in the wrong order ([languageCode,letterToFind])`, () => {
+                            it(`should return the expected error`, async () => {
+                                await assertQueryError(
+                                    {
+                                        type: CoscradConditionBlockType.SIMPLE,
+                                        operator:
+                                            CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                        // TODO test when the field is an empty string
+                                        field: 'foo',
+                                        params: [LanguageCode.English, 'a'],
+                                    },
+                                    ['expected Language Code', 'received: a']
+                                );
+                            });
+                        });
+
+                        describe(`when a number is provided as paramter 0 instead of text (letter)`, () => {
+                            const invalidParam = 1;
+
+                            it(`should return the expected error`, async () => {
+                                await assertQueryError(
+                                    {
+                                        type: CoscradConditionBlockType.SIMPLE,
+                                        operator:
+                                            CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                        field: 'foo',
+                                        params: [invalidParam, LanguageCode.English],
+                                    },
+                                    ['expected non-empty string', `received: ${invalidParam}`]
+                                );
+                            });
+                        });
+
+                        describe(`when a number is provided as parameter 1 instead of a language code`, () => {
+                            it(`should return the expected error`, async () => {
+                                const invalidParam = 505;
+
+                                await assertQueryError(
+                                    {
+                                        type: CoscradConditionBlockType.SIMPLE,
+                                        operator:
+                                            CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                                        field: 'foo',
+                                        params: ['a', invalidParam],
+                                    },
+                                    ['expected Language Code', `received: ${invalidParam}`]
+                                );
+                            });
+                        });
+                    });
+                });
             });
 
             describe(`AND`, () => {
@@ -613,7 +916,7 @@ describe(`Coscrad Query Language`, () => {
                         conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
                     };
 
-                    it.only(`should return the expected results`, async () => {
+                    it(`should return the expected results`, async () => {
                         const result = await widgetRepository.fetchForUser({
                             filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
                         });

@@ -19,6 +19,7 @@ import { CoscradFilterCondition } from '../../lib/coscrad-query-language/models/
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { DeepPartial } from '../../types/DeepPartial';
+import { ResultOrError } from '../../types/ResultOrError';
 import { ArangoDatabase } from './arango-database';
 import { ArangoDatabaseError } from './errors/ArangoDatabaseError';
 import { ArangoDatabaseDocument } from './utilities/mapEntityDTOToDatabaseDocument';
@@ -82,7 +83,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         user?: CoscradUserWithGroups;
         filter?: CoscradFilterCondition;
         pagination?: PaginationOptions;
-    }): Promise<ArangoDatabaseDocument<TEntity>[]> {
+    }): Promise<ResultOrError<ArangoDatabaseDocument<TEntity>[]>> {
         const docRef = 'doc';
 
         const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
@@ -99,8 +100,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             const compileResult = compileAqlFilterBlock(filterCondition, docRef);
 
             if (isInternalError(compileResult)) {
-                // TODO make this a returned error
-                throw new InternalError(`Failed to compile user query`);
+                return new InternalError(`The query you have provided is invalid.`, [
+                    compileResult,
+                ]);
             }
 
             const { bindVars: subqueryBindVars, statement: filterStatements } = compileResult;
