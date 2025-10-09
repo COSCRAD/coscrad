@@ -977,25 +977,53 @@ describe(`Coscrad Query Language`, () => {
             });
 
             describe(`NOT`, () => {
-                describe(`when the not's condition is a simple condition`, () => {
-                    const isNotGreaterThanCutoffYear: CoscradNotCondition = {
-                        type: CoscradConditionBlockType.NOT,
-                        condition: greaterThanCutoffYear,
-                    };
+                describe(`when the query is valid`, () => {
+                    describe(`when the not's condition is a simple condition`, () => {
+                        const isNotGreaterThanCutoffYear: CoscradNotCondition = {
+                            type: CoscradConditionBlockType.NOT,
+                            condition: greaterThanCutoffYear,
+                        };
 
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            widgetThatComesAfterCutoffYear,
-                            widgetThatComesBeforeCutoffYear,
-                        ]);
-                    });
-
-                    it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
-                            filter: isNotGreaterThanCutoffYear,
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                widgetThatComesAfterCutoffYear,
+                                widgetThatComesBeforeCutoffYear,
+                            ]);
                         });
 
-                        expect(result).toHaveLength(1);
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: isNotGreaterThanCutoffYear,
+                            });
+
+                            expect(result).toHaveLength(1);
+                        });
+                    });
+                });
+
+                describe(`when the query is invalid`, () => {
+                    describe(`when the nested condition is itself invalid`, () => {
+                        const operator = CoscradBooleanOperator.GREATER_THAN;
+
+                        const invalidCondition: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator,
+                            field: 'foo',
+                            params: [], // should be a single number
+                        };
+
+                        const notQuery: CoscradNotCondition = {
+                            type: CoscradConditionBlockType.NOT,
+                            condition: invalidCondition,
+                        };
+
+                        it(`should return the expected error`, async () => {
+                            await assertQueryError(notQuery, [
+                                'not block with an invalid child condition',
+                                'expected 1 parameter, but received: 0',
+                                operator,
+                            ]);
+                        });
                     });
                 });
             });

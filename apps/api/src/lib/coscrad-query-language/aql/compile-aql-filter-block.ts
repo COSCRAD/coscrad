@@ -430,7 +430,7 @@ const compileNotFilterCondition = (
     );
 
     if (isInternalError(childCompileResult)) {
-        throw new InternalError(`TODO make this a bad user input returned error`, [
+        return new InternalError(`Encountered a NOT block with an invalid child condition.`, [
             childCompileResult,
         ]);
     }
