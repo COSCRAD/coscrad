@@ -23,10 +23,10 @@ const buildReducersForFetchTermThunk = <VThunkArg = unknown>(
     builder.addCase(thunk.fulfilled, (state: ILoadable<TermIndexState>, action) => {
         const { entities, indexScopedActions } = action.payload;
 
-        const existingEntitiesMap = state.data?.entities || new Map();
+        const existingEntitiesMap = state.data?.entities || {};
 
         entities.forEach((entity) => {
-            existingEntitiesMap.set(entity.id, entity);
+            existingEntitiesMap[entity.id] = entity;
         });
 
         state.data = {

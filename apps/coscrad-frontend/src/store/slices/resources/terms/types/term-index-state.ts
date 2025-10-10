@@ -5,5 +5,9 @@ import {
 
 export type TermIndexState = {
     indexScopedActions: IBackendCommandFormAndLabels[];
-    entities: Map<string, ITermViewModel>;
+    /**
+     * Note that a `Map` does not play nice with serialization required for
+     * some of the React dev tools.
+     */
+    entities: Record<string, ITermViewModel>;
 };

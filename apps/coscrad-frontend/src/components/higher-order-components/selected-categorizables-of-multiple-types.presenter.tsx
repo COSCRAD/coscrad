@@ -70,6 +70,7 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
 
                         return (
                             <SelectedCategorizablesPresenter
+                                // @ts-expect-error we should avoid using this with `Terms`. How can we do that?
                                 viewModels={queryResult.data}
                                 presenterFactory={presenterFactory}
                                 pluralLabelForCategorizableType={getPluralLabelForCategorizableType(

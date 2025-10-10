@@ -13,6 +13,6 @@ export const selectTermById = (state: RootState, id: string) => {
     return {
         isLoading,
         errorInfo,
-        data: termsById.has(id) ? termsById.get(id) : null,
+        data: id in termsById ? termsById[id] : null,
     };
 };
