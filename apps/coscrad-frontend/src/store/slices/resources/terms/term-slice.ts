@@ -29,6 +29,12 @@ const buildReducersForFetchTermThunk = <VThunkArg = unknown>(
             existingEntitiesMap[entity.id] = entity;
         });
 
+        console.log({
+            entities,
+            existingEntitiesMap,
+            size: Array.from(Object.keys(existingEntitiesMap)).length,
+        });
+
         state.data = {
             entities: existingEntitiesMap,
             indexScopedActions,

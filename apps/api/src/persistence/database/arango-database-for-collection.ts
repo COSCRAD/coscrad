@@ -177,6 +177,14 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         const result = await cursor.all();
 
+        console.log({
+            LENGTH: result.length,
+            aqlQueryString,
+            filterCondition,
+            bindVars,
+            dbName: this.getDbName(),
+        });
+
         return result;
     }
 

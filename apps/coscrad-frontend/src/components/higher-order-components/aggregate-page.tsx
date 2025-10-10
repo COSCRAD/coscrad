@@ -40,7 +40,7 @@ const isCategorizableCompositeIdentifier = (
     return Object.values(CategorizableType).includes(type);
 };
 
-const buildCommandExecutionFormsAndLabels = (
+export const buildCommandExecutionFormsAndLabels = (
     actionsFromApi: IBackendCommandFormAndLabels[],
     compositeIdentifier: AggregateCompositeIdentifier
 ) => {
@@ -107,13 +107,14 @@ export const AggregatePage = ({
 
     /**
      * If the actions array is empty, the user does not have write access to
-     * the aggregate root. 
-     * 
+     * the aggregate root.
+     *
      * For audio items, we disable the command panel, even for admin, in favor
      * of a more "immersive admin experience". This introduces collisions with
      * the dynamic command forms available in the command panel.
      */
-    const shouldShowCommands = viewModel?.actions?.length > 0 && aggregateType !== AggregateType.audioItem; 
+    const shouldShowCommands =
+        viewModel?.actions?.length > 0 && aggregateType !== AggregateType.audioItem;
 
     const Commands = () => (
         <>

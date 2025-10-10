@@ -13,10 +13,15 @@ import { NotFoundPresenter } from '../components/not-found';
 import { NoteDetailPageContainer } from '../components/notes/note-detail-page.container';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
+import { TermDetailFullViewPresenter } from '../components/resources/terms/term-detail.full-view.presenter';
+import { TermDetailThumbnailPresenter } from '../components/resources/terms/term-detail.thumbnail.presenter';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
-import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
+import {
+    ConfigurableContent,
+    DetailViewType,
+} from '../configurable-front-matter/data/configurable-content-schema';
 import { AlphabetPage } from './../components/alphabet/AlphabetPage';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
 
@@ -181,7 +186,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 ({ categorizableType }) => categorizableType === CategorizableType.term
             ),
             () => {
-                const { labelOverrides } = indexToDetailFlows.find(
+                const { labelOverrides, detailViewType } = indexToDetailFlows.find(
                     ({ categorizableType }) => categorizableType === CategorizableType.term
                 );
 
@@ -192,7 +197,16 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                 return {
                     path,
                     label: labelOverrides?.label || 'Term',
-                    element: <TermIndexContainer />,
+                    element: (
+                        <AggregatePage
+                            aggregateType={AggregateType.term}
+                            DetailPresenter={
+                                detailViewType === DetailViewType.fullView
+                                    ? TermDetailFullViewPresenter
+                                    : TermDetailThumbnailPresenter
+                            }
+                        />
+                    ),
                 };
             },
         ],
