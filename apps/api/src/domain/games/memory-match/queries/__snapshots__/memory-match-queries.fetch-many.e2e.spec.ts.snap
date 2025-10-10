@@ -4,6 +4,7 @@ exports[`when querying for a memory match round: fetch many when the user is una
 [
   {
     "cardbackImageUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
+    "cardBackImageUrl": "http://localhost:1234/awesome-api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
     "cards": [
       {
         "audioUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",

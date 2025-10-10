@@ -10,7 +10,7 @@ import {
     InsufficientNumberOfCardsForPublicationError,
     MemoryRoundIsNotReadyForPublicationError,
     MissingAudioForMemoryMatchCardError,
-    MissingCardbackErrorForMemoryMatchRound,
+    MissingCardBackErrorForMemoryMatchRound,
     MissingImageForMemoryMatchCardError,
 } from '../errors';
 import { MemoryMatchCard } from './memory-match-card.entity';
@@ -125,7 +125,7 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
         });
 
         describe(`when the round is published`, () => {
-            describe(`when the cardback image is missing`, () => {
+            describe(`when the card back image is missing`, () => {
                 it(`should return the expected error`, () => {
                     const roundWithoutCardbackImage = buildTestInstance(
                         MemoryMatchRound,
@@ -145,7 +145,7 @@ describe(`MemoryMatchRound.validateInvariants`, () => {
                     assertErrorAsExpected(
                         result[0],
                         new MemoryRoundIsNotReadyForPublicationError(roundWithoutCardbackImage.id, [
-                            new MissingCardbackErrorForMemoryMatchRound(),
+                            new MissingCardBackErrorForMemoryMatchRound(),
                         ])
                     );
                 });

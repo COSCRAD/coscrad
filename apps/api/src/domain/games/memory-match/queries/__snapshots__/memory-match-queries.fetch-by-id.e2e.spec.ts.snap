@@ -2,7 +2,7 @@
 
 exports[`when querying for a memory match round: fetch by Id when the user is authenticated as a viewer when there is a memory match round with the given ID when the round is public should return the expected response 1`] = `
 {
-  "cardbackImageUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
+  "cardBackImageUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
   "cards": [
     {
       "audioUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
@@ -201,7 +201,7 @@ exports[`when querying for a memory match round: fetch by Id when the user is au
 
 exports[`when querying for a memory match round: fetch by Id when the user is unauthenticated when there is a memory match round with the given ID when the round is public should return the expected response 1`] = `
 {
-  "cardbackImageUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
+  "cardBackImageUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100022",
   "cards": [
     {
       "audioUrl": "http://localhost:5555/test_api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",

@@ -1,6 +1,7 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Controller, Get, Param, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ApiTags } from '@nestjs/swagger';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
 import { NotFound } from '../../../lib/types/not-found';
@@ -54,6 +55,7 @@ const isAlphabet = (input: unknown): input is Alphabet => {
     new CoscradInternalErrorFilter()
 )
 @UseInterceptors(QueryResponseTransformInterceptor)
+@ApiTags('alphabet')
 @Controller('games')
 export class GameController {
     private readonly gamesDatabase: ArangoDatabaseForCollection<GameDto>;

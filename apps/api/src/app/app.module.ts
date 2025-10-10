@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthorizationModule } from '../authorization/authorization.module';
 import { EventModule } from '../domain/common';
+import { MemoryMatchModule } from '../domain/games/memory-match/memory-match.module';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { MediaItemModule } from '../domain/models/media-item';
 import { PhotographModule } from '../domain/models/photograph/photograph.module';
@@ -79,6 +80,7 @@ import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge/web-of-k
         DigitalTextModule,
         SpatialFeatureModule,
         PlaylistModule,
+        MemoryMatchModule,
         DynamicDataTypeModule,
     ],
     controllers: [
