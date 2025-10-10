@@ -41,7 +41,10 @@ export const bootstrapIndexToDetailFlowRoutes = ({
         }, {});
 
     const indexToDetailFlowsRoutes: CoscradRoute[] = indexToDetailFlows
+        // Here we are slowly strangling out the "magic bootstrapping pattern"
+        .filter(({ categorizableType }) => categorizableType !== CategorizableType.term)
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
+
         .flatMap(({ categorizableType, detailViewType, indexFilter }) => {
             /**
              * TODO Use a switch, lookup table, or OOP & polymorphism as soon as

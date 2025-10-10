@@ -51,6 +51,16 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
                         CategorizableType,
                         ViewModelDetailSnapshot[keyof ViewModelDetailSnapshot]
                     ]) => {
+                        /**
+                         * Note that we are moving to sending back denormalized
+                         * views of the resources on notes (and notes on resources)
+                         * and we should leverage these for the notes and
+                         * connection panels going forward.
+                         */
+                        if (queryResult.data instanceof Map) {
+                            throw new Error(`terms are not supported here`);
+                        }
+
                         // TODO Use our loadable helper
                         if (queryResult.errorInfo)
                             return <ErrorDisplay {...queryResult.errorInfo} />;

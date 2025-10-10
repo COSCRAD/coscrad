@@ -26,7 +26,9 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
-    const { entities: terms } = termsIndexResult;
+    const { entities: termsById } = termsIndexResult;
+
+    const terms = Object.values(termsById);
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },

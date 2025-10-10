@@ -1,5 +1,6 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { TermIndexContainer } from '../../term-index.container';
 import { About } from '../components/about/about';
 import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
@@ -156,6 +157,45 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             element: <Credits />,
         },
         ...bootstrapIndexToDetailFlowRoutes(contentConfig),
+        [
+            indexToDetailFlows.some(
+                ({ categorizableType }) => categorizableType === CategorizableType.term
+            ),
+            () => {
+                const { labelOverrides } = indexToDetailFlows.find(
+                    ({ categorizableType }) => categorizableType === CategorizableType.term
+                );
+
+                const path = `Resources/${labelOverrides?.route || 'Terms'}`;
+
+                return {
+                    path,
+                    label: labelOverrides?.pluralLabel || 'Terms',
+                    // TODO move this file
+                    element: <TermIndexContainer />,
+                };
+            },
+        ],
+        [
+            indexToDetailFlows.some(
+                ({ categorizableType }) => categorizableType === CategorizableType.term
+            ),
+            () => {
+                const { labelOverrides } = indexToDetailFlows.find(
+                    ({ categorizableType }) => categorizableType === CategorizableType.term
+                );
+
+                const baseRoute = labelOverrides?.route || 'Terms';
+
+                const path = `Resources/${baseRoute}/:id`;
+
+                return {
+                    path,
+                    label: labelOverrides?.label || 'Term',
+                    element: <TermIndexContainer />,
+                };
+            },
+        ],
         {
             path: '*',
             element: <NotFoundPresenter />,

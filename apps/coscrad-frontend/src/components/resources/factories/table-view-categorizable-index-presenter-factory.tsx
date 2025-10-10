@@ -13,7 +13,6 @@ import { PlaylistIndexPresenter } from '../playlists/playlist-index.presenter';
 import { SongIndexPresenter } from '../songs/song-index.presenter';
 import { CoscradLeafletMap } from '../spatial-features/leaflet';
 import { SpatialFeatureIndexPresenter } from '../spatial-features/spatial-feature-index.presenter';
-import { TermIndexPresenter } from '../terms/term-index.presenter';
 import { VideoIndexPresenter } from '../videos';
 import { VocabularyListIndexPresenter } from '../vocabulary-lists/vocabulary-list-index.presenter';
 import {
@@ -70,7 +69,7 @@ export const tableViewCategorizableIndexPresenterFactory: CategorizableIndexPres
             return ConcreteSpatialFeaturePresenter as unknown as CategorizableIndexPresenter<T>;
 
         case CategorizableType.term:
-            return TermIndexPresenter as unknown as CategorizableIndexPresenter<T>;
+            throw new Error(`Do not use the categorizable index presenter factory for Terms.`);
 
         case CategorizableType.audioItem:
             return TranscribedAudioIndexPresenter as unknown as CategorizableIndexPresenter<T>;

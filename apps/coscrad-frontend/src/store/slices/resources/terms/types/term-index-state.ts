@@ -1,3 +1,9 @@
-import { ICategorizableIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels as IBackendCommandFormAndLabels,
+    ITermViewModel,
+} from '@coscrad/api-interfaces';
 
-export type TermIndexState = ICategorizableIndexQueryResult<ITermViewModel>;
+export type TermIndexState = {
+    indexScopedActions: IBackendCommandFormAndLabels[];
+    entities: Map<string, ITermViewModel>;
+};

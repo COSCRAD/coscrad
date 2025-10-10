@@ -1,19 +1,27 @@
-import { IIndexQueryResult, ITermViewModel, WithTags } from '@coscrad/api-interfaces';
+import { CategorizableType, IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { getConfig } from '../../../../../config';
+import { getConfigurableContent } from '../../../../../configurable-front-matter';
 import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
 import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { getApiResourcesBaseRoute } from '../../shared';
 import { TERMS } from '../constants';
-import { TermIndexState } from '../types/term-index-state';
 
-export const fetchTerms = createFetchThunk<TermIndexState>(
+export const fetchTerms = createFetchThunk<IIndexQueryResult<ITermViewModel>>(
     buildResourceFetchActionPrefix(TERMS),
     `${getApiResourcesBaseRoute()}/terms`,
-    (
-        serverResponse: IIndexQueryResult<WithTags<ITermViewModel>>
-    ): IIndexQueryResult<WithTags<ITermViewModel>> => {
+    (serverResponse: IIndexQueryResult<ITermViewModel>): IIndexQueryResult<ITermViewModel> => {
         const { apiUrl } = getConfig();
+
+        const { indexToDetailFlows } = getConfigurableContent();
+
+        const termIndexToDetailFlowConfig = indexToDetailFlows.find(
+            ({ categorizableType }) => categorizableType === CategorizableType.term
+        );
+
+        const identityFilter = (x: unknown) => x;
+
+        const preFilter = termIndexToDetailFlowConfig?.indexFilter || identityFilter;
 
         /**
          * TODO Phase the following mapping layer out in favour
@@ -21,13 +29,17 @@ export const fetchTerms = createFetchThunk<TermIndexState>(
          */
         return {
             ...serverResponse,
-            entities: serverResponse.entities.map((entity) => {
-                return {
-                    ...entity,
-                    audioURL: isNullOrUndefined(entity.audioURL)
-                        ? undefined
-                        : `${apiUrl}${entity.audioURL}`,
-                };
+            entities: serverResponse.entities.flatMap((entity) => {
+                return preFilter(entity)
+                    ? [
+                          {
+                              ...entity,
+                              audioURL: isNullOrUndefined(entity.audioURL)
+                                  ? undefined
+                                  : `${apiUrl}${entity.audioURL}`,
+                          },
+                      ]
+                    : [];
             }),
         };
     }
