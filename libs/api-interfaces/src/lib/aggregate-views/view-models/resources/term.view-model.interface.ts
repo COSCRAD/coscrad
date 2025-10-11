@@ -1,5 +1,6 @@
 import { IBaseResourceViewModel } from '../base.view-model.interface';
 import { LanguageCode } from '../multilingual-text';
+import { IEdgeConnectionContext } from '../note';
 import { IMultilingualText } from './common';
 
 export interface IVocabularyListRecordForTerm {
@@ -45,4 +46,6 @@ export interface ITermViewModel extends IBaseResourceViewModel {
     vocabularyLists: IVocabularyListRecordForTerm[];
 
     tokens: IToken[];
+
+    notes: { id: string; context: IEdgeConnectionContext; note: IMultilingualText }[];
 }

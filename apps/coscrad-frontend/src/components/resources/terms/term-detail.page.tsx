@@ -8,6 +8,7 @@ import {
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { useLoadableTermById } from '../../../store/slices/resources';
+import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelPresenter } from '../../../store/slices/resources/shared/notes-for-resource/self-notes-panel.presenter';
 import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../../commands';
@@ -16,6 +17,7 @@ import { buildCommandExecutionFormsAndLabels } from '../../higher-order-componen
 import { CategorizablePageLayout } from '../../higher-order-components/categorizable-page-layout';
 import { Loading } from '../../loading';
 import { NotFoundPresenter } from '../../not-found';
+import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 
 interface TermPageProps {
     DetailPresenter: (viewModel: IDetailQueryResult<ITermViewModel>) => JSX.Element;
@@ -76,15 +78,35 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
                         id,
                         // TODO make sure these are populated from the back-end
                     }}
-                    notes={[]}
+                    notes={viewModel.notes.map((note) => {
+                        const { id, note: text, context } = note;
+
+                        /**
+                         * In the future, we should expose the translations as well.
+                         */
+                        const singleLanguageText = findOriginalTextItem(text).text;
+
+                        return {
+                            id,
+                            text: singleLanguageText,
+                            context,
+                        };
+                    })}
                 />
             }
             connectedResourcesList={
-                // TODO We need to populate this from the denormalized view sent from the back-end
-                <NotFoundPresenter />
-                // <SelectedCategorizablesOfMultipleTypesPresenter viewModelSnapshot={undefined} presenterFactory={undefined} getPluralLabelForCategorizableType={function (categorizableType: CategorizableType): string {
-                //     throw new Error('Function not implemented.');
-                // } } />
+                /**
+                 * TODO We need to populate this from the denormalized view sent
+                 * from the back-end. Currently, we only have the `resourceCompositeIdentifiers`
+                 * for connected resourceson the view model. We should update our
+                 * event consumer to eagerly join in the nested view.
+                 */
+                <ConnectedResourcesPanel
+                    compositeIdentifier={{
+                        type: ResourceType.term,
+                        id,
+                    }}
+                />
             }
             commandPanel={<Commands />}
         >

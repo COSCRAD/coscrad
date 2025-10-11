@@ -14,6 +14,7 @@ import { NoteDetailPageContainer } from '../components/notes/note-detail-page.co
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
 import { TermDetailFullViewPresenter } from '../components/resources/terms/term-detail.full-view.presenter';
+import { TermDetailPage } from '../components/resources/terms/term-detail.page';
 import { TermDetailThumbnailPresenter } from '../components/resources/terms/term-detail.thumbnail.presenter';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
@@ -194,19 +195,15 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
 
                 const path = `Resources/${baseRoute}/:id`;
 
+                const DetailPresenter =
+                    detailViewType === DetailViewType.fullView
+                        ? TermDetailFullViewPresenter
+                        : TermDetailThumbnailPresenter;
+
                 return {
                     path,
                     label: labelOverrides?.label || 'Term',
-                    element: (
-                        <AggregatePage
-                            aggregateType={AggregateType.term}
-                            DetailPresenter={
-                                detailViewType === DetailViewType.fullView
-                                    ? TermDetailFullViewPresenter
-                                    : TermDetailThumbnailPresenter
-                            }
-                        />
-                    ),
+                    element: <TermDetailPage DetailPresenter={DetailPresenter} />,
                 };
             },
         ],
