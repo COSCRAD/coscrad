@@ -43,8 +43,8 @@ const endpoint = `${getConfig().apiUrl}/resources/terms`;
 
 const act = buildCategorizableDetailPageRendererForTest(ResourceType.term);
 
-// TODO Fix this test
-describe('Term Detail', () => {
+// TODO Should we remove this test? It is redundant with the corresponding Cypress test at this point.
+describe.skip('Term Detail', () => {
     describe('when the API request is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
