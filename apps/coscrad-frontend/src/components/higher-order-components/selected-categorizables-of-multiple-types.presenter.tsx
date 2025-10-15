@@ -2,6 +2,9 @@ import {
     CategorizableType,
     IBaseViewModel,
     ICategorizableDetailQueryResult,
+    IDetailQueryResult,
+    ITermViewModel,
+    WithTags,
 } from '@coscrad/api-interfaces';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
@@ -51,16 +54,6 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
                         CategorizableType,
                         ViewModelDetailSnapshot[keyof ViewModelDetailSnapshot]
                     ]) => {
-                        /**
-                         * Note that we are moving to sending back denormalized
-                         * views of the resources on notes (and notes on resources)
-                         * and we should leverage these for the notes and
-                         * connection panels going forward.
-                         */
-                        if (queryResult.data instanceof Map) {
-                            throw new Error(`terms are not supported here`);
-                        }
-
                         // TODO Use our loadable helper
                         if (queryResult.errorInfo)
                             return <ErrorDisplay {...queryResult.errorInfo} />;
@@ -70,8 +63,18 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
 
                         return (
                             <SelectedCategorizablesPresenter
-                                // @ts-expect-error we should avoid using this with `Terms`. How can we do that?
-                                viewModels={queryResult.data}
+                                viewModels={
+                                    Array.isArray(queryResult.data)
+                                        ? queryResult.data
+                                        : /**
+                                           * This is to support the new approach to
+                                           * state-management where we store resource
+                                           * views as a `Record<AggregateId,ViewModel>`
+                                           */
+                                          (Object.values(queryResult.data) as IDetailQueryResult<
+                                              WithTags<ITermViewModel>
+                                          >[])
+                                }
                                 presenterFactory={presenterFactory}
                                 pluralLabelForCategorizableType={getPluralLabelForCategorizableType(
                                     categorizableType

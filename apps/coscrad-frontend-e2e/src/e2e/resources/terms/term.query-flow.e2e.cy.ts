@@ -666,8 +666,6 @@ describe(`Term index-to-detail flow`, () => {
 
         describe(`when there are no contributors of record on the event history`, () => {
             beforeEach(() => {
-                cy.rehydrateViews();
-
                 cy.visit(`/Resources/Terms/${idForTermToView}`);
             });
 
@@ -809,7 +807,7 @@ describe(`Term index-to-detail flow`, () => {
 
                 cy.openPanel('connections');
 
-                cy.contains('No Connections Found');
+                cy.contains('No Connections Found', { matchCase: false });
             });
         });
     });

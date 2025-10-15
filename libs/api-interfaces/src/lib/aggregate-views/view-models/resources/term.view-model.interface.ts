@@ -1,7 +1,8 @@
 import { IBaseResourceViewModel } from '../base.view-model.interface';
 import { LanguageCode } from '../multilingual-text';
-import { IEdgeConnectionContext } from '../note';
+import { EdgeConnectionMemberRole, IEdgeConnectionContext } from '../note';
 import { IMultilingualText } from './common';
+import { ResourceCompositeIdentifier } from './resource-composite-identifier';
 
 export interface IVocabularyListRecordForTerm {
     id: string;
@@ -31,6 +32,20 @@ export interface IToken {
     isStop: boolean;
 }
 
+type IConnectedResourceRecord = {
+    id: string;
+
+    note: IMultilingualText;
+
+    selfContext: IEdgeConnectionContext;
+
+    otherCompositeIdentifier: ResourceCompositeIdentifier;
+
+    otherContext: IEdgeConnectionContext;
+
+    role: typeof EdgeConnectionMemberRole.to | typeof EdgeConnectionMemberRole.from;
+};
+
 export interface ITermViewModel extends IBaseResourceViewModel {
     audioURL?: string;
 
@@ -48,4 +63,6 @@ export interface ITermViewModel extends IBaseResourceViewModel {
     tokens: IToken[];
 
     notes: { id: string; context: IEdgeConnectionContext; note: IMultilingualText }[];
+
+    connections: IConnectedResourceRecord[];
 }

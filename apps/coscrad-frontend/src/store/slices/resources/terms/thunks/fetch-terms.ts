@@ -32,10 +32,6 @@ export const fetchTerms = createFetchThunk<IIndexQueryResult<ITermViewModel>>(
             entities: serverResponse.entities.flatMap((entity) => {
                 const doesEntityPassFilter = preFilter(entity);
 
-                if (!doesEntityPassFilter) {
-                    console.log(`I failed to pass the filter: ${entity}`);
-                }
-
                 return doesEntityPassFilter
                     ? [
                           {

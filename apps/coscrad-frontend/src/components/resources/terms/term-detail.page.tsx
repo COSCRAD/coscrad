@@ -8,16 +8,17 @@ import {
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { useLoadableTermById } from '../../../store/slices/resources';
-import { ConnectedResourcesPanel } from '../../../store/slices/resources/shared/connected-resources';
 import { SelfNotesPanelPresenter } from '../../../store/slices/resources/shared/notes-for-resource/self-notes-panel.presenter';
 import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
 import { CommandPanel } from '../../commands';
 import { ErrorDisplay } from '../../error-display/error-display';
+import { CategorizablesOfMultipleTypeContainer } from '../../higher-order-components';
 import { buildCommandExecutionFormsAndLabels } from '../../higher-order-components/aggregate-page';
 import { CategorizablePageLayout } from '../../higher-order-components/categorizable-page-layout';
 import { Loading } from '../../loading';
 import { NotFoundPresenter } from '../../not-found';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
+import { thumbnailCategorizableDetailPresenterFactory } from '../factories/thumbnail-categorizable-detail-presenter-factory';
 
 interface TermPageProps {
     DetailPresenter: (viewModel: IDetailQueryResult<ITermViewModel>) => JSX.Element;
@@ -39,6 +40,10 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
     const compositeIdentifier = { type: AggregateType.term, id };
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
+
+    const connectResourceCompositeIds = viewModel.connections.map(
+        ({ otherCompositeIdentifier }) => otherCompositeIdentifier
+    );
 
     /**
      * If the actions array is empty, the user does not have write access to
@@ -95,18 +100,21 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
                 />
             }
             connectedResourcesList={
-                /**
-                 * TODO We need to populate this from the denormalized view sent
-                 * from the back-end. Currently, we only have the `resourceCompositeIdentifiers`
-                 * for connected resourceson the view model. We should update our
-                 * event consumer to eagerly join in the nested view.
-                 */
-                <ConnectedResourcesPanel
-                    compositeIdentifier={{
-                        type: ResourceType.term,
-                        id,
-                    }}
-                />
+                connectResourceCompositeIds.length > 0 ? (
+                    /**
+                     * TODO We need to populate this from the denormalized view sent
+                     * from the back-end. Currently, we only have the `resourceCompositeIdentifiers`
+                     * for connected resourceson the view model. We should update our
+                     * event consumer to eagerly join in the nested view.
+                     */
+                    <CategorizablesOfMultipleTypeContainer
+                        heading="Connected Resources"
+                        members={connectResourceCompositeIds}
+                        detailPresenterFactory={thumbnailCategorizableDetailPresenterFactory}
+                    />
+                ) : (
+                    <>No connections found.</>
+                )
             }
             commandPanel={<Commands />}
         >

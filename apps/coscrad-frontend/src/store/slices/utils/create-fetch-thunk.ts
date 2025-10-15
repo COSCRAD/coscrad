@@ -29,8 +29,6 @@ export const createFetchThunk = <TPayload>(
 
         const responseJson = await response.json();
 
-        console.log({ responseJson });
-
         if (response.status !== HttpStatusCode.ok)
             /**
              * TODO [https://www.pivotaltracker.com/story/show/183619131]

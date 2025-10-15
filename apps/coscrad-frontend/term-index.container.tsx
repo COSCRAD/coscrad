@@ -9,7 +9,7 @@ import { TermIndexPresenter } from './src/components/resources/terms/term-index.
 import { useLoadableTerms } from './src/store/slices/resources';
 
 export const TermIndexContainer = (): JSX.Element => {
-    // TODO we need to deal with pagination here
+    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-332] we need to deal with pagination here
     const loadableTerms = useLoadableTerms();
 
     const Presenter = displayLoadableWithErrorsAndLoading(TermIndexPresenter);
