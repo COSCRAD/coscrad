@@ -1,4 +1,9 @@
-import { CategorizableType, IBaseViewModel, ICategoryTreeViewModel, ResourceType } from '@coscrad/api-interfaces';
+import {
+    CategorizableType,
+    IBaseViewModel,
+    ICategoryTreeViewModel,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { getConfig } from '../../config';
 import { assertElementWithTestIdOnScreen, renderWithProviders } from '../../utils/test-utils';
@@ -110,7 +115,11 @@ const buildIndexResponse = (models: IBaseViewModel[]) =>
         []
     );
 
-describe('Category Tree', () => {
+/**
+ * We still do not fully support managing a Category Tree on the back-end.
+ * Once we do, we can opt into this or write a full `e2e` test.
+ */
+describe.skip('Category Tree', () => {
     describe('when the API request for categories is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({
