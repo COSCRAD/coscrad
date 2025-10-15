@@ -7,6 +7,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
 import { useLoadableTermById } from '../../../store/slices/resources';
 import { SelfNotesPanelPresenter } from '../../../store/slices/resources/shared/notes-for-resource/self-notes-panel.presenter';
 import { useIdFromLocation } from '../../../utils/custom-hooks/use-id-from-location';
@@ -31,9 +32,12 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
 
     const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
 
-    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+    // eslint-disable-next-line no-debugger
+    debugger;
 
-    if (viewModel === null) return <NotFoundPresenter />;
+    if (viewModel === NOT_FOUND) return <NotFoundPresenter />;
+
+    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
 
     if (isLoading || viewModel === null) return <Loading />;
 

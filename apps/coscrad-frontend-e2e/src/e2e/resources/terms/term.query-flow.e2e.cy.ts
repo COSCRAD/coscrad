@@ -632,182 +632,204 @@ describe(`Term index-to-detail flow`, () => {
     });
 
     describe(`the term detail page`, () => {
-        const compositeIdentifierOfTermToView = buildDummyAggregateCompositeIdentifier(
-            AggregateType.term,
-            2
-        );
-
-        const { id: idForTermToView } = compositeIdentifierOfTermToView;
-
-        const textForTermWithNoCredits = 'I have notes';
-
-        const noteText =
-            'This first 4 letters of this term form a syllable that indicates this is a plant ';
-
-        before(() => {
-            cy.seedDataWithCommand(`CREATE_TERM`, {
-                aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
-                text: textForTermWithNoCredits,
-            });
-
-            cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
-            });
-
-            cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
-                aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
-                    AggregateType.note,
-                    801
-                ),
-                resourceCompositeIdentifier: compositeIdentifierOfTermToView,
-                text: noteText,
-            });
-        });
-
-        describe(`when there are no contributors of record on the event history`, () => {
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idForTermToView}`);
-            });
-
-            it(`should display the defualt credits`, () => {
-                cy.contains(textForTermWithNoCredits);
-
-                cy.contains('created by: (data entry) admin');
-            });
-        });
-
-        describe(`when there are no vocabulary lists for the term (2)`, () => {
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idForTermToView}`);
-            });
-
-            it(`should not display vocabulary list info`, () => {
-                cy.getByDataAttribute(`vocbulary-lists-for-term-${idForTermToView}`).should(
-                    'not.exist'
-                );
-            });
-        });
-
-        describe('when there are notes for the term (2)', () => {
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idForTermToView}`);
-            });
-
-            it(`it should display the note text:\n${noteText}`, () => {
-                cy.openPanel('notes');
-
-                cy.contains(noteText);
-            });
-        });
-
-        describe('when there are no notes for the term (13)', () => {
-            // Note that we have yet to add a note for this term
-            const { id: idOfTermWithoutNotes } = basicTermCompositeIdentifier;
-
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idOfTermWithoutNotes}`);
-            });
-
-            it('should display the no notes message', () => {
-                cy.contains(textForTerm);
-
-                cy.openPanel('notes');
-
-                cy.contains('No Notes Found');
-            });
-        });
-
-        describe(`when the term appears in a vocabulary list`, () => {
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${basicTermId}`);
-
-                cy.getByDataAttribute('loading').should('not.exist');
-            });
-
-            it(`should display the vocabulary list`, () => {
-                cy.contains(vocabularyListName);
-
-                cy.get(
-                    `[href="/Resources/VocabularyLists/${vocabularyListCompositeId.id}"]`
-                ).click();
-            });
-        });
-
-        describe('when there are connections for the term (2)', () => {
-            const connectedPlayListCompositeId = buildDummyAggregateCompositeIdentifier(
-                AggregateType.playlist,
-                12
-            );
-
-            const { id: connectedPlaylistId } = connectedPlayListCompositeId;
-
-            before(() => {
-                cy.seedDataWithCommand(`CREATE_PLAYLIST`, {
-                    aggregateCompositeIdentifier: connectedPlayListCompositeId,
-                });
-
-                cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    aggregateCompositeIdentifier: connectedPlayListCompositeId,
-                });
-
-                cy.seedDataWithCommand(`CONNECT_RESOURCES_WITH_NOTE`, {
-                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
-                        AggregateType.note,
-                        402
-                    ),
-                    toMemberCompositeIdentifier: connectedPlayListCompositeId,
-                    fromMemberCompositeIdentifier: basicTermCompositeIdentifier,
-                });
-            });
-
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${basicTermId}`);
-
-                cy.getByDataAttribute('loading').should('not.exist');
-            });
-
-            it('should display the connected playlist', () => {
-                cy.openPanel('connections');
-
-                cy.getAggregateDetailView(AggregateType.playlist, connectedPlaylistId);
-            });
-
-            it.skip('should display exactly 2 connected resources', () => {
-                // we should have a test here.
-            });
-        });
-
-        describe('when there are no connections for the term (123)', () => {
-            const textForTermWithNoConnections = 'I have no connections';
-
-            const compositeIdForTermWithNoConnections = buildDummyAggregateCompositeIdentifier(
+        describe(`when the target term exists`, () => {
+            const compositeIdentifierOfTermToView = buildDummyAggregateCompositeIdentifier(
                 AggregateType.term,
-                123
+                2
             );
 
-            const { id: idForTermWithoutConnections } = compositeIdForTermWithNoConnections;
+            const { id: idForTermToView } = compositeIdentifierOfTermToView;
+
+            const textForTermWithNoCredits = 'I have notes';
+
+            const noteText =
+                'This first 4 letters of this term form a syllable that indicates this is a plant ';
 
             before(() => {
                 cy.seedDataWithCommand(`CREATE_TERM`, {
-                    aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
-                    text: textForTermWithNoConnections,
+                    aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
+                    text: textForTermWithNoCredits,
                 });
 
                 cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
-                    aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
+                    aggregateCompositeIdentifier: compositeIdentifierOfTermToView,
+                });
+
+                cy.seedDataWithCommand(`CREATE_NOTE_ABOUT_RESOURCE`, {
+                    aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                        AggregateType.note,
+                        801
+                    ),
+                    resourceCompositeIdentifier: compositeIdentifierOfTermToView,
+                    text: noteText,
                 });
             });
 
-            beforeEach(() => {
-                cy.visit(`/Resources/Terms/${idForTermWithoutConnections}`);
+            describe(`when there are no contributors of record on the event history`, () => {
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${idForTermToView}`);
+                });
+
+                it(`should display the defualt credits`, () => {
+                    cy.contains(textForTermWithNoCredits);
+
+                    cy.contains('created by: (data entry) admin');
+                });
             });
 
-            it('should display the no connections message', () => {
-                cy.contains(textForTermWithNoConnections);
+            describe(`when there are no vocabulary lists for the term (2)`, () => {
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${idForTermToView}`);
+                });
 
-                cy.openPanel('connections');
+                it(`should not display vocabulary list info`, () => {
+                    cy.getByDataAttribute(`vocbulary-lists-for-term-${idForTermToView}`).should(
+                        'not.exist'
+                    );
+                });
+            });
 
-                cy.contains('No Connections Found', { matchCase: false });
+            describe('when there are notes for the term (2)', () => {
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${idForTermToView}`);
+                });
+
+                it(`it should display the note text:\n${noteText}`, () => {
+                    cy.openPanel('notes');
+
+                    cy.contains(noteText);
+                });
+            });
+
+            describe('when there are no notes for the term (13)', () => {
+                // Note that we have yet to add a note for this term
+                const { id: idOfTermWithoutNotes } = basicTermCompositeIdentifier;
+
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${idOfTermWithoutNotes}`);
+                });
+
+                it('should display the no notes message', () => {
+                    cy.contains(textForTerm);
+
+                    cy.openPanel('notes');
+
+                    cy.contains('No Notes Found');
+                });
+            });
+
+            describe(`when the term appears in a vocabulary list`, () => {
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${basicTermId}`);
+
+                    cy.getByDataAttribute('loading').should('not.exist');
+                });
+
+                it(`should display the vocabulary list`, () => {
+                    cy.contains(vocabularyListName);
+
+                    cy.get(
+                        `[href="/Resources/VocabularyLists/${vocabularyListCompositeId.id}"]`
+                    ).click();
+                });
+            });
+
+            describe('when there are connections for the term (2)', () => {
+                const connectedPlayListCompositeId = buildDummyAggregateCompositeIdentifier(
+                    AggregateType.playlist,
+                    12
+                );
+
+                const { id: connectedPlaylistId } = connectedPlayListCompositeId;
+
+                before(() => {
+                    cy.seedDataWithCommand(`CREATE_PLAYLIST`, {
+                        aggregateCompositeIdentifier: connectedPlayListCompositeId,
+                    });
+
+                    cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                        aggregateCompositeIdentifier: connectedPlayListCompositeId,
+                    });
+
+                    cy.seedDataWithCommand(`CONNECT_RESOURCES_WITH_NOTE`, {
+                        aggregateCompositeIdentifier: buildDummyAggregateCompositeIdentifier(
+                            AggregateType.note,
+                            402
+                        ),
+                        toMemberCompositeIdentifier: connectedPlayListCompositeId,
+                        fromMemberCompositeIdentifier: basicTermCompositeIdentifier,
+                    });
+                });
+
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${basicTermId}`);
+
+                    cy.getByDataAttribute('loading').should('not.exist');
+                });
+
+                it('should display the connected playlist', () => {
+                    cy.openPanel('connections');
+
+                    cy.getAggregateDetailView(AggregateType.playlist, connectedPlaylistId);
+                });
+
+                it.skip('should display exactly 2 connected resources', () => {
+                    // we should have a test here.
+                });
+            });
+
+            describe('when there are no connections for the term (123)', () => {
+                const textForTermWithNoConnections = 'I have no connections';
+
+                const compositeIdForTermWithNoConnections = buildDummyAggregateCompositeIdentifier(
+                    AggregateType.term,
+                    123
+                );
+
+                const { id: idForTermWithoutConnections } = compositeIdForTermWithNoConnections;
+
+                before(() => {
+                    cy.seedDataWithCommand(`CREATE_TERM`, {
+                        aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
+                        text: textForTermWithNoConnections,
+                    });
+
+                    cy.seedDataWithCommand(`PUBLISH_RESOURCE`, {
+                        aggregateCompositeIdentifier: compositeIdForTermWithNoConnections,
+                    });
+                });
+
+                beforeEach(() => {
+                    cy.visit(`/Resources/Terms/${idForTermWithoutConnections}`);
+                });
+
+                it('should display the no connections message', () => {
+                    cy.contains(textForTermWithNoConnections);
+
+                    cy.openPanel('connections');
+
+                    cy.contains('No Connections Found', { matchCase: false });
+                });
+            });
+        });
+
+        /**
+         * TODO We should test
+         * - no network
+         * - hanging request
+         * - 500 error from back-end
+         * at the `e2e` level.
+         *
+         * Until now, we've used unit tests for this. But this requires network
+         * mocking that has proven brittle and sensitive to implementation details.
+         */
+        describe(`when the target term does not exist`, () => {
+            beforeEach(() => {
+                cy.visit(`/Resources/Terms/404`);
+            });
+
+            it(`should display a not found message`, () => {
+                cy.getByDataAttribute('not-found');
             });
         });
     });

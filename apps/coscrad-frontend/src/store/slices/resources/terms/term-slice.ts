@@ -7,6 +7,7 @@ import {
 } from '@coscrad/api-interfaces';
 import { ActionReducerMapBuilder, AsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ILoadable } from '../../interfaces/loadable.interface';
+import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
 import { TERMS } from './constants';
 import { fetchTermById, fetchTerms } from './thunks';
@@ -31,7 +32,14 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
          */
         const existingEntitiesById = state.data?.entities || {};
 
-        existingEntitiesById[entity.id] = entity;
+        if (typeof entity === 'string') {
+            existingEntitiesById[entity] = NOT_FOUND;
+        } else {
+            existingEntitiesById[entity.id] = entity;
+        }
+
+        // eslint-disable-next-line no-debugger
+        debugger;
 
         state.isLoading = false;
 

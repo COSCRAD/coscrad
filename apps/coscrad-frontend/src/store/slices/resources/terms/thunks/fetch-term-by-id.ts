@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getConfig } from '../../../../../../src/config';
 import { getConfigurableContent } from '../../../../../../src/configurable-front-matter';
 import { RootState } from '../../../../../../src/store';
+import { NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 import { buildAuthenticationHeaders } from '../../../utils/build-authentication-headers';
 import { buildResourceFetchActionPrefix } from '../../../utils/build-resource-fetch-action-prefix';
 import { selectAuthToken } from '../../../utils/select-token';
@@ -35,7 +36,16 @@ export const fetchTermById = createAsyncThunk(
             headers: buildAuthenticationHeaders(token),
         });
 
-        const responseJson = await response.json();
+        const responseJson =
+            response.status === HttpStatusCode.notFound ? NOT_FOUND : await response.json();
+
+        if (responseJson === NOT_FOUND || !preFilter(response)) {
+            /**
+             * TODO We should move this filter to the database. In that case,
+             * We should filter by And(idEquals,...otherFilters).
+             */
+            return termId;
+        }
 
         if (response.status !== HttpStatusCode.ok)
             /**
@@ -49,17 +59,6 @@ export const fetchTermById = createAsyncThunk(
                 code: responseJson.statusCode,
                 message: responseJson.error,
             } as IHttpErrorInfo);
-
-        if (!preFilter(response)) {
-            /**
-             * TODO We should move this filter to the database. In that case,
-             * We should filter by And(idEquals,...otherFilters).
-             */
-            return thunkApi.rejectWithValue({
-                code: HttpStatusCode.notFound,
-                message: responseJson.error,
-            } as IHttpErrorInfo);
-        }
 
         return {
             ...responseJson,
