@@ -123,7 +123,7 @@ describe(`when using the REST API to delete a memory match round`, () => {
             app.get(ArangoDatabaseProvider).close;
         });
 
-        describe(`when the target round is available for delition`, () => {
+        describe(`when the target round is available for deletion`, () => {
             // published case
             describe(`when the round is published`, () => {
                 const publishedRound = buildTestInstance(MemoryMatchRound, {
@@ -209,12 +209,321 @@ describe(`when using the REST API to delete a memory match round`, () => {
                     );
                 });
 
-                it.only(`should should not found`, async () => {
+                it(`should should not found`, async () => {
                     const server = app.getHttpServer();
 
                     const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
 
                     expect(res.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+        });
+    });
+
+    describe(`when the user is a project admin`, () => {
+        const coscradAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.projectAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the target round is available for deletion`, () => {
+            describe(`when the round is published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    const searchResponse = await request(server).get(
+                        buildEndpoint(testMemoryRoundId)
+                    );
+
+                    expect(searchResponse.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+
+            describe(`when the round is not yet published`, () => {
+                const unpublishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: false,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    const searchResponse = await request(server).get(
+                        buildEndpoint(testMemoryRoundId)
+                    );
+
+                    expect(searchResponse.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+        });
+
+        describe(`when the round is not available to be deleted`, () => {
+            describe(`when the round does not exist`, () => {
+                it(`should return the expected error`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+
+            describe(`when the round has already been deleted`, () => {
+                const deletedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                const deletedRoundDto = {
+                    ...deletedRound.toDTO(),
+                    __isDeleted: true,
+                };
+
+                beforeEach(async () => {
+                    await rawDatabaseForMemoryMatch.create(
+                        mapEntityDTOToDatabaseDocument(deletedRoundDto)
+                    );
+                });
+
+                it(`should should not found`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.notFound);
+                });
+            });
+        });
+    });
+
+    describe(`when the user is a Ordinary User (viewer)`, () => {
+        const coscradAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.viewer],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the target round is available for deletion`, () => {
+            describe(`when the round is published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round is not yet published`, () => {
+                const unpublishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: false,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+        });
+
+        describe(`when the round is not available to be deleted`, () => {
+            describe(`when the round does not exist`, () => {
+                it(`should return the expected error`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round has already been deleted`, () => {
+                const deletedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                const deletedRoundDto = {
+                    ...deletedRound.toDTO(),
+                    __isDeleted: true,
+                };
+
+                beforeEach(async () => {
+                    await rawDatabaseForMemoryMatch.create(
+                        mapEntityDTOToDatabaseDocument(deletedRoundDto)
+                    );
+                });
+
+                it(`should should not found`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+        });
+    });
+
+    describe(`when the user is not authenticated`, () => {
+        beforeAll(async () => {
+            await setItUp(undefined);
+        });
+
+        beforeEach(async () => {
+            await app
+                .get(ArangoDatabaseProvider)
+                .getDatabaseForCollection('memory_match_rounds')
+                .clear();
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the target round is available for deletion`, () => {
+            describe(`when the round is published`, () => {
+                const publishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(publishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round is not yet published`, () => {
+                const unpublishedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: false,
+                });
+
+                beforeEach(async () => {
+                    await memoryMatchRepository.create(unpublishedRound);
+                });
+
+                it(`should delete the round`, async () => {
+                    const server = app.getHttpServer();
+
+                    const endpoint = buildEndpoint(testMemoryRoundId);
+
+                    const res = await request(server).delete(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+        });
+
+        describe(`when the round is not available to be deleted`, () => {
+            describe(`when the round does not exist`, () => {
+                it(`should return the expected error`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
+                });
+            });
+
+            describe(`when the round has already been deleted`, () => {
+                const deletedRound = buildTestInstance(MemoryMatchRound, {
+                    id: testMemoryRoundId,
+                    isPublished: true,
+                });
+
+                const deletedRoundDto = {
+                    ...deletedRound.toDTO(),
+                    __isDeleted: true,
+                };
+
+                beforeEach(async () => {
+                    await rawDatabaseForMemoryMatch.create(
+                        mapEntityDTOToDatabaseDocument(deletedRoundDto)
+                    );
+                });
+
+                it(`should should not found`, async () => {
+                    const server = app.getHttpServer();
+
+                    const res = await request(server).delete(buildEndpoint(testMemoryRoundId));
+
+                    expect(res.status).toBe(HttpStatusCode.forbidden);
                 });
             });
         });
