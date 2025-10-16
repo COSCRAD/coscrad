@@ -2,6 +2,9 @@ import {
     CategorizableType,
     IBaseViewModel,
     ICategorizableDetailQueryResult,
+    IDetailQueryResult,
+    ITermViewModel,
+    WithTags,
 } from '@coscrad/api-interfaces';
 import { ErrorDisplay } from '../error-display/error-display';
 import { Loading } from '../loading';
@@ -60,7 +63,18 @@ export const SelectedCategorizablesOfMultipleTypesPresenter = ({
 
                         return (
                             <SelectedCategorizablesPresenter
-                                viewModels={queryResult.data}
+                                viewModels={
+                                    Array.isArray(queryResult.data)
+                                        ? queryResult.data
+                                        : /**
+                                           * This is to support the new approach to
+                                           * state-management where we store resource
+                                           * views as a `Record<AggregateId,ViewModel>`
+                                           */
+                                          (Object.values(queryResult.data) as IDetailQueryResult<
+                                              WithTags<ITermViewModel>
+                                          >[])
+                                }
                                 presenterFactory={presenterFactory}
                                 pluralLabelForCategorizableType={getPluralLabelForCategorizableType(
                                     categorizableType

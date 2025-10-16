@@ -30,6 +30,7 @@ import {
     TranslateNoteCommandHandler,
 } from '../../domain/models/context/commands';
 import { ResourcesConnectedWithNote } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event';
+import { ResourcesConnectedWithNoteEventHandler } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { EdgeConnectionContextUnion } from '../../domain/models/context/edge-connection-context-union';
@@ -75,6 +76,7 @@ import { CoscradNLPModule } from '../../lib/nlp';
         AddAudioForNoteCommandHandler,
         // Event Handlers
         NoteAboutResourceCreatedEventHandler,
+        ResourcesConnectedWithNoteEventHandler,
     ],
     exports: [EdgeConnectionQueryService],
 })

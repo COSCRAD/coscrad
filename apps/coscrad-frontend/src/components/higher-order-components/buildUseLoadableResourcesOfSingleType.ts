@@ -15,7 +15,6 @@ import {
     useLoadablePlaylists,
     useLoadableSongs,
     useLoadableSpatialFeatures,
-    useLoadableTerms,
     useLoadableVideos,
     useLoadableVocabularyLists,
 } from '../../store/slices/resources';
@@ -33,7 +32,15 @@ const lookupTable: {
     [CategorizableType.photograph]: useLoadablePhotographs,
     [CategorizableType.song]: useLoadableSongs,
     [CategorizableType.spatialFeature]: useLoadableSpatialFeatures,
-    [CategorizableType.term]: useLoadableTerms,
+    [CategorizableType.term]: () => {
+        /**
+         * Note that this is used for the dynamic select experience, which
+         * in turn is necessary for dynamic forms whenever there are joins
+         * (E.g., when adding a term to a vocabulary list). We need to decide
+         * how this will work going forward.
+         */
+        throw new Error(`not implemented`);
+    },
     [CategorizableType.audioItem]: useLoadableAudioItems,
     [CategorizableType.video]: useLoadableVideos,
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,

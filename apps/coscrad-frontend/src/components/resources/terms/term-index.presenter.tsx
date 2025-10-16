@@ -9,6 +9,7 @@ import { LinkOff } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
+import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { CommaSeparatedList } from '../../../utils/generic-components';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
@@ -26,7 +27,9 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
-    const { entities: terms } = termsIndexResult;
+    const { entities: termsById } = termsIndexResult;
+
+    const terms = Object.values(termsById).filter((t) => t !== NOT_FOUND);
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
@@ -89,7 +92,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         <IndexTable
             type={AggregateType.term}
             headingLabels={headingLabels}
-            tableData={terms}
+            tableData={terms as ITermViewModel[]}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={'Terms'}
             filterableProperties={['name', 'contributions', 'vocabularyLists', 'tokens']}

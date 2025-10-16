@@ -27,7 +27,12 @@ export const useLoadable = <TSelectedState, UIndexState>({
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (isNull(data)) dispatch(fetchThunk());
+        if (isNull(data)) {
+            // eslint-disable-next-line no-debugger
+            debugger;
+
+            dispatch(fetchThunk());
+        }
     }, [data, dispatch, fetchThunk]);
 
     return loadable;

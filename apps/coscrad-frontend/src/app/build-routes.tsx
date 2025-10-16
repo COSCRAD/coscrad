@@ -1,5 +1,6 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { TermIndexContainer } from '../../term-index.container';
 import { About } from '../components/about/about';
 import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
@@ -12,10 +13,16 @@ import { NotFoundPresenter } from '../components/not-found';
 import { NoteDetailPageContainer } from '../components/notes/note-detail-page.container';
 import { NoteIndexContainer } from '../components/notes/note-index.container';
 import { ResourceInfoContainer } from '../components/resource-info/resource-info.container';
+import { TermDetailFullViewPresenter } from '../components/resources/terms/term-detail.full-view.presenter';
+import { TermDetailPage } from '../components/resources/terms/term-detail.page';
+import { TermDetailThumbnailPresenter } from '../components/resources/terms/term-detail.thumbnail.presenter';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
-import { ConfigurableContent } from '../configurable-front-matter/data/configurable-content-schema';
+import {
+    ConfigurableContent,
+    DetailViewType,
+} from '../configurable-front-matter/data/configurable-content-schema';
 import { AlphabetPage } from './../components/alphabet/AlphabetPage';
 import { bootstrapIndexToDetailFlowRoutes } from './bootstrap-index-to-detail-flow-routes';
 
@@ -156,6 +163,50 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
             element: <Credits />,
         },
         ...bootstrapIndexToDetailFlowRoutes(contentConfig),
+        [
+            indexToDetailFlows.some(
+                ({ categorizableType }) => categorizableType === CategorizableType.term
+            ),
+            () => {
+                const { labelOverrides } = indexToDetailFlows.find(
+                    ({ categorizableType }) => categorizableType === CategorizableType.term
+                );
+
+                const path = `Resources/${labelOverrides?.route || 'Terms'}`;
+
+                return {
+                    path,
+                    label: labelOverrides?.pluralLabel || 'Terms',
+                    // TODO move this file
+                    element: <TermIndexContainer />,
+                };
+            },
+        ],
+        [
+            indexToDetailFlows.some(
+                ({ categorizableType }) => categorizableType === CategorizableType.term
+            ),
+            () => {
+                const { labelOverrides, detailViewType } = indexToDetailFlows.find(
+                    ({ categorizableType }) => categorizableType === CategorizableType.term
+                );
+
+                const baseRoute = labelOverrides?.route || 'Terms';
+
+                const path = `Resources/${baseRoute}/:id`;
+
+                const DetailPresenter =
+                    detailViewType === DetailViewType.fullView
+                        ? TermDetailFullViewPresenter
+                        : TermDetailThumbnailPresenter;
+
+                return {
+                    path,
+                    label: labelOverrides?.label || 'Term',
+                    element: <TermDetailPage DetailPresenter={DetailPresenter} />,
+                };
+            },
+        ],
         {
             path: '*',
             element: <NotFoundPresenter />,

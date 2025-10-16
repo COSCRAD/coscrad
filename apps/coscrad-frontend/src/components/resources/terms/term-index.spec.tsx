@@ -3,15 +3,16 @@ import {
     ITermViewModel,
     LanguageCode,
     MultilingualTextItemRole,
-    ResourceType,
 } from '@coscrad/api-interfaces';
+import { MemoryRouter } from 'react-router-dom';
+import { renderWithProviders } from '../../../../src/utils/test-utils';
+import { TermIndexContainer } from '../../../../term-index.container';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
 import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
-import { renderResourceIndexPageForTest } from '../test-utils';
 
 const dummyTerms: ITermViewModel[] = [
     {
@@ -42,11 +43,18 @@ const dummyTerms: ITermViewModel[] = [
     actions: [],
     isPublished: true,
     tokens: [],
+    notes: [],
+    connections: [],
 }));
 
 const endpoint = `${getConfig().apiUrl}/Resources/Terms`;
 
-const act = () => renderResourceIndexPageForTest(ResourceType.term);
+const act = () =>
+    renderWithProviders(
+        <MemoryRouter>
+            <TermIndexContainer />
+        </MemoryRouter>
+    );
 
 describe(`Term Index`, () => {
     describe('when the API request is valid', () => {
