@@ -92,6 +92,8 @@ export class MemoryMatchController {
         return result;
     }
 
+    @ApiBearerAuth(`JWT`)
+    @UseGuards(AdminJwtGuard)
     @Post('import')
     async import(@Body() dto: MemoryMatchRoundImportDto) {
         if (!isNonEmptyObject(dto)) {
