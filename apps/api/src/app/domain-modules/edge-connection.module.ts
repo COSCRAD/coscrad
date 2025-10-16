@@ -17,7 +17,6 @@ import { NoteViewModel } from '../../queries/edgeConnectionViewModels/note.view-
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { EdgeConnectionController } from '../controllers/edge-connection.controller';
 
-import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../coscrad-cli/logging';
 import {
     AddAudioForNote,
     AddAudioForNoteCommandHandler,
@@ -43,10 +42,6 @@ import { CoscradNLPModule } from '../../lib/nlp';
     providers: [
         CommandInfoService,
         EdgeConnectionQueryService,
-        {
-            provide: COSCRAD_LOGGER_TOKEN,
-            useValue: new ConsoleCoscradCliLogger(),
-        },
         // Data Classes
         ...[
             EdgeConnection,

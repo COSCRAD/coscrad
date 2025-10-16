@@ -5,7 +5,6 @@ import {
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../../coscrad-cli/logging';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -47,8 +46,7 @@ interface IQueryRepositoryProvider {
 export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly repositoryProvider: IQueryRepositoryProvider,
-        @Inject(COSCRAD_LOGGER_TOKEN) private readonly logger: ICoscradLogger
+        private readonly repositoryProvider: IQueryRepositoryProvider
     ) {}
 
     async handle({
@@ -89,9 +87,5 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
                 text,
                 role,
             });
-
-        this.logger.log(
-            `connected :${toMemberCompositeIdentifier} to ${fromMemberCompositeIdentifier}`
-        );
     }
 }
