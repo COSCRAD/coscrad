@@ -161,6 +161,18 @@ export class MemoryMatchService {
         return id;
     }
 
+    async delete(id: AggregateId) {
+        const searchResult = await this.memoryMatchRepository.fetchById(id);
+
+        if (isNotFound(searchResult)) {
+            return NotFound;
+        }
+
+        await this.memoryMatchRepository.delete(id);
+
+        return id;
+    }
+
     async fetchById(
         roundId: AggregateId,
         userWithGroups?: CoscradUserWithGroups
