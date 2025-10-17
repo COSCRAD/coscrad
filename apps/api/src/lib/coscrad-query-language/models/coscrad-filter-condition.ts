@@ -36,13 +36,13 @@ export class CoscradOrCondition implements CoscradCoditionBlock {
 }
 
 export class CoscradAndCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    type = CoscradConditionBlockType.AND;
 
     conditions: CoscradSimpleCondition[];
 }
 
 export class CoscradNotCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    type = CoscradConditionBlockType.NOT;
 
     condition: CoscradSimpleCondition;
 }

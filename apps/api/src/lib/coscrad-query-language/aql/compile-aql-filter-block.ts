@@ -364,7 +364,9 @@ const compileOrFilterCondition = (
 
     if (conditions.some((c) => c.type !== CoscradConditionBlockType.SIMPLE)) {
         throw new InternalError(
-            `Nesting of complex queries is not yet supported.\n An AND query may only take simple conditions.`
+            `Nesting of complex queries is not yet supported.\n An OR query may only take simple conditions. Received: ${JSON.stringify(
+                conditions
+            )}`
         );
     }
 
@@ -384,6 +386,17 @@ const compileOrFilterCondition = (
             const { bindVars, filterStatement: statement } = compileResult;
 
             statements.push(statement);
+
+            if (!Array.isArray(bindVars['args'])) {
+                throw new InternalError(
+                    `Encountered invalidly parsed bindVars: ${JSON.stringify({
+                        bindVars,
+                        condition,
+                        docRef,
+                        index,
+                    })}`
+                );
+            }
 
             context.args.push(...(bindVars['args'] as unknown[]));
 

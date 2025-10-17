@@ -58,7 +58,7 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
             break;
 
         case AggregateType.term:
-            dispatch(fetchTerms());
+            dispatch(fetchTerms(undefined));
             break;
 
         case AggregateType.audioItem:

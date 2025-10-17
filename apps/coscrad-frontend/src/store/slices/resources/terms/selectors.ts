@@ -1,7 +1,21 @@
+import { isNull } from '@coscrad/validation-constraints';
 import { RootState } from '../../..';
 import { TERMS } from './constants';
 
-export const selectLoadableTerms = (state: RootState) => state[TERMS];
+export const selectLoadableTerms = (state: RootState) => {
+    const { isLoading, errorInfo, data } = state[TERMS];
+
+    return {
+        isLoading,
+        errorInfo,
+        data: isNull(data)
+            ? null
+            : {
+                  entities: data.selected,
+                  indexScopedActions: data.indexScopedActions,
+              },
+    };
+};
 
 export const selectTermById = (state: RootState, id: string) => {
     const { isLoading, errorInfo, data } = state[TERMS];

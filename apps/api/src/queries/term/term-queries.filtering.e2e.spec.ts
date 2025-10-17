@@ -77,13 +77,13 @@ describe(`term index queries`, () => {
         await termRepository.createMany([...matches, ...nonMatches]);
 
         // Act
-        const res = await request(app.getHttpServer()).get(indexEndpoint).send({
+        const res = await request(app.getHttpServer()).post(indexEndpoint).send({
             filter,
             pagination,
         });
 
         // Assert
-        expect(res.status).toBe(HttpStatusCode.ok);
+        expect(res.status).toBe(HttpStatusCode.createdResource);
 
         const { entities } = res.body;
 
@@ -145,7 +145,14 @@ describe(`term index queries`, () => {
             const res = await request(app.getHttpServer()).get(indexEndpoint);
 
             // Assert
-            expect(res.status).toBe(HttpStatusCode.ok);
+            /**
+             * We don't really want a 201. This post has no effect on the state.
+             * But we have to use a `POST` to send the user-defined filters
+             * as part of the (encrypted) body instead of (in the clear)
+             * query parameters and respect REST semantics. As such, we
+             * are returning a `201`.
+             */
+            expect(res.status).toBe(HttpStatusCode.createdResource);
 
             const { entities } = res.body;
 
@@ -218,7 +225,7 @@ describe(`term index queries`, () => {
 
                         // Act
                         const res = await request(app.getHttpServer())
-                            .get(indexEndpoint)
+                            .post(indexEndpoint)
                             .send({
                                 filter: doesTextInclude,
                                 pagination: {
@@ -228,7 +235,7 @@ describe(`term index queries`, () => {
                             });
 
                         // Assert
-                        expect(res.status).toBe(HttpStatusCode.ok);
+                        expect(res.status).toBe(HttpStatusCode.createdResource);
 
                         const { entities } = res.body;
 

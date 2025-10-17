@@ -2,17 +2,25 @@ import {
     AggregateType,
     ITermViewModel,
     IVocabularyListRecordForTerm,
+    LanguageCode,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { useContext } from 'react';
+import { useAppDispatch } from '../../../app/hooks';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
+import { fetchTerms } from '../../../store/slices/resources';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { CommaSeparatedList } from '../../../utils/generic-components';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
+import {
+    ALL_PROPERTIES_SEARCH_KEY,
+    HeadingLabel,
+    IndexSearchScope,
+    IndexTable,
+} from '../../../utils/generic-components/presenters/tables';
 import {
     doesTextIncludeCaseInsensitive,
     Matchers,
@@ -26,6 +34,8 @@ import { renderMultilingualTextCell } from '../utils/render-multilingual-text-ce
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+
+    const dispatch = useAppDispatch();
 
     const { entities: termsById } = termsIndexResult;
 
@@ -88,6 +98,60 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             ),
     };
 
+    const onSearch = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
+        if (!isNonEmptyString(queryFromForm)) {
+            return; // TODO fetch with no filters
+        }
+
+        let condition;
+
+        if (queryFromForm.charAt(0) === '{' && queryFromForm.includes('}')) {
+            const extractedLanguageCode = queryFromForm.slice(1).split('}')[0];
+
+            if (Object.values(LanguageCode).some((lc) => lc === extractedLanguageCode)) {
+                condition = {
+                    type: 'SIMPLE',
+                    operator: 'MULTILINGUAL_TEXT_INCLUDES',
+                    params: [queryFromForm, extractedLanguageCode],
+                };
+            }
+        }
+
+        // default
+        if (!condition) {
+            condition = {
+                type: 'SIMPLE',
+                operator: 'MULTILINGUAL_TEXT_INCLUDES',
+                params: [queryFromForm],
+            };
+        }
+
+        const filter = {
+            type: 'OR',
+            conditions: (scope === ALL_PROPERTIES_SEARCH_KEY
+                ? ['name', 'contributions', 'vocabularyLists', 'tokens']
+                : [scope]
+            ).map((field) => ({
+                ...condition,
+                field,
+            })),
+        };
+
+        console.log({
+            dispatching: filter,
+        });
+
+        dispatch(
+            fetchTerms({
+                filter: filter,
+                pagination: {
+                    size: 100,
+                    page: 1,
+                },
+            })
+        );
+    };
+
     return (
         <IndexTable
             type={AggregateType.term}
@@ -97,6 +161,7 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             heading={'Terms'}
             filterableProperties={['name', 'contributions', 'vocabularyLists', 'tokens']}
             matchers={matchers}
+            onSearch={onSearch}
         />
     );
 };

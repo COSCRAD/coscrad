@@ -38,20 +38,19 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
             existingEntitiesById[entity.id] = entity;
         }
 
-        // eslint-disable-next-line no-debugger
-        debugger;
-
         state.isLoading = false;
 
         if (!state.data) {
             state.data = {
                 entities: existingEntitiesById,
                 indexScopedActions: [],
+                selected: [],
             };
         } else {
             state.data = {
                 entities: existingEntitiesById,
                 indexScopedActions: state.data.indexScopedActions,
+                selected: [],
             };
         }
 
@@ -104,6 +103,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
         state.data = {
             entities: existingEntitiesById,
             indexScopedActions,
+            selected: entities,
         };
         state.isLoading = false;
     });

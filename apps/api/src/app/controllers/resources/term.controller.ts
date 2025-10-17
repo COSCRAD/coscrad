@@ -3,6 +3,7 @@ import {
     Controller,
     Get,
     Param,
+    Post,
     Request,
     Res,
     UseFilters,
@@ -62,7 +63,7 @@ export class TermController {
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
-    @Get('')
+    @Post('')
     async fetchMany(@Request() req, @Body() userQueryOptions?: UserQueryOptions) {
         const result = await this.termQueryService.fetchMany(
             // TODO combine these parameters

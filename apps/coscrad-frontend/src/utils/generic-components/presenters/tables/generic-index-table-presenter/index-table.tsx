@@ -55,6 +55,10 @@ const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
  */
 export type ValueUnion<T> = T[keyof T];
 
+export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+
+export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
+
 /**
  * We want to constrain the keys of renderers to a subset of the heading
  * labels' property keys. - This could lead to clients specifying unused renderers.
@@ -71,9 +75,8 @@ export interface GenericIndexTablePresenterProps<T> {
     heading: string;
     filterableProperties: (keyof T)[];
     matchers?: Matchers<T>;
+    onSearch?: (scope: typeof ALL_PROPERTIES_SEARCH_KEY | keyof T, query: string) => void;
 }
-
-const allProperties = 'allProperties';
 
 export const IndexTable = <T,>({
     type,
@@ -82,35 +85,46 @@ export const IndexTable = <T,>({
     cellRenderersDefinition,
     heading,
     filterableProperties,
+    onSearch: userProvidedOnSearch,
     matchers = {}, // default to String(value) & case-insensitive search
 }: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
 
+    const searchInMemory = (scope, searchValue) => {
+        const propertiesToSearch =
+            scope === ALL_PROPERTIES_SEARCH_KEY
+                ? filterableProperties
+                : [selectedFilterProperty as keyof T];
+
+        const filterResult = filterTableData(tableData, propertiesToSearch, searchValue, matchers);
+
+        console.log({
+            scope,
+            propertiesToSearch,
+            searchValue,
+            filterResult,
+        });
+
+        setFilteredTableData(filterResult);
+    };
+
+    const onSearch = userProvidedOnSearch || searchInMemory;
+
     // TODO [] Encapsulte this as part of the `SearchBar`.
     const { simulatedKeyboard } = useContext(ConfigurableContentContext);
 
     const [searchValue, setSearchValue] = useState('');
 
+    const [filteredTableData, setFilteredTableData] = useState(tableData);
+
     // SEARCH LOGIC
     const [selectedFilterProperty, setSelectedFilterProperty] = useState<
-        typeof allProperties | keyof T
-    >(allProperties);
+        typeof ALL_PROPERTIES_SEARCH_KEY | keyof T
+    >(ALL_PROPERTIES_SEARCH_KEY);
 
     const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
-
-    const propertiesToFilterBy =
-        selectedFilterProperty === 'allProperties'
-            ? filterableProperties
-            : [selectedFilterProperty];
-
-    const filteredTableData = filterTableData(
-        tableData,
-        propertiesToFilterBy,
-        searchValue,
-        matchers
-    );
 
     // PAGINATION
     // we index pages starting at 0
@@ -284,7 +298,7 @@ export const IndexTable = <T,>({
                     setSelectedFilterProperty(value as keyof T);
                 }}
             >
-                <MenuItem sx={{ minWidth: 120 }} value={'allProperties'}>
+                <MenuItem sx={{ minWidth: 120 }} value={ALL_PROPERTIES_SEARCH_KEY}>
                     {labelForSearchAllPropertiesOption}
                 </MenuItem>
                 {filterableProperties.map((selectedFilterProperty: keyof T & string) => (
@@ -347,7 +361,11 @@ export const IndexTable = <T,>({
 
                 <SearchBar
                     value={searchValue}
-                    onValueChange={setSearchValue}
+                    onValueChange={(newValue: string) => {
+                        setSearchValue(newValue);
+
+                        onSearch(selectedFilterProperty, searchValue);
+                    }}
                     specialCharacterReplacements={
                         shouldUseVirtualKeyboard
                             ? Object.assign(

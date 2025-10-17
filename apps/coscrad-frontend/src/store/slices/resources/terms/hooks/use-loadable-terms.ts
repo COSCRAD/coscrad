@@ -5,5 +5,6 @@ import { fetchTerms } from '../thunks';
 export const useLoadableTerms = () =>
     useLoadable({
         selector: selectLoadableTerms,
-        fetchThunk: fetchTerms,
+        // @ts-expect-error fix this
+        fetchThunk: () => fetchTerms(null),
     });
