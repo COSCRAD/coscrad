@@ -2,6 +2,7 @@ import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Param,
     Patch,
@@ -23,6 +24,7 @@ import {
 } from '../../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
 import { OptionalJwtAuthGuard } from '../../../../authorization/optional-jwt-auth-guard';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { MemoryMatchRoundCreationDto } from '../models/dtos/memory-match-round-creation.dto';
 import { MemoryMatchRoundImportDto } from '../models/dtos/memory-match-round-import.dto';
 import { MemoryMatchService } from '../services/memory-match.service';
@@ -41,7 +43,7 @@ export class MemoryMatchController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
-    @Get(`/:id`)
+    @Get(`:id`)
     async fetchById(@Param('id') id: string, @Request() req) {
         return this.memoryMatchService.fetchById(id, req.user || undefined);
     }
@@ -90,6 +92,8 @@ export class MemoryMatchController {
         return result;
     }
 
+    @ApiBearerAuth(`JWT`)
+    @UseGuards(AdminJwtGuard)
     @Post('import')
     async import(@Body() dto: MemoryMatchRoundImportDto) {
         if (!isNonEmptyObject(dto)) {
@@ -109,5 +113,17 @@ export class MemoryMatchController {
         return {
             id: result,
         };
+    }
+
+    @ApiBearerAuth(`JWT`)
+    @UseGuards(AdminJwtGuard)
+    @ApiParam(buildByIdApiParamMetadata())
+    @Delete(`:id`)
+    async delete(@Param('id') id: string) {
+        const result = await this.memoryMatchService.delete(id);
+
+        if (isNotFound(result)) return NotFound;
+
+        return { id: result };
     }
 }
