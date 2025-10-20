@@ -448,4 +448,16 @@ describe(`MemoryMatchRound`, () => {
             });
         });
     });
+
+    describe(`remove`, () => {
+        describe(`when the update is valid`, () => {
+            it.todo(`should remove the round`);
+        });
+
+        describe(`when the update is invalid`, () => {
+            describe(`when the round is already removed`, () => {
+                it.todo(`should return the expected error`);
+            });
+        });
+    });
 });

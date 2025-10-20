@@ -301,6 +301,10 @@ export class MemoryMatchRound {
         return this;
     }
 
+    remove(_sequenceNumber: number): ResultOrError<MemoryMatchRound> {
+        throw new Error('not implemented');
+    }
+
     get(sequenceNumber: Number): Maybe<MemoryMatchCard> {
         if (!this.has(sequenceNumber)) {
             return NotFound;
