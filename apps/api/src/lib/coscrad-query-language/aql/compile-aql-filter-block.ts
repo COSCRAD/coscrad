@@ -16,13 +16,16 @@ import {
     CoscradSimpleCondition,
 } from '../models/coscrad-filter-condition';
 
+// This is a hack. How should we handle this?
+let varCount = 0;
+
 interface CoscradAqlFilterBlock {
     letStatement?: string;
     filterStatement: string;
     bindVars: Record<string, unknown>;
 }
 
-const buildFieldref = (
+const buildFieldRef = (
     docRef: string,
     fieldPath: string,
     startingArgIndex = 0
@@ -39,7 +42,7 @@ const buildFieldref = (
 
     if (nestedFieldNames.some((f, i) => i !== 0 && f.endsWith('[*]'))) {
         throw new InternalError(
-            `Declaring filters nested arrayed-value fields is not yet supported.`
+            `Declaring filters for nested arrayed-value fields is not yet supported.`
         );
     }
 
@@ -89,7 +92,7 @@ const compileSimpleFilterCondition = (
         // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
-        const { expression: fieldRef, nestedFieldNames } = buildFieldref(
+        const { expression: fieldRef, nestedFieldNames } = buildFieldRef(
             docRef,
             field,
             startingArgIndex
@@ -113,11 +116,7 @@ const compileSimpleFilterCondition = (
             return new InvalidParameterListSizeForQueryOperator(2, params, operator);
         }
 
-        if (params.length === 2) {
-            throw new Error(`specifying language code is not yet supported`);
-        }
-
-        // we know there is only one parameter- the search text
+        // We always need a first parameter
         const searchText = params[0];
 
         if (!isString(searchText)) {
@@ -129,18 +128,92 @@ const compileSimpleFilterCondition = (
             );
         }
 
+        const {
+            expression: fieldRef,
+            nestedFieldNames,
+            isArray,
+        } = buildFieldRef(docRef, field, startingArgIndex);
+
+        if (params.length === 2) {
+            const languageCode = params[1];
+
+            /**
+             * If the text is empty, we return all resources who have a
+             * multilingual text item in this language for the given field.
+             */
+            if (searchText === '') {
+                if (isArray) {
+                    const filterStatement = `contains(${fieldRef}.items[*].languaugeCode,@args[${
+                        startingArgIndex + nestedFieldNames.length
+                    }])`;
+
+                    return {
+                        filterStatement,
+                        bindVars: { args: [...nestedFieldNames, languageCode] },
+                    };
+                }
+
+                const letVarName = `matches_${++varCount}`;
+
+                const letStatement = `
+                let ${letVarName} = (
+                    for i in ${fieldRef}.items
+                    filter i.languageCode == @args[${
+                        startingArgIndex + nestedFieldNames.length + 1
+                    }]
+                    limit 1
+                    return "match"
+                )
+                `;
+
+                const statement = `length(${letVarName}) > 0`;
+
+                return {
+                    letStatement,
+                    filterStatement: statement,
+                    bindVars: { args: [...nestedFieldNames, searchText, languageCode] },
+                };
+            }
+
+            /**
+             * We need to ensure that this is globally unique, otherwise
+             * we will get odd results due to multiple blocks
+             * modifying the same scope.
+             */
+            const letVarName = `matches_${++varCount}`;
+
+            if (!isArray) {
+                const letStatement = `
+                let ${letVarName} = (
+                    for i in ${fieldRef}.items
+                    filter contains(i.text,@args[${startingArgIndex + nestedFieldNames.length}]) 
+                    and i.languageCode == @args[${startingArgIndex + nestedFieldNames.length + 1}]
+                    return "match"
+                )
+                `;
+
+                const statement = `length(${letVarName}) > 0`;
+
+                return {
+                    letStatement,
+                    filterStatement: statement,
+                    bindVars: { args: [...nestedFieldNames, searchText, languageCode] },
+                };
+            }
+
+            // We have 2 parameters (search text, language code) and the field is an array of ML Text items
+            throw new InternalError(
+                `Searching a list of multilingual text values is not yet supported via COSCRAD query language.`
+            );
+        }
+
+        // we know there is only one parameter- the search text
         if (searchText === '') {
             return {
                 filterStatement: '',
                 bindVars: {},
             };
         }
-
-        const {
-            expression: fieldRef,
-            nestedFieldNames,
-            isArray,
-        } = buildFieldref(docRef, field, startingArgIndex);
 
         if (!isArray) {
             const statement = `contains(${fieldRef},@args[${
@@ -286,6 +359,66 @@ const compileSimpleFilterCondition = (
         };
     }
 
+    if (operator === CoscradBooleanOperator.TEXT_INCLUDES) {
+        if (params.length !== 1) {
+            throw new Error('TODO return wrong param number error');
+        }
+
+        const searchText = params[0];
+
+        if (!isString(searchText)) {
+            throw new Error(`TODO return wrong param type error`);
+        }
+
+        const {
+            expression: fieldRef,
+            nestedFieldNames,
+            isArray,
+        } = buildFieldRef(docRef, field, startingArgIndex);
+
+        const matchVarName = `matches_${varCount}`;
+
+        if (isArray) {
+            const letStatement = `
+            let ${matchVarName} = (
+                for item in ${docRef}['${nestedFieldNames}']
+                filter contains(item,@args[${startingArgIndex + 1}])
+                limit 1
+                return "match"
+            )
+            `;
+
+            // AQL Takes care of comparing one string value at a time for us
+            const filterStatement = `
+            length(${matchVarName}) > 0
+            `;
+
+            return {
+                letStatement,
+                filterStatement,
+                bindVars: {
+                    args: [field, searchText],
+                },
+            };
+        }
+
+        // TODO why is `id` one of the `nestedFieldNames`? Let's rewrite this to remove the current `field` name.
+        if (nestedFieldNames.length > 1) {
+            throw Error(`we need to support nested text searches`);
+        }
+
+        const filterStatement = `
+        contains(${fieldRef},@args[${startingArgIndex + 1}])
+        `;
+
+        return {
+            filterStatement,
+            bindVars: {
+                args: [field, searchText],
+            },
+        };
+    }
+
     throw new InternalError(`Unsupported logical operator for COSCRAD query filter: ${operator}`);
 };
 
@@ -370,9 +503,13 @@ const compileOrFilterCondition = (
         );
     }
 
-    const { context: bindVars, statements } = conditions.reduce(
+    const {
+        context: bindVars,
+        filterStatements,
+        letStatements,
+    } = conditions.reduce(
         (acc, condition) => {
-            const { statements, context, index } = acc;
+            const { filterStatements, letStatements, context, index } = acc;
 
             const compileResult = compileSimpleFilterCondition(condition, docRef, index);
 
@@ -383,9 +520,11 @@ const compileOrFilterCondition = (
                 );
             }
 
-            const { bindVars, filterStatement: statement } = compileResult;
+            const { bindVars, filterStatement: statement, letStatement } = compileResult;
 
-            statements.push(statement);
+            filterStatements.push(statement);
+
+            letStatements.push(letStatement);
 
             if (!Array.isArray(bindVars['args'])) {
                 throw new InternalError(
@@ -403,21 +542,29 @@ const compileOrFilterCondition = (
             const newStartingIndex = index + (bindVars['args'] as unknown[]).length;
 
             return {
-                statements,
+                filterStatements,
+                letStatements,
                 context,
                 index: newStartingIndex,
             };
         },
-        { context: { args: [] }, statements: [], index: startingArgIndex } as {
+        {
+            context: { args: [] },
+            filterStatements: [],
+            letStatements: [],
+            index: startingArgIndex,
+        } as {
             context: { args: unknown[] };
-            statements: string[];
+            filterStatements: string[];
+            letStatements: string[];
             index: number;
         }
     );
 
     return {
         bindVars,
-        filterStatement: statements.join(' or '),
+        filterStatement: filterStatements.join(' or '),
+        letStatement: letStatements.join('\n'),
     };
 };
 

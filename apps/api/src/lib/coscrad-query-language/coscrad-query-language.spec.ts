@@ -48,6 +48,8 @@ class Location {
 class Widget {
     id: string;
 
+    comment: string;
+
     yearBuilt: number;
 
     description: MultilingualText;
@@ -71,6 +73,7 @@ class Widget {
         rating,
         tags,
         tokens,
+        comment,
     }: DTO<Widget>) {
         this.id = id;
 
@@ -90,6 +93,8 @@ class Widget {
 
         this.tags = [...tags];
 
+        this.comment = comment;
+
         this.tokens = tokens.map((t) => cloneToPlainObject(t));
     }
 
@@ -108,6 +113,7 @@ const dummyWidget = new Widget({
     description: buildMultilingualTextWithSingleItem('Awesome Widget'),
     tags: [],
     tokens: [],
+    comment: 'an awesome widget indeed',
 });
 
 class WidgetRepository {
@@ -178,7 +184,7 @@ const widgetThatMatchesInTranslatedText = dummyWidget.clone({
     ),
 });
 
-const widgetThatDoesNotMachSearchText = dummyWidget.clone({
+const widgetThatDoesNotMatchSearchText = dummyWidget.clone({
     id: '3',
     description: buildMultilingualTextWithSingleItem(`I don't match!`),
 });
@@ -188,6 +194,13 @@ const doesAnyTextIncludeEllo: CoscradSimpleCondition = {
     operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
     field: 'description',
     params: [searchText],
+};
+
+const doesEnglishTextIncludeEllo: CoscradSimpleCondition = {
+    type: CoscradConditionBlockType.SIMPLE,
+    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+    field: 'description',
+    params: [searchText, LanguageCode.English],
 };
 
 const dummyLocationName = buildMultilingualTextWithSingleItem('zzz', LanguageCode.Chilcotin);
@@ -384,7 +397,7 @@ describe(`Coscrad Query Language`, () => {
                                 // +
                                 widgetThatMatchesInTranslatedText,
                                 // -
-                                widgetThatDoesNotMachSearchText,
+                                widgetThatDoesNotMatchSearchText,
                             ]);
                         });
 
@@ -398,7 +411,81 @@ describe(`Coscrad Query Language`, () => {
                     });
 
                     describe(`when 2 parameters are provided`, () => {
-                        it.todo(`should have a test once language code is supported`);
+                        describe(`when the search text is not empty`, () => {
+                            beforeEach(async () => {
+                                await widgetRepository.createMany([
+                                    // +
+                                    widgetThatMatchesInOriginalText,
+                                    // -
+                                    widgetThatMatchesInTranslatedText,
+                                    // -
+                                    widgetThatDoesNotMatchSearchText,
+                                ]);
+                            });
+
+                            it(`should return the expected results`, async () => {
+                                const result = await widgetRepository.fetchForUser({
+                                    filter: doesEnglishTextIncludeEllo,
+                                });
+
+                                expect(result).toHaveLength(1);
+                            });
+                        });
+
+                        /**
+                         * A query with a language code and an empty string will
+                         * return all resources that have a text item (original or translation)
+                         * for the target field.
+                         */
+                        describe(`when the search text is empty`, () => {
+                            const targetLanguageCode = LanguageCode.Chilcotin;
+
+                            const widgetsWithTextInTargetLanguage = ['a', 'b', 'c'].map(
+                                (text, index) =>
+                                    dummyWidget.clone({
+                                        id: buildDummyUuid(index + 1),
+                                        description: buildMultilingualTextWithSingleItem(
+                                            text,
+                                            targetLanguageCode
+                                        ),
+                                    })
+                            );
+
+                            const widgetsWithNoTextInTargetLanguage = ['d', 'e', 'f', 'g'].map(
+                                (text, index) =>
+                                    dummyWidget.clone({
+                                        id: buildDummyUuid(
+                                            index + 1 + widgetsWithTextInTargetLanguage.length
+                                        ),
+                                        description: buildMultilingualTextWithSingleItem(
+                                            text,
+                                            LanguageCode.English
+                                        ),
+                                    })
+                            );
+
+                            const doesDescriptionHaveChilcotin: CoscradSimpleCondition = {
+                                type: CoscradConditionBlockType.SIMPLE,
+                                operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                field: 'description',
+                                params: ['', LanguageCode.Chilcotin],
+                            };
+
+                            beforeEach(async () => {
+                                await widgetRepository.createMany([
+                                    ...widgetsWithTextInTargetLanguage,
+                                    ...widgetsWithNoTextInTargetLanguage,
+                                ]);
+                            });
+
+                            it(`should return the expected results`, async () => {
+                                const result = await widgetRepository.fetchForUser({
+                                    filter: doesDescriptionHaveChilcotin,
+                                });
+
+                                expect(result).toHaveLength(widgetsWithTextInTargetLanguage.length);
+                            });
+                        });
                     });
                 });
 
@@ -483,6 +570,7 @@ describe(`Coscrad Query Language`, () => {
                             location: null,
                             tags: [],
                             tokens: [],
+                            comment: "this one doesn't have a location",
                         });
 
                         const hasLocation: CoscradSimpleCondition = {
@@ -884,6 +972,107 @@ describe(`Coscrad Query Language`, () => {
                 });
             });
 
+            describe(`TEXT_INCLUDES`, () => {
+                describe(`when the query is well formed`, () => {
+                    describe(`when searching a non-array valued prop (comment)`, () => {
+                        const textToFind = 'xyZ';
+
+                        const widgetWhoseIdMatchesText = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            comment: `A comment that matches because it has the text: ${textToFind}.`,
+                        });
+
+                        const widgetWhoseIdDoesNotMatchText = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            comment: 'Aint no way I am gonna match!',
+                        });
+
+                        const simpleTextIncludes: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.TEXT_INCLUDES,
+                            params: [textToFind],
+                            field: 'comment',
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWhoseIdMatchesText,
+                                // -
+                                widgetWhoseIdDoesNotMatchText,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: simpleTextIncludes,
+                            });
+
+                            expect(result).toHaveLength(1);
+                        });
+                    });
+
+                    describe(`when searching an array valued prop (tags: string[])`, () => {
+                        const searchText = 'RXz';
+
+                        const widgetWithOneTagThatMatches = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            tags: [searchText],
+                        });
+
+                        const widgetWithSomeTagsThatMatchAndSomeThatDont = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            tags: [
+                                searchText,
+                                'no match!',
+                                `Are you looking for: ${searchText}?`,
+                                '123',
+                            ],
+                        });
+
+                        const widgetWithNoTags = dummyWidget.clone({
+                            id: buildDummyUuid(3),
+                            tags: [],
+                        });
+
+                        const widgetWithTagsThatDontMatch = dummyWidget.clone({
+                            id: buildDummyUuid(4),
+                            tags: ['x', 'a', 'horsies'],
+                        });
+
+                        const doesAnyTagIncludeText: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.TEXT_INCLUDES,
+                            params: [searchText],
+                            field: 'tags[*]',
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWithOneTagThatMatches,
+                                // +
+                                widgetWithSomeTagsThatMatchAndSomeThatDont,
+                                // -
+                                widgetWithNoTags,
+                                // -
+                                widgetWithTagsThatDontMatch,
+                            ]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: doesAnyTagIncludeText,
+                            });
+
+                            expect(result).toHaveLength(2);
+                        });
+                    });
+                });
+            });
+        });
+
+        describe(`when the query is a complex condition`, () => {
             describe(`AND`, () => {
                 describe(`when the AND's conditions are all simple conditions`, () => {
                     beforeEach(async () => {
@@ -898,7 +1087,7 @@ describe(`Coscrad Query Language`, () => {
                                 id: '2',
                                 yearBuilt: cutoffYearExclusive - 1,
                             }),
-                            widgetThatDoesNotMachSearchText.clone({
+                            widgetThatDoesNotMatchSearchText.clone({
                                 id: '3',
                             }),
                             widgetThatComesAfterCutoffYear.clone({
@@ -930,19 +1119,19 @@ describe(`Coscrad Query Language`, () => {
                 describe(`when the OR's conditions are all simple conditions`, () => {
                     beforeEach(async () => {
                         await widgetRepository.createMany([
-                            // 4 / 5 should match the `OR`
+                            // 3 / 5 should match the `OR`
                             // +
                             widgetThatMatchesInOriginalText.clone({
                                 id: '1',
                                 yearBuilt: cutoffYearExclusive + 1,
                             }),
-                            // +
+                            // - We specify the language code to be the original ('en') language code for this case
                             widgetThatMatchesInTranslatedText.clone({
                                 id: '2',
                                 yearBuilt: cutoffYearExclusive - 1,
                             }),
                             // -
-                            widgetThatDoesNotMachSearchText.clone({
+                            widgetThatDoesNotMatchSearchText.clone({
                                 id: '3',
                                 yearBuilt: cutoffYearExclusive - 1,
                             }),
@@ -961,17 +1150,18 @@ describe(`Coscrad Query Language`, () => {
                         ]);
                     });
 
-                    const doesAnyTextIncludeElloAndGreaterThanCutoffYear: CoscradAndCondition = {
+                    const doesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition = {
                         type: CoscradConditionBlockType.OR,
-                        conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
+                        // Note we use the language-code specific version of the ml text query here
+                        conditions: [doesEnglishTextIncludeEllo, greaterThanCutoffYear],
                     };
 
                     it(`should return the expected results`, async () => {
                         const result = await widgetRepository.fetchForUser({
-                            filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
+                            filter: doesEnglishTextIncludeElloOrGreaterThanCutoffYear,
                         });
 
-                        expect(result).toHaveLength(4);
+                        expect(result).toHaveLength(3);
                     });
                 });
             });

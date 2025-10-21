@@ -129,15 +129,6 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
          * controller \ middleware.
          */
 
-        const DEFAULT_OFFSET = 0;
-
-        const userProvidedPage = options?.pagination?.page;
-
-        const offset =
-            Number.isInteger(userProvidedPage) && userProvidedPage >= 0
-                ? userProvidedPage
-                : DEFAULT_OFFSET;
-
         const DEFAULT_SIZE = 100;
 
         const MAX_SIZE = 1000;
@@ -151,6 +142,15 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 ? userProvidedSize
                 : DEFAULT_SIZE;
 
+        const DEFAULT_OFFSET = 0;
+
+        const userProvidedPage = options?.pagination?.page;
+
+        const offset =
+            Number.isInteger(userProvidedPage) && userProvidedPage >= 0
+                ? (userProvidedPage - 1) * size
+                : DEFAULT_OFFSET;
+
         const limitBlock = `
             limit ${offset}, ${size}
         `;
@@ -162,10 +162,10 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         // Should we ensure that the query returns the `next` page number \ offset?
         const aqlQueryString = `
             for ${docRef} in @@collectionName
+            ${sortBlock}
             ${letStatements}
             ${filterBlock}
             ${limitBlock}
-            ${sortBlock}
             return ${docRef}
         `;
 

@@ -17,23 +17,30 @@ import { selectAuthToken } from '../../../utils/select-token';
 import { getApiResourcesBaseRoute } from '../../shared';
 import { TERMS } from '../constants';
 
-interface IUserDefinedFilter<T> {
+interface ISimpleCondition<_T> {
     type: string;
-    conditions: {
-        type: string;
 
-        field: keyof T;
+    /**
+     * Type safety is difficult here. It's not just `keyof T` that are supported
+     * but also things like `contributions[*].statement`.
+     */
+    field: string;
 
-        operator: string;
+    operator: string;
 
-        params: unknown[];
-    }[];
+    params: unknown[];
 }
+interface IComplexUserDefinedFilter<T> {
+    type: string;
+    conditions: ISimpleCondition<T>[];
+}
+
+export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
 
 /**
  * TODO Can we use an interface from `@api-interfaces`?
  */
-interface IUserQueryOptions<T> {
+export interface IUserQueryOptions<T> {
     filter?: IUserDefinedFilter<T>;
     pagination: {
         size: number;

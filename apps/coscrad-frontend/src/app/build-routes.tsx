@@ -1,6 +1,6 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { TermIndexContainer } from '../../term-index.container';
+import { TermIndexPage } from '../../term-index.page';
 import { About } from '../components/about/about';
 import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
@@ -178,7 +178,7 @@ export const buildRoutes = (contentConfig: ConfigurableContent): CoscradRoute[] 
                     path,
                     label: labelOverrides?.pluralLabel || 'Terms',
                     // TODO move this file
-                    element: <TermIndexContainer />,
+                    element: <TermIndexPage />,
                 };
             },
         ],

@@ -4,8 +4,16 @@ import {
     IHttpErrorInfo,
     IIndexQueryResult,
     ITermViewModel,
+    IVocabularyListRecordForTerm,
 } from '@coscrad/api-interfaces';
 import { ActionReducerMapBuilder, AsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { doesSomeMultilingualTextItemInclude } from '../../../../components/resources/utils/query-matchers';
+import { ALL_PROPERTIES_SEARCH_KEY } from '../../../../utils/generic-components/presenters/tables';
+import {
+    doesTextIncludeCaseInsensitive,
+    filterTableData,
+    Matchers,
+} from '../../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
@@ -124,10 +132,71 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
 
 const initialState: TermSliceState = buildInitialLoadableState<TermIndexState>();
 
+const matchers: Matchers<ITermViewModel> = {
+    name: doesSomeMultilingualTextItemInclude,
+    vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
+        vocabularyLists.some(({ name }) =>
+            name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
+        ),
+    tokens: (tokens, searchTerm) =>
+        (tokens || []).some(({ characters }) =>
+            characters.some((c) => {
+                const doesMatch = c.text === searchTerm.toLowerCase();
+
+                if (c.isOutOfAlphabet) return false;
+
+                return doesMatch;
+            })
+        ),
+};
+
 export const termSlice = createSlice({
     name: TERMS,
     initialState,
-    reducers: {},
+    reducers: {
+        filter: (state, action) => {
+            const { scope, query: searchValue } = action.payload;
+
+            const propertiesToSearch =
+                scope === ALL_PROPERTIES_SEARCH_KEY
+                    ? ([
+                          'name',
+                          'contributions',
+                          'vocabularyLists',
+                          'tokens',
+                          /**
+                           * For some reason, `as const` leads to an incompatibility
+                           * due to an incompatible `readonly` descriptor.
+                           */
+                      ] as (keyof ITermViewModel)[])
+                    : [scope];
+
+            const filterResult =
+                searchValue === ''
+                    ? state.data.entities
+                    : filterTableData(
+                          /**
+                           * TODO Make it so that the filtering logic ignores `NOT_FOUND` instead
+                           */
+                          Object.values(state.data.entities).filter(
+                              (val) => val !== NOT_FOUND
+                          ) as ITermViewModel[],
+                          propertiesToSearch,
+                          searchValue,
+                          matchers
+                      );
+
+            console.log({
+                searchValue,
+                filterResult,
+            });
+
+            // @ts-expect-error Fix this issue with not found
+            state.data.selected = filterResult;
+
+            return state;
+        },
+    },
     extraReducers: (builder) => {
         buildReducersForFetchTermsThunk(builder, fetchTerms);
 
@@ -136,3 +205,5 @@ export const termSlice = createSlice({
 });
 
 export const termReducer = termSlice.reducer;
+
+export const { filter: filterTerms } = termSlice.actions;
