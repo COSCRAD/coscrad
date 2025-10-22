@@ -40,6 +40,7 @@ import {
     MemoryRoundIsNotReadyForPublicationError,
     MissingCardbackErrorForMemoryMatchRound,
 } from '../errors';
+import { FailedToRemoveCardMemoryMatchRoundError } from '../errors/failed-to-remove-card-memory-match-round.errer';
 import { MemoryMatchRoundCreationDto } from './dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from './memory-match-card.entity';
 
@@ -301,8 +302,12 @@ export class MemoryMatchRound {
         return this;
     }
 
-    remove(_sequenceNumber: number): ResultOrError<MemoryMatchRound> {
-        throw new Error('not implemented');
+    remove(sequenceNumber: number): ResultOrError<MemoryMatchRound> {
+        if (!this.remove) {
+            return new FailedToRemoveCardMemoryMatchRoundError(this.id);
+        }
+
+        return this;
     }
 
     get(sequenceNumber: Number): Maybe<MemoryMatchCard> {

@@ -451,13 +451,27 @@ describe(`MemoryMatchRound`, () => {
 
     describe(`remove`, () => {
         describe(`when the update is valid`, () => {
-            it.todo(`should remove the round`);
+            it(`should remove the card`, async () => {
+                const testRound = buildTestInstance(MemoryMatchRound, {
+                    id: testRoundId,
+                });
+
+                const sequenceNumber = testRound.addCard() as number;
+
+                const updateResult = testRound.remove(sequenceNumber);
+
+                expect(updateResult).toBeInstanceOf(MemoryMatchRound);
+            });
         });
 
         describe(`when the update is invalid`, () => {
-            describe(`when the round is already removed`, () => {
+            describe(`when there is no card with the given sequence number`, () => {
                 it.todo(`should return the expected error`);
             });
+        });
+
+        describe(`when the round is already published`, () => {
+            it.todo(`should fail with the expected error`);
         });
     });
 });
