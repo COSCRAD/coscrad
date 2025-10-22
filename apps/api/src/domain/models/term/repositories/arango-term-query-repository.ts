@@ -329,7 +329,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         if (isInternalError(result)) {
             throw new InternalError(
                 `Encountered an unexpected database error when fetching all terms`,
-                []
+                [result]
             );
         }
 

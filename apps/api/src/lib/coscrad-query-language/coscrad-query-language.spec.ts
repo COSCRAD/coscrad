@@ -845,6 +845,35 @@ describe(`Coscrad Query Language`, () => {
                         ],
                     });
 
+                    const widgetWithLetterOutOfAlphabet = dummyWidget.clone({
+                        id: '104',
+                        tokens: [
+                            {
+                                text: `${targetLetter}`,
+                                characters: [
+                                    {
+                                        text: targetLetter,
+                                        isPunctuationOrWhiteSpace: false,
+                                        /**
+                                         * Technically, this sample data is inconsistent.
+                                         * There's no way this letter would be
+                                         * out-of-alphabet in one token but not
+                                         * in another. However, this is the easiest
+                                         * way to fit multiple possibilities into
+                                         * a single test case (for readability).
+                                         */
+                                        isOutOfAlphabet: true,
+                                        isUpperCase: false,
+                                    },
+                                ],
+                                languageCode: LanguageCode.Chilcotin,
+                                isSpace: false,
+                                isPunct: false,
+                                isStop: false,
+                            },
+                        ],
+                    });
+
                     const hasLetterTs: CoscradSimpleCondition = {
                         type: CoscradConditionBlockType.SIMPLE,
                         operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
@@ -858,8 +887,10 @@ describe(`Coscrad Query Language`, () => {
                             widgetWithLetter,
                             // -
                             widgetWithoutLetter,
-                            // +
+                            // -
                             widgetWithLetterInWrongLanguage,
+                            // -
+                            widgetWithLetterOutOfAlphabet,
                         ]);
                     });
 
@@ -1066,6 +1097,154 @@ describe(`Coscrad Query Language`, () => {
                             });
 
                             expect(result).toHaveLength(2);
+                        });
+                    });
+                });
+            });
+
+            describe(`TEXT_EQUALS`, () => {
+                describe(`when the query is well formed`, () => {
+                    const textToMatch = 'ABCD';
+
+                    describe(`when the property is not an array or nested`, () => {
+                        const widgetWhoseCommentMatches = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            comment: textToMatch,
+                        });
+
+                        const widgetWhoseCommentContainsTextAndMore = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            comment: `${textToMatch}EFG`,
+                        });
+
+                        // TODO add test case for optional properties
+                        // const widgetWithNoComment
+
+                        const widgetWithNoMatchingCharactersInComment = dummyWidget.clone({
+                            id: buildDummyUuid(3),
+                            comment: 'ZQC foobert',
+                        });
+
+                        const commentTextEquals: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.TEXT_EQUALS,
+                            field: 'comment',
+                            params: [textToMatch],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWhoseCommentMatches,
+                                // -
+                                widgetWhoseCommentContainsTextAndMore,
+                                // -
+                                widgetWithNoMatchingCharactersInComment,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: commentTextEquals,
+                            });
+
+                            expect(result).toHaveLength(1);
+                        });
+                    });
+
+                    describe(`when the property is an array`, () => {
+                        const widgetWithOneMatch = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            tags: [textToMatch],
+                        });
+
+                        const widgetWithMultipleMatches = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            tags: [textToMatch, 'other tag', textToMatch],
+                        });
+
+                        const widgetWithNoTags = dummyWidget.clone({
+                            id: buildDummyUuid(3),
+                            tags: [],
+                        });
+
+                        const widgetWithNonMatchingTags = dummyWidget.clone({
+                            id: buildDummyUuid(4),
+                            tags: ['z', 'q2', 'rooster'],
+                        });
+
+                        const someTagEquals: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.TEXT_EQUALS,
+                            field: 'tags[*]',
+                            params: [textToMatch],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetWithOneMatch,
+                                // +
+                                widgetWithMultipleMatches,
+                                // -
+                                widgetWithNoTags,
+                                // -
+                                widgetWithNonMatchingTags,
+                            ]);
+                        });
+
+                        it(`should return the expected results`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: someTagEquals,
+                            });
+                            expect(result).toHaveLength(2);
+                        });
+                    });
+
+                    describe(`when the property is nested`, () => {
+                        const widgetThatMatchesNestedFilter = dummyWidget.clone({
+                            id: buildDummyUuid(1),
+                            description: buildMultilingualTextFromBilingualText(
+                                {
+                                    text: textToMatch,
+                                    languageCode: LanguageCode.English,
+                                },
+                                {
+                                    text: 'this one doesn not match, though',
+                                    languageCode: LanguageCode.Haida,
+                                }
+                            ),
+                        });
+
+                        const widgetThatDoesNotMatchNestedFilter = dummyWidget.clone({
+                            id: buildDummyUuid(2),
+                            description: buildMultilingualTextWithSingleItem(
+                                'no match for this description at all'
+                            ),
+                        });
+
+                        const deepTextEquals: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.TEXT_EQUALS,
+                            field: 'description.items[*].text',
+                            params: [textToMatch],
+                        };
+
+                        beforeEach(async () => {
+                            await widgetRepository.createMany([
+                                // +
+                                widgetThatMatchesNestedFilter,
+                                // -
+                                widgetThatDoesNotMatchNestedFilter,
+                            ]);
+                        });
+
+                        it(`should return the expected result`, async () => {
+                            const result = await widgetRepository.fetchForUser({
+                                filter: deepTextEquals,
+                            });
+
+                            expect(result).toHaveLength(1);
                         });
                     });
                 });

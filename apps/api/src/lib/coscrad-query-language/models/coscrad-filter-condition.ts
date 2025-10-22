@@ -12,6 +12,8 @@ export enum CoscradBooleanOperator {
     HAS_PROPERTY = 'HAS_PROPERTY',
     HAS_LENGTH_GREATER_THAN = 'HAS_LENGTH_GREATER_THAN',
     TEXT_INCLUDES = 'TEXT_INCLUDES',
+    TEXT_EQUALS = 'TEXT_EQUALS',
+    TEXT_HAS_LETTER = 'TEXT_HAS_LETTER',
 }
 
 interface CoscradCoditionBlock {

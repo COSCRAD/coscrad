@@ -1,12 +1,14 @@
 import { ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Box, Stack, Typography } from '@mui/material';
+import { useContext } from 'react';
 import { useAppDispatch } from './src/app/hooks';
 import {
     ALL_PROPERTIES_SEARCH_KEY,
     IndexSearchScope,
 } from './src/components/resources/terms/term-index-table';
 import { TermSearchBar } from './src/components/resources/terms/term-search-bar';
+import { ConfigurableContentContext } from './src/configurable-front-matter/configurable-content-provider';
 import {
     fetchTerms,
     filterTerms,
@@ -46,14 +48,16 @@ const compileMultilingualTextContainsQuery = (
 
 const compileCoscradQueryFromUserSearchText = (
     scope: IndexSearchScope<ITermViewModel>,
-    queryString: string
+    queryString: string,
+    defaultLanguageCode: LanguageCode = LanguageCode.English
 ): IUserQueryOptions<ITermViewModel>['filter'] => {
     if (scope === ALL_PROPERTIES_SEARCH_KEY) {
         return {
             type: 'OR',
             // @ts-expect-error TODO let's sort out the full types in api-interfaces
             conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
-                (field) => compileCoscradQueryFromUserSearchText(field, queryString)
+                (field) =>
+                    compileCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
             ),
         };
     }
@@ -88,11 +92,15 @@ const compileCoscradQueryFromUserSearchText = (
     if (scope === 'tokens') {
         return {
             type: 'SIMPLE',
-            field: `tokens[*].characters[*].text`,
+            field: `tokens`,
             // TODO support this
-            operator: 'TEXT_EQUALS',
-            // TODO Include language code option
-            params: [queryString],
+            operator: 'MULTILINGUAL_TEXT_INCLUDES_LETTER',
+            /**
+             * Allow the user to specify the language code once we tokenize English as well.
+             * Right now, we assume that users will only search the Indigenous language
+             * that is default for the tenant.
+             */
+            params: [queryString, defaultLanguageCode],
         };
     }
 
@@ -108,6 +116,8 @@ const compileCoscradQueryFromUserSearchText = (
 
 export const TermIndexPage = (): JSX.Element => {
     const dispatch = useAppDispatch();
+
+    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
     const searchInDb = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
         if (!isNonEmptyString(queryFromForm)) {
@@ -127,7 +137,11 @@ export const TermIndexPage = (): JSX.Element => {
          * in which case we could move that logic to a lib.
          */
 
-        const filter = compileCoscradQueryFromUserSearchText(scope, queryFromForm);
+        const filter = compileCoscradQueryFromUserSearchText(
+            scope,
+            queryFromForm,
+            defaultLanguageCode
+        );
 
         dispatch(
             fetchTerms({

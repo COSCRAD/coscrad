@@ -40,12 +40,6 @@ const buildFieldRef = (
         .map((_fieldName, fieldIndex) => `[@args[${startingArgIndex + fieldIndex}]]`)
         .join('')}`;
 
-    if (nestedFieldNames.some((f, i) => i !== 0 && f.endsWith('[*]'))) {
-        throw new InternalError(
-            `Declaring filters for nested arrayed-value fields is not yet supported.`
-        );
-    }
-
     const isArray = nestedFieldNames[0].endsWith('[*]');
 
     return {
@@ -55,11 +49,21 @@ const buildFieldRef = (
     };
 };
 
+const forbidArrayValuedFieldQuery = (field: string, operator: CoscradBooleanOperator) => {
+    if (field.includes('[*]')) {
+        throw new InternalError(
+            `You cannot use the query operator: ${operator} to filter arrays. Received field path: ${field}`
+        );
+    }
+};
+
 /**
  * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] Support nested fields for all query operators.
  */
 const forbidNestedFieldQuery = (field: string, operator: CoscradBooleanOperator) => {
-    if (field.includes('.') || field.includes('[*]')) {
+    forbidArrayValuedFieldQuery(field, operator);
+
+    if (field.includes('.')) {
         throw new InternalError(
             `You cannot use the query operator: ${operator} to filter by nested fields. Recieved field path: ${field}.`
         );
@@ -335,26 +339,40 @@ const compileSimpleFilterCondition = (
 
         const fieldRef = `${docRef}[@args[${startingArgIndex}]]`;
 
+        // TODO expose this option
+        const IGNORE_CASE = true;
+
+        const matchVarName = `matches_${++varCount}`;
+
         const letStatements = `
-            let matches = (
+            let ${matchVarName} = (
             for t in ${fieldRef} || []
             filter t.languageCode == @args[${startingArgIndex + 2}]
             for c in t.characters || []
-            filter c.text == @args[${startingArgIndex + 1}]
+            let textForComparison = ${
+                IGNORE_CASE
+                    ? `lower(@args[${startingArgIndex + 1}])`
+                    : `@args[${startingArgIndex + 1}]`
+            }
+            filter c.text == textForComparison && !c.isOutOfAlphabet
             return c
             )
 
         `;
 
         const statement = `
-            length(matches) > 0
+            length(${matchVarName}) > 0
         `;
 
         return {
             letStatement: letStatements,
             filterStatement: statement,
             bindVars: {
-                args: [field, letterToFind, languageCode],
+                args: [
+                    field,
+                    IGNORE_CASE ? letterToFind.toLowerCase() : letterToFind,
+                    languageCode,
+                ],
             },
         };
     }
@@ -376,12 +394,14 @@ const compileSimpleFilterCondition = (
             isArray,
         } = buildFieldRef(docRef, field, startingArgIndex);
 
-        const matchVarName = `matches_${varCount}`;
+        const matchVarName = `matches_${++varCount}`;
 
         if (isArray) {
             const letStatement = `
             let ${matchVarName} = (
-                for item in ${docRef}['${nestedFieldNames}']
+                for item in ${docRef}['${nestedFieldNames[0]}'][*].${nestedFieldNames
+                .slice(1)
+                .join('.')}
                 filter contains(item,@args[${startingArgIndex + 1}])
                 limit 1
                 return "match"
@@ -415,6 +435,71 @@ const compileSimpleFilterCondition = (
             filterStatement,
             bindVars: {
                 args: [field, searchText],
+            },
+        };
+    }
+
+    if (operator === CoscradBooleanOperator.TEXT_EQUALS) {
+        // TODO check parameter number \ length
+
+        const textToMatch = params[0];
+
+        // TODO check that `textToMatch` is a string
+
+        const {
+            expression: fieldRef,
+            isArray,
+            nestedFieldNames,
+        } = buildFieldRef(docRef, field, startingArgIndex);
+
+        if (isArray) {
+            const filterStatement = `
+            @args[${startingArgIndex + 1}] in ${fieldRef}[*]
+            `;
+
+            return {
+                filterStatement,
+                bindVars: {
+                    args: [nestedFieldNames[0], textToMatch],
+                },
+            };
+        }
+
+        if (nestedFieldNames.length > 1) {
+            const numberOfArrayRefs = nestedFieldNames.filter((n) => n.includes('[*]')).length;
+
+            if (numberOfArrayRefs > 1) {
+                throw new InternalError(
+                    `Deeply nested arrays are not supported for operator: ${operator}. Received: ${field}`
+                );
+            }
+
+            /**
+             * TODO We need to either
+             * 1. bind in the field
+             * 2. validate the field against the schema (use a known props list approach)
+             * to ensure we avoid injection attacks
+             */
+            const filterStatement = `
+                   @args[${startingArgIndex + 1}] in ${docRef}.${field}
+                    `;
+
+            return {
+                filterStatement,
+                bindVars: {
+                    args: [field, textToMatch],
+                },
+            };
+        }
+
+        const filterStatement = `
+            ${fieldRef} == @args[${startingArgIndex + 1}]
+        `;
+
+        return {
+            filterStatement,
+            bindVars: {
+                args: [field, textToMatch],
             },
         };
     }
