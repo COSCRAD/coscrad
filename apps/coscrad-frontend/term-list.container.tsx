@@ -1,4 +1,4 @@
-import { AggregateType, ITermViewModel } from '@coscrad/api-interfaces';
+import { AggregateType, CategorizableType, ITermViewModel } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
@@ -19,7 +19,12 @@ import { HeadingLabel } from './src/utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from './src/utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 
 export const TermListContainer = (): JSX.Element => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultLanguageCode, indexToDetailFlows } = useContext(ConfigurableContentContext);
+
+    const headingForList =
+        indexToDetailFlows.find(
+            ({ categorizableType }) => categorizableType === CategorizableType.term
+        )?.labelOverrides?.pluralLabel || 'Terms';
 
     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-332] we need to deal with pagination here
     const loadableTerms = useLoadableTerms();
@@ -82,7 +87,7 @@ export const TermListContainer = (): JSX.Element => {
             headingLabels={headingLabels}
             tableData={terms as ITermViewModel[]}
             cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Terms'}
+            heading={headingForList}
         />
     );
 };

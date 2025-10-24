@@ -1,4 +1,9 @@
-import { AggregateType, ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CategorizableType,
+    ITermViewModel,
+    LanguageCode,
+} from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
@@ -7,13 +12,10 @@ import { useContext } from 'react';
 import { useAppDispatch } from '../../../app/hooks';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
-import { filterTerms } from '../../../store/slices/resources';
+import { filterTerms, IndexSearchScope } from '../../../store/slices/resources';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { CommaSeparatedList } from '../../../utils/generic-components';
-import {
-    HeadingLabel,
-    IndexSearchScope,
-} from '../../../utils/generic-components/presenters/tables';
+import { HeadingLabel } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
@@ -23,7 +25,12 @@ import { TermIndexTable } from './term-index-table';
 import { TermSearchBar } from './term-search-bar';
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultLanguageCode, indexToDetailFlows } = useContext(ConfigurableContentContext);
+
+    const label =
+        indexToDetailFlows.find(
+            ({ categorizableType }) => categorizableType === CategorizableType.term
+        )?.labelOverrides?.pluralLabel || 'Terms';
 
     const dispatch = useAppDispatch();
 
@@ -98,40 +105,16 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
             };
         }
 
-        // const filter = {
-        //     type: 'OR',
-        //     conditions: (scope === ALL_PROPERTIES_SEARCH_KEY
-        //         ? ['name', 'contributions', 'vocabularyLists', 'tokens']
-        //         : [scope]
-        //     ).map((field) => ({
-        //         ...condition,
-        //         field,
-        //     })),
-        // };
-
         // TODO type safety
         const action = filterTerms({ scope, query: queryFromForm });
 
-        console.log({
-            dispatching: action,
-        });
-
-        dispatch(
-            // fetchTerms({
-            //     filter: filter,
-            //     pagination: {
-            //         size: 100,
-            //         page: 1,
-            //     },
-            // })
-            action
-        );
+        dispatch(action);
     };
 
     return (
         <Stack>
             {/* TODO Pull this from the resource info \ config? */}
-            <Typography variant="h2">{'Terms'}</Typography>
+            <Typography variant="h2">{label}</Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <TermSearchBar
                     onValueChange={(searchScope, newValue: string) => {

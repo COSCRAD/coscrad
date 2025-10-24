@@ -31,7 +31,7 @@ export const createFetchThunk = <TPayload>(
 
         if (response.status !== HttpStatusCode.ok)
             /**
-             * TODO [https://www.pivotaltracker.com/story/show/183619131]
+             * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-338]
              *
              * We need more specific error handling that considers the format of
              * and difference between a returned error, a system error (backend runtime exception),

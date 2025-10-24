@@ -85,7 +85,7 @@ export const fetchTerms = createAsyncThunk(
 
         if (response.status !== HttpStatusCode.createdResource)
             /**
-             * TODO [https://www.pivotaltracker.com/story/show/183619131]
+             * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-338]
              *
              * We need more specific error handling that considers the format of
              * and difference between a returned error, a system error (backend runtime exception),
@@ -108,7 +108,7 @@ export const fetchTerms = createAsyncThunk(
 
         const preFilter = termIndexToDetailFlowConfig?.indexFilter || identityFilter;
 
-        // TODO do this on the back-end
+        // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-339] do this on the back-end
         const newEntitiesWithAudioUrl = responseJson.entities.flatMap((entity) => {
             const doesEntityPassFilter = preFilter(entity);
 

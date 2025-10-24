@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useContext, useState } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
-import { ALL_PROPERTIES_SEARCH_KEY } from './term-index-table';
+import { ALL_PROPERTIES_SEARCH_KEY } from '../../../store/slices/resources';
 
 interface SearchBarProps {
     onValueChange: (
@@ -62,6 +62,12 @@ const defaultCharacterReplacements = {
 
 const labelForSearchAllPropertiesOption = 'ALL';
 
+/**
+ * Note that this is a duplication of the generic `SearchBar`. We have encapsulated
+ * the virtual keyboard in this version. Eventually, we want to generalize
+ * the `TermSearchBar` for use with other resource index views as we move them
+ * all to server side filtering \ pagination.
+ */
 export const TermSearchBar = ({ onValueChange, scopes }: SearchBarProps) => {
     const [value, setValue] = useState('');
 

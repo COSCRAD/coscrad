@@ -58,6 +58,10 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
             break;
 
         case AggregateType.term:
+            /**
+             * This is a bit awkward. But we are moving away from the SSE
+             * approach in the near future in favor of web sockets.
+             */
             dispatch(fetchTerms(undefined));
             break;
 

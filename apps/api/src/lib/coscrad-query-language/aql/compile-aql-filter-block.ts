@@ -31,7 +31,7 @@ const buildFieldRef = (
     startingArgIndex = 0
 ): {
     expression: string;
-    nestedFieldNames: string[];
+    individualFieldNames: string[];
     isArray: boolean;
 } => {
     const nestedFieldNames = fieldPath.split('.');
@@ -44,7 +44,7 @@ const buildFieldRef = (
 
     return {
         expression,
-        nestedFieldNames: nestedFieldNames.map((f) => f.replace('[*]', '')), // the `[*]` must be added externally below
+        individualFieldNames: nestedFieldNames.map((f) => f.replace('[*]', '')), // the `[*]` must be added externally below
         isArray,
     };
 };
@@ -65,7 +65,7 @@ const forbidNestedFieldQuery = (field: string, operator: CoscradBooleanOperator)
 
     if (field.includes('.')) {
         throw new InternalError(
-            `You cannot use the query operator: ${operator} to filter by nested fields. Recieved field path: ${field}.`
+            `You cannot use the query operator: ${operator} to filter by nested fields. Received field path: ${field}.`
         );
     }
 };
@@ -96,13 +96,13 @@ const compileSimpleFilterCondition = (
         // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-330] opt-in
         forbidNestedFieldQuery(field, operator);
 
-        const { expression: fieldRef, nestedFieldNames } = buildFieldRef(
+        const { expression: fieldRef, individualFieldNames } = buildFieldRef(
             docRef,
             field,
             startingArgIndex
         );
 
-        startingArgIndex += nestedFieldNames.length;
+        startingArgIndex += individualFieldNames.length;
 
         // field names are provided by the user and must be part of the bindVars
         const statement = `${fieldRef} > @args[${startingArgIndex}]`;
@@ -110,7 +110,7 @@ const compileSimpleFilterCondition = (
         return {
             filterStatement: statement,
             bindVars: {
-                args: [...nestedFieldNames, minExclusive],
+                args: [...individualFieldNames, minExclusive],
             },
         };
     }
@@ -134,7 +134,7 @@ const compileSimpleFilterCondition = (
 
         const {
             expression: fieldRef,
-            nestedFieldNames,
+            individualFieldNames,
             isArray,
         } = buildFieldRef(docRef, field, startingArgIndex);
 
@@ -147,13 +147,13 @@ const compileSimpleFilterCondition = (
              */
             if (searchText === '') {
                 if (isArray) {
-                    const filterStatement = `contains(${fieldRef}.items[*].languaugeCode,@args[${
-                        startingArgIndex + nestedFieldNames.length
+                    const filterStatement = `contains(${fieldRef}[*].items[*].languageCode,@args[${
+                        startingArgIndex + individualFieldNames.length
                     }])`;
 
                     return {
                         filterStatement,
-                        bindVars: { args: [...nestedFieldNames, languageCode] },
+                        bindVars: { args: [...individualFieldNames, languageCode] },
                     };
                 }
 
@@ -163,7 +163,7 @@ const compileSimpleFilterCondition = (
                 let ${letVarName} = (
                     for i in ${fieldRef}.items
                     filter i.languageCode == @args[${
-                        startingArgIndex + nestedFieldNames.length + 1
+                        startingArgIndex + individualFieldNames.length + 1
                     }]
                     limit 1
                     return "match"
@@ -175,7 +175,7 @@ const compileSimpleFilterCondition = (
                 return {
                     letStatement,
                     filterStatement: statement,
-                    bindVars: { args: [...nestedFieldNames, searchText, languageCode] },
+                    bindVars: { args: [...individualFieldNames, searchText, languageCode] },
                 };
             }
 
@@ -190,8 +190,12 @@ const compileSimpleFilterCondition = (
                 const letStatement = `
                 let ${letVarName} = (
                     for i in ${fieldRef}.items
-                    filter contains(i.text,@args[${startingArgIndex + nestedFieldNames.length}]) 
-                    and i.languageCode == @args[${startingArgIndex + nestedFieldNames.length + 1}]
+                    filter contains(i.text,@args[${
+                        startingArgIndex + individualFieldNames.length
+                    }]) 
+                    and i.languageCode == @args[${
+                        startingArgIndex + individualFieldNames.length + 1
+                    }]
                     return "match"
                 )
                 `;
@@ -201,7 +205,7 @@ const compileSimpleFilterCondition = (
                 return {
                     letStatement,
                     filterStatement: statement,
-                    bindVars: { args: [...nestedFieldNames, searchText, languageCode] },
+                    bindVars: { args: [...individualFieldNames, searchText, languageCode] },
                 };
             }
 
@@ -221,13 +225,13 @@ const compileSimpleFilterCondition = (
 
         if (!isArray) {
             const statement = `contains(${fieldRef},@args[${
-                startingArgIndex + nestedFieldNames.length
+                startingArgIndex + individualFieldNames.length
             }])`;
 
             return {
                 filterStatement: statement,
                 bindVars: {
-                    args: [...nestedFieldNames, searchText],
+                    args: [...individualFieldNames, searchText],
                 },
             };
         }
@@ -240,7 +244,7 @@ const compileSimpleFilterCondition = (
             LET matches = (
                 for foo in ${docRef}[@args[${startingArgIndex}]]
                 filter contains(foo[@args[${startingArgIndex + 1}]],@args[${
-            startingArgIndex + nestedFieldNames.length
+            startingArgIndex + individualFieldNames.length
         }])
                 limit 1
                 return "match"
@@ -255,7 +259,7 @@ const compileSimpleFilterCondition = (
             filterStatement: statement,
             letStatement: letStatements,
             bindVars: {
-                args: [...nestedFieldNames, searchText],
+                args: [...individualFieldNames, searchText],
             },
         };
     }
@@ -379,18 +383,18 @@ const compileSimpleFilterCondition = (
 
     if (operator === CoscradBooleanOperator.TEXT_INCLUDES) {
         if (params.length !== 1) {
-            throw new Error('TODO return wrong param number error');
+            return new InvalidParameterListSizeForQueryOperator(1, params, operator);
         }
 
         const searchText = params[0];
 
         if (!isString(searchText)) {
-            throw new Error(`TODO return wrong param type error`);
+            return new InvalidParameterTypeForQueryOperator(0, searchText, 'text', operator);
         }
 
         const {
             expression: fieldRef,
-            nestedFieldNames,
+            individualFieldNames,
             isArray,
         } = buildFieldRef(docRef, field, startingArgIndex);
 
@@ -399,7 +403,7 @@ const compileSimpleFilterCondition = (
         if (isArray) {
             const letStatement = `
             let ${matchVarName} = (
-                for item in ${docRef}['${nestedFieldNames[0]}'][*].${nestedFieldNames
+                for item in ${docRef}['${individualFieldNames[0]}'][*].${individualFieldNames
                 .slice(1)
                 .join('.')}
                 filter contains(item,@args[${startingArgIndex + 1}])
@@ -408,7 +412,6 @@ const compileSimpleFilterCondition = (
             )
             `;
 
-            // AQL Takes care of comparing one string value at a time for us
             const filterStatement = `
             length(${matchVarName}) > 0
             `;
@@ -422,8 +425,7 @@ const compileSimpleFilterCondition = (
             };
         }
 
-        // TODO why is `id` one of the `nestedFieldNames`? Let's rewrite this to remove the current `field` name.
-        if (nestedFieldNames.length > 1) {
+        if (individualFieldNames.length > 1) {
             throw Error(`we need to support nested text searches`);
         }
 
@@ -440,16 +442,20 @@ const compileSimpleFilterCondition = (
     }
 
     if (operator === CoscradBooleanOperator.TEXT_EQUALS) {
-        // TODO check parameter number \ length
+        if (params.length !== 1) {
+            return new InvalidParameterListSizeForQueryOperator(1, params, operator);
+        }
 
         const textToMatch = params[0];
 
-        // TODO check that `textToMatch` is a string
+        if (!isString(textToMatch)) {
+            return new InvalidParameterTypeForQueryOperator(0, textToMatch, 'text', operator);
+        }
 
         const {
             expression: fieldRef,
             isArray,
-            nestedFieldNames,
+            individualFieldNames,
         } = buildFieldRef(docRef, field, startingArgIndex);
 
         if (isArray) {
@@ -460,13 +466,13 @@ const compileSimpleFilterCondition = (
             return {
                 filterStatement,
                 bindVars: {
-                    args: [nestedFieldNames[0], textToMatch],
+                    args: [individualFieldNames[0], textToMatch],
                 },
             };
         }
 
-        if (nestedFieldNames.length > 1) {
-            const numberOfArrayRefs = nestedFieldNames.filter((n) => n.includes('[*]')).length;
+        if (individualFieldNames.length > 1) {
+            const numberOfArrayRefs = individualFieldNames.filter((n) => n.includes('[*]')).length;
 
             if (numberOfArrayRefs > 1) {
                 throw new InternalError(

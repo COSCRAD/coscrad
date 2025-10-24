@@ -55,10 +55,6 @@ const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
  */
 export type ValueUnion<T> = T[keyof T];
 
-export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
-
-export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
-
 /**
  * We want to constrain the keys of renderers to a subset of the heading
  * labels' property keys. - This could lead to clients specifying unused renderers.

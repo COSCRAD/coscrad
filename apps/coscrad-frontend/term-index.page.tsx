@@ -1,17 +1,16 @@
 import { ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { useContext } from 'react';
 import { useAppDispatch } from './src/app/hooks';
-import {
-    ALL_PROPERTIES_SEARCH_KEY,
-    IndexSearchScope,
-} from './src/components/resources/terms/term-index-table';
+
 import { TermSearchBar } from './src/components/resources/terms/term-search-bar';
 import { ConfigurableContentContext } from './src/configurable-front-matter/configurable-content-provider';
 import {
+    ALL_PROPERTIES_SEARCH_KEY,
     fetchTerms,
     filterTerms,
+    IndexSearchScope,
     IUserDefinedFilter,
     IUserQueryOptions,
 } from './src/store/slices/resources';
@@ -46,7 +45,7 @@ const compileMultilingualTextContainsQuery = (
     };
 };
 
-const compileCoscradQueryFromUserSearchText = (
+const interpretCoscradQueryFromUserSearchText = (
     scope: IndexSearchScope<ITermViewModel>,
     queryString: string,
     defaultLanguageCode: LanguageCode = LanguageCode.English
@@ -57,7 +56,7 @@ const compileCoscradQueryFromUserSearchText = (
             // @ts-expect-error TODO let's sort out the full types in api-interfaces
             conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
                 (field) =>
-                    compileCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
+                    interpretCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
             ),
         };
     }
@@ -84,7 +83,7 @@ const compileCoscradQueryFromUserSearchText = (
             type: 'SIMPLE',
             field: `vocabularyLists[*].name`,
             operator: 'MULTILINGUAL_TEXT_INCLUDES',
-            // TODO Include language code option
+            // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-340] Include language code option
             params: [queryString],
         };
     }
@@ -137,7 +136,7 @@ export const TermIndexPage = (): JSX.Element => {
          * in which case we could move that logic to a lib.
          */
 
-        const filter = compileCoscradQueryFromUserSearchText(
+        const filter = interpretCoscradQueryFromUserSearchText(
             scope,
             queryFromForm,
             defaultLanguageCode
@@ -164,8 +163,7 @@ export const TermIndexPage = (): JSX.Element => {
     return (
         <div>
             <Stack>
-                {/* TODO Pull this from the resource info \ config? */}
-                <Typography variant="h2">{'Terms'}</Typography>
+                {/* <Typography variant="h2">{label}</Typography> */}
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <TermSearchBar
                         onValueChange={(searchScope, newValue: string) => {

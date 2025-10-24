@@ -8,7 +8,6 @@ import {
 } from '@coscrad/api-interfaces';
 import { ActionReducerMapBuilder, AsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { doesSomeMultilingualTextItemInclude } from '../../../../components/resources/utils/query-matchers';
-import { ALL_PROPERTIES_SEARCH_KEY } from '../../../../utils/generic-components/presenters/tables';
 import {
     doesTextIncludeCaseInsensitive,
     filterTableData,
@@ -21,6 +20,10 @@ import { TERMS } from './constants';
 import { fetchTermById, fetchTerms } from './thunks';
 import { TermSliceState } from './types';
 import { TermIndexState } from './types/term-index-state';
+
+export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+
+export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
 
 const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
     builder: ActionReducerMapBuilder<ILoadable<TermIndexState>>,
@@ -173,25 +176,14 @@ export const termSlice = createSlice({
 
             const filterResult =
                 searchValue === ''
-                    ? state.data.entities
+                    ? Object.values(state.data.entities).filter((v) => v !== NOT_FOUND)
                     : filterTableData(
-                          /**
-                           * TODO Make it so that the filtering logic ignores `NOT_FOUND` instead
-                           */
-                          Object.values(state.data.entities).filter(
-                              (val) => val !== NOT_FOUND
-                          ) as ITermViewModel[],
+                          Object.values(state.data.entities),
                           propertiesToSearch,
                           searchValue,
                           matchers
                       );
 
-            console.log({
-                searchValue,
-                filterResult,
-            });
-
-            // @ts-expect-error Fix this issue with not found
             state.data.selected = filterResult;
 
             return state;

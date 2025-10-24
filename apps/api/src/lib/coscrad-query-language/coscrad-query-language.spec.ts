@@ -54,6 +54,8 @@ class Widget {
 
     description: MultilingualText;
 
+    pages?: MultilingualText[];
+
     location?: Location;
 
     nickname?: string;
@@ -74,6 +76,7 @@ class Widget {
         tags,
         tokens,
         comment,
+        pages,
     }: DTO<Widget>) {
         this.id = id;
 
@@ -96,6 +99,8 @@ class Widget {
         this.comment = comment;
 
         this.tokens = tokens.map((t) => cloneToPlainObject(t));
+
+        this.pages = Array.isArray(pages) ? pages.map((p) => new MultilingualText(p)) : [];
     }
 
     clone(overrides?: DeepPartial<this>) {
@@ -440,50 +445,139 @@ describe(`Coscrad Query Language`, () => {
                         describe(`when the search text is empty`, () => {
                             const targetLanguageCode = LanguageCode.Chilcotin;
 
-                            const widgetsWithTextInTargetLanguage = ['a', 'b', 'c'].map(
-                                (text, index) =>
-                                    dummyWidget.clone({
-                                        id: buildDummyUuid(index + 1),
-                                        description: buildMultilingualTextWithSingleItem(
-                                            text,
-                                            targetLanguageCode
-                                        ),
-                                    })
-                            );
+                            describe(`when the property is not array valued`, () => {
+                                const widgetsWithTextInTargetLanguage = ['a', 'b', 'c'].map(
+                                    (text, index) =>
+                                        dummyWidget.clone({
+                                            id: buildDummyUuid(index + 1),
+                                            description: buildMultilingualTextWithSingleItem(
+                                                text,
+                                                targetLanguageCode
+                                            ),
+                                        })
+                                );
 
-                            const widgetsWithNoTextInTargetLanguage = ['d', 'e', 'f', 'g'].map(
-                                (text, index) =>
-                                    dummyWidget.clone({
-                                        id: buildDummyUuid(
-                                            index + 1 + widgetsWithTextInTargetLanguage.length
-                                        ),
-                                        description: buildMultilingualTextWithSingleItem(
-                                            text,
-                                            LanguageCode.English
-                                        ),
-                                    })
-                            );
+                                const widgetsWithNoTextInTargetLanguage = ['d', 'e', 'f', 'g'].map(
+                                    (text, index) =>
+                                        dummyWidget.clone({
+                                            id: buildDummyUuid(
+                                                index + 1 + widgetsWithTextInTargetLanguage.length
+                                            ),
+                                            description: buildMultilingualTextWithSingleItem(
+                                                text,
+                                                LanguageCode.English
+                                            ),
+                                        })
+                                );
 
-                            const doesDescriptionHaveChilcotin: CoscradSimpleCondition = {
-                                type: CoscradConditionBlockType.SIMPLE,
-                                operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
-                                field: 'description',
-                                params: ['', LanguageCode.Chilcotin],
-                            };
+                                const doesDescriptionHaveChilcotin: CoscradSimpleCondition = {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                    field: 'description',
+                                    params: ['', LanguageCode.Chilcotin],
+                                };
 
-                            beforeEach(async () => {
-                                await widgetRepository.createMany([
-                                    ...widgetsWithTextInTargetLanguage,
-                                    ...widgetsWithNoTextInTargetLanguage,
-                                ]);
-                            });
-
-                            it(`should return the expected results`, async () => {
-                                const result = await widgetRepository.fetchForUser({
-                                    filter: doesDescriptionHaveChilcotin,
+                                beforeEach(async () => {
+                                    await widgetRepository.createMany([
+                                        ...widgetsWithTextInTargetLanguage,
+                                        ...widgetsWithNoTextInTargetLanguage,
+                                    ]);
                                 });
 
-                                expect(result).toHaveLength(widgetsWithTextInTargetLanguage.length);
+                                it(`should return the expected results`, async () => {
+                                    const result = await widgetRepository.fetchForUser({
+                                        filter: doesDescriptionHaveChilcotin,
+                                    });
+
+                                    expect(result).toHaveLength(
+                                        widgetsWithTextInTargetLanguage.length
+                                    );
+                                });
+                            });
+
+                            describe(`when the property is array valued`, () => {
+                                const monolignualPageWithMatch =
+                                    buildMultilingualTextWithSingleItem(
+                                        'I match by language code',
+                                        targetLanguageCode
+                                    );
+
+                                const monolingualPageWithNoMatch =
+                                    buildMultilingualTextWithSingleItem(
+                                        'I do not match',
+                                        LanguageCode.French
+                                    );
+
+                                const bilingualPageWithNoMatch =
+                                    buildMultilingualTextFromBilingualText(
+                                        {
+                                            text: 'I do not match',
+                                            languageCode: LanguageCode.French,
+                                        },
+                                        { text: 'nor do I', languageCode: LanguageCode.English }
+                                    );
+
+                                const bilingualPageWithMatch =
+                                    buildMultilingualTextFromBilingualText(
+                                        {
+                                            text: 'I do not match',
+                                            languageCode: LanguageCode.English,
+                                        },
+                                        { text: 'but I do', languageCode: targetLanguageCode }
+                                    );
+
+                                const widgetWithOneMatchingPage = dummyWidget.clone({
+                                    id: buildDummyUuid(1),
+                                    pages: [monolignualPageWithMatch],
+                                });
+
+                                const widgetWithMultipleMatchingPages = dummyWidget.clone({
+                                    id: buildDummyUuid(2),
+                                    pages: [
+                                        monolingualPageWithNoMatch,
+                                        monolignualPageWithMatch,
+                                        bilingualPageWithNoMatch,
+                                        bilingualPageWithMatch,
+                                    ],
+                                });
+
+                                const widgetWithNoPages = dummyWidget.clone({
+                                    id: buildDummyUuid(3),
+                                    pages: [],
+                                });
+
+                                const widgetWithPagesButNoMatches = dummyWidget.clone({
+                                    id: buildDummyUuid(4),
+                                    pages: [monolingualPageWithNoMatch, bilingualPageWithNoMatch],
+                                });
+
+                                const doesAnyPageHaveLanguage: CoscradSimpleCondition = {
+                                    type: CoscradConditionBlockType.SIMPLE,
+                                    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                    params: ['', targetLanguageCode],
+                                    field: 'pages[*]',
+                                };
+
+                                beforeEach(async () => {
+                                    await widgetRepository.createMany([
+                                        // +
+                                        widgetWithOneMatchingPage,
+                                        // +
+                                        widgetWithMultipleMatchingPages,
+                                        // -
+                                        widgetWithNoPages,
+                                        // -
+                                        widgetWithPagesButNoMatches,
+                                    ]);
+                                });
+
+                                it(`should return the expected results`, async () => {
+                                    const result = await widgetRepository.fetchForUser({
+                                        filter: doesAnyPageHaveLanguage,
+                                    });
+
+                                    expect(result).toHaveLength(2);
+                                });
                             });
                         });
                     });
@@ -1004,6 +1098,10 @@ describe(`Coscrad Query Language`, () => {
             });
 
             describe(`TEXT_INCLUDES`, () => {
+                const operator = CoscradBooleanOperator.TEXT_INCLUDES;
+
+                const field = 'comment';
+
                 describe(`when the query is well formed`, () => {
                     describe(`when searching a non-array valued prop (comment)`, () => {
                         const textToFind = 'xyZ';
@@ -1020,9 +1118,9 @@ describe(`Coscrad Query Language`, () => {
 
                         const simpleTextIncludes: CoscradSimpleCondition = {
                             type: CoscradConditionBlockType.SIMPLE,
-                            operator: CoscradBooleanOperator.TEXT_INCLUDES,
+                            operator,
                             params: [textToFind],
-                            field: 'comment',
+                            field,
                         };
 
                         beforeEach(async () => {
@@ -1097,6 +1195,55 @@ describe(`Coscrad Query Language`, () => {
                             });
 
                             expect(result).toHaveLength(2);
+                        });
+                    });
+                });
+
+                describe(`when the query is invalid`, () => {
+                    const validFilter: CoscradFilterCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator,
+                        field,
+                        params: ['text to find'],
+                    };
+
+                    describe(`when 0 paramters are provided`, () => {
+                        it(`should return the expeced error`, async () => {
+                            await assertQueryError(
+                                {
+                                    ...validFilter,
+                                    params: [],
+                                },
+                                ['expected 1 parameter', `received: 0`]
+                            );
+                        });
+                    });
+
+                    describe(`when 2 paramters are provided`, () => {
+                        it(`should return the expeced error`, async () => {
+                            await assertQueryError(
+                                {
+                                    ...validFilter,
+                                    params: ['text to find', 909],
+                                },
+                                [operator, 'expected 1 parameter', `received: 2`]
+                            );
+                        });
+                    });
+
+                    describe(`when 1 parameter is provided`, () => {
+                        describe(`when it is a number`, () => {
+                            const invalidParam = 67;
+
+                            it(`should return the expected error`, async () => {
+                                await assertQueryError(
+                                    {
+                                        ...validFilter,
+                                        params: [invalidParam],
+                                    },
+                                    ['expected text', `received: ${invalidParam}`]
+                                );
+                            });
                         });
                     });
                 });
@@ -1245,6 +1392,55 @@ describe(`Coscrad Query Language`, () => {
                             });
 
                             expect(result).toHaveLength(1);
+                        });
+                    });
+                });
+
+                describe(`when the query is invalid`, () => {
+                    const validQuery: CoscradFilterCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.TEXT_EQUALS,
+                        params: ['good'],
+                        field: 'comment',
+                    };
+
+                    describe(`when 0 parameters are provided`, () => {
+                        it(`should return the expected error`, () => {
+                            assertQueryError(
+                                {
+                                    ...validQuery,
+                                    params: [],
+                                },
+                                ['expected 1 param', 'received: 0']
+                            );
+                        });
+                    });
+
+                    describe(`when 2 paramters are provided`, () => {
+                        it(`should return the expected error`, () => {
+                            assertQueryError(
+                                {
+                                    ...validQuery,
+                                    params: ['needle to find', 'superfluous search terms'],
+                                },
+                                ['expected 1 parameter', 'received: 2']
+                            );
+                        });
+                    });
+
+                    describe(`when 1 parameters is provided`, () => {
+                        describe(`when the parameter is a number`, () => {
+                            it(`should return the expected error`, async () => {
+                                const invalidParam = 67;
+
+                                await assertQueryError(
+                                    {
+                                        ...validQuery,
+                                        params: [invalidParam],
+                                    },
+                                    ['expected text', `received: ${invalidParam}`]
+                                );
+                            });
                         });
                     });
                 });
