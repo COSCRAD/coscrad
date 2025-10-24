@@ -1,9 +1,9 @@
 import { AggregateType, ITermViewModel } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { useContext } from 'react';
-import { isNullOrUndefined } from 'util';
 import { ErrorDisplay } from './src/components/error-display/error-display';
 import { Loading } from './src/components/loading';
 import { findOriginalTextItem } from './src/components/notes/shared/find-original-text-item';

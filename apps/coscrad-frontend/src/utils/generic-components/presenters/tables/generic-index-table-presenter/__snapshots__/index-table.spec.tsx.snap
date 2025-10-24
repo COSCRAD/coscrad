@@ -41,7 +41,7 @@ exports[` 1`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -414,7 +414,7 @@ exports[` 2`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -782,7 +782,7 @@ exports[` 2`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -1157,7 +1157,7 @@ exports[` 3`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -1525,7 +1525,7 @@ exports[` 3`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -1895,7 +1895,7 @@ exports[` 3`] = `
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -2258,7 +2258,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -2679,7 +2679,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -3084,7 +3084,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -3452,7 +3452,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -3822,7 +3822,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"
@@ -4180,7 +4180,7 @@ exports[`IndexTable when the table setup is valid when all properies are include
               aria-invalid="false"
               class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
               tabindex="-1"
-              value="allProperties"
+              value="__ALL-PROPERTIES-SEARCH-KEY__"
             />
             <svg
               aria-hidden="true"

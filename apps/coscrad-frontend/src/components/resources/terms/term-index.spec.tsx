@@ -4,12 +4,12 @@ import {
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { rest } from 'msw';
 import { MemoryRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../../../src/utils/test-utils';
-import { TermIndexContainer } from '../../../../term-index.container';
+import { TermIndexPage } from '../../../../term-index.page';
 import { getConfig } from '../../../config';
 import { assertElementWithEveryIdRenderedForIndex } from '../../../utils/test-utils/assertions/assert-element-with-every-id-rendered-for-index';
-import { buildMockSuccessfulGETHandler } from '../../../utils/test-utils/build-mock-successful-get-handler';
 import { testContainerComponentErrorHandling } from '../../../utils/test-utils/common-test-cases/test-container-component-error-handling';
 import { setupTestServer } from '../../../utils/test-utils/setup-test-server';
 import { buildMockIndexResponse } from '../../../utils/test-utils/test-data';
@@ -52,19 +52,22 @@ const endpoint = `${getConfig().apiUrl}/Resources/Terms`;
 const act = () =>
     renderWithProviders(
         <MemoryRouter>
-            <TermIndexContainer />
+            <TermIndexPage />
         </MemoryRouter>
     );
 
 describe(`Term Index`, () => {
     describe('when the API request is valid', () => {
         setupTestServer(
-            buildMockSuccessfulGETHandler({
-                endpoint,
-                response: buildMockIndexResponse(
-                    dummyTerms.map((term) => [term, []]),
-                    []
-                ),
+            rest.post(endpoint, (_, res, ctx) => {
+                return res(
+                    ctx.json(
+                        buildMockIndexResponse(
+                            dummyTerms.map((t) => [t, []]),
+                            []
+                        )
+                    )
+                );
             })
         );
 
