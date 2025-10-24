@@ -184,7 +184,7 @@ export const termSlice = createSlice({
                           matchers
                       );
 
-            state.data.selected = filterResult;
+            state.data.selected = filterResult as ITermViewModel[];
 
             return state;
         },
