@@ -1,5 +1,5 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
     Box,
@@ -234,7 +234,7 @@ export const TermIndexTable = ({
                                         )
                                     }
                                 >
-                                    <ArrowBackIosIcon />
+                                    <ArrowBackIosNewIcon />
                                 </IconButton>
                             </Grid>
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
