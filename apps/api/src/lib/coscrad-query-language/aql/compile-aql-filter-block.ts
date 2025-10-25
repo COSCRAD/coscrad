@@ -403,9 +403,7 @@ const compileSimpleFilterCondition = (
         if (isArray) {
             const letStatement = `
             let ${matchVarName} = (
-                for item in ${docRef}['${individualFieldNames[0]}'][*].${individualFieldNames
-                .slice(1)
-                .join('.')}
+                for item in ${docRef}.${field}
                 filter contains(item,@args[${startingArgIndex + 1}])
                 limit 1
                 return "match"
