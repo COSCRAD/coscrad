@@ -23,7 +23,7 @@ interface CoscradCoditionBlock {
 type CoscradUserQueryParams = string | number;
 
 export class CoscradSimpleCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.SIMPLE;
+    readonly type = CoscradConditionBlockType.SIMPLE;
 
     field: string;
 
@@ -33,19 +33,19 @@ export class CoscradSimpleCondition implements CoscradCoditionBlock {
 }
 
 export class CoscradOrCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    readonly type = CoscradConditionBlockType.OR;
 
     conditions: CoscradSimpleCondition[];
 }
 
 export class CoscradAndCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.AND;
+    readonly type = CoscradConditionBlockType.AND;
 
     conditions: CoscradSimpleCondition[];
 }
 
 export class CoscradNotCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.NOT;
+    readonly type = CoscradConditionBlockType.NOT;
 
     condition: CoscradSimpleCondition;
 }
