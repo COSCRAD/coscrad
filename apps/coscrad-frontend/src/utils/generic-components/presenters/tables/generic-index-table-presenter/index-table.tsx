@@ -50,7 +50,7 @@ const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
 };
 
 /**
- * TODO [https://www.pivotaltracker.com/story/show/182694263]
+ * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-341]
  * Add ValueUnion to the types library.
  */
 export type ValueUnion<T> = T[keyof T];
