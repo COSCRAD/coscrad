@@ -122,6 +122,10 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         await this.database.softDelete(roundId);
     }
 
+    async removeCard(_roundId: AggregateId, _sequenceNumber: number): Promise<Error | AggregateId> {
+        throw new Error(`not implemented`);
+    }
+
     async fetchById(roundId: AggregateId): Promise<Maybe<MemoryMatchRound>> {
         const documentSearchResult = await this.database.fetchById(roundId);
 

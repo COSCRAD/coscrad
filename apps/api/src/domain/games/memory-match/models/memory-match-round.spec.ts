@@ -15,6 +15,7 @@ import {
     FailedToUpdateMissingMemoryMatchCardError,
     MemoryMatchRoundCapacityReachedError,
 } from '../errors';
+import { FailedToRemoveCardFromPublishedMemoryMatchRoundError } from '../errors/FailedToRemoveCardFromPublishedMemoryMatchRoundError';
 import { MemoryMatchCard } from './memory-match-card.entity';
 import { MemoryMatchRound } from './memory-match-round.entity';
 
@@ -451,27 +452,87 @@ describe(`MemoryMatchRound`, () => {
 
     describe(`remove`, () => {
         describe(`when the update is valid`, () => {
+            const targetSequenceNumber = 1;
+
+            const cardToRemove = buildTestInstance(MemoryMatchCard, {
+                sequenceNumber: targetSequenceNumber,
+            });
+
+            const cardToKeep = buildTestInstance(MemoryMatchCard, {
+                sequenceNumber: targetSequenceNumber + 1,
+            });
+
             it(`should remove the card`, async () => {
                 const testRound = buildTestInstance(MemoryMatchRound, {
                     id: testRoundId,
+                    cards: [cardToRemove, cardToKeep],
                 });
 
-                const sequenceNumber = testRound.addCard() as number;
+                const updatedResult = testRound.remove(targetSequenceNumber);
 
-                const updateResult = testRound.remove(sequenceNumber);
+                expect(updatedResult).not.toBeInstanceOf(InternalError);
 
-                expect(updateResult).toBeInstanceOf(MemoryMatchRound);
+                const updatedRound = updatedResult as MemoryMatchRound;
+
+                expect(updatedRound.count()).toBe(1);
             });
         });
 
         describe(`when the update is invalid`, () => {
             describe(`when there is no card with the given sequence number`, () => {
-                it.todo(`should return the expected error`);
+                const validSequenceNumber = 1;
+
+                const card = buildTestInstance(MemoryMatchCard, {
+                    sequenceNumber: validSequenceNumber,
+                });
+
+                const invalidSequenceNumber = 404;
+
+                const invalidCard = buildTestInstance(MemoryMatchCard, {
+                    sequenceNumber: invalidSequenceNumber,
+                });
+
+                it(`should return the expected error`, async () => {
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: testRoundId,
+                        cards: [card, invalidCard],
+                    });
+
+                    const updatedResult = testRound.remove(invalidSequenceNumber);
+
+                    expect(updatedResult).not.toBeInstanceOf(InternalError);
+
+                    const updatedRound = updatedResult as MemoryMatchRound;
+
+                    expect(updatedRound.count()).toBe(1);
+                });
             });
         });
 
         describe(`when the round is already published`, () => {
-            it.todo(`should fail with the expected error`);
+            const sequenceNumber = 2;
+
+            const card = buildTestInstance(MemoryMatchCard, {
+                sequenceNumber,
+            });
+
+            it(`should fail with the expected error`, async () => {
+                const testRound = buildTestInstance(MemoryMatchRound, {
+                    id: testRoundId,
+                    cards: [card],
+                    isPublished: true,
+                });
+
+                const updatedResult = testRound.remove(sequenceNumber);
+
+                assertErrorAsExpected(
+                    updatedResult,
+                    new FailedToRemoveCardFromPublishedMemoryMatchRoundError(
+                        testRound.id,
+                        sequenceNumber
+                    )
+                );
+            });
         });
     });
 });

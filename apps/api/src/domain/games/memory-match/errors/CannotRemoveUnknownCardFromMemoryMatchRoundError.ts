@@ -3,11 +3,11 @@ import formatAggregateCompositeIdentifier from '../../../../queries/presentation
 import { AggregateId } from '../../../types/AggregateId';
 import { buildMemoryRoundCompositeId } from './build-memory-round-composite-id';
 
-export class FailedToRemoveCardMemoryMatchRoundError extends InternalError {
-    constructor(cardId: AggregateId) {
-        const msg = `You cannot remove ${formatAggregateCompositeIdentifier(
+export class CannotRemoveUnknownCardFromMemoryMatchRoundError extends InternalError {
+    constructor(cardId: AggregateId, sequenceNumber: number) {
+        const msg = `You cannot remove card ${sequenceNumber} as there is no such card in ${formatAggregateCompositeIdentifier(
             buildMemoryRoundCompositeId(cardId)
-        )} as it is in the published round`;
+        )}`;
 
         super(msg);
     }

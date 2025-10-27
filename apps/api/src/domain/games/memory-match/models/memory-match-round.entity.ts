@@ -40,7 +40,8 @@ import {
     MemoryRoundIsNotReadyForPublicationError,
     MissingCardbackErrorForMemoryMatchRound,
 } from '../errors';
-import { FailedToRemoveCardMemoryMatchRoundError } from '../errors/failed-to-remove-card-memory-match-round.errer';
+import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/CannotRemoveUnknownCardFromMemoryMatchRoundError';
+import { FailedToRemoveCardFromPublishedMemoryMatchRoundError } from '../errors/FailedToRemoveCardFromPublishedMemoryMatchRoundError';
 import { MemoryMatchRoundCreationDto } from './dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from './memory-match-card.entity';
 
@@ -303,9 +304,19 @@ export class MemoryMatchRound {
     }
 
     remove(sequenceNumber: number): ResultOrError<MemoryMatchRound> {
-        if (!this.remove) {
-            return new FailedToRemoveCardMemoryMatchRoundError(this.id);
+        if (this.isPublished) {
+            return new FailedToRemoveCardFromPublishedMemoryMatchRoundError(
+                this.id,
+                sequenceNumber
+            );
         }
+
+        if (!this.has(sequenceNumber)) {
+            // TODO first add a test case and this custom error class
+            return new CannotRemoveUnknownCardFromMemoryMatchRoundError(this.id, sequenceNumber);
+        }
+
+        this.cards = this.cards.filter((c) => c.sequenceNumber !== sequenceNumber);
 
         return this;
     }

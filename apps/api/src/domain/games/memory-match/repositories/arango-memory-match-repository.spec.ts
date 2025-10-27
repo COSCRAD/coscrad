@@ -277,6 +277,31 @@ describe(`ArangoMemoryMatchRepository`, () => {
         });
     });
 
+    describe(`removeCard`, () => {
+        describe(`when the request is valid`, () => {
+            describe(`when removing the only card from a round`, () => {
+                it.todo(`should return the expected error`);
+            });
+
+            describe(`when removing the last card from a round`, () => {
+                it.todo(`should return the expected error`);
+            });
+
+            describe(`when removing the middle card from the list`, () => {
+                it.todo(`should return the expected error`);
+            });
+        });
+        describe(`when the request is invalid`, () => {
+            describe(`when the round does not exist`, () => {
+                it.todo(`should return the expected error`);
+            });
+
+            describe(`when there is no card with the given sequence number`, () => {
+                it.todo(`should return the expected error`);
+            });
+        });
+    });
+
     describe(`create`, () => {
         const testRound = buildTestInstance(MemoryMatchRound, {
             id: buildDummyUuid(123),
