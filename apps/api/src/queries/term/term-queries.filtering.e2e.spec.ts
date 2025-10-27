@@ -144,7 +144,7 @@ describe(`term index queries`, () => {
             await termRepository.createMany(allTerms);
 
             // Act
-            const res = await request(app.getHttpServer()).get(indexEndpoint);
+            const res = await request(app.getHttpServer()).post(indexEndpoint);
 
             // Assert
             /**
@@ -435,7 +435,7 @@ describe(`term index queries`, () => {
 
                     const { message } = res.body;
 
-                    expect(message).toContain(`You've really dropped the ball this time, Aaron.`);
+                    expect(message).toContain(`bogus`);
                 });
             });
 

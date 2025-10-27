@@ -691,7 +691,7 @@ const compileNotFilterCondition = (
     };
 };
 
-export const compileAqlFilterBlock = (
+export const compileAqlFilterBlockHelper = (
     condition: CoscradFilterCondition,
     /**
      * Never build this dynamically from user input or else you could expose AQL injection.
@@ -700,8 +700,6 @@ export const compileAqlFilterBlock = (
     startingArgIndex = 0
     // options? e.g., case-insensitive
 ): ResultOrError<CoscradAqlFilterBlock> => {
-    // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-327] schmea-based type validation for the object?
-
     const { type } = condition;
 
     if (type === CoscradConditionBlockType.SIMPLE) {
@@ -733,4 +731,25 @@ export const compileAqlFilterBlock = (
     }
 
     throw new InternalError(`Unsupported COSCRAD filter condition type: ${type}`);
+};
+
+export const compileAqlFilterBlock = (
+    condition: CoscradFilterCondition,
+    /**
+     * Never build this dynamically from user input or else you could expose AQL injection.
+     */
+    docRef: string,
+    startingArgIndex = 0
+    // options? e.g., case-insensitive
+): ResultOrError<CoscradAqlFilterBlock> => {
+    const result = compileAqlFilterBlockHelper(condition, docRef, startingArgIndex);
+
+    /**
+     * This is a hack. We need to find a better way to deal with generating
+     * unique names for `let` vars in Arango queries. Note that these are not
+     * bind vars, as they are not built from user input directly.
+     */
+    varCount = 0;
+
+    return result;
 };

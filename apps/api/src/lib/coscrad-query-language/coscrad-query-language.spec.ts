@@ -28,6 +28,7 @@ import {
     CoscradConditionBlockType,
     CoscradFilterCondition,
     CoscradNotCondition,
+    CoscradOrCondition,
     CoscradSimpleCondition,
 } from './models/coscrad-filter-condition';
 
@@ -1525,7 +1526,7 @@ describe(`Coscrad Query Language`, () => {
                         ]);
                     });
 
-                    const doesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition = {
+                    const doesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradOrCondition = {
                         type: CoscradConditionBlockType.OR,
                         // Note we use the language-code specific version of the ml text query here
                         conditions: [doesEnglishTextIncludeEllo, greaterThanCutoffYear],
