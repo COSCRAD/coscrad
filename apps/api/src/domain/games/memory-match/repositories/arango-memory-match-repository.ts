@@ -8,7 +8,10 @@ import { ArangoDatabaseError } from '../../../../persistence/database/errors/Ara
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { DTO } from '../../../../types/DTO';
+import AggregateNotFoundError from '../../../models/shared/common-command-errors/AggregateNotFoundError';
 import { AggregateId } from '../../../types/AggregateId';
+import { MEMORY_MATCH_ROUND } from '../constants';
+import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/cannot-remove-unknown-card-from-memory-match-round.error';
 import { IMemoryMatchRepository } from '../memory-match.repository.interface';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
@@ -122,8 +125,42 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         await this.database.softDelete(roundId);
     }
 
-    async removeCard(_roundId: AggregateId, _sequenceNumber: number): Promise<Error | AggregateId> {
-        throw new Error(`not implemented`);
+    async removeCard(roundId: AggregateId, sequenceNumber: number): Promise<Error | AggregateId> {
+        const query = `
+        for doc in @@collectionName
+        filter doc._key == @roundId
+        let index = position(doc.cards[*].sequenceNumber,@sequenceNumber,true)
+        let shouldUpdate = index != -1
+        let newCards = shouldUpdate ? remove_nth(doc.cards,index) : doc.cards
+        update doc with {
+            cards: newCards
+        } in @@collectionName
+         return {
+            didUpdate: shouldUpdate
+         }
+        `;
+
+        const bindVars = {
+            '@collectionName': 'memory_match_rounds',
+            roundId,
+            sequenceNumber,
+        };
+
+        const cursor = await this.database.query({ query, bindVars });
+
+        const updates = await cursor.all();
+
+        if (updates.length == 1)
+            return new AggregateNotFoundError({
+                type: MEMORY_MATCH_ROUND,
+                id: roundId,
+            });
+
+        const { didUpdate } = updates[0];
+
+        if (!didUpdate) {
+            return new CannotRemoveUnknownCardFromMemoryMatchRoundError(roundId, sequenceNumber);
+        }
     }
 
     async fetchById(roundId: AggregateId): Promise<Maybe<MemoryMatchRound>> {

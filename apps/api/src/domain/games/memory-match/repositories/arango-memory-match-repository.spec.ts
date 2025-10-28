@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -13,6 +14,8 @@ import generateDatabaseNameForTestSuite from '../../../../persistence/repositori
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
+import AggregateNotFoundError from '../../../models/shared/common-command-errors/AggregateNotFoundError';
+import { MEMORY_MATCH_ROUND } from '../constants';
 import { IMemoryMatchRepository } from '../memory-match.repository.interface';
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
@@ -32,6 +35,8 @@ const buildRound = (n: number) => {
         ),
     });
 };
+
+const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
 
 const testRoundSequentialIds = [1, 2, 3];
 
@@ -279,26 +284,139 @@ describe(`ArangoMemoryMatchRepository`, () => {
 
     describe(`removeCard`, () => {
         describe(`when the request is valid`, () => {
+            const assertCardGetsRemoved = async (
+                testRound: MemoryMatchRound,
+                sequenceNumber: number
+            ) => {
+                const originalNumberOfCards = testRound.count();
+
+                await testRepository.create(testRound);
+
+                const result = await testRepository.removeCard(testRound.id, sequenceNumber);
+
+                expect(result).not.toBeInstanceOf(Error);
+
+                const updatedRound = (await testRepository.fetchById(
+                    testRound.id
+                )) as MemoryMatchRound;
+
+                expect(updatedRound.count()).toBe(originalNumberOfCards - 1);
+
+                expect(updatedRound.has(sequenceNumber)).toBe(false);
+            };
+
             describe(`when removing the only card from a round`, () => {
-                it.todo(`should return the expected error`);
+                it(`should remove the card`, async () => {
+                    const targetSequenceNumber = 123;
+
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: buildDummyUuid(1),
+                        isPublished: false,
+                        cards: [
+                            buildTestInstance(MemoryMatchCard, {
+                                sequenceNumber: targetSequenceNumber,
+                            }),
+                        ],
+                    });
+
+                    await assertCardGetsRemoved(testRound, targetSequenceNumber);
+                });
             });
 
             describe(`when removing the last card from a round`, () => {
-                it.todo(`should return the expected error`);
+                it(`should remove the card`, async () => {
+                    const targetSequenceNumber = 123;
+
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: buildDummyUuid(1),
+                        isPublished: false,
+                        cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                            .fill(null)
+                            .map((_, index) =>
+                                buildTestInstance(MemoryMatchCard, {
+                                    sequenceNumber:
+                                        index == NUMBER_OF_PAIRS_IN_A_ROUND - 1
+                                            ? targetSequenceNumber
+                                            : index + 1,
+                                })
+                            ),
+                    });
+
+                    await assertCardGetsRemoved(testRound, targetSequenceNumber);
+                });
             });
 
             describe(`when removing the middle card from the list`, () => {
-                it.todo(`should return the expected error`);
+                it(`should remove the card`, async () => {
+                    const targetSequenceNumber = 123;
+
+                    const testRound = buildTestInstance(MemoryMatchRound, {
+                        id: buildDummyUuid(1),
+                        isPublished: false,
+                        cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                            .fill(null)
+                            .map((_, index) =>
+                                buildTestInstance(MemoryMatchCard, {
+                                    sequenceNumber:
+                                        index == Math.floor(NUMBER_OF_PAIRS_IN_A_ROUND / 2)
+                                            ? targetSequenceNumber
+                                            : index + 1,
+                                })
+                            ),
+                    });
+
+                    await assertCardGetsRemoved(testRound, targetSequenceNumber);
+                });
             });
         });
+
         describe(`when the request is invalid`, () => {
             describe(`when the round does not exist`, () => {
-                it.todo(`should return the expected error`);
+                it(`should return the expected error`, async () => {
+                    const missingId = buildDummyUuid(123);
+
+                    const sequenceNumber = 1;
+
+                    const result = await testRepository.removeCard(missingId, sequenceNumber);
+
+                    assertErrorAsExpected(
+                        result,
+                        new AggregateNotFoundError({ type: MEMORY_MATCH_ROUND, id: missingId })
+                    );
+                });
             });
 
             describe(`when there is no card with the given sequence number`, () => {
-                it.todo(`should return the expected error`);
+                const missingSequenceNumber = 123;
+
+                const testRound = buildTestInstance(MemoryMatchRound, {
+                    id: buildDummyUuid(1),
+                    isPublished: false,
+                    cards: [1, 2, 3].map((sequenceNumber) =>
+                        buildTestInstance(MemoryMatchCard, {
+                            sequenceNumber,
+                        })
+                    ),
+                });
+
+                beforeEach(async () => {
+                    await testRepository.create(testRound);
+                });
+
+                it(`should return the expected error`, async () => {
+                    const result = await testRepository.removeCard(
+                        testRound.id,
+                        missingSequenceNumber
+                    );
+
+                    assertErrorAsExpected(
+                        result,
+                        new AggregateNotFoundError(testRound.getCompositeIdentifier())
+                    );
+                });
             });
+
+            // TODO should the repository prevent modifying a published resource?
         });
     });
 

@@ -25,4 +25,6 @@ export interface IMemoryMatchRepository {
     publish(roundId: AggregateId): Promise<Error | AggregateId>;
 
     unpublish(roundId: AggregateId): Promise<Error | AggregateId>;
+
+    removeCard(roundId: AggregateId, sequenceNumber: number): Promise<Error | AggregateId>;
 }

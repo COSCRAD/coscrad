@@ -25,6 +25,7 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import validateSimpleInvariants from '../../../domainModelValidators/utilities/validateSimpleInvariants';
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { AggregateId } from '../../../types/AggregateId';
+import { MEMORY_MATCH_ROUND } from '../constants';
 import {
     CannotExceedMemoryMatchRoundCapacityError,
     CannotOverwriteAudioForMemoryMatchCardError,
@@ -40,7 +41,7 @@ import {
     MemoryRoundIsNotReadyForPublicationError,
     MissingCardbackErrorForMemoryMatchRound,
 } from '../errors';
-import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/CannotRemoveUnknownCardFromMemoryMatchRoundError';
+import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/cannot-remove-unknown-card-from-memory-match-round.error';
 import { FailedToRemoveCardFromPublishedMemoryMatchRoundError } from '../errors/FailedToRemoveCardFromPublishedMemoryMatchRoundError';
 import { MemoryMatchRoundCreationDto } from './dtos/memory-match-round-creation.dto';
 import { MemoryMatchCard } from './memory-match-card.entity';
@@ -312,7 +313,6 @@ export class MemoryMatchRound {
         }
 
         if (!this.has(sequenceNumber)) {
-            // TODO first add a test case and this custom error class
             return new CannotRemoveUnknownCardFromMemoryMatchRoundError(this.id, sequenceNumber);
         }
 
@@ -466,6 +466,13 @@ export class MemoryMatchRound {
         );
 
         return references;
+    }
+
+    public getCompositeIdentifier(): { type: typeof MEMORY_MATCH_ROUND; id: AggregateId } {
+        return {
+            type: MEMORY_MATCH_ROUND,
+            id: this.id,
+        };
     }
 
     public static fromDto(dto: DTO<MemoryMatchRound>) {

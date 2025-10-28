@@ -15,6 +15,7 @@ import {
     FailedToUpdateMissingMemoryMatchCardError,
     MemoryMatchRoundCapacityReachedError,
 } from '../errors';
+import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/cannot-remove-unknown-card-from-memory-match-round.error';
 import { FailedToRemoveCardFromPublishedMemoryMatchRoundError } from '../errors/FailedToRemoveCardFromPublishedMemoryMatchRoundError';
 import { MemoryMatchCard } from './memory-match-card.entity';
 import { MemoryMatchRound } from './memory-match-round.entity';
@@ -488,23 +489,25 @@ describe(`MemoryMatchRound`, () => {
 
                 const invalidSequenceNumber = 404;
 
-                const invalidCard = buildTestInstance(MemoryMatchCard, {
-                    sequenceNumber: invalidSequenceNumber,
-                });
-
                 it(`should return the expected error`, async () => {
                     const testRound = buildTestInstance(MemoryMatchRound, {
                         id: testRoundId,
-                        cards: [card, invalidCard],
+                        cards: [card],
                     });
 
                     const updatedResult = testRound.remove(invalidSequenceNumber);
 
-                    expect(updatedResult).not.toBeInstanceOf(InternalError);
+                    expect(updatedResult).toBeInstanceOf(InternalError);
 
-                    const updatedRound = updatedResult as MemoryMatchRound;
+                    assertErrorAsExpected(
+                        updatedResult,
+                        new CannotRemoveUnknownCardFromMemoryMatchRoundError(
+                            testRound.id,
+                            invalidSequenceNumber
+                        )
+                    );
 
-                    expect(updatedRound.count()).toBe(1);
+                    expect(testRound.count()).toBe(1);
                 });
             });
         });
