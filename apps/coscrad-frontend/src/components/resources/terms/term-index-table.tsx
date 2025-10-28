@@ -1,13 +1,11 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { ITermViewModel } from '@coscrad/api-interfaces';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
     Box,
-    Checkbox,
     FormControl,
     Grid,
     IconButton,
-    InputLabel,
     TableContainer as MUITableContainer,
     MenuItem,
     Paper,
@@ -20,16 +18,20 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
-import { NotFoundPresenter } from '../../../../../components/not-found';
-import { ConfigurableContentContext } from '../../../../../configurable-front-matter/configurable-content-provider';
-import { cyclicDecrement, cyclicIncrement } from '../../../../math';
-import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
-import { Matchers, filterTableData } from './filter-table-data';
-import { renderCell } from './render-cell';
-import { SearchBar } from './search-bar';
-import { CellRenderer, CellRenderersMap, HeadingLabel } from './types';
-import { CellRenderersDefinition } from './types/cell-renderers-definition';
+import { useEffect, useState } from 'react';
+import {
+    CellRenderer,
+    CellRenderersMap,
+    HeadingLabel,
+} from '../../../utils/generic-components/presenters/tables';
+import {
+    EmptyIndexTableException,
+    UnnecessaryCellRendererDefinitionException,
+} from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/exceptions';
+import { renderCell } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/render-cell';
+import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
+import { NotFoundPresenter } from '../../not-found';
 
 interface HasId {
     id: string;
@@ -38,8 +40,6 @@ interface HasId {
 export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
-
-const labelForSearchAllPropertiesOption = 'ALL';
 
 const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
     const quotient = Math.floor(numberOfRecords / pageSize);
@@ -69,55 +69,31 @@ export interface GenericIndexTablePresenterProps<T> {
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
     heading: string;
-    filterableProperties: (keyof T)[];
-    matchers?: Matchers<T>;
 }
 
-const allProperties = 'allProperties';
-
-export const IndexTable = <T,>({
+/**
+ * Note that our previous generic `IndexTable` worked well until we pushed
+ * pagination and filtering to the back-end. We have duplicated and modified
+ * its logic so we can achieve active search for terms without breaking
+ * the other resource views, which currently use the legacy experience.
+ */
+export const TermIndexTable = ({
     type,
     headingLabels,
     tableData,
     cellRenderersDefinition,
     heading,
-    filterableProperties,
-    matchers = {}, // default to String(value) & case-insensitive search
-}: GenericIndexTablePresenterProps<T>) => {
+}: GenericIndexTablePresenterProps<ITermViewModel>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
-
-    // TODO [] Encapsulte this as part of the `SearchBar`.
-    const { simulatedKeyboard } = useContext(ConfigurableContentContext);
-
-    const [searchValue, setSearchValue] = useState('');
-
-    // SEARCH LOGIC
-    const [selectedFilterProperty, setSelectedFilterProperty] = useState<
-        typeof allProperties | keyof T
-    >(allProperties);
-
-    const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
-
-    const propertiesToFilterBy =
-        selectedFilterProperty === 'allProperties'
-            ? filterableProperties
-            : [selectedFilterProperty];
-
-    const filteredTableData = filterTableData(
-        tableData,
-        propertiesToFilterBy,
-        searchValue,
-        matchers
-    );
 
     // PAGINATION
     // we index pages starting at 0
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
     const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
 
-    const lastPageIndex = calculateNumberOfPages(filteredTableData.length, pageSize) - 1;
+    const lastPageIndex = calculateNumberOfPages(tableData.length, pageSize) - 1;
 
     useEffect(() => {
         if (currentPageIndex > lastPageIndex) setCurrentPageIndex(0);
@@ -125,7 +101,7 @@ export const IndexTable = <T,>({
 
     const startIndex = currentPageIndex * pageSize;
     const endIndex = startIndex + pageSize;
-    const paginatedData = filteredTableData.slice(startIndex, endIndex);
+    const paginatedData = tableData.slice(startIndex, endIndex);
 
     /**
      * It's tricky to get type safety that forces cell renderers to only include
@@ -136,8 +112,9 @@ export const IndexTable = <T,>({
 
     const cellRendererKeysNotInHeadings = Object.keys(cellRenderersDefinition).reduce(
         (acc: string[], rendererPropertyKey) =>
-            // @ts-expect-error We need to tell the compiler the keys of IBaseViewModel  must be strings
-            propertiesInTable.includes(rendererPropertyKey) ? acc : acc.concat(rendererPropertyKey),
+            propertiesInTable.includes(rendererPropertyKey as unknown as keyof ITermViewModel)
+                ? acc
+                : acc.concat(rendererPropertyKey),
         []
     );
 
@@ -145,8 +122,11 @@ export const IndexTable = <T,>({
         throw new UnnecessaryCellRendererDefinitionException(cellRendererKeysNotInHeadings);
     }
 
-    const cellRenderers: CellRenderersMap<T> = new Map(
-        Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
+    const cellRenderers: CellRenderersMap<ITermViewModel> = new Map(
+        Object.entries(cellRenderersDefinition) as [
+            keyof ITermViewModel,
+            CellRenderer<ITermViewModel>
+        ][]
     );
 
     /**
@@ -207,7 +187,7 @@ export const IndexTable = <T,>({
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Typography component="span" sx={{ mr: 2, mt: 1 }}>
                                     Total Records: {tableData.length} &nbsp; Filtered Records:{' '}
-                                    {filteredTableData.length}
+                                    {tableData.length}
                                 </Typography>
                             </Grid>
                             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
@@ -270,107 +250,9 @@ export const IndexTable = <T,>({
             </Box>
         );
 
-    const propertiesToSearchSelectField = (
-        <FormControl sx={{ minWidth: 120 }} size={'small'}>
-            <InputLabel>Filter</InputLabel>
-            <Select
-                data-testid="select_index_search_scope"
-                label={'Filter'}
-                value={selectedFilterProperty}
-                onChange={(changeEvent) => {
-                    const {
-                        target: { value },
-                    } = changeEvent;
-                    setSelectedFilterProperty(value as keyof T);
-                }}
-            >
-                <MenuItem sx={{ minWidth: 120 }} value={'allProperties'}>
-                    {labelForSearchAllPropertiesOption}
-                </MenuItem>
-                {filterableProperties.map((selectedFilterProperty: keyof T & string) => (
-                    <MenuItem
-                        key={selectedFilterProperty}
-                        value={selectedFilterProperty}
-                        sx={{ minWidth: 120 }}
-                    >
-                        {
-                            headingLabels.find(
-                                ({ propertyKey: labelPropertyKey }) =>
-                                    labelPropertyKey === selectedFilterProperty
-                            )?.headingLabel
-                        }
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-    );
-
-    /**
-     * Note that the following is required in case text is pasted or entered
-     * from a system keyboard using the consonant + lone surrogate representation
-     * instead of the single Unicode keypoint. The resulting characters are not
-     * equivalent with respect to
-     * - string comparison
-     * - object keys
-     * - map keys
-     * in JavaScript.
-     *
-     * TODO support marked high tone on vowels:
-     *
-     * TODO Unit test the replacement logic
-     * Also, can we standardize either using the escape sequence
-     * in the string literal **or** String.fromCodePoint across the
-     * code base?
-     */
-    // TODO Named consonants \ dictionary
-    const defaultCharacterReplacements = {
-        // (U+0073) - ◌̂ (U+0302)[
-        // ŝ
-        [`s${`\u0302`}`]: '\u015d',
-        // Ŝ
-        [`S${`\u0302`}`]: '\u015c',
-        // ŵ
-        [`w${`\u0302`}`]: '\u0175',
-        // Ŵ
-        [`W${`\u0302`}`]: '\u0174',
-        // ẑ:
-        [`z${`\u0302`}`]: '\u1e91',
-        // Ẑ
-        [`Z${`\u0302`}`]: '\u1e91',
-    };
-
     return (
         <Stack>
             <Typography variant="h2">{heading}</Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                {propertiesToSearchSelectField}
-
-                <SearchBar
-                    value={searchValue}
-                    onValueChange={setSearchValue}
-                    specialCharacterReplacements={
-                        shouldUseVirtualKeyboard
-                            ? Object.assign(
-                                  simulatedKeyboard?.specialCharacterReplacements || {},
-                                  defaultCharacterReplacements
-                              )
-                            : defaultCharacterReplacements
-                    }
-                />
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <Checkbox
-                    checked={shouldUseVirtualKeyboard}
-                    onChange={() => setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
-                />
-
-                {!isNullOrUndefined(simulatedKeyboard) && shouldUseVirtualKeyboard ? (
-                    <p>Special Character Input Method: {simulatedKeyboard.name}</p>
-                ) : (
-                    <p>Click to enable input method: {simulatedKeyboard.name}</p>
-                )}
-            </Box>
-
             <Box>{table}</Box>
         </Stack>
     );

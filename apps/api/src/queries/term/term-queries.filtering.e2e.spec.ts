@@ -26,9 +26,11 @@ import {
     TERM_QUERY_REPOSITORY_TOKEN,
 } from '../../domain/models/term/queries';
 import {
+    CoscradAndCondition,
     CoscradBooleanOperator,
     CoscradConditionBlockType,
     CoscradFilterCondition,
+    CoscradOrCondition,
     CoscradSimpleCondition,
 } from '../../lib/coscrad-query-language/models/coscrad-filter-condition';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
@@ -77,13 +79,13 @@ describe(`term index queries`, () => {
         await termRepository.createMany([...matches, ...nonMatches]);
 
         // Act
-        const res = await request(app.getHttpServer()).get(indexEndpoint).send({
+        const res = await request(app.getHttpServer()).post(indexEndpoint).send({
             filter,
             pagination,
         });
 
         // Assert
-        expect(res.status).toBe(HttpStatusCode.ok);
+        expect(res.status).toBe(HttpStatusCode.createdResource);
 
         const { entities } = res.body;
 
@@ -142,10 +144,17 @@ describe(`term index queries`, () => {
             await termRepository.createMany(allTerms);
 
             // Act
-            const res = await request(app.getHttpServer()).get(indexEndpoint);
+            const res = await request(app.getHttpServer()).post(indexEndpoint);
 
             // Assert
-            expect(res.status).toBe(HttpStatusCode.ok);
+            /**
+             * We don't really want a 201. This post has no effect on the state.
+             * But we have to use a `POST` to send the user-defined filters
+             * as part of the (encrypted) body instead of (in the clear)
+             * query parameters and respect REST semantics. As such, we
+             * are returning a `201`.
+             */
+            expect(res.status).toBe(HttpStatusCode.createdResource);
 
             const { entities } = res.body;
 
@@ -154,254 +163,342 @@ describe(`term index queries`, () => {
     });
 
     describe(`when user-defined filters are provided`, () => {
-        describe(`when searching the property: **name**`, () => {
-            describe(`when searching multilingual text for a search string`, () => {
-                describe(`when the number of results does not exceed the page size`, () => {
-                    it(`should find the expected term`, async () => {
-                        const multilingualTextIncludes: CoscradSimpleCondition = {
+        describe(`when the provided filters are valid`, () => {
+            describe(`when searching the property: **name**`, () => {
+                describe(`when searching multilingual text for a search string`, () => {
+                    describe(`when the number of results does not exceed the page size`, () => {
+                        it(`should find the expected term`, async () => {
+                            const multilingualTextIncludes: CoscradSimpleCondition = {
+                                type: CoscradConditionBlockType.SIMPLE,
+                                operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                                field: 'name',
+                                params: [searchTermsWithNoSpecialChar],
+                            };
+
+                            await assertFilterWorks({
+                                matches: [termWhoseEnglishMatchesSearch],
+                                nonMatches: [termThatShouldMatchNoSearches],
+                                filter: multilingualTextIncludes,
+                            });
+                        });
+                    });
+
+                    describe(`when the number of results exceeds the page size`, () => {
+                        const keyword = 'hello';
+
+                        const pageSize = 10;
+
+                        const targetPage = 2;
+
+                        const numberOfMatchingTerms = (targetPage + 1) * pageSize;
+
+                        const matches = Array(numberOfMatchingTerms)
+                            .fill(null)
+                            .map((_, index) =>
+                                buildTestInstance(TermViewModel, {
+                                    id: buildDummyUuid(index),
+                                    name: buildMultilingualTextWithSingleItem(keyword),
+                                })
+                            );
+
+                        const nonMatches = Array(numberOfMatchingTerms)
+                            .fill(null)
+                            .map((_, index) =>
+                                buildTestInstance(TermViewModel, {
+                                    id: buildDummyUuid(100 + index),
+                                    name: buildMultilingualTextWithSingleItem('zrzrzr'),
+                                })
+                            );
+
+                        const doesTextInclude: CoscradSimpleCondition = {
                             type: CoscradConditionBlockType.SIMPLE,
                             operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                            params: [keyword],
                             field: 'name',
-                            params: [searchTermsWithNoSpecialChar],
                         };
 
-                        await assertFilterWorks({
-                            matches: [termWhoseEnglishMatchesSearch],
-                            nonMatches: [termThatShouldMatchNoSearches],
-                            filter: multilingualTextIncludes,
+                        /**
+                         * This test case tests the interaction of filtering with
+                         * pagination. We should have a seaprate test suite that
+                         * tests filtering in isolation.
+                         */
+                        it(`should return a single page worth of results`, async () => {
+                            // Arrange
+                            await termRepository.createMany([...matches, ...nonMatches]);
+
+                            // Act
+                            const res = await request(app.getHttpServer())
+                                .post(indexEndpoint)
+                                .send({
+                                    filter: doesTextInclude,
+                                    pagination: {
+                                        size: pageSize,
+                                        page: targetPage,
+                                    },
+                                });
+
+                            // Assert
+                            expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                            const { entities } = res.body;
+
+                            expect(entities).toHaveLength(pageSize);
                         });
                     });
                 });
 
-                describe(`when the number of results exceeds the page size`, () => {
-                    const keyword = 'hello';
+                describe(`when searching multilingual text for a language-specific character`, () => {
+                    const buildTokenFromLetters = (letters: string[]) => ({
+                        text: letters.join(''),
+                        languageCode: LanguageCode.Chilcotin,
+                        /**
+                         * Note that if `isSpace` and `isPunct` are false, the `symbols` array will
+                         * be a list of the atomic letters for the given alphabet, which may use
+                         * multiple unicode symbols to indicate one letter.
+                         */
+                        characters: letters.map((l) => ({
+                            text: l,
+                            isPunctuationOrWhiteSpace: false,
+                            isOutOfAlphabet: false,
+                            isUpperCase: false,
+                        })),
+                        /**
+                         * Eventually, we would like to move our NLP to spacy. We are staying
+                         * close to their API for that reason.
+                         */
+                        isSpace: false,
+                        isPunct: false,
+                        isStop: false,
+                    });
 
-                    const pageSize = 10;
+                    it(`should find the expected results`, async () => {
+                        const letterToFind = 'ts';
 
-                    const targetPage = 2;
+                        const targetLanguage = LanguageCode.Chilcotin;
 
-                    const numberOfMatchingTerms = (targetPage + 1) * pageSize;
+                        const termWithLetterInOnlyWord = buildTestInstance(TermViewModel, {
+                            id: buildDummyUuid(1),
+                            tokens: [buildTokenFromLetters([letterToFind, 'a'])],
+                        });
 
-                    const matches = Array(numberOfMatchingTerms)
-                        .fill(null)
-                        .map((_, index) =>
-                            buildTestInstance(TermViewModel, {
-                                id: buildDummyUuid(index),
-                                name: buildMultilingualTextWithSingleItem(keyword),
-                            })
-                        );
+                        const termWithLetterInSecondWord = buildTestInstance(TermViewModel, {
+                            id: buildDummyUuid(2),
+                            tokens: [
+                                buildTokenFromLetters(['g', 'u', 'y', 'i']),
+                                buildTokenFromLetters([letterToFind, 'a']),
+                            ],
+                        });
 
-                    const nonMatches = Array(numberOfMatchingTerms)
-                        .fill(null)
-                        .map((_, index) =>
-                            buildTestInstance(TermViewModel, {
-                                id: buildDummyUuid(100 + index),
-                                name: buildMultilingualTextWithSingleItem('zrzrzr'),
-                            })
-                        );
+                        const termWithoutLetter = buildTestInstance(TermViewModel, {
+                            id: buildDummyUuid(3),
+                            tokens: [buildTokenFromLetters(['d', 'e', 'ʔ', 'a', 'x'])],
+                        });
 
-                    const doesTextInclude: CoscradSimpleCondition = {
-                        type: CoscradConditionBlockType.SIMPLE,
-                        operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
-                        params: [keyword],
-                        field: 'name',
-                    };
+                        const multilingualTextIncludesLetter: CoscradSimpleCondition = {
+                            type: CoscradConditionBlockType.SIMPLE,
+                            operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
+                            field: 'tokens',
+                            params: [letterToFind, targetLanguage],
+                        };
 
-                    /**
-                     * This test case tests the interaction of filtering with
-                     * pagination. We should have a seaprate test suite that
-                     * tests filtering in isolation.
-                     */
-                    it.only(`should return a single page worth of results`, async () => {
-                        // Arrange
-                        await termRepository.createMany([...matches, ...nonMatches]);
-
-                        // Act
-                        const res = await request(app.getHttpServer())
-                            .get(indexEndpoint)
-                            .send({
-                                filter: doesTextInclude,
-                                pagination: {
-                                    size: pageSize,
-                                    page: targetPage,
-                                },
-                            });
-
-                        // Assert
-                        expect(res.status).toBe(HttpStatusCode.ok);
-
-                        const { entities } = res.body;
-
-                        expect(entities).toHaveLength(pageSize);
+                        await assertFilterWorks({
+                            matches: [termWithLetterInOnlyWord, termWithLetterInSecondWord],
+                            nonMatches: [termWithoutLetter],
+                            filter: multilingualTextIncludesLetter,
+                        });
                     });
                 });
             });
 
-            describe(`when searching multilingual text for a language-specific character`, () => {
-                const buildTokenFromLetters = (letters: string[]) => ({
-                    text: letters.join(''),
-                    languageCode: LanguageCode.Chilcotin,
-                    /**
-                     * Note that if `isSpace` and `isPunct` are false, the `symbols` array will
-                     * be a list of the atomic letters for the given alphabet, which may use
-                     * multiple unicode symbols to indicate one letter.
-                     */
-                    characters: letters.map((l) => ({
-                        text: l,
-                        isPunctuationOrWhiteSpace: false,
-                        isOutOfAlphabet: false,
-                        isUpperCase: false,
-                    })),
-                    /**
-                     * Eventually, we would like to move our NLP to spacy. We are staying
-                     * close to their API for that reason.
-                     */
-                    isSpace: false,
-                    isPunct: false,
-                    isStop: false,
+            describe(`when searching the property: audioURL`, () => {
+                const termWithAudio = buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(1),
+                    mediaItemId: buildDummyUuid(55),
                 });
 
-                it(`should find the expected results`, async () => {
-                    const letterToFind = 'ts';
-
-                    const targetLanguage = LanguageCode.Chilcotin;
-
-                    const termWithLetterInOnlyWord = buildTestInstance(TermViewModel, {
-                        id: buildDummyUuid(1),
-                        tokens: [buildTokenFromLetters([letterToFind, 'a'])],
-                    });
-
-                    const termWithLetterInSecondWord = buildTestInstance(TermViewModel, {
-                        id: buildDummyUuid(2),
-                        tokens: [
-                            buildTokenFromLetters(['g', 'u', 'y', 'i']),
-                            buildTokenFromLetters([letterToFind, 'a']),
-                        ],
-                    });
-
-                    const termWithoutLetter = buildTestInstance(TermViewModel, {
-                        id: buildDummyUuid(3),
-                        tokens: [buildTokenFromLetters(['d', 'e', 'ʔ', 'a', 'x'])],
-                    });
-
-                    const multilingualTextIncludesLetter: CoscradSimpleCondition = {
-                        type: CoscradConditionBlockType.SIMPLE,
-                        operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES_LETTER,
-                        field: 'tokens',
-                        params: [letterToFind, targetLanguage],
-                    };
-
-                    await assertFilterWorks({
-                        matches: [termWithLetterInOnlyWord, termWithLetterInSecondWord],
-                        nonMatches: [termWithoutLetter],
-                        filter: multilingualTextIncludesLetter,
-                    });
-                });
-            });
-        });
-
-        describe(`when searching the property: audioURL`, () => {
-            const termWithAudio = buildTestInstance(TermViewModel, {
-                id: buildDummyUuid(1),
-                mediaItemId: buildDummyUuid(55),
-            });
-
-            const termWithoutAudio = buildTestInstance(TermViewModel, {
-                id: buildDummyUuid(2),
-                // this term does not yet have audio
-                // mediaItemId: null
-            });
-
-            const hasAudio: CoscradSimpleCondition = {
-                type: CoscradConditionBlockType.SIMPLE,
-                operator: CoscradBooleanOperator.HAS_PROPERTY,
-                params: [],
-                // Note that this is built in the service layer using the config for the base URL, but corresponding media item IDs are persisted in the query DB
-                field: 'mediaItemId',
-            };
-
-            it(`should return the expected result`, async () => {
-                await assertFilterWorks({
-                    matches: [termWithAudio],
-                    nonMatches: [termWithoutAudio],
-                    filter: hasAudio,
-                });
-            });
-        });
-
-        describe(`when searching the property: vocabularyLists`, () => {
-            const searchText = 'Fruit';
-
-            const termInVocabularyListWithMatchingName = buildTestInstance(TermViewModel, {
-                id: buildDummyUuid(1),
-                vocabularyLists: [
-                    buildTestInstance(VocabularyListViewModel, {
-                        name: buildMultilingualTextFromBilingualText(
-                            {
-                                text: 'not me',
-                                languageCode: LanguageCode.English,
-                            },
-                            {
-                                text: `This matches, though. ${searchText}`,
-                                languageCode: LanguageCode.Chilcotin,
-                            }
-                        ),
-                    }),
-                ],
-            });
-
-            const termInSeveralVocabularyListsWithOneMatchingName = buildTestInstance(
-                TermViewModel,
-                {
+                const termWithoutAudio = buildTestInstance(TermViewModel, {
                     id: buildDummyUuid(2),
+                    // this term does not yet have audio
+                    // mediaItemId: null
+                });
+
+                const hasAudio: CoscradSimpleCondition = {
+                    type: CoscradConditionBlockType.SIMPLE,
+                    operator: CoscradBooleanOperator.HAS_PROPERTY,
+                    params: [],
+                    // Note that this is built in the service layer using the config for the base URL, but corresponding media item IDs are persisted in the query DB
+                    field: 'mediaItemId',
+                };
+
+                it(`should return the expected result`, async () => {
+                    await assertFilterWorks({
+                        matches: [termWithAudio],
+                        nonMatches: [termWithoutAudio],
+                        filter: hasAudio,
+                    });
+                });
+            });
+
+            describe(`when searching the property: vocabularyLists`, () => {
+                const searchText = 'Fruit';
+
+                const termInVocabularyListWithMatchingName = buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(1),
                     vocabularyLists: [
                         buildTestInstance(VocabularyListViewModel, {
-                            name: buildMultilingualTextWithSingleItem(
-                                `This one matches. ${searchText}`
+                            name: buildMultilingualTextFromBilingualText(
+                                {
+                                    text: 'not me',
+                                    languageCode: LanguageCode.English,
+                                },
+                                {
+                                    text: `This matches, though. ${searchText}`,
+                                    languageCode: LanguageCode.Chilcotin,
+                                }
                             ),
                         }),
+                    ],
+                });
+
+                const termInSeveralVocabularyListsWithOneMatchingName = buildTestInstance(
+                    TermViewModel,
+                    {
+                        id: buildDummyUuid(2),
+                        vocabularyLists: [
+                            buildTestInstance(VocabularyListViewModel, {
+                                name: buildMultilingualTextWithSingleItem(
+                                    `This one matches. ${searchText}`
+                                ),
+                            }),
+                            buildTestInstance(VocabularyListViewModel, {
+                                name: buildMultilingualTextWithSingleItem('I do not match.'),
+                            }),
+                        ],
+                    }
+                );
+
+                const termWithNoVocabularyLists = buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(3),
+                    vocabularyLists: [],
+                });
+
+                const termWithNoMatchingNames = buildTestInstance(TermViewModel, {
+                    id: buildDummyUuid(4),
+                    vocabularyLists: [
                         buildTestInstance(VocabularyListViewModel, {
-                            name: buildMultilingualTextWithSingleItem('I do not match.'),
+                            name: buildMultilingualTextWithSingleItem('I do not match!'),
+                        }),
+                        buildTestInstance(VocabularyListViewModel, {
+                            name: buildMultilingualTextWithSingleItem(
+                                'I do not match either.',
+                                LanguageCode.Chilcotin
+                            ),
                         }),
                     ],
-                }
-            );
+                });
 
-            const termWithNoVocabularyLists = buildTestInstance(TermViewModel, {
-                id: buildDummyUuid(3),
-                vocabularyLists: [],
+                const vocabularyListNameIncludes: CoscradSimpleCondition = {
+                    type: CoscradConditionBlockType.SIMPLE,
+                    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                    field: 'vocabularyLists[*].name',
+                    params: [searchText],
+                };
+
+                it(`should return the expected result`, async () => {
+                    await assertFilterWorks({
+                        matches: [
+                            termInSeveralVocabularyListsWithOneMatchingName,
+                            termInVocabularyListWithMatchingName,
+                        ],
+                        nonMatches: [termWithNoMatchingNames, termWithNoVocabularyLists],
+                        filter: vocabularyListNameIncludes,
+                    });
+                });
+            });
+        });
+
+        describe(`when one of the provided filters has an invalid path`, () => {
+            describe(`when a top level superfluous property is provided`, () => {
+                it(`should return the expected error`, async () => {
+                    const invalidFilter: CoscradSimpleCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.TEXT_EQUALS,
+                        field: 'bogus',
+                        params: ['match me'],
+                    };
+
+                    const res = await request(app.getHttpServer()).post(indexEndpoint).send({
+                        filter: invalidFilter,
+                    });
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                    const { message } = res.body;
+
+                    expect(message).toContain(`bogus`);
+                });
             });
 
-            const termWithNoMatchingNames = buildTestInstance(TermViewModel, {
-                id: buildDummyUuid(4),
-                vocabularyLists: [
-                    buildTestInstance(VocabularyListViewModel, {
-                        name: buildMultilingualTextWithSingleItem('I do not match!'),
-                    }),
-                    buildTestInstance(VocabularyListViewModel, {
-                        name: buildMultilingualTextWithSingleItem(
-                            'I do not match either.',
-                            LanguageCode.Chilcotin
-                        ),
-                    }),
-                ],
+            describe(`when a top level primitive property is referenced erroneously as an array`, () => {
+                const validNonArrayProperty = 'mediaItemIdForVideo';
+
+                const invalidFilter: CoscradSimpleCondition = {
+                    type: CoscradConditionBlockType.SIMPLE,
+                    operator: CoscradBooleanOperator.TEXT_EQUALS,
+                    field: `${validNonArrayProperty}[*]`,
+                    params: ['match me'],
+                };
+
+                const validFilter: CoscradSimpleCondition = {
+                    type: CoscradConditionBlockType.SIMPLE,
+                    operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
+                    field: 'name',
+                    params: ['match me'],
+                };
+
+                const invalidAndFilter: CoscradAndCondition = {
+                    type: CoscradConditionBlockType.AND,
+                    conditions: [invalidFilter, validFilter],
+                };
+
+                it(`should return the expected error`, async () => {
+                    const res = await request(app.getHttpServer()).post(indexEndpoint).send({
+                        filter: invalidAndFilter,
+                    });
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                    const { message } = res.body;
+
+                    expect(message).toContain(invalidFilter.field);
+                });
             });
 
-            const vocabularyListNameIncludes: CoscradSimpleCondition = {
-                type: CoscradConditionBlockType.SIMPLE,
-                operator: CoscradBooleanOperator.MULTILINGUAL_TEXT_INCLUDES,
-                field: 'vocabularyLists[*].name',
-                params: [searchText],
-            };
+            describe(`when a deeply nested superfluous property is provided`, () => {
+                const invalidFilter: CoscradSimpleCondition = {
+                    type: CoscradConditionBlockType.SIMPLE,
+                    operator: CoscradBooleanOperator.HAS_PROPERTY,
+                    field: 'tokens[*].characters[*].isPunctuationOrWhiteSpace.count',
+                    params: [],
+                };
 
-            it(`should return the expected result`, async () => {
-                await assertFilterWorks({
-                    matches: [
-                        termInSeveralVocabularyListsWithOneMatchingName,
-                        termInVocabularyListWithMatchingName,
-                    ],
-                    nonMatches: [termWithNoMatchingNames, termWithNoVocabularyLists],
-                    filter: vocabularyListNameIncludes,
+                const invalidOrFilter: CoscradOrCondition = {
+                    type: CoscradConditionBlockType.OR,
+                    conditions: [invalidFilter],
+                };
+
+                it(`should return the expected error response`, async () => {
+                    const res = await request(app.getHttpServer()).post(indexEndpoint).send({
+                        filter: invalidOrFilter,
+                    });
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                    const { message } = res.body;
+
+                    expect(message).toContain(`isPunctuationOrWhiteSpace`);
+
+                    expect(message).toContain('count');
                 });
             });
         });

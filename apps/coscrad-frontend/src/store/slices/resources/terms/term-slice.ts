@@ -4,8 +4,15 @@ import {
     IHttpErrorInfo,
     IIndexQueryResult,
     ITermViewModel,
+    IVocabularyListRecordForTerm,
 } from '@coscrad/api-interfaces';
 import { ActionReducerMapBuilder, AsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { doesSomeMultilingualTextItemInclude } from '../../../../components/resources/utils/query-matchers';
+import {
+    doesTextIncludeCaseInsensitive,
+    filterTableData,
+    Matchers,
+} from '../../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
@@ -13,6 +20,10 @@ import { TERMS } from './constants';
 import { fetchTermById, fetchTerms } from './thunks';
 import { TermSliceState } from './types';
 import { TermIndexState } from './types/term-index-state';
+
+export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+
+export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
 
 const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
     builder: ActionReducerMapBuilder<ILoadable<TermIndexState>>,
@@ -38,20 +49,19 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
             existingEntitiesById[entity.id] = entity;
         }
 
-        // eslint-disable-next-line no-debugger
-        debugger;
-
         state.isLoading = false;
 
         if (!state.data) {
             state.data = {
                 entities: existingEntitiesById,
                 indexScopedActions: [],
+                selected: [],
             };
         } else {
             state.data = {
                 entities: existingEntitiesById,
                 indexScopedActions: state.data.indexScopedActions,
+                selected: [],
             };
         }
 
@@ -104,6 +114,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
         state.data = {
             entities: existingEntitiesById,
             indexScopedActions,
+            selected: entities,
         };
         state.isLoading = false;
     });
@@ -124,10 +135,60 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
 
 const initialState: TermSliceState = buildInitialLoadableState<TermIndexState>();
 
+const matchers: Matchers<ITermViewModel> = {
+    name: doesSomeMultilingualTextItemInclude,
+    vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
+        vocabularyLists.some(({ name }) =>
+            name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
+        ),
+    tokens: (tokens, searchTerm) =>
+        (tokens || []).some(({ characters }) =>
+            characters.some((c) => {
+                const doesMatch = c.text === searchTerm.toLowerCase();
+
+                if (c.isOutOfAlphabet) return false;
+
+                return doesMatch;
+            })
+        ),
+};
+
 export const termSlice = createSlice({
     name: TERMS,
     initialState,
-    reducers: {},
+    reducers: {
+        filter: (state, action) => {
+            const { scope, query: searchValue } = action.payload;
+
+            const propertiesToSearch =
+                scope === ALL_PROPERTIES_SEARCH_KEY
+                    ? ([
+                          'name',
+                          'contributions',
+                          'vocabularyLists',
+                          'tokens',
+                          /**
+                           * For some reason, `as const` leads to an incompatibility
+                           * due to an incompatible `readonly` descriptor.
+                           */
+                      ] as (keyof ITermViewModel)[])
+                    : [scope];
+
+            const filterResult =
+                searchValue === ''
+                    ? Object.values(state.data.entities).filter((v) => v !== NOT_FOUND)
+                    : filterTableData(
+                          Object.values(state.data.entities),
+                          propertiesToSearch,
+                          searchValue,
+                          matchers
+                      );
+
+            state.data.selected = filterResult as ITermViewModel[];
+
+            return state;
+        },
+    },
     extraReducers: (builder) => {
         buildReducersForFetchTermsThunk(builder, fetchTerms);
 
@@ -136,3 +197,5 @@ export const termSlice = createSlice({
 });
 
 export const termReducer = termSlice.reducer;
+
+export const { filter: filterTerms } = termSlice.actions;

@@ -32,9 +32,6 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
 
     const { shouldEnableWebOfKnowledgeForResources } = useContext(ConfigurableContentContext);
 
-    // eslint-disable-next-line no-debugger
-    debugger;
-
     if (viewModel === NOT_FOUND) return <NotFoundPresenter />;
 
     if (errorInfo) return <ErrorDisplay {...errorInfo} />;

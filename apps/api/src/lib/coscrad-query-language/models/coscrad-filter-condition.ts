@@ -11,6 +11,9 @@ export enum CoscradBooleanOperator {
     MULTILINGUAL_TEXT_INCLUDES_LETTER = 'MULTILINGUAL_TEXT_INCLUDES_LETTER',
     HAS_PROPERTY = 'HAS_PROPERTY',
     HAS_LENGTH_GREATER_THAN = 'HAS_LENGTH_GREATER_THAN',
+    TEXT_INCLUDES = 'TEXT_INCLUDES',
+    TEXT_EQUALS = 'TEXT_EQUALS',
+    MULTILINGUAL_TEXT_HAS_LETTER = 'MULTILINGUAL_TEXT_HAS_LETTER',
 }
 
 interface CoscradCoditionBlock {
@@ -20,7 +23,7 @@ interface CoscradCoditionBlock {
 type CoscradUserQueryParams = string | number;
 
 export class CoscradSimpleCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.SIMPLE;
+    readonly type = CoscradConditionBlockType.SIMPLE;
 
     field: string;
 
@@ -30,19 +33,19 @@ export class CoscradSimpleCondition implements CoscradCoditionBlock {
 }
 
 export class CoscradOrCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    readonly type = CoscradConditionBlockType.OR;
 
     conditions: CoscradSimpleCondition[];
 }
 
 export class CoscradAndCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    readonly type = CoscradConditionBlockType.AND;
 
     conditions: CoscradSimpleCondition[];
 }
 
 export class CoscradNotCondition implements CoscradCoditionBlock {
-    type = CoscradConditionBlockType.OR;
+    readonly type = CoscradConditionBlockType.NOT;
 
     condition: CoscradSimpleCondition;
 }

@@ -1,4 +1,5 @@
 import { isNonEmptyString, isNull, isUndefined } from '@coscrad/validation-constraints';
+import { NOT_FOUND } from '../../../../../store/slices/interfaces/maybe-loadable.interface';
 
 export type Matchers<T> = {
     [K in keyof T]?: (value: T[K], searchTerm: string) => boolean;
@@ -21,22 +22,24 @@ export const defaultMatcher = (value: unknown, searchTerm: string): boolean =>
     doesTextIncludeCaseInsensitive(defaultStringify(value), searchTerm);
 
 export const filterTableData = <T>(
-    tableData: T[],
+    tableData: (typeof NOT_FOUND | T)[],
     selectedFilterableProperties: (keyof T)[],
     searchTerm: string,
     // We should limit this to matchers for the selected filterable properties
     matchers: Matchers<T> = {}
 ): T[] => {
     // Do not filter for empty search terms
-    if (!isNonEmptyString(searchTerm)) return tableData;
+    if (!isNonEmptyString(searchTerm)) return tableData.filter((r): r is T => r !== NOT_FOUND);
 
-    return tableData.filter((row) =>
-        selectedFilterableProperties.some((propertyKey) => {
-            const doesValueMatchSearchTerm = matchers[propertyKey] || defaultMatcher;
+    return tableData.filter(
+        (row): row is T =>
+            row !== NOT_FOUND &&
+            selectedFilterableProperties.some((propertyKey) => {
+                const doesValueMatchSearchTerm = matchers[propertyKey] || defaultMatcher;
 
-            const propertyValue = row[propertyKey];
+                const propertyValue = row[propertyKey];
 
-            return doesValueMatchSearchTerm(propertyValue, searchTerm);
-        })
+                return doesValueMatchSearchTerm(propertyValue, searchTerm);
+            })
     );
 };

@@ -1,31 +1,38 @@
 import {
     AggregateType,
+    CategorizableType,
     ITermViewModel,
-    IVocabularyListRecordForTerm,
+    LanguageCode,
 } from '@coscrad/api-interfaces';
 import { AudioClipPlayer } from '@coscrad/media-player';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useContext } from 'react';
+import { useAppDispatch } from '../../../app/hooks';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { NOT_FOUND } from '../../../store/slices/interfaces/maybe-loadable.interface';
+import { filterTerms, IndexSearchScope } from '../../../store/slices/resources';
 import { TermIndexState } from '../../../store/slices/resources/terms/types/term-index-state';
 import { CommaSeparatedList } from '../../../utils/generic-components';
-import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
-import {
-    doesTextIncludeCaseInsensitive,
-    Matchers,
-} from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
+import { HeadingLabel } from '../../../utils/generic-components/presenters/tables';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
-import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
+import { TermIndexTable } from './term-index-table';
+import { TermSearchBar } from './term-search-bar';
 
 export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
-    const { defaultLanguageCode } = useContext(ConfigurableContentContext);
+    const { defaultLanguageCode, indexToDetailFlows } = useContext(ConfigurableContentContext);
+
+    const label =
+        indexToDetailFlows.find(
+            ({ categorizableType }) => categorizableType === CategorizableType.term
+        )?.labelOverrides?.pluralLabel || 'Terms';
+
+    const dispatch = useAppDispatch();
 
     const { entities: termsById } = termsIndexResult;
 
@@ -70,33 +77,70 @@ export const TermIndexPresenter = (termsIndexResult: TermIndexState) => {
         ),
     };
 
-    const matchers: Matchers<ITermViewModel> = {
-        name: doesSomeMultilingualTextItemInclude,
-        vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
-            vocabularyLists.some(({ name }) =>
-                name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
-            ),
-        tokens: (tokens, searchTerm) =>
-            (tokens || []).some(({ characters }) =>
-                characters.some((c) => {
-                    const doesMatch = c.text === searchTerm.toLowerCase();
+    const onSearch = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
+        if (!isNonEmptyString(queryFromForm)) {
+            return; // TODO fetch with no filters
+        }
 
-                    if (c.isOutOfAlphabet) return false;
+        let condition;
 
-                    return doesMatch;
-                })
-            ),
+        if (queryFromForm.charAt(0) === '{' && queryFromForm.includes('}')) {
+            const extractedLanguageCode = queryFromForm.slice(1).split('}')[0];
+
+            if (Object.values(LanguageCode).some((lc) => lc === extractedLanguageCode)) {
+                condition = {
+                    type: 'SIMPLE',
+                    operator: 'MULTILINGUAL_TEXT_INCLUDES',
+                    params: [queryFromForm, extractedLanguageCode],
+                };
+            }
+        }
+
+        // default
+        if (!condition) {
+            condition = {
+                type: 'SIMPLE',
+                operator: 'MULTILINGUAL_TEXT_INCLUDES',
+                params: [queryFromForm],
+            };
+        }
+
+        // TODO type safety
+        const action = filterTerms({ scope, query: queryFromForm });
+
+        dispatch(action);
     };
 
     return (
-        <IndexTable
-            type={AggregateType.term}
-            headingLabels={headingLabels}
-            tableData={terms as ITermViewModel[]}
-            cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Terms'}
-            filterableProperties={['name', 'contributions', 'vocabularyLists', 'tokens']}
-            matchers={matchers}
-        />
+        <Stack>
+            {/* TODO Pull this from the resource info \ config? */}
+            <Typography variant="h2">{label}</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <TermSearchBar
+                    onValueChange={(searchScope, newValue: string) => {
+                        onSearch(searchScope, newValue);
+                    }}
+                    scopes={[
+                        'name',
+                        'contributions',
+                        'vocabularyLists',
+                        'tokens',
+                        /**
+                         * For some reason, `as const` leads to an incompatibility
+                         * due to an incompatible `readonly` descriptor.
+                         */
+                    ]}
+                />
+            </Box>
+            <Box>
+                <TermIndexTable
+                    type={AggregateType.term}
+                    headingLabels={headingLabels}
+                    tableData={terms as ITermViewModel[]}
+                    cellRenderersDefinition={cellRenderersDefinition}
+                    heading={'Terms'}
+                />
+            </Box>
+        </Stack>
     );
 };

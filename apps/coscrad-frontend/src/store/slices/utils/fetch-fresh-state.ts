@@ -58,7 +58,11 @@ export const fetchFreshState = (dispatch: AppDispatch, aggregateType: AggregateT
             break;
 
         case AggregateType.term:
-            dispatch(fetchTerms());
+            /**
+             * This is a bit awkward. But we are moving away from the SSE
+             * approach in the near future in favor of web sockets.
+             */
+            dispatch(fetchTerms(undefined));
             break;
 
         case AggregateType.audioItem:

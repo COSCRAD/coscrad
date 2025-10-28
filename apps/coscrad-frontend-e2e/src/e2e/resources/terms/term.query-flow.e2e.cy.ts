@@ -130,7 +130,7 @@ describe(`Term index-to-detail flow`, () => {
 
             const dummyEnglishTranslationOfTerm = `ZZZ Term (English)`;
 
-            const searchScopes = [`allProperties`, `name`];
+            const searchScopes = [`__ALL-PROPERTIES-SEARCH-KEY__`, `name`];
 
             before(() => {
                 cy.seedDataWithCommand(`CREATE_TERM`, {
@@ -188,7 +188,7 @@ describe(`Term index-to-detail flow`, () => {
                     // Note that we need to ensure that we use only 1 target Indigenous language code plus English
                     describe(`when the filter should return (with language query) 1 result (based on Chilcotin term)`, () => {
                         it(`should return the correct result`, () => {
-                            const searchTerms = `{clc}:${haidaTextToFind}`;
+                            const searchTerms = `{clc}${haidaTextToFind}`;
 
                             cy.getByDataAttribute(`index_search_bar`).click();
 

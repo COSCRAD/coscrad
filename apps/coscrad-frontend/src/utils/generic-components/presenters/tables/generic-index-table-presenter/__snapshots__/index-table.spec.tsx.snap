@@ -326,12 +326,12 @@ exports[` 1`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -699,12 +699,12 @@ exports[` 2`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -1069,12 +1069,12 @@ exports[` 2`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -1442,12 +1442,12 @@ exports[` 3`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -1812,12 +1812,12 @@ exports[` 3`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -2170,12 +2170,12 @@ exports[` 3`] = `
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -2591,12 +2591,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -2996,12 +2996,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -3369,12 +3369,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -3739,12 +3739,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -4097,12 +4097,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span
@@ -4513,12 +4513,12 @@ exports[`IndexTable when the table setup is valid when all properies are include
                     <svg
                       aria-hidden="true"
                       class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
-                      data-testid="ArrowBackIosIcon"
+                      data-testid="ArrowBackIosNewIcon"
                       focusable="false"
                       viewBox="0 0 24 24"
                     >
                       <path
-                        d="M11.67 3.87 9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+                        d="M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z"
                       />
                     </svg>
                     <span

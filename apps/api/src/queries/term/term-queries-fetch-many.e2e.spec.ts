@@ -208,9 +208,9 @@ describe(`when querying for a term: fetch many`, () => {
             });
 
             it(`should only return published terms`, async () => {
-                const res = await request(app.getHttpServer()).get(indexEndpoint);
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
 
-                expect(res.status).toBe(httpStatusCodes.ok);
+                expect(res.status).toBe(httpStatusCodes.createdResource);
 
                 const {
                     body: { entities },
@@ -250,9 +250,9 @@ describe(`when querying for a term: fetch many`, () => {
             });
 
             it(`should return no terms`, async () => {
-                const res = await request(app.getHttpServer()).get(indexEndpoint);
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
 
-                expect(res.status).toBe(httpStatusCodes.ok);
+                expect(res.status).toBe(httpStatusCodes.createdResource);
 
                 expect(res.body.entities).toHaveLength(0);
             });
@@ -299,9 +299,9 @@ describe(`when querying for a term: fetch many`, () => {
                 });
 
                 it(`should not return the unpublished term`, async () => {
-                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+                    const res = await request(app.getHttpServer()).post(indexEndpoint);
 
-                    expect(res.status).toBe(httpStatusCodes.ok);
+                    expect(res.status).toBe(httpStatusCodes.createdResource);
 
                     /**
                      * + private, but user in ACL
@@ -331,9 +331,9 @@ describe(`when querying for a term: fetch many`, () => {
                 });
 
                 it(`should return the unpublished term`, async () => {
-                    const res = await request(app.getHttpServer()).get(indexEndpoint);
+                    const res = await request(app.getHttpServer()).post(indexEndpoint);
 
-                    expect(res.status).toBe(httpStatusCodes.ok);
+                    expect(res.status).toBe(httpStatusCodes.createdResource);
 
                     const {
                         body: { entities },
@@ -394,13 +394,13 @@ describe(`when querying for a term: fetch many`, () => {
             });
 
             it(`should allow the user to access private resources`, async () => {
-                const res = await request(app.getHttpServer()).get(indexEndpoint);
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
 
                 const numberOfPrivateTerms = 2;
 
                 const numberOfPublicTerms = 1;
 
-                expect(res.status).toBe(HttpStatusCode.ok);
+                expect(res.status).toBe(HttpStatusCode.createdResource);
 
                 expect(res.body.entities).toHaveLength(numberOfPrivateTerms + numberOfPublicTerms);
 

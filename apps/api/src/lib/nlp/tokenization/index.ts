@@ -1,2 +1,2 @@
-export * from '../interfaces/tokenizer.interface';
+export * from '../types/tokenizer.dto';
 export * from './chilcotin-tokenizer';

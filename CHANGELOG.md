@@ -13,6 +13,11 @@ which were previously applied in the browser, must now be sent to the server.
 This will be aparent to users in the speed up of the initial load of all
 index pages (e.g. `/Terms`).
 
+#### Relevant Commits
+
+-   perf: implement active search for terms (#786)
+-   refactor: update state management strategy for terms (#784)
+
 ### Bulk Imports
 
 We have exposed additional features via our CLI for use in bulk data ingestion.

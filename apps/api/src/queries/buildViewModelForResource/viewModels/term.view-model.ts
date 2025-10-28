@@ -172,6 +172,12 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     // TODO remove this in favor of `getAvailableActions()`
     actions: string[];
 
+    @NestedDataType(Token, {
+        label: 'tokens',
+        description:
+            'a list of the individual tokens (pre-processed words) in this term, including a letter-by-letter breakdown',
+        isArray: true,
+    })
     tokens: Token[];
 
     // TODO remove this when returning general queries?
