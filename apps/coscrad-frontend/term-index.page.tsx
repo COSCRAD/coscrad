@@ -1,9 +1,10 @@
 import { ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Box, Stack } from '@mui/material';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useAppDispatch } from './src/app/hooks';
 
+import { TermPaginator } from './src/components/resources/terms/term-paginator';
 import { TermSearchBar } from './src/components/resources/terms/term-search-bar';
 import { ConfigurableContentContext } from './src/configurable-front-matter/configurable-content-provider';
 import {
@@ -118,6 +119,13 @@ export const TermIndexPage = (): JSX.Element => {
 
     const { defaultLanguageCode } = useContext(ConfigurableContentContext);
 
+    const [filter, setFilter] = useState<IUserDefinedFilter<ITermViewModel> | null>(null);
+
+    const [paginationOptions, setPaginationOptions] = useState<{ size: number; page: number }>({
+        size: 100,
+        page: 1,
+    });
+
     const searchInDb = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
         if (!isNonEmptyString(queryFromForm)) {
             return dispatch(fetchTerms(null));
@@ -142,13 +150,12 @@ export const TermIndexPage = (): JSX.Element => {
             defaultLanguageCode
         );
 
+        setFilter(filter);
+
         dispatch(
             fetchTerms({
                 filter: filter,
-                pagination: {
-                    size: 100,
-                    page: 1,
-                },
+                pagination: paginationOptions,
             })
         );
     };
@@ -174,6 +181,53 @@ export const TermIndexPage = (): JSX.Element => {
                 </Box>
                 <Box>
                     <TermListContainer />
+                </Box>
+                <Box>
+                    <TermPaginator
+                        count={0}
+                        pageCount={10}
+                        onPageSizeChange={function (pageSize: number): void {
+                            const newPaginationOptions = {
+                                ...paginationOptions,
+                                size: pageSize,
+                            };
+
+                            setPaginationOptions(newPaginationOptions);
+
+                            console.log({
+                                dispatch: {
+                                    filter,
+                                    paginationOptions,
+                                    pageSize,
+                                    newPaginationOptions,
+                                },
+                            });
+
+                            dispatch(
+                                fetchTerms({
+                                    filter,
+                                    pagination: newPaginationOptions,
+                                })
+                            );
+                        }}
+                        onPageNumberChange={function (pageNumber: number): void {
+                            const newPaginationOptions = {
+                                ...paginationOptions,
+                                page: pageNumber,
+                            };
+
+                            setPaginationOptions(newPaginationOptions);
+
+                            dispatch(
+                                fetchTerms({
+                                    filter,
+                                    pagination: newPaginationOptions,
+                                })
+                            );
+                        }}
+                        page={paginationOptions.page}
+                        pageSize={paginationOptions.size}
+                    />
                 </Box>
             </Stack>
         </div>
