@@ -9,6 +9,9 @@ import { buildMultilingualTextFromBilingualText } from '../../domain/common/buil
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
+import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
+import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../persistence/database/arango-database-for-collection';
@@ -16,6 +19,7 @@ import mapDatabaseDocumentToAggregateDTO from '../../persistence/database/utilit
 import mapEntityDTOToDatabaseDocument from '../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { buildTestInstance } from '../../test-data/utilities';
 import { DeepPartial } from '../../types/DeepPartial';
 import { DTO } from '../../types/DTO';
 import { InternalError, isInternalError } from '../errors/InternalError';
@@ -31,6 +35,17 @@ import {
     CoscradOrCondition,
     CoscradSimpleCondition,
 } from './models/coscrad-filter-condition';
+
+const testUserId = buildDummyUuid(808);
+
+const matchingUserId = testUserId;
+
+const matchingGroupIds = [50, 60, 107].map(buildDummyUuid);
+
+const testUserWithGroups = buildTestInstance(CoscradUserWithGroups, {
+    id: testUserId,
+    groups: matchingGroupIds.map((id) => buildTestInstance(CoscradUserGroup, { id })),
+});
 
 const WIDGETS_COLLECTION_ID = 'widgets';
 
@@ -48,6 +63,10 @@ class Location {
 
 class Widget {
     id: string;
+
+    accessControlList: AccessControlList;
+
+    isPublished?: boolean;
 
     comment: string;
 
@@ -78,6 +97,8 @@ class Widget {
         tokens,
         comment,
         pages,
+        accessControlList,
+        isPublished,
     }: DTO<Widget>) {
         this.id = id;
 
@@ -91,6 +112,10 @@ class Widget {
             this.location = new Location(location);
         }
 
+        if (isNonEmptyObject(accessControlList)) {
+            this.accessControlList = new AccessControlList(accessControlList);
+        }
+
         this.nickname = nickname;
 
         this.rating = rating;
@@ -102,6 +127,8 @@ class Widget {
         this.tokens = tokens.map((t) => cloneToPlainObject(t));
 
         this.pages = Array.isArray(pages) ? pages.map((p) => new MultilingualText(p)) : [];
+
+        this.isPublished = isPublished;
     }
 
     clone(overrides?: DeepPartial<this>) {
@@ -115,11 +142,13 @@ class Widget {
 
 const dummyWidget = new Widget({
     id: '123',
+    isPublished: true,
     yearBuilt: 2023,
     description: buildMultilingualTextWithSingleItem('Awesome Widget'),
     tags: [],
     tokens: [],
     comment: 'an awesome widget indeed',
+    accessControlList: new AccessControlList(),
 });
 
 class WidgetRepository {
@@ -140,14 +169,27 @@ class WidgetRepository {
         await this.databaseForCollection.createMany(widgets.map(mapEntityDTOToDatabaseDocument));
     }
 
-    async fetchForUser({ filter }: { filter: CoscradFilterCondition }) {
-        const result = await this.databaseForCollection.fetchForUser({ filter });
+    async fetchForUser({
+        filter,
+        user,
+    }: {
+        filter: CoscradFilterCondition;
+        user?: CoscradUserWithGroups;
+    }) {
+        const result = await this.databaseForCollection.fetchForUser({ filter, user });
 
         if (isInternalError(result)) {
             return result;
         }
 
-        return result.map((doc) => new Widget(mapDatabaseDocumentToAggregateDTO(doc)));
+        const finalResult = {
+            selected: result.selected.map((doc) => {
+                return new Widget(mapDatabaseDocumentToAggregateDTO(doc));
+            }),
+            count: result.count,
+        };
+
+        return finalResult;
     }
 }
 
@@ -279,6 +321,21 @@ describe(`Coscrad Query Language`, () => {
     };
 
     describe(`when the query is validly formatted`, () => {
+        const isPublished: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.IS_FLAGGED,
+            params: [],
+            field: 'isPublished',
+        };
+
+        // TODO include publication status in this check
+        const canUser: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.USER_CAN,
+            params: [matchingUserId, matchingGroupIds],
+            field: 'accessControlList',
+        };
+
         describe(`when the query is a simple condition`, () => {
             describe(`when searching a nested field`, () => {
                 describe(`MULTILINGUAL_TEXT_INCLUDES`, () => {
@@ -657,6 +714,7 @@ describe(`Coscrad Query Language`, () => {
 
                         const widgetThatExplicitlyDoesNotHaveALocation = new Widget({
                             id: '104',
+                            isPublished: true,
                             // Aaron wuz here
                             yearBuilt: 2025,
                             description: buildMultilingualTextWithSingleItem(
@@ -666,6 +724,7 @@ describe(`Coscrad Query Language`, () => {
                             tags: [],
                             tokens: [],
                             comment: "this one doesn't have a location",
+                            accessControlList: new AccessControlList(),
                         });
 
                         const hasLocation: CoscradSimpleCondition = {
@@ -1446,9 +1505,137 @@ describe(`Coscrad Query Language`, () => {
                     });
                 });
             });
+
+            describe(`USER_CAN`, () => {
+                const widgetWithUserId = dummyWidget.clone({
+                    id: buildDummyUuid(1),
+                    accessControlList: new AccessControlList().allowUser(matchingUserId),
+                });
+
+                const widgetWithoutUserIdOrGroupId = dummyWidget.clone({
+                    id: buildDummyUuid(2),
+                    // Let's be sure there's no chance of crossing the wires with user and group IDs, although UUIDs protect us from this due to making ID collisions almost impossible
+                    accessControlList: new AccessControlList()
+                        .allowUser(buildDummyUuid(666))
+                        .allowUser(buildDummyUuid(777))
+                        .allowGroup(matchingUserId),
+                });
+
+                const widgetWithEmptyAcl = dummyWidget.clone({
+                    id: buildDummyUuid(3),
+                    accessControlList: new AccessControlList(),
+                });
+
+                const widgetWithOneGroupIdButNoUserId = dummyWidget.clone({
+                    id: buildDummyUuid(4),
+                    accessControlList: new AccessControlList()
+                        .allowUser(buildDummyUuid(666))
+                        .allowGroup(matchingGroupIds[0])
+                        .allowGroup(buildDummyUuid(123)),
+                });
+
+                const widgetWithAllGroupsButNoUserId = dummyWidget.clone({
+                    id: buildDummyUuid(5),
+                    accessControlList: matchingGroupIds.reduce(
+                        (acl, groupId) => acl.allowGroup(groupId),
+                        new AccessControlList()
+                    ),
+                });
+
+                const widgetWithAllGroupsAndUserId = dummyWidget.clone({
+                    id: buildDummyUuid(6),
+                    accessControlList: matchingGroupIds.reduce(
+                        (acl, groupId) => acl.allowGroup(groupId),
+                        new AccessControlList().allowUser(matchingUserId)
+                    ),
+                });
+
+                beforeEach(async () => {
+                    await widgetRepository.createMany([
+                        // +
+                        widgetWithUserId,
+                        // -
+                        widgetWithoutUserIdOrGroupId,
+                        // -
+                        widgetWithEmptyAcl,
+                        // +
+                        widgetWithOneGroupIdButNoUserId,
+                        // +
+                        widgetWithAllGroupsButNoUserId,
+                        // +
+                        widgetWithAllGroupsAndUserId,
+                    ]);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const result = await widgetRepository.fetchForUser({
+                        filter: canUser,
+                    });
+
+                    if (isInternalError(result)) {
+                        throw result;
+                    }
+
+                    expect(result.selected).toHaveLength(4);
+
+                    expect(result.count).toBe(4);
+                });
+            });
+
+            describe(`IS_FLAGGED`, () => {
+                describe(`when the flag is at top level`, () => {
+                    const publishedWidget = dummyWidget.clone({
+                        id: buildDummyUuid(1),
+                        isPublished: true,
+                    });
+
+                    const unpublishedWidget = dummyWidget.clone({
+                        id: buildDummyUuid(2),
+                        isPublished: false,
+                    });
+
+                    const implicitlyUnpublishedWidget = dummyWidget.clone({
+                        id: buildDummyUuid(3),
+                        isPublished: null,
+                    });
+
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            // +
+                            publishedWidget,
+                            // -
+                            unpublishedWidget,
+                            // -
+                            implicitlyUnpublishedWidget,
+                        ]);
+                    });
+
+                    it(`should return the expected results`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: isPublished,
+                        });
+
+                        if (isInternalError(result)) {
+                            throw new InternalError(`Test failed unexpectedly`);
+                        }
+
+                        const { count, selected } = result;
+
+                        expect(count).toBe(1);
+
+                        expect(selected).toHaveLength(1);
+                    });
+                });
+            });
         });
 
         describe(`when the query is a complex condition`, () => {
+            const doesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradOrCondition = {
+                type: CoscradConditionBlockType.OR,
+                // Note we use the language-code specific version of the ml text query here
+                conditions: [doesEnglishTextIncludeEllo, greaterThanCutoffYear],
+            };
+
             describe(`AND`, () => {
                 describe(`when the AND's conditions are all simple conditions`, () => {
                     beforeEach(async () => {
@@ -1489,6 +1676,74 @@ describe(`Coscrad Query Language`, () => {
                         expect(result).toHaveLength(1);
                     });
                 });
+
+                describe(`when querying for user access along with an or condition`, () => {
+                    beforeEach(async () => {
+                        await widgetRepository.createMany([
+                            // 3 / 5 should match the `OR`
+                            // +
+                            widgetThatMatchesInOriginalText.clone({
+                                id: '1',
+                                yearBuilt: cutoffYearExclusive + 1,
+                                accessControlList: new AccessControlList().allowUser(testUserId),
+                            }),
+                            // - We specify the language code to be the original ('en') language code for this case
+                            widgetThatMatchesInTranslatedText.clone({
+                                id: '2',
+                                yearBuilt: cutoffYearExclusive - 1,
+                            }),
+                            // -
+                            widgetThatDoesNotMatchSearchText.clone({
+                                id: '3',
+                                yearBuilt: cutoffYearExclusive - 1,
+                            }),
+                            // - due to lack of ACL access
+                            widgetThatComesAfterCutoffYear.clone({
+                                id: '4',
+                                description: buildMultilingualTextWithSingleItem('no text match!'),
+                                accessControlList: new AccessControlList(),
+                            }),
+                            // +
+                            widgetThatComesBeforeCutoffYear.clone({
+                                id: '5',
+                                description: buildMultilingualTextWithSingleItem(
+                                    `H${searchText} to all!`
+                                ),
+                                accessControlList: new AccessControlList().allowGroup(
+                                    matchingGroupIds[0]
+                                ),
+                            }),
+                        ]);
+                    });
+
+                    const doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition =
+                        {
+                            type: CoscradConditionBlockType.AND,
+                            conditions: [
+                                isPublished,
+                                canUser,
+                                doesEnglishTextIncludeElloOrGreaterThanCutoffYear,
+                            ],
+                        };
+
+                    it(`should return the expected results`, async () => {
+                        const result = await widgetRepository.fetchForUser({
+                            filter: doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear,
+                            user: testUserWithGroups,
+                        });
+
+                        // TODO use `assertQueryResult`... helper
+                        if (isInternalError(result)) {
+                            throw new Error(`broken test case`);
+                        }
+
+                        const { count, selected } = result;
+
+                        expect(count).toBe(2);
+
+                        expect(selected).toHaveLength(2);
+                    });
+                });
             });
 
             describe(`OR`, () => {
@@ -1526,15 +1781,10 @@ describe(`Coscrad Query Language`, () => {
                         ]);
                     });
 
-                    const doesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradOrCondition = {
-                        type: CoscradConditionBlockType.OR,
-                        // Note we use the language-code specific version of the ml text query here
-                        conditions: [doesEnglishTextIncludeEllo, greaterThanCutoffYear],
-                    };
-
                     it(`should return the expected results`, async () => {
                         const result = await widgetRepository.fetchForUser({
                             filter: doesEnglishTextIncludeElloOrGreaterThanCutoffYear,
+                            user: testUserWithGroups,
                         });
 
                         expect(result).toHaveLength(3);

@@ -221,6 +221,8 @@ export class MediaItemQueryService {
         return {
             entities,
             indexScopedActions: this.fetchUserActions(userWithGroups, this.getDomainModelCtors()),
+            page: 1,
+            count: entities.length,
         };
     }
 

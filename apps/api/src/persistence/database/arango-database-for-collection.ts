@@ -83,7 +83,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         user?: CoscradUserWithGroups;
         filter?: CoscradFilterCondition;
         pagination?: PaginationOptions;
-    }): Promise<ResultOrError<ArangoDatabaseDocument<TEntity>[]>> {
+    }): Promise<ResultOrError<{ selected: ArangoDatabaseDocument<TEntity>[]; count: number }>> {
         const docRef = 'doc';
 
         const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
@@ -161,12 +161,30 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         // Should we ensure that the query returns the `next` page number \ offset?
         const aqlQueryString = `
+        let allResults = (
             for ${docRef} in @@collectionName
             ${sortBlock}
             ${letStatements}
             ${filterBlock}
-            ${limitBlock}
             return ${docRef}
+        )
+
+        let count = (
+            for r in allResults
+            collect with count into l
+            return l
+        )
+
+        let selected = (
+            for r in allResults
+            ${limitBlock}
+            return r
+        )
+
+        return {
+            selected,
+            count: count[0]
+        }
         `;
 
         const cursor = await this.#arangoDatabase
@@ -175,7 +193,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 throw e;
             });
 
-        const result = await cursor.all();
+        const resultsList = await cursor.all();
+
+        const result = resultsList[0];
 
         return result;
     }

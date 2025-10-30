@@ -213,10 +213,14 @@ describe(`when querying for a term: fetch many`, () => {
                 expect(res.status).toBe(httpStatusCodes.createdResource);
 
                 const {
-                    body: { entities },
+                    body: { entities, page, count },
                 } = res;
 
-                // TODO check that the actions are correct !!!!!
+                expect(page).toBe(1);
+
+                expect(count).toBe(1);
+
+                // TODO check that the actions are correct
                 expect(entities).toHaveLength(1);
 
                 // Only one published result should come through from eventHistoryForMany

@@ -508,6 +508,78 @@ const compileSimpleFilterCondition = (
         };
     }
 
+    if (operator === CoscradBooleanOperator.USER_CAN) {
+        const {
+            expression: fieldRef,
+            individualFieldNames,
+            isArray,
+        } = buildFieldRef(docRef, field, startingArgIndex);
+
+        if (isArray) {
+            throw new Error(`Arrays of Access Control Lists are not allowed`);
+        }
+
+        if (individualFieldNames.length > 1) {
+            throw new Error(`Nested Access Control Lists are not yet supported`);
+        }
+
+        if (individualFieldNames[0] !== 'accessControlList') {
+            throw new Error(
+                `We currently only support filtering for user access via a top-level 'accessControlList' property`
+            );
+        }
+
+        // TODO validate param list
+
+        const [userId, groupIds] = params;
+
+        const letVarName = `acl_${varCount}`;
+
+        const letStatement = `
+        let ${letVarName} = has(${docRef},'${individualFieldNames.join(
+            '.'
+        )}') ? ${fieldRef} : { allowedUserIds: [], allowedGroupIds: [] }
+        `;
+
+        const filterStatement = `contains(${letVarName}.allowedUserIds,@args[${
+            startingArgIndex + 1
+        }]) || length(intersection(${letVarName}.allowedGroupIds,@args[${
+            startingArgIndex + 2
+        }])) > 0`;
+
+        return {
+            letStatement,
+            filterStatement,
+            bindVars: {
+                args: [field, userId, groupIds],
+            },
+        };
+    }
+
+    if (operator === CoscradBooleanOperator.IS_FLAGGED) {
+        const {
+            expression: fieldRef,
+            individualFieldNames,
+            isArray,
+        } = buildFieldRef(docRef, field, startingArgIndex);
+
+        if (isArray) {
+            // TODO make this a returned error
+            throw new Error(`Arrays of flags are not supported for operator IS_FLAGGED`);
+        }
+
+        const filterStatement = `
+        has(${docRef},'${individualFieldNames.join('.')}') && ${fieldRef}
+        `;
+
+        return {
+            filterStatement,
+            bindVars: {
+                args: [field],
+            },
+        };
+    }
+
     throw new InternalError(`Unsupported logical operator for COSCRAD query filter: ${operator}`);
 };
 
@@ -518,17 +590,24 @@ const compileAndFilterCondition = (
 ): ResultOrError<CoscradAqlFilterBlock> => {
     const { conditions } = condition;
 
-    if (conditions.some((c) => c.type !== CoscradConditionBlockType.SIMPLE)) {
-        throw new InternalError(
-            `Nesting of complex queries is not yet supported.\n An AND query may only take simple conditions.`
-        );
-    }
-
-    const { context: bindVars, statements } = conditions.reduce(
+    const {
+        context: bindVars,
+        statements,
+        letStatements,
+    } = conditions.reduce(
         (acc, condition) => {
-            const { statements, context, index } = acc;
+            const { statements, letStatements, context, index } = acc;
 
-            const compileResult = compileSimpleFilterCondition(condition, docRef, index);
+            if (
+                condition.type !== CoscradConditionBlockType.SIMPLE &&
+                condition.type !== CoscradConditionBlockType.OR
+            ) {
+                throw new Error(
+                    `Child condition of type: ${condition.type} is not yet supported within an AND block`
+                );
+            }
+
+            const compileResult = compileAqlFilterBlock(condition, docRef, index);
 
             if (isInternalError(compileResult)) {
                 throw new InternalError(
@@ -537,9 +616,11 @@ const compileAndFilterCondition = (
                 );
             }
 
-            const { bindVars, filterStatement: statement } = compileResult;
+            const { bindVars, filterStatement: statement, letStatement } = compileResult;
 
             statements.push(statement);
+
+            letStatements.push(letStatement);
 
             context.args.push(...(bindVars['args'] as unknown[]));
 
@@ -547,13 +628,15 @@ const compileAndFilterCondition = (
 
             return {
                 statements,
+                letStatements,
                 context,
                 index: newStartingIndex,
             };
         },
-        { context: { args: [] }, statements: [], index: startingArgIndex } as {
+        { context: { args: [] }, statements: [], letStatements: [], index: startingArgIndex } as {
             context: { args: unknown[] };
             statements: string[];
+            letStatements: string[];
             index: number;
         }
     );
@@ -573,6 +656,7 @@ const compileAndFilterCondition = (
          * in AQL
          * ```
          */
+        letStatement: letStatements.join('\n'),
         filterStatement: statements.join(' and '),
     };
 };

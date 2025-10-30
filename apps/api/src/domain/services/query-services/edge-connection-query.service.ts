@@ -77,6 +77,8 @@ export class EdgeConnectionQueryService {
                 ...mixinTags(new NoteViewModel(domainModel)),
                 actions: this.fetchUserActions(systemUser, domainModel),
             })),
+            page: 1,
+            count: validDomainModels.length,
         };
     }
 

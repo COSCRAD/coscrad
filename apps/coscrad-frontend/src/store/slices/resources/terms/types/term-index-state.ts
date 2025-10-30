@@ -21,4 +21,5 @@ export type TermIndexState = {
      * 2. Populates a fresh selection in the following property
      */
     selected: ITermViewModel[];
+    page: number;
 };

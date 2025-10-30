@@ -110,7 +110,7 @@ export class TermQueryService {
 
     // TODO should we support specifications \ custom filters?
     async fetchMany(userWithGroups?: CoscradUserWithGroups, options?: UserQueryOptions) {
-        const entities = await this.termQueryRepository.fetchMany(options);
+        const { entities, page, count } = await this.termQueryRepository.fetchMany(options);
 
         // TODO consider filtering for user access in the DB
 
@@ -149,6 +149,8 @@ export class TermQueryService {
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+            page,
+            count,
         };
     }
 

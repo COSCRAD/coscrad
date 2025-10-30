@@ -89,6 +89,8 @@ export class PlaylistQueryService {
 
                 return result;
             }),
+            page: 1,
+            count: result.length,
         };
     }
 

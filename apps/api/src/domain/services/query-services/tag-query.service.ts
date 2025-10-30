@@ -74,6 +74,8 @@ export class TagQueryService {
                 actions: this.fetchUserActions(systemUser, tag),
             })),
             indexScopedActions: this.fetchUserActions(systemUser, Tag),
+            page: 1,
+            count: allTags.length,
         };
     }
 

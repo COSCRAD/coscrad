@@ -323,7 +323,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(queryOptions?: UserQueryOptions): Promise<TermViewModel[]> {
+    async fetchMany(queryOptions?: UserQueryOptions) {
         const result = await this.database.fetchForUser(queryOptions);
 
         if (isInternalError(result)) {
@@ -333,13 +333,20 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             );
         }
 
-        const buildResult = result.map((doc) => {
+        const { selected, count } = result;
+
+        const buildResult = selected.map((doc) => {
             const dto = mapDatabaseDocumentToAggregateDTO(doc);
 
             return TermViewModel.fromDto(dto);
         });
 
-        return buildResult;
+        return {
+            entities: buildResult,
+            // TODO return this from the AQL query as well as it resolves the actual pagination params to use by applying defaults
+            page: queryOptions?.pagination?.page || 1,
+            count,
+        };
     }
 
     async count(): Promise<number> {

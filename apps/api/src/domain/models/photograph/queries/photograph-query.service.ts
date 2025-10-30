@@ -94,6 +94,8 @@ export class PhotographQueryService {
                 };
             }),
             indexScopedActions,
+            page: 1,
+            count: entities.length,
         };
 
         return result;

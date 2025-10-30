@@ -5,4 +5,6 @@ import { IViewModel } from './view-model.interface';
 export interface IIndexQueryResult<UViewModel extends IViewModel = IViewModel> {
     entities: IDetailQueryResult<UViewModel>[];
     indexScopedActions: IBackendCommandFormAndLabels[];
+    page: number;
+    count: number;
 }

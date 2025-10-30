@@ -69,6 +69,8 @@ export class SongQueryService {
             // TODO Use `SongViewModel` here
             indexScopedActions: fetchActionsForUser(this.commandInfoService, userWithGroups, Song),
             entities: result as unknown as ISongViewModel[],
+            page: 1,
+            count: result.length,
         };
     }
 

@@ -81,6 +81,8 @@ export class AudioItemQueryService {
                 AudioItem
             ),
             entities: result,
+            page: 1,
+            count: result.length,
         };
     }
 

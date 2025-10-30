@@ -1,6 +1,7 @@
 import { IMultilingualTextItem, IToken, LanguageCode } from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
-import { IResourceQueryRepository } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
+import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
+import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
@@ -17,13 +18,24 @@ export interface AudioCandidatesForTerm {
     possibleAudioItems: EventSourcedAudioItemViewModel[];
 }
 
+interface PaginatedResponse<T> {
+    entities: T[];
+    page: number;
+    count: number;
+}
+
 /**
  * Note that we are abstracting over the database, not the view model so
  * we program to the concrete view model type. `ITermViewModel` is only meant
  * to serve as a constraint for the return of the query service and represents
  * a contract with the client.
  */
-export interface ITermQueryRepository extends IResourceQueryRepository<TermViewModel> {
+export interface ITermQueryRepository {
+    create(view: TermViewModel): Promise<void>;
+    createMany(views: TermViewModel[]): Promise<void>;
+    fetchById(id: string): Promise<Maybe<TermViewModel>>;
+    fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<TermViewModel>>;
+
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     delete(id: string): Promise<void>;

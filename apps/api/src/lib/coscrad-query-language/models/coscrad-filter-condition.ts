@@ -14,13 +14,15 @@ export enum CoscradBooleanOperator {
     TEXT_INCLUDES = 'TEXT_INCLUDES',
     TEXT_EQUALS = 'TEXT_EQUALS',
     MULTILINGUAL_TEXT_HAS_LETTER = 'MULTILINGUAL_TEXT_HAS_LETTER',
+    USER_CAN = 'USER_CAN',
+    IS_FLAGGED = 'IS_FLAGGED',
 }
 
 interface CoscradCoditionBlock {
     type: CoscradConditionBlockType;
 }
 
-type CoscradUserQueryParams = string | number;
+type CoscradUserQueryParams = string | number | CoscradUserQueryParams[];
 
 export class CoscradSimpleCondition implements CoscradCoditionBlock {
     readonly type = CoscradConditionBlockType.SIMPLE;
@@ -41,7 +43,7 @@ export class CoscradOrCondition implements CoscradCoditionBlock {
 export class CoscradAndCondition implements CoscradCoditionBlock {
     readonly type = CoscradConditionBlockType.AND;
 
-    conditions: CoscradSimpleCondition[];
+    conditions: CoscradFilterCondition[];
 }
 
 export class CoscradNotCondition implements CoscradCoditionBlock {

@@ -53,12 +53,14 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
 
         if (!state.data) {
             state.data = {
+                page: state.data?.page,
                 entities: existingEntitiesById,
                 indexScopedActions: [],
                 selected: [],
             };
         } else {
             state.data = {
+                page: state.data.page,
                 entities: existingEntitiesById,
                 indexScopedActions: state.data.indexScopedActions,
                 selected: [],
@@ -98,7 +100,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
     });
 
     builder.addCase(thunk.fulfilled, (state: ILoadable<TermIndexState>, action) => {
-        const { entities, indexScopedActions } = action.payload;
+        const { entities, indexScopedActions, page } = action.payload;
 
         /**
          * Note that this is a plain-old JS object and not a map because maps
@@ -112,6 +114,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
         });
 
         state.data = {
+            page,
             entities: existingEntitiesById,
             indexScopedActions,
             selected: entities,
@@ -133,7 +136,10 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
     });
 };
 
-const initialState: TermSliceState = buildInitialLoadableState<TermIndexState>();
+const initialState: TermSliceState = {
+    ...buildInitialLoadableState<TermIndexState>(),
+    pageSize: 100,
+};
 
 const matchers: Matchers<ITermViewModel> = {
     name: doesSomeMultilingualTextItemInclude,
@@ -188,6 +194,17 @@ export const termSlice = createSlice({
 
             return state;
         },
+        changePageSize: (state, { payload: { pageSize } }: { payload: { pageSize: number } }) => {
+            state.pageSize = pageSize;
+
+            state.data = null;
+
+            state.isLoading = false;
+
+            state.errorInfo = null;
+
+            return state;
+        },
     },
     extraReducers: (builder) => {
         buildReducersForFetchTermsThunk(builder, fetchTerms);
@@ -198,4 +215,9 @@ export const termSlice = createSlice({
 
 export const termReducer = termSlice.reducer;
 
-export const { filter: filterTerms } = termSlice.actions;
+/**
+ * TODO At some point, we may want to generalize this for other resource types.
+ * It's possible that the page size is actually a single property that is
+ * shared for all resource index views.
+ */
+export const { filter: filterTerms, changePageSize: changePageSizeForTerms } = termSlice.actions;
