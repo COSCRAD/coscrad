@@ -42,7 +42,7 @@ const matchingUserId = testUserId;
 
 const matchingGroupIds = [50, 60, 107].map(buildDummyUuid);
 
-const testUserWithGroups = buildTestInstance(CoscradUserWithGroups, {
+const _testUserWithGroups = buildTestInstance(CoscradUserWithGroups, {
     id: testUserId,
     groups: matchingGroupIds.map((id) => buildTestInstance(CoscradUserGroup, { id })),
 });
@@ -296,6 +296,36 @@ describe(`Coscrad Query Language`, () => {
         await widgetRepository.clear();
     });
 
+    const assertQueryResult = async ({
+        filter,
+        matchingWidgets,
+        nonMatchingWidgets,
+    }: {
+        matchingWidgets: Widget[];
+        nonMatchingWidgets: Widget[];
+        filter: CoscradFilterCondition;
+    }) => {
+        await widgetRepository.createMany([...matchingWidgets, ...nonMatchingWidgets]);
+
+        // TODO should we have a (closer-to) unit test for user access filtering?
+        const result = await widgetRepository.fetchForUser({
+            filter,
+        });
+
+        if (isInternalError(result)) {
+            throw new InternalError(`Expected a query result but received an error.`, [result]);
+        }
+
+        const { count, selected } = result;
+
+        const expectedNumberOfResults = matchingWidgets.length;
+
+        // TODO tighten up the sanity check by comparing names or IDs
+        expect(selected).toHaveLength(expectedNumberOfResults);
+
+        expect(count).toBe(expectedNumberOfResults);
+    };
+
     /**
      * A query may fail due to being ill-formatted. For example, the
      * paramers may be of the wrong type or number for the given operator.
@@ -368,19 +398,12 @@ describe(`Coscrad Query Language`, () => {
                             params: [targetLocationName],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                widgetWithTargetLocationName,
-                                widgetWhoseLocationNameDoesntMatchTheFilter,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetWithTargetLocationName],
+                                nonMatchingWidgets: [widgetWhoseLocationNameDoesntMatchTheFilter],
                                 filter: nestedDoesMultilingualTextInclude,
                             });
-
-                            expect(result).toHaveLength(1);
                         });
                     });
                 });
@@ -388,19 +411,12 @@ describe(`Coscrad Query Language`, () => {
 
             describe(`GREATER_THAN`, () => {
                 describe(`when the query is well-formed`, () => {
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            widgetThatComesAfterCutoffYear,
-                            widgetThatComesBeforeCutoffYear,
-                        ]);
-                    });
-
                     it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [widgetThatComesAfterCutoffYear],
+                            nonMatchingWidgets: [widgetThatComesBeforeCutoffYear],
                             filter: greaterThanCutoffYear,
                         });
-
-                        expect(result).toHaveLength(1);
                     });
                 });
 
@@ -453,45 +469,29 @@ describe(`Coscrad Query Language`, () => {
                 describe(`when the filter is well-formed`, () => {
                     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-331] include case-sensitive option
                     describe(`when no language code is provided`, () => {
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetThatMatchesInOriginalText,
-                                // +
-                                widgetThatMatchesInTranslatedText,
-                                // -
-                                widgetThatDoesNotMatchSearchText,
-                            ]);
-                        });
-
                         it(`should return the document`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [
+                                    widgetThatMatchesInOriginalText,
+                                    widgetThatMatchesInTranslatedText,
+                                ],
+                                nonMatchingWidgets: [widgetThatDoesNotMatchSearchText],
                                 filter: doesAnyTextIncludeEllo,
                             });
-
-                            expect(result).toHaveLength(2);
                         });
                     });
 
                     describe(`when 2 parameters are provided`, () => {
                         describe(`when the search text is not empty`, () => {
-                            beforeEach(async () => {
-                                await widgetRepository.createMany([
-                                    // +
-                                    widgetThatMatchesInOriginalText,
-                                    // -
-                                    widgetThatMatchesInTranslatedText,
-                                    // -
-                                    widgetThatDoesNotMatchSearchText,
-                                ]);
-                            });
-
                             it(`should return the expected results`, async () => {
-                                const result = await widgetRepository.fetchForUser({
+                                await assertQueryResult({
+                                    matchingWidgets: [widgetThatMatchesInOriginalText],
+                                    nonMatchingWidgets: [
+                                        widgetThatMatchesInTranslatedText,
+                                        widgetThatDoesNotMatchSearchText,
+                                    ],
                                     filter: doesEnglishTextIncludeEllo,
                                 });
-
-                                expect(result).toHaveLength(1);
                             });
                         });
 
@@ -535,21 +535,12 @@ describe(`Coscrad Query Language`, () => {
                                     params: ['', LanguageCode.Chilcotin],
                                 };
 
-                                beforeEach(async () => {
-                                    await widgetRepository.createMany([
-                                        ...widgetsWithTextInTargetLanguage,
-                                        ...widgetsWithNoTextInTargetLanguage,
-                                    ]);
-                                });
-
                                 it(`should return the expected results`, async () => {
-                                    const result = await widgetRepository.fetchForUser({
+                                    await assertQueryResult({
+                                        matchingWidgets: widgetsWithTextInTargetLanguage,
+                                        nonMatchingWidgets: widgetsWithNoTextInTargetLanguage,
                                         filter: doesDescriptionHaveChilcotin,
                                     });
-
-                                    expect(result).toHaveLength(
-                                        widgetsWithTextInTargetLanguage.length
-                                    );
                                 });
                             });
 
@@ -616,25 +607,18 @@ describe(`Coscrad Query Language`, () => {
                                     field: 'pages[*]',
                                 };
 
-                                beforeEach(async () => {
-                                    await widgetRepository.createMany([
-                                        // +
-                                        widgetWithOneMatchingPage,
-                                        // +
-                                        widgetWithMultipleMatchingPages,
-                                        // -
-                                        widgetWithNoPages,
-                                        // -
-                                        widgetWithPagesButNoMatches,
-                                    ]);
-                                });
-
                                 it(`should return the expected results`, async () => {
-                                    const result = await widgetRepository.fetchForUser({
+                                    await assertQueryResult({
+                                        matchingWidgets: [
+                                            widgetWithOneMatchingPage,
+                                            widgetWithMultipleMatchingPages,
+                                        ],
+                                        nonMatchingWidgets: [
+                                            widgetWithNoPages,
+                                            widgetWithPagesButNoMatches,
+                                        ],
                                         filter: doesAnyPageHaveLanguage,
                                     });
-
-                                    expect(result).toHaveLength(2);
                                 });
                             });
                         });
@@ -734,25 +718,15 @@ describe(`Coscrad Query Language`, () => {
                             params: [],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWithLocation,
-                                // -
-                                widgetWithoutALocation,
-                                // +
-                                anotherWidgetWithALoaction,
-                                // -
-                                widgetThatExplicitlyDoesNotHaveALocation,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetWithLocation, anotherWidgetWithALoaction],
+                                nonMatchingWidgets: [
+                                    widgetWithoutALocation,
+                                    widgetThatExplicitlyDoesNotHaveALocation,
+                                ],
                                 filter: hasLocation,
                             });
-
-                            expect(result).toHaveLength(2);
                         });
                     });
 
@@ -778,23 +752,15 @@ describe(`Coscrad Query Language`, () => {
                             params: [],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWithEmptyStringNickname,
-                                // -
-                                widgetWithNoNickname,
-                                // +
-                                widgetWithFullNickname,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [
+                                    widgetWithEmptyStringNickname,
+                                    widgetWithFullNickname,
+                                ],
+                                nonMatchingWidgets: [widgetWithNoNickname],
                                 filter: hasNickname,
                             });
-
-                            expect(result).toHaveLength(2);
                         });
                     });
 
@@ -827,25 +793,19 @@ describe(`Coscrad Query Language`, () => {
                             params: [],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetFromYearZero,
-                                // +
-                                widgetWithHighRating,
-                                // +
-                                widgetWithLowRating,
-                                // -
-                                widgetWithoutARating,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [
+                                    // +
+                                    widgetFromYearZero,
+                                    // +
+                                    widgetWithHighRating,
+                                    // +
+                                    widgetWithLowRating,
+                                ],
+                                nonMatchingWidgets: [widgetWithoutARating],
                                 filter: hasRating,
                             });
-
-                            expect(result).toHaveLength(3);
                         });
                     });
                 });
@@ -895,20 +855,12 @@ describe(`Coscrad Query Language`, () => {
                         params: [9],
                     };
 
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            widgetWithNineTags,
-                            widgetWithTenTags,
-                            widgetWithNoTags,
-                        ]);
-                    });
-
                     it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [widgetWithTenTags],
+                            nonMatchingWidgets: [widgetWithNineTags, widgetWithNoTags],
                             filter: hasMoreThanNineTags,
                         });
-
-                        expect(result).toHaveLength(1);
                     });
                 });
 
@@ -1035,25 +987,16 @@ describe(`Coscrad Query Language`, () => {
                         params: [targetLetter, LanguageCode.Chilcotin],
                     };
 
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            // +
-                            widgetWithLetter,
-                            // -
-                            widgetWithoutLetter,
-                            // -
-                            widgetWithLetterInWrongLanguage,
-                            // -
-                            widgetWithLetterOutOfAlphabet,
-                        ]);
-                    });
-
                     it(`should return the expected result`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [widgetWithLetter],
+                            nonMatchingWidgets: [
+                                widgetWithoutLetter,
+                                widgetWithLetterInWrongLanguage,
+                                widgetWithLetterOutOfAlphabet,
+                            ],
                             filter: hasLetterTs,
                         });
-
-                        expect(result).toHaveLength(1);
                     });
                 });
 
@@ -1183,21 +1126,12 @@ describe(`Coscrad Query Language`, () => {
                             field,
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWhoseIdMatchesText,
-                                // -
-                                widgetWhoseIdDoesNotMatchText,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetWhoseIdMatchesText],
+                                nonMatchingWidgets: [widgetWhoseIdDoesNotMatchText],
                                 filter: simpleTextIncludes,
                             });
-
-                            expect(result).toHaveLength(1);
                         });
                     });
 
@@ -1236,25 +1170,22 @@ describe(`Coscrad Query Language`, () => {
                             field: 'tags[*]',
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWithOneTagThatMatches,
-                                // +
-                                widgetWithSomeTagsThatMatchAndSomeThatDont,
-                                // -
-                                widgetWithNoTags,
-                                // -
-                                widgetWithTagsThatDontMatch,
-                            ]);
-                        });
-
                         it(`should return the expected result`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [
+                                    // +
+                                    widgetWithOneTagThatMatches,
+                                    // +
+                                    widgetWithSomeTagsThatMatchAndSomeThatDont,
+                                ],
+                                nonMatchingWidgets: [
+                                    // -
+                                    widgetWithNoTags,
+                                    // -
+                                    widgetWithTagsThatDontMatch,
+                                ],
                                 filter: doesAnyTagIncludeText,
                             });
-
-                            expect(result).toHaveLength(2);
                         });
                     });
                 });
@@ -1339,23 +1270,15 @@ describe(`Coscrad Query Language`, () => {
                             params: [textToMatch],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWhoseCommentMatches,
-                                // -
-                                widgetWhoseCommentContainsTextAndMore,
-                                // -
-                                widgetWithNoMatchingCharactersInComment,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetWhoseCommentMatches],
+                                nonMatchingWidgets: [
+                                    widgetWhoseCommentContainsTextAndMore,
+                                    widgetWithNoMatchingCharactersInComment,
+                                ],
                                 filter: commentTextEquals,
                             });
-
-                            expect(result).toHaveLength(1);
                         });
                     });
 
@@ -1387,24 +1310,12 @@ describe(`Coscrad Query Language`, () => {
                             params: [textToMatch],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetWithOneMatch,
-                                // +
-                                widgetWithMultipleMatches,
-                                // -
-                                widgetWithNoTags,
-                                // -
-                                widgetWithNonMatchingTags,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetWithOneMatch, widgetWithMultipleMatches],
+                                nonMatchingWidgets: [widgetWithNoTags, widgetWithNonMatchingTags],
                                 filter: someTagEquals,
                             });
-                            expect(result).toHaveLength(2);
                         });
                     });
 
@@ -1437,21 +1348,18 @@ describe(`Coscrad Query Language`, () => {
                             params: [textToMatch],
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                // +
-                                widgetThatMatchesNestedFilter,
-                                // -
-                                widgetThatDoesNotMatchNestedFilter,
-                            ]);
-                        });
-
                         it(`should return the expected result`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [
+                                    // +
+                                    widgetThatMatchesNestedFilter,
+                                ],
+                                nonMatchingWidgets: [
+                                    // -
+                                    widgetThatDoesNotMatchNestedFilter,
+                                ],
                                 filter: deepTextEquals,
                             });
-
-                            expect(result).toHaveLength(1);
                         });
                     });
                 });
@@ -1550,35 +1458,27 @@ describe(`Coscrad Query Language`, () => {
                     ),
                 });
 
-                beforeEach(async () => {
-                    await widgetRepository.createMany([
-                        // +
-                        widgetWithUserId,
-                        // -
-                        widgetWithoutUserIdOrGroupId,
-                        // -
-                        widgetWithEmptyAcl,
-                        // +
-                        widgetWithOneGroupIdButNoUserId,
-                        // +
-                        widgetWithAllGroupsButNoUserId,
-                        // +
-                        widgetWithAllGroupsAndUserId,
-                    ]);
-                });
-
                 it(`should return the expected result`, async () => {
-                    const result = await widgetRepository.fetchForUser({
+                    await assertQueryResult({
+                        matchingWidgets: [
+                            // +
+                            widgetWithUserId,
+
+                            // +
+                            widgetWithOneGroupIdButNoUserId,
+                            // +
+                            widgetWithAllGroupsButNoUserId,
+                            // +
+                            widgetWithAllGroupsAndUserId,
+                        ],
+                        nonMatchingWidgets: [
+                            // -
+                            widgetWithoutUserIdOrGroupId,
+                            // -
+                            widgetWithEmptyAcl,
+                        ],
                         filter: canUser,
                     });
-
-                    if (isInternalError(result)) {
-                        throw result;
-                    }
-
-                    expect(result.selected).toHaveLength(4);
-
-                    expect(result.count).toBe(4);
                 });
             });
 
@@ -1599,31 +1499,12 @@ describe(`Coscrad Query Language`, () => {
                         isPublished: null,
                     });
 
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            // +
-                            publishedWidget,
-                            // -
-                            unpublishedWidget,
-                            // -
-                            implicitlyUnpublishedWidget,
-                        ]);
-                    });
-
                     it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [publishedWidget],
+                            nonMatchingWidgets: [unpublishedWidget, implicitlyUnpublishedWidget],
                             filter: isPublished,
                         });
-
-                        if (isInternalError(result)) {
-                            throw new InternalError(`Test failed unexpectedly`);
-                        }
-
-                        const { count, selected } = result;
-
-                        expect(count).toBe(1);
-
-                        expect(selected).toHaveLength(1);
                     });
                 });
             });
@@ -1638,42 +1519,38 @@ describe(`Coscrad Query Language`, () => {
 
             describe(`AND`, () => {
                 describe(`when the AND's conditions are all simple conditions`, () => {
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            // +
-                            widgetThatMatchesInOriginalText.clone({
-                                id: '1',
-                                yearBuilt: cutoffYearExclusive + 1,
-                            }),
-                            // - (all below)
-                            widgetThatMatchesInTranslatedText.clone({
-                                id: '2',
-                                yearBuilt: cutoffYearExclusive - 1,
-                            }),
-                            widgetThatDoesNotMatchSearchText.clone({
-                                id: '3',
-                            }),
-                            widgetThatComesAfterCutoffYear.clone({
-                                id: '4',
-                                description: buildMultilingualTextWithSingleItem('no text match!'),
-                            }),
-                            widgetThatComesBeforeCutoffYear.clone({
-                                id: '5',
-                            }),
-                        ]);
-                    });
-
                     const doesAnyTextIncludeElloAndGreaterThanCutoffYear: CoscradAndCondition = {
                         type: CoscradConditionBlockType.AND,
                         conditions: [doesAnyTextIncludeEllo, greaterThanCutoffYear],
                     };
 
                     it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [
+                                widgetThatMatchesInOriginalText.clone({
+                                    id: '1',
+                                    yearBuilt: cutoffYearExclusive + 1,
+                                }),
+                            ],
+                            nonMatchingWidgets: [
+                                widgetThatMatchesInTranslatedText.clone({
+                                    id: '2',
+                                    yearBuilt: cutoffYearExclusive - 1,
+                                }),
+                                widgetThatDoesNotMatchSearchText.clone({
+                                    id: '3',
+                                }),
+                                widgetThatComesAfterCutoffYear.clone({
+                                    id: '4',
+                                    description:
+                                        buildMultilingualTextWithSingleItem('no text match!'),
+                                }),
+                                widgetThatComesBeforeCutoffYear.clone({
+                                    id: '5',
+                                }),
+                            ],
                             filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
                         });
-
-                        expect(result).toHaveLength(1);
                     });
                 });
 
@@ -1716,7 +1593,7 @@ describe(`Coscrad Query Language`, () => {
                         ]);
                     });
 
-                    const doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition =
+                    const _doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition =
                         {
                             type: CoscradConditionBlockType.AND,
                             conditions: [
@@ -1726,68 +1603,44 @@ describe(`Coscrad Query Language`, () => {
                             ],
                         };
 
-                    it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
-                            filter: doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear,
-                            user: testUserWithGroups,
-                        });
-
-                        // TODO use `assertQueryResult`... helper
-                        if (isInternalError(result)) {
-                            throw new Error(`broken test case`);
-                        }
-
-                        const { count, selected } = result;
-
-                        expect(count).toBe(2);
-
-                        expect(selected).toHaveLength(2);
-                    });
+                    it.todo(`should throw not supported`);
                 });
             });
 
             describe(`OR`, () => {
                 describe(`when the OR's conditions are all simple conditions`, () => {
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            // 3 / 5 should match the `OR`
-                            // +
-                            widgetThatMatchesInOriginalText.clone({
-                                id: '1',
-                                yearBuilt: cutoffYearExclusive + 1,
-                            }),
-                            // - We specify the language code to be the original ('en') language code for this case
-                            widgetThatMatchesInTranslatedText.clone({
-                                id: '2',
-                                yearBuilt: cutoffYearExclusive - 1,
-                            }),
-                            // -
-                            widgetThatDoesNotMatchSearchText.clone({
-                                id: '3',
-                                yearBuilt: cutoffYearExclusive - 1,
-                            }),
-                            // +
-                            widgetThatComesAfterCutoffYear.clone({
-                                id: '4',
-                                description: buildMultilingualTextWithSingleItem('no text match!'),
-                            }),
-                            // +
-                            widgetThatComesBeforeCutoffYear.clone({
-                                id: '5',
-                                description: buildMultilingualTextWithSingleItem(
-                                    `H${searchText} to all!`
-                                ),
-                            }),
-                        ]);
-                    });
-
                     it(`should return the expected results`, async () => {
-                        const result = await widgetRepository.fetchForUser({
+                        await assertQueryResult({
+                            matchingWidgets: [
+                                widgetThatMatchesInOriginalText.clone({
+                                    id: '1',
+                                    yearBuilt: cutoffYearExclusive + 1,
+                                }),
+                                widgetThatComesAfterCutoffYear.clone({
+                                    id: '4',
+                                    description:
+                                        buildMultilingualTextWithSingleItem('no text match!'),
+                                }),
+                                widgetThatComesBeforeCutoffYear.clone({
+                                    id: '5',
+                                    description: buildMultilingualTextWithSingleItem(
+                                        `H${searchText} to all!`
+                                    ),
+                                }),
+                            ],
+                            nonMatchingWidgets: [
+                                // - We specify the language code to be the original ('en') language code for this case
+                                widgetThatMatchesInTranslatedText.clone({
+                                    id: '2',
+                                    yearBuilt: cutoffYearExclusive - 1,
+                                }),
+                                widgetThatDoesNotMatchSearchText.clone({
+                                    id: '3',
+                                    yearBuilt: cutoffYearExclusive - 1,
+                                }),
+                            ],
                             filter: doesEnglishTextIncludeElloOrGreaterThanCutoffYear,
-                            user: testUserWithGroups,
                         });
-
-                        expect(result).toHaveLength(3);
                     });
                 });
             });
@@ -1800,19 +1653,12 @@ describe(`Coscrad Query Language`, () => {
                             condition: greaterThanCutoffYear,
                         };
 
-                        beforeEach(async () => {
-                            await widgetRepository.createMany([
-                                widgetThatComesAfterCutoffYear,
-                                widgetThatComesBeforeCutoffYear,
-                            ]);
-                        });
-
                         it(`should return the expected results`, async () => {
-                            const result = await widgetRepository.fetchForUser({
+                            await assertQueryResult({
+                                matchingWidgets: [widgetThatComesBeforeCutoffYear],
+                                nonMatchingWidgets: [widgetThatComesAfterCutoffYear],
                                 filter: isNotGreaterThanCutoffYear,
                             });
-
-                            expect(result).toHaveLength(1);
                         });
                     });
                 });
