@@ -5,6 +5,7 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 
@@ -33,7 +34,7 @@ interface PaginatedResponse<T> {
 export interface ITermQueryRepository {
     create(view: TermViewModel): Promise<void>;
     createMany(views: TermViewModel[]): Promise<void>;
-    fetchById(id: string): Promise<Maybe<TermViewModel>>;
+    fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<TermViewModel>>;
     fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<TermViewModel>>;
 
     subscribeToUpdates(): Observable<{ data: { type: string } }>;

@@ -75,7 +75,11 @@ const compileSimpleFilterCondition = (
     docRef: string,
     startingArgIndex = 0
 ): ResultOrError<CoscradAqlFilterBlock> => {
-    const { operator, params, field } = condition as CoscradSimpleCondition;
+    const { operator, params, field: domainDtoField } = condition as CoscradSimpleCondition;
+
+    // here we map id -> _key, etc.
+    // TODO _to, _from
+    const field = domainDtoField in fieldAliases ? fieldAliases[domainDtoField] : domainDtoField;
 
     if (operator === CoscradBooleanOperator.GREATER_THAN) {
         if (params.length != 1) {
@@ -815,6 +819,10 @@ export const compileAqlFilterBlockHelper = (
     }
 
     throw new InternalError(`Unsupported COSCRAD filter condition type: ${type}`);
+};
+
+const fieldAliases = {
+    id: '_key',
 };
 
 export const compileAqlFilterBlock = (

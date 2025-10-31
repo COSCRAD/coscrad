@@ -92,9 +92,38 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         let letStatements = '';
 
-        const bindVars = {
+        const bindVars: Record<string, unknown> = {
             '@collectionName': this.collectionID,
         };
+
+        /**
+         * Note that we could use `CoscradQueryLanguage` to `And` the incoming
+         * user filter with a `CAN_USER` block. But given that the present
+         * layer is where we interpret `Coscrad` user queries into `AQL`, it's
+         * not worth the added complexity to our query language. As our
+         * query language evolves to support arbitrary nesting (deep recursion),
+         * we can consider this refactor.
+         *
+         * If there is ever a reason for a resource to name the `accessControlList`
+         * property differently, we can make this property name an instance variable
+         * for this class.
+         */
+        let filterBlockForUser = `
+        filter @isAdmin || (has(${docRef},"isPublished") && ${docRef}.isPublished)
+        `;
+
+        bindVars.isAdmin = options?.user?.isAdmin() || false;
+
+        if (options?.user) {
+            bindVars.userId = options.user.id;
+
+            bindVars.groupIds = options.user.groups.map(({ id }) => id);
+
+            // if the resource is not published, we need to defer to the ACL list
+            filterBlockForUser += `|| (contains(${docRef}.accessControlList.allowedUserIds,@userId)
+        || length(intersection(${docRef}.accessControlList.allowedGroupIds,@groupIds)) > 0)
+        `;
+        }
 
         if (filterCondition) {
             const compileResult = compileAqlFilterBlock(filterCondition, docRef);
@@ -165,6 +194,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
             for ${docRef} in @@collectionName
             ${sortBlock}
             ${letStatements}
+            ${filterBlockForUser}
             ${filterBlock}
             return ${docRef}
         )
