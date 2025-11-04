@@ -1,34 +1,54 @@
-import { ArrowForwardIos } from '@mui/icons-material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
+import { useAppDispatch } from '../../../app/hooks';
+import {
+    changePageSizeForTerms,
+    fetchTerms,
+    useLoadableTerms,
+} from '../../../store/slices/resources';
 import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
+import { ErrorDisplay } from '../../error-display/error-display';
+import { Loading } from '../../loading';
 
 export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
 
-interface TermPaginatorProps {
-    count: number;
-    pageCount: number;
-    pageSize: number;
-    page: number;
-    onPageSizeChange: (pageSize: number) => void;
-    onPageNumberChange: (pageNumber: number) => void;
-}
+export const TermPaginator = (): JSX.Element => {
+    const dispatch = useAppDispatch();
 
-export const TermPaginator = ({
-    count,
-    pageCount,
-    pageSize,
-    page,
-    onPageSizeChange,
-    onPageNumberChange,
-}: TermPaginatorProps): JSX.Element => {
+    const { data, isLoading, errorInfo, pageSize } = useLoadableTerms();
+
+    if (errorInfo) {
+        return <ErrorDisplay {...errorInfo} />;
+    }
+
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (!data?.selected) {
+        return <Loading />;
+    }
+
+    const { count, page, selected = [] } = data;
+
+    const pageCount = Math.ceil(count / pageSize);
+
+    const startingRecordNumberHumanReadable = pageSize * (page - 1) + 1;
+
+    const endingnRecordNumberHumanReadable =
+        startingRecordNumberHumanReadable + (selected?.length || 0) - 1;
+
+    const totalNumberOfPages = Math.ceil(count / pageSize);
+
     return (
         <Grid container justifyContent="flex-end" spacing={3}>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography component="span" sx={{ mr: 2, mt: 1 }}>
-                    Total Records: {count} &nbsp; Filtered Records: {count}
+                    Showing Records: {startingRecordNumberHumanReadable}-
+                    {endingnRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count}
                 </Typography>
             </Grid>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
@@ -47,7 +67,11 @@ export const TermPaginator = ({
                             const newPageSize =
                                 typeof value === 'string' ? Number.parseInt(value) : value;
 
-                            onPageSizeChange(newPageSize);
+                            dispatch(
+                                changePageSizeForTerms({
+                                    pageSize: newPageSize,
+                                })
+                            );
                         }}
                     >
                         {pageSizeOptions.map((pageSize) => (
@@ -64,7 +88,14 @@ export const TermPaginator = ({
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        onPageNumberChange(cyclicDecrement(page, pageCount));
+                        dispatch(
+                            fetchTerms({
+                                pagination: {
+                                    size: pageSize,
+                                    page: cyclicDecrement(page - 1, totalNumberOfPages) + 1,
+                                },
+                            })
+                        );
                     }}
                 >
                     <ArrowBackIosNewIcon />
@@ -73,10 +104,17 @@ export const TermPaginator = ({
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        onPageNumberChange(cyclicIncrement(page, pageCount));
+                        dispatch(
+                            fetchTerms({
+                                pagination: {
+                                    size: pageSize,
+                                    page: cyclicIncrement(page - 1, totalNumberOfPages) + 1,
+                                },
+                            })
+                        );
                     }}
                 >
-                    <ArrowForwardIos />
+                    <ArrowForwardIosIcon />
                 </IconButton>
             </Grid>
         </Grid>

@@ -22,4 +22,5 @@ export type TermIndexState = {
      */
     selected: ITermViewModel[];
     page: number;
+    count?: number;
 };

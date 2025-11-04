@@ -17,7 +17,7 @@ import { ILoadable } from '../../interfaces/loadable.interface';
 import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
 import { TERMS } from './constants';
-import { fetchTermById, fetchTerms } from './thunks';
+import { fetchTermById, fetchTerms, IUserDefinedFilter } from './thunks';
 import { TermSliceState } from './types';
 import { TermIndexState } from './types/term-index-state';
 
@@ -57,6 +57,7 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
                 entities: existingEntitiesById,
                 indexScopedActions: [],
                 selected: [],
+                count: undefined,
             };
         } else {
             state.data = {
@@ -64,6 +65,7 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
                 entities: existingEntitiesById,
                 indexScopedActions: state.data.indexScopedActions,
                 selected: [],
+                count: undefined,
             };
         }
 
@@ -75,6 +77,10 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
          * with the next index request.
          */
         state.data.indexScopedActions = state.data?.indexScopedActions || [];
+
+        console.log({
+            state,
+        });
     });
 
     builder.addCase(thunk.rejected, (state: ILoadable<TermIndexState>, action) => {
@@ -100,7 +106,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
     });
 
     builder.addCase(thunk.fulfilled, (state: ILoadable<TermIndexState>, action) => {
-        const { entities, indexScopedActions, page } = action.payload;
+        const { entities, indexScopedActions, page, count } = action.payload;
 
         /**
          * Note that this is a plain-old JS object and not a map because maps
@@ -118,8 +124,14 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
             entities: existingEntitiesById,
             indexScopedActions,
             selected: entities,
+            count,
         };
+
         state.isLoading = false;
+
+        console.log({
+            state,
+        });
     });
 
     builder.addCase(thunk.rejected, (state: ILoadable<TermIndexState>, action) => {
@@ -163,7 +175,7 @@ export const termSlice = createSlice({
     name: TERMS,
     initialState,
     reducers: {
-        filter: (state, action) => {
+        filterInMemory: (state, action) => {
             const { scope, query: searchValue } = action.payload;
 
             const propertiesToSearch =
@@ -194,6 +206,23 @@ export const termSlice = createSlice({
 
             return state;
         },
+        setFilters: (
+            state,
+            { payload }: { payload: { filter: IUserDefinedFilter<ITermViewModel> } }
+        ) => {
+            state.filter = payload.filter;
+
+            if (state.data) {
+                state.data.selected = null;
+
+                // we reset the page if the user provides a new filter becasue we don't know how many pages there will be
+                state.data.page = 1;
+            }
+
+            state.isLoading = false;
+
+            state.errorInfo = null;
+        },
         changePageSize: (state, { payload: { pageSize } }: { payload: { pageSize: number } }) => {
             state.pageSize = pageSize;
 
@@ -220,4 +249,8 @@ export const termReducer = termSlice.reducer;
  * It's possible that the page size is actually a single property that is
  * shared for all resource index views.
  */
-export const { filter: filterTerms, changePageSize: changePageSizeForTerms } = termSlice.actions;
+export const {
+    filterInMemory: filterTermsInMemory,
+    changePageSize: changePageSizeForTerms,
+    setFilters: setTermFilters,
+} = termSlice.actions;

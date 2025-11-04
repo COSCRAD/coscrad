@@ -12,7 +12,6 @@ import { renderAggregateIdCell } from './src/components/resources/utils/render-a
 import { renderContributionsTextCell } from './src/components/resources/utils/render-contributions-text-cell';
 import { renderMultilingualTextCell } from './src/components/resources/utils/render-multilingual-text-cell';
 import { ConfigurableContentContext } from './src/configurable-front-matter/configurable-content-provider';
-import { NOT_FOUND } from './src/store/slices/interfaces/maybe-loadable.interface';
 import { useLoadableTerms } from './src/store/slices/resources';
 import { CommaSeparatedList } from './src/utils/generic-components';
 import { HeadingLabel } from './src/utils/generic-components/presenters/tables';
@@ -37,10 +36,7 @@ export const TermListContainer = (): JSX.Element => {
 
     if (isLoading || isNullOrUndefined(data)) return <Loading />;
 
-    const { entities: termsById } = data;
-
-    // @ts-expect-error Why is the compiler unaware of this?
-    const terms = Object.values(termsById).filter((t) => t !== NOT_FOUND);
+    const { selected: terms } = data;
 
     const headingLabels: HeadingLabel<ITermViewModel>[] = [
         { propertyKey: 'id', headingLabel: 'Link' },
@@ -85,7 +81,7 @@ export const TermListContainer = (): JSX.Element => {
         <TermIndexTable
             type={AggregateType.term}
             headingLabels={headingLabels}
-            tableData={terms as ITermViewModel[]}
+            tableData={(terms as ITermViewModel[]) || []}
             cellRenderersDefinition={cellRenderersDefinition}
             heading={headingForList}
         />

@@ -240,12 +240,14 @@ const compileSimpleFilterCondition = (
             };
         }
 
+        const matchVarName = `matches_${++varCount}`;
+
         /**
          * Here we know that:
          * - the top-level field is array valued
          */
         const letStatements = `
-            LET matches = (
+            LET ${matchVarName} = (
                 for foo in ${docRef}[@args[${startingArgIndex}]]
                 filter contains(foo[@args[${startingArgIndex + 1}]],@args[${
             startingArgIndex + individualFieldNames.length
@@ -253,11 +255,9 @@ const compileSimpleFilterCondition = (
                 limit 1
                 return "match"
             )
-
-            LET hasMatch = LENGTH(matches)>0
         `;
 
-        const statement = `hasMatch`;
+        const statement = `length(${matchVarName}) > 0`;
 
         return {
             filterStatement: statement,
