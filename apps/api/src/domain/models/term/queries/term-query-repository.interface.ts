@@ -5,6 +5,12 @@ import { Maybe } from '../../../../lib/types/maybe';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { IQueryRepositoryForConnectable } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
+import { IQueryRepositoryForAnnotatable } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
+import { IQueryRepositoryForAttributable } from '../../shared/common-event-handlers/attributor.event-handler';
+import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 
 export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
@@ -31,11 +37,19 @@ interface PaginatedResponse<T> {
  * to serve as a constraint for the return of the query service and represents
  * a contract with the client.
  */
-export interface ITermQueryRepository {
+// TODO Expose the `FetchManyQueryOptions` to other resourc types so we can extend `IResourceQueryRepository` again.
+export interface ITermQueryRepository
+    extends IQueryRepositoryForAnnotatable,
+        IQueryRepositoryForConnectable,
+        IQueryRepositoryForTaggable,
+        IQueryRepositoryForAttributable,
+        IAccessible,
+        IPublishable {
     create(view: TermViewModel): Promise<void>;
     createMany(views: TermViewModel[]): Promise<void>;
     fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<TermViewModel>>;
     fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<TermViewModel>>;
+    count(options?: FetchManyQueryOptions): Promise<number>;
 
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 

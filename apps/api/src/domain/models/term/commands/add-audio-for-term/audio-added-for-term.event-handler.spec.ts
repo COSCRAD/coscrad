@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -13,6 +13,7 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AudioItemCreated } from '../../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
@@ -20,6 +21,8 @@ import {
     AUDIO_QUERY_REPOSITORY_TOKEN,
     IAudioItemQueryRepository,
 } from '../../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from '../create-term';
@@ -75,6 +78,13 @@ const [audioItemCreated] = new TestEventStream()
     .as(audioItemCompositeId) as [AudioItemCreated];
 
 const relatedAudioItem = EventSourcedAudioItemViewModel.fromAudioItemCreated(audioItemCreated);
+
+const testAdminUser = new CoscradUserWithGroups(
+    buildTestInstance(CoscradUser, {
+        roles: [CoscradUserRole.superAdmin],
+    }),
+    []
+);
 
 describe('AudioAddedForTermEventHandler.handle', () => {
     let testQueryRepository: ITermQueryRepository;
@@ -142,7 +152,7 @@ describe('AudioAddedForTermEventHandler.handle', () => {
         it(`should update the database appropriately`, async () => {
             await audioAddedForTermEventHandler.handle(audioAddedEvent as AudioAddedForTerm);
 
-            const result = await testQueryRepository.fetchById(termId);
+            const result = await testQueryRepository.fetchById(termId, testAdminUser);
 
             // Do we want to return instances?
             // expect(result).toBeInstanceOf(TermViewModel);

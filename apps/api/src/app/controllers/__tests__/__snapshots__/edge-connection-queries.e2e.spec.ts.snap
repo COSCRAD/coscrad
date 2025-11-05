@@ -398,6 +398,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
 
 exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
 {
+  "count": 52,
   "entities": [
     {
       "actions": [],
@@ -3089,5 +3090,6 @@ exports[`When querying for edge connections GET /connections/notes should return
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;

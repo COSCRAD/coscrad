@@ -974,9 +974,9 @@ describe(`ArangoTermQueryRepository`, () => {
                         vocabularyListToAdd.id
                     );
 
-                    const updatedViews = await testQueryRepository.fetchMany();
+                    const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
 
-                    updatedViews.forEach(({ vocabularyLists }) => {
+                    queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(1);
 
                         const { name, id } = vocabularyLists[0];
@@ -1020,9 +1020,9 @@ describe(`ArangoTermQueryRepository`, () => {
                         vocabularyListToAdd.id
                     );
 
-                    const updatedViews = await testQueryRepository.fetchMany();
+                    const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
 
-                    updatedViews.forEach(({ vocabularyLists }) => {
+                    queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(2);
 
                         const { name, id } = vocabularyLists.find(

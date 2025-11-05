@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole, LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -23,8 +23,11 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { Attributor } from '../../../shared/common-event-handlers/attributor.event-handler';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { TermCreated } from './term-created.event';
@@ -66,6 +69,13 @@ const termCreated = new TestEventStream()
         id: termId,
         type: AggregateType.term,
     })[0]; // There is only one event in this stream, which is the target event
+
+const testAdminUser = new CoscradUserWithGroups(
+    buildTestInstance(CoscradUser, {
+        roles: [CoscradUserRole.superAdmin],
+    }),
+    []
+);
 
 describe(`TermCreatedEventHandler`, () => {
     let testQueryRepository: ITermQueryRepository;
@@ -157,7 +167,7 @@ describe(`TermCreatedEventHandler`, () => {
              */
             await app.get(Attributor).handle(termCreated);
 
-            const searchResult = await testQueryRepository.fetchById(termId);
+            const searchResult = await testQueryRepository.fetchById(termId, testAdminUser);
 
             expect(searchResult).not.toBe(NotFound);
 
