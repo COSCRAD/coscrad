@@ -1090,6 +1090,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching all groups should return the expected result 1`] = `
 {
+  "count": 1,
   "entities": [
     {
       "actions": [
@@ -1211,6 +1212,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "CREATE_USER_GROUP",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1289,6 +1291,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for users when fetching all users should return the expected result 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [
@@ -1545,6 +1548,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "REGISTER_USER",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1628,6 +1632,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for user groups when fetching all groups should return the expected result 1`] = `
 {
+  "count": 1,
   "entities": [
     {
       "actions": [
@@ -1749,6 +1754,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "CREATE_USER_GROUP",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1827,6 +1833,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for users when fetching all users should return the expected result 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [
@@ -2083,5 +2090,6 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "REGISTER_USER",
     },
   ],
+  "page": 1,
 }
 `;

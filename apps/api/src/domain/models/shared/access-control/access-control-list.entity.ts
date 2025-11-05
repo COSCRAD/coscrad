@@ -61,7 +61,9 @@ export class AccessControlList extends BaseDomainModel {
     }
 
     canUser(userId: AggregateId) {
-        return this.allowedUserIds.includes(userId);
+        const hasAccess = this.allowedUserIds.includes(userId);
+
+        return hasAccess;
     }
 
     canGroup(groupId: AggregateId) {

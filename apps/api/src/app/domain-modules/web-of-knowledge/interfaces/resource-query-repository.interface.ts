@@ -11,7 +11,7 @@ import { CoscradUserWithGroups } from '../../../../domain/models/user-management
 import { Maybe } from '../../../../lib/types/maybe';
 import { UserQueryOptions } from '../../../controllers/resources/term.controller';
 
-export type FetchManyQueryOptions = UserQueryOptions & {
+export type FetchManyQueryOptions = Partial<UserQueryOptions> & {
     user?: CoscradUserWithGroups;
 };
 

@@ -15,7 +15,7 @@ import {
 } from '../../../../lib/coscrad-query-language';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -332,8 +332,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             filter: idEquals,
             user,
         });
-
-        if (isNotFound(result)) return result;
 
         if (isInternalError(result)) {
             // TODO should this be a returned error?
