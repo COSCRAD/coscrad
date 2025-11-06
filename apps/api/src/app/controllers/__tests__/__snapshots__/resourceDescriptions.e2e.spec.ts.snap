@@ -8,11 +8,22 @@ exports[`GET /resources should return the expected result 1`] = `
     "link": "/resources/terms",
     "pluralLabel": "Terms",
     "schema": {
+      "accessControlList": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "includes lists of IDs for users and user groups who can read this resource",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": true,
+        "label": "access control list",
+        "name": "AccessControlList",
+        "schema": {},
+      },
       "connections": {
         "complexDataType": "NESTED_TYPE",
         "description": "a list of contextualized connections to other resources about with a note",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "connections",
         "name": "ConnectionRecordForResourceViewModel",
         "schema": {},
@@ -22,6 +33,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of all contributions to the development of this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
         "name": "ContributionSummary",
         "schema": {
@@ -30,6 +42,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "system references identifying who contributed to the creation or editing of this resource",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "contributor IDs",
           },
           "date": {
@@ -37,6 +50,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the date the data update was made",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "date of record",
             "name": "CoscradDate",
             "schema": {
@@ -45,6 +59,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "Day of Month",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "day of month",
               },
               "month": {
@@ -54,6 +69,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Month",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "month",
                 "labelsAndValues": [
                   {
@@ -111,6 +127,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "The Year",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "the year",
               },
             },
@@ -120,6 +137,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a written acknowledgement of the contribution",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "statement",
           },
           "timestamp": {
@@ -127,6 +145,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a unix timestamp for the purpose of sorting events",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "timestamp",
           },
           "type": {
@@ -134,6 +153,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "system identifier for the type of work that has been contributed",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "contribution type",
           },
         },
@@ -143,6 +163,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "id",
       },
       "isPublished": {
@@ -150,6 +171,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "is published",
       },
       "mediaItemId": {
@@ -166,6 +188,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -174,6 +197,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -184,6 +208,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -223,6 +248,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -252,6 +278,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -263,6 +290,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized notes about this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "notes",
         "name": "NoteRecordForResourceViewModel",
         "schema": {},
@@ -272,6 +300,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a summary of the tags that have been applied to this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tags",
         "name": "EventSourcedTagViewModel",
         "schema": {
@@ -280,6 +309,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -287,6 +317,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a human readable text label for this tag",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "name": {
@@ -294,6 +325,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -302,6 +334,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -312,6 +345,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -351,6 +385,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -380,6 +415,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -393,6 +429,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of the individual tokens (pre-processed words) in this term, including a letter-by-letter breakdown",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tokens",
         "name": "Token",
         "schema": {
@@ -401,6 +438,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "an ordered list of the letters in this token, atomic to the target alphabet",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "characters",
             "name": "AlphabetCharacters",
             "schema": {
@@ -409,6 +447,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "flags this symbol as out-of-alphabet for the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "is out of alphabet",
               },
               "isPunctuationOrWhiteSpace": {
@@ -416,6 +455,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "flags this symbol as punctuation or white space (and not part of the target alphabet)",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "is punctuation or white space",
               },
               "isUpperCase": {
@@ -423,6 +463,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "flags this symbol as the upper-case variant",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "is upper case",
               },
               "text": {
@@ -430,6 +471,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "text for this alphabet letter (possibly multiple unicode characters)",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -439,6 +481,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "flags this token as punctuation in the orthography for the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "is punctuation",
           },
           "isSpace": {
@@ -446,6 +489,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "flags this token as a white space",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "is space",
           },
           "isStop": {
@@ -453,6 +497,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "flags this token as a stop word in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "is stop",
           },
           "languageCode": {
@@ -462,6 +507,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "enumName": "LanguageCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -499,6 +545,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the full text (all characters joined) for this token",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -508,6 +555,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of all the vocabulary lists that contain this term as an entry",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "vocabulary lists including this term",
         "name": "VocabularyListRecordForTerm",
         "schema": {
@@ -516,6 +564,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "system identifier for this vocabulary list",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "vocabulary list ID",
           },
           "name": {
@@ -523,6 +572,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "name of this vocabulary list (including translations thereof)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "vocabulary list name",
             "name": "MultilingualText",
             "schema": {
@@ -531,6 +581,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -541,6 +592,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -580,6 +632,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -609,6 +662,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -631,6 +685,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized connections to other resources about with a note",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "connections",
         "name": "ConnectionRecordForResourceViewModel",
         "schema": {},
@@ -640,6 +695,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "id",
       },
       "isPublished": {
@@ -647,6 +703,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "is published",
       },
       "name": {
@@ -654,6 +711,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -662,6 +720,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -672,6 +731,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -711,6 +771,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -740,6 +801,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -751,6 +813,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized notes about this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "notes",
         "name": "NoteRecordForResourceViewModel",
         "schema": {},
@@ -760,6 +823,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a summary of the tags that have been applied to this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tags",
         "name": "TagViewModel",
         "schema": {
@@ -768,6 +832,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -775,6 +840,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a human readable text label for this tag",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "members": {
@@ -782,6 +848,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the composite identifier of every resource or note with this tag",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "members",
           },
           "name": {
@@ -789,6 +856,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "multilingual text name of the entity",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -797,6 +865,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -807,6 +876,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -846,6 +916,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -875,6 +946,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -897,6 +969,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a web link to an accompanying digital audio file",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "audio link",
       },
       "contributions": {
@@ -904,6 +977,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "list of knowledge keepers who contributed this song",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
       },
       "id": {
@@ -911,6 +985,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "lengthMilliseconds": {
@@ -918,6 +993,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "the length of the accompanying audio file in milliseconds",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "length (ms)",
       },
       "mediaItemId": {
@@ -925,6 +1001,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a reference to the raw media item for this audio item",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "media item",
       },
       "mimeType": {
@@ -934,6 +1011,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "enumName": "MIMEType",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "MIME type",
         "labelsAndValues": [
           {
@@ -1007,6 +1085,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name of the audio item",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -1015,6 +1094,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -1025,6 +1105,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -1064,6 +1145,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -1093,6 +1175,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -1104,6 +1187,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a plain-text representation of the transcript",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "plain text",
       },
     },
@@ -1120,6 +1204,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "list of knowledge keepers who contributed this song",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
       },
       "id": {
@@ -1127,6 +1212,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "lengthMilliseconds": {
@@ -1134,6 +1220,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "the length of the accompanying audio file in milliseconds",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "length (ms)",
       },
       "mimeType": {
@@ -1143,6 +1230,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "enumName": "MIMEType",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "MIME type",
         "labelsAndValues": [
           {
@@ -1216,6 +1304,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name of the video",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -1224,6 +1313,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -1234,6 +1324,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -1273,6 +1364,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -1302,6 +1394,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -1313,6 +1406,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "transcript for this video",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "transcript",
         "name": "Transcript",
         "schema": {
@@ -1321,6 +1415,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "time stamps with text and speaker labels",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "items",
             "name": "TranscriptItem",
             "schema": {
@@ -1329,6 +1424,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "starting time stamp (ms)",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "in point",
               },
               "outPointMilliseconds": {
@@ -1336,6 +1432,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "ending time stamp (ms)",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "out point",
               },
               "speakerInitials": {
@@ -1343,6 +1440,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the label for the current timestamped item",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "label",
               },
               "text": {
@@ -1350,6 +1448,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "multi-lingual text transcription \\ translation for this item",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
                 "name": "MultilingualText",
                 "schema": {
@@ -1358,6 +1457,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "one item for each provided language",
                     "isArray": true,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "items",
                     "name": "MultilingualTextItem",
                     "schema": {
@@ -1368,6 +1468,7 @@ exports[`GET /resources should return the expected result 1`] = `
                         "enumName": "LangaugeCode",
                         "isArray": false,
                         "isOptional": false,
+                        "isPrivate": false,
                         "label": "language code",
                         "labelsAndValues": [
                           {
@@ -1407,6 +1508,7 @@ exports[`GET /resources should return the expected result 1`] = `
                         "enumName": "Multilingual Text Item Role",
                         "isArray": false,
                         "isOptional": false,
+                        "isPrivate": false,
                         "label": "text item role",
                         "labelsAndValues": [
                           {
@@ -1436,6 +1538,7 @@ exports[`GET /resources should return the expected result 1`] = `
                         "description": "plain text in the given language",
                         "isArray": false,
                         "isOptional": false,
+                        "isPrivate": false,
                         "label": "text",
                       },
                     },
@@ -1449,6 +1552,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a list of participants and their initials",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "participants",
             "name": "TranscriptParticipant",
             "schema": {
@@ -1457,6 +1561,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the initials or text identifier for this speaker",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "speaker initials",
               },
               "name": {
@@ -1464,6 +1569,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the participant's name",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "name",
               },
             },
@@ -1475,6 +1581,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a web link to an accompanying digital video file",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "video link",
       },
     },
@@ -1491,6 +1598,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized connections about this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "connections",
         "name": "ConnectionRecordForResourceViewModel",
         "schema": {},
@@ -1500,6 +1608,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "Height of the image in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "Image Height PX",
       },
       "id": {
@@ -1507,6 +1616,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "id",
       },
       "isPublished": {
@@ -1514,6 +1624,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "is published",
       },
       "mediaItemId": {
@@ -1521,6 +1632,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a reference to the raw media item for this photograph",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "media item",
       },
       "name": {
@@ -1528,6 +1640,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -1536,6 +1649,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -1546,6 +1660,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -1585,6 +1700,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -1614,6 +1730,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -1625,6 +1742,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized notes about this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "notes",
         "name": "NoteRecordForResourceViewModel",
         "schema": {},
@@ -1634,6 +1752,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "the full name of the photographer responsible for this photograph",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "photographer",
       },
       "tags": {
@@ -1641,6 +1760,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a summary of the tags that have been applied to this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tags",
         "name": "TagViewModel",
         "schema": {
@@ -1649,6 +1769,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -1656,6 +1777,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a human readable text label for this tag",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "members": {
@@ -1663,6 +1785,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the composite identifier of every resource or note with this tag",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "members",
           },
           "name": {
@@ -1670,6 +1793,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "multilingual text name of the entity",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -1678,6 +1802,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -1688,6 +1813,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -1727,6 +1853,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -1756,6 +1883,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -1769,6 +1897,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "Width of the image in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "Image Height PX",
       },
     },
@@ -1785,6 +1914,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "name": {
@@ -1792,6 +1922,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -1800,6 +1931,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -1810,6 +1942,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -1849,6 +1982,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -1878,6 +2012,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -1898,6 +2033,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "list of knowledge keepers who contributed this song",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
       },
       "data": {
@@ -1906,6 +2042,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "discriminantPath": "type",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "citation data",
         "schemaDefinitions": [
           {
@@ -1916,6 +2053,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a brief summary of the court case",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "abstract",
               },
               "caseName": {
@@ -1923,6 +2061,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the official name of the court case",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "case name",
               },
               "court": {
@@ -1930,6 +2069,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the name of the court in which the case was decided",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "court",
               },
               "dateDecided": {
@@ -1937,6 +2077,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the date on which the court case was decided",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "date decided",
               },
               "pages": {
@@ -1944,6 +2085,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "summary information about the pages relevant to this court case",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "pages",
               },
               "url": {
@@ -1951,6 +2093,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "external link to digital materials regarding this court case",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "external link",
               },
             },
@@ -1963,6 +2106,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a brief summary of the journal article",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "abstract",
               },
               "creators": {
@@ -1970,6 +2114,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the authors of the referenced journal article",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "creators",
                 "name": "BibliographicCitationCreator",
                 "schema": {
@@ -1978,6 +2123,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "full name of work's creator (free-form text)",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "name",
                   },
                   "type": {
@@ -1987,6 +2133,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "creator type",
                     "labelsAndValues": [
                       {
@@ -2010,6 +2157,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "an alternative unique identifier in the form of a permalink",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "DOI",
               },
               "issn": {
@@ -2017,6 +2165,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a standardized unique identifier for the journal article",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "ISSN",
               },
               "issueDate": {
@@ -2024,6 +2173,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "unstructured text representation of the date the journal article was issued",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "issue date",
               },
               "publicationTitle": {
@@ -2031,6 +2181,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the name of the journal in which the article was published",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "publication title",
               },
               "title": {
@@ -2038,6 +2189,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the title of the referenced journal article",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "title",
               },
               "url": {
@@ -2045,6 +2197,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "an external link to a digital representation of the referenced journal article",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "external link",
               },
             },
@@ -2057,6 +2210,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a brief summary of the referenced book",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "abstract",
               },
               "creators": {
@@ -2064,6 +2218,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "those responsible for creating this work",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "creators",
                 "name": "BibliographicCitationCreator",
                 "schema": {
@@ -2072,6 +2227,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "full name of work's creator (free-form text)",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "name",
                   },
                   "type": {
@@ -2081,6 +2237,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "creator type",
                     "labelsAndValues": [
                       {
@@ -2104,6 +2261,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a standardized globally unique identifier for the referenced book",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "ISBN",
               },
               "numberOfPages": {
@@ -2111,6 +2269,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the total number of pages in the referenced book",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "number of pages",
               },
               "place": {
@@ -2118,6 +2277,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the place where the referenced book was published",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "place",
               },
               "publisher": {
@@ -2125,6 +2285,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the publisher of the referenced book",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "publisher",
               },
               "title": {
@@ -2132,6 +2293,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "the title of the referenced book",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "title",
               },
               "url": {
@@ -2139,6 +2301,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "an link to an external digital representation of the book",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "external link",
               },
               "year": {
@@ -2146,6 +2309,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "A number representing the year of publication",
                 "isArray": false,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "year",
               },
             },
@@ -2158,6 +2322,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "name": {
@@ -2165,6 +2330,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -2173,6 +2339,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -2183,6 +2350,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -2222,6 +2390,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -2251,6 +2420,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -2271,6 +2441,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "audio in one or more languages for the title of this digital text",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "audio for title",
         "name": "MultilingualAudio",
         "schema": {
@@ -2279,6 +2450,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a list of audio for each available",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "audio items",
             "name": "MultilingualAudioItem",
             "schema": {
@@ -2287,6 +2459,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a reference to the relevant audio item",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "audio item ID",
                 "referenceTo": "audioItem",
               },
@@ -2297,6 +2470,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LanguageCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language",
                 "labelsAndValues": [
                   {
@@ -2338,6 +2512,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized connections to other resources in the web-of-knowledge",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "connections",
         "name": "ConnectionRecordForResourceViewModel",
         "schema": {},
@@ -2347,6 +2522,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "system identifier for this digital text",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "isPublished": {
@@ -2354,6 +2530,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a flag that indicates whether this resource is published",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "isPublished",
       },
       "name": {
@@ -2361,6 +2538,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -2369,6 +2547,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -2379,6 +2558,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -2418,6 +2598,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -2447,6 +2628,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -2458,6 +2640,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "contextualized notes about this digital text",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "notes",
         "name": "NoteRecordForResourceViewModel",
         "schema": {},
@@ -2467,6 +2650,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "digital representation of the pages in this digital text",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "pages",
         "name": "DigitalTextPage",
         "schema": {
@@ -2475,6 +2659,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "maintains references to audio in available languages",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "multilingual audio",
             "name": "MultilingualAudio",
             "schema": {
@@ -2483,6 +2668,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "a list of audio for each available",
                 "isArray": true,
                 "isOptional": true,
+                "isPrivate": false,
                 "label": "audio items",
                 "name": "MultilingualAudioItem",
                 "schema": {
@@ -2491,6 +2677,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "a reference to the relevant audio item",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "audio item ID",
                     "referenceTo": "audioItem",
                   },
@@ -2501,6 +2688,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LanguageCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language",
                     "labelsAndValues": [
                       {
@@ -2542,6 +2730,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "(multilingual text) content for this page",
             "isArray": false,
             "isOptional": true,
+            "isPrivate": false,
             "label": "content",
             "name": "MultilingualText",
             "schema": {
@@ -2550,6 +2739,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -2560,6 +2750,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -2599,6 +2790,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -2628,6 +2820,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -2639,6 +2832,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "text identifier for the page",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "identifier",
           },
           "photographId": {
@@ -2646,6 +2840,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a reference to the main photograph for this page",
             "isArray": false,
             "isOptional": true,
+            "isPrivate": false,
             "label": "photograph ID",
           },
         },
@@ -2655,6 +2850,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "tags that apply to this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tags",
         "name": "EventSourcedTagViewModel",
         "schema": {
@@ -2663,6 +2859,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -2670,6 +2867,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a human readable text label for this tag",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "name": {
@@ -2677,6 +2875,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -2685,6 +2884,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -2695,6 +2895,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -2734,6 +2935,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -2763,6 +2965,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -2785,6 +2988,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a web link to the digital audio file for playback",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "audio link",
       },
       "contributions": {
@@ -2792,6 +2996,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "list of knowledge keepers who contributed this song",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
       },
       "id": {
@@ -2799,6 +3004,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "lengthMilliseconds": {
@@ -2806,6 +3012,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "length of the song's audio in milliseconds",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "length (ms)",
       },
       "lyrics": {
@@ -2813,6 +3020,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "the lyrics of the song",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "lyrics",
         "name": "MultilingualText",
         "schema": {
@@ -2821,6 +3029,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -2831,6 +3040,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -2870,6 +3080,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -2899,6 +3110,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -2910,6 +3122,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -2918,6 +3131,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -2928,6 +3142,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -2967,6 +3182,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -2996,6 +3212,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -3016,6 +3233,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized connections to other resources about with a note",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "connections",
         "name": "ConnectionRecordForResourceViewModel",
         "schema": {},
@@ -3025,6 +3243,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of all contributions to the development of this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributions",
         "name": "ContributionSummary",
         "schema": {
@@ -3033,6 +3252,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "system references identifying who contributed to the creation or editing of this resource",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "contributor IDs",
           },
           "date": {
@@ -3040,6 +3260,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the date the data update was made",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "date of record",
             "name": "CoscradDate",
             "schema": {
@@ -3048,6 +3269,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "Day of Month",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "day of month",
               },
               "month": {
@@ -3057,6 +3279,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Month",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "month",
                 "labelsAndValues": [
                   {
@@ -3114,6 +3337,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "The Year",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "the year",
               },
             },
@@ -3123,6 +3347,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a written acknowledgement of the contribution",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "statement",
           },
           "timestamp": {
@@ -3130,6 +3355,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a unix timestamp for the purpose of sorting events",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "timestamp",
           },
           "type": {
@@ -3137,6 +3363,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "system identifier for the type of work that has been contributed",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "contribution type",
           },
         },
@@ -3146,6 +3373,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a summary description of each episode in this playlist",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "episodes",
       },
       "id": {
@@ -3153,6 +3381,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "system identifier for this resource",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "id",
       },
       "isPublished": {
@@ -3160,6 +3389,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "indicates whether this resource available to the public",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "is published",
       },
       "name": {
@@ -3167,6 +3397,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "name (text) includes the text as well as any translations for this term",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -3175,6 +3406,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -3185,6 +3417,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -3224,6 +3457,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -3253,6 +3487,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -3264,6 +3499,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a list of contextualized notes about this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "notes",
         "name": "NoteRecordForResourceViewModel",
         "schema": {},
@@ -3273,6 +3509,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "a summary of the tags that have been applied to this resource",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "tags",
         "name": "EventSourcedTagViewModel",
         "schema": {
@@ -3281,6 +3518,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -3288,6 +3526,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "a human readable text label for this tag",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "name": {
@@ -3295,6 +3534,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -3303,6 +3543,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -3313,6 +3554,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -3352,6 +3594,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -3381,6 +3624,7 @@ exports[`GET /resources should return the expected result 1`] = `
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -3403,6 +3647,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "the width and height of the media item",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "dimensions",
         "name": "MediaItemDimensions",
         "schema": {
@@ -3411,6 +3656,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the height of the media item in pixels",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "height (px)",
           },
           "widthPx": {
@@ -3418,6 +3664,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "the width of the media item in pixels",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "width (px)",
           },
         },
@@ -3427,6 +3674,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "lengthMilliseconds": {
@@ -3434,6 +3682,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "length of the media item in milliseconds",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "length (ms)",
       },
       "mimeType": {
@@ -3443,6 +3692,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "enumName": "MIMEType",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "MIME type",
         "labelsAndValues": [
           {
@@ -3516,6 +3766,7 @@ exports[`GET /resources should return the expected result 1`] = `
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -3524,6 +3775,7 @@ exports[`GET /resources should return the expected result 1`] = `
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -3534,6 +3786,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -3573,6 +3826,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -3602,6 +3856,7 @@ exports[`GET /resources should return the expected result 1`] = `
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },

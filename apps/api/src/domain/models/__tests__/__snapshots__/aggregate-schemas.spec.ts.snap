@@ -7,6 +7,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "citation information for the referenced book",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "reference data",
     "name": "BookBibliographicCitationData",
     "schema": {
@@ -15,6 +16,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a brief summary of the referenced book",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "abstract",
       },
       "creators": {
@@ -22,6 +24,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "those responsible for creating this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "creators",
         "name": "BibliographicCitationCreator",
         "schema": {
@@ -30,6 +33,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
           },
           "type": {
@@ -39,6 +43,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "creator type",
             "labelsAndValues": [
               {
@@ -62,6 +67,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a standardized globally unique identifier for the referenced book",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "ISBN",
       },
       "numberOfPages": {
@@ -69,6 +75,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the total number of pages in the referenced book",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "number of pages",
       },
       "place": {
@@ -76,6 +83,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the place where the referenced book was published",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "place",
       },
       "publisher": {
@@ -83,6 +91,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the publisher of the referenced book",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "publisher",
       },
       "title": {
@@ -90,6 +99,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the title of the referenced book",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "title",
       },
       "url": {
@@ -97,6 +107,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "an link to an external digital representation of the book",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "external link",
       },
       "year": {
@@ -104,6 +115,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "A number representing the year of publication",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "year",
       },
     },
@@ -113,6 +125,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -120,6 +133,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -128,6 +142,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -136,6 +151,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -150,6 +166,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "citation information for the referenced court case",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "reference data",
     "name": "CourtCaseBibliographicCitationData",
     "schema": {
@@ -158,6 +175,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a brief summary of the court case",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "abstract",
       },
       "caseName": {
@@ -165,6 +183,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the official name of the court case",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "case name",
       },
       "court": {
@@ -172,6 +191,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the name of the court in which the case was decided",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "court",
       },
       "dateDecided": {
@@ -179,6 +199,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the date on which the court case was decided",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "date decided",
       },
       "pages": {
@@ -186,6 +207,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "summary information about the pages relevant to this court case",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "pages",
       },
       "url": {
@@ -193,6 +215,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "external link to digital materials regarding this court case",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "external link",
       },
     },
@@ -202,6 +225,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -209,6 +233,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -217,6 +242,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -225,6 +251,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -239,6 +266,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "citation information for the referenced journal article",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "reference data",
     "name": "JournalArticleBibliographicCitationData",
     "schema": {
@@ -247,6 +275,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a brief summary of the journal article",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "abstract",
       },
       "creators": {
@@ -254,6 +283,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the authors of the referenced journal article",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "creators",
         "name": "BibliographicCitationCreator",
         "schema": {
@@ -262,6 +292,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "full name of work's creator (free-form text)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
           },
           "type": {
@@ -271,6 +302,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "creator type",
             "labelsAndValues": [
               {
@@ -294,6 +326,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "an alternative unique identifier in the form of a permalink",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "DOI",
       },
       "issn": {
@@ -301,6 +334,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a standardized unique identifier for the journal article",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "ISSN",
       },
       "issueDate": {
@@ -308,6 +342,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "unstructured text representation of the date the journal article was issued",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "issue date",
       },
       "publicationTitle": {
@@ -315,6 +350,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the name of the journal in which the article was published",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "publication title",
       },
       "title": {
@@ -322,6 +358,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the title of the referenced journal article",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "title",
       },
       "url": {
@@ -329,6 +366,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "an external link to a digital representation of the referenced journal article",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "external link",
       },
     },
@@ -338,6 +376,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -345,6 +384,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -353,6 +393,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -361,6 +402,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -375,6 +417,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the ID of every category that is a child (sub-cateogry) of this one",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "children IDs",
   },
   "id": {
@@ -382,6 +425,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "label": {
@@ -389,6 +433,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the user-facing label for this category",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label",
   },
   "members": {
@@ -396,6 +441,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the composite identifier of every resource or note in this category",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "members",
   },
 }
@@ -408,6 +454,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "Contributor's Date of Birth",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "date of birth",
     "name": "CoscradDate",
     "schema": {
@@ -416,6 +463,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "Day of Month",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "day of month",
       },
       "month": {
@@ -425,6 +473,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "enumName": "Month",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "month",
         "labelsAndValues": [
           {
@@ -482,6 +531,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "The Year",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "the year",
       },
     },
@@ -491,6 +541,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "The Contributor's Full Name",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "full name",
     "name": "FullName",
     "schema": {
@@ -499,6 +550,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the user's first name",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "first name",
       },
       "lastName": {
@@ -506,6 +558,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the user's last name",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "last name",
       },
     },
@@ -515,6 +568,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "shortBio": {
@@ -522,6 +576,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "A Short Biography",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "biography",
   },
 }
@@ -534,6 +589,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "contains refereneces to audio for the title",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "audio for title",
     "name": "MultilingualAudio",
     "schema": {
@@ -542,6 +598,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a list of audio for each available",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -550,6 +607,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "a reference to the relevant audio item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "audio item ID",
             "referenceTo": "audioItem",
           },
@@ -560,6 +618,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LanguageCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language",
             "labelsAndValues": [
               {
@@ -601,6 +660,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a reference to a cover photograph for this digital text",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "cover photograph ID",
     "referenceTo": "photograph",
   },
@@ -609,6 +669,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -616,6 +677,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -624,6 +686,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -632,6 +695,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -641,6 +705,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a digital representation of the digital text's pages",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "digital text pages",
     "name": "DigitalTextPage",
     "schema": {
@@ -649,6 +714,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "maintains references to audio in available languages",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "multilingual audio",
         "name": "MultilingualAudio",
         "schema": {
@@ -657,6 +723,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "a list of audio for each available",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "audio items",
             "name": "MultilingualAudioItem",
             "schema": {
@@ -665,6 +732,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "a reference to the relevant audio item",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "audio item ID",
                 "referenceTo": "audioItem",
               },
@@ -675,6 +743,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "enumName": "LanguageCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language",
                 "labelsAndValues": [
                   {
@@ -716,6 +785,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "(multilingual text) content for this page",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "content",
         "name": "MultilingualText",
         "schema": {
@@ -724,6 +794,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -734,6 +805,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -773,6 +845,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -802,6 +875,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -813,6 +887,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "text identifier for the page",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "identifier",
       },
       "photographId": {
@@ -820,6 +895,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a reference to the main photograph for this page",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "photograph ID",
       },
     },
@@ -829,6 +905,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the title of the digital text",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "title",
     "name": "MultilingualText",
     "schema": {
@@ -837,6 +914,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -847,6 +925,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -886,6 +965,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -915,6 +995,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -931,6 +1012,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the width and height of the media item",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "dimensions",
     "name": "MediaItemDimensions",
     "schema": {
@@ -939,6 +1021,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the height of the media item in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "height (px)",
       },
       "widthPx": {
@@ -946,6 +1029,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the width of the media item in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "width (px)",
       },
     },
@@ -955,6 +1039,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "lengthMilliseconds": {
@@ -962,6 +1047,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "length of the media item in milliseconds",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "length (ms)",
   },
   "manualCredits": {
@@ -969,6 +1055,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -977,6 +1064,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -985,6 +1073,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -996,6 +1085,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "enumName": "MIMEType",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "MIME type",
     "labelsAndValues": [
       {
@@ -1069,6 +1159,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "title of the media item in the language",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "title (language)",
   },
 }
@@ -1081,6 +1172,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "contains references to audio for the note",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "audio for note",
     "name": "MultilingualAudio",
     "schema": {
@@ -1089,6 +1181,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a list of audio for each available",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -1097,6 +1190,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "a reference to the relevant audio item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "audio item ID",
             "referenceTo": "audioItem",
           },
@@ -1107,6 +1201,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LanguageCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language",
             "labelsAndValues": [
               {
@@ -1150,6 +1245,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "enumName": "EdgeConnectionType",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "type",
     "labelsAndValues": [
       {
@@ -1167,6 +1263,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "members": {
@@ -1174,6 +1271,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the resource for the note or the resources involved in the connection",
     "isArray": true,
     "isOptional": false,
+    "isPrivate": false,
     "label": "members",
     "name": "EdgeConnectionMember",
     "schema": {
@@ -1182,6 +1280,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "composite identifier of the members's resource",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "composite identifier",
       },
       "context": {
@@ -1190,6 +1289,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "discriminantPath": "type",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "context",
         "schemaDefinitions": [
           {
@@ -1200,6 +1300,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "must be: general",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "context type",
               },
             },
@@ -1212,6 +1313,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "a list of page identifiers relevant to this note or connection",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "page identifiers",
               },
               "type": {
@@ -1219,6 +1321,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "must be: pageRange",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "context type",
               },
             },
@@ -1231,6 +1334,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "specifies the time range (in and out points) of a segment of a media item",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "time range",
                 "name": "TimeRange",
                 "schema": {
@@ -1239,6 +1343,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "description": "starting time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "in point (ms)",
                   },
                   "outPointMilliseconds": {
@@ -1246,6 +1351,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "description": "ending time stamp in milliseconds",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "out point (ms)",
                   },
                 },
@@ -1255,6 +1361,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "type",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "type",
               },
             },
@@ -1267,6 +1374,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "specifies a range of characters in a text that are relevant to a note or connection",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "character range",
               },
               "languageCode": {
@@ -1276,6 +1384,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "enumName": "LanguageCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language",
                 "labelsAndValues": [
                   {
@@ -1313,6 +1422,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "the text-valued property that provides the context for this note or connection",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "target property",
               },
               "type": {
@@ -1320,6 +1430,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "text field",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "context type",
               },
             },
@@ -1334,6 +1445,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "role",
         "labelsAndValues": [
           {
@@ -1357,6 +1469,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "text summary of why this connection is relevant",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "note text",
     "name": "MultilingualText",
     "schema": {
@@ -1365,6 +1478,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -1375,6 +1489,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -1414,6 +1529,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -1443,6 +1559,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -1459,6 +1576,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the height and width of the photograph in pixels",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "dimensions",
     "name": "MediaItemDimensions",
     "schema": {
@@ -1467,6 +1585,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the height of the media item in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "height (px)",
       },
       "widthPx": {
@@ -1474,6 +1593,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the width of the media item in pixels",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "width (px)",
       },
     },
@@ -1483,6 +1603,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -1490,6 +1611,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -1498,6 +1620,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -1506,6 +1629,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -1515,6 +1639,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "reference to the media item for this photograph",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "media item ID",
     "referenceTo": "mediaItem",
   },
@@ -1523,6 +1648,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the person who took the picture",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "photograph",
   },
   "title": {
@@ -1530,6 +1656,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "multilingual title for this photograph",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "title",
     "name": "MultilingualText",
     "schema": {
@@ -1538,6 +1665,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -1548,6 +1676,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -1587,6 +1716,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -1616,6 +1746,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -1632,6 +1763,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "items": {
@@ -1639,6 +1771,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the resources from which the playlist's episodes are derived",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "playlist items",
     "name": "PlaylistItem",
     "schema": {
@@ -1647,6 +1780,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "system-wide unique identifier for the resource this playlist item was derived from",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "resource composite identifier",
         "name": "PlaylistableResourceCompositeIdentifier",
         "schema": {
@@ -1655,6 +1789,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "id",
           },
           "type": {
@@ -1664,6 +1799,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "type",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "resource type",
             "labelsAndValues": [
               {
@@ -1681,6 +1817,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -1689,6 +1826,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -1697,6 +1835,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -1706,6 +1845,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the playlist",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "name",
     "name": "MultilingualText",
     "schema": {
@@ -1714,6 +1854,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -1724,6 +1865,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -1763,6 +1905,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -1792,6 +1935,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -1808,6 +1952,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "reference to the corresponding audio item",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "media item ID",
     "referenceTo": "audioItem",
   },
@@ -1816,6 +1961,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "lyrics": {
@@ -1823,6 +1969,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the lyrics of the song",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "lyrics",
     "name": "MultilingualText",
     "schema": {
@@ -1831,6 +1978,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -1841,6 +1989,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -1880,6 +2029,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -1909,6 +2059,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -1920,6 +2071,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -1928,6 +2080,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -1936,6 +2089,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -1945,6 +2099,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the title of the song",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "title",
     "name": "MultilingualText",
     "schema": {
@@ -1953,6 +2108,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -1963,6 +2119,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -2002,6 +2159,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -2031,6 +2189,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -2047,6 +2206,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -2054,6 +2214,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2062,6 +2223,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2070,6 +2232,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2084,6 +2247,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -2091,6 +2255,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2099,6 +2264,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2107,6 +2273,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2121,6 +2288,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -2128,6 +2296,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2136,6 +2305,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2144,6 +2314,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2158,6 +2329,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "label": {
@@ -2165,6 +2337,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a human readable text label for this tag",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label",
   },
   "members": {
@@ -2172,6 +2345,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the composite identifier of every resource or note with this tag",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "members",
   },
 }
@@ -2184,6 +2358,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "collection of references to audio for content in available langauges",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "multilingual audio",
     "name": "MultilingualAudio",
     "schema": {
@@ -2192,6 +2367,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a list of audio for each available",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "audio items",
         "name": "MultilingualAudioItem",
         "schema": {
@@ -2200,6 +2376,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "a reference to the relevant audio item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "audio item ID",
             "referenceTo": "audioItem",
           },
@@ -2210,6 +2387,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LanguageCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language",
             "labelsAndValues": [
               {
@@ -2251,6 +2429,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "isPromptTerm": {
@@ -2258,6 +2437,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "flag for whether or not this is a prompt term",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "is prompt term",
   },
   "manualCredits": {
@@ -2265,6 +2445,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2273,6 +2454,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2281,6 +2463,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2290,6 +2473,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "reference to a photograph for this term",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "photograph ID",
     "referenceTo": "photograph",
   },
@@ -2298,6 +2482,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the project through which the term was collected",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "Source Project",
   },
   "text": {
@@ -2305,6 +2490,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the text for the term",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "text",
     "name": "MultilingualText",
     "schema": {
@@ -2313,6 +2499,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -2323,6 +2510,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -2362,6 +2550,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -2391,6 +2580,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -2402,6 +2592,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "reference to a viedo for this term",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "video ID",
   },
 }
@@ -2414,6 +2605,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "lengthMilliseconds": {
@@ -2421,6 +2613,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the length of the transcript's media item in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "length (ms)",
   },
   "manualCredits": {
@@ -2428,6 +2621,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2436,6 +2630,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2444,6 +2639,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2453,6 +2649,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "ID of the transcript's media item",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "media item ID",
     "referenceTo": "mediaItem",
   },
@@ -2461,6 +2658,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the transcript",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "name",
     "name": "MultilingualText",
     "schema": {
@@ -2469,6 +2667,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -2479,6 +2678,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -2518,6 +2718,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -2547,6 +2748,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -2558,6 +2760,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "time stamps with text and speaker labels",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "items",
     "name": "Transcript",
     "schema": {
@@ -2566,6 +2769,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "time stamps with text and speaker labels",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "items",
         "name": "TranscriptItem",
         "schema": {
@@ -2574,6 +2778,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "starting time stamp (ms)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "in point",
           },
           "outPointMilliseconds": {
@@ -2581,6 +2786,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "ending time stamp (ms)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "out point",
           },
           "speakerInitials": {
@@ -2588,6 +2794,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the label for the current timestamped item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "text": {
@@ -2595,6 +2802,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "multi-lingual text transcription \\ translation for this item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
             "name": "MultilingualText",
             "schema": {
@@ -2603,6 +2811,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -2613,6 +2822,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -2652,6 +2862,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -2681,6 +2892,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -2694,6 +2906,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a list of participants and their initials",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "participants",
         "name": "TranscriptParticipant",
         "schema": {
@@ -2702,6 +2915,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the initials or text identifier for this speaker",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "speaker initials",
           },
           "name": {
@@ -2709,6 +2923,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the participant's name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
           },
         },
@@ -2725,6 +2940,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "an external ID that identifies the user with the auth provider",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "user ID with the auth provider",
   },
   "id": {
@@ -2732,6 +2948,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "profile": {
@@ -2739,6 +2956,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the user's profile information",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "profile",
     "name": "CoscradUserProfile",
     "schema": {
@@ -2747,6 +2965,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the user's email address",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "email",
       },
       "name": {
@@ -2754,6 +2973,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the user's full name",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "full name",
         "name": "FullName",
         "schema": {
@@ -2762,6 +2982,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the user's first name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "first name",
           },
           "lastName": {
@@ -2769,6 +2990,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the user's last name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "last name",
           },
         },
@@ -2782,6 +3004,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "roles",
     "labelsAndValues": [
       {
@@ -2803,6 +3026,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a human-readable identifier for this user",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "username",
   },
 }
@@ -2815,6 +3039,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a summary of the significance of this user group (what its members have in common)",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "description",
   },
   "id": {
@@ -2822,6 +3047,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "label": {
@@ -2829,6 +3055,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the group",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label",
   },
   "userIds": {
@@ -2836,6 +3063,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the ID of every user that is in this group",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "user IDs",
   },
 }
@@ -2848,6 +3076,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "lengthMilliseconds": {
@@ -2855,6 +3084,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the length of the transcript's media item in milliseconds",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "length (ms)",
   },
   "manualCredits": {
@@ -2862,6 +3092,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -2870,6 +3101,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -2878,6 +3110,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -2887,6 +3120,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "ID of the transcript's media item",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "media item ID",
     "referenceTo": "mediaItem",
   },
@@ -2895,6 +3129,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the video",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "name",
     "name": "MultilingualText",
     "schema": {
@@ -2903,6 +3138,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -2913,6 +3149,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -2952,6 +3189,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -2981,6 +3219,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -2992,6 +3231,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "time stamps with text and speaker labels",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "items",
     "name": "Transcript",
     "schema": {
@@ -3000,6 +3240,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "time stamps with text and speaker labels",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "items",
         "name": "TranscriptItem",
         "schema": {
@@ -3008,6 +3249,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "starting time stamp (ms)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "in point",
           },
           "outPointMilliseconds": {
@@ -3015,6 +3257,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "ending time stamp (ms)",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "out point",
           },
           "speakerInitials": {
@@ -3022,6 +3265,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the label for the current timestamped item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "text": {
@@ -3029,6 +3273,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "multi-lingual text transcription \\ translation for this item",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
             "name": "MultilingualText",
             "schema": {
@@ -3037,6 +3282,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -3047,6 +3293,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -3086,6 +3333,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -3115,6 +3363,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -3128,6 +3377,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "a list of participants and their initials",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "participants",
         "name": "TranscriptParticipant",
         "schema": {
@@ -3136,6 +3386,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the initials or text identifier for this speaker",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "speaker initials",
           },
           "name": {
@@ -3143,6 +3394,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "the participant's name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
           },
         },
@@ -3159,6 +3411,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "all terms in this vocabulary list with corresponding filter properties",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "entries",
     "name": "VocabularyListEntry",
     "schema": {
@@ -3167,6 +3420,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "unique identifier for the term that is included in the vocabulary list via this entry",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "term ID",
       },
     },
@@ -3176,6 +3430,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "unique identifier",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "ID",
   },
   "manualCredits": {
@@ -3183,6 +3438,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "a list of credits that were provided manually by users in addition to the system-generated credits that come from the event history for this resource",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "manual credits",
     "name": "ManualCredits",
     "schema": {
@@ -3191,6 +3447,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "list of system identifiers for contributors who contributed this work",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contributor IDs",
         "referenceTo": "contributor",
       },
@@ -3199,6 +3456,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "statement of the type of work that was contributed",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "contribution type",
       },
     },
@@ -3208,6 +3466,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "the name of the vocabulary list",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "name",
     "name": "MultilingualText",
     "schema": {
@@ -3216,6 +3475,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "one item for each provided language",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "items",
         "name": "MultilingualTextItem",
         "schema": {
@@ -3226,6 +3486,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "LangaugeCode",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "language code",
             "labelsAndValues": [
               {
@@ -3265,6 +3526,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "enumName": "Multilingual Text Item Role",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text item role",
             "labelsAndValues": [
               {
@@ -3294,6 +3556,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
             "description": "plain text in the given language",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "text",
           },
         },
@@ -3305,6 +3568,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "description": "defines a dynamic form that can be used to filter the entries",
     "isArray": true,
     "isOptional": true,
+    "isPrivate": false,
     "label": "filters",
     "name": "VocabularyListFilterProperty",
     "schema": {
@@ -3313,6 +3577,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
         "description": "the name of this filter property",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "filter property name",
       },
     },
