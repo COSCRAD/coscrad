@@ -115,6 +115,11 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     isPublished: boolean;
 
+    @NestedDataType(AccessControlList, {
+        label: 'access control list',
+        description: 'includes lists of IDs for users and user groups who can read this resource',
+        isPrivate: true,
+    })
     accessControlList: AccessControlList;
 
     @NestedDataType(ContributionSummary, {

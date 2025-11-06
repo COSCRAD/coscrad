@@ -1,4 +1,9 @@
-import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    CoscradUserRole,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -11,9 +16,12 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { TermCreated } from '../../../term/commands';
 import { ITermQueryRepository } from '../../../term/queries';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { AccessControlList } from '../../access-control/access-control-list.entity';
 import {
     IQueryRepositoryProvider,
@@ -57,6 +65,13 @@ const [creationEvent, readAccessEvent] = eventHistory as [
     ResourceReadAccessGrantedToUser
 ];
 
+const testAdminUser = new CoscradUserWithGroups(
+    buildTestInstance(CoscradUser, {
+        roles: [CoscradUserRole.superAdmin],
+    }),
+    []
+);
+
 describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
     let testQueryRepository: ITermQueryRepository;
 
@@ -93,6 +108,7 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
 
         repositoryProvider = app.get<IQueryRepositoryProvider>(QUERY_REPOSITORY_PROVIDER_TOKEN);
 
+        // @ts-expect-error TODO Update the interface to support the paginated responses from `fetchMany`
         testQueryRepository = repositoryProvider.forResource<ITermQueryRepository>(
             ResourceType.term
         );
@@ -117,7 +133,10 @@ describe(`ResourceReadAccessGrantedToUserEventHandler.handle`, () => {
     it(`should allow access to the given user`, async () => {
         await readAccessEventHandler.handle(readAccessEvent);
 
-        const updatedView = (await testQueryRepository.fetchById(termId)) as TermViewModel;
+        const updatedView = (await testQueryRepository.fetchById(
+            termId,
+            testAdminUser
+        )) as TermViewModel;
 
         const updatedAcl = new AccessControlList(updatedView.accessControlList);
 

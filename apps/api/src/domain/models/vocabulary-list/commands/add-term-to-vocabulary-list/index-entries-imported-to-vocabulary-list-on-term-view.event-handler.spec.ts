@@ -116,7 +116,7 @@ describe('IndexEntriesImportedToVocabularyListOnTermViewEventHandler', () => {
         it(`should add the vocabulary list to all term views`, async () => {
             await eventHandler.handle(entriesImportedEvent);
 
-            const updatedViews = await termQueryRepository.fetchMany();
+            const { entities: updatedViews } = await termQueryRepository.fetchMany();
 
             const invalidResults = updatedViews.filter(({ vocabularyLists }) => {
                 if (

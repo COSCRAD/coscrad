@@ -31,4 +31,15 @@ export class CoscradUserWithGroups extends CoscradUser {
             groups
         ) as T;
     }
+
+    static override fromDto(dto: DTO<CoscradUser> & { groups: CoscradUserGroup[] }) {
+        const { groups } = dto;
+
+        const user = new CoscradUser(dto);
+
+        return new CoscradUserWithGroups(
+            user,
+            groups.map((g) => new CoscradUserGroup(g))
+        );
+    }
 }

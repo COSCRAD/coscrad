@@ -2,6 +2,7 @@
 
 exports[`when querying for a photograph: fetch many when the user is a project admin should allow the user to access private resources 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "accessControlList": {
@@ -817,5 +818,6 @@ exports[`when querying for a photograph: fetch many when the user is a project a
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;

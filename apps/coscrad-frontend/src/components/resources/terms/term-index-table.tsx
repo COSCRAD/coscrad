@@ -1,15 +1,8 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
     Box,
-    FormControl,
-    Grid,
-    IconButton,
     TableContainer as MUITableContainer,
-    MenuItem,
     Paper,
-    Select,
     Stack,
     Table,
     TableBody,
@@ -18,7 +11,6 @@ import {
     TableRow,
     Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
 import {
     CellRenderer,
     CellRenderersMap,
@@ -30,24 +22,11 @@ import {
 } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/exceptions';
 import { renderCell } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/render-cell';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
 import { NotFoundPresenter } from '../../not-found';
 
 interface HasId {
     id: string;
 }
-
-export const DEFAULT_PAGE_SIZE = 5;
-
-const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
-
-const calculateNumberOfPages = (numberOfRecords: number, pageSize: number) => {
-    const quotient = Math.floor(numberOfRecords / pageSize);
-
-    const remainder = numberOfRecords % pageSize;
-
-    return remainder === 0 ? quotient : quotient + 1;
-};
 
 /**
  * TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-341]
@@ -88,21 +67,6 @@ export const TermIndexTable = ({
         throw new EmptyIndexTableException();
     }
 
-    // PAGINATION
-    // we index pages starting at 0
-    const [currentPageIndex, setCurrentPageIndex] = useState(0);
-    const [pageSize, setPageSize] = useState(pageSizeOptions[0]);
-
-    const lastPageIndex = calculateNumberOfPages(tableData.length, pageSize) - 1;
-
-    useEffect(() => {
-        if (currentPageIndex > lastPageIndex) setCurrentPageIndex(0);
-    }, [lastPageIndex, currentPageIndex]);
-
-    const startIndex = currentPageIndex * pageSize;
-    const endIndex = startIndex + pageSize;
-    const paginatedData = tableData.slice(startIndex, endIndex);
-
     /**
      * It's tricky to get type safety that forces cell renderers to only include
      * properties referenced in the heading labels. For now, we'll do a dynamic
@@ -135,7 +99,7 @@ export const TermIndexTable = ({
      * and pagination logic.
      */
     const table =
-        paginatedData.length === 0 ? (
+        tableData.length === 0 ? (
             <NotFoundPresenter />
         ) : (
             <Box sx={{ width: '100%' }}>
@@ -152,7 +116,7 @@ export const TermIndexTable = ({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {paginatedData.map((row, index) => (
+                                {tableData.map((row, index) => (
                                     // TODO find a better fallback key
                                     <TableRow
                                         key={(row as HasId).id || index}
@@ -182,70 +146,7 @@ export const TermIndexTable = ({
                             alignItems: 'center',
                             justifyItems: 'flex-end',
                         }}
-                    >
-                        <Grid container justifyContent="flex-end" spacing={3}>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography component="span" sx={{ mr: 2, mt: 1 }}>
-                                    Total Records: {tableData.length} &nbsp; Filtered Records:{' '}
-                                    {tableData.length}
-                                </Typography>
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography component="span" sx={{ mr: 2 }}>
-                                    Rows per page:
-                                </Typography>
-                                <FormControl variant="standard" sx={{ m: 1 }}>
-                                    <Select
-                                        name="pageSize"
-                                        value={pageSize}
-                                        onChange={(changeEvent) => {
-                                            const {
-                                                target: { value },
-                                            } = changeEvent;
-
-                                            const newPageSize =
-                                                typeof value === 'string'
-                                                    ? Number.parseInt(value)
-                                                    : value;
-
-                                            setPageSize(newPageSize);
-                                        }}
-                                    >
-                                        {pageSizeOptions.map((pageSize) => (
-                                            <MenuItem key={pageSize} value={pageSize}>
-                                                {pageSize}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                Page: {currentPageIndex + 1}/{lastPageIndex + 1}
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton
-                                    onClick={() =>
-                                        setCurrentPageIndex(
-                                            cyclicDecrement(currentPageIndex, lastPageIndex + 1)
-                                        )
-                                    }
-                                >
-                                    <ArrowBackIosNewIcon />
-                                </IconButton>
-                            </Grid>
-                            <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
-                                <IconButton
-                                    onClick={() =>
-                                        setCurrentPageIndex(
-                                            cyclicIncrement(currentPageIndex, lastPageIndex + 1)
-                                        )
-                                    }
-                                >
-                                    <ArrowForwardIosIcon />
-                                </IconButton>
-                            </Grid>
-                        </Grid>
-                    </Box>
+                    ></Box>
                 </Paper>
             </Box>
         );

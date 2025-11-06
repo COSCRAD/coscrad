@@ -2,6 +2,7 @@
 
 exports[`when querying for a playlist: fetch many (/resources/playlists) when the user is authenticated as a COSCRAD admin it should return playlists and episodes that are public or have the user in the ACL 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [
@@ -577,5 +578,6 @@ exports[`when querying for a playlist: fetch many (/resources/playlists) when th
       "type": "CREATE_PLAYLIST",
     },
   ],
+  "page": 1,
 }
 `;

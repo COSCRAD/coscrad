@@ -1,5 +1,6 @@
 import {
     AggregateType,
+    CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionMemberRole,
     IEdgeConnectionContext,
@@ -54,12 +55,21 @@ import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { Tag } from '../../tag/tag.entity';
 import { CoscradContributor } from '../../user-management/contributor';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { IVocabularyListQueryRepository } from '../../vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../../vocabulary-list/repositories';
 import { PromptTermCreated } from '../commands';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
+
+const testAdminUser = new CoscradUserWithGroups(
+    buildTestInstance(CoscradUser, {
+        roles: [CoscradUserRole.superAdmin],
+    }),
+    []
+);
 
 describe(`ArangoTermQueryRepository`, () => {
     let testQueryRepository: ITermQueryRepository;
@@ -207,7 +217,7 @@ describe(`ArangoTermQueryRepository`, () => {
         describe(`when there is a term with the given ID`, () => {
             describe(`when the term is not in a vocabulary list`, () => {
                 it(`should return the expected view`, async () => {
-                    const result = await testQueryRepository.fetchById(targetTermId);
+                    const result = await testQueryRepository.fetchById(targetTermId, testAdminUser);
 
                     expect(result).not.toBe(NotFound);
 
@@ -241,7 +251,9 @@ describe(`ArangoTermQueryRepository`, () => {
         });
 
         it(`should return the expected term views`, async () => {
-            const result = await testQueryRepository.fetchMany();
+            const { entities: result } = await testQueryRepository.fetchMany({
+                user: testAdminUser,
+            });
 
             expect(result).toHaveLength(termViews.length);
         });
@@ -319,7 +331,10 @@ describe(`ArangoTermQueryRepository`, () => {
         it(`should tag the term`, async () => {
             await testQueryRepository.tag(targetTerm.id, newTag.id);
 
-            const { tags } = (await testQueryRepository.fetchById(targetTerm.id)) as TermViewModel;
+            const { tags } = (await testQueryRepository.fetchById(
+                targetTerm.id,
+                testAdminUser
+            )) as TermViewModel;
 
             expect(tags).toHaveLength(2);
 
@@ -374,7 +389,10 @@ describe(`ArangoTermQueryRepository`, () => {
                 text: targetNote.note,
             });
 
-            const { notes } = (await testQueryRepository.fetchById(targetTerm.id)) as TermViewModel;
+            const { notes } = (await testQueryRepository.fetchById(
+                targetTerm.id,
+                testAdminUser
+            )) as TermViewModel;
 
             expect(notes).toHaveLength(1);
 
@@ -424,7 +442,8 @@ describe(`ArangoTermQueryRepository`, () => {
             });
 
             const { connections } = (await testQueryRepository.fetchById(
-                targetTerm.id
+                targetTerm.id,
+                testAdminUser
             )) as TermViewModel;
 
             expect(connections).toHaveLength(1);
@@ -474,7 +493,7 @@ describe(`ArangoTermQueryRepository`, () => {
                 role: targetTranslationRole,
             });
 
-            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
+            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id, testAdminUser);
 
             if (isNotFound(updatedTerm)) {
                 expect(updatedTerm).not.toBe(NotFound);
@@ -529,7 +548,7 @@ describe(`ArangoTermQueryRepository`, () => {
                 []
             );
 
-            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id);
+            const updatedTerm = await testQueryRepository.fetchById(targetTerm.id, testAdminUser);
 
             if (isNotFound(updatedTerm)) {
                 expect(updatedTerm).not.toBe(NotFound);
@@ -609,7 +628,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
-                    targetTerm.id
+                    targetTerm.id,
+                    testAdminUser
                 )) as TermViewModel;
 
                 // TODO In the future, we should use multilingual audio for terms
@@ -686,7 +706,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 await testQueryRepository.addVideo(targetTerm.id, videoId);
 
                 const updatedView = (await testQueryRepository.fetchById(
-                    targetTerm.id
+                    targetTerm.id,
+                    testAdminUser
                 )) as TermViewModel;
 
                 expect(updatedView.mediaItemIdForVideo).toBe(mediaItemId);
@@ -714,7 +735,8 @@ describe(`ArangoTermQueryRepository`, () => {
             await testQueryRepository.allowUser(targetTerm.id, userId);
 
             const updatedView = (await testQueryRepository.fetchById(
-                targetTerm.id
+                targetTerm.id,
+                testAdminUser
             )) as TermViewModel;
 
             const updatedAcl = new AccessControlList(updatedView.accessControlList);
@@ -770,7 +792,10 @@ describe(`ArangoTermQueryRepository`, () => {
             // act
             await testQueryRepository.create(termToCreate);
 
-            const searchResult = await testQueryRepository.fetchById(termToCreate.id);
+            const searchResult = await testQueryRepository.fetchById(
+                termToCreate.id,
+                testAdminUser
+            );
 
             expect(searchResult).not.toBe(NotFound);
 
@@ -810,7 +835,8 @@ describe(`ArangoTermQueryRepository`, () => {
             await testQueryRepository.publish(targetTerm.id);
 
             const updatedView = (await testQueryRepository.fetchById(
-                targetTerm.id
+                targetTerm.id,
+                testAdminUser
             )) as TermViewModel;
 
             expect(updatedView.isPublished).toBe(true);
@@ -851,7 +877,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
-                    targetTerm.id
+                    targetTerm.id,
+                    testAdminUser
                 )) as TermViewModel;
 
                 const missingAttributions = updatedView.contributions.filter(
@@ -888,7 +915,8 @@ describe(`ArangoTermQueryRepository`, () => {
                 );
 
                 const updatedView = (await testQueryRepository.fetchById(
-                    targetTerm.id
+                    targetTerm.id,
+                    testAdminUser
                 )) as TermViewModel;
 
                 const targetContribution = updatedView.contributions[0];
@@ -929,9 +957,18 @@ describe(`ArangoTermQueryRepository`, () => {
             it(`should update the view with a reference to the associated vocabulary list`, async () => {
                 await testQueryRepository.indexVocabularyList(targetTerm.id, vocabularyListId);
 
-                const { vocabularyLists } = (await testQueryRepository.fetchById(
-                    targetTerm.id
-                )) as TermViewModel;
+                const searchResult = await testQueryRepository.fetchById(
+                    targetTerm.id,
+                    testAdminUser
+                );
+
+                if (isNotFound(searchResult)) {
+                    throw new InternalError(
+                        `Unexpected missing term: ${targetTerm.id} in test case.`
+                    );
+                }
+
+                const { vocabularyLists } = searchResult;
 
                 expect(vocabularyLists).toHaveLength(1);
 
@@ -974,9 +1011,9 @@ describe(`ArangoTermQueryRepository`, () => {
                         vocabularyListToAdd.id
                     );
 
-                    const updatedViews = await testQueryRepository.fetchMany();
+                    const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
 
-                    updatedViews.forEach(({ vocabularyLists }) => {
+                    queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(1);
 
                         const { name, id } = vocabularyLists[0];
@@ -1020,9 +1057,9 @@ describe(`ArangoTermQueryRepository`, () => {
                         vocabularyListToAdd.id
                     );
 
-                    const updatedViews = await testQueryRepository.fetchMany();
+                    const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
 
-                    updatedViews.forEach(({ vocabularyLists }) => {
+                    queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(2);
 
                         const { name, id } = vocabularyLists.find(

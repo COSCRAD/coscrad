@@ -7,6 +7,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
     "description": "information about resources that participate in this connection",
     "isArray": true,
     "isOptional": false,
+    "isPrivate": false,
     "label": "members",
     "name": "EdgeConnectionMember",
     "schema": {
@@ -16,6 +17,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
         "discriminantPath": "type",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "context",
         "schemaDefinitions": [
           {
@@ -26,6 +28,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
                 "description": "foo",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "foo",
               },
             },
@@ -38,6 +41,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
                 "description": "bar",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "bar",
               },
             },
@@ -50,6 +54,7 @@ exports[`DynamicDataTypeFinderService when there is a valid union type definitio
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
     },

@@ -12,6 +12,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
       "description": "the 1 (self note) or 2 (dual connection) resources that this note connects",
       "isArray": true,
       "isOptional": false,
+      "isPrivate": false,
       "label": "connected resources",
       "name": "EdgeConnectionMember",
       "schema": {
@@ -20,6 +21,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "description": "composite identifier of the members's resource",
           "isArray": false,
           "isOptional": false,
+          "isPrivate": false,
           "label": "composite identifier",
         },
         "context": {
@@ -28,6 +30,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "discriminantPath": "type",
           "isArray": false,
           "isOptional": false,
+          "isPrivate": false,
           "label": "context",
           "schemaDefinitions": [
             {
@@ -38,6 +41,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "must be: general",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "context type",
                 },
               },
@@ -50,6 +54,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "a list of page identifiers relevant to this note or connection",
                   "isArray": true,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "page identifiers",
                 },
                 "type": {
@@ -57,6 +62,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "must be: pageRange",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "context type",
                 },
               },
@@ -69,6 +75,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "specifies the time range (in and out points) of a segment of a media item",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "time range",
                   "name": "TimeRange",
                   "schema": {
@@ -77,6 +84,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                       "description": "starting time stamp in milliseconds",
                       "isArray": false,
                       "isOptional": false,
+                      "isPrivate": false,
                       "label": "in point (ms)",
                     },
                     "outPointMilliseconds": {
@@ -84,6 +92,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                       "description": "ending time stamp in milliseconds",
                       "isArray": false,
                       "isOptional": false,
+                      "isPrivate": false,
                       "label": "out point (ms)",
                     },
                   },
@@ -93,6 +102,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "type",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "type",
                 },
               },
@@ -105,6 +115,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "specifies a range of characters in a text that are relevant to a note or connection",
                   "isArray": true,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "character range",
                 },
                 "languageCode": {
@@ -114,6 +125,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "enumName": "LanguageCode",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "language",
                   "labelsAndValues": [
                     {
@@ -151,6 +163,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "the text-valued property that provides the context for this note or connection",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "target property",
                 },
                 "type": {
@@ -158,6 +171,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
                   "description": "text field",
                   "isArray": false,
                   "isOptional": false,
+                  "isPrivate": false,
                   "label": "context type",
                 },
               },
@@ -172,6 +186,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "enumName": "EDGE_CONNECTION_MEMBER_ROLE",
           "isArray": false,
           "isOptional": false,
+          "isPrivate": false,
           "label": "role",
           "labelsAndValues": [
             {
@@ -195,6 +210,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
       "description": "unique identifier",
       "isArray": false,
       "isOptional": false,
+      "isPrivate": false,
       "label": "ID",
     },
     "name": {
@@ -202,6 +218,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
       "description": "multilingual text name of the entity",
       "isArray": false,
       "isOptional": false,
+      "isPrivate": false,
       "label": "name",
       "name": "MultilingualText",
       "schema": {
@@ -210,6 +227,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "description": "one item for each provided language",
           "isArray": true,
           "isOptional": false,
+          "isPrivate": false,
           "label": "items",
           "name": "MultilingualTextItem",
           "schema": {
@@ -220,6 +238,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "enumName": "LangaugeCode",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "language code",
               "labelsAndValues": [
                 {
@@ -259,6 +278,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "enumName": "Multilingual Text Item Role",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "text item role",
               "labelsAndValues": [
                 {
@@ -288,6 +308,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "description": "plain text in the given language",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "text",
             },
           },
@@ -299,6 +320,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
       "description": "an note about a resource or pair of connected resources",
       "isArray": false,
       "isOptional": false,
+      "isPrivate": false,
       "label": "note text",
       "name": "MultilingualText",
       "schema": {
@@ -307,6 +329,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
           "description": "one item for each provided language",
           "isArray": true,
           "isOptional": false,
+          "isPrivate": false,
           "label": "items",
           "name": "MultilingualTextItem",
           "schema": {
@@ -317,6 +340,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "enumName": "LangaugeCode",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "language code",
               "labelsAndValues": [
                 {
@@ -356,6 +380,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "enumName": "Multilingual Text Item Role",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "text item role",
               "labelsAndValues": [
                 {
@@ -385,6 +410,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
               "description": "plain text in the given language",
               "isArray": false,
               "isOptional": false,
+              "isPrivate": false,
               "label": "text",
             },
           },
@@ -398,6 +424,7 @@ exports[`When querying for edge connections GET /connections/ should return the 
 
 exports[`When querying for edge connections GET /connections/notes should return the expected result 1`] = `
 {
+  "count": 52,
   "entities": [
     {
       "actions": [],
@@ -3089,5 +3116,6 @@ exports[`When querying for edge connections GET /connections/notes should return
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;

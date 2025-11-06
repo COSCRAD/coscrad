@@ -17,7 +17,7 @@ import { ILoadable } from '../../interfaces/loadable.interface';
 import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
 import { TERMS } from './constants';
-import { fetchTermById, fetchTerms } from './thunks';
+import { fetchTermById, fetchTerms, IUserDefinedFilter } from './thunks';
 import { TermSliceState } from './types';
 import { TermIndexState } from './types/term-index-state';
 
@@ -53,15 +53,19 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
 
         if (!state.data) {
             state.data = {
+                page: state.data?.page,
                 entities: existingEntitiesById,
                 indexScopedActions: [],
                 selected: [],
+                count: undefined,
             };
         } else {
             state.data = {
+                page: state.data.page,
                 entities: existingEntitiesById,
                 indexScopedActions: state.data.indexScopedActions,
                 selected: [],
+                count: undefined,
             };
         }
 
@@ -98,7 +102,7 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
     });
 
     builder.addCase(thunk.fulfilled, (state: ILoadable<TermIndexState>, action) => {
-        const { entities, indexScopedActions } = action.payload;
+        const { entities, indexScopedActions, page, count } = action.payload;
 
         /**
          * Note that this is a plain-old JS object and not a map because maps
@@ -112,10 +116,13 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
         });
 
         state.data = {
+            page,
             entities: existingEntitiesById,
             indexScopedActions,
             selected: entities,
+            count,
         };
+
         state.isLoading = false;
     });
 
@@ -133,7 +140,10 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
     });
 };
 
-const initialState: TermSliceState = buildInitialLoadableState<TermIndexState>();
+const initialState: TermSliceState = {
+    ...buildInitialLoadableState<TermIndexState>(),
+    pageSize: 100,
+};
 
 const matchers: Matchers<ITermViewModel> = {
     name: doesSomeMultilingualTextItemInclude,
@@ -157,7 +167,7 @@ export const termSlice = createSlice({
     name: TERMS,
     initialState,
     reducers: {
-        filter: (state, action) => {
+        filterInMemory: (state, action) => {
             const { scope, query: searchValue } = action.payload;
 
             const propertiesToSearch =
@@ -188,6 +198,35 @@ export const termSlice = createSlice({
 
             return state;
         },
+        setFilters: (
+            state,
+            { payload }: { payload: { filter: IUserDefinedFilter<ITermViewModel> } }
+        ) => {
+            state.filter = payload.filter;
+
+            if (state.data) {
+                state.data.selected = null;
+
+                // we reset the page if the user provides a new filter becasue we don't know how many pages there will be
+                state.data.page = 1;
+            }
+
+            state.isLoading = false;
+
+            state.errorInfo = null;
+        },
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-358] We should cache the pages until the page size or filter is changed
+        changePageSize: (state, { payload: { pageSize } }: { payload: { pageSize: number } }) => {
+            state.pageSize = pageSize;
+
+            state.data = null;
+
+            state.isLoading = false;
+
+            state.errorInfo = null;
+
+            return state;
+        },
     },
     extraReducers: (builder) => {
         buildReducersForFetchTermsThunk(builder, fetchTerms);
@@ -198,4 +237,13 @@ export const termSlice = createSlice({
 
 export const termReducer = termSlice.reducer;
 
-export const { filter: filterTerms } = termSlice.actions;
+/**
+ * TODO At some point, we may want to generalize this for other resource types.
+ * It's possible that the page size is actually a single property that is
+ * shared for all resource index views.
+ */
+export const {
+    filterInMemory: filterTermsInMemory,
+    changePageSize: changePageSizeForTerms,
+    setFilters: setTermFilters,
+} = termSlice.actions;

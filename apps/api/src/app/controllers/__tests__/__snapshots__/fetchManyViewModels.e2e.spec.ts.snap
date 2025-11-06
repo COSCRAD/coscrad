@@ -2,6 +2,7 @@
 
 exports[`When fetching multiple resources GET /resources/bibliographicCitations when all of the resources are published should fetch multiple resources of type bibliographicCitation 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [],
@@ -173,11 +174,13 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/bibliographicCitations when some of the resources are unpublished should return the expected number of results 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [],
@@ -349,11 +352,13 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when all of the resources are published should fetch multiple resources of type mediaItem 1`] = `
 {
+  "count": 9,
   "entities": [
     {
       "actions": [],
@@ -513,11 +518,13 @@ exports[`When fetching multiple resources GET /resources/mediaItems when all of 
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/mediaItems when some of the resources are unpublished should return the expected number of results 1`] = `
 {
+  "count": 9,
   "entities": [
     {
       "actions": [],
@@ -677,11 +684,13 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 {
+  "count": 7,
   "entities": [
     {
       "actions": [],
@@ -1048,11 +1057,13 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
 {
+  "count": 7,
   "entities": [
     {
       "actions": [],
@@ -1419,5 +1430,6 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
     },
   ],
   "indexScopedActions": [],
+  "page": 1,
 }
 `;

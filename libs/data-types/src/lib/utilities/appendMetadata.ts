@@ -8,6 +8,7 @@ import getCoscradDataSchemaFromPrototype from './getCoscradDataSchemaFromPrototy
 type OptionalMetadata = {
     isOptional: boolean;
     isArray: boolean;
+    isPrivate: boolean;
     label?: string;
     description?: string;
 };
@@ -21,15 +22,15 @@ export default (
         | EnumTypeDefinition
         | NestedTypeDefinition
         | UnionDataTypeDefinition,
-    { isOptional, isArray, label, description }: OptionalMetadata
+    { isOptional, isArray, isPrivate, label, description }: OptionalMetadata
 ): void => {
     const existingMeta = getCoscradDataSchemaFromPrototype(target);
 
     const existingMetaForThisProperty = existingMeta[propertyKey as string] || {};
 
     const newMetaForThisProperty = isCoscradDataType(propertyType)
-        ? { coscradDataType: propertyType, isOptional, isArray, label, description }
-        : { ...propertyType, isOptional, isArray, label, description };
+        ? { coscradDataType: propertyType, isOptional, isArray, isPrivate, label, description }
+        : { ...propertyType, isOptional, isArray, isPrivate, label, description };
 
     Reflect.defineMetadata(
         COSCRAD_DATA_TYPE_METADATA,

@@ -8,9 +8,14 @@ import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { UserQueryOptions } from '../../../../app/controllers/resources/term.controller';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
+import {
+    CoscradBooleanOperator,
+    CoscradConditionBlockType,
+    CoscradSimpleCondition,
+} from '../../../../lib/coscrad-query-language';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
-import { isNotFound } from '../../../../lib/types/not-found';
+import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -23,6 +28,7 @@ import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/quer
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ContributionSummary } from '../../user-management';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { AudioCandidatesForTerm, ITermQueryRepository } from '../queries';
 import { BaseArangoResourceViewQueryBuilder } from './base-arango-resource-query-builder';
 
@@ -313,17 +319,36 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
     }
 
-    async fetchById(id: AggregateId): Promise<Maybe<TermViewModel>> {
-        const result = await this.database.fetchById(id);
+    async fetchById(id: AggregateId, user?: CoscradUserWithGroups): Promise<Maybe<TermViewModel>> {
+        const idEquals: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.TEXT_EQUALS,
+            params: [id],
+            field: 'id',
+        };
 
-        if (isNotFound(result)) return result;
+        const result = await this.database.fetchForUser({
+            filter: idEquals,
+            user,
+        });
 
-        const asView = mapDatabaseDocumentToAggregateDTO(result);
+        if (isInternalError(result)) {
+            // TODO We might consider returning this error.
+            throw result;
+        }
+
+        const { selected } = result;
+
+        if (selected.length === 0) {
+            return NotFound;
+        }
+
+        const asView = mapDatabaseDocumentToAggregateDTO(selected[0]);
 
         return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(queryOptions?: UserQueryOptions): Promise<TermViewModel[]> {
+    async fetchMany(queryOptions?: UserQueryOptions) {
         const result = await this.database.fetchForUser(queryOptions);
 
         if (isInternalError(result)) {
@@ -333,13 +358,20 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             );
         }
 
-        const buildResult = result.map((doc) => {
+        const { selected, count } = result;
+
+        const buildResult = selected.map((doc) => {
             const dto = mapDatabaseDocumentToAggregateDTO(doc);
 
             return TermViewModel.fromDto(dto);
         });
 
-        return buildResult;
+        return {
+            entities: buildResult,
+            // TODO return this from the AQL query as well as it resolves the actual pagination params to use by applying defaults
+            page: queryOptions?.pagination?.page || 1,
+            count,
+        };
     }
 
     async count(): Promise<number> {

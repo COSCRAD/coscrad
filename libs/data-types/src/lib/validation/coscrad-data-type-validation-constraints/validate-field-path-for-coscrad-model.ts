@@ -31,6 +31,10 @@ export const validateFieldPathForCoscradModel = (
 
     const schemaForTargetProperty = schema[current];
 
+    if (schemaForTargetProperty.isPrivate) {
+        return [new Error(`The property: ${fieldPath} is a private property.`)];
+    }
+
     if (isArray && !schemaForTargetProperty.isArray) {
         return [
             new Error(

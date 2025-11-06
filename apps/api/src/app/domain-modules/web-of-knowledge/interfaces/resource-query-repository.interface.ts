@@ -7,10 +7,13 @@ import {
 } from '../../../../domain/models/shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
 import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
+import { CoscradUserWithGroups } from '../../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { Maybe } from '../../../../lib/types/maybe';
 import { UserQueryOptions } from '../../../controllers/resources/term.controller';
 
-export type FetchManyQueryOptions = UserQueryOptions;
+export type FetchManyQueryOptions = Partial<UserQueryOptions> & {
+    user?: CoscradUserWithGroups;
+};
 
 export interface IResourceQueryRepository<T = unknown>
     extends ICountable,

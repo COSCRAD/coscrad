@@ -1,6 +1,7 @@
 import {
     AggregateType,
     ICommandFormAndLabels,
+    IIndexQueryResult,
     ITermViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
@@ -13,10 +14,10 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
-import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
-import { AccessControlList } from '../../models/shared/access-control/access-control-list.entity';
 import { PublishResource } from '../../models/shared/common-commands';
 import { AddAudioForTerm } from '../../models/term/commands';
 import { Term } from '../../models/term/entities/term.entity';
@@ -71,84 +72,58 @@ export class TermQueryService {
         this.audioUrlPrefix = `/resources/mediaItems/download`;
     }
 
-    // todo add explicit return type
-    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
-        const result = await this.termQueryRepository.fetchById(id);
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<ITermViewModel>> {
+        const result = await this.termQueryRepository.fetchById(id, userWithGroups);
 
         if (isNotFound(result)) return result;
 
-        const acl = new AccessControlList(result.accessControlList);
+        const { mediaItemId } = result;
 
-        if (isNullOrUndefined(userWithGroups) && !result.isPublished) {
-            return NotFound;
-        }
+        const audioItemURL = isNullOrUndefined(mediaItemId)
+            ? undefined
+            : this.buildAudioUrl(mediaItemId);
 
-        if (
-            result.isPublished ||
-            userWithGroups?.isAdmin() ||
-            acl.canUser(userWithGroups.id) ||
-            userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
-        ) {
-            const { mediaItemId } = result;
+        const transformed = result as unknown as ITermViewModel;
 
-            const audioItemURL = isNullOrUndefined(mediaItemId)
-                ? undefined
-                : this.buildAudioUrl(mediaItemId);
+        transformed.audioURL = audioItemURL;
 
-            const transformed = result as unknown as ITermViewModel;
+        transformed.actions = this.fetchUserActions(userWithGroups, [result]);
 
-            transformed.audioURL = audioItemURL;
-
-            transformed.actions = this.fetchUserActions(userWithGroups, [result]);
-
-            // TODO do this more efficiently
-            return transformed;
-        }
-
-        return NotFound;
+        return transformed;
     }
 
-    // TODO should we support specifications \ custom filters?
-    async fetchMany(userWithGroups?: CoscradUserWithGroups, options?: UserQueryOptions) {
-        const entities = await this.termQueryRepository.fetchMany(options);
-
-        // TODO consider filtering for user access in the DB
-
-        // TODO use SSOT utility function \ method for this
-        const availableEntities = entities.filter((entity) => {
-            if (entity.isPublished) return true;
-
-            // the public can only access published resources
-            if (isNullOrUndefined(userWithGroups)) return false;
-
-            if (userWithGroups.isAdmin()) return true;
-
-            const acl = new AccessControlList(entity.accessControlList);
-
-            return (
-                acl.canUser(userWithGroups.id) ||
-                userWithGroups.groups.some(({ id: groupId }) => acl.canGroup(groupId))
-            );
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups,
+        options?: UserQueryOptions
+    ): Promise<IIndexQueryResult<ITermViewModel>> {
+        const { entities, page, count } = await this.termQueryRepository.fetchMany({
+            ...options,
+            user: userWithGroups,
         });
 
         return {
             // TODO ensure actions show up on entities
-            entities: availableEntities.map((entity) => {
-                Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
+            entities: entities.map((e) => {
+                const entity = e as unknown as ITermViewModel;
 
-                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(
-                    entity.mediaItemId
-                );
+                Object.assign(entity, { audioURL: this.buildAudioUrl(e.mediaItemId) });
+
+                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(e.mediaItemId);
 
                 (entity as unknown as ITermViewModel).actions = this.fetchUserActions(
                     userWithGroups,
-                    [entity]
+                    [e]
                 );
 
-                return entity;
+                return entity as ITermViewModel;
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+            page,
+            count,
         };
     }
 

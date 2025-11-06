@@ -83,7 +83,7 @@ describe(`Term index-to-detail flow`, () => {
             cy.visit(`/Resources`);
         });
 
-        it('should have an entry for terms', () => {
+        it.only('should have an entry for terms', () => {
             cy.contains('Terms');
 
             // Ensure this is the link to the Terms and not an occurence of the word terms
@@ -103,6 +103,10 @@ describe(`Term index-to-detail flow`, () => {
     describe(`the term index page`, () => {
         beforeEach(() => {
             cy.visit(`/Resources/Terms`);
+        });
+
+        it.only(`should display the terms label exactly once`, () => {
+            cy.get('h2:contains(Terms)').should('have.length', 1);
         });
 
         it('should display the text for term 513', () => {

@@ -71,6 +71,8 @@ export class DigitalTextQueryService {
                 this.transform(entityViewModel, userWithGroups)
             ),
             indexScopedActions: this.fetchUserActions(userWithGroups, [commandContext]),
+            page: 1,
+            count: availableEntityViewModels.length,
         };
     }
 

@@ -210,6 +210,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
 
 exports[`When querying for a digital text when the user is a COSCRAD admin index queries (fetch many) should allow the user to access private resources 1`] = `
 {
+  "count": 2,
   "entities": [
     {
       "actions": [
@@ -596,6 +597,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
       "type": "CREATE_DIGITAL_TEXT",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -809,6 +811,7 @@ exports[`When querying for a digital text when the user is a project admin detai
 
 exports[`When querying for a digital text when the user is a project admin index queries (fetch many) should allow the user to access private resources 1`] = `
 {
+  "count": 2,
   "entities": [
     {
       "actions": [
@@ -1195,5 +1198,6 @@ exports[`When querying for a digital text when the user is a project admin index
       "type": "CREATE_DIGITAL_TEXT",
     },
   ],
+  "page": 1,
 }
 `;

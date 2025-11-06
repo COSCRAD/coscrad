@@ -221,6 +221,9 @@ export class MediaItemQueryService {
         return {
             entities,
             indexScopedActions: this.fetchUserActions(userWithGroups, this.getDomainModelCtors()),
+            // TODO opt-in to paginated responses for media items
+            page: 1,
+            count: entities.length,
         };
     }
 

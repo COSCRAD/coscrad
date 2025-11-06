@@ -58,6 +58,8 @@ export class CoscradUserQueryService {
             entities: viewModelsAndActions,
             // Only admin users can reach this logic to begin with- no need to filter
             indexScopedActions: this.commandInfoService.getCommandForms(CoscradUser),
+            page: 1,
+            count: viewModelsAndActions.length,
         };
     }
 }

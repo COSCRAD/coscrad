@@ -9,6 +9,7 @@ export type CoscradComplexDataTypeDefinition = (
 ) & {
     isOptional: boolean;
     isArray: boolean;
+    isPrivate: boolean;
     label: string;
     description: string;
 };

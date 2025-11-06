@@ -16,6 +16,7 @@ import { createFetchThunk } from '../../../utils/create-fetch-thunk';
 import { selectAuthToken } from '../../../utils/select-token';
 import { getApiResourcesBaseRoute } from '../../shared';
 import { TERMS } from '../constants';
+import { selectTermFilter } from '../selectors';
 
 interface ISimpleCondition<_T> {
     type: string;
@@ -40,8 +41,7 @@ export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondit
 /**
  * TODO Can we use an interface from `@api-interfaces`?
  */
-export interface IUserQueryOptions<T> {
-    filter?: IUserDefinedFilter<T>;
+export interface IUserQueryOptions {
     pagination: {
         size: number;
         page: number;
@@ -50,20 +50,26 @@ export interface IUserQueryOptions<T> {
 
 export const fetchTerms = createAsyncThunk(
     buildResourceFetchActionPrefix(TERMS),
-    async (options: Partial<IUserQueryOptions<ITermViewModel>> | null, thunkApi) => {
+    async (options: Partial<IUserQueryOptions> | null, thunkApi) => {
         const { getState } = thunkApi;
 
-        const token = selectAuthToken(getState() as RootState);
+        const state = getState() as RootState;
 
-        const optionsWithDefaultsApplied: IUserQueryOptions<ITermViewModel> = {
+        const token = selectAuthToken(state);
+
+        const filter = selectTermFilter(state);
+
+        const optionsWithDefaultsApplied: IUserQueryOptions & {
+            filter?: IUserDefinedFilter<ITermViewModel>;
+        } = {
             pagination: options?.pagination || {
                 size: 100,
                 page: 1,
             },
         };
 
-        if (options?.filter) {
-            optionsWithDefaultsApplied.filter = options.filter;
+        if (filter) {
+            optionsWithDefaultsApplied.filter = filter;
         }
 
         const headers = buildAuthenticationHeaders(token);

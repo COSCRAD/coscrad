@@ -83,7 +83,7 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
         user?: CoscradUserWithGroups;
         filter?: CoscradFilterCondition;
         pagination?: PaginationOptions;
-    }): Promise<ResultOrError<ArangoDatabaseDocument<TEntity>[]>> {
+    }): Promise<ResultOrError<{ selected: ArangoDatabaseDocument<TEntity>[]; count: number }>> {
         const docRef = 'doc';
 
         const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
@@ -92,9 +92,36 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         let letStatements = '';
 
-        const bindVars = {
+        const bindVars: Record<string, unknown> = {
             '@collectionName': this.collectionID,
         };
+
+        /**
+         * Note that we could use `CoscradQueryLanguage` to `And` the incoming
+         * user filter with a `CAN_USER` block. We do not do this, because we want
+         * to prevent public users from accessing the `AccessControlList` field
+         * in queries as this opens up injection attacks.
+         *
+         * If there is ever a reason for a resource to name the `accessControlList`
+         * property differently, we can make this property name an instance variable
+         * for this class.
+         */
+        let filterBlockForUser = `
+        filter @isAdmin || (has(${docRef},"isPublished") && ${docRef}.isPublished)
+        `;
+
+        bindVars.isAdmin = options?.user?.isAdmin() || false;
+
+        if (options?.user) {
+            bindVars.userId = options.user.id;
+
+            bindVars.groupIds = options.user.groups.map(({ id }) => id);
+
+            // if the resource is not published, we need to defer to the ACL list
+            filterBlockForUser += `|| (contains(${docRef}.accessControlList.allowedUserIds,@userId)
+        || length(intersection(${docRef}.accessControlList.allowedGroupIds,@groupIds)) > 0)
+        `;
+        }
 
         if (filterCondition) {
             const compileResult = compileAqlFilterBlock(filterCondition, docRef);
@@ -161,12 +188,31 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         // Should we ensure that the query returns the `next` page number \ offset?
         const aqlQueryString = `
+        let allResults = (
             for ${docRef} in @@collectionName
             ${sortBlock}
             ${letStatements}
+            ${filterBlockForUser}
             ${filterBlock}
-            ${limitBlock}
             return ${docRef}
+        )
+
+        let count = (
+            for r in allResults
+            collect with count into l
+            return l
+        )
+
+        let selected = (
+            for r in allResults
+            ${limitBlock}
+            return r
+        )
+
+        return {
+            selected,
+            count: count[0]
+        }
         `;
 
         const cursor = await this.#arangoDatabase
@@ -175,7 +221,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
                 throw e;
             });
 
-        const result = await cursor.all();
+        const resultsList = await cursor.all();
+
+        const result = resultsList[0];
 
         return result;
     }

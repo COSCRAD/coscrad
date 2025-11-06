@@ -76,6 +76,8 @@ export class CoscradUserGroupQueryService {
         return {
             entities: viewModelsAndActions,
             indexScopedActions: this.commandInfoService.getCommandForms(CoscradUserGroup),
+            page: 1,
+            count: viewModelsAndActions.length,
         };
     }
 

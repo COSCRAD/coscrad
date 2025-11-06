@@ -13,6 +13,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "label": {
@@ -20,6 +21,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "a human readable text label for this tag",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "label",
       },
       "members": {
@@ -27,6 +29,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "the composite identifier of every resource or note with this tag",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "members",
       },
       "name": {
@@ -34,6 +37,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -42,6 +46,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -52,6 +57,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -91,6 +97,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -120,6 +127,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -140,6 +148,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "self similar reference to all categories that are direct-descendants of this category in the tree",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "children",
         "name": "CategoryTreeViewModel",
         "schema": {
@@ -148,6 +157,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "label": {
@@ -155,6 +165,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "the user-facing label for this category",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label",
           },
           "members": {
@@ -162,6 +173,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "the composite identifier of every resource or note in this category",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "members",
           },
           "name": {
@@ -169,6 +181,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "multilingual text name of the entity",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -177,6 +190,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -187,6 +201,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -226,6 +241,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -255,6 +271,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -268,6 +285,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "label": {
@@ -275,6 +293,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "the user-facing label for this category",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "label",
       },
       "members": {
@@ -282,6 +301,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "the composite identifier of every resource or note in this category",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "members",
       },
       "name": {
@@ -289,6 +309,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -297,6 +318,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -307,6 +329,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -346,6 +369,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -375,6 +399,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -395,6 +420,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "name": {
@@ -402,6 +428,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -410,6 +437,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -420,6 +448,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -459,6 +488,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -488,6 +518,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -499,6 +530,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "the user's profile information",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "profile",
         "name": "CoscradUserProfile",
         "schema": {
@@ -507,6 +539,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "the user's email address",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "email",
           },
           "name": {
@@ -514,6 +547,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "the user's full name",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "full name",
             "name": "FullName",
             "schema": {
@@ -522,6 +556,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "the user's first name",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "first name",
               },
               "lastName": {
@@ -529,6 +564,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "the user's last name",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "last name",
               },
             },
@@ -542,6 +578,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "enumName": "COSCRAD_USER_ROLE",
         "isArray": true,
         "isOptional": true,
+        "isPrivate": false,
         "label": "roles",
         "labelsAndValues": [
           {
@@ -563,6 +600,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "a human-readable identifier for this user",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "username",
       },
     },
@@ -579,6 +617,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "a summary of the significance of this user group (what its members have in common)",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "description",
       },
       "id": {
@@ -586,6 +625,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "label": {
@@ -593,6 +633,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "the name of the group",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "label",
       },
       "name": {
@@ -600,6 +641,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -608,6 +650,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -618,6 +661,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -657,6 +701,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -686,6 +731,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -697,6 +743,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "all users that are in this group",
         "isArray": true,
         "isOptional": false,
+        "isPrivate": false,
         "label": "users",
         "name": "CoscradUserViewModel",
         "schema": {
@@ -705,6 +752,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "unique identifier",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "ID",
           },
           "name": {
@@ -712,6 +760,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "multilingual text name of the entity",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "name",
             "name": "MultilingualText",
             "schema": {
@@ -720,6 +769,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "one item for each provided language",
                 "isArray": true,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "items",
                 "name": "MultilingualTextItem",
                 "schema": {
@@ -730,6 +780,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "enumName": "LangaugeCode",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "language code",
                     "labelsAndValues": [
                       {
@@ -769,6 +820,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "enumName": "Multilingual Text Item Role",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text item role",
                     "labelsAndValues": [
                       {
@@ -798,6 +850,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "description": "plain text in the given language",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "text",
                   },
                 },
@@ -809,6 +862,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "the user's profile information",
             "isArray": false,
             "isOptional": true,
+            "isPrivate": false,
             "label": "profile",
             "name": "CoscradUserProfile",
             "schema": {
@@ -817,6 +871,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "the user's email address",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "email",
               },
               "name": {
@@ -824,6 +879,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "the user's full name",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "full name",
                 "name": "FullName",
                 "schema": {
@@ -832,6 +888,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "description": "the user's first name",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "first name",
                   },
                   "lastName": {
@@ -839,6 +896,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                     "description": "the user's last name",
                     "isArray": false,
                     "isOptional": false,
+                    "isPrivate": false,
                     "label": "last name",
                   },
                 },
@@ -852,6 +910,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "enumName": "COSCRAD_USER_ROLE",
             "isArray": true,
             "isOptional": true,
+            "isPrivate": false,
             "label": "roles",
             "labelsAndValues": [
               {
@@ -873,6 +932,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "a human-readable identifier for this user",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "username",
           },
         },
@@ -891,6 +951,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "full name of the contributor",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "full name",
       },
       "id": {
@@ -898,6 +959,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "unique identifier",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "ID",
       },
       "name": {
@@ -905,6 +967,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "multilingual text name of the entity",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "name",
         "name": "MultilingualText",
         "schema": {
@@ -913,6 +976,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
             "description": "one item for each provided language",
             "isArray": true,
             "isOptional": false,
+            "isPrivate": false,
             "label": "items",
             "name": "MultilingualTextItem",
             "schema": {
@@ -923,6 +987,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "LangaugeCode",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "language code",
                 "labelsAndValues": [
                   {
@@ -962,6 +1027,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "enumName": "Multilingual Text Item Role",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text item role",
                 "labelsAndValues": [
                   {
@@ -991,6 +1057,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
                 "description": "plain text in the given language",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "text",
               },
             },
@@ -1002,6 +1069,7 @@ exports[`User Management Queries when fetching schemas (/admin) should return th
         "description": "A Short Biography",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "biography",
       },
     },
@@ -1090,6 +1158,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for user groups when fetching all groups should return the expected result 1`] = `
 {
+  "count": 1,
   "entities": [
     {
       "actions": [
@@ -1211,6 +1280,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "CREATE_USER_GROUP",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1289,6 +1359,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a coscrad admin when querying for users when fetching all users should return the expected result 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [
@@ -1545,6 +1616,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "REGISTER_USER",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1628,6 +1700,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for user groups when fetching all groups should return the expected result 1`] = `
 {
+  "count": 1,
   "entities": [
     {
       "actions": [
@@ -1749,6 +1822,7 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "CREATE_USER_GROUP",
     },
   ],
+  "page": 1,
 }
 `;
 
@@ -1827,6 +1901,7 @@ exports[`User Management Queries when the system user issuing the command is aut
 
 exports[`User Management Queries when the system user issuing the command is authorized when the user is a project admin when querying for users when fetching all users should return the expected result 1`] = `
 {
+  "count": 3,
   "entities": [
     {
       "actions": [
@@ -2083,5 +2158,6 @@ exports[`User Management Queries when the system user issuing the command is aut
       "type": "REGISTER_USER",
     },
   ],
+  "page": 1,
 }
 `;
