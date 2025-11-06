@@ -8,7 +8,6 @@ export const TermIndexPage = (): JSX.Element => {
     return (
         <div>
             <Stack>
-                {/* <Typography variant="h2">{label}</Typography> */}
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <TermSearchBar
                         scopes={['name', 'contributions', 'vocabularyLists', 'tokens']}

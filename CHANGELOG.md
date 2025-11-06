@@ -15,7 +15,7 @@ index pages (e.g. `/Terms`).
 
 #### Relevant Commits
 
--   perf: leverage pagination API for terms on the client (##787)
+-   perf: leverage pagination API for terms on the client (#787)
 -   perf: implement active search for terms (#786)
 -   refactor: update state management strategy for terms (#784)
 
