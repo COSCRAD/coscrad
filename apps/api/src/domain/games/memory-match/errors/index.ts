@@ -3,6 +3,7 @@ export * from './cannot-overwrite-audio-for-memory-match-card.error';
 export * from './cannot-overwrite-cardback-image-for-memory-match-round.error';
 export * from './cannot-overwrite-image-for-memory-match-card.error';
 export * from './cannot-overwrite-text-for-memory-match-card.error';
+export * from './cannot-remove-card-from-published-memory-match-round.error';
 export * from './duplicate-sequence-number-for-cards.error';
 export * from './failed-to-republish-memory-round.error';
 export * from './failed-to-unpublish-draft-memory-round.error';

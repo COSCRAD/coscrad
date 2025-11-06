@@ -11,6 +11,7 @@ import { DTO } from '../../../../types/DTO';
 import AggregateNotFoundError from '../../../models/shared/common-command-errors/AggregateNotFoundError';
 import { AggregateId } from '../../../types/AggregateId';
 import { MEMORY_MATCH_ROUND } from '../constants';
+import { CannotRemoveCardFromPublishedMemoryMatchRoundError } from '../errors';
 import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/cannot-remove-unknown-card-from-memory-match-round.error';
 import { IMemoryMatchRepository } from '../memory-match.repository.interface';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
@@ -129,14 +130,16 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
         const query = `
         for doc in @@collectionName
         filter doc._key == @roundId
+        let isPublished = doc.isPublished
         let index = position(doc.cards[*].sequenceNumber,@sequenceNumber,true)
-        let shouldUpdate = index != -1
+        let shouldUpdate = index != -1 && !isPublished
         let newCards = shouldUpdate ? remove_nth(doc.cards,index) : doc.cards
         update doc with {
             cards: newCards
         } in @@collectionName
          return {
-            didUpdate: shouldUpdate
+            didUpdate: shouldUpdate,
+            isPublished
          }
         `;
 
@@ -150,15 +153,21 @@ export class ArangoMemoryMatchRepository implements IMemoryMatchRepository {
 
         const updates = await cursor.all();
 
-        if (updates.length == 1)
+        if (updates.length !== 1)
             return new AggregateNotFoundError({
                 type: MEMORY_MATCH_ROUND,
                 id: roundId,
             });
 
-        const { didUpdate } = updates[0];
+        const { didUpdate, isPublished } = updates[0];
 
         if (!didUpdate) {
+            if (isPublished) {
+                return new CannotRemoveCardFromPublishedMemoryMatchRoundError(
+                    roundId,
+                    sequenceNumber
+                );
+            }
             return new CannotRemoveUnknownCardFromMemoryMatchRoundError(roundId, sequenceNumber);
         }
     }

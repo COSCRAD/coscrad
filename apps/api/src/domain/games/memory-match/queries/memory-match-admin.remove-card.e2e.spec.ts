@@ -11,6 +11,7 @@ import { Environment } from '../../../../app/config/constants/environment';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { AuthorizationModule } from '../../../../authorization/authorization.module';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -27,25 +28,14 @@ import {
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
 
+const NUMBER_OF_PAIRS_IN_A_ROUND = 12;
+
 const buildEndpoint = (id: string, sequenceNumber: number) =>
     `/games/memory-match/${id}/cards/${sequenceNumber}`;
 
 const testMemoryRoundId = buildDummyUuid(420);
 
 const targetSquenceNumber = 123;
-
-const initialSize = 5;
-
-const testRound = buildTestInstance(MemoryMatchRound, {
-    id: testMemoryRoundId,
-    cards: Array(initialSize)
-        .fill(null)
-        .map((_, index) =>
-            buildTestInstance(MemoryMatchCard, {
-                sequenceNumber: index === 2 ? targetSquenceNumber : index + 1,
-            })
-        ),
-});
 
 describe(`when using the REST API to remove a card from a memory match round`, () => {
     let app: INestApplication;
@@ -128,39 +118,339 @@ describe(`when using the REST API to remove a card from a memory match round`, (
             app.get(ArangoDatabaseProvider).close;
         });
 
-        describe(`when the request is valid`, () => {
-            beforeEach(async () => {
-                await memoryMatchRepository.create(testRound);
+        describe(`when the round is already published`, () => {
+            const publishedRound = buildTestInstance(MemoryMatchRound, {
+                isPublished: true,
+                id: testMemoryRoundId,
+                cardBackImageId: buildDummyUuid(50),
+                cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                    .fill(null)
+                    .map((_, index) =>
+                        buildTestInstance(MemoryMatchCard, {
+                            sequenceNumber: index === 0 ? targetSquenceNumber : index + 1,
+                            audioId: buildDummyUuid(100 + index),
+                            imageId: buildDummyUuid(200 + index),
+                        })
+                    ),
             });
 
-            it(`should remove the card`, async () => {
-                const endpoint = buildEndpoint(testMemoryRoundId, targetSquenceNumber);
+            const validationResult = publishedRound.validateInvariants();
 
-                const res = await request(app.getHttpServer()).delete(endpoint);
+            if (validationResult.length > 0) {
+                throw new InternalError(`Test setup failed`, validationResult);
+            }
 
-                expect(res.status).toBe(HttpStatusCode.ok);
+            beforeEach(async () => {
+                await memoryMatchRepository.create(publishedRound);
+            });
 
-                const updatedRound = (await memoryMatchRepository.fetchById(
-                    testMemoryRoundId
-                )) as MemoryMatchRound;
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(publishedRound.id, targetSquenceNumber)
+                );
 
-                expect(updatedRound.count()).toBe(initialSize - 1);
+                expect(res.statusCode).toBe(HttpStatusCode.badRequest);
 
-                expect(updatedRound.has(targetSquenceNumber)).toBe(false);
+                const { message } = res.body;
+
+                expect(message).toContain(publishedRound.id);
+
+                expect(message).toContain(targetSquenceNumber.toString());
+
+                expect(message).toContain(`already published`);
             });
         });
 
-        describe(`when the round is not yet published`, () => {
-            beforeEach(async () => {
-                await memoryMatchRepository.create(testRound);
+        describe(`when there is no card with the sequence number`, () => {
+            const missingSequenceNumber = 404;
+
+            const bogusRound = buildTestInstance(MemoryMatchRound, {
+                id: buildDummyUuid(2),
+                isPublished: false,
+                cards: [1, 2, 4].map((sequenceNumber) =>
+                    buildTestInstance(MemoryMatchCard, {
+                        sequenceNumber,
+                    })
+                ),
             });
 
-            it(`should remove the card`, async () => {
-                const endpoint = buildEndpoint(testMemoryRoundId, targetSquenceNumber);
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(bogusRound.id, missingSequenceNumber)
+                );
 
-                const res = await request(app.getHttpServer()).delete(endpoint);
+                expect(res.statusCode).toBe(HttpStatusCode.badRequest);
+            });
+        });
 
-                expect(res.status).toBe(HttpStatusCode.ok);
+        describe(`when the round does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                const server = app.getHttpServer();
+
+                const res = await request(server).delete(
+                    buildEndpoint(testMemoryRoundId, targetSquenceNumber)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.badRequest);
+            });
+        });
+    });
+
+    describe(`when the user is a project admin`, () => {
+        const coscradAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.projectAdmin],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the round is already published`, () => {
+            const publishedRound = buildTestInstance(MemoryMatchRound, {
+                isPublished: true,
+                id: testMemoryRoundId,
+                cardBackImageId: buildDummyUuid(50),
+                cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                    .fill(null)
+                    .map((_, index) =>
+                        buildTestInstance(MemoryMatchCard, {
+                            sequenceNumber: index === 0 ? targetSquenceNumber : index + 1,
+                            audioId: buildDummyUuid(100 + index),
+                            imageId: buildDummyUuid(200 + index),
+                        })
+                    ),
+            });
+
+            const validationResult = publishedRound.validateInvariants();
+
+            if (validationResult.length > 0) {
+                throw new InternalError(`Test setup failed`, validationResult);
+            }
+
+            beforeEach(async () => {
+                await memoryMatchRepository.create(publishedRound);
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(publishedRound.id, targetSquenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.badRequest);
+
+                const { message } = res.body;
+
+                expect(message).toContain(publishedRound.id);
+
+                expect(message).toContain(targetSquenceNumber.toString());
+
+                expect(message).toContain(`already published`);
+            });
+        });
+
+        describe(`when there is no card with the sequence number`, () => {
+            const missingSequenceNumber = 404;
+
+            const bogusRound = buildTestInstance(MemoryMatchRound, {
+                id: buildDummyUuid(2),
+                isPublished: false,
+                cards: [1, 2, 4].map((sequenceNumber) =>
+                    buildTestInstance(MemoryMatchCard, {
+                        sequenceNumber,
+                    })
+                ),
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(bogusRound.id, missingSequenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.badRequest);
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                const server = app.getHttpServer();
+
+                const res = await request(server).delete(
+                    buildEndpoint(testMemoryRoundId, targetSquenceNumber)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.badRequest);
+            });
+        });
+    });
+
+    describe(`when the user is a Ordinary User (viewer)`, () => {
+        const coscradAdminUser = buildTestInstance(CoscradUser, {
+            roles: [CoscradUserRole.viewer],
+        });
+
+        beforeAll(async () => {
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the round is already published`, () => {
+            const publishedRound = buildTestInstance(MemoryMatchRound, {
+                isPublished: true,
+                id: testMemoryRoundId,
+                cardBackImageId: buildDummyUuid(50),
+                cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                    .fill(null)
+                    .map((_, index) =>
+                        buildTestInstance(MemoryMatchCard, {
+                            sequenceNumber: index === 0 ? targetSquenceNumber : index + 1,
+                            audioId: buildDummyUuid(100 + index),
+                            imageId: buildDummyUuid(200 + index),
+                        })
+                    ),
+            });
+
+            const validationResult = publishedRound.validateInvariants();
+
+            if (validationResult.length > 0) {
+                throw new InternalError(`Test setup failed`, validationResult);
+            }
+
+            beforeEach(async () => {
+                await memoryMatchRepository.create(publishedRound);
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(publishedRound.id, targetSquenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.forbidden);
+            });
+        });
+
+        describe(`when there is no card with the sequence number`, () => {
+            const missingSequenceNumber = 404;
+
+            const bogusRound = buildTestInstance(MemoryMatchRound, {
+                id: buildDummyUuid(2),
+                isPublished: false,
+                cards: [1, 2, 4].map((sequenceNumber) =>
+                    buildTestInstance(MemoryMatchCard, {
+                        sequenceNumber,
+                    })
+                ),
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(bogusRound.id, missingSequenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.forbidden);
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                const server = app.getHttpServer();
+
+                const res = await request(server).delete(
+                    buildEndpoint(testMemoryRoundId, targetSquenceNumber)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.forbidden);
+            });
+        });
+    });
+
+    describe(`when the user is not authenticated`, () => {
+        beforeAll(async () => {
+            await setItUp(undefined);
+        });
+
+        afterAll(async () => {
+            await app.close();
+
+            app.get(ArangoDatabaseProvider).close;
+        });
+
+        describe(`when the round is already published`, () => {
+            const publishedRound = buildTestInstance(MemoryMatchRound, {
+                isPublished: true,
+                id: testMemoryRoundId,
+                cardBackImageId: buildDummyUuid(50),
+                cards: Array(NUMBER_OF_PAIRS_IN_A_ROUND)
+                    .fill(null)
+                    .map((_, index) =>
+                        buildTestInstance(MemoryMatchCard, {
+                            sequenceNumber: index === 0 ? targetSquenceNumber : index + 1,
+                            audioId: buildDummyUuid(100 + index),
+                            imageId: buildDummyUuid(200 + index),
+                        })
+                    ),
+            });
+
+            const validationResult = publishedRound.validateInvariants();
+
+            if (validationResult.length > 0) {
+                throw new InternalError(`Test setup failed`, validationResult);
+            }
+
+            beforeEach(async () => {
+                await memoryMatchRepository.create(publishedRound);
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(publishedRound.id, targetSquenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.forbidden);
+            });
+        });
+
+        describe(`when there is no card with the sequence number`, () => {
+            const missingSequenceNumber = 404;
+
+            const bogusRound = buildTestInstance(MemoryMatchRound, {
+                id: buildDummyUuid(2),
+                isPublished: false,
+                cards: [1, 2, 4].map((sequenceNumber) =>
+                    buildTestInstance(MemoryMatchCard, {
+                        sequenceNumber,
+                    })
+                ),
+            });
+
+            it(`should return the expected error`, async () => {
+                const res = await request(app.getHttpServer()).delete(
+                    buildEndpoint(bogusRound.id, missingSequenceNumber)
+                );
+
+                expect(res.statusCode).toBe(HttpStatusCode.forbidden);
+            });
+        });
+
+        describe(`when the round does not exist`, () => {
+            it(`should fail with the expected error`, async () => {
+                const server = app.getHttpServer();
+
+                const res = await request(server).delete(
+                    buildEndpoint(testMemoryRoundId, targetSquenceNumber)
+                );
+
+                expect(res.status).toBe(HttpStatusCode.forbidden);
             });
         });
     });

@@ -130,8 +130,8 @@ export class MemoryMatchController {
     @ApiBearerAuth('JWT')
     @UseGuards(AdminJwtGuard)
     @Delete(`:id/cards/:squenceNumber`)
-    async removeCard(@Param('id') roundId: string, @Param('squenceNumber') sequenceNumber: number) {
-        const result = await this.memoryMatchService.removeCard(roundId, sequenceNumber);
+    async removeCard(@Param('id') roundId: string, @Param('squenceNumber') sequenceNumber: string) {
+        const result = await this.memoryMatchService.removeCard(roundId, parseInt(sequenceNumber));
 
         if (isInternalError(result)) {
             return new CoscradInvalidUserInputException(result);
