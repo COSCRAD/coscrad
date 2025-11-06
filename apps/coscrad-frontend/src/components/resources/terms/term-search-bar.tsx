@@ -24,6 +24,13 @@ import {
     useLoadableTerms,
 } from '../../../store/slices/resources';
 
+/**
+ * Clearly this doesn't belong here. However, we want to generalize it to
+ * work for other resource types. It's a matter of parsing the query string
+ * based on the `CoscradDataType` of each field.
+ *
+ * We may end up moving this logic to the server.
+ */
 const compileMultilingualTextContainsQuery = (
     fieldName: keyof ITermViewModel,
     queryString: string

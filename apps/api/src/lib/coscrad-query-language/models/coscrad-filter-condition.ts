@@ -1,3 +1,6 @@
+/**
+ * TODO We should break `COSCRAD query language` into a separate library.
+ */
 export enum CoscradConditionBlockType {
     OR = 'OR',
     AND = 'AND',
@@ -14,7 +17,6 @@ export enum CoscradBooleanOperator {
     TEXT_INCLUDES = 'TEXT_INCLUDES',
     TEXT_EQUALS = 'TEXT_EQUALS',
     MULTILINGUAL_TEXT_HAS_LETTER = 'MULTILINGUAL_TEXT_HAS_LETTER',
-    USER_CAN = 'USER_CAN',
     IS_FLAGGED = 'IS_FLAGGED',
 }
 

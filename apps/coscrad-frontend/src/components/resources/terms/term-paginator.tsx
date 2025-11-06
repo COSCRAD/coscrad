@@ -11,6 +11,7 @@ import { cyclicDecrement, cyclicIncrement } from '../../../utils/math';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { Loading } from '../../loading';
 
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-344] make this configurable
 export const DEFAULT_PAGE_SIZE = 5;
 
 const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
@@ -38,7 +39,7 @@ export const TermPaginator = (): JSX.Element => {
 
     const startingRecordNumberHumanReadable = pageSize * (page - 1) + 1;
 
-    const endingnRecordNumberHumanReadable =
+    const endingRecordNumberHumanReadable =
         startingRecordNumberHumanReadable + (selected?.length || 0) - 1;
 
     const totalNumberOfPages = Math.ceil(count / pageSize);
@@ -48,7 +49,7 @@ export const TermPaginator = (): JSX.Element => {
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography component="span" sx={{ mr: 2, mt: 1 }}>
                     Showing Records: {startingRecordNumberHumanReadable}-
-                    {endingnRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count}
+                    {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count}
                 </Typography>
             </Grid>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>

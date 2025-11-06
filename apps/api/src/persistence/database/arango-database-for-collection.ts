@@ -98,11 +98,9 @@ export class ArangoDatabaseForCollection<TEntity extends HasAggregateId> {
 
         /**
          * Note that we could use `CoscradQueryLanguage` to `And` the incoming
-         * user filter with a `CAN_USER` block. But given that the present
-         * layer is where we interpret `Coscrad` user queries into `AQL`, it's
-         * not worth the added complexity to our query language. As our
-         * query language evolves to support arbitrary nesting (deep recursion),
-         * we can consider this refactor.
+         * user filter with a `CAN_USER` block. We do not do this, because we want
+         * to prevent public users from accessing the `AccessControlList` field
+         * in queries as this opens up injection attacks.
          *
          * If there is ever a reason for a resource to name the `accessControlList`
          * property differently, we can make this property name an instance variable

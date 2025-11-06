@@ -70,6 +70,11 @@ const forbidNestedFieldQuery = (field: string, operator: CoscradBooleanOperator)
     }
 };
 
+// TODO Share this with `mapEntityDTOToDatabaseDocument`
+const fieldAliases = {
+    id: '_key',
+};
+
 const compileSimpleFilterCondition = (
     condition: CoscradSimpleCondition,
     docRef: string,
@@ -512,54 +517,6 @@ const compileSimpleFilterCondition = (
         };
     }
 
-    if (operator === CoscradBooleanOperator.USER_CAN) {
-        const {
-            expression: fieldRef,
-            individualFieldNames,
-            isArray,
-        } = buildFieldRef(docRef, field, startingArgIndex);
-
-        if (isArray) {
-            throw new Error(`Arrays of Access Control Lists are not allowed`);
-        }
-
-        if (individualFieldNames.length > 1) {
-            throw new Error(`Nested Access Control Lists are not yet supported`);
-        }
-
-        if (individualFieldNames[0] !== 'accessControlList') {
-            throw new Error(
-                `We currently only support filtering for user access via a top-level 'accessControlList' property`
-            );
-        }
-
-        // TODO validate param list
-
-        const [userId, groupIds] = params;
-
-        const letVarName = `acl_${varCount}`;
-
-        const letStatement = `
-        let ${letVarName} = has(${docRef},'${individualFieldNames.join(
-            '.'
-        )}') ? ${fieldRef} : { allowedUserIds: [], allowedGroupIds: [] }
-        `;
-
-        const filterStatement = `contains(${letVarName}.allowedUserIds,@args[${
-            startingArgIndex + 1
-        }]) || length(intersection(${letVarName}.allowedGroupIds,@args[${
-            startingArgIndex + 2
-        }])) > 0`;
-
-        return {
-            letStatement,
-            filterStatement,
-            bindVars: {
-                args: [field, userId, groupIds],
-            },
-        };
-    }
-
     if (operator === CoscradBooleanOperator.IS_FLAGGED) {
         const {
             expression: fieldRef,
@@ -819,10 +776,6 @@ export const compileAqlFilterBlockHelper = (
     }
 
     throw new InternalError(`Unsupported COSCRAD filter condition type: ${type}`);
-};
-
-const fieldAliases = {
-    id: '_key',
 };
 
 export const compileAqlFilterBlock = (

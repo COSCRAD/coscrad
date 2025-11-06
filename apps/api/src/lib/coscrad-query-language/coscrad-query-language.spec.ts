@@ -38,8 +38,6 @@ import {
 
 const testUserId = buildDummyUuid(808);
 
-const matchingUserId = testUserId;
-
 const matchingGroupIds = [50, 60, 107].map(buildDummyUuid);
 
 const _testUserWithGroups = buildTestInstance(CoscradUserWithGroups, {
@@ -356,14 +354,6 @@ describe(`Coscrad Query Language`, () => {
             operator: CoscradBooleanOperator.IS_FLAGGED,
             params: [],
             field: 'isPublished',
-        };
-
-        // TODO include publication status in this check
-        const canUser: CoscradSimpleCondition = {
-            type: CoscradConditionBlockType.SIMPLE,
-            operator: CoscradBooleanOperator.USER_CAN,
-            params: [matchingUserId, matchingGroupIds],
-            field: 'accessControlList',
         };
 
         describe(`when the query is a simple condition`, () => {
@@ -1414,74 +1404,6 @@ describe(`Coscrad Query Language`, () => {
                 });
             });
 
-            describe(`USER_CAN`, () => {
-                const widgetWithUserId = dummyWidget.clone({
-                    id: buildDummyUuid(1),
-                    accessControlList: new AccessControlList().allowUser(matchingUserId),
-                });
-
-                const widgetWithoutUserIdOrGroupId = dummyWidget.clone({
-                    id: buildDummyUuid(2),
-                    // Let's be sure there's no chance of crossing the wires with user and group IDs, although UUIDs protect us from this due to making ID collisions almost impossible
-                    accessControlList: new AccessControlList()
-                        .allowUser(buildDummyUuid(666))
-                        .allowUser(buildDummyUuid(777))
-                        .allowGroup(matchingUserId),
-                });
-
-                const widgetWithEmptyAcl = dummyWidget.clone({
-                    id: buildDummyUuid(3),
-                    accessControlList: new AccessControlList(),
-                });
-
-                const widgetWithOneGroupIdButNoUserId = dummyWidget.clone({
-                    id: buildDummyUuid(4),
-                    accessControlList: new AccessControlList()
-                        .allowUser(buildDummyUuid(666))
-                        .allowGroup(matchingGroupIds[0])
-                        .allowGroup(buildDummyUuid(123)),
-                });
-
-                const widgetWithAllGroupsButNoUserId = dummyWidget.clone({
-                    id: buildDummyUuid(5),
-                    accessControlList: matchingGroupIds.reduce(
-                        (acl, groupId) => acl.allowGroup(groupId),
-                        new AccessControlList()
-                    ),
-                });
-
-                const widgetWithAllGroupsAndUserId = dummyWidget.clone({
-                    id: buildDummyUuid(6),
-                    accessControlList: matchingGroupIds.reduce(
-                        (acl, groupId) => acl.allowGroup(groupId),
-                        new AccessControlList().allowUser(matchingUserId)
-                    ),
-                });
-
-                it(`should return the expected result`, async () => {
-                    await assertQueryResult({
-                        matchingWidgets: [
-                            // +
-                            widgetWithUserId,
-
-                            // +
-                            widgetWithOneGroupIdButNoUserId,
-                            // +
-                            widgetWithAllGroupsButNoUserId,
-                            // +
-                            widgetWithAllGroupsAndUserId,
-                        ],
-                        nonMatchingWidgets: [
-                            // -
-                            widgetWithoutUserIdOrGroupId,
-                            // -
-                            widgetWithEmptyAcl,
-                        ],
-                        filter: canUser,
-                    });
-                });
-            });
-
             describe(`IS_FLAGGED`, () => {
                 describe(`when the flag is at top level`, () => {
                     const publishedWidget = dummyWidget.clone({
@@ -1552,58 +1474,6 @@ describe(`Coscrad Query Language`, () => {
                             filter: doesAnyTextIncludeElloAndGreaterThanCutoffYear,
                         });
                     });
-                });
-
-                describe(`when querying for user access along with an or condition`, () => {
-                    beforeEach(async () => {
-                        await widgetRepository.createMany([
-                            // 3 / 5 should match the `OR`
-                            // +
-                            widgetThatMatchesInOriginalText.clone({
-                                id: '1',
-                                yearBuilt: cutoffYearExclusive + 1,
-                                accessControlList: new AccessControlList().allowUser(testUserId),
-                            }),
-                            // - We specify the language code to be the original ('en') language code for this case
-                            widgetThatMatchesInTranslatedText.clone({
-                                id: '2',
-                                yearBuilt: cutoffYearExclusive - 1,
-                            }),
-                            // -
-                            widgetThatDoesNotMatchSearchText.clone({
-                                id: '3',
-                                yearBuilt: cutoffYearExclusive - 1,
-                            }),
-                            // - due to lack of ACL access
-                            widgetThatComesAfterCutoffYear.clone({
-                                id: '4',
-                                description: buildMultilingualTextWithSingleItem('no text match!'),
-                                accessControlList: new AccessControlList(),
-                            }),
-                            // +
-                            widgetThatComesBeforeCutoffYear.clone({
-                                id: '5',
-                                description: buildMultilingualTextWithSingleItem(
-                                    `H${searchText} to all!`
-                                ),
-                                accessControlList: new AccessControlList().allowGroup(
-                                    matchingGroupIds[0]
-                                ),
-                            }),
-                        ]);
-                    });
-
-                    const _doesUserHaveAccessAndDoesEnglishTextIncludeElloOrGreaterThanCutoffYear: CoscradAndCondition =
-                        {
-                            type: CoscradConditionBlockType.AND,
-                            conditions: [
-                                isPublished,
-                                canUser,
-                                doesEnglishTextIncludeElloOrGreaterThanCutoffYear,
-                            ],
-                        };
-
-                    it.todo(`should throw not supported`);
                 });
             });
 

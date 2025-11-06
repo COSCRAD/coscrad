@@ -9,6 +9,7 @@ export * from './games';
 export * from './has-id.interface';
 export * from './multilingual-text';
 export * from './note';
+export * from './paginated-response.interface';
 export * from './resources';
 export * from './tag.view-model.interface';
 export * from './user-management';

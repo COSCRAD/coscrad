@@ -77,10 +77,6 @@ const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
          * with the next index request.
          */
         state.data.indexScopedActions = state.data?.indexScopedActions || [];
-
-        console.log({
-            state,
-        });
     });
 
     builder.addCase(thunk.rejected, (state: ILoadable<TermIndexState>, action) => {
@@ -128,10 +124,6 @@ const buildReducersForFetchTermsThunk = <VThunkArg = any>(
         };
 
         state.isLoading = false;
-
-        console.log({
-            state,
-        });
     });
 
     builder.addCase(thunk.rejected, (state: ILoadable<TermIndexState>, action) => {
@@ -223,6 +215,7 @@ export const termSlice = createSlice({
 
             state.errorInfo = null;
         },
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-358] We should cache the pages until the page size or filter is changed
         changePageSize: (state, { payload: { pageSize } }: { payload: { pageSize: number } }) => {
             state.pageSize = pageSize;
 

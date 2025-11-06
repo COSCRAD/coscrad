@@ -32,16 +32,11 @@ export class CoscradUserWithGroups extends CoscradUser {
         ) as T;
     }
 
-    static override fromDto<CoscradUserWithGroups>(
-        dto: DTO<CoscradUserWithGroups>
-    ): CoscradUserWithGroups {
-        // @ts-expect-error fix me
+    static override fromDto(dto: DTO<CoscradUser> & { groups: CoscradUserGroup[] }) {
         const { groups } = dto;
 
-        // @ts-expect-error fix me
         const user = new CoscradUser(dto);
 
-        // @ts-expect-error fix me
         return new CoscradUserWithGroups(
             user,
             groups.map((g) => new CoscradUserGroup(g))

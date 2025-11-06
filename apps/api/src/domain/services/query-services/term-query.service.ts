@@ -1,6 +1,7 @@
 import {
     AggregateType,
     ICommandFormAndLabels,
+    IIndexQueryResult,
     ITermViewModel,
     LanguageCode,
 } from '@coscrad/api-interfaces';
@@ -13,6 +14,7 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
+import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
@@ -70,8 +72,10 @@ export class TermQueryService {
         this.audioUrlPrefix = `/resources/mediaItems/download`;
     }
 
-    // TODO add explicit return type
-    async fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups) {
+    async fetchById(
+        id: AggregateId,
+        userWithGroups?: CoscradUserWithGroups
+    ): Promise<Maybe<ITermViewModel>> {
         const result = await this.termQueryRepository.fetchById(id, userWithGroups);
 
         if (isNotFound(result)) return result;
@@ -91,8 +95,10 @@ export class TermQueryService {
         return transformed;
     }
 
-    // TODO should we support specifications \ custom filters?
-    async fetchMany(userWithGroups?: CoscradUserWithGroups, options?: UserQueryOptions) {
+    async fetchMany(
+        userWithGroups?: CoscradUserWithGroups,
+        options?: UserQueryOptions
+    ): Promise<IIndexQueryResult<ITermViewModel>> {
         const { entities, page, count } = await this.termQueryRepository.fetchMany({
             ...options,
             user: userWithGroups,
@@ -100,19 +106,19 @@ export class TermQueryService {
 
         return {
             // TODO ensure actions show up on entities
-            entities: entities.map((entity) => {
-                Object.assign(entity, { audioURL: this.buildAudioUrl(entity.mediaItemId) });
+            entities: entities.map((e) => {
+                const entity = e as unknown as ITermViewModel;
 
-                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(
-                    entity.mediaItemId
-                );
+                Object.assign(entity, { audioURL: this.buildAudioUrl(e.mediaItemId) });
+
+                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(e.mediaItemId);
 
                 (entity as unknown as ITermViewModel).actions = this.fetchUserActions(
                     userWithGroups,
-                    [entity]
+                    [e]
                 );
 
-                return entity;
+                return entity as ITermViewModel;
             }),
             // TODO Should we register index-scoped commands in the view layer instead?
             indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),

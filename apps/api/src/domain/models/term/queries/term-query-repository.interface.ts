@@ -1,4 +1,9 @@
-import { IMultilingualTextItem, IToken, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    IMultilingualTextItem,
+    IToken,
+    LanguageCode,
+    PaginatedResponse,
+} from '@coscrad/api-interfaces';
 import { Observable } from 'rxjs';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
@@ -23,12 +28,6 @@ export const TERM_QUERY_REPOSITORY_TOKEN = 'TERM_QUERY_REPOSITORY_TOKEN';
 export interface AudioCandidatesForTerm {
     term: TermViewModel;
     possibleAudioItems: EventSourcedAudioItemViewModel[];
-}
-
-interface PaginatedResponse<T> {
-    entities: T[];
-    page: number;
-    count: number;
 }
 
 /**

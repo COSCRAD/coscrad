@@ -111,7 +111,7 @@ describe(`Pagination in the Term Index view`, () => {
                     .click();
             });
 
-            it(`should display one page of results`, () => {
+            it(`should display all pages, including the partial last page of results`, () => {
                 cy.contains('Page: 1/3');
 
                 cy.contains(`Filtered Records: ${numberOfResults}`);
@@ -241,10 +241,8 @@ describe(`Pagination in the Term Index view`, () => {
 
                 cy.contains(`You can find me #9.`).should('not.exist');
 
-                // TODO Change this to the new icon
                 cy.getByDataAttribute('ArrowForwardIosIcon').click();
 
-                // ensure wrap around "to the left" as well
                 cy.contains(`Page: 2/3`);
             });
         });

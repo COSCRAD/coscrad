@@ -324,7 +324,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
             type: CoscradConditionBlockType.SIMPLE,
             operator: CoscradBooleanOperator.TEXT_EQUALS,
             params: [id],
-            // TODO where is this converted to a _key?
             field: 'id',
         };
 
@@ -334,7 +333,7 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
 
         if (isInternalError(result)) {
-            // TODO should this be a returned error?
+            // TODO We might consider returning this error.
             throw result;
         }
 

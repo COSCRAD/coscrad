@@ -1,10 +1,10 @@
-import exp = require('constants');
 import {
     ExternalEnum,
     NestedDataType,
     NonEmptyString,
     NonNegativeFiniteNumber,
     PositiveInteger,
+    UUID,
 } from '../../decorators';
 import { getCoscradDataSchema } from '../../utilities';
 import { validateFieldPathForCoscradModel } from './validate-field-path-for-coscrad-model';
@@ -13,6 +13,14 @@ const buildLabel = (field) => ({
     label: field,
     description: `description for test field: ${field}`,
 });
+
+class AccessControlList {
+    @UUID({
+        ...buildLabel('allowedUserIds'),
+        isArray: true,
+    })
+    allowedUserIds: string[];
+}
 
 enum WidgetType {
     red = 'RED',
@@ -110,6 +118,12 @@ class Widget {
         isOptional: true,
     })
     alias?: Alias;
+
+    @NestedDataType(AccessControlList, {
+        ...buildLabel('acl'),
+        isPrivate: true,
+    })
+    accessControlList: AccessControlList;
 }
 
 const schema = getCoscradDataSchema(Widget);
@@ -144,7 +158,7 @@ describe(`validateFieldPathForCoscradModel`, () => {
 
         describe(`when given a top-level enum-valued type`, () => {
             it(`should return no errors`, () => {
-                const result = validateFieldPathForCoscradModel(``, schema);
+                const result = validateFieldPathForCoscradModel(`type`, schema);
 
                 expect(result).toEqual([]);
             });
@@ -212,6 +226,20 @@ describe(`validateFieldPathForCoscradModel`, () => {
     });
 
     describe(`when the path is invalid`, () => {
+        describe(`when a private top level property is referenced`, () => {
+            const invalidPath = 'accessControlList';
+
+            it(`should return the expected error`, () => {
+                const result = validateFieldPathForCoscradModel(invalidPath, schema);
+
+                expect(result).toHaveLength(1);
+
+                const { message } = result[0];
+
+                expect(message).toContain(invalidPath);
+            });
+        });
+
         describe(`when an unknown top level property is referenced`, () => {
             const invalidPath = 'missingFieldName';
 
@@ -220,7 +248,7 @@ describe(`validateFieldPathForCoscradModel`, () => {
 
                 expect(result).toHaveLength(1);
 
-                const message = result[0].message;
+                const { message } = result[0];
 
                 expect(message).toContain(invalidPath);
             });
@@ -289,7 +317,7 @@ describe(`validateFieldPathForCoscradModel`, () => {
 
                     expect(message).toContain(invalidPath);
 
-                    expect(message).toContain(`invalid reference to array`);
+                    expect(message).toContain(`Unexpected array reference in field path`);
                 });
             });
         });

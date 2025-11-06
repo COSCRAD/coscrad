@@ -418,6 +418,37 @@ describe(`term index queries`, () => {
         });
 
         describe(`when one of the provided filters has an invalid path`, () => {
+            describe(`when a top level private property is provided`, () => {
+                it(`should return the expected error`, async () => {
+                    const invalidField = 'accessControlList';
+
+                    /**
+                     * If we allowed the following query, it would allow clever users
+                     * (directly via the API using, e.g., cURL) to execute injection
+                     * attacks to bypass `ACL` based access, thereby obtaining read access
+                     * to private resources.
+                     */
+                    const invalidFilter: CoscradSimpleCondition = {
+                        type: CoscradConditionBlockType.SIMPLE,
+                        operator: CoscradBooleanOperator.HAS_PROPERTY,
+                        field: invalidField,
+                        params: [],
+                    };
+
+                    const res = await request(app.getHttpServer()).post(indexEndpoint).send({
+                        filter: invalidFilter,
+                    });
+
+                    expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                    const { message } = res.body;
+
+                    expect(message).toContain('private');
+
+                    expect(message).toContain(invalidField);
+                });
+            });
+
             describe(`when a top level superfluous property is provided`, () => {
                 it(`should return the expected error`, async () => {
                     const invalidFilter: CoscradSimpleCondition = {
