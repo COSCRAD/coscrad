@@ -174,12 +174,20 @@ describe(`when using the REST API to remove a card from a memory match round`, (
                 ),
             });
 
+            beforeEach(async () => {
+                await memoryMatchRepository.create(bogusRound);
+            });
+
             it(`should return the expected error`, async () => {
                 const res = await request(app.getHttpServer()).delete(
                     buildEndpoint(bogusRound.id, missingSequenceNumber)
                 );
 
                 expect(res.statusCode).toBe(HttpStatusCode.badRequest);
+
+                const { message } = res.body;
+
+                expect(message).toContain(missingSequenceNumber.toString());
             });
         });
 
@@ -192,6 +200,10 @@ describe(`when using the REST API to remove a card from a memory match round`, (
                 );
 
                 expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                const { message } = res.body;
+
+                expect(message).toContain(testMemoryRoundId);
             });
         });
     });
@@ -267,12 +279,20 @@ describe(`when using the REST API to remove a card from a memory match round`, (
                 ),
             });
 
+            beforeEach(async () => {
+                await memoryMatchRepository.create(bogusRound);
+            });
+
             it(`should return the expected error`, async () => {
                 const res = await request(app.getHttpServer()).delete(
                     buildEndpoint(bogusRound.id, missingSequenceNumber)
                 );
 
                 expect(res.statusCode).toBe(HttpStatusCode.badRequest);
+
+                const { message } = res.body;
+
+                expect(message).toContain(missingSequenceNumber.toString());
             });
         });
 
@@ -285,6 +305,10 @@ describe(`when using the REST API to remove a card from a memory match round`, (
                 );
 
                 expect(res.status).toBe(HttpStatusCode.badRequest);
+
+                const { message } = res.body;
+
+                expect(message).toContain(testMemoryRoundId);
             });
         });
     });
