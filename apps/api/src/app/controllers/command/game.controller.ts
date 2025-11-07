@@ -1,5 +1,5 @@
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Controller, Get, Param, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../../domain/utilities/validation/is-null-or-undefined';
@@ -67,8 +67,26 @@ export class GameController {
         );
     }
 
-    @Get(':name')
-    async fetchGame(@Param('name') nameToFind: string) {
+    @Get('/alphabet')
+    async fetchAlphabet() {
+        return this.fetchLegacyGameByName('alphabet');
+    }
+
+    /**
+     * Note that we hard wire the "name" of the target legacy game. This is
+     * to avoid conflicts with new game endpoints such as `games/memory-match`.
+     *
+     * Also note that this endpoint's behaviour is tested via a UX e2e Cypress
+     * test `alphabet.e2e.cy.ts`.
+     *
+     * TODO We full back-end support for managing alphabets.
+     */
+    @Get('/alphabet-english')
+    async fetchAlphabetEnglish() {
+        return this.fetchLegacyGameByName('alphabet-english');
+    }
+
+    private async fetchLegacyGameByName(nameToFind: string) {
         // Note that the config is technically a string 'false', we should deal with this later
         if (this.configService.get<string>('SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT') === 'false')
             // TODO Send correct error code do this now
