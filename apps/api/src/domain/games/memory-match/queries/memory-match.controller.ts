@@ -126,4 +126,17 @@ export class MemoryMatchController {
 
         return { id: result };
     }
+
+    @ApiBearerAuth('JWT')
+    @UseGuards(AdminJwtGuard)
+    @Delete(`:id/cards/:squenceNumber`)
+    async removeCard(@Param('id') roundId: string, @Param('squenceNumber') sequenceNumber: string) {
+        const result = await this.memoryMatchService.removeCard(roundId, parseInt(sequenceNumber));
+
+        if (isInternalError(result)) {
+            return new CoscradInvalidUserInputException(result);
+        }
+
+        return result;
+    }
 }

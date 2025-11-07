@@ -173,6 +173,19 @@ export class MemoryMatchService {
         return id;
     }
 
+    async removeCard(
+        roundId: AggregateId,
+        sequenceNumber: number
+    ): Promise<ResultOrError<AggregateId>> {
+        const result = await this.memoryMatchRepository.removeCard(roundId, sequenceNumber);
+
+        if (result instanceof Error) {
+            return new InternalError(result.message);
+        }
+
+        return result;
+    }
+
     async fetchById(
         roundId: AggregateId,
         userWithGroups?: CoscradUserWithGroups
