@@ -46,6 +46,7 @@ by leveraging resources from the web-of-knowledge as data sources.
 
 #### Relevant PRs
 
+-   feat: support deleting a memory match card via the API (#785)
 -   feat: support deleting a memory match round via the API (#783)
 -   feat: support unpublishing a memory match round via the API (#782)
 -   feat: support memory match round imports (#771)

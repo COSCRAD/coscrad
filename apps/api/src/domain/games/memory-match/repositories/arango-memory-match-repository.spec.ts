@@ -16,6 +16,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import AggregateNotFoundError from '../../../models/shared/common-command-errors/AggregateNotFoundError';
 import { MEMORY_MATCH_ROUND } from '../constants';
+import { CannotRemoveUnknownCardFromMemoryMatchRoundError } from '../errors/cannot-remove-unknown-card-from-memory-match-round.error';
 import { IMemoryMatchRepository } from '../memory-match.repository.interface';
 import { MemoryMatchCard } from '../models/memory-match-card.entity';
 import { MemoryMatchRound } from '../models/memory-match-round.entity';
@@ -411,7 +412,10 @@ describe(`ArangoMemoryMatchRepository`, () => {
 
                     assertErrorAsExpected(
                         result,
-                        new AggregateNotFoundError(testRound.getCompositeIdentifier())
+                        new CannotRemoveUnknownCardFromMemoryMatchRoundError(
+                            testRound.id,
+                            missingSequenceNumber
+                        )
                     );
                 });
             });
