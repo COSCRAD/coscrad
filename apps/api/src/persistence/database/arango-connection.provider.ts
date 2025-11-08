@@ -110,6 +110,8 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('tag__VIEWS');
 
+        await this.createCollectionIfNotExists('note__VIEWS');
+
         await this.createCollectionIfNotExists('memory_match_rounds');
 
         await this.connection.collection('memory_match_rounds').ensureIndex({
