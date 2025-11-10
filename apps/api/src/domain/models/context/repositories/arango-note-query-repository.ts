@@ -1,4 +1,7 @@
 import {
+    CategorizableType,
+    EdgeConnectionType,
+    IEdgeConnectionContext,
     IMultilingualTextItem,
     LanguageCode,
     PaginatedResponse,
@@ -16,9 +19,10 @@ import convertResourceCompositeIdentifierToArangoDocumentHandle from '../../../.
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
 import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
-import { INoteQueryRepository } from './note-query-repository.interface';
+import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
 const mapNoteViewDtoToArangoDocument = (dto: DTO<EventSourcedNoteViewModel>) => {
     const { to: toMember, from: fromMember, self: selfMember } = dto.connectedResources;
@@ -26,22 +30,25 @@ const mapNoteViewDtoToArangoDocument = (dto: DTO<EventSourcedNoteViewModel>) => 
     const toAndFromCompositeIds: [ResourceCompositeIdentifier, ResourceCompositeIdentifier] =
         isNullOrUndefined(selfMember)
             ? [
-                  { type: toMember.type, id: toMember.id },
-                  { type: fromMember.type, id: fromMember.id },
+                  { type: toMember.resource.type, id: toMember.resource.id },
+                  { type: fromMember.resource.type, id: fromMember.resource.id },
               ]
             : [
                   {
-                      type: selfMember.type,
-                      id: selfMember.id,
+                      type: selfMember.resource.type,
+                      id: selfMember.resource.id,
                   },
                   {
-                      type: selfMember.type,
-                      id: selfMember.id,
+                      type: selfMember.resource.type,
+                      id: selfMember.resource.id,
                   },
               ];
 
-    const [_to, _from] = toAndFromCompositeIds.map(
-        convertResourceCompositeIdentifierToArangoDocumentHandle
+    const [_to, _from] = toAndFromCompositeIds.map((compId) =>
+        convertResourceCompositeIdentifierToArangoDocumentHandle(
+            compId,
+            (resourceType) => `${resourceType}__VIEWS`
+        )
     );
 
     // TODO Use `toDto`
@@ -105,12 +112,6 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         return documents.map((document) =>
             EventSourcedNoteViewModel.fromDto(mapArangoDocumentToNoteDto(document))
         );
-    }
-
-    async create(note: EventSourcedNoteViewModel): Promise<void> {
-        const document = mapNoteViewDtoToArangoDocument(note);
-
-        await this.database.create(document);
     }
 
     async createMany(notes: EventSourcedNoteViewModel[]): Promise<void> {
@@ -189,9 +190,39 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         await this.database.query({ query, bindVars });
     }
 
-    createNoteAbout(
-        _noteViewModel: EventSourcedNoteViewModel,
-        _resourceCompositeIdentifier: ResourceCompositeIdentifier
+    async createNoteAbout(
+        noteInfo: INoteCreationRecord,
+        resourceCompositeIdentifier: ResourceCompositeIdentifier,
+        context: IEdgeConnectionContext
+    ): Promise<void> {
+        const { id, text } = noteInfo;
+
+        const view = new EventSourcedNoteViewModel({
+            type: CategorizableType.note,
+            id,
+            connectionType: EdgeConnectionType.self,
+            text,
+            connectedResources: {
+                self: {
+                    resource: resourceCompositeIdentifier,
+                    context,
+                },
+            },
+            tags: [],
+            audio: MultilingualAudio.buildEmpty(),
+        });
+
+        const document = mapNoteViewDtoToArangoDocument(view);
+
+        await this.database.create(document);
+    }
+
+    async connectResourcesWithNote(
+        _noteInfo: INoteCreationRecord,
+        _fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        _fromMemberContext: IEdgeConnectionContext,
+        _toMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        _toMemberContext: IEdgeConnectionContext
     ): Promise<void> {
         throw new Error('Method not implemented.');
     }

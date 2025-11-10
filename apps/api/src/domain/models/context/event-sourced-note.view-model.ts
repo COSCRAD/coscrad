@@ -3,10 +3,10 @@ import {
     CategorizableType,
     EdgeConnectionContextType,
     EdgeConnectionType,
+    ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, UUID } from '@coscrad/data-types';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { EventSourcedTagViewModel } from '../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../test-data/utilities';
@@ -18,8 +18,7 @@ import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 
 class EdgeConnectionMemberViewModel<TContext = unknown> {
-    type: ResourceType;
-    id: string;
+    resource: ResourceCompositeIdentifier;
     context: TContext;
 
     constructor(dto: DTO<EdgeConnectionMemberViewModel>) {
@@ -27,11 +26,9 @@ class EdgeConnectionMemberViewModel<TContext = unknown> {
             return;
         }
 
-        const { type, id, context } = dto;
+        const { resource, context } = dto;
 
-        this.type = type;
-
-        this.id = id;
+        this.resource = resource;
 
         // @ts-expect-error Deal with the generic type here properly
         this.context = context;
@@ -67,8 +64,8 @@ class ConnectedResources {
     example: {
         type: AggregateType.note,
         id: buildDummyUuid(5),
-        name: buildMultilingualTextWithSingleItem('breeze'),
-        note: buildMultilingualTextWithSingleItem('this is the note for breeze'),
+        // name: buildMultilingualTextWithSingleItem('breeze'),
+        text: buildMultilingualTextWithSingleItem('this is the note for breeze'),
         audio: MultilingualAudio.buildEmpty(),
         tags: [],
         connectedResources: {
@@ -76,8 +73,10 @@ class ConnectedResources {
                 context: {
                     type: EdgeConnectionContextType.general,
                 },
-                type: ResourceType.term,
-                id: buildDummyUuid(6),
+                resource: {
+                    type: ResourceType.term,
+                    id: buildDummyUuid(6),
+                },
             },
         },
         connectionType: EdgeConnectionType.self,
@@ -94,7 +93,11 @@ export class EventSourcedNoteViewModel {
 
     connectionType: EdgeConnectionType;
 
-    note: MultilingualText;
+    @NestedDataType(MultilingualText, {
+        label: 'text',
+        description: 'text for this note, including translations',
+    })
+    text: MultilingualText;
 
     connectedResources: ConnectedResources;
 
@@ -105,12 +108,8 @@ export class EventSourcedNoteViewModel {
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(MultilingualText, {
-        label: 'name',
-        // note that we call it `name` not `text` for consistency with other models
-        description: 'name (text) includes the text as well as any translations for this term',
-    })
-    name: MultilingualText;
+    //    TODO Do we need this?
+    // name: MultilingualText;
 
     @NestedDataType(MultilingualAudio, {
         label: 'audio',
@@ -120,26 +119,21 @@ export class EventSourcedNoteViewModel {
 
     constructor({
         connectionType,
-        note,
+        text: note,
         connectedResources,
         id,
         tags,
-        name,
         audio,
     }: DTO<EventSourcedNoteViewModel>) {
         this.id = id;
 
         this.connectionType = connectionType;
 
-        this.note = new MultilingualText(note);
+        this.text = new MultilingualText(note);
 
         this.connectedResources = connectedResources;
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
-
-        if (isNonEmptyObject(name)) {
-            this.name = new MultilingualText(name);
-        }
 
         this.audio = new MultilingualAudio(audio);
     }

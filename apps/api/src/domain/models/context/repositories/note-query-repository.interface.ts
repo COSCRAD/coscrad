@@ -1,4 +1,7 @@
 import {
+    EdgeConnectionType,
+    IEdgeConnectionContext,
+    IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
     PaginatedResponse,
@@ -11,14 +14,20 @@ import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
 
 export const NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN = 'NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN';
 
+export interface INoteCreationRecord {
+    id: AggregateId;
+
+    connectionType: EdgeConnectionType;
+
+    text: IMultilingualText;
+}
+
 export interface INoteQueryRepository {
     fetchById(id: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>>;
 
     fetchMany(
         options?: FetchManyQueryOptions
     ): Promise<PaginatedResponse<EventSourcedNoteViewModel>>;
-
-    create(note: EventSourcedNoteViewModel): Promise<void>;
 
     createMany(notes: EventSourcedNoteViewModel[]): Promise<void>;
 
@@ -33,7 +42,16 @@ export interface INoteQueryRepository {
     ): Promise<void>;
 
     createNoteAbout(
-        noteViewModel: EventSourcedNoteViewModel,
-        resourceCompositeIdentifier: ResourceCompositeIdentifier
+        noteInfo: INoteCreationRecord,
+        resourceCompositeIdentifier: ResourceCompositeIdentifier,
+        context: IEdgeConnectionContext
+    ): Promise<void>;
+
+    connectResourcesWithNote(
+        noteInfo: INoteCreationRecord,
+        fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        fromMemberContext: IEdgeConnectionContext,
+        toMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        toMemberContext: IEdgeConnectionContext
     ): Promise<void>;
 }
