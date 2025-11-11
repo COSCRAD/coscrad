@@ -110,8 +110,26 @@ export class ArangoConnectionProvider {
 
         await this.createCollectionIfNotExists('tag__VIEWS');
 
+        await this.createCollectionIfNotExists('widget__VIEWS');
+
         if (!(await this.#doesCollectionExist('note__VIEWS'))) {
             await this.connection.createEdgeCollection('note__VIEWS', {});
+        }
+
+        const doesGraphExist = await this.connection.graph('web_of_knowledge').exists();
+
+        if (!doesGraphExist) {
+            await this.connection
+                .createGraph('web_of_knowledge', [
+                    {
+                        collection: 'note__VIEWS',
+                        from: ['widget__VIEWS'],
+                        to: ['widget__VIEWS'],
+                    },
+                ])
+                .catch((e) => {
+                    throw e;
+                });
         }
 
         await this.createCollectionIfNotExists('memory_match_rounds');

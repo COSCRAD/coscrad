@@ -16,6 +16,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import convertResourceCompositeIdentifierToArangoDocumentHandle from '../../../../persistence/database/utilities/convertResourceCompositeIdentifierToArangoDocumentHandle';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
@@ -64,9 +65,36 @@ const mapNoteViewDtoToArangoDocument = (dto: DTO<EventSourcedNoteViewModel>) => 
 
 const mapArangoDocumentToNoteDto = (document) => {
     const dto = {
+        // the _key -> id in the query directly
         ...document,
-        id: document._key,
+        connectedResources: {},
     };
+
+    if ('self' in document.connectedResources) {
+        const self = mapDatabaseDocumentToAggregateDTO(document.connectedResources.self.resource);
+
+        // @ts-expect-error FIX This
+        delete self._id;
+
+        dto.connectedResources.self = {
+            resource: self,
+            context: document.connectedResources.self.context,
+        };
+    }
+
+    if ('from' in document.connectedResources) {
+        dto.connectedResources.from = {
+            resource: mapDatabaseDocumentToAggregateDTO(document.connectedResources.from.resource),
+            context: document.connectedResources.from.context,
+        };
+    }
+
+    if ('to' in document.connectedResources) {
+        dto.connectedResources.to = {
+            resource: mapDatabaseDocumentToAggregateDTO(document.connectedResources.to.resource),
+            context: document.connectedResources.to.context,
+        };
+    }
 
     return dto;
 };
@@ -94,7 +122,61 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             return NotFound;
         }
 
-        const dto = mapArangoDocumentToNoteDto(document);
+        const { connectedResources } = document;
+
+        const {
+            resource: { type: fromResourceType, id: fromResourceId },
+        } = connectedResources.from || connectedResources.self;
+
+        const resourceHandle = `${fromResourceType}__VIEWS/${fromResourceId}`;
+
+        const aql = `
+        let connectedResources = (
+        FOR resource, note IN 0..1 OUTBOUND '${resourceHandle}' GRAPH web_of_knowledge
+        return {
+        note,
+        resource,
+        })
+
+        let from = connectedResources[0].resource._id
+
+        let to = connectedResources[0].resource._id
+
+        let note = connectedResources[1].note
+
+        return {
+            id:  note._key,
+            text: note.text,
+            note,
+            connectedResources: to != from ? {
+                from: {
+                    resource: connectedResources[0].resource,
+                    context: note.connectedResources.from.context
+                },
+                to: {
+                    resource: connectedResources[1].resource,
+                    context: note.connectedResources.to.context
+                }
+            } : {
+                self: {
+                    resource: connectedResources[0].resource,
+                    context: note.connectedResources.self.context
+                } 
+            }
+        } 
+        `;
+
+        const cursor = await this.database.query({ query: aql, bindVars: {} }).catch((e) => {
+            throw e;
+        });
+
+        const results = await cursor.all();
+
+        if (results.length === 0) {
+            return NotFound;
+        }
+
+        const dto = mapArangoDocumentToNoteDto(results[0]);
 
         return EventSourcedNoteViewModel.fromDto(dto);
     }

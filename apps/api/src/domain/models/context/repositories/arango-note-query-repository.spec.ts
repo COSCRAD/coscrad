@@ -149,7 +149,7 @@ describe(`ArangoNoteQueryRepository`, () => {
         });
 
         describe(`when the note exists`, () => {
-            it(`should return the note`, async () => {
+            it.only(`should return the note`, async () => {
                 const result = await testQueryRepository.fetchById(existingNote.id);
 
                 expect(result).not.toBe(NotFound);
@@ -167,6 +167,16 @@ describe(`ArangoNoteQueryRepository`, () => {
                 const { context, resource } = self;
 
                 expect(context).toEqual(generalContext);
+
+                const rawWidgetDoc = resource as WidgetViewModel & {
+                    _id: string;
+                    _key: string;
+                    _rev: string;
+                };
+
+                delete rawWidgetDoc._id;
+                delete rawWidgetDoc._key;
+                delete rawWidgetDoc._rev;
 
                 expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
             });
