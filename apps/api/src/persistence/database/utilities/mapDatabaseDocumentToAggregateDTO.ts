@@ -8,9 +8,10 @@ export default <TEntity extends HasAggregateId>(
 ): DTO<TEntity> =>
     Object.entries(databaseDTO).reduce((accumulatedMappedObject: DTO<TEntity>, [key, value]) => {
         /**
-         * We don't currently expose this in the repository layer
+         * We don't currently expose the _rev in the repository layer,
+         * while the _id is redundant with the collection name -> type.
          */
-        if (key === '_rev') {
+        if (key === '_rev' || key === '_id') {
             return accumulatedMappedObject as unknown as DTO<TEntity>;
         }
 

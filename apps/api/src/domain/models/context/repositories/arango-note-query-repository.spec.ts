@@ -354,7 +354,7 @@ describe(`ArangoNoteQueryRepository`, () => {
         it(`should return the notes`, async () => {
             const result = await testQueryRepository.fetchMany();
 
-            expect(result).toHaveLength(existingNotes.length);
+            expect(result.entities).toHaveLength(existingNotes.length);
         });
     });
 
