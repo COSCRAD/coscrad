@@ -67,6 +67,8 @@ describe(`NoteTranslatedEventHandler`, () => {
 
         app = moduleRef.createNestApplication();
 
+        await app.init();
+
         const connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
