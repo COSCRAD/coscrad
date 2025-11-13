@@ -43,13 +43,6 @@ const noteIds = [1, 2, 3].map(buildDummyUuid);
 
 const textForNote = 'the text for a note';
 
-const existingNotes = [1, 2, 3].map((sequenceNumber) =>
-    buildTestInstance(EventSourcedNoteViewModel, {
-        id: noteIds[sequenceNumber - 1],
-        text: buildMultilingualTextWithSingleItem(`note #${sequenceNumber}`),
-    })
-);
-
 class WidgetViewModel {
     readonly type = WIDGET_TYPE;
 
@@ -178,17 +171,31 @@ describe(`ArangoNoteQueryRepository`, () => {
                     await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
                     await testQueryRepository.createNoteAbout(
+                        {
+                            ...existingNote,
+                            id: buildDummyUuid(88),
+                            text: buildMultilingualTextWithSingleItem(
+                                'additional note for the given widget'
+                            ),
+                        },
+                        testWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await testQueryRepository.createNoteAbout(
                         existingNote,
-                        { type: WIDGET_TYPE, id: testWidget.id },
+                        testWidget.getCompositeIdentifier(),
                         generalContext
                     );
                 });
+
                 it(`should return the note`, async () => {
                     const result = await testQueryRepository.fetchById(existingNote.id);
 
                     expect(result).not.toBe(NotFound);
 
                     const {
+                        text,
                         connectedResources: { to, from, self },
                     } = result as EventSourcedNoteViewModel;
 
@@ -205,6 +212,8 @@ describe(`ArangoNoteQueryRepository`, () => {
                     expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
 
                     assertWidgetDocumentMatchesWidget(resource, testWidget);
+
+                    expect(text.toString()).toBe(existingNote.text.toString());
                 });
             });
 
@@ -482,6 +491,19 @@ describe(`ArangoNoteQueryRepository`, () => {
     });
 
     describe(`count`, () => {
+        const existingNotes = [1, 2, 3].map((sequenceNumber) =>
+            buildTestInstance(EventSourcedNoteViewModel, {
+                id: noteIds[sequenceNumber - 1],
+                text: buildMultilingualTextWithSingleItem(`note #${sequenceNumber}`),
+                connectedResources: {
+                    self: {
+                        resource: testWidget.getCompositeIdentifier(),
+                        context: generalContext,
+                    },
+                },
+            })
+        );
+
         beforeEach(async () => {
             await databaseProvider.clearViews();
 

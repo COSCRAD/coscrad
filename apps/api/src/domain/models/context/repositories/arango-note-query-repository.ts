@@ -11,7 +11,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
-import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import { NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
@@ -133,61 +133,40 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(this.collectionName);
     }
 
-    async fetchById(id: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>> {
-        const document = await this.database.fetchById(id);
-
-        if (isNotFound(document)) {
-            return NotFound;
-        }
-
-        const { connectedResources } = document;
-
-        const {
-            resource: { type: fromResourceType, id: fromResourceId },
-        } = connectedResources.from || connectedResources.self;
-
-        const resourceHandle = `${fromResourceType}__VIEWS/${fromResourceId}`;
-
+    async fetchById(noteId: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>> {
         const aql = `
-        let connectedResources = (
-        FOR resource, note IN 0..1 OUTBOUND '${resourceHandle}' GRAPH web_of_knowledge
-        return {
-        note,
-        resource,
-        })
-
-        let from = connectedResources[0].resource._id
-
-        let to = connectedResources[1].resource._id
-
-        let note = connectedResources[1].note
-
-        return {
-            id:  note._key,
-            text: note.text,
-            note,
-            audio: note.audio,
-            connectedResources: to != from ? {
-                from: {
-                    resource: connectedResources[0].resource,
-                    context: note.connectedResources.from.context
-                },
-                to: {
-                    resource: connectedResources[1].resource,
-                    context: note.connectedResources.to.context
-                }
-            } : {
-                self: {
-                    resource: connectedResources[0].resource,
-                    context: note.connectedResources.self.context
-                } 
+        for doc in note__VIEWS
+        filter doc._key == @noteId
+        let connectedResources = doc._to == doc._from ? {
+            self: {
+                resource: document(doc._from),
+                context: doc.connectedResources.self.context
             }
-        } 
+        } : {
+            from: {
+                resource: document(doc._from),
+                context: doc.connectedResources.from.context
+            },
+            to: {
+                resource: document(doc._to),
+                context: doc.connectedResources.to.context
+            }  
+        }
+        return MERGE(doc,{
+            connectedResources
+        })
         `;
 
-        const cursor = await this.database.query({ query: aql, bindVars: {} }).catch((e) => {
-            throw e;
-        });
+        const cursor = await this.database
+            .query({
+                query: aql,
+                bindVars: {
+                    noteId,
+                },
+            })
+            .catch((e) => {
+                throw e;
+            });
 
         const results = await cursor.all();
 

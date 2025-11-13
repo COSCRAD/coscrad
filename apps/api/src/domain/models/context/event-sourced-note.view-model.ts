@@ -1,11 +1,9 @@
 import {
     AggregateType,
     CategorizableType,
-    EdgeConnectionContextType,
     EdgeConnectionType,
     IEdgeConnectionContext,
     ResourceCompositeIdentifier,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, UUID } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
@@ -74,15 +72,16 @@ class ConnectedResources {
         audio: MultilingualAudio.buildEmpty(),
         tags: [],
         connectedResources: {
-            self: {
-                context: {
-                    type: EdgeConnectionContextType.general,
-                },
-                resource: {
-                    type: ResourceType.term,
-                    id: buildDummyUuid(6),
-                },
-            },
+            // Because of the way our clone \ merge utils work, you have to specify this property every time
+            // self: {
+            //     context: {
+            //         type: EdgeConnectionContextType.general,
+            //     },
+            //     resource: {
+            //         type: ResourceType.term,
+            //         id: buildDummyUuid(6),
+            //     },
+            // },
         },
         connectionType: EdgeConnectionType.self,
     },
