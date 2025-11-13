@@ -25,7 +25,16 @@ import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base
 import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
 import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
-const mapNoteViewDtoToArangoDocument = (dto: DTO<EventSourcedNoteViewModel>) => {
+type ArangoNoteDocument = Omit<EventSourcedNoteViewModel, 'id'> & {
+    _key: string;
+    _id: string;
+    _to: string;
+    _from: string;
+};
+
+const mapNoteViewDtoToArangoDocument = (
+    dto: DTO<EventSourcedNoteViewModel>
+): ArangoNoteDocument => {
     const { to: toMember, from: fromMember, self: selfMember } = dto.connectedResources;
 
     const toAndFromCompositeIds: [ResourceCompositeIdentifier, ResourceCompositeIdentifier] =
@@ -52,15 +61,15 @@ const mapNoteViewDtoToArangoDocument = (dto: DTO<EventSourcedNoteViewModel>) => 
         )
     );
 
-    // TODO Use `toDto`
-    const document = {
-        ...dto,
+    Object.assign(dto, {
         _to,
         _from,
         _key: dto.id,
-    };
+    });
 
-    return document;
+    delete dto.id;
+
+    return dto as unknown as ArangoNoteDocument;
 };
 
 const mapArangoDocumentToNoteDto = (document) => {
@@ -72,9 +81,6 @@ const mapArangoDocumentToNoteDto = (document) => {
 
     if ('self' in document.connectedResources) {
         const self = mapDatabaseDocumentToAggregateDTO(document.connectedResources.self.resource);
-
-        // @ts-expect-error FIX This
-        delete self._id;
 
         dto.connectedResources.self = {
             resource: self,
@@ -95,6 +101,14 @@ const mapArangoDocumentToNoteDto = (document) => {
             context: document.connectedResources.to.context,
         };
     }
+
+    delete dto._from;
+
+    delete dto._to;
+
+    delete dto._key;
+
+    delete dto._id;
 
     return dto;
 };
@@ -140,7 +154,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
 
         let from = connectedResources[0].resource._id
 
-        let to = connectedResources[0].resource._id
+        let to = connectedResources[1].resource._id
 
         let note = connectedResources[1].note
 
@@ -148,6 +162,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             id:  note._key,
             text: note.text,
             note,
+            audio: note.audio,
             connectedResources: to != from ? {
                 from: {
                     resource: connectedResources[0].resource,
@@ -176,6 +191,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             return NotFound;
         }
 
+        // TODO handle the case when the corresponding resource document is missing (system error)
+
         const dto = mapArangoDocumentToNoteDto(results[0]);
 
         return EventSourcedNoteViewModel.fromDto(dto);
@@ -190,10 +207,14 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
 
         const documents = await this.database.fetchMany();
 
-        // @ts-expect-error TODO fix this
-        return documents.map((document) =>
-            EventSourcedNoteViewModel.fromDto(mapArangoDocumentToNoteDto(document))
-        );
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-363] handle pagination
+        return {
+            page: 1,
+            count: documents.length,
+            entities: documents.map((document) =>
+                EventSourcedNoteViewModel.fromDto(mapArangoDocumentToNoteDto(document))
+            ),
+        };
     }
 
     async createMany(notes: EventSourcedNoteViewModel[]): Promise<void> {
@@ -222,8 +243,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
                         role: @role
             }
             UPDATE doc WITH {
-                note: {
-                    items: APPEND(doc.note.items,newItem)
+                text: {
+                    items: doc.note.items ? APPEND(doc.note.items,newItem) : [newItem]
                 }
             } IN @@collectionName
             `;
@@ -232,7 +253,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             '@collectionName': this.collectionName,
             id: id,
             text: text,
-            // TODO we may want this to be passed in, presumably from an event payload
+            // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-365] we may want this to be passed in, presumably from an event payload
             role,
             languageCode: languageCode,
         };
@@ -254,9 +275,10 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
               FILTER a._key == @audioItemId
               UPDATE doc WITH {
                   audio: {
-                      items: APPEND(doc.audio.items, @newMultilingualAudioItem)
+                      items: doc.audio.items ? APPEND(doc.audio.items, @newMultilingualAudioItem) : [@newMultilingualAudioItem]
                   }
               } IN @@collectionName
+            return NEW
               `;
 
         const bindVars = {
@@ -269,7 +291,9 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             }).toDTO(),
         };
 
-        await this.database.query({ query, bindVars });
+        const cursor = await this.database.query({ query, bindVars });
+
+        await cursor.all();
     }
 
     async createNoteAbout(
@@ -294,18 +318,41 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             audio: MultilingualAudio.buildEmpty(),
         });
 
-        const document = mapNoteViewDtoToArangoDocument(view);
+        const document = mapNoteViewDtoToArangoDocument(view.toDto());
 
         await this.database.create(document);
     }
 
     async connectResourcesWithNote(
-        _noteInfo: INoteCreationRecord,
-        _fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
-        _fromMemberContext: IEdgeConnectionContext,
-        _toMemberCompositeIdentifier: ResourceCompositeIdentifier,
-        _toMemberContext: IEdgeConnectionContext
+        noteInfo: INoteCreationRecord,
+        fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        fromMemberContext: IEdgeConnectionContext,
+        toMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        toMemberContext: IEdgeConnectionContext
     ): Promise<void> {
-        throw new Error('Method not implemented.');
+        const { id, text } = noteInfo;
+
+        const view = new EventSourcedNoteViewModel({
+            type: CategorizableType.note,
+            id,
+            connectionType: EdgeConnectionType.self,
+            text,
+            connectedResources: {
+                from: {
+                    resource: fromMemberCompositeIdentifier,
+                    context: fromMemberContext,
+                },
+                to: {
+                    resource: toMemberCompositeIdentifier,
+                    context: toMemberContext,
+                },
+            },
+            tags: [],
+            audio: MultilingualAudio.buildEmpty(),
+        });
+
+        const document = mapNoteViewDtoToArangoDocument(view.toDto());
+
+        await this.database.create(document);
     }
 }

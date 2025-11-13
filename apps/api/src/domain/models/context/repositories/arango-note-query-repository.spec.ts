@@ -1,4 +1,9 @@
-import { EdgeConnectionType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -18,8 +23,11 @@ import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { DynamicDataTypeFinderService } from '../../../../validation';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
+import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
 import { GeneralContext } from '../general-context/general-context.entity';
 import { ArangoNoteQueryRepository } from './arango-note-query-repository';
@@ -69,6 +77,22 @@ const testWidget = new WidgetViewModel({
 });
 
 const generalContext = new GeneralContext();
+
+const assertWidgetDocumentMatchesWidget = (actual: unknown, widget: WidgetViewModel) => {
+    const dto = widget.toDto();
+
+    const rawWidgetDoc = actual as WidgetViewModel & {
+        _id: string;
+        _key: string;
+        _rev: string;
+    };
+
+    delete rawWidgetDoc._id;
+    delete rawWidgetDoc._key;
+    delete rawWidgetDoc._rev;
+
+    expect(rawWidgetDoc).toEqual(dto);
+};
 
 describe(`ArangoNoteQueryRepository`, () => {
     let testQueryRepository: INoteQueryRepository;
@@ -128,7 +152,7 @@ describe(`ArangoNoteQueryRepository`, () => {
         databaseProvider.close();
     });
 
-    describe.only(`fetchById`, () => {
+    describe(`fetchById`, () => {
         const existingNote: INoteCreationRecord = {
             id: noteIds[0],
             // TODO should this be called text?
@@ -138,53 +162,186 @@ describe(`ArangoNoteQueryRepository`, () => {
 
         beforeEach(async () => {
             await databaseProvider.clearViews();
-
-            await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
-
-            await testQueryRepository.createNoteAbout(
-                existingNote,
-                { type: WIDGET_TYPE, id: testWidget.id },
-                generalContext
-            );
         });
 
         describe(`when the note exists`, () => {
-            it.only(`should return the note`, async () => {
-                const result = await testQueryRepository.fetchById(existingNote.id);
+            describe(`when the note is a self-note`, () => {
+                beforeEach(async () => {
+                    await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
-                expect(result).not.toBe(NotFound);
+                    await testQueryRepository.createNoteAbout(
+                        existingNote,
+                        { type: WIDGET_TYPE, id: testWidget.id },
+                        generalContext
+                    );
+                });
+                it(`should return the note`, async () => {
+                    const result = await testQueryRepository.fetchById(existingNote.id);
 
-                const {
-                    connectedResources: { to, from, self },
-                } = result as EventSourcedNoteViewModel;
+                    expect(result).not.toBe(NotFound);
 
-                expect(to).toBeFalsy();
+                    const {
+                        connectedResources: { to, from, self },
+                    } = result as EventSourcedNoteViewModel;
 
-                expect(from).toBeFalsy();
+                    expect(to).toBeFalsy();
 
-                expect(self).not.toBeFalsy();
+                    expect(from).toBeFalsy();
 
-                const { context, resource } = self;
+                    expect(self).not.toBeFalsy();
 
-                expect(context).toEqual(generalContext);
+                    const { context, resource } = self;
 
-                const rawWidgetDoc = resource as WidgetViewModel & {
-                    _id: string;
-                    _key: string;
-                    _rev: string;
-                };
+                    expect(context).toEqual(generalContext);
 
-                delete rawWidgetDoc._id;
-                delete rawWidgetDoc._key;
-                delete rawWidgetDoc._rev;
+                    expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
 
-                expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
+                    assertWidgetDocumentMatchesWidget(resource, testWidget);
+                });
+            });
+
+            describe(`when the note is a connecting-note`, () => {
+                const toWidgetId = buildDummyUuid(99);
+
+                const toWidget = new WidgetViewModel({
+                    id: toWidgetId,
+                    type: WIDGET_TYPE,
+                    rating: 99,
+                });
+
+                beforeEach(async () => {
+                    await widgetDatabase.createMany(
+                        [testWidget, toWidget].map(mapEntityDTOToDatabaseDocument)
+                    );
+                });
+
+                it(`should create the connection`, async () => {
+                    await testQueryRepository.connectResourcesWithNote(
+                        existingNote,
+                        { type: WIDGET_TYPE, id: testWidget.id },
+                        generalContext,
+                        { type: WIDGET_TYPE, id: toWidgetId },
+                        generalContext
+                    );
+
+                    const searchResult = await testQueryRepository.fetchById(existingNote.id);
+
+                    expect(searchResult).not.toBe(NotFound);
+
+                    const {
+                        connectedResources: {
+                            to: { resource: toResource },
+                            from: { resource: fromResource },
+                        },
+                    } = searchResult as EventSourcedNoteViewModel;
+
+                    assertWidgetDocumentMatchesWidget(fromResource, testWidget);
+
+                    assertWidgetDocumentMatchesWidget(toResource, toWidget);
+                });
             });
         });
 
-        // TODO when the widget has been updated after note creation, it should return the updated resource on the note
+        describe(`when the widget has been updated after note creation`, () => {
+            const updatedRating = 1234;
 
-        // TODO when the note does not exist
+            describe(`when the widget has been updated after creating a self-note`, () => {
+                beforeEach(async () => {
+                    await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
+                });
+
+                it(`should return the updated widget on the note`, async () => {
+                    await testQueryRepository.createNoteAbout(
+                        existingNote,
+                        { type: WIDGET_TYPE, id: testWidget.id },
+                        generalContext
+                    );
+
+                    await widgetDatabase.update(testWidget.id, {
+                        rating: updatedRating,
+                    });
+
+                    const result = await testQueryRepository.fetchById(existingNote.id);
+
+                    expect(result).not.toBe(NotFound);
+
+                    const {
+                        connectedResources: { to, from, self },
+                    } = result as EventSourcedNoteViewModel;
+
+                    expect(to).toBeFalsy();
+
+                    expect(from).toBeFalsy();
+
+                    expect(self).not.toBeFalsy();
+
+                    const { context, resource } = self;
+
+                    expect(context).toEqual(generalContext);
+
+                    expect((resource as WidgetViewModel).rating).toBe(updatedRating);
+                });
+            });
+
+            describe(`when the widget has been updated after creating a connection`, () => {
+                const toWidgetId = buildDummyUuid(99);
+
+                const toWidget = new WidgetViewModel({
+                    id: toWidgetId,
+                    type: WIDGET_TYPE,
+                    rating: 99,
+                });
+
+                beforeEach(async () => {
+                    await widgetDatabase.createMany(
+                        [testWidget, toWidget].map(mapEntityDTOToDatabaseDocument)
+                    );
+                });
+
+                it(`should return the updated widget on the note view`, async () => {
+                    const updatedToWidgetRating = 300;
+
+                    await testQueryRepository.connectResourcesWithNote(
+                        existingNote,
+                        { type: WIDGET_TYPE, id: testWidget.id },
+                        generalContext,
+                        { type: WIDGET_TYPE, id: toWidgetId },
+                        generalContext
+                    );
+
+                    await widgetDatabase.update(testWidget.id, {
+                        rating: updatedRating,
+                    });
+
+                    await widgetDatabase.update(toWidget.id, {
+                        rating: updatedToWidgetRating,
+                    });
+
+                    const searchResult = await testQueryRepository.fetchById(existingNote.id);
+
+                    expect(searchResult).not.toBe(NotFound);
+
+                    const {
+                        connectedResources: {
+                            to: { resource: toResource },
+                            from: { resource: fromResource },
+                        },
+                    } = searchResult as EventSourcedNoteViewModel;
+
+                    expect((fromResource as WidgetViewModel).rating).toBe(updatedRating);
+
+                    expect((toResource as WidgetViewModel).rating).toBe(updatedToWidgetRating);
+                });
+            });
+        });
+
+        describe(`when the note does not exist`, () => {
+            it(`should return not found`, async () => {
+                const result = await testQueryRepository.fetchById(buildDummyUuid(404));
+
+                expect(result).toBe(NotFound);
+            });
+        });
     });
 
     describe(`fetchMany`, () => {
@@ -215,164 +372,184 @@ describe(`ArangoNoteQueryRepository`, () => {
         });
     });
 
-    // describe(`translate`, () => {
-    //     const translationLanguageCode = LanguageCode.Chilcotin;
+    describe(`translate`, () => {
+        const translationLanguageCode = LanguageCode.Chilcotin;
 
-    //     const translationText = `translation of the note`;
+        const translationText = `translation of the note`;
 
-    //     const translationRole = MultilingualTextItemRole.freeTranslation;
+        const translationRole = MultilingualTextItemRole.freeTranslation;
 
-    //     const noteWithoutTranslation = buildTestInstance(EventSourcedNoteViewModel, {
-    //         id: buildDummyUuid(1),
-    //         text: buildMultilingualTextWithSingleItem('original english text for note'),
-    //     });
+        const noteWithoutTranslation = buildTestInstance(EventSourcedNoteViewModel, {
+            id: buildDummyUuid(1),
+            text: buildMultilingualTextWithSingleItem('original english text for note'),
+        });
 
-    //     beforeEach(async () => {
-    //         await databaseProvider.clearViews();
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
 
-    //         await testQueryRepository.create(noteWithoutTranslation);
-    //     });
+            await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
-    //     it(`should translate the note`, async () => {
-    //         await testQueryRepository.translate(noteWithoutTranslation.id, {
-    //             text: translationText,
-    //             role: translationRole,
-    //             languageCode: translationLanguageCode,
-    //         });
+            await testQueryRepository.createNoteAbout(
+                noteWithoutTranslation,
+                {
+                    type: WIDGET_TYPE,
+                    id: testWidget.id,
+                },
+                generalContext
+            );
+        });
 
-    //         const updatedView = (await testQueryRepository.fetchById(
-    //             noteWithoutTranslation.id
-    //         )) as EventSourcedNoteViewModel;
+        it(`should translate the note`, async () => {
+            await testQueryRepository.translate(noteWithoutTranslation.id, {
+                text: translationText,
+                role: translationRole,
+                languageCode: translationLanguageCode,
+            });
 
-    //         const foo = updatedView.text.getTranslation(translationLanguageCode);
+            const updatedView = (await testQueryRepository.fetchById(
+                noteWithoutTranslation.id
+            )) as EventSourcedNoteViewModel;
 
-    //         expect(foo).not.toBe(NotFound);
+            const foo = updatedView.text.getTranslation(translationLanguageCode);
 
-    //         const { text, role } = foo as MultilingualTextItem;
+            expect(foo).not.toBe(NotFound);
 
-    //         expect(text).toBe(translationText);
+            const { text, role } = foo as MultilingualTextItem;
 
-    //         expect(role).toBe(translationRole);
-    //     });
-    // });
+            expect(text).toBe(translationText);
 
-    // describe(`addAudio`, () => {
-    //     describe(`when there is no audio to begin with`, () => {
-    //         const audioId = buildDummyUuid(44);
+            expect(role).toBe(translationRole);
+        });
+    });
 
-    //         const existingAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
-    //             id: audioId,
-    //         });
+    describe(`addAudio`, () => {
+        describe(`when there is no audio to begin with`, () => {
+            const audioId = buildDummyUuid(44);
 
-    //         const originalLanguageCode = LanguageCode.English;
+            const existingAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: audioId,
+            });
 
-    //         const noteWithNoAudio = buildTestInstance(EventSourcedNoteViewModel, {
-    //             id: buildDummyUuid(1),
-    //             text: buildMultilingualTextWithSingleItem(
-    //                 'existing text for target language',
-    //                 originalLanguageCode
-    //             ),
-    //         });
+            const originalLanguageCode = LanguageCode.English;
 
-    //         beforeEach(async () => {
-    //             await databaseProvider.clearViews();
+            const noteWithNoAudio = buildTestInstance(EventSourcedNoteViewModel, {
+                id: buildDummyUuid(1),
+                text: buildMultilingualTextWithSingleItem(
+                    'existing text for target language',
+                    originalLanguageCode
+                ),
+            });
 
-    //             await testQueryRepository.create(noteWithNoAudio);
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
 
-    //             // @ts-expect-error FIX ME
-    //             await new ArangoAudioItemQueryRepository(connectionProvider).create(existingAudio);
-    //         });
+                await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
-    //         it(`should have a test`, async () => {
-    //             await testQueryRepository.addAudio(
-    //                 noteWithNoAudio.id,
-    //                 audioId,
-    //                 originalLanguageCode
-    //             );
+                await testQueryRepository.createNoteAbout(
+                    noteWithNoAudio,
+                    {
+                        type: WIDGET_TYPE,
+                        id: testWidget.id,
+                    },
+                    generalContext
+                );
 
-    //             const updatedView = (await testQueryRepository.fetchById(
-    //                 noteWithNoAudio.id
-    //             )) as EventSourcedNoteViewModel;
+                // @ts-expect-error FIX this
+                await new ArangoAudioItemQueryRepository(connectionProvider).create(existingAudio);
+            });
 
-    //             expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
+            it(`should add the audio`, async () => {
+                await testQueryRepository.addAudio(
+                    noteWithNoAudio.id,
+                    existingAudio.id,
+                    originalLanguageCode
+                );
 
-    //             expect(updatedView.audio.getIdForAudioIn(originalLanguageCode)).toBe(audioId);
-    //         });
-    //     });
+                const updatedView = (await testQueryRepository.fetchById(
+                    noteWithNoAudio.id
+                )) as EventSourcedNoteViewModel;
 
-    //     describe(`when there is audio for the original language, but the audio is being added for the translation language`, () => {
-    //         it.todo(`should have a test`);
-    //     });
-    // });
+                expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
 
-    // describe.skip(`createNoteAbout`, () => {
-    //     const resourceCompositeIdentifier = {
-    //         type: WIDGET_TYPE,
-    //         id: buildDummyUuid(123),
-    //     };
+                expect(updatedView.audio.getIdForAudioIn(originalLanguageCode)).toBe(audioId);
+            });
+        });
 
-    //     const testWidget = new WidgetViewModel({
-    //         ...resourceCompositeIdentifier,
-    //         rating: 100,
-    //     });
+        describe(`when there is audio for the original language, but the audio is being added for the translation language`, () => {
+            const originalLanguageAudioId = buildDummyUuid(44);
 
-    //     const note = buildTestInstance(EventSourcedNoteViewModel, {
-    //         id: buildDummyUuid(5),
-    //         connectedResources: {
-    //             self: {
-    //                 ...testWidget,
-    //                 context: generalContext,
-    //             },
-    //         },
-    //     });
+            const translationAudioId = buildDummyUuid(45);
 
-    //     beforeEach(async () => {
-    //         await databaseProvider.clearViews();
+            const originalLanguageAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: originalLanguageAudioId,
+            });
 
-    //         await databaseProvider.getDatabaseForCollection('widget__VIEWS').clear();
+            const existingTranslationAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
+                id: translationAudioId,
+            });
 
-    //         await databaseProvider
-    //             .getDatabaseForCollection('widget__VIEWS')
-    //             .create(mapEntityDTOToDatabaseDocument(testWidget));
-    //     });
+            const originalLanguageCode = LanguageCode.English;
 
-    //     it(`should create the note`, async () => {
-    //         // TODO we don't want the full note here
-    //         await testQueryRepository.createNoteAbout(note, resourceCompositeIdentifier);
+            const translationLanguageCode = LanguageCode.Chilcotin;
 
-    //         const searchResult = await testQueryRepository.fetchById(note.id);
+            const noteWithNoAudio = buildTestInstance(EventSourcedNoteViewModel, {
+                id: buildDummyUuid(1),
+                text: buildMultilingualTextWithSingleItem(
+                    'existing text for target language',
+                    originalLanguageCode
+                ),
+            });
 
-    //         expect(searchResult).not.toBe(NotFound);
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
 
-    //         const newNote = searchResult as EventSourcedNoteViewModel;
+                await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
-    //         const {
-    //             connectedResources: {
-    //                 self: {
-    //                     resource: {
-    //                         type,
-    //                         id,
-    //                         // @ts-expect-error TODO make this prop generic
-    //                         rating,
-    //                     },
-    //                     context,
-    //                 },
-    //                 to,
-    //                 from,
-    //             },
-    //         } = newNote;
+                await testQueryRepository.createNoteAbout(
+                    noteWithNoAudio,
+                    {
+                        type: WIDGET_TYPE,
+                        id: testWidget.id,
+                    },
+                    generalContext
+                );
 
-    //         expect(to).toBeFalsy();
+                await new ArangoAudioItemQueryRepository(connectionProvider).createMany([
+                    originalLanguageAudio,
+                    existingTranslationAudio,
+                ]);
+            });
 
-    //         expect(from).toBeFalsy();
+            it(`should add audio for the translation language and preserve the audio for the original language`, async () => {
+                await testQueryRepository.addAudio(
+                    noteWithNoAudio.id,
+                    originalLanguageAudio.id,
+                    originalLanguageCode
+                );
 
-    //         expect(type).toBe(WIDGET_TYPE);
+                await testQueryRepository.addAudio(
+                    noteWithNoAudio.id,
+                    existingTranslationAudio.id,
+                    translationLanguageCode
+                );
 
-    //         expect(id).toBe(resourceCompositeIdentifier.id);
+                const updatedView = (await testQueryRepository.fetchById(
+                    noteWithNoAudio.id
+                )) as EventSourcedNoteViewModel;
 
-    //         expect(rating).toBe(testWidget.rating);
+                expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
 
-    //         expect(context).toEqual(generalContext);
-    //     });
-    // });
+                const foundOriginalAudioId =
+                    updatedView.audio.getIdForAudioIn(originalLanguageCode);
+
+                expect(foundOriginalAudioId).toBe(originalLanguageAudio.id);
+
+                expect(updatedView.audio.hasAudioIn(translationLanguageCode)).toBe(true);
+
+                expect(updatedView.audio.getIdForAudioIn(translationLanguageCode)).toBe(
+                    translationAudioId
+                );
+            });
+        });
+    });
 });

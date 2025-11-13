@@ -3,10 +3,13 @@ import {
     CategorizableType,
     EdgeConnectionContextType,
     EdgeConnectionType,
+    IEdgeConnectionContext,
     ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, UUID } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { EventSourcedTagViewModel } from '../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../test-data/utilities';
@@ -17,9 +20,10 @@ import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 
-class EdgeConnectionMemberViewModel<TContext = unknown> {
+class EdgeConnectionMemberViewModel {
     resource: ResourceCompositeIdentifier;
-    context: TContext;
+
+    context: IEdgeConnectionContext;
 
     constructor(dto: DTO<EdgeConnectionMemberViewModel>) {
         if (!dto) {
@@ -30,8 +34,9 @@ class EdgeConnectionMemberViewModel<TContext = unknown> {
 
         this.resource = resource;
 
-        // @ts-expect-error Deal with the generic type here properly
-        this.context = context;
+        if (isNonEmptyObject(context)) {
+            this.context = context;
+        }
     }
 }
 
@@ -119,7 +124,7 @@ export class EventSourcedNoteViewModel {
 
     constructor({
         connectionType,
-        text: note,
+        text,
         connectedResources,
         id,
         tags,
@@ -129,16 +134,30 @@ export class EventSourcedNoteViewModel {
 
         this.connectionType = connectionType;
 
-        this.text = new MultilingualText(note);
+        if (isNonEmptyObject(text)) {
+            this.text = new MultilingualText(text);
+        }
 
-        this.connectedResources = connectedResources;
+        if (connectedResources) {
+            this.connectedResources = connectedResources;
+        }
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        this.audio = new MultilingualAudio(audio);
+        if (isNonEmptyObject(audio)) {
+            this.audio = MultilingualAudio.fromDto<MultilingualAudio>(audio);
+        } else {
+            this.audio = MultilingualAudio.buildEmpty();
+        }
+    }
+
+    public toDto(): DTO<EventSourcedNoteViewModel> {
+        return cloneToPlainObject(this);
     }
 
     public static fromDto(dto: DTO<EventSourcedNoteViewModel>) {
-        return new EventSourcedNoteViewModel(dto);
+        const instance = new EventSourcedNoteViewModel(dto);
+
+        return instance;
     }
 }
