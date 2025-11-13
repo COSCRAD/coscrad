@@ -12,6 +12,8 @@ import {
     VIDEO_QUERY_REPOSITORY_TOKEN,
 } from '../domain/models/audio-visual/video/queries';
 import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
+import { ArangoNoteQueryRepository } from '../domain/models/context/repositories/arango-note-query-repository';
+import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../domain/models/context/repositories/note-query-repository.interface';
 import { ArangoDigitalTextQueryRepository } from '../domain/models/digital-text/queries/arango-digital-text-query-repository';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -266,6 +268,13 @@ export class PersistenceModule implements OnApplicationShutdown {
             ],
         };
 
+        const noteQueryRepsoitoryProvider = {
+            provide: NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+            useFactory: (connectionProvider: ArangoConnectionProvider) =>
+                new ArangoNoteQueryRepository(connectionProvider),
+            inject: [ArangoConnectionProvider],
+        };
+
         return {
             module: PersistenceModule,
             imports: [ConfigModule, EventModule, DynamicDataTypeModule],
@@ -287,6 +296,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 songQueryRepository,
                 tagQueryRepositoryProvider,
                 queryRepositoryProvider,
+                noteQueryRepsoitoryProvider,
             ],
             exports: [
                 arangoConnectionProvider,
@@ -305,6 +315,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 songQueryRepository,
                 tagQueryRepositoryProvider,
                 queryRepositoryProvider,
+                noteQueryRepsoitoryProvider,
                 EventModule,
             ],
             global: true,
