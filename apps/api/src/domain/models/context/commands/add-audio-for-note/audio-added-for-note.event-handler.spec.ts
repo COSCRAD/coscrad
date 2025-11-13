@@ -5,6 +5,7 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import { buildMultilingualTextFromBilingualText } from '../../../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
@@ -18,11 +19,17 @@ import { INoteQueryRepository } from '../../repositories/note-query-repository.i
 import { AudioAddedForNote } from './audio-added-for-note.event';
 import { AudioAddedForNoteEventHandler } from './audio-added-for-note.event-handler';
 
+const generalContext = {
+    type: EdgeConnectionContextType.general,
+};
+
+const originalLanguageCode = LanguageCode.English;
+
+const translationLanguageCode = LanguageCode.Chilcotin;
+
 const noteId = buildDummyUuid(32);
 
-const languageCodeForAudio = LanguageCode.English;
-
-const audioItemId = buildDummyUuid(4);
+const audioItemIdToAdd = buildDummyUuid(4);
 
 const existingNoteView = buildTestInstance(EventSourcedNoteViewModel, {
     id: noteId,
@@ -32,8 +39,8 @@ const existingNoteView = buildTestInstance(EventSourcedNoteViewModel, {
 const audioAddedForNote = buildTestInstance(AudioAddedForNote, {
     payload: {
         aggregateCompositeIdentifier: { id: noteId },
-        audioItemId,
-        languageCode: languageCodeForAudio,
+        audioItemId: audioItemIdToAdd,
+        languageCode: originalLanguageCode,
     },
 });
 
@@ -80,15 +87,17 @@ describe(`AudioAddedForNoteEventHandler`, () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
-
-        await testQueryRepository.createNoteAbout(
-            existingNoteView,
-            { type: ResourceType.term, id: buildDummyUuid(135) },
-            { type: EdgeConnectionContextType.general }
-        );
     });
 
-    describe(`when there is a note with no audio`, () => {
+    describe(`when there is a self-note with no audio`, () => {
+        beforeEach(async () => {
+            await testQueryRepository.createNoteAbout(
+                existingNoteView,
+                { type: ResourceType.term, id: buildDummyUuid(135) },
+                { type: EdgeConnectionContextType.general }
+            );
+        });
+
         it(`should add audio to the note`, async () => {
             await audioAddedForNoteEventHandler.handle(audioAddedForNote);
 
@@ -96,9 +105,65 @@ describe(`AudioAddedForNoteEventHandler`, () => {
                 noteId
             )) as EventSourcedNoteViewModel;
 
-            expect(updatedView.audio.hasAudioIn(languageCodeForAudio));
+            expect(updatedView.audio.hasAudioIn(originalLanguageCode));
 
-            expect(updatedView.audio.hasAudioItem(audioItemId));
+            expect(updatedView.audio.hasAudioItem(audioItemIdToAdd));
+        });
+    });
+
+    describe(`when there is a connecting note with existing original audio`, () => {
+        const existingAudioItemId = buildDummyUuid(123);
+
+        const connectingNote = buildTestInstance(EventSourcedNoteViewModel, {
+            id: noteId,
+            text: buildMultilingualTextFromBilingualText(
+                {
+                    text: 'original text',
+                    languageCode: originalLanguageCode,
+                },
+                {
+                    text: 'translation into language',
+                    languageCode: translationLanguageCode,
+                }
+            ),
+
+            audio: MultilingualAudio.buildEmpty(),
+        });
+
+        beforeEach(async () => {
+            await testQueryRepository.connectResourcesWithNote(
+                connectingNote,
+                { type: ResourceType.term, id: buildDummyUuid(135) },
+                generalContext,
+                { type: ResourceType.song, id: buildDummyUuid(199) },
+                generalContext
+            );
+        });
+
+        it(`should add audio to the note and keep the existing audio`, async () => {
+            await testQueryRepository.addAudio(
+                connectingNote.id,
+                existingAudioItemId,
+                originalLanguageCode
+            );
+
+            await audioAddedForNoteEventHandler.handle(audioAddedForNote);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                noteId
+            )) as EventSourcedNoteViewModel;
+
+            expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
+
+            expect(updatedView.audio.getIdForAudioIn(originalLanguageCode)).toBe(
+                existingAudioItemId
+            );
+
+            expect(updatedView.audio.hasAudioIn(translationLanguageCode)).toBe(true);
+
+            expect(updatedView.audio.getIdForAudioIn(translationLanguageCode)).toBe(
+                audioItemIdToAdd
+            );
         });
     });
 });
