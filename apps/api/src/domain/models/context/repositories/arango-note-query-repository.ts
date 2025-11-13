@@ -12,6 +12,7 @@ import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-kno
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -33,8 +34,10 @@ type ArangoNoteDocument = Omit<EventSourcedNoteViewModel, 'id'> & {
 };
 
 const mapNoteViewDtoToArangoDocument = (
-    dto: DTO<EventSourcedNoteViewModel>
+    dtoIn: DTO<EventSourcedNoteViewModel>
 ): ArangoNoteDocument => {
+    const dto = cloneToPlainObject(dtoIn);
+
     const { to: toMember, from: fromMember, self: selfMember } = dto.connectedResources;
 
     const toAndFromCompositeIds: [ResourceCompositeIdentifier, ResourceCompositeIdentifier] =
@@ -73,12 +76,9 @@ const mapNoteViewDtoToArangoDocument = (
 };
 
 const mapArangoDocumentToNoteDto = (document) => {
-    const dto = {
-        // the _key -> id in the query directly
-        ...document,
-        connectedResources: {},
-    };
+    const dto = cloneToPlainObject(document);
 
+    dto.connectedResources = {};
     /**
      * Note that it's a system error for the resource to be null here. But this
      * does happen frequently in test setup.
@@ -209,15 +209,42 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             throw new InternalError(`user query options are not available for notes`);
         }
 
-        const documents = await this.database.fetchMany();
+        const aql = `
+            for doc in note__VIEWS
+            let connectedResources = doc._from ==  doc._to ? {
+                self: {
+                    resource: document(doc._from),
+                    context: doc.connectedResources.from.context
+                }
+            } : {
+                to: {
+                    resource: document(doc._to),
+                    context: doc.connectedResources.to.context
+                },
+                from: {
+                    resource: document(doc._from),
+                    context: doc.connectedResources.from.context
+                }
+            }
+            return MERGE(doc,{
+                connectedResources
+            })
+        `;
 
-        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-363] handle pagination
+        const cursor = await this.database.query({
+            query: aql,
+            bindVars: {},
+        });
+
+        const documents = await cursor.all();
+
+        const dtos = documents.map(mapArangoDocumentToNoteDto);
+
+        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-363] Support pagination.
         return {
             page: 1,
-            count: documents.length,
-            entities: documents.map((document) =>
-                EventSourcedNoteViewModel.fromDto(mapArangoDocumentToNoteDto(document))
-            ),
+            count: 1,
+            entities: dtos.map((dto) => EventSourcedNoteViewModel.fromDto(dto)),
         };
     }
 

@@ -156,7 +156,7 @@ export class EventSourcedNoteViewModel {
     }
 
     public static fromDto(dto: DTO<EventSourcedNoteViewModel>) {
-        const instance = new EventSourcedNoteViewModel(dto);
+        const instance = new EventSourcedNoteViewModel(cloneToPlainObject(dto));
 
         return instance;
     }
