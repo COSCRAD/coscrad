@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { EdgeConnectionContextType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -28,7 +28,7 @@ const translationText = 'translation for the note';
 
 const existingNoteView = buildTestInstance(EventSourcedNoteViewModel, {
     id: noteId,
-    note: buildMultilingualTextWithSingleItem('note text', originalLanguageCode),
+    text: buildMultilingualTextWithSingleItem('note text', originalLanguageCode),
 });
 
 const noteTranslated = buildTestInstance(NoteTranslated, {
@@ -83,7 +83,11 @@ describe(`NoteTranslatedEventHandler`, () => {
     beforeEach(async () => {
         await databaseProvider.clearViews();
 
-        await testQueryRepository.create(existingNoteView);
+        await testQueryRepository.createNoteAbout(
+            existingNoteView,
+            { type: ResourceType.term, id: buildDummyUuid(135) },
+            { type: EdgeConnectionContextType.general }
+        );
     });
 
     describe(`when there is a note with no translation`, () => {
@@ -94,7 +98,7 @@ describe(`NoteTranslatedEventHandler`, () => {
                 noteId
             )) as EventSourcedNoteViewModel;
 
-            expect(updatedView.name.has(translationLanguageCode)).toBe(true);
+            expect(updatedView.text.has(translationLanguageCode)).toBe(true);
         });
     });
 });

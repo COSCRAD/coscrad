@@ -79,7 +79,11 @@ const mapArangoDocumentToNoteDto = (document) => {
         connectedResources: {},
     };
 
-    if ('self' in document.connectedResources) {
+    /**
+     * Note that it's a system error for the resource to be null here. But this
+     * does happen frequently in test setup.
+     */
+    if ('self' in document.connectedResources && document.connectedResources.self.resource) {
         const self = mapDatabaseDocumentToAggregateDTO(document.connectedResources.self.resource);
 
         dto.connectedResources.self = {
@@ -88,14 +92,14 @@ const mapArangoDocumentToNoteDto = (document) => {
         };
     }
 
-    if ('from' in document.connectedResources) {
+    if ('from' in document.connectedResources && document.connectedResources.from.resource) {
         dto.connectedResources.from = {
             resource: mapDatabaseDocumentToAggregateDTO(document.connectedResources.from.resource),
             context: document.connectedResources.from.context,
         };
     }
 
-    if ('to' in document.connectedResources) {
+    if ('to' in document.connectedResources && document.connectedResources.to.resource) {
         dto.connectedResources.to = {
             resource: mapDatabaseDocumentToAggregateDTO(document.connectedResources.to.resource),
             context: document.connectedResources.to.context,
