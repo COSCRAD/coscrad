@@ -9,6 +9,7 @@ eagerly cached in a separate query database, as is done for resources.
 
 #### Relevant Commits
 
+-   feat: introduce event consumer for NOTE_TRANSLATED (#792)
 -   infra: introduce a note query repository (#791)
 
 ### API: User-Defined Filters and Query Optimizations
