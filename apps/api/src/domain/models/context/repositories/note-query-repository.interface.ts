@@ -1,0 +1,57 @@
+import {
+    EdgeConnectionType,
+    IEdgeConnectionContext,
+    IMultilingualText,
+    IMultilingualTextItem,
+    LanguageCode,
+    PaginatedResponse,
+    ResourceCompositeIdentifier,
+} from '@coscrad/api-interfaces';
+import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
+import { Maybe } from '../../../../lib/types/maybe';
+import { AggregateId } from '../../../types/AggregateId';
+import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
+
+export const NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN = 'NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN';
+
+export interface INoteCreationRecord {
+    id: AggregateId;
+
+    connectionType: EdgeConnectionType;
+
+    text: IMultilingualText;
+}
+
+export interface INoteQueryRepository {
+    fetchById(id: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>>;
+
+    fetchMany(
+        options?: FetchManyQueryOptions
+    ): Promise<PaginatedResponse<EventSourcedNoteViewModel>>;
+
+    createMany(notes: EventSourcedNoteViewModel[]): Promise<void>;
+
+    count(options?: FetchManyQueryOptions): Promise<number>;
+
+    translate(id: string, translationItem: IMultilingualTextItem): Promise<void>;
+
+    addAudio(
+        noteId: AggregateId,
+        audioItemId: AggregateId,
+        languageCode: LanguageCode
+    ): Promise<void>;
+
+    createNoteAbout(
+        noteInfo: INoteCreationRecord,
+        resourceCompositeIdentifier: ResourceCompositeIdentifier,
+        context: IEdgeConnectionContext
+    ): Promise<void>;
+
+    connectResourcesWithNote(
+        noteInfo: INoteCreationRecord,
+        fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        fromMemberContext: IEdgeConnectionContext,
+        toMemberCompositeIdentifier: ResourceCompositeIdentifier,
+        toMemberContext: IEdgeConnectionContext
+    ): Promise<void>;
+}

@@ -2,6 +2,15 @@
 
 ## <next>
 
+### Optimized Note Queries
+
+In this release, we have refactored the system so that note queries are
+eagerly cached in a separate query database, as is done for resources.
+
+#### Relevant Commits
+
+-   infra: introduce a note query repository (#791)
+
 ### API: User-Defined Filters and Query Optimizations
 
 Until now, when users search a list of resources on the front-end, we have been
