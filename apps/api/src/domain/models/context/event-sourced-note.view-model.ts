@@ -1,11 +1,9 @@
 import {
     AggregateType,
     CategorizableType,
-    EdgeConnectionContextType,
     EdgeConnectionType,
     IEdgeConnectionContext,
     ResourceCompositeIdentifier,
-    ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, UUID } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
@@ -74,15 +72,16 @@ class ConnectedResources {
         audio: MultilingualAudio.buildEmpty(),
         tags: [],
         connectedResources: {
-            self: {
-                context: {
-                    type: EdgeConnectionContextType.general,
-                },
-                resource: {
-                    type: ResourceType.term,
-                    id: buildDummyUuid(6),
-                },
-            },
+            // Because of the way our clone \ merge utils work, you have to specify this property every time
+            // self: {
+            //     context: {
+            //         type: EdgeConnectionContextType.general,
+            //     },
+            //     resource: {
+            //         type: ResourceType.term,
+            //         id: buildDummyUuid(6),
+            //     },
+            // },
         },
         connectionType: EdgeConnectionType.self,
     },
@@ -149,6 +148,10 @@ export class EventSourcedNoteViewModel {
         } else {
             this.audio = MultilingualAudio.buildEmpty();
         }
+
+        if (audio.items.length > 1) {
+            console.log('foo u 2');
+        }
     }
 
     public toDto(): DTO<EventSourcedNoteViewModel> {
@@ -156,7 +159,7 @@ export class EventSourcedNoteViewModel {
     }
 
     public static fromDto(dto: DTO<EventSourcedNoteViewModel>) {
-        const instance = new EventSourcedNoteViewModel(dto);
+        const instance = new EventSourcedNoteViewModel(cloneToPlainObject(dto));
 
         return instance;
     }

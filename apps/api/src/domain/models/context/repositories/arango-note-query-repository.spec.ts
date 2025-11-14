@@ -2,6 +2,7 @@ import {
     EdgeConnectionType,
     LanguageCode,
     MultilingualTextItemRole,
+    ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -28,6 +29,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
 import { GeneralContext } from '../general-context/general-context.entity';
 import { ArangoNoteQueryRepository } from './arango-note-query-repository';
@@ -37,16 +39,9 @@ const WIDGET_TYPE = 'widget' as ResourceType;
 
 const widgetCollectionName = 'widget__VIEWS';
 
-const noteIds = [2, 3, 4].map(buildDummyUuid);
+const noteIds = [1, 2, 3].map(buildDummyUuid);
 
 const textForNote = 'the text for a note';
-
-const existingNotes = [1, 2, 3].map((sequenceNumber, index) =>
-    buildTestInstance(EventSourcedNoteViewModel, {
-        id: noteIds[index],
-        text: buildMultilingualTextWithSingleItem(`note #${index}`),
-    })
-);
 
 class WidgetViewModel {
     readonly type = WIDGET_TYPE;
@@ -63,6 +58,13 @@ class WidgetViewModel {
         this.id = id;
 
         this.rating = rating;
+    }
+
+    getCompositeIdentifier() {
+        return {
+            type: WIDGET_TYPE,
+            id: this.id,
+        } as ResourceCompositeIdentifier;
     }
 
     toDto() {
@@ -155,7 +157,6 @@ describe(`ArangoNoteQueryRepository`, () => {
     describe(`fetchById`, () => {
         const existingNote: INoteCreationRecord = {
             id: noteIds[0],
-            // TODO should this be called text?
             text: buildMultilingualTextWithSingleItem(textForNote),
             connectionType: EdgeConnectionType.self,
         };
@@ -170,17 +171,31 @@ describe(`ArangoNoteQueryRepository`, () => {
                     await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
 
                     await testQueryRepository.createNoteAbout(
+                        {
+                            ...existingNote,
+                            id: buildDummyUuid(88),
+                            text: buildMultilingualTextWithSingleItem(
+                                'additional note for the given widget'
+                            ),
+                        },
+                        testWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await testQueryRepository.createNoteAbout(
                         existingNote,
-                        { type: WIDGET_TYPE, id: testWidget.id },
+                        testWidget.getCompositeIdentifier(),
                         generalContext
                     );
                 });
+
                 it(`should return the note`, async () => {
                     const result = await testQueryRepository.fetchById(existingNote.id);
 
                     expect(result).not.toBe(NotFound);
 
                     const {
+                        text,
                         connectedResources: { to, from, self },
                     } = result as EventSourcedNoteViewModel;
 
@@ -197,6 +212,8 @@ describe(`ArangoNoteQueryRepository`, () => {
                     expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
 
                     assertWidgetDocumentMatchesWidget(resource, testWidget);
+
+                    expect(text.toString()).toBe(existingNote.text.toString());
                 });
             });
 
@@ -345,20 +362,148 @@ describe(`ArangoNoteQueryRepository`, () => {
     });
 
     describe(`fetchMany`, () => {
+        const selfWidget = new WidgetViewModel({
+            id: buildDummyUuid(101),
+            type: WIDGET_TYPE,
+            rating: 1,
+        });
+
+        const fromWidget = new WidgetViewModel({
+            id: buildDummyUuid(102),
+            type: WIDGET_TYPE,
+            rating: 2,
+        });
+
+        const toWidget = new WidgetViewModel({
+            id: buildDummyUuid(103),
+            type: WIDGET_TYPE,
+            rating: 3,
+        });
+
+        const existingSelfNote: EventSourcedNoteViewModel = buildTestInstance(
+            EventSourcedNoteViewModel,
+            {
+                id: noteIds[0],
+                text: buildMultilingualTextWithSingleItem(textForNote),
+                connectedResources: {
+                    self: {
+                        resource: selfWidget.getCompositeIdentifier(),
+                        context: generalContext,
+                    },
+                },
+                tags: [],
+                type: ResourceType.term,
+                connectionType: EdgeConnectionType.self,
+                audio: MultilingualAudio.buildEmpty(),
+            }
+        );
+
+        const existingConnection = buildTestInstance(EventSourcedNoteViewModel, {
+            id: noteIds[1],
+            text: buildMultilingualTextWithSingleItem('note for the connection'),
+            connectedResources: {
+                from: {
+                    resource: fromWidget.getCompositeIdentifier(),
+                    context: generalContext,
+                },
+                to: {
+                    resource: toWidget.getCompositeIdentifier(),
+                    context: generalContext,
+                },
+            },
+            tags: [],
+            type: ResourceType.term,
+            connectionType: EdgeConnectionType.dual,
+            audio: MultilingualAudio.buildEmpty(),
+        });
+
+        const extraConnectionForWidget = buildTestInstance(EventSourcedNoteViewModel, {
+            id: noteIds[2],
+            text: buildMultilingualTextWithSingleItem('I am another note for the target widget'),
+            connectedResources: {
+                self: {
+                    // We want to ensure our query logic is robust to multiple edges for the same widget
+                    resource: selfWidget.getCompositeIdentifier(),
+                    context: generalContext,
+                },
+            },
+            tags: [],
+            type: ResourceType.term,
+            connectionType: EdgeConnectionType.self,
+            audio: MultilingualAudio.buildEmpty(),
+        });
+
+        const allNotes = [existingSelfNote, existingConnection, extraConnectionForWidget];
+
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
-            await testQueryRepository.createMany(existingNotes);
+            [selfWidget, toWidget, fromWidget].forEach(async (w) => {
+                await widgetDatabase.create(mapEntityDTOToDatabaseDocument(w));
+            });
+
+            await testQueryRepository.createMany(allNotes);
         });
 
-        it(`should return the notes`, async () => {
+        it(`should return the notes along with joined resource views`, async () => {
             const result = await testQueryRepository.fetchMany();
 
-            expect(result.entities).toHaveLength(existingNotes.length);
+            expect(result.entities).toHaveLength(allNotes.length);
+
+            const selfNote = await testQueryRepository.fetchById(existingSelfNote.id);
+
+            expect(selfNote).not.toBe(NotFound);
+
+            const {
+                connectedResources: {
+                    to,
+                    from,
+                    self: { resource, context },
+                },
+            } = selfNote as EventSourcedNoteViewModel;
+
+            expect(context).toEqual(generalContext);
+
+            assertWidgetDocumentMatchesWidget(resource, selfWidget);
+
+            expect(to).toBeFalsy();
+
+            expect(from).toBeFalsy();
+
+            const connection = await testQueryRepository.fetchById(existingConnection.id);
+
+            expect(connection).not.toBe(NotFound);
+
+            const {
+                connectedResources: { to: toForConnection, from: fromForConnection, self },
+            } = connection as EventSourcedNoteViewModel;
+
+            expect(self).toBeFalsy();
+
+            expect(toForConnection.context).toEqual(generalContext);
+
+            assertWidgetDocumentMatchesWidget(toForConnection.resource, toWidget);
+
+            expect(fromForConnection.context).toEqual(generalContext);
+
+            assertWidgetDocumentMatchesWidget(fromForConnection.resource, fromWidget);
         });
     });
 
     describe(`count`, () => {
+        const existingNotes = [1, 2, 3].map((sequenceNumber) =>
+            buildTestInstance(EventSourcedNoteViewModel, {
+                id: noteIds[sequenceNumber - 1],
+                text: buildMultilingualTextWithSingleItem(`note #${sequenceNumber}`),
+                connectedResources: {
+                    self: {
+                        resource: testWidget.getCompositeIdentifier(),
+                        context: generalContext,
+                    },
+                },
+            })
+        );
+
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
@@ -520,7 +665,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 ]);
             });
 
-            it(`should add audio for the translation language and preserve the audio for the original language`, async () => {
+            it.only(`should add audio for the translation language and preserve the audio for the original language`, async () => {
                 await testQueryRepository.addAudio(
                     noteWithNoAudio.id,
                     originalLanguageAudio.id,

@@ -9,6 +9,7 @@ eagerly cached in a separate query database, as is done for resources.
 
 #### Relevant Commits
 
+-   feat: join resource views into note index queries (#794)
 -   feat: introduce event consumer for AUDIO_ADDED_FOR_NOTE (#793)
 -   feat: introduce event consumer for NOTE_TRANSLATED (#792)
 -   infra: introduce a note query repository (#791)
