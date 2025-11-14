@@ -33,17 +33,13 @@ const noteId = buildDummyUuid(32);
 
 const audioItemIdToAdd = buildDummyUuid(4);
 
+const audioItemToAdd = buildTestInstance(EventSourcedAudioItemViewModel, {
+    id: audioItemIdToAdd,
+});
+
 const existingNoteView = buildTestInstance(EventSourcedNoteViewModel, {
     id: noteId,
     audio: MultilingualAudio.buildEmpty(),
-});
-
-const audioAddedForNote = buildTestInstance(AudioAddedForNote, {
-    payload: {
-        aggregateCompositeIdentifier: { id: noteId },
-        audioItemId: audioItemIdToAdd,
-        languageCode: originalLanguageCode,
-    },
 });
 
 const existingAudioItemId = buildDummyUuid(123);
@@ -98,11 +94,21 @@ describe(`AudioAddedForNoteEventHandler`, () => {
     beforeEach(async () => {
         await databaseProvider.clearViews();
 
-        // @ts-expect-error We shouldn't need an `actions` property here.
-        await new ArangoAudioItemQueryRepository(connectionProvider).create(existingAudio);
+        await new ArangoAudioItemQueryRepository(connectionProvider).createMany([
+            existingAudio,
+            audioItemToAdd,
+        ]);
     });
 
     describe(`when there is a self-note with no audio`, () => {
+        const audioAddedForNote = buildTestInstance(AudioAddedForNote, {
+            payload: {
+                aggregateCompositeIdentifier: { id: noteId },
+                audioItemId: audioItemIdToAdd,
+                languageCode: originalLanguageCode,
+            },
+        });
+
         beforeEach(async () => {
             await testQueryRepository.createNoteAbout(
                 existingNoteView,
@@ -139,6 +145,14 @@ describe(`AudioAddedForNoteEventHandler`, () => {
             ),
 
             audio: MultilingualAudio.buildEmpty(),
+        });
+
+        const audioAddedForNote = buildTestInstance(AudioAddedForNote, {
+            payload: {
+                aggregateCompositeIdentifier: { id: noteId },
+                audioItemId: audioItemIdToAdd,
+                languageCode: translationLanguageCode,
+            },
         });
 
         beforeEach(async () => {
