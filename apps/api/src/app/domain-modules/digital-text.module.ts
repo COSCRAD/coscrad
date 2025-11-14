@@ -40,9 +40,16 @@ import { DigitalTextQueryService } from '../../queries/digital-text';
 import { DynamicDataTypeFinderService } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
+import { BibliographicCitationModule } from './bibliographic-citation.module';
 
 @Module({
-    imports: [CommandModule, IdGenerationModule, CoscradNLPModule],
+    /**
+     * Currently, the BibliographicCitationModule is required to leverage
+     * a service to join in the source citations for digital texts. In the
+     * future, this will be done using a dedicated, denormalized query DB.
+     * At that point, the dependency can be removed here.
+     */
+    imports: [CommandModule, IdGenerationModule, CoscradNLPModule, BibliographicCitationModule],
     controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,

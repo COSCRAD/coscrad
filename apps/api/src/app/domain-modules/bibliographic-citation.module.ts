@@ -31,6 +31,7 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
         DynamicDataTypeModule,
         CoscradNLPModule,
     ],
+    exports: [BibliographicCitationQueryService],
     controllers: [BibliographicCitationController],
     providers: [
         CommandInfoService,
