@@ -1,6 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { IResourceQueryRepository } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { DigitalTextViewModel } from '../../../../queries/digital-text';
+import { AggregateId } from '../../../types/AggregateId';
 import { DigitalTextPageImportRecord } from '../commands';
 
 export const DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN =
@@ -56,4 +57,6 @@ export interface IDigitalTextQueryRepository
         audioItemId: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    registerCitation(digitalTextId: string, citationId: AggregateId): Promise<void>;
 }

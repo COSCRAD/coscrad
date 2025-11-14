@@ -6,15 +6,20 @@ import {
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
 } from '../../domain/models/digital-text/queries/digital-text-query-repository.interface';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { BibliographicCitationQueryService } from '../../domain/services/query-services/bibliographic-citation-query.service';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
+import { AggregateId } from '../../domain/types/AggregateId';
+import { isInternalError } from '../../lib/errors/InternalError';
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound, isNotFound } from '../../lib/types/not-found';
+import { BibliographicCitationViewModel } from '../buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextViewModel } from './digital-text.view-model';
 
 type IndexScopedCommandContext = {
@@ -40,7 +45,8 @@ export class DigitalTextQueryService {
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
         protected readonly queryRepository: IDigitalTextQueryRepository,
-        @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService
+        @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService,
+        protected readonly bibliographicCitationQueryService: BibliographicCitationQueryService
     ) {}
 
     public async fetchById(
@@ -51,7 +57,24 @@ export class DigitalTextQueryService {
 
         if (isNotFound(searchResult)) return NotFound;
 
-        return this.transform(searchResult, userWithGroups);
+        const { sourceCitationId } = searchResult;
+
+        const citations = new Map<AggregateId, BibliographicCitationViewModel>();
+
+        if (isNonEmptyString(sourceCitationId)) {
+            const citation = await this.bibliographicCitationQueryService.fetchById(
+                sourceCitationId
+            );
+
+            if (!isNotFound(citation) && !isInternalError(citation)) {
+                citations.set(
+                    sourceCitationId,
+                    citation as unknown as BibliographicCitationViewModel
+                );
+            }
+        }
+
+        return this.transform(searchResult, userWithGroups, citations);
     }
 
     public async fetchMany(
@@ -65,10 +88,19 @@ export class DigitalTextQueryService {
 
         const commandContext = DigitalTextViewModel;
 
+        const bibliographicCitationIndexQueryResult =
+            await this.bibliographicCitationQueryService.fetchMany(userWithGroups);
+
+        const citationMap = bibliographicCitationIndexQueryResult.entities.reduce(
+            // @ts-expect-error TODO fix this type
+            (acc: Map<string, BibliographicCitationViewModel>, c) => acc.set(c.id, c),
+            new Map<string, BibliographicCitationViewModel>()
+        );
+
         return {
             // Here we mix-in the detail-scoped actions.
             entities: availableEntityViewModels.map((entityViewModel) =>
-                this.transform(entityViewModel, userWithGroups)
+                this.transform(entityViewModel, userWithGroups, citationMap)
             ),
             indexScopedActions: this.fetchUserActions(userWithGroups, [commandContext]),
             page: 1,
@@ -99,12 +131,25 @@ export class DigitalTextQueryService {
         });
     }
 
-    private transform(view: DigitalTextViewModel, userWithGroups: CoscradUserWithGroups) {
+    private transform(
+        view: DigitalTextViewModel,
+        userWithGroups: CoscradUserWithGroups,
+        citations: Map<AggregateId, BibliographicCitationViewModel> = new Map()
+    ) {
         const transformed = view as unknown as IDigitalTextViewModel;
 
         transformed.actions = this.fetchUserActions(userWithGroups, [
             view as unknown as CommandContext,
         ]);
+
+        if (view.sourceCitationId && citations.has(view.sourceCitationId)) {
+            const citation = citations.get(view.sourceCitationId);
+
+            // @ts-expect-error We need to deal with the `actions` property in this type
+            transformed.sourceCitation = citation;
+        }
+
+        delete view.sourceCitationId;
 
         return transformed;
     }

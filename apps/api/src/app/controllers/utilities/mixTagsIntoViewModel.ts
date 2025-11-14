@@ -20,8 +20,8 @@ export default <TViewModel extends BaseViewModel = BaseViewModel>(
         )
         .map((tag) => new TagViewModel(tag));
 
-    return {
-        ...viewModel,
-        tags: tagsForThisModel,
-    } as TViewModel & { tags: TagViewModel[] };
+    // @ts-expect-error TODO fix the type here
+    viewModel.tags = tagsForThisModel;
+
+    return viewModel as TViewModel & { tags: TagViewModel[] };
 };

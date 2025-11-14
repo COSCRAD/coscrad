@@ -129,10 +129,16 @@ export abstract class ResourceQueryService<
             tags: TagViewModel[];
         };
 
-        return {
-            ...viewModelWithTags,
-            actions: this.fetchUserActions(userWithGroups, [domainModelSearchResult]),
+        const viewModelWithActions = viewModelWithTags as UViewModel & {
+            tags: TagViewModel[];
+            actions: ICommandFormAndLabels[];
         };
+
+        viewModelWithActions.actions = this.fetchUserActions(userWithGroups, [
+            domainModelSearchResult,
+        ]);
+
+        return viewModelWithActions;
     }
 
     public async fetchByName(
@@ -183,10 +189,14 @@ export abstract class ResourceQueryService<
             tags: TagViewModel[];
         };
 
-        return {
-            ...viewModelWithTags,
-            actions: this.fetchUserActions(userWithGroups, [resource]),
+        const viewModelWithActions = viewModelWithTags as UViewModel & {
+            tags: TagViewModel[];
+            actions: ICommandFormAndLabels[];
         };
+
+        viewModelWithActions.actions = this.fetchUserActions(userWithGroups, [resource]);
+
+        return viewModelWithActions;
     }
 
     public async fetchMany(

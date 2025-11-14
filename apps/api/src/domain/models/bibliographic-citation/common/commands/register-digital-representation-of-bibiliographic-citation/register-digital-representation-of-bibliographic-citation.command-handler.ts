@@ -15,7 +15,7 @@ import { IBibliographicCitationData } from '../../../interfaces/bibliographic-ci
 import { IBibliographicCitation } from '../../../interfaces/bibliographic-citation.interface';
 import { DigitalReprsentationAlreadyRegisteredForResourceError } from '../../errors/digital-representation-already-registered-for-resource.error';
 import { FailedToRegisterDigitalRepresentationError } from '../../errors/failed-to-register-digital-representation.error';
-import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-added.event';
+import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-registered.event';
 import { RegisterDigitalRepresentationOfBibliographicCitation } from './register-digital-representation-of-bibliographic-citation.command';
 
 @CommandHandler(RegisterDigitalRepresentationOfBibliographicCitation)

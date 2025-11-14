@@ -3,7 +3,9 @@ import {
     IDetailQueryResult,
     IDigitalTextViewModel,
     IIndexQueryResult,
+    ResourceType,
 } from '@coscrad/api-interfaces';
+import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes, { HttpStatusCode } from '../../app/constants/httpStatusCodes';
@@ -12,6 +14,7 @@ import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-m
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import { assertQueryResult } from '../../domain/models/__tests__';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { BookBibliographicCitation } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import DigitalTextPage from '../../domain/models/digital-text/entities/digital-text-page.entity';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -22,6 +25,7 @@ import { CoscradUserGroup } from '../../domain/models/user-management/group/enti
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { AggregateId } from '../../domain/types/AggregateId';
+import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
 import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -46,14 +50,40 @@ const dummyGroup = buildTestInstance(CoscradUserGroup, {
     userIds: [dummyUser.id],
 });
 
+const publicDigitalTextId = buildDummyUuid(101);
+
 const dummyUserWithGroups = new CoscradUserWithGroups(dummyUser, [dummyGroup]);
 
+const sourceBookBibliographicCitation = buildTestInstance(BookBibliographicCitation, {
+    id: buildDummyUuid(345),
+    data: {
+        title: 'Source book for the public digital text',
+        creators: [
+            {
+                type: BibliographicSubjectCreatorType.author,
+                name: 'Julie Writerwoman',
+            },
+        ],
+    },
+    digitalRepresentationResourceCompositeIdentifier: {
+        type: ResourceType.digitalText,
+        id: publicDigitalTextId,
+    },
+});
+
+const validationResult = sourceBookBibliographicCitation.validateInvariants();
+
+if (isInternalError(validationResult)) {
+    throw new InternalError('test setup failed', [validationResult]);
+}
+
 const publicDigitalText = buildTestInstance(DigitalTextViewModel, {
-    id: buildDummyUuid(101),
+    id: publicDigitalTextId,
     name: buildMultilingualTextWithSingleItem('published text'),
     isPublished: true,
     accessControlList: new AccessControlList(),
     tags: [buildTestInstance(EventSourcedTagViewModel)],
+    sourceCitationId: sourceBookBibliographicCitation.id,
 });
 
 const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
@@ -91,6 +121,10 @@ describe(`When querying for a digital text`, () => {
 
     beforeEach(async () => {
         await testRepositoryProvider.testSetup();
+
+        await testRepositoryProvider
+            .forResource(ResourceType.bibliographicCitation)
+            .create(sourceBookBibliographicCitation);
     });
 
     afterAll(async () => {

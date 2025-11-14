@@ -19,6 +19,7 @@ import { TagCreated } from '../../domain/models/tag/commands/create-tag/tag-crea
 import { ResourceOrNoteTaggedPayload } from '../../domain/models/tag/commands/tag-resource-or-note/resource-or-note-tagged.event';
 import { ContributionSummary } from '../../domain/models/user-management';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { AggregateId } from '../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound } from '../../lib/types/not-found';
@@ -119,6 +120,8 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     contributions: ContributionSummary[];
 
+    sourceCitationId?: AggregateId;
+
     constructor(dto: DTO<DigitalTextViewModel>) {
         if (!dto) return;
 
@@ -134,6 +137,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             notes,
             connections,
             contributions,
+            sourceCitationId,
         } = dto;
 
         this.id = id;
@@ -141,6 +145,8 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
         this.name = new MultilingualText(name);
 
         this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.sourceCitationId = sourceCitationId;
 
         if (Array.isArray(tags)) {
             this.tags = tags.map((t) => new EventSourcedTagViewModel(t));

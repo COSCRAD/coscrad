@@ -27,6 +27,10 @@ export class BaseViewModel implements IBaseViewModel {
     constructor(domainModel: HasViewModelId & Nameable) {
         this.id = domainModel.id;
 
+        if (typeof domainModel.getName !== 'function') {
+            throw new Error(`uh oh`);
+        }
+
         const name = domainModel.getName();
 
         if (isNonEmptyObject(name)) {

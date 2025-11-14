@@ -14,9 +14,14 @@ import { validAggregateOrThrow } from '../../models/shared/functional';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../types/ResourceType';
-import { ResourceQueryService } from './resource-query.service';
+import { ResourceQueryService as DomainStateResourceQueryService } from './resource-query.service';
 
-export class BibliographicCitationQueryService extends ResourceQueryService<
+/**
+ * Note that for ease of development, we originally built query services by
+ * projecting off the domain database. We are slowly strangling out this old
+ * pattern, one resource type at a time.
+ */
+export class BibliographicCitationQueryService extends DomainStateResourceQueryService<
     IBibliographicCitation,
     IBibliographicCitationViewModel
 > {
@@ -45,6 +50,10 @@ export class BibliographicCitationQueryService extends ResourceQueryService<
         bibliographicCitationInstance: IBibliographicCitation<IBibliographicCitationData>,
         { contributor: contributors }: InMemorySnapshot
     ): Omit<IBibliographicCitationViewModel, 'actions'> {
+        if (typeof bibliographicCitationInstance.getName !== 'function') {
+            throw new Error(`we went wrong, bro!`);
+        }
+
         return new BibliographicCitationViewModel(bibliographicCitationInstance, contributors);
     }
 

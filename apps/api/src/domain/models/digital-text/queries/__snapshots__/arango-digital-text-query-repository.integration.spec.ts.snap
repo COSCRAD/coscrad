@@ -179,6 +179,7 @@ DigitalTextViewModel {
       "photographId": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100202",
     },
   ],
+  "sourceCitationId": undefined,
   "tags": [
     EventSourcedTagViewModel {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",

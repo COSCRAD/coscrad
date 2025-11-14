@@ -298,6 +298,81 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
       },
       "notes": [],
       "pages": [],
+      "sourceCitation": {
+        "actions": [
+          {
+            "description": "Allow a user to view (but not edit) a given resource",
+            "form": {
+              "fields": [
+                {
+                  "constraints": [
+                    {
+                      "message": "must be a UUID",
+                      "name": "UUID",
+                    },
+                    {
+                      "message": "must be a defined value",
+                      "name": "defined value",
+                    },
+                  ],
+                  "description": "the ID of the user who will be given permission to view this resource",
+                  "label": "userId",
+                  "name": "userId",
+                  "options": {
+                    "aggregateType": "user",
+                  },
+                  "type": "DYNAMIC_SELECT",
+                },
+              ],
+              "prepopulatedFields": {
+                "aggregateCompositeIdentifier": {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+                  "type": "bibliographicCitation",
+                },
+              },
+            },
+            "label": "Grant Read Access to User",
+            "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+          },
+          {
+            "description": "Make a resource visible to the public",
+            "form": {
+              "fields": [],
+              "prepopulatedFields": {
+                "aggregateCompositeIdentifier": {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+                  "type": "bibliographicCitation",
+                },
+              },
+            },
+            "label": "Publish Resource",
+            "type": "PUBLISH_RESOURCE",
+          },
+        ],
+        "contributions": [],
+        "data": {
+          "creators": [
+            {
+              "name": "Julie Writerwoman",
+              "type": "author",
+            },
+          ],
+          "title": "Source book for the public digital text",
+          "type": "book",
+        },
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+        "name": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Source book for the public digital text",
+            },
+          ],
+        },
+        "tags": [],
+        "type": "bibliographicCitation",
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",
@@ -899,6 +974,81 @@ exports[`When querying for a digital text when the user is a project admin index
       },
       "notes": [],
       "pages": [],
+      "sourceCitation": {
+        "actions": [
+          {
+            "description": "Allow a user to view (but not edit) a given resource",
+            "form": {
+              "fields": [
+                {
+                  "constraints": [
+                    {
+                      "message": "must be a UUID",
+                      "name": "UUID",
+                    },
+                    {
+                      "message": "must be a defined value",
+                      "name": "defined value",
+                    },
+                  ],
+                  "description": "the ID of the user who will be given permission to view this resource",
+                  "label": "userId",
+                  "name": "userId",
+                  "options": {
+                    "aggregateType": "user",
+                  },
+                  "type": "DYNAMIC_SELECT",
+                },
+              ],
+              "prepopulatedFields": {
+                "aggregateCompositeIdentifier": {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+                  "type": "bibliographicCitation",
+                },
+              },
+            },
+            "label": "Grant Read Access to User",
+            "type": "GRANT_RESOURCE_READ_ACCESS_TO_USER",
+          },
+          {
+            "description": "Make a resource visible to the public",
+            "form": {
+              "fields": [],
+              "prepopulatedFields": {
+                "aggregateCompositeIdentifier": {
+                  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+                  "type": "bibliographicCitation",
+                },
+              },
+            },
+            "label": "Publish Resource",
+            "type": "PUBLISH_RESOURCE",
+          },
+        ],
+        "contributions": [],
+        "data": {
+          "creators": [
+            {
+              "name": "Julie Writerwoman",
+              "type": "author",
+            },
+          ],
+          "title": "Source book for the public digital text",
+          "type": "book",
+        },
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100345",
+        "name": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "Source book for the public digital text",
+            },
+          ],
+        },
+        "tags": [],
+        "type": "bibliographicCitation",
+      },
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100003",

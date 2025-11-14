@@ -7,6 +7,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { Maybe } from '../../../../../lib/types/maybe';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -14,6 +15,8 @@ import { MultilingualText } from '../../../../common/entities/multilingual-text'
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import BaseDomainModel from '../../../base-domain-model.entity';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -27,10 +30,18 @@ import { IBibliographicCitation } from '../../interfaces/bibliographic-citation.
 import { BookBibliographicCitationCreated } from '../commands/create-book-bibliographic-citation/book-bibliographic-citation-created.event';
 import BookBibliographicCitationData from './book-bibliographic-citation-data.entity';
 
-/**
- * TODO [https://www.pivotaltracker.com/story/show/183227660]
- * Make sure the decorator breaks if there is no such command or else use enum.
- */
+@CoscradDataExample<BookBibliographicCitation>({
+    example: {
+        id: buildDummyUuid(1),
+        type: ResourceType.bibliographicCitation,
+        data: {
+            type: BibliographicCitationType.book,
+            title: 'This is a textbook written by a professor long agon.',
+            creators: [],
+        },
+        published: false,
+    },
+})
 @RegisterIndexScopedCommands(['CREATE_BOOK_BIBLIOGRAPHIC_CITATION'])
 export class BookBibliographicCitation
     extends Resource
@@ -38,6 +49,12 @@ export class BookBibliographicCitation
 {
     readonly type = ResourceType.bibliographicCitation;
 
+    @NestedDataType(ResourceCompositeIdentifier, {
+        label: 'digital representation resource composite ID',
+        description:
+            'a reference to the resource within the web-of-knowledge that contains the contents of the referenced work',
+        isOptional: true,
+    })
     digitalRepresentationResourceCompositeIdentifier?: ResourceCompositeIdentifier;
 
     @NestedDataType(BookBibliographicCitationData, {
@@ -83,6 +100,10 @@ export class BookBibliographicCitation
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
+    }
+
+    static fromDto<T extends BaseDomainModel>(dto: DTO<T>): T {
+        return new BookBibliographicCitation(dto as BookBibliographicCitation) as unknown as T;
     }
 
     static fromEventHistory(

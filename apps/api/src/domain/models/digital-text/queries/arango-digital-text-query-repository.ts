@@ -1,5 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { isInternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -37,7 +37,7 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         );
     }
 
-    create(digitalText: DigitalTextViewModel): Promise<void> {
+    async create(digitalText: DigitalTextViewModel): Promise<void> {
         return this.database.create(mapEntityDTOToDatabaseDocument(digitalText));
     }
 
@@ -373,5 +373,18 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
         };
 
         await this.database.query({ query, bindVars });
+    }
+
+    async registerCitation(digitalTextId: string, citationId: AggregateId): Promise<void> {
+        await this.database
+            .update(digitalTextId, {
+                sourceCitationId: citationId,
+            })
+            .catch((e) => {
+                throw new InternalError(
+                    `Failed to register ${digitalTextId} as the representation of ${citationId} due to an ArangoDB error`,
+                    [e]
+                );
+            });
     }
 }

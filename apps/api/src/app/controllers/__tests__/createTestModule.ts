@@ -840,14 +840,20 @@ export default async (
                 provide: DigitalTextQueryService,
                 useFactory: (
                     connectionProvider: ArangoConnectionProvider,
-                    commandInfoService: CommandInfoService
+                    commandInfoService: CommandInfoService,
+                    bibliographicCitationQueryService: BibliographicCitationQueryService
                 ) =>
                     new DigitalTextQueryService(
                         new ArangoDigitalTextQueryRepository(connectionProvider),
-                        commandInfoService
+                        commandInfoService,
+                        bibliographicCitationQueryService
                     ),
 
-                inject: [ArangoConnectionProvider, CommandInfoService],
+                inject: [
+                    ArangoConnectionProvider,
+                    CommandInfoService,
+                    BibliographicCitationQueryService,
+                ],
             },
             {
                 provide: ID_MANAGER_TOKEN,
