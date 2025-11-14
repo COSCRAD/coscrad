@@ -12,6 +12,8 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
+import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
 import { EventSourcedNoteViewModel } from '../../event-sourced-note.view-model';
 import { ArangoNoteQueryRepository } from '../../repositories/arango-note-query-repository';
@@ -44,10 +46,18 @@ const audioAddedForNote = buildTestInstance(AudioAddedForNote, {
     },
 });
 
+const existingAudioItemId = buildDummyUuid(123);
+
+const existingAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
+    id: existingAudioItemId,
+});
+
 describe(`AudioAddedForNoteEventHandler`, () => {
     let testQueryRepository: INoteQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
+
+    let connectionProvider: ArangoConnectionProvider;
 
     let app: INestApplication;
 
@@ -72,7 +82,7 @@ describe(`AudioAddedForNoteEventHandler`, () => {
 
         app = moduleRef.createNestApplication();
 
-        const connectionProvider = app.get(ArangoConnectionProvider);
+        connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
@@ -87,6 +97,9 @@ describe(`AudioAddedForNoteEventHandler`, () => {
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
+
+        // @ts-expect-error We shouldn't need an `actions` property here.
+        await new ArangoAudioItemQueryRepository(connectionProvider).create(existingAudio);
     });
 
     describe(`when there is a self-note with no audio`, () => {
@@ -112,8 +125,6 @@ describe(`AudioAddedForNoteEventHandler`, () => {
     });
 
     describe(`when there is a connecting note with existing original audio`, () => {
-        const existingAudioItemId = buildDummyUuid(123);
-
         const connectingNote = buildTestInstance(EventSourcedNoteViewModel, {
             id: noteId,
             text: buildMultilingualTextFromBilingualText(

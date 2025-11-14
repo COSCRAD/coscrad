@@ -665,7 +665,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 ]);
             });
 
-            it(`should add audio for the translation language and preserve the audio for the original language`, async () => {
+            it.only(`should add audio for the translation language and preserve the audio for the original language`, async () => {
                 await testQueryRepository.addAudio(
                     noteWithNoAudio.id,
                     originalLanguageAudio.id,

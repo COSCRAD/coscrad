@@ -301,9 +301,15 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             }).toDTO(),
         };
 
-        const cursor = await this.database.query({ query, bindVars });
+        const cursor = await this.database.query({ query, bindVars }).catch((e) => {
+            throw e;
+        });
 
-        await cursor.all();
+        const result = await cursor.all();
+
+        if (languageCode === LanguageCode.Chilcotin) {
+            console.log(result);
+        }
     }
 
     async createNoteAbout(
