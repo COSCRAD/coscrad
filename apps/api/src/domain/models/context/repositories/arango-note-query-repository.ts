@@ -339,6 +339,10 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         await this.database.create(document);
     }
 
+    async tag(_id: string, _tagId: string): Promise<void> {
+        throw new Error('Method not implemented.');
+    }
+
     async connectResourcesWithNote(
         noteInfo: INoteCreationRecord,
         fromMemberCompositeIdentifier: ResourceCompositeIdentifier,
