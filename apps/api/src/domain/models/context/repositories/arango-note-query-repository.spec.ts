@@ -576,6 +576,14 @@ describe(`ArangoNoteQueryRepository`, () => {
             )) as EventSourcedNoteViewModel;
 
             expect(tags).toHaveLength(1);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 
