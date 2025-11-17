@@ -1,4 +1,9 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    EdgeConnectionContextType,
+    EdgeConnectionType,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -20,12 +25,18 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { EventSourcedNoteViewModel } from '../../../context/note.view-model.event-sourced';
+import { ArangoNoteQueryRepository } from '../../../context/repositories/arango-note-query-repository';
+import { INoteQueryRepository } from '../../../context/repositories/note-query-repository.interface';
+import { ArangoTagQueryRepository } from '../../repositories/arango-tag-query-repository';
+import { ITagQueryRepository } from '../../repositories/tag-query-repository.interface';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
-import { TagAddedForResourceEventHandler } from './tag-added-for-resource.event-handler';
+import { TagAddedForResourceOrNoteEventHandler } from './tag-added-for-resource.event-handler';
 
 const WIDGET_COLLECTION = 'widgets';
 
@@ -138,7 +149,11 @@ describe(`TagAddedForResourceEventHandler`, () => {
 
     let app: INestApplication;
 
-    let resourceOrNoteTaggedEventHandler: TagAddedForResourceEventHandler;
+    let resourceOrNoteTaggedEventHandler: TagAddedForResourceOrNoteEventHandler;
+
+    let noteQueryRepository: INoteQueryRepository;
+
+    let tagQueryRepository: ITagQueryRepository;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -165,7 +180,7 @@ describe(`TagAddedForResourceEventHandler`, () => {
 
         testQueryRepository = new WidgetQueryRepository(connectionProvider);
 
-        resourceOrNoteTaggedEventHandler = new TagAddedForResourceEventHandler({
+        resourceOrNoteTaggedEventHandler = new TagAddedForResourceOrNoteEventHandler({
             forResource: (resourceType) => {
                 if (resourceType !== ('widget' as ResourceType)) {
                     throw new InternalError(`this test only supports resources of type 'widget'`);
@@ -173,28 +188,35 @@ describe(`TagAddedForResourceEventHandler`, () => {
 
                 return testQueryRepository;
             },
+            getNoteRepository: () => {
+                return new ArangoNoteQueryRepository(connectionProvider);
+            },
         });
 
         await connectionProvider.createCollectionIfNotExists(WIDGET_COLLECTION);
+
+        noteQueryRepository = new ArangoNoteQueryRepository(connectionProvider);
+
+        tagQueryRepository = new ArangoTagQueryRepository(connectionProvider);
     });
 
     afterAll(async () => {
         databaseProvider.close();
     });
 
-    beforeEach(async () => {
-        await databaseProvider.getDatabaseForCollection(WIDGET_COLLECTION).clear();
-
-        /**
-         * We attempted to use "handle" on a creation event for the test
-         * setup, but it failed due to an apparent race condition.
-         *
-         * We should investigate this further.
-         */
-        await testQueryRepository.create(existingWidgetView);
-    });
-
     describe(`when the target is a resource`, () => {
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(WIDGET_COLLECTION).clear();
+
+            /**
+             * We attempted to use "handle" on a creation event for the test
+             * setup, but it failed due to an apparent race condition.
+             *
+             * We should investigate this further.
+             */
+            await testQueryRepository.create(existingWidgetView);
+        });
+
         describe(`when the target resource exists and does not yet have any tags`, () => {
             const widgetTagged = new TestEventStream().buildSingle<ResourceOrNoteTagged>({
                 type: 'RESOURCE_OR_NOTE_TAGGED',
@@ -220,6 +242,61 @@ describe(`TagAddedForResourceEventHandler`, () => {
 
                 expect(updatedView.tags[0].label).toBe(targetTagLabel);
             });
+        });
+    });
+
+    describe(`when the target is a note`, () => {
+        const existingNoteView = buildTestInstance(EventSourcedNoteViewModel, {
+            id: buildDummyUuid(101),
+            connectionType: EdgeConnectionType.self,
+            connectedResources: {
+                self: {
+                    resource: {
+                        type: ResourceType.term,
+                        id: buildDummyUuid(22),
+                    },
+                },
+            },
+        });
+
+        const noteTagged = new TestEventStream().buildSingle<ResourceOrNoteTagged>({
+            type: 'RESOURCE_OR_NOTE_TAGGED',
+            payload: {
+                aggregateCompositeIdentifier: {
+                    id: targetTagId,
+                },
+                taggedMemberCompositeIdentifier: existingNoteView.getCompositeIdentifier(),
+            },
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection('note__VIEWS').clear();
+
+            await noteQueryRepository.createNoteAbout(
+                existingNoteView,
+                existingNoteView.connectedResources.self.resource,
+                { type: EdgeConnectionContextType.general }
+            );
+
+            await databaseProvider.getDatabaseForCollection('tag__VIEWS').clear();
+
+            await tagQueryRepository.createMany(knownTags);
+        });
+
+        it(`should add the tags to the note view`, async () => {
+            await resourceOrNoteTaggedEventHandler.handle(noteTagged);
+
+            const updatedNote = (await noteQueryRepository.fetchById(
+                existingNoteView.id
+            )) as EventSourcedNoteViewModel;
+
+            const tagSearchResult = updatedNote.tags.find(({ id }) => id === targetTagId);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toEqual(targetTagLabel);
         });
     });
 });

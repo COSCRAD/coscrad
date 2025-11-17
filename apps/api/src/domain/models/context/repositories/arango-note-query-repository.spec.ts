@@ -33,9 +33,9 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { Tag } from '../../tag/tag.entity';
-import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { GeneralContext } from '../general-context/general-context.entity';
+import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from './arango-note-query-repository';
 import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
@@ -543,7 +543,7 @@ describe(`ArangoNoteQueryRepository`, () => {
 
         const newTagLabel = 'songs';
 
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -563,9 +563,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 generalContext
             );
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the note`, async () => {
@@ -735,7 +733,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 ]);
             });
 
-            it.only(`should add audio for the translation language and preserve the audio for the original language`, async () => {
+            it(`should add audio for the translation language and preserve the audio for the original language`, async () => {
                 await testQueryRepository.addAudio(
                     noteWithNoAudio.id,
                     originalLanguageAudio.id,

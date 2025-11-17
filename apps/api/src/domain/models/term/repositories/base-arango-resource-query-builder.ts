@@ -41,7 +41,7 @@ export class BaseArangoResourceViewQueryBuilder {
         FOR doc IN @@collectionName
         FILTER doc._key == @resourceId
         LET tagsToAdd = (
-            FOR t IN tags
+            FOR t IN tag__VIEWS
             FILTER t._key == @tagId
             RETURN {
                 id: t._key,
@@ -49,7 +49,7 @@ export class BaseArangoResourceViewQueryBuilder {
             }
         )
         UPDATE doc WITH  {
-            tags: APPEND(doc.tags,tagsToAdd)
+            tags: APPEND(doc.tags || [],tagsToAdd)
         }
         IN @@collectionName
         `;

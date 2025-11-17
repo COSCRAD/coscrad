@@ -51,7 +51,9 @@ export class ArangoTagQueryRepository implements ITagQueryRepository {
     }
 
     async create(tag: EventSourcedTagViewModel): Promise<void> {
-        return this.database.create(mapEntityDTOToDatabaseDocument(tag.toDto()));
+        const dto = tag.toDto();
+
+        return this.database.create(mapEntityDTOToDatabaseDocument(dto));
     }
 
     async createMany(tags: EventSourcedTagViewModel[]): Promise<void> {

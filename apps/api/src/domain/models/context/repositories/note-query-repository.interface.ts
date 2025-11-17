@@ -11,7 +11,7 @@ import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-kno
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
 import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
-import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
+import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 
 export const NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN = 'NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN';
 

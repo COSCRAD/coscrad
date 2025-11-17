@@ -24,7 +24,6 @@ import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
-import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { EventSourcedTagViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
@@ -33,7 +32,7 @@ import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnection } from '../../../context/edge-connection.entity';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
-import { Tag } from '../../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../tag/repositories/tag-query-repository.interface';
 import { TranscriptLineItemDto, TranslationItem } from '../../shared/commands';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
@@ -193,8 +192,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -204,18 +202,14 @@ describe(`ArangoVideoQueryRepository`, () => {
         });
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
-
             await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetVideo);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
-        it(`should tag the playlist`, async () => {
+        it(`should tag the video`, async () => {
             await testQueryRepository.tag(targetVideo.id, newTag.id);
 
             const { tags } = (await testQueryRepository.fetchById(

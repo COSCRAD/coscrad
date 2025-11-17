@@ -158,6 +158,13 @@ export class EventSourcedNoteViewModel {
         return cloneToPlainObject(this);
     }
 
+    public getCompositeIdentifier() {
+        return {
+            type: AggregateType.note,
+            id: this.id,
+        } as const;
+    }
+
     public static fromDto(dto: DTO<EventSourcedNoteViewModel>) {
         const instance = new EventSourcedNoteViewModel(cloneToPlainObject(dto));
 

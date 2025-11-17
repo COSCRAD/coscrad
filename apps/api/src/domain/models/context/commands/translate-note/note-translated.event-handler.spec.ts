@@ -12,7 +12,7 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { EventSourcedNoteViewModel } from '../../event-sourced-note.view-model';
+import { EventSourcedNoteViewModel } from '../../note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from '../../repositories/arango-note-query-repository';
 import { INoteQueryRepository } from '../../repositories/note-query-repository.interface';
 import { NoteTranslated } from './note-translated.event';
