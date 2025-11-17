@@ -25,6 +25,7 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
@@ -36,7 +37,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
-import { Tag } from '../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { PhotographCreated } from '../commands';
@@ -390,8 +391,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -401,15 +401,11 @@ describe(`ArangoPhotographQueryRepository`, () => {
         });
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
-
             await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetView);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the term`, async () => {
