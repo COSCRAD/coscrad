@@ -16,10 +16,13 @@ import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { DynamicDataTypeFinderService } from '../../../../validation';
@@ -30,8 +33,9 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { GeneralContext } from '../general-context/general-context.entity';
+import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from './arango-note-query-repository';
 import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
@@ -49,6 +53,8 @@ class WidgetViewModel {
     id: AggregateId;
 
     rating: number;
+
+    tags: EventSourcedTagViewModel[];
 
     constructor(dto: DTO<WidgetViewModel>) {
         if (!dto) return;
@@ -76,6 +82,7 @@ const testWidget = new WidgetViewModel({
     type: WIDGET_TYPE,
     id: buildDummyUuid(1),
     rating: 55,
+    tags: [],
 });
 
 const generalContext = new GeneralContext();
@@ -224,6 +231,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                     id: toWidgetId,
                     type: WIDGET_TYPE,
                     rating: 99,
+                    tags: [],
                 });
 
                 beforeEach(async () => {
@@ -307,6 +315,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                     id: toWidgetId,
                     type: WIDGET_TYPE,
                     rating: 99,
+                    tags: [],
                 });
 
                 beforeEach(async () => {
@@ -366,18 +375,21 @@ describe(`ArangoNoteQueryRepository`, () => {
             id: buildDummyUuid(101),
             type: WIDGET_TYPE,
             rating: 1,
+            tags: [],
         });
 
         const fromWidget = new WidgetViewModel({
             id: buildDummyUuid(102),
             type: WIDGET_TYPE,
             rating: 2,
+            tags: [],
         });
 
         const toWidget = new WidgetViewModel({
             id: buildDummyUuid(103),
             type: WIDGET_TYPE,
             rating: 3,
+            tags: [],
         });
 
         const existingSelfNote: EventSourcedNoteViewModel = buildTestInstance(
@@ -514,6 +526,62 @@ describe(`ArangoNoteQueryRepository`, () => {
             const result = await testQueryRepository.count();
 
             expect(result).toBe(existingNotes.length);
+        });
+    });
+
+    describe(`tag`, () => {
+        const existingTagLabel = 'games';
+
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(67),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            members: [],
+        };
+
+        const newTagId = buildDummyUuid(19);
+
+        const newTagLabel = 'songs';
+
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetNote = buildTestInstance(EventSourcedNoteViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.createNoteAbout(
+                targetNote,
+                { type: WIDGET_TYPE, id: testWidget.id },
+                generalContext
+            );
+
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
+        });
+
+        it(`should tag the note`, async () => {
+            await testQueryRepository.tag(targetNote.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetNote.id
+            )) as EventSourcedNoteViewModel;
+
+            expect(tags).toHaveLength(1);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
         });
     });
 
@@ -665,7 +733,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 ]);
             });
 
-            it.only(`should add audio for the translation language and preserve the audio for the original language`, async () => {
+            it(`should add audio for the translation language and preserve the audio for the original language`, async () => {
                 await testQueryRepository.addAudio(
                     noteWithNoAudio.id,
                     originalLanguageAudio.id,

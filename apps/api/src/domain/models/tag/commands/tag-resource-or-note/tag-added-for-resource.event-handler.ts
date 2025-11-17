@@ -1,3 +1,4 @@
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../common';
 import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
@@ -9,10 +10,15 @@ export interface IQueryRepositoryForTaggable {
 
 interface IQueryRepositoryProvider {
     forResource(resourceType: string): IQueryRepositoryForTaggable;
+    getNoteRepository(): IQueryRepositoryForTaggable;
 }
 
+/**
+ * This handler denormalizes the resource or note view, eagerly adding the tag
+ * to the corresponding resource view.
+ */
 @CoscradEventConsumer('RESOURCE_OR_NOTE_TAGGED')
-export class TagAddedForResourceEventHandler implements ICoscradEventHandler {
+export class TagAddedForResourceOrNoteEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly repositoryProvider: IQueryRepositoryProvider
@@ -21,9 +27,15 @@ export class TagAddedForResourceEventHandler implements ICoscradEventHandler {
     async handle({
         payload: {
             aggregateCompositeIdentifier: { id: tagId },
-            taggedMemberCompositeIdentifier: { type: resourceType, id: resourceId },
+            taggedMemberCompositeIdentifier: { type: categorizableType, id: resourceOrNoteId },
         },
     }: ResourceOrNoteTagged): Promise<void> {
-        await this.repositoryProvider.forResource(resourceType).tag(resourceId, tagId);
+        if (categorizableType === CategorizableType.note) {
+            await this.repositoryProvider.getNoteRepository().tag(resourceOrNoteId, tagId);
+
+            return;
+        }
+
+        await this.repositoryProvider.forResource(categorizableType).tag(resourceOrNoteId, tagId);
     }
 }

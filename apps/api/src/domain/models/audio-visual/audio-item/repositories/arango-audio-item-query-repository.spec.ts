@@ -38,7 +38,7 @@ import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnection } from '../../../context/edge-connection.entity';
 import { AccessControlList } from '../../../shared/access-control/access-control-list.entity';
-import { Tag } from '../../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../tag/repositories/tag-query-repository.interface';
 import { CoscradContributor } from '../../../user-management';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
@@ -352,8 +352,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -369,9 +368,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             await testQueryRepository.create(targetTerm);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the term`, async () => {

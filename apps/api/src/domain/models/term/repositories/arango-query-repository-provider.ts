@@ -2,6 +2,10 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { VIDEO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/video/queries';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../context/repositories/note-query-repository.interface';
 import { DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../digital-text/queries/digital-text-query-repository.interface';
 import { PHOTOGRAPH_QUERY_REPOSITORY_TOKEN } from '../../photograph/queries';
 import { PLAYLIST_QUERY_REPOSITORY_TOKEN } from '../../playlist/queries/playlist-query-repository.interface';
@@ -10,7 +14,10 @@ import {
     IQueryRepositoryProvider,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { SONG_QUERY_REPOSITORY_TOKEN } from '../../song/queries/song-query-repository.interface';
-import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
+import {
+    ITagQueryRepository,
+    TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../tag/repositories/tag-query-repository.interface';
 import { VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN } from '../../vocabulary-list/queries';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../queries';
 
@@ -35,7 +42,9 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly digitalTextQueryRepository,
         @Inject(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly tagQueryRepository
+        private readonly tagQueryRepository,
+        @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly noteQueryRepository
     ) {}
 
     forResource<T extends IPublishable>(resourceType: ResourceType): T {
@@ -82,5 +91,13 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         // throw new InternalError(
         //     `Failed to provide a query repository for unsupported resource type: ${resourceType}`
         // );
+    }
+
+    getTagRepository(): ITagQueryRepository {
+        return this.tagQueryRepository;
+    }
+
+    getNoteRepository(): INoteQueryRepository {
+        return this.noteQueryRepository;
     }
 }

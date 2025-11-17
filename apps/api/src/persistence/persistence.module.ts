@@ -13,7 +13,10 @@ import {
 } from '../domain/models/audio-visual/video/queries';
 import { ArangoVideoQueryRepository } from '../domain/models/audio-visual/video/repositories/arango-video-query-repository';
 import { ArangoNoteQueryRepository } from '../domain/models/context/repositories/arango-note-query-repository';
-import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../domain/models/context/repositories/note-query-repository.interface';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../domain/models/context/repositories/note-query-repository.interface';
 import { ArangoDigitalTextQueryRepository } from '../domain/models/digital-text/queries/arango-digital-text-query-repository';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -242,7 +245,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                 playlistQueryRepository: IPlaylistQueryRepository,
                 songQueryRepository: ISongQueryRepository,
                 digitalTextRepository: IDigitalTextQueryRepository,
-                tagQueryRepository: ITagQueryRepository
+                tagQueryRepository: ITagQueryRepository,
+                noteQueryRepository: INoteQueryRepository
             ): IQueryRepositoryProvider =>
                 new ArangoQueryRepositoryProvider(
                     photographQueryRepository,
@@ -253,7 +257,8 @@ export class PersistenceModule implements OnApplicationShutdown {
                     playlistQueryRepository,
                     songQueryRepository,
                     digitalTextRepository,
-                    tagQueryRepository
+                    tagQueryRepository,
+                    noteQueryRepository
                 ),
             inject: [
                 PHOTOGRAPH_QUERY_REPOSITORY_TOKEN,
@@ -265,6 +270,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 SONG_QUERY_REPOSITORY_TOKEN,
                 DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
                 TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
             ],
         };
 

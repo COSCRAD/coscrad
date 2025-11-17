@@ -24,6 +24,7 @@ import generateDatabaseNameForTestSuite from '../../../../persistence/repositori
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { PlaylistViewModel } from '../../../../queries/buildViewModelForResource/viewModels/playlist.view-model';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -35,7 +36,7 @@ import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/qu
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { EdgeConnection } from '../../context/edge-connection.entity';
-import { Tag } from '../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { CoscradContributor } from '../../user-management';
 import { PlaylistCreated } from '../commands/playlist-created.event';
 import { ArangoPlaylistQueryRepository } from './arango-playlist-query-repository';
@@ -189,8 +190,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -200,15 +200,11 @@ describe(`ArangoPlaylistQueryRepository`, () => {
         });
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
-
             await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetTerm);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the playlist`, async () => {

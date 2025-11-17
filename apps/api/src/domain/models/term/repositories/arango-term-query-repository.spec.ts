@@ -26,6 +26,7 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import {
     VocabularyListEntryViewModel,
@@ -53,7 +54,7 @@ import {
 } from '../../audio-visual/video/queries';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
-import { Tag } from '../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { CoscradContributor } from '../../user-management/contributor';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
@@ -306,8 +307,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -323,9 +323,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             await testQueryRepository.create(targetTerm);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the term`, async () => {

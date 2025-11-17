@@ -43,7 +43,7 @@ import { EdgeConnection } from '../../context/edge-connection.entity';
 import { PhotographViewModel } from '../../photograph/queries/photograph.view-model';
 import { ArangoPhotographQueryRepository } from '../../photograph/repositories';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
-import { Tag } from '../../tag/tag.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { ContributionSummary, CoscradContributor } from '../../user-management';
 import { DigitalTextCreated, DigitalTextPageImportRecord } from '../commands';
 import DigitalTextPage from '../entities/digital-text-page.entity';
@@ -303,8 +303,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
         const newTagLabel = 'animals';
 
-        // TODO use event sourced setup?
-        const newTag = buildTestInstance(Tag, {
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
             id: newTagId,
             label: newTagLabel,
         });
@@ -320,9 +319,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
             await testQueryRepository.create(targetDigitalText);
 
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
         });
 
         it(`should tag the digital text`, async () => {

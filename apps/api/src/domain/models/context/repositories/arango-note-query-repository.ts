@@ -23,7 +23,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
-import { EventSourcedNoteViewModel } from '../event-sourced-note.view-model';
+import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
 type ArangoNoteDocument = Omit<EventSourcedNoteViewModel, 'id'> & {
@@ -301,15 +301,9 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             }).toDTO(),
         };
 
-        const cursor = await this.database.query({ query, bindVars }).catch((e) => {
+        await this.database.query({ query, bindVars }).catch((e) => {
             throw e;
         });
-
-        const result = await cursor.all();
-
-        if (languageCode === LanguageCode.Chilcotin) {
-            console.log(result);
-        }
     }
 
     async createNoteAbout(
@@ -337,6 +331,12 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         const document = mapNoteViewDtoToArangoDocument(view.toDto());
 
         await this.database.create(document);
+    }
+
+    async tag(id: string, tagId: string): Promise<void> {
+        const cursor = await this.database.query(this.baseResourceQueryBuilder.tag(id, tagId));
+
+        await cursor.all();
     }
 
     async connectResourcesWithNote(

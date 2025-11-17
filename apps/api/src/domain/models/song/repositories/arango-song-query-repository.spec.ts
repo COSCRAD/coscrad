@@ -328,7 +328,7 @@ describe(`ArangoSongQueryRepository`, () => {
                 .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
         });
 
-        it(`should tag the playlist`, async () => {
+        it(`should tag the song`, async () => {
             await testQueryRepository.tag(targetTerm.id, newTag.id);
 
             const { tags } = (await testQueryRepository.fetchById(
