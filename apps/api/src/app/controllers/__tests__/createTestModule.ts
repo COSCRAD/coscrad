@@ -100,6 +100,8 @@ import { FreeMultilineContext } from '../../../domain/models/context/free-multil
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { PointContext } from '../../../domain/models/context/point-context/point-context.entity';
+import { ArangoNoteQueryRepository } from '../../../domain/models/context/repositories/arango-note-query-repository';
+import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../domain/models/context/repositories/note-query-repository.interface';
 import { TextFieldContext } from '../../../domain/models/context/text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import {
@@ -694,6 +696,12 @@ export default async (
                 inject: [ArangoConnectionProvider],
             },
             {
+                provide: NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                useFactory: (arangoConnectionProvider: ArangoConnectionProvider) =>
+                    new ArangoNoteQueryRepository(arangoConnectionProvider),
+                inject: [ArangoConnectionProvider],
+            },
+            {
                 //  TODO use a more extensible pattern
                 provide: QUERY_REPOSITORY_PROVIDER_TOKEN,
                 useFactory: (
@@ -705,7 +713,8 @@ export default async (
                     playlistQueryRepository: ArangoPlaylistQueryRepository,
                     songQueryRepository: ArangoSongQueryRepository,
                     digitalTextQueryRepository: ArangoDigitalTextQueryRepository,
-                    tagQueryRepository: ArangoTagQueryRepository
+                    tagQueryRepository: ArangoTagQueryRepository,
+                    noteQueryRepository: ArangoNoteQueryRepository
                 ): IQueryRepositoryProvider => {
                     return new ArangoQueryRepositoryProvider(
                         photographQueryRespository,
@@ -716,7 +725,8 @@ export default async (
                         playlistQueryRepository,
                         songQueryRepository,
                         digitalTextQueryRepository,
-                        tagQueryRepository
+                        tagQueryRepository,
+                        noteQueryRepository
                     );
                 },
                 inject: [
@@ -729,6 +739,7 @@ export default async (
                     SONG_QUERY_REPOSITORY_TOKEN,
                     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
                     TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
                 ],
             },
             {
