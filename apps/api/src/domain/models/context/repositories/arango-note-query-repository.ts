@@ -336,9 +336,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
     async tag(id: string, tagId: string): Promise<void> {
         const cursor = await this.database.query(this.baseResourceQueryBuilder.tag(id, tagId));
 
-        const result = await cursor.all();
-
-        console.log(result);
+        await cursor.all();
     }
 
     async connectResourcesWithNote(
