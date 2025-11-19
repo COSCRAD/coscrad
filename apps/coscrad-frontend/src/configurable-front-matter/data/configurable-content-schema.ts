@@ -66,6 +66,10 @@ export type AdditionalMaterialItem = {
     };
 };
 
+export type MemoryMatchConfig = {
+    isEnabled: boolean;
+};
+
 export type ConfigurableContent<T extends CategorizableType = CategorizableType> = {
     // TODO sort all dummy data and this type alphabetically by field names
     indexToDetailFlows: IndexToDetailFlowDefinition<T>[];
@@ -99,6 +103,7 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     shouldEnableMemoryMatch: boolean;
     additionalMaterials: AdditionalMaterialItem[];
     landingPage?: string;
+    memoryMatch: MemoryMatchConfig;
 };
 
 // is this still necessary?
@@ -135,6 +140,8 @@ export const configurableContentPropertiesAndConstraints: {
     alphabetConfig: [CoscradConstraint.isObject],
     shouldEnableMemoryMatch: [CoscradConstraint.isBoolean],
     additionalMaterials: [],
+    // TODO Are we still using this now that we have a typescript type?
+    memoryMatch: [],
 };
 
 export type ConfigurableContentSchema = typeof configurableContentPropertiesAndConstraints;
