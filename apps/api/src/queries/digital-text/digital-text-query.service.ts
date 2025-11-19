@@ -8,6 +8,7 @@ import { Inject } from '@nestjs/common';
 
 import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { CommandInfoService } from '../../app/controllers/command/services/command-info-service';
+import { IBibliographicCitation } from '../../domain/models/bibliographic-citation/interfaces/bibliographic-citation.interface';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
@@ -34,6 +35,11 @@ type DetailScopedCommandContext = {
 
 type CommandContext = IndexScopedCommandContext | DetailScopedCommandContext;
 
+interface CitationService {
+    fetchById(id: AggregateId, userWithGroups?: CoscradUserWithGroups);
+    fetchMany(userWithGroups?: CoscradUserWithGroups): Promise<IBibliographicCitation[]>;
+}
+
 export class DigitalTextQueryService {
     /**
      * TODO We probably want to make this depend on a `DigitalTextQueryRepository`
@@ -45,8 +51,10 @@ export class DigitalTextQueryService {
         // TODO Use a string injection token here. Consider using a provider when generalizing the implementation over aggregate type.
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
         protected readonly queryRepository: IDigitalTextQueryRepository,
+        // Is the decorator necessary here?
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService,
-        protected readonly bibliographicCitationQueryService: BibliographicCitationQueryService
+        @Inject(BibliographicCitationQueryService)
+        protected readonly bibliographicCitationQueryService: CitationService
     ) {}
 
     public async fetchById(
@@ -91,8 +99,8 @@ export class DigitalTextQueryService {
         const bibliographicCitationIndexQueryResult =
             await this.bibliographicCitationQueryService.fetchMany(userWithGroups);
 
+        // @ts-expect-error fix this
         const citationMap = bibliographicCitationIndexQueryResult.entities.reduce(
-            // @ts-expect-error TODO fix this type
             (acc: Map<string, BibliographicCitationViewModel>, c) => acc.set(c.id, c),
             new Map<string, BibliographicCitationViewModel>()
         );

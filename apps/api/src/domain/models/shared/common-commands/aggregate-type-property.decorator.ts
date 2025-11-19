@@ -1,7 +1,6 @@
 import { ExternalEnum } from '@coscrad/data-types';
-import { AggregateType } from '../../../types/AggregateType';
 
-const buildDescription = (allowedTypes: AggregateType[]) => {
+const buildDescription = (allowedTypes: string[]) => {
     if (allowedTypes.length === 0) return `this condition cannot be satisfied`;
 
     if (allowedTypes.length === 1) return `must be: ${allowedTypes[0]}`;
@@ -14,7 +13,7 @@ const buildDescription = (allowedTypes: AggregateType[]) => {
  * as this decorator will immediately prove uselessly restrictive in that case and
  * the error will be caught quickly.
  */
-export const AggregateTypeProperty = (allowedTypes: AggregateType[]) =>
+export const AggregateTypeProperty = (allowedTypes: string[]) =>
     ExternalEnum(
         {
             enumName: 'type',

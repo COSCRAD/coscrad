@@ -846,6 +846,7 @@ export default async (
                     new DigitalTextQueryService(
                         new ArangoDigitalTextQueryRepository(connectionProvider),
                         commandInfoService,
+                        // @ts-expect-error Fix this
                         bibliographicCitationQueryService
                     ),
 
