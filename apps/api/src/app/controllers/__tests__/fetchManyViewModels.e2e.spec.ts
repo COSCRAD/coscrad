@@ -83,6 +83,9 @@ describe('When fetching multiple resources', () => {
         AggregateType.song,
         AggregateType.audioItem,
         AggregateType.video,
+        // TODO remove these again
+        AggregateType.spatialFeature,
+        AggregateType.mediaItem,
     ];
 
     Object.values(ResourceType)

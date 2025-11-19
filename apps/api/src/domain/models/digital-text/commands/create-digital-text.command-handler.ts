@@ -5,7 +5,7 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
@@ -42,9 +42,7 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
         };
 
         // TODO: consider using our new aggregate root decorator to build this
-        const newInstanceOrError = getInstanceFactoryForResource<DigitalText>(
-            ResourceType.digitalText
-        )(createDto);
+        const newInstanceOrError = buildInstanceFactory(DigitalText)(createDto);
 
         return newInstanceOrError;
     }

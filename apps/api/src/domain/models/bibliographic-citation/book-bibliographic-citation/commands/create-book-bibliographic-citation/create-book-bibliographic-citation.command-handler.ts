@@ -1,10 +1,10 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
+import buildBibliographicCitationFactory from '../../../../../../domain/factories/complex-factories/build-bibliographic-citation-factory';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
@@ -53,9 +53,8 @@ export class CreateBookBibliographicCitationCommandHandler extends BaseCreateCom
             },
         };
 
-        return getInstanceFactoryForResource<BookBibliographicCitation>(
-            ResourceType.bibliographicCitation
-        )(bookBibliographicCitationDto);
+        // @ts-expect-error fix this
+        return buildBibliographicCitationFactory()(bookBibliographicCitationDto);
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

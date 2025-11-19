@@ -1,5 +1,7 @@
 import { CommandHandler } from '@coscrad/commands';
+import buildInstanceFactory from '../../../../../../domain/factories/utilities/buildInstanceFactory';
 import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
+import { Ctor } from '../../../../../../lib/types/Ctor';
 import { isNotFound } from '../../../../../../lib/types/not-found';
 import formatAggregateCompositeIdentifier from '../../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../../../types/DTO';
@@ -10,10 +12,9 @@ import {
     MultilingualTextItemRole,
 } from '../../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
@@ -49,7 +50,7 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
         };
 
         // the cast is necessary due to loss of type-safety from using a mixin
-        return getInstanceFactoryForResource<Video>(ResourceType.video)(videoItemDto);
+        return buildInstanceFactory(Video as Ctor<Video>)(videoItemDto);
     }
 
     protected async fetchRequiredExternalState({

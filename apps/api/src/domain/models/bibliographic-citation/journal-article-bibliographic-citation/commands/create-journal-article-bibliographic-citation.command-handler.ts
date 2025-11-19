@@ -2,10 +2,10 @@ import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { EVENT_PUBLISHER_TOKEN } from '../../../../../domain/common';
 import { ICoscradEventPublisher } from '../../../../../domain/common/events/interfaces';
+import buildBibliographicCitationFactory from '../../../../../domain/factories/complex-factories/build-bibliographic-citation-factory';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../repositories/interfaces/repository-provider.interface';
@@ -65,9 +65,8 @@ export class CreateJournalArticleBibliographicCitationCommandHandler extends Bas
             },
         };
 
-        return getInstanceFactoryForResource<JournalArticleBibliographicCitation>(
-            ResourceType.bibliographicCitation
-        )(createDto);
+        // @ts-expect-error This type issue is due to overlapping interface and class definitions
+        return buildBibliographicCitationFactory()(createDto);
     }
 
     protected buildEvent(

@@ -1,10 +1,10 @@
 import { CommandHandler } from '@coscrad/commands';
+import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
@@ -53,7 +53,7 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
                       }),
         };
 
-        return getInstanceFactoryForResource<MediaItem>(ResourceType.mediaItem)(createDto);
+        return buildInstanceFactory(MediaItem)(createDto);
     }
 
     protected async fetchRequiredExternalState({

@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    LanguageCode,
-    MultilingualTextItemRole,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { DeluxeInMemoryStore } from '../../../../..//domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../..//domain/types/ResourceType';
@@ -12,10 +7,10 @@ import {
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
+import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
@@ -46,7 +41,7 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
             ],
         });
 
-        const factory = getInstanceFactoryForResource(ResourceType.term);
+        const factory = buildInstanceFactory(Term);
 
         const createDto = {
             type: AggregateType.term,

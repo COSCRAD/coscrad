@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { CreateBookBibliographicCitation } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command';
 import { CreateBookBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
 import BookBibliographicCitationData from '../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
+import { BookBibliographicCitation } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/digital-representation-of-bibliographic-citation-registered.event';
 import { DigitalRepresentationOfBibliographicCitationRegisteredEventHandler } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/digital-representation-of-bibliographic-citation-registered.event-handler';
@@ -10,9 +11,11 @@ import { RegisterDigitalRepresentationOfBibliographicCitationCommandHandler } fr
 import { CreateCourtCaseBibliographicCitation } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command';
 import { CreateCourtCaseBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command-handler';
 import { CourtCaseBibliographicCitationData } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation-data.entity';
+import { CourtCaseBibliographicCitation } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/entities/court-case-bibliographic-citation.entity';
 import { CreateJournalArticleBibliographicCitation } from '../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/commands/create-journal-article-bibliographic-citation.command';
 import { CreateJournalArticleBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/commands/create-journal-article-bibliographic-citation.command-handler';
 import JournalArticleBibliographicCitationData from '../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation-data.entity';
+import { JournalArticleBibliographicCitation } from '../../domain/models/bibliographic-citation/journal-article-bibliographic-citation/entities/journal-article-bibliographic-citation.entity';
 import { BibliographicCitationDataUnion } from '../../domain/models/bibliographic-citation/shared';
 import { BibliographicCitationQueryService } from '../../domain/services/query-services/bibliographic-citation-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
@@ -56,8 +59,11 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
             BibliographicCitationDataUnion,
             BibliographicCitationViewModel,
             BookBibliographicCitationData,
+            BookBibliographicCitation,
             JournalArticleBibliographicCitationData,
+            JournalArticleBibliographicCitation,
             CourtCaseBibliographicCitationData,
+            CourtCaseBibliographicCitation,
             // Events
             DigitalRepresentationOfBibliographicCitationRegistered,
         ].map((ctor) => ({

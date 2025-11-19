@@ -1,7 +1,8 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
+import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
 import { HasName } from '../../../../../domain/repositories/specifications';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
@@ -9,7 +10,6 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
@@ -34,9 +34,8 @@ export class CreateVocabularyListCommandHandler extends BaseCreateCommandHandler
             published: false,
         };
 
-        const newInstanceOrError = getInstanceFactoryForResource<VocabularyList>(
-            ResourceType.vocabularyList
-        )(createDto);
+        const newInstanceOrError = buildInstanceFactory(VocabularyList)(createDto);
+
         return newInstanceOrError;
     }
 

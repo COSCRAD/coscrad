@@ -12,7 +12,7 @@ import { EVENT_PUBLISHER_TOKEN } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IMediaManagementService } from '../../../interfaces';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
@@ -56,7 +56,7 @@ export class CreateSongCommandHandler extends BaseCreateCommandHandler<Song> {
         languageCodeForTitle,
         audioItemId,
     }: CreateSong): ResultOrError<Song> {
-        const songDTO: DTO<Song> = {
+        const songDto: DTO<Song> = {
             id,
             title: buildMultilingualTextWithSingleItem(title, languageCodeForTitle),
             audioItemId,
@@ -66,7 +66,7 @@ export class CreateSongCommandHandler extends BaseCreateCommandHandler<Song> {
         };
 
         // Attempt state mutation - Result or Error (Invariant violation in our case- could also be invalid state transition in other cases)
-        return getInstanceFactoryForResource<Song>(ResourceType.song)(songDTO);
+        return buildInstanceFactory(Song)(songDto);
     }
 
     /**

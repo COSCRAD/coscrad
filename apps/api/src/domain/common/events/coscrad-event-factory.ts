@@ -10,7 +10,7 @@ export class CoscradEventFactory {
          * TODO[hack] Remove this hack. We need to get to the root of why this
          * is not being initialized in time.
          */
-        if (typeof dynamicDataTypeFinderService.unionFactory?.build !== 'function') {
+        if (typeof dynamicDataTypeFinderService?.getUnionFactory !== 'function') {
             dynamicDataTypeFinderService.bootstrapDynamicTypes();
         }
     }
@@ -22,9 +22,8 @@ export class CoscradEventFactory {
          * that this must be updated when we update the API of the BaseEvent
          * constructor.
          */
-        return this.dynamicDataTypeFinderService.unionFactory.build(
-            eventDocument.type,
-            eventDocument
-        ) as T;
+        return this.dynamicDataTypeFinderService
+            .getUnionFactory<string, T>('COSCRAD_EVENT_UNION')
+            .build(eventDocument.type, eventDocument);
     }
 }

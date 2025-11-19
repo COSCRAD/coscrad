@@ -1,5 +1,6 @@
 import {
     bootstrapDynamicTypes as bootstrapDynamicTypesUtil,
+    buildUnionTypesMap,
     UnionFactory,
 } from '@coscrad/data-types';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
@@ -10,13 +11,13 @@ const isClass = (input): input is Ctor<unknown> => {
     return typeof input === 'function' && /^\s*class\s+/.test(input.toString());
 };
 
-interface IUnionFactory<_T = unknown, UProduct = unknown> {
-    build(discriminantValue: string, ...args: unknown[]): UProduct;
+interface IUnionFactory<TDiscriminantValue = string, UProduct = unknown> {
+    build(discriminantValue: TDiscriminantValue, ...args: unknown[]): UProduct;
 }
 
 @Injectable()
 export class DynamicDataTypeFinderService {
-    public unionFactory: IUnionFactory;
+    private unionNameToFactory: Map<string, IUnionFactory>;
 
     constructor(private readonly discoverService: DiscoveryService) {}
 
@@ -25,18 +26,13 @@ export class DynamicDataTypeFinderService {
 
         bootstrapDynamicTypesUtil(unionProviders);
 
-        if (!this.unionFactory) {
-            const dataClassCtors = await this.getAllDataClassCtors();
+        if (!this.unionNameToFactory) {
+            const dataClassCtors = (await this.getAllDataClassCtors()) as Ctor<unknown>[];
 
-            /**
-             * What we really want to do here is to discover all union types
-             * and eagerly create their factories, keeping them in a
-             * lookup table.
-             */
-            this.unionFactory = new UnionFactory(
-                dataClassCtors as Ctor<unknown>[],
-                // TODO This doesn't belong here...
-                'COSCRAD_EVENT_UNION'
+            const unionMap = buildUnionTypesMap(dataClassCtors);
+
+            [...unionMap.keys()].forEach((unionName) =>
+                this.unionNameToFactory.set(unionName, new UnionFactory(dataClassCtors, unionName))
             );
         }
     }
@@ -47,5 +43,18 @@ export class DynamicDataTypeFinderService {
         );
 
         return dataTypeProviders.map((provider) => provider.instance);
+    }
+
+    public getUnionFactory<TDiscriminantValue = string, UProduct = unknown>(
+        unionName: string
+    ): IUnionFactory<TDiscriminantValue, UProduct> {
+        if (!this.unionNameToFactory.has(unionName)) {
+            throw new Error(`Failed to provide a union factory for unknown union: ${unionName}`);
+        }
+
+        return this.unionNameToFactory.get(unionName) as IUnionFactory<
+            TDiscriminantValue,
+            UProduct
+        >;
     }
 }

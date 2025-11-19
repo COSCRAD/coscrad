@@ -9,7 +9,7 @@ import { EVENT_PUBLISHER_TOKEN } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -61,9 +61,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
             published: false,
         };
 
-        const newInstanceOrError = getInstanceFactoryForResource<Playlist>(ResourceType.playlist)(
-            createDto
-        );
+        const newInstanceOrError = buildInstanceFactory(Playlist)(createDto);
 
         return newInstanceOrError;
     }
