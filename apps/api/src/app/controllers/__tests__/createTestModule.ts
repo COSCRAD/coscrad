@@ -837,6 +837,10 @@ export default async (
                 inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService],
             },
             {
+                provide: 'BIBLIOGRAPHIC_CITATION_QUERY_SERVICE',
+                useClass: BibliographicCitationQueryService,
+            },
+            {
                 provide: DigitalTextQueryService,
                 useFactory: (
                     connectionProvider: ArangoConnectionProvider,
@@ -853,7 +857,7 @@ export default async (
                 inject: [
                     ArangoConnectionProvider,
                     CommandInfoService,
-                    BibliographicCitationQueryService,
+                    'BIBLIOGRAPHIC_CITATION_QUERY_SERVICE',
                 ],
             },
             {

@@ -31,12 +31,7 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
         DynamicDataTypeModule,
         CoscradNLPModule,
     ],
-    exports: [
-        {
-            provide: 'BIBLIOGRAPHIC_CITATION_QUERY_SERVICE',
-            useClass: BibliographicCitationQueryService,
-        },
-    ],
+    exports: ['BIBLIOGRAPHIC_CITATION_QUERY_SERVICE'],
     controllers: [BibliographicCitationController],
     providers: [
         CommandInfoService,
@@ -51,6 +46,11 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
         RegisterDigitalRepresentationOfBibliographicCitation,
         RegisterDigitalRepresentationOfBibliographicCitationCommandHandler,
         DigitalRepresentationOfBibliographicCitationRegisteredEventHandler,
+        // This is a temporary workaround until we have a dedicated bibliographic citation query repository (using bibliographicCitation__VIEWS in the query DB)
+        {
+            provide: 'BIBLIOGRAPHIC_CITATION_QUERY_SERVICE',
+            useClass: BibliographicCitationQueryService,
+        },
         // Data Classes
         ...[
             BibliographicCitationDataUnion,
