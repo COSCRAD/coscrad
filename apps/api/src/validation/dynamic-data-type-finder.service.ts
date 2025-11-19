@@ -27,6 +27,8 @@ export class DynamicDataTypeFinderService {
         bootstrapDynamicTypesUtil(unionProviders);
 
         if (!this.unionNameToFactory) {
+            this.unionNameToFactory = new Map<string, IUnionFactory<string, unknown>>();
+
             const dataClassCtors = (await this.getAllDataClassCtors()) as Ctor<unknown>[];
 
             const unionMap = buildUnionTypesMap(dataClassCtors);
