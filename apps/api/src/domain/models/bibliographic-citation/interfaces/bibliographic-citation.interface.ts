@@ -21,7 +21,8 @@ export interface IBibliographicCitation<
      */
     digitalRepresentationResourceCompositeIdentifier?: ResourceCompositeIdentifier;
 
-    registerDigitalRepresentation(
-        compositeIdentifier: ResourceCompositeIdentifier
-    ): ResultOrError<IBibliographicCitation<T>>;
+    registerDigitalRepresentation(compositeIdentifier: {
+        type: string;
+        id: string;
+    }): ResultOrError<IBibliographicCitation<T>>;
 }

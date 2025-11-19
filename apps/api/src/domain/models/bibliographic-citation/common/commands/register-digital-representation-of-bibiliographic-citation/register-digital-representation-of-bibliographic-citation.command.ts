@@ -1,8 +1,19 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { FullReference, NestedDataType } from '@coscrad/data-types';
-import { DigitalTextCompositeId } from '../../../../digital-text/commands';
+import { FullReference, NestedDataType, UUID } from '@coscrad/data-types';
+import { AggregateTypeProperty } from '../../../../shared/common-commands';
 import { BibliographicCitationCompositeIdentifier } from '../../../shared/bibliographic-citation-composite-identifier';
+
+class DigitalTextCompositeId {
+    @AggregateTypeProperty(['digitalText'])
+    type = 'digitalText';
+
+    @UUID({
+        label: 'ID',
+        description: 'unique identifier',
+    })
+    id: string;
+}
 
 @Command({
     type: `REGISTER_DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION`,

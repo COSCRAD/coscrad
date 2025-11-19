@@ -120,6 +120,81 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "digitalRepresentationResourceCompositeIdentifier": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "a reference to the resource within the web-of-knowledge that contains the contents of the referenced work",
+    "isArray": false,
+    "isOptional": true,
+    "isPrivate": false,
+    "label": "digital representation resource composite ID",
+    "name": "ResourceCompositeIdentifier",
+    "schema": {
+      "id": {
+        "coscradDataType": "UUID",
+        "description": "unique identifier",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "ID",
+      },
+      "type": {
+        "complexDataType": "ENUM",
+        "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+        "enumLabel": "type",
+        "enumName": "type",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "type",
+        "labelsAndValues": [
+          {
+            "label": "term",
+            "value": "term",
+          },
+          {
+            "label": "vocabularyList",
+            "value": "vocabularyList",
+          },
+          {
+            "label": "audioItem",
+            "value": "audioItem",
+          },
+          {
+            "label": "photograph",
+            "value": "photograph",
+          },
+          {
+            "label": "spatialFeature",
+            "value": "spatialFeature",
+          },
+          {
+            "label": "bibliographicCitation",
+            "value": "bibliographicCitation",
+          },
+          {
+            "label": "digitalText",
+            "value": "digitalText",
+          },
+          {
+            "label": "song",
+            "value": "song",
+          },
+          {
+            "label": "mediaItem",
+            "value": "mediaItem",
+          },
+          {
+            "label": "video",
+            "value": "video",
+          },
+          {
+            "label": "playlist",
+            "value": "playlist",
+          },
+        ],
+      },
+    },
+  },
   "id": {
     "coscradDataType": "NON_EMPTY_STRING",
     "description": "unique identifier",

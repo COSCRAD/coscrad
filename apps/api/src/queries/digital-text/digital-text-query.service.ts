@@ -14,7 +14,6 @@ import {
     IDigitalTextQueryRepository,
 } from '../../domain/models/digital-text/queries/digital-text-query-repository.interface';
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
-import { BibliographicCitationQueryService } from '../../domain/services/query-services/bibliographic-citation-query.service';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { isInternalError } from '../../lib/errors/InternalError';
@@ -53,7 +52,7 @@ export class DigitalTextQueryService {
         protected readonly queryRepository: IDigitalTextQueryRepository,
         // Is the decorator necessary here?
         @Inject(CommandInfoService) protected readonly commandInfoService: CommandInfoService,
-        @Inject(BibliographicCitationQueryService)
+        @Inject('BIBLIOGRAPHIC_CITATION_QUERY_SERVICE')
         protected readonly bibliographicCitationQueryService: CitationService
     ) {}
 
