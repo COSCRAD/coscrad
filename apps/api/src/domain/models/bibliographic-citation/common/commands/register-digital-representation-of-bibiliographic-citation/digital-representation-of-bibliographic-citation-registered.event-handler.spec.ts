@@ -11,7 +11,6 @@ import { BibliographicCitationModule } from '../../../../../../app/domain-module
 import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
-import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DigitalTextViewModel } from '../../../../../../queries/digital-text';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
@@ -39,7 +38,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
                     envFilePath: buildConfigFilePath(Environment.test),
                     cache: false,
                 }),
-                PersistenceModule.forRootAsync(),
+                // PersistenceModule.forRootAsync(),
                 CommandModule,
                 DigitalTextModule,
                 BibliographicCitationModule,
