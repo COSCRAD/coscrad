@@ -28,6 +28,10 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
         "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
         "year": 1999,
       },
+      "digitalRepresentationResourceCompositeIdentifier": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+        "type": "digitalText",
+      },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "name": {
         "items": [
@@ -205,6 +209,10 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
         "type": "book",
         "url": "https://coscrad.org/wp-content/uploads/2023/05/mock-book-bibliographic-citation-1_a-day-in-the-life.pdf",
         "year": 1999,
+      },
+      "digitalRepresentationResourceCompositeIdentifier": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+        "type": "digitalText",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
       "name": {
