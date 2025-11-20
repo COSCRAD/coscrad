@@ -80,6 +80,8 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
     afterAll(async () => {
         databaseProvider.close();
+
+        await app.close();
     });
 
     describe(`when registering a digital text as the digital representation of a book bibliographic citation`, () => {
