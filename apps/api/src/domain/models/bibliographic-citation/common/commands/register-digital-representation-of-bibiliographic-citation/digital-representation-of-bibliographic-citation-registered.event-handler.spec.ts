@@ -14,6 +14,7 @@ import { PersistenceModule } from '../../../../../../persistence/persistence.mod
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DigitalTextViewModel } from '../../../../../../queries/digital-text';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
+import { DynamicDataTypeFinderService } from '../../../../../../validation';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { ArangoDigitalTextQueryRepository } from '../../../../digital-text/queries/arango-digital-text-query-repository';
 import { IDigitalTextQueryRepository } from '../../../../digital-text/queries/digital-text-query-repository.interface';
@@ -37,6 +38,15 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             providers: [],
             imports: [PersistenceModule.forRootAsync()],
         })
+            .overrideProvider(DynamicDataTypeFinderService)
+            .useValue({
+                bootstrapDynamicTypes: async () => {
+                    Promise.resolve();
+                },
+                getAllDataCtors: async () => {
+                    return Promise.resolve([]);
+                },
+            })
             .overrideProvider(ConfigService)
             .useValue(
                 buildMockConfigService(
