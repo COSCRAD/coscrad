@@ -1,5 +1,4 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
-import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -7,8 +6,6 @@ import buildMockConfigService from '../../../../../../app/config/__tests__/utili
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
 import { CommandInfoService } from '../../../../../../app/controllers/command/services/command-info-service';
-import { BibliographicCitationModule } from '../../../../../../app/domain-modules/bibliographic-citation.module';
-import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -39,9 +36,9 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
                     cache: false,
                 }),
                 // PersistenceModule.forRootAsync(),
-                CommandModule,
-                DigitalTextModule,
-                BibliographicCitationModule,
+                // CommandModule,
+                // DigitalTextModule,
+                // BibliographicCitationModule,
             ],
         })
             .overrideProvider(ConfigService)
