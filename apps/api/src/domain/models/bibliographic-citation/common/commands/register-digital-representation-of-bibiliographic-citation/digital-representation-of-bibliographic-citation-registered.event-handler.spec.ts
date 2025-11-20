@@ -1,11 +1,23 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
+import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
+import { Environment } from '../../../../../../app/config/constants/environment';
+import { CommandInfoService } from '../../../../../../app/controllers/command/services/command-info-service';
+import { BibliographicCitationModule } from '../../../../../../app/domain-modules/bibliographic-citation.module';
+import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
+import { PersistenceModule } from '../../../../../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DigitalTextViewModel } from '../../../../../../queries/digital-text';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { IDigitalTextQueryRepository } from '../../../../digital-text/queries/digital-text-query-repository.interface';
+import { SongCreatedEventHandler } from '../../../../song/commands/song-created.event-handler';
 import { BookBibliographicCitation } from '../../../book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-registered.event';
 
@@ -19,33 +31,37 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
     let _app: INestApplication;
 
     beforeAll(async () => {
-        // const moduleRef = await Test.createTestingModule({
-        //     providers: [CommandInfoService, SongCreatedEventHandler],
-        //     imports: [
-        //         ConfigModule.forRoot({
-        //             isGlobal: true,
-        //             envFilePath: buildConfigFilePath(Environment.test),
-        //             cache: false,
-        //         }),
-        //         PersistenceModule.forRootAsync(),
-        //         CommandModule,
-        //         DigitalTextModule,
-        //         BibliographicCitationModule,
-        //     ],
-        // })
-        //     .overrideProvider(ConfigService)
-        //     .useValue(
-        //         buildMockConfigService(
-        //             {
-        //                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-        //             },
-        //             buildConfigFilePath(Environment.test)
-        //         )
-        //     )
-        //     .compile();
-        // await moduleRef.init();
-        // app = moduleRef.createNestApplication();
+        const moduleRef = await Test.createTestingModule({
+            providers: [CommandInfoService, SongCreatedEventHandler],
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                CommandModule,
+                DigitalTextModule,
+                BibliographicCitationModule,
+            ],
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService(
+                    {
+                        ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                    },
+                    buildConfigFilePath(Environment.test)
+                )
+            )
+            .compile();
+
+        await moduleRef.init();
+
+        _app = moduleRef.createNestApplication();
+
         // const connectionProvider = app.get(ArangoConnectionProvider);
+
         // _databaseProvider = new ArangoDatabaseProvider(connectionProvider);
         // _digitalTextQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
         // _bibliographicCitationRepository = app
