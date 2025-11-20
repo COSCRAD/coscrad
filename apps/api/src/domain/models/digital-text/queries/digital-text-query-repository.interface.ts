@@ -56,4 +56,6 @@ export interface IDigitalTextQueryRepository
         audioItemId: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    registerCitation(digitalTextId: string, citationId: string): Promise<void>;
 }
