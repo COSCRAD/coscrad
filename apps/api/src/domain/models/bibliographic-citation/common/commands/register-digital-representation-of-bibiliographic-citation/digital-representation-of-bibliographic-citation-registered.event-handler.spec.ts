@@ -6,7 +6,6 @@ import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
-import { CommandInfoService } from '../../../../../../app/controllers/command/services/command-info-service';
 import { BibliographicCitationModule } from '../../../../../../app/domain-modules/bibliographic-citation.module';
 import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
@@ -36,7 +35,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [CommandInfoService],
+            providers: [],
             imports: [
                 ConfigModule.forRoot({
                     isGlobal: true,
