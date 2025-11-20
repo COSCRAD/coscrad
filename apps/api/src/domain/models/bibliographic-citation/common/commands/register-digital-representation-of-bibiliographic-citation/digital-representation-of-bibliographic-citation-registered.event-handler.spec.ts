@@ -46,9 +46,10 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
                     buildConfigFilePath(Environment.test)
                 )
             )
-            .compile();
-
-        await moduleRef.init();
+            .compile()
+            .catch((e) => {
+                throw e;
+            });
 
         app = moduleRef.createNestApplication();
 
@@ -63,6 +64,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
     beforeEach(async () => {
         await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
+
         await databaseProvider
             .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
             .clear();
@@ -70,6 +72,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
     afterAll(async () => {
         databaseProvider.close();
+
         await app.close();
     });
 
@@ -98,6 +101,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
         beforeEach(async () => {
             await bibliographicCitationRepository.create(bookBibliographicCitation);
+
             await digitalTextQueryRepository.create(digitalText);
         });
 
