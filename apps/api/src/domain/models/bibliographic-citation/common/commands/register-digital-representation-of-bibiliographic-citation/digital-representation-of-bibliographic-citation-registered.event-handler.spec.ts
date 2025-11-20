@@ -122,15 +122,13 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             // await app
             //     .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
             //     .handle(event);
+            // const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
+            //     digitalText.id
+            // )) as DigitalTextViewModel;
+            // const { sourceCitationId } = updatedDigitalText;
+            // expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
 
-            const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
-                digitalText.id
-            )) as DigitalTextViewModel;
-
-            const { sourceCitationId } = updatedDigitalText;
-
-            expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
-
+            expect(1).toBe(2);
             /**
              * TODO Once we have a query repository for bibliographic citations,
              * we should check that the corresponding document is updated.
