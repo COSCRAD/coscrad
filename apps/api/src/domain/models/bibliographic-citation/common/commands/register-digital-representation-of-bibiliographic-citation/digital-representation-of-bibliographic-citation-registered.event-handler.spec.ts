@@ -1,42 +1,52 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
+import { CommandInfoService } from '../../../../../../app/controllers/command/services/command-info-service';
+import { BibliographicCitationModule } from '../../../../../../app/domain-modules/bibliographic-citation.module';
+import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
+import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
+import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { DigitalTextViewModel } from '../../../../../../queries/digital-text';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { ArangoDigitalTextQueryRepository } from '../../../../digital-text/queries/arango-digital-text-query-repository';
 import { IDigitalTextQueryRepository } from '../../../../digital-text/queries/digital-text-query-repository.interface';
 import { BookBibliographicCitation } from '../../../book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-registered.event';
+import { DigitalRepresentationOfBibliographicCitationRegisteredEventHandler } from './digital-representation-of-bibliographic-citation-registered.event-handler';
 
 describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, () => {
-    let _digitalTextQueryRepository: IDigitalTextQueryRepository;
+    let digitalTextQueryRepository: IDigitalTextQueryRepository;
 
-    let _bibliographicCitationRepository: IRepositoryForAggregate<BookBibliographicCitation>;
+    let bibliographicCitationRepository: IRepositoryForAggregate<BookBibliographicCitation>;
 
-    let _databaseProvider: ArangoDatabaseProvider;
+    let databaseProvider: ArangoDatabaseProvider;
 
-    let _app: INestApplication;
+    let app: INestApplication;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            providers: [], // [CommandInfoService],
+            providers: [CommandInfoService],
             imports: [
                 ConfigModule.forRoot({
                     isGlobal: true,
                     envFilePath: buildConfigFilePath(Environment.test),
                     cache: false,
                 }),
-                // PersistenceModule.forRootAsync(),
-                // CommandModule,
-                // DigitalTextModule,
-                // BibliographicCitationModule,
+                PersistenceModule.forRootAsync(),
+                CommandModule,
+                DigitalTextModule,
+                BibliographicCitationModule,
             ],
         })
             .overrideProvider(ConfigService)
@@ -50,29 +60,29 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             )
             .compile();
 
-        // await moduleRef.init();
+        await moduleRef.init();
 
-        _app = moduleRef.createNestApplication();
+        app = moduleRef.createNestApplication();
 
-        // const connectionProvider = app.get(ArangoConnectionProvider);
+        const connectionProvider = app.get(ArangoConnectionProvider);
 
-        // _databaseProvider = new ArangoDatabaseProvider(connectionProvider);
-        // _digitalTextQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
-        // _bibliographicCitationRepository = app
-        //     .get(REPOSITORY_PROVIDER_TOKEN)
-        //     .forResource(ResourceType.bibliographicCitation);
+        databaseProvider = new ArangoDatabaseProvider(connectionProvider);
+        digitalTextQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
+        bibliographicCitationRepository = app
+            .get(REPOSITORY_PROVIDER_TOKEN)
+            .forResource(ResourceType.bibliographicCitation);
     });
 
     beforeEach(async () => {
-        // await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
-        // await databaseProvider
-        //     .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
-        //     .clear();
+        await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
+            .clear();
     });
 
     afterAll(async () => {
-        // databaseProvider.close();
-        // await app.close();
+        databaseProvider.close();
+        await app.close();
     });
 
     describe(`when registering a digital text as the digital representation of a book bibliographic citation`, () => {
@@ -85,7 +95,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             id: buildDummyUuid(2),
         });
 
-        const _event = buildTestInstance(DigitalRepresentationOfBibliographicCitationRegistered, {
+        const event = buildTestInstance(DigitalRepresentationOfBibliographicCitationRegistered, {
             payload: {
                 aggregateCompositeIdentifier: {
                     id: bookBibliographicCitation.id,
@@ -99,23 +109,23 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         });
 
         beforeEach(async () => {
-            // await bibliographicCitationRepository.create(bookBibliographicCitation);
-            // await digitalTextQueryRepository.create(digitalText);
+            await bibliographicCitationRepository.create(bookBibliographicCitation);
+            await digitalTextQueryRepository.create(digitalText);
         });
 
         it(`should update the corresponding views`, async () => {
             expect(1).toBe(2);
-            // await app
-            //     .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
-            //     .handle(event);
+            await app
+                .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
+                .handle(event);
 
-            // const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
-            //     digitalText.id
-            // )) as DigitalTextViewModel;
+            const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
+                digitalText.id
+            )) as DigitalTextViewModel;
 
-            // const { sourceCitationId } = updatedDigitalText;
+            const { sourceCitationId } = updatedDigitalText;
 
-            // expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
+            expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
 
             /**
              * TODO Once we have a query repository for bibliographic citations,
