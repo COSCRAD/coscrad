@@ -56,7 +56,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             )
             .compile();
 
-        await moduleRef.init();
+        // await moduleRef.init();
 
         _app = moduleRef.createNestApplication();
 
