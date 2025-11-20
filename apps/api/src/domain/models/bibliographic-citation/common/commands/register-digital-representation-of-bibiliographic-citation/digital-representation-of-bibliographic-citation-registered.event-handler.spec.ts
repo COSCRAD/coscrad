@@ -12,7 +12,6 @@ import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
-import { ArangoCollectionId } from '../../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -24,11 +23,12 @@ import { IDigitalTextQueryRepository } from '../../../../digital-text/queries/di
 import { SongCreatedEventHandler } from '../../../../song/commands/song-created.event-handler';
 import { BookBibliographicCitation } from '../../../book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-registered.event';
+import { DigitalRepresentationOfBibliographicCitationRegisteredEventHandler } from './digital-representation-of-bibliographic-citation-registered.event-handler';
 
 describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, () => {
     let digitalTextQueryRepository: IDigitalTextQueryRepository;
 
-    let bibliographicCitationRepository: IRepositoryForAggregate<BookBibliographicCitation>;
+    let _bibliographicCitationRepository: IRepositoryForAggregate<BookBibliographicCitation>;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -70,17 +70,16 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
         digitalTextQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
 
-        bibliographicCitationRepository = app
+        _bibliographicCitationRepository = app
             .get(REPOSITORY_PROVIDER_TOKEN)
             .forResource(ResourceType.bibliographicCitation);
     });
 
     beforeEach(async () => {
-        await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
-
-        await databaseProvider
-            .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
-            .clear();
+        // await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
+        // await databaseProvider
+        //     .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
+        //     .clear();
     });
 
     afterAll(async () => {
@@ -99,7 +98,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
             id: buildDummyUuid(2),
         });
 
-        const _event = buildTestInstance(DigitalRepresentationOfBibliographicCitationRegistered, {
+        const event = buildTestInstance(DigitalRepresentationOfBibliographicCitationRegistered, {
             payload: {
                 aggregateCompositeIdentifier: {
                     id: bookBibliographicCitation.id,
@@ -113,22 +112,23 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         });
 
         beforeEach(async () => {
-            await bibliographicCitationRepository.create(bookBibliographicCitation);
-
-            await digitalTextQueryRepository.create(digitalText);
+            // await bibliographicCitationRepository.create(bookBibliographicCitation);
+            // await digitalTextQueryRepository.create(digitalText);
         });
 
         it(`should update the corresponding views`, async () => {
-            // await app
-            //     .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
-            //     .handle(event);
-            // const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
-            //     digitalText.id
-            // )) as DigitalTextViewModel;
-            // const { sourceCitationId } = updatedDigitalText;
-            // expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
+            await app
+                .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
+                .handle(event);
 
-            expect(1).toBe(2);
+            const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
+                digitalText.id
+            )) as DigitalTextViewModel;
+
+            const { sourceCitationId } = updatedDigitalText;
+
+            expect(sourceCitationId).toEqual(bookBibliographicCitation.id);
+
             /**
              * TODO Once we have a query repository for bibliographic citations,
              * we should check that the corresponding document is updated.
