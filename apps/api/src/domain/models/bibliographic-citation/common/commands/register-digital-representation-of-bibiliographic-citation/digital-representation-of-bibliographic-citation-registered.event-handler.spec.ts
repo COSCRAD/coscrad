@@ -108,7 +108,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         });
 
         beforeEach(async () => {
-            await databaseProvider.clearViews();
+            await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
 
             await databaseProvider
                 .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
