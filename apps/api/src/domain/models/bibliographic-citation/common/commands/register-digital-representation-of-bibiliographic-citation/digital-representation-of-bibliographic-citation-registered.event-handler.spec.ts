@@ -1,13 +1,10 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
-import { CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
-import { BibliographicCitationModule } from '../../../../../../app/domain-modules/bibliographic-citation.module';
-import { DigitalTextModule } from '../../../../../../app/domain-modules/digital-text.module';
 import { IRepositoryForAggregate } from '../../../../../../domain/repositories/interfaces/repository-for-aggregate.interface';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../../persistence/database/arango-connection.provider';
@@ -31,6 +28,8 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
     let databaseProvider: ArangoDatabaseProvider;
 
+    let connectionProvider: ArangoConnectionProvider;
+
     let app: INestApplication;
 
     beforeAll(async () => {
@@ -43,9 +42,6 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
                     cache: false,
                 }),
                 PersistenceModule.forRootAsync(),
-                CommandModule,
-                DigitalTextModule,
-                BibliographicCitationModule,
             ],
         })
             .overrideProvider(ConfigService)
@@ -63,7 +59,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
         app = moduleRef.createNestApplication();
 
-        const connectionProvider = app.get(ArangoConnectionProvider);
+        connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
         digitalTextQueryRepository = new ArangoDigitalTextQueryRepository(connectionProvider);
@@ -113,10 +109,9 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         });
 
         it(`should update the corresponding views`, async () => {
-            expect(1).toBe(2);
-            await app
-                .get(DigitalRepresentationOfBibliographicCitationRegisteredEventHandler)
-                .handle(event);
+            await new DigitalRepresentationOfBibliographicCitationRegisteredEventHandler(
+                new ArangoDigitalTextQueryRepository(connectionProvider)
+            ).handle(event);
 
             const updatedDigitalText = (await digitalTextQueryRepository.fetchById(
                 digitalText.id
