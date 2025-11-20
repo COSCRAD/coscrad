@@ -1,12 +1,13 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
-import { ICoscradEventHandler } from '../../../../../../domain/common';
+import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../../domain/common';
 import {
     DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
     IDigitalTextQueryRepository,
 } from '../../../../digital-text/queries/digital-text-query-repository.interface';
 import { DigitalRepresentationOfBibliographicCitationRegistered } from './digital-representation-of-bibliographic-citation-registered.event';
 
+@CoscradEventConsumer('DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION_REGISTERED')
 export class DigitalRepresentationOfBibliographicCitationRegisteredEventHandler
     implements ICoscradEventHandler
 {
