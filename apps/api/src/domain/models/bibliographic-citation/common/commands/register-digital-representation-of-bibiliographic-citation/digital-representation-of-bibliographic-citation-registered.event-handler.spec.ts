@@ -65,8 +65,6 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
 
         app = moduleRef.createNestApplication();
 
-        await app.init();
-
         const connectionProvider = app.get(ArangoConnectionProvider);
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
@@ -76,6 +74,14 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         bibliographicCitationRepository = app
             .get(REPOSITORY_PROVIDER_TOKEN)
             .forResource(ResourceType.bibliographicCitation);
+    });
+
+    beforeEach(async () => {
+        await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
+
+        await databaseProvider
+            .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
+            .clear();
     });
 
     afterAll(async () => {
@@ -108,12 +114,6 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
         });
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection('digitalText__VIEWS').clear();
-
-            await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
-                .clear();
-
             await bibliographicCitationRepository.create(bookBibliographicCitation);
 
             await digitalTextQueryRepository.create(digitalText);
