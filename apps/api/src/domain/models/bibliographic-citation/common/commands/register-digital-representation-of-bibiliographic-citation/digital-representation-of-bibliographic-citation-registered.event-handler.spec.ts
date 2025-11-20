@@ -1,6 +1,6 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
@@ -35,14 +35,7 @@ describe(`RegisterDigitalRepresentationOfBibliographicCitationCommandHandler`, (
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             providers: [],
-            imports: [
-                ConfigModule.forRoot({
-                    isGlobal: true,
-                    envFilePath: buildConfigFilePath(Environment.test),
-                    cache: false,
-                }),
-                PersistenceModule.forRootAsync(),
-            ],
+            imports: [PersistenceModule.forRootAsync()],
         })
             .overrideProvider(ConfigService)
             .useValue(
