@@ -13,6 +13,7 @@ import buildMockConfigService from '../../../../app/config/__tests__/utilities/b
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { NotFound } from '../../../../lib/types/not-found';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -35,10 +36,12 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
+import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
+import { BookBibliographicCitation } from '../../bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { PhotographViewModel } from '../../photograph/queries/photograph.view-model';
 import { ArangoPhotographQueryRepository } from '../../photograph/repositories';
@@ -188,6 +191,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 }
             ),
             pages,
+            sourceCitationId: buildDummyUuid(99),
             contributions: [
                 buildTestInstance(ContributionSummary, {
                     type: 'DIGITAL_TEXT_CREATED',
@@ -313,8 +317,6 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
         });
 
         beforeEach(async () => {
-            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
-
             await databaseProvider.clearViews();
 
             await testQueryRepository.create(targetDigitalText);
@@ -1259,6 +1261,52 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 expect(audioForTitle.getIdForAudioIn(languageCodeForExistingAudio)).toBe(
                     audioItemIdForOtherLanguage
                 );
+            });
+        });
+    });
+
+    describe(`registerCitation`, () => {
+        const targetDigitalText = buildTestInstance(DigitalTextViewModel, {});
+
+        const targetCitation = buildTestInstance(BookBibliographicCitation, {
+            id: buildDummyUuid(800),
+            digitalRepresentationResourceCompositeIdentifier: null,
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.bibliographic_references)
+                .clear();
+
+            await testQueryRepository.create(targetDigitalText);
+
+            await app
+                .get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN)
+                .forResource(ResourceType.bibliographicCitation)
+                .create(targetCitation);
+        });
+
+        describe(`when the citation and the digital text exist`, () => {
+            it(`should update the given digital text`, async () => {
+                await testQueryRepository.registerCitation(targetDigitalText.id, targetCitation.id);
+
+                const updatedDigitalText = (await testQueryRepository.fetchById(
+                    targetDigitalText.id
+                )) as DigitalTextViewModel;
+
+                expect(updatedDigitalText.sourceCitationId).toEqual(
+                    targetCitation.getCompositeIdentifier().id
+                );
+
+                /**
+                 * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-375]
+                 *
+                 * In the future, we should update a bibliographic citation
+                 * query database document as well. For now, the bibliographic
+                 * citation query service is projecting off the domain.
+                 */
             });
         });
     });

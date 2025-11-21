@@ -7,6 +7,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { Maybe } from '../../../../../lib/types/maybe';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -14,6 +15,7 @@ import { MultilingualText } from '../../../../common/entities/multilingual-text'
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -31,6 +33,18 @@ import BookBibliographicCitationData from './book-bibliographic-citation-data.en
  * TODO [https://www.pivotaltracker.com/story/show/183227660]
  * Make sure the decorator breaks if there is no such command or else use enum.
  */
+@CoscradDataExample<BookBibliographicCitation>({
+    example: {
+        type: ResourceType.bibliographicCitation,
+        id: buildDummyUuid(7),
+        data: {
+            type: BibliographicCitationType.book,
+            title: 'An Ehtnography of the Foobarians',
+            creators: [],
+        },
+        published: false,
+    },
+})
 @RegisterIndexScopedCommands(['CREATE_BOOK_BIBLIOGRAPHIC_CITATION'])
 export class BookBibliographicCitation
     extends Resource

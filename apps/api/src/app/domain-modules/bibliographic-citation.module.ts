@@ -4,6 +4,8 @@ import { CreateBookBibliographicCitation } from '../../domain/models/bibliograph
 import { CreateBookBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/book-bibliographic-citation/commands/create-book-bibliographic-citation/create-book-bibliographic-citation.command-handler';
 import BookBibliographicCitationData from '../../domain/models/bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation-data.entity';
 import { RegisterDigitalRepresentationOfBibliographicCitation } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation';
+import { DigitalRepresentationOfBibliographicCitationRegistered } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/digital-representation-of-bibliographic-citation-added.event';
+import { DigitalRepresentationOfBibliographicCitationRegisteredEventHandler } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/digital-representation-of-bibliographic-citation-registered.event-handler';
 import { RegisterDigitalRepresentationOfBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/common/commands/register-digital-representation-of-bibiliographic-citation/register-digital-representation-of-bibliographic-citation.command-handler';
 import { CreateCourtCaseBibliographicCitation } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command';
 import { CreateCourtCaseBibliographicCitationCommandHandler } from '../../domain/models/bibliographic-citation/court-case-bibliographic-citation/commands/create-court-case-bibliographic-citation/create-court-case-bibliographic-citation.command-handler';
@@ -42,6 +44,7 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
         CourtCaseBibliographicCitationData,
         RegisterDigitalRepresentationOfBibliographicCitation,
         RegisterDigitalRepresentationOfBibliographicCitationCommandHandler,
+        DigitalRepresentationOfBibliographicCitationRegisteredEventHandler,
         // Data Classes
         ...[
             BibliographicCitationDataUnion,
@@ -49,6 +52,7 @@ import { BibliographicCitationController } from '../controllers/resources/biblio
             BookBibliographicCitationData,
             JournalArticleBibliographicCitationData,
             CourtCaseBibliographicCitationData,
+            DigitalRepresentationOfBibliographicCitationRegistered,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,

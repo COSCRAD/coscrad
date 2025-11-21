@@ -374,4 +374,28 @@ export class ArangoDigitalTextQueryRepository implements IDigitalTextQueryReposi
 
         await this.database.query({ query, bindVars });
     }
+
+    async registerCitation(digitalTextId: string, citationId: string): Promise<void> {
+        // todo change bibliographic_references -> bibliographic citations
+        const aql = `
+        for doc in @@collectionName
+        filter doc._key == @digitalTextId
+        for c in bibliographic_references
+        filter c._key == @citationId
+        update doc with {
+            sourceCitationId: c._key
+        } in @@collectionName
+        `;
+
+        // TODO this.collectionName ?
+        const bindVars = {
+            '@collectionName': 'digitalText__VIEWS',
+            digitalTextId,
+            citationId,
+        };
+
+        const cursor = await this.database.query({ query: aql, bindVars });
+
+        await cursor.all();
+    }
 }

@@ -252,7 +252,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
         // TODO return an instance with this method from the validation service
         if (failures.length > 0) {
             throw new InternalError(
-                `Failed to create bulk job. One or more commands has failed schema validation.`
+                `Failed to create bulk job. One or more commands has failed schema validation.`,
+                failures
             );
         }
 

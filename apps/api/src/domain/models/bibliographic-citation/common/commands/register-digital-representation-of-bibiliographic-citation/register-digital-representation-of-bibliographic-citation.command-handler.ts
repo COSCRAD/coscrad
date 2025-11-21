@@ -1,4 +1,9 @@
-import { AggregateType, ICommandBase, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    ICommandBase,
+    ResourceCompositeIdentifier,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandler, ICommand } from '@coscrad/commands';
 import { isDeepStrictEqual } from 'util';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
@@ -43,7 +48,7 @@ export class RegisterDigitalRepresentationOfBibliographicCitationCommandHandler 
     ): ResultOrError<IBibliographicCitation<IBibliographicCitationData>> {
         // TODO Support this on all bibliographic citations
         return instance.registerDigitalRepresentation(
-            digitalRepresentationResourceCompositeIdentifier
+            digitalRepresentationResourceCompositeIdentifier as ResourceCompositeIdentifier
         );
     }
 
