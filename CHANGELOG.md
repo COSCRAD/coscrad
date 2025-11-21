@@ -2,6 +2,18 @@
 
 ## <next>
 
+### Digital Representations of Bibliographic Citations on the Client
+
+On the server, we already support registering a digital text as containing rich text
+for a corresponding bibliographic citation. This is a necessary step before leveraging
+page range context in making connections to other resources in the web-of-knowledge.
+With this release, the link between bibliographic citations and digital texts becomes
+visible to end-users.
+
+#### Relevant Commits
+
+-   feat: introduce event consumer for DIGITAL_REPRESENTATION_OF_BIBLIOGRAPHIC_CITATION_REGISTERED (#798)
+
 ### Optimized Note Queries
 
 In this release, we have refactored the system so that note queries are

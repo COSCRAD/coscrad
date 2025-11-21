@@ -1301,7 +1301,9 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 );
 
                 /**
-                 * TODO In the future, we should update a bibliographic citation
+                 * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-375]
+                 *
+                 * In the future, we should update a bibliographic citation
                  * query database document as well. For now, the bibliographic
                  * citation query service is projecting off the domain.
                  */
