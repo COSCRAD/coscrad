@@ -49,6 +49,9 @@ const buildValidCommandFSA = (id: AggregateId): FluxStandardAction<DTO<CreateDig
         aggregateCompositeIdentifier: { id, type: AggregateType.digitalText },
         title: titleForNewDigitalText,
         languageCodeForTitle: languageCodeForNewDigitalText,
+        rawData: {
+            id: 'old-system-id/123',
+        },
     },
 });
 

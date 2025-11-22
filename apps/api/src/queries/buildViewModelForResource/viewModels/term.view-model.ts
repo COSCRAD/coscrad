@@ -212,10 +212,6 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             connections,
         } = dto;
 
-        this.contributions = Array.isArray(contributions)
-            ? contributions.map((c) => ContributionSummary.fromDto(c))
-            : [];
-
         if (isNonEmptyObject(name)) {
             this.name = new MultilingualText({
                 ...name,

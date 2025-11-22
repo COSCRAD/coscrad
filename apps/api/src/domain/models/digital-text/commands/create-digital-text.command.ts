@@ -1,6 +1,6 @@
 import { ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, RawDataObject, UUID } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { LanguageCodeEnum } from '../../../common/entities/multilingual-text';
@@ -58,6 +58,13 @@ export class CreateDigitalText implements ICommandBase {
         description: 'the language in which you are titling the digital text',
     })
     readonly languageCodeForTitle: LanguageCode;
+
+    @RawDataObject({
+        isOptional: true,
+        label: 'raw data',
+        description: 'additional data from a legacy \\ third-party system source of the data',
+    })
+    readonly rawData?: Record<string, unknown>;
 
     public static fromDto(dto: DTO<CreateDigitalText>) {
         const instance = new CreateDigitalText();
