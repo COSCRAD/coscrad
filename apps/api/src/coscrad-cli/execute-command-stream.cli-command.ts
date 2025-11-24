@@ -241,7 +241,8 @@ export class ExecuteCommandStreamCliCommand extends CliCommandRunner {
 
         if (isInternalError(typeValidationResult)) {
             throw new InternalError(
-                `Failed to create bulk job. One or more commands was invalidly formatted`
+                `Failed to create bulk job. One or more commands was invalidly formatted`,
+                [typeValidationResult]
             );
         }
 
