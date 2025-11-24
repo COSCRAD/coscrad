@@ -926,6 +926,14 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         ],
       },
+      "rawData": {
+        "coscradDataType": "RAW_DATA",
+        "description": "additional data from a legacy \\ third-party system source of the data",
+        "isArray": false,
+        "isOptional": true,
+        "isPrivate": false,
+        "label": "raw data",
+      },
       "title": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "digital text's title in the given language",
