@@ -101,14 +101,7 @@ class WidgetQueryRepository {
         const { notes, connections } = connectedDocsAndEdges.reduce(
             (acc, { doc: _doc, edge }) => {
                 if (edge.connectionType === EdgeConnectionType.self) {
-                    const noteRecord: NoteRecordForResourceViewModel = {
-                        id: edge._key,
-                        note: new MultilingualText(edge.text),
-                        context: edge.context,
-                    };
-
-                    acc.notes.push(noteRecord);
-                    return acc;
+                    throw new Error(`Not implemented: notes are not supported`);
                 }
 
                 const myRole =
@@ -313,7 +306,56 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
         });
 
         describe(`when adding a second connection`, () => {
-            it.todo(`should have a test`);
+            const secondWidgetForToMember = new WidgetViewModel({
+                id: buildDummyUuid(20),
+                connections: [],
+                notes: [],
+            });
+
+            beforeEach(async () => {
+                await testQueryRepository.create(secondWidgetForToMember);
+            });
+
+            const additionalResourcesConnected =
+                new TestEventStream().buildSingle<ResourcesConnectedWithNote>({
+                    type: 'RESOURCES_CONNECTED_WITH_NOTE',
+                    payload: {
+                        aggregateCompositeIdentifier: {
+                            id: buildDummyUuid(98),
+                        },
+                        toMemberCompositeIdentifier: {
+                            type: WIDGET_RESOURCE_TYPE,
+                            id: secondWidgetForToMember.id,
+                        },
+                        toMemberContext: generalContext,
+                        fromMemberCompositeIdentifier: {
+                            type: WIDGET_RESOURCE_TYPE,
+                            id: existingWidgetViewForFromMember.id,
+                        },
+                        fromMemberContext: generalContext,
+                        text: textForConnectionNote,
+                        languageCode: languageCodeForNote,
+                    },
+                });
+
+            it(`should add both connections`, async () => {
+                await resourcesConnectedWithNoteEventHandler.handle(resourcesConnected);
+                await resourcesConnectedWithNoteEventHandler.handle(additionalResourcesConnected);
+
+                const updatedFromMember = (await testQueryRepository.fetchById(
+                    existingWidgetViewForFromMember.id
+                )) as WidgetViewModel;
+
+                expect(updatedFromMember.connections).toHaveLength(2);
+
+                const connectedResourceIds = new Set(
+                    updatedFromMember.connections.map(({ otherCompositeIdentifier: { id } }) => id)
+                );
+
+                expect(connectedResourceIds.has(existingWidgetViewForToMember.id)).toBe(true);
+
+                expect(connectedResourceIds.has(secondWidgetForToMember.id)).toBe(true);
+            });
         });
     });
 });
