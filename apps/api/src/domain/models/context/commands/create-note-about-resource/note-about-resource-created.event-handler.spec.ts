@@ -1,4 +1,9 @@
-import { EdgeConnectionContextType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -7,9 +12,9 @@ import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
-import { isNotFound } from '../../../../../lib/types/not-found';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
@@ -18,18 +23,17 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/databa
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { ConnectionRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { DeepPartial } from '../../../../../types/DeepPartial';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../repositories/note-query-repository.interface';
 import { NoteAboutResourceCreated } from './note-about-resource-created.event';
-import {
-    INoteCreationDto,
-    IQueryRepositoryForAnnotatable,
-    NoteAboutResourceCreatedEventHandler,
-} from './note-about-resource-created.event-handler';
+import { NoteAboutResourceCreatedEventHandler } from './note-about-resource-created.event-handler';
 
-const WIDGET_COLLECTION = 'widgets';
+const WIDGET_COLLECTION = 'widget__VIEWS';
 
 class WidgetViewModel {
     id: string;
@@ -57,18 +61,52 @@ const knownNotes: NoteRecordForResourceViewModel[] = [
     },
 ];
 
-interface IWidgetQueryRepository extends IQueryRepositoryForAnnotatable {
-    fetchById(id: string): Promise<Maybe<WidgetViewModel>>;
-    create(w: WidgetViewModel): Promise<void>;
-}
-
 const existingWidgetView = new WidgetViewModel({
     id: buildDummyUuid(4),
     name: buildMultilingualTextWithSingleItem('weather widget'),
     notes: [],
 });
 
-class WidgetQueryRepository implements IWidgetQueryRepository {
+// class WidgetQueryRepository {
+//     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
+
+//     constructor(connectionProvider: ArangoConnectionProvider) {
+//         this.arangoDb = new ArangoDatabaseForCollection(
+//             new ArangoDatabase(connectionProvider.getConnection()),
+//             WIDGET_COLLECTION
+//         );
+//     }
+
+//     async createNoteAbout(resourceId: string, { noteId }: INoteCreationDto): Promise<void> {
+//         const searchResult = knownNotes.find(({ id }) => id === noteId);
+
+//         if (!searchResult) return;
+
+//         const widget = await this.fetchById(resourceId);
+
+//         if (isNotFound(widget)) return;
+
+//         widget.notes.push(searchResult);
+
+//         await this.arangoDb.update(resourceId, { notes: widget.notes });
+//     }
+
+//     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
+//         const searchResult = await this.arangoDb.fetchById(id);
+
+//         if (isNotFound(searchResult)) {
+//             return searchResult;
+//         }
+
+//         return new WidgetViewModel(mapDatabaseDocumentToAggregateDTO(searchResult));
+//     }
+
+//     async create(w: WidgetViewModel): Promise<void> {
+//         await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w));
+//     }
+// }
+
+class WidgetQueryRepository {
     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
 
     constructor(connectionProvider: ArangoConnectionProvider) {
@@ -78,37 +116,99 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
         );
     }
 
-    async createNoteAbout(resourceId: string, { noteId }: INoteCreationDto): Promise<void> {
-        const searchResult = knownNotes.find(({ id }) => id === noteId);
-
-        if (!searchResult) return;
-
-        const widget = await this.fetchById(resourceId);
-
-        if (isNotFound(widget)) return;
-
-        widget.notes.push(searchResult);
-
-        await this.arangoDb.update(resourceId, { notes: widget.notes });
-    }
-
     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
-        const searchResult = await this.arangoDb.fetchById(id);
+        const aql = `
+        for doc,edge in 0..1 any "${WIDGET_COLLECTION}/${id}" graph web_of_knowledge
+        return {
+            doc,
+            edge
+        }
+        `;
 
-        if (isNotFound(searchResult)) {
-            return searchResult;
+        // options {uniqueVertices: 'global', order: 'bfs'}
+
+        const cursor = await this.arangoDb.query({ query: aql, bindVars: {} });
+
+        const results = await cursor.all();
+
+        if (results.length === 0) {
+            return NotFound;
         }
 
-        return new WidgetViewModel(mapDatabaseDocumentToAggregateDTO(searchResult));
+        const [{ doc: widgetDoc }, ...connectedDocsAndEdges] = results;
+
+        const { notes, connections } = connectedDocsAndEdges.reduce(
+            (acc, { doc: _doc, edge }) => {
+                if (edge.connectionType === EdgeConnectionType.self) {
+                    const noteRecord: NoteRecordForResourceViewModel = {
+                        id: edge._key,
+                        note: new MultilingualText(edge.text),
+                        context: edge.connectedResources.self,
+                    };
+
+                    if (!acc.notes.some((note) => note.id === noteRecord.id)) {
+                        acc.notes.push(noteRecord);
+                    }
+
+                    return acc;
+                }
+
+                const myRole =
+                    edge._to == `widget__VIEWS/${id}`
+                        ? EdgeConnectionMemberRole.to
+                        : EdgeConnectionMemberRole.from;
+
+                const connection: ConnectionRecordForResourceViewModel = {
+                    id: edge.id,
+                    note: new MultilingualText(edge.text),
+                    selfContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.from.context
+                            : edge.connectedResources.to.context,
+                    otherCompositeIdentifier:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.to.resource
+                            : edge.connectedResources.from.resource,
+                    otherContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.to.context
+                            : edge.connectedResources.from.context,
+                    role: EdgeConnectionMemberRole.to,
+                };
+
+                acc.connections.push(connection);
+
+                return acc;
+            },
+            {
+                notes: [],
+                connections: [],
+            }
+        );
+
+        const widgetDocWithNotes = mapDatabaseDocumentToAggregateDTO({
+            ...widgetDoc,
+            notes, // .map
+            connections, // .map
+        });
+
+        // @ts-expect-error FIX THIS!
+        return new WidgetViewModel(widgetDocWithNotes);
     }
 
     async create(w: WidgetViewModel): Promise<void> {
-        await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w));
+        await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w)).catch((e) => {
+            throw e;
+        });
+    }
+
+    async update(id: AggregateId, w: DeepPartial<DTO<WidgetViewModel>>): Promise<void> {
+        await this.arangoDb.update(id, w);
     }
 }
 
 describe(`NoteAboutResourceCreatedEventHandler`, () => {
-    let testQueryRepository: IWidgetQueryRepository;
+    let testQueryRepository: WidgetQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -141,15 +241,9 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
 
         testQueryRepository = new WidgetQueryRepository(connectionProvider);
 
-        noteAboutResourceCreatedEventHandler = new NoteAboutResourceCreatedEventHandler({
-            forResource: (resourceType) => {
-                if (resourceType !== ('widget' as ResourceType)) {
-                    throw new InternalError(`this test only supports resources of type 'widget'`);
-                }
-
-                return testQueryRepository;
-            },
-        });
+        noteAboutResourceCreatedEventHandler = new NoteAboutResourceCreatedEventHandler(
+            app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        );
 
         await connectionProvider.createCollectionIfNotExists(WIDGET_COLLECTION);
     });
@@ -160,6 +254,8 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
 
     beforeEach(async () => {
         await databaseProvider.getDatabaseForCollection(WIDGET_COLLECTION).clear();
+
+        await databaseProvider.clearViews();
 
         await testQueryRepository.create(existingWidgetView);
     });
@@ -175,6 +271,7 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
                     type: 'widget' as ResourceType,
                     id: existingWidgetView.id,
                 },
+                text: noteText,
             },
         });
 
