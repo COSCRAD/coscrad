@@ -1,6 +1,7 @@
 import {
     EdgeConnectionContextType,
     EdgeConnectionMemberRole,
+    EdgeConnectionType,
     IEdgeConnectionContext,
     LanguageCode,
     ResourceType,
@@ -14,9 +15,8 @@ import { Environment } from '../../../../../app/config/constants/environment';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
-import { InternalError } from '../../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../../lib/types/maybe';
-import { isNotFound } from '../../../../../lib/types/not-found';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
@@ -26,50 +26,50 @@ import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ConnectionRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../repositories/note-query-repository.interface';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
-import {
-    IQueryRepositoryForConnectable,
-    IResourceConnectionDto,
-    ResourcesConnectedWithNoteEventHandler,
-} from './resources-connected-with-note.event-handler';
+import { ResourcesConnectedWithNoteEventHandler } from './resources-connected-with-note.event-handler';
 
-const WIDGET_COLLECTION = 'widgets';
+const WIDGET_COLLECTION = 'widget__VIEWS';
 
 const WIDGET_RESOURCE_TYPE = 'widget' as ResourceType;
 
 class WidgetViewModel {
     id: string;
+
     connections: ConnectionRecordForResourceViewModel[];
 
-    constructor({ id, connections }: DTO<WidgetViewModel>) {
+    notes: NoteRecordForResourceViewModel[];
+
+    constructor({ id, connections, notes }: DTO<WidgetViewModel>) {
         this.id = id;
 
         this.connections = connections.map((dto) =>
             ConnectionRecordForResourceViewModel.fromDto(dto)
         );
+
+        this.notes = notes.map((dto) => NoteRecordForResourceViewModel.fromDto(dto));
     }
 }
 
 const existingWidgetViewForToMember = new WidgetViewModel({
     id: buildDummyUuid(9),
     connections: [],
+    notes: [],
 });
 
 const existingWidgetViewForFromMember = new WidgetViewModel({
     id: buildDummyUuid(10),
     connections: [],
+    notes: [],
 });
 
-interface IWidgetQueryRepository extends IQueryRepositoryForConnectable {
-    fetchById(id: string): Promise<Maybe<WidgetViewModel>>;
-    create(w: WidgetViewModel): Promise<void>;
-}
-
-class WidgetQueryRepository implements IWidgetQueryRepository {
+class WidgetQueryRepository {
     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
 
     constructor(connectionProvider: ArangoConnectionProvider) {
@@ -80,50 +80,88 @@ class WidgetQueryRepository implements IWidgetQueryRepository {
     }
 
     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
-        const searchResult = await this.arangoDb.fetchById(id);
+        const aql = `
+        for doc,edge in 0..1 any "${WIDGET_COLLECTION}/${id}" graph web_of_knowledge
+        return {
+            doc,
+            edge
+        }
+        `;
 
-        if (isNotFound(searchResult)) {
-            return searchResult;
+        const cursor = await this.arangoDb.query({ query: aql, bindVars: {} });
+
+        const results = await cursor.all();
+
+        if (results.length === 0) {
+            return NotFound;
         }
 
-        return new WidgetViewModel(mapDatabaseDocumentToAggregateDTO(searchResult));
+        const [{ doc: widgetDoc }, ...connectedDocsAndEdges] = results;
+
+        const { notes, connections } = connectedDocsAndEdges.reduce(
+            (acc, { doc: _doc, edge }) => {
+                if (edge.connectionType === EdgeConnectionType.self) {
+                    const noteRecord: NoteRecordForResourceViewModel = {
+                        id: edge._key,
+                        note: new MultilingualText(edge.text),
+                        context: edge.context,
+                    };
+
+                    acc.notes.push(noteRecord);
+                    return acc;
+                }
+
+                const myRole =
+                    edge._to == `widget__VIEWS/${id}`
+                        ? EdgeConnectionMemberRole.to
+                        : EdgeConnectionMemberRole.from;
+
+                const connection: ConnectionRecordForResourceViewModel = {
+                    id: edge.id,
+                    note: new MultilingualText(edge.text),
+                    selfContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.from.context
+                            : edge.connectedResources.to.context,
+                    otherCompositeIdentifier:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.to.resource
+                            : edge.connectedResources.from.resource,
+                    otherContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.to.context
+                            : edge.connectedResources.from.context,
+                    role: EdgeConnectionMemberRole.to,
+                };
+
+                acc.connections.push(connection);
+
+                return acc;
+            },
+            {
+                notes: [],
+                connections: [],
+            }
+        );
+
+        const widgetDocWithNotes = mapDatabaseDocumentToAggregateDTO({
+            ...widgetDoc,
+            notes, // .map
+            connections, // .map
+        });
+
+        // @ts-expect-error FIX THIS!
+        return new WidgetViewModel(widgetDocWithNotes);
     }
 
     async create(w: WidgetViewModel): Promise<void> {
-        await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w));
+        await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w)).catch((e) => {
+            throw e;
+        });
     }
 
     async update(id: AggregateId, w: DeepPartial<DTO<WidgetViewModel>>): Promise<void> {
         await this.arangoDb.update(id, w);
-    }
-
-    async createConnection(
-        id: string,
-        {
-            noteId,
-            otherCompositeIdentifier: compositeIdentifier,
-            selfContext,
-            otherContext,
-            text,
-            role,
-        }: IResourceConnectionDto
-    ): Promise<void> {
-        const targetWidget = await this.fetchById(id);
-
-        if (isNotFound(targetWidget)) return;
-
-        targetWidget.connections.push(
-            ConnectionRecordForResourceViewModel.fromDto({
-                id: noteId,
-                selfContext,
-                otherCompositeIdentifier: compositeIdentifier,
-                otherContext,
-                note: new MultilingualText(text),
-                role,
-            })
-        );
-
-        await this.update(id, targetWidget);
     }
 }
 
@@ -154,7 +192,7 @@ const resourcesConnected = new TestEventStream().buildSingle<ResourcesConnectedW
 });
 
 describe(`ResourcesConnectedWithNoteEventHandler`, () => {
-    let testQueryRepository: IWidgetQueryRepository;
+    let testQueryRepository: WidgetQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
 
@@ -187,15 +225,9 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
         testQueryRepository = new WidgetQueryRepository(connectionProvider);
 
-        resourcesConnectedWithNoteEventHandler = new ResourcesConnectedWithNoteEventHandler({
-            forResource: (resourceType) => {
-                if (resourceType !== ('widget' as ResourceType)) {
-                    throw new InternalError(`this test only supports resources of type 'widget'`);
-                }
-
-                return testQueryRepository;
-            },
-        });
+        resourcesConnectedWithNoteEventHandler = new ResourcesConnectedWithNoteEventHandler(
+            app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        );
 
         await connectionProvider.createCollectionIfNotExists(WIDGET_COLLECTION);
     });
@@ -207,71 +239,81 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
     beforeEach(async () => {
         await databaseProvider.getDatabaseForCollection(WIDGET_COLLECTION).clear();
 
+        await databaseProvider.getDatabaseForCollection('note__VIEWS').clear();
+
         await testQueryRepository.create(existingWidgetViewForToMember);
 
         await testQueryRepository.create(existingWidgetViewForFromMember);
     });
 
     describe(`when there is an existing resource with no connections`, () => {
-        it(`should add the connection`, async () => {
-            await resourcesConnectedWithNoteEventHandler.handle(resourcesConnected);
+        describe(`when adding a first connection`, () => {
+            it(`should add the connection`, async () => {
+                await resourcesConnectedWithNoteEventHandler.handle(resourcesConnected);
 
-            // check the to member
-            const updatedToMember = (await testQueryRepository.fetchById(
-                existingWidgetViewForToMember.id
-            )) as WidgetViewModel;
+                // check the to member
+                const updatedToMember = (await testQueryRepository.fetchById(
+                    existingWidgetViewForToMember.id
+                )) as WidgetViewModel;
 
-            expect(updatedToMember.connections).toHaveLength(1);
+                expect(updatedToMember.connections).toHaveLength(1);
 
-            const newConnectionForToMember = updatedToMember.connections[0];
+                const newConnectionForToMember = updatedToMember.connections[0];
 
-            expect(newConnectionForToMember.otherCompositeIdentifier).toEqual({
-                type: WIDGET_RESOURCE_TYPE,
-                id: existingWidgetViewForFromMember.id,
-            });
+                expect(newConnectionForToMember.otherCompositeIdentifier).toEqual({
+                    type: WIDGET_RESOURCE_TYPE,
+                    id: existingWidgetViewForFromMember.id,
+                });
 
-            expect(newConnectionForToMember.otherContext).toEqual(generalContext);
+                expect(newConnectionForToMember.otherContext).toEqual(generalContext);
 
-            expect(newConnectionForToMember.role).toBe(EdgeConnectionMemberRole.to);
+                expect(newConnectionForToMember.role).toBe(EdgeConnectionMemberRole.to);
 
-            const expectedNote = // this looks too much like the implementation
-                buildMultilingualTextWithSingleItem(
-                    resourcesConnected.payload.text,
-                    resourcesConnected.payload.languageCode
+                const expectedNote = // this looks too much like the implementation
+                    buildMultilingualTextWithSingleItem(
+                        resourcesConnected.payload.text,
+                        resourcesConnected.payload.languageCode
+                    );
+
+                expect(newConnectionForToMember.note.toDTO()).toEqual(expectedNote.toDTO());
+
+                expect(newConnectionForToMember.id).toBe(
+                    resourcesConnected.payload.aggregateCompositeIdentifier.id
                 );
 
-            expect(newConnectionForToMember.note.toDTO()).toEqual(expectedNote.toDTO());
+                // check the from member
+                const updatedFromMember = (await testQueryRepository.fetchById(
+                    existingWidgetViewForFromMember.id
+                )) as WidgetViewModel;
 
-            expect(newConnectionForToMember.id).toBe(
-                resourcesConnected.payload.aggregateCompositeIdentifier.id
-            );
+                expect(updatedFromMember.connections).toHaveLength(1);
 
-            // check the from member
-            const updatedFromMember = (await testQueryRepository.fetchById(
-                existingWidgetViewForFromMember.id
-            )) as WidgetViewModel;
+                const {
+                    id: connectionId,
+                    selfContext,
+                    otherCompositeIdentifier,
+                    otherContext,
+                    note,
+                } = updatedFromMember.connections[0];
 
-            expect(updatedFromMember.connections).toHaveLength(1);
+                expect(selfContext).toEqual(generalContext);
 
-            const {
-                id: connectionId,
-                selfContext,
-                otherCompositeIdentifier,
-                otherContext,
-                note,
-            } = updatedFromMember.connections[0];
+                expect(otherContext).toEqual(generalContext);
 
-            expect(selfContext).toEqual(generalContext);
+                expect(note.toDTO()).toEqual(expectedNote.toDTO());
 
-            expect(otherContext).toEqual(generalContext);
+                expect(connectionId).toBe(
+                    resourcesConnected.payload.aggregateCompositeIdentifier.id
+                );
 
-            expect(note.toDTO()).toEqual(expectedNote.toDTO());
+                expect(otherCompositeIdentifier).toEqual(
+                    resourcesConnected.payload.toMemberCompositeIdentifier
+                );
+            });
+        });
 
-            expect(connectionId).toBe(resourcesConnected.payload.aggregateCompositeIdentifier.id);
-
-            expect(otherCompositeIdentifier).toEqual(
-                resourcesConnected.payload.toMemberCompositeIdentifier
-            );
+        describe(`when adding a second connection`, () => {
+            it.todo(`should have a test`);
         });
     });
 });

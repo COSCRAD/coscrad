@@ -123,6 +123,7 @@ export class ArangoConnectionProvider {
                 .createGraph('web_of_knowledge', [
                     {
                         collection: 'note__VIEWS',
+                        // TODO register the discovered resource view collections (nodes in the web-of-knowledge)
                         from: ['widget__VIEWS'],
                         to: ['widget__VIEWS'],
                     },

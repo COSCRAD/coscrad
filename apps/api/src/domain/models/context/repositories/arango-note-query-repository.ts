@@ -351,7 +351,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         const view = new EventSourcedNoteViewModel({
             type: CategorizableType.note,
             id,
-            connectionType: EdgeConnectionType.self,
+            connectionType: EdgeConnectionType.dual,
             text,
             connectedResources: {
                 from: {
