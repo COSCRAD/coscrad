@@ -67,45 +67,6 @@ const existingWidgetView = new WidgetViewModel({
     notes: [],
 });
 
-// class WidgetQueryRepository {
-//     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
-
-//     constructor(connectionProvider: ArangoConnectionProvider) {
-//         this.arangoDb = new ArangoDatabaseForCollection(
-//             new ArangoDatabase(connectionProvider.getConnection()),
-//             WIDGET_COLLECTION
-//         );
-//     }
-
-//     async createNoteAbout(resourceId: string, { noteId }: INoteCreationDto): Promise<void> {
-//         const searchResult = knownNotes.find(({ id }) => id === noteId);
-
-//         if (!searchResult) return;
-
-//         const widget = await this.fetchById(resourceId);
-
-//         if (isNotFound(widget)) return;
-
-//         widget.notes.push(searchResult);
-
-//         await this.arangoDb.update(resourceId, { notes: widget.notes });
-//     }
-
-//     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
-//         const searchResult = await this.arangoDb.fetchById(id);
-
-//         if (isNotFound(searchResult)) {
-//             return searchResult;
-//         }
-
-//         return new WidgetViewModel(mapDatabaseDocumentToAggregateDTO(searchResult));
-//     }
-
-//     async create(w: WidgetViewModel): Promise<void> {
-//         await this.arangoDb.create(mapEntityDTOToDatabaseDocument(w));
-//     }
-// }
-
 class WidgetQueryRepository {
     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
 
@@ -124,8 +85,6 @@ class WidgetQueryRepository {
             edge
         }
         `;
-
-        // options {uniqueVertices: 'global', order: 'bfs'}
 
         const cursor = await this.arangoDb.query({ query: aql, bindVars: {} });
 
@@ -188,11 +147,11 @@ class WidgetQueryRepository {
 
         const widgetDocWithNotes = mapDatabaseDocumentToAggregateDTO({
             ...widgetDoc,
-            notes, // .map
-            connections, // .map
+            notes,
+            connections,
         });
 
-        // @ts-expect-error FIX THIS!
+        // @ts-expect-error TODO Add a type assertion to the query result at the top level
         return new WidgetViewModel(widgetDocWithNotes);
     }
 
@@ -208,6 +167,20 @@ class WidgetQueryRepository {
 }
 
 describe(`NoteAboutResourceCreatedEventHandler`, () => {
+    const noteCreated = new TestEventStream().buildSingle<NoteAboutResourceCreated>({
+        type: 'NOTE_ABOUT_RESOURCE_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: {
+                id: knownNotes[0].id,
+            },
+            resourceCompositeIdentifier: {
+                type: 'widget' as ResourceType,
+                id: existingWidgetView.id,
+            },
+            text: noteText,
+        },
+    });
+
     let testQueryRepository: WidgetQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
@@ -261,20 +234,6 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
     });
 
     describe(`when the target resource exists and has no notes`, () => {
-        const noteCreated = new TestEventStream().buildSingle<NoteAboutResourceCreated>({
-            type: 'NOTE_ABOUT_RESOURCE_CREATED',
-            payload: {
-                aggregateCompositeIdentifier: {
-                    id: knownNotes[0].id,
-                },
-                resourceCompositeIdentifier: {
-                    type: 'widget' as ResourceType,
-                    id: existingWidgetView.id,
-                },
-                text: noteText,
-            },
-        });
-
         it(`should create the note`, async () => {
             await noteAboutResourceCreatedEventHandler.handle(noteCreated);
 
