@@ -9,6 +9,7 @@ import {
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { DynamicDataTypeFinderService } from '../../../../../../src/validation';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
@@ -110,7 +111,7 @@ class WidgetQueryRepository {
                         : EdgeConnectionMemberRole.from;
 
                 const connection: ConnectionRecordForResourceViewModel = {
-                    id: edge.id,
+                    id: edge._key,
                     note: new MultilingualText(edge.text),
                     selfContext:
                         myRole === EdgeConnectionMemberRole.from
@@ -206,6 +207,12 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
                     buildConfigFilePath(Environment.test)
                 )
             )
+            .overrideProvider(DynamicDataTypeFinderService)
+            .useValue({
+                bootstrapDynamicTypes: async () => {
+                    Promise.resolve();
+                },
+            })
             .compile();
 
         await moduleRef.init();

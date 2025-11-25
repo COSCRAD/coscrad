@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Database } from 'arangojs';
 import { Scheme } from '../../app/config/constants/Scheme';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { InternalError } from '../../lib/errors/InternalError';
 import { DTO } from '../../types/DTO';
 import ArangoDatabaseConfiguration from './ArangoDatabaseConfiguration';
 import {
@@ -92,25 +93,37 @@ export class ArangoConnectionProvider {
          * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-301]
          * Discover view collections dynamically.
          */
-        await this.createCollectionIfNotExists('photograph__VIEWS');
 
-        await this.createCollectionIfNotExists('term__VIEWS');
+        const resourceViewCollectionIds = [
+            'photograph__VIEWS',
 
-        await this.createCollectionIfNotExists('audioItem__VIEWS');
+            'term__VIEWS',
 
-        await this.createCollectionIfNotExists('video__VIEWS');
+            'audioItem__VIEWS',
 
-        await this.createCollectionIfNotExists('vocabularyList__VIEWS');
+            'video__VIEWS',
 
-        await this.createCollectionIfNotExists('playlist__VIEWS');
+            'vocabularyList__VIEWS',
 
-        await this.createCollectionIfNotExists('song__VIEWS');
+            'playlist__VIEWS',
 
-        await this.createCollectionIfNotExists('digitalText__VIEWS');
+            'song__VIEWS',
 
-        await this.createCollectionIfNotExists('tag__VIEWS');
+            'digitalText__VIEWS',
 
-        await this.createCollectionIfNotExists('widget__VIEWS');
+            'tag__VIEWS',
+
+            'widget__VIEWS',
+        ];
+
+        for (const collectionId of resourceViewCollectionIds) {
+            await this.createCollectionIfNotExists(collectionId).catch((e) => {
+                throw new InternalError(
+                    `Failed to created collection: ${collectionId} in Arango DB`,
+                    [e]
+                );
+            });
+        }
 
         if (!(await this.#doesCollectionExist('note__VIEWS'))) {
             await this.connection.createEdgeCollection('note__VIEWS', {});
@@ -124,8 +137,8 @@ export class ArangoConnectionProvider {
                     {
                         collection: 'note__VIEWS',
                         // TODO register the discovered resource view collections (nodes in the web-of-knowledge)
-                        from: ['widget__VIEWS'],
-                        to: ['widget__VIEWS'],
+                        from: resourceViewCollectionIds,
+                        to: resourceViewCollectionIds,
                     },
                 ])
                 .catch((e) => {
