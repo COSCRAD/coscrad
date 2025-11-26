@@ -254,6 +254,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                     expect(searchResult).not.toBe(NotFound);
 
                     const {
+                        connectionType,
                         connectedResources: {
                             to: { resource: toResource },
                             from: { resource: fromResource },
@@ -263,6 +264,8 @@ describe(`ArangoNoteQueryRepository`, () => {
                     assertWidgetDocumentMatchesWidget(fromResource, testWidget);
 
                     assertWidgetDocumentMatchesWidget(toResource, toWidget);
+
+                    expect(connectionType).toBe(EdgeConnectionType.dual);
                 });
             });
         });

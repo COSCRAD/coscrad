@@ -1,5 +1,6 @@
 import {
     EdgeConnectionMemberRole,
+    EdgeConnectionType,
     IEdgeConnectionContext,
     IMultilingualText,
     ResourceCompositeIdentifier,
@@ -8,7 +9,10 @@ import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
-import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../repositories/note-query-repository.interface';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
 
 export interface IResourceConnectionDto {
@@ -38,15 +42,11 @@ export interface IQueryRepositoryForConnectable {
     createConnection(id: string, dto: IResourceConnectionDto): Promise<void>;
 }
 
-interface IQueryRepositoryProvider {
-    forResource(resourceType: string): IQueryRepositoryForConnectable;
-}
-
 @CoscradEventConsumer('RESOURCES_CONNECTED_WITH_NOTE')
 export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHandler {
     constructor(
-        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly repositoryProvider: IQueryRepositoryProvider
+        @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly noteRepository: INoteQueryRepository
     ) {}
 
     async handle({
@@ -62,30 +62,20 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
     }: ResourcesConnectedWithNote): Promise<void> {
         const text = buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote);
 
-        const role = EdgeConnectionMemberRole.to;
-
-        // TODO can we wrap this in a transaction?
-
-        await this.repositoryProvider
-            .forResource(toMemberCompositeIdentifier.type)
-            .createConnection(toMemberCompositeIdentifier.id, {
-                noteId,
-                selfContext: toMemberContext,
-                otherCompositeIdentifier: fromMemberCompositeIdentifier,
-                otherContext: fromMemberContext,
-                text,
-                role,
-            });
-
-        await this.repositoryProvider
-            .forResource(fromMemberCompositeIdentifier.type)
-            .createConnection(fromMemberCompositeIdentifier.id, {
-                noteId,
-                selfContext: fromMemberContext,
-                otherCompositeIdentifier: toMemberCompositeIdentifier,
-                otherContext: toMemberContext,
-                text,
-                role,
+        await this.noteRepository
+            .connectResourcesWithNote(
+                {
+                    id: noteId,
+                    connectionType: EdgeConnectionType.dual,
+                    text,
+                },
+                fromMemberCompositeIdentifier,
+                fromMemberContext,
+                toMemberCompositeIdentifier,
+                toMemberContext
+            )
+            .catch((e) => {
+                throw e;
             });
     }
 }
