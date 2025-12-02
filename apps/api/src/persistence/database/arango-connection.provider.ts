@@ -177,7 +177,13 @@ export class ArangoConnectionProvider {
     async #doesCollectionExist(collectionName: string): Promise<boolean> {
         const allCollections = await this.connection
             .listCollections()
-            .then((allCollectionMetadata) => allCollectionMetadata.map(({ name }) => name));
+            .then((allCollectionMetadata) => allCollectionMetadata.map(({ name }) => name))
+            .catch((e) => {
+                throw new InternalError(
+                    `Failed to check for existing collection: ${collectionName} due to ArangoError`,
+                    [e]
+                );
+            });
 
         const doesCollectionExist = allCollections.includes(collectionName);
 
@@ -197,15 +203,44 @@ export class ArangoConnectionProvider {
 
         const doesDatabaseExist = await adminInstance
             .listDatabases()
-            .then((allDatabaseNames) => allDatabaseNames.includes(databaseName));
+            .then((allDatabaseNames) => allDatabaseNames.includes(databaseName))
+            .catch((e) => {
+                throw new InternalError(
+                    `Failed to initialize ArangoDB after connecting to _system with config: \n ${JSON.stringify(
+                        this.databaseConfiguration
+                    )}`,
+                    [e]
+                );
+            });
 
         if (doesDatabaseExist) return;
 
-        const { dbUser } = this.#databaseConfiguration;
+        const { dbUser, dbPass } = this.#databaseConfiguration;
 
-        await adminInstance.createDatabase(databaseName, {
-            users: [{ username: dbUser }, { username: 'root' }],
+        const allUsers = await adminInstance.listUsers().catch((e) => {
+            throw new InternalError(
+                `Failed to list users from Arango DB in db initialization routine`,
+                [e]
+            );
         });
+
+        const doesUserExist = allUsers.some(({ user }) => user === dbUser);
+
+        if (!doesUserExist) await adminInstance.createUser(dbUser, dbPass);
+
+        await adminInstance
+            .createDatabase(databaseName, {
+                users: [{ username: dbUser }, { username: 'root' }],
+            })
+            .catch((e) => {
+                throw new InternalError(
+                    `Failed to create new database: ${this.databaseConfiguration.dbName} due to Arango error`,
+                    [e]
+                );
+            })
+            .finally(() => {
+                console.log('Arango database initialized!');
+            });
 
         adminInstance.close();
 
