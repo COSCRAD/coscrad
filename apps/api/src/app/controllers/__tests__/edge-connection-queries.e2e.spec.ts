@@ -85,6 +85,9 @@ describe('When querying for edge connections', () => {
             expect(result.status).toBe(httpStatusCodes.ok);
 
             expect(result.body).toMatchSnapshot();
+
+            // TODO remove this
+            expect(1).toBe(2);
         });
     });
 

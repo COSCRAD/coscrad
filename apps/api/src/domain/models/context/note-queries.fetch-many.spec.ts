@@ -8,7 +8,6 @@ import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import { buildTestInstance, CoscradDataExample } from '../.../../../../test-data/utilities';
 import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
@@ -25,6 +24,7 @@ import { PersistenceModule } from '../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ConnectionRecordForResourceViewModel } from '../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
+import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { MultilingualText } from '../../common/entities/multilingual-text';
@@ -37,7 +37,7 @@ import {
     NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
 } from './repositories/note-query-repository.interface';
 
-const buildDetailEndpoint = (id: AggregateId) => `/webOfKnowledge/${id}`;
+const indexEndpoint = `/webOfKnowledge`;
 
 const WIDGET_COLLECTION = 'widget__VIEWS';
 
@@ -147,18 +147,37 @@ const fromMemberWidget = buildTestInstance(WidgetViewModel, {
     notes: [],
 });
 
+const toMemberWidget = buildTestInstance(WidgetViewModel, {
+    id: buildDummyUuid(6),
+    name: 'widget for the to member',
+});
+
 const noteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(101),
     connectionType: EdgeConnectionType.self,
     connectedResources: {
         self: {
             resource: fromMemberWidget.getCompositeIdentifier(),
+        },
+    },
+});
+
+const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(102),
+    connectionType: EdgeConnectionType.dual,
+    connectedResources: {
+        from: {
+            resource: fromMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+        to: {
+            resource: toMemberWidget.getCompositeIdentifier(),
             context: generalContext,
         },
     },
 });
 
-describe(`when querying for a note: fetch by Id`, () => {
+describe(`when querying for a note: fetch many`, () => {
     let app: INestApplication;
 
     let databaseProvider: ArangoDatabaseProvider;
@@ -226,83 +245,35 @@ describe(`when querying for a note: fetch by Id`, () => {
 
     describe(`when the user is unauthenticated`, () => {
         // TODO support user access control for notes
-        describe(`when the note is public`, () => {
-            describe(`when there is a note with the given ID`, () => {
-                beforeEach(async () => {
-                    await widgetQueryRepository.create(fromMemberWidget);
+        describe(`when there is a note with the given ID`, () => {
+            beforeEach(async () => {
+                await widgetQueryRepository.create(fromMemberWidget);
 
-                    await noteQueryRepository.createNoteAbout(
-                        noteAboutWidget,
-                        fromMemberWidget.getCompositeIdentifier(),
-                        generalContext
-                    );
-                });
+                await widgetQueryRepository.create(toMemberWidget);
 
-                it(`should find it`, async () => {
-                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
-
-                    const res = await request(app.getHttpServer()).get(endpoint);
-
-                    expect(res.status).toBe(HttpStatusCode.ok);
-
-                    expect(res.body).toMatchSnapshot();
-                });
-            });
-
-            describe(`when there is a connection with the given ID`, () => {
-                const toMemberWidget = buildTestInstance(WidgetViewModel, {
-                    id: buildDummyUuid(105),
-                    name: 'widget for the to member',
-                });
-
-                const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
-                    id: buildDummyUuid(101),
-                    connectionType: EdgeConnectionType.dual,
-                    connectedResources: {
-                        from: {
-                            resource: fromMemberWidget.getCompositeIdentifier(),
-                            context: generalContext,
-                        },
-                        to: {
-                            resource: toMemberWidget.getCompositeIdentifier(),
-                            context: generalContext,
-                        },
-                    },
-                });
-
-                beforeEach(async () => {
-                    await widgetQueryRepository.create(fromMemberWidget);
-
-                    await widgetQueryRepository.create(toMemberWidget);
-
-                    await noteQueryRepository.connectResourcesWithNote(
-                        noteConnectingWidgets,
-                        fromMemberWidget.getCompositeIdentifier(),
-                        generalContext,
-                        toMemberWidget.getCompositeIdentifier(),
-                        generalContext
-                    );
-                });
-
-                it(`should return the expected result`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(noteAboutWidget.id)
-                    );
-
-                    expect(res.status).toBe(HttpStatusCode.ok);
-
-                    expect(res.body).toMatchSnapshot();
-                });
-            });
-        });
-
-        describe(`when the note does not exist`, () => {
-            it(`should return not found`, async () => {
-                const res = await request(app.getHttpServer()).get(
-                    buildDetailEndpoint(buildDummyUuid(404))
+                await noteQueryRepository.createNoteAbout(
+                    noteAboutWidget,
+                    fromMemberWidget.getCompositeIdentifier(),
+                    generalContext
                 );
 
-                expect(res.status).toBe(HttpStatusCode.notFound);
+                await noteQueryRepository.connectResourcesWithNote(
+                    noteConnectingWidgets,
+                    fromMemberWidget.getCompositeIdentifier(),
+                    generalContext,
+                    toMemberWidget.getCompositeIdentifier(),
+                    generalContext
+                );
+            });
+
+            it(`should return the available notes`, async () => {
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                expect(res.body.entities).toHaveLength(2);
+
+                expect(res.body).toMatchSnapshot();
             });
         });
     });

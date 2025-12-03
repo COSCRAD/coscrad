@@ -194,7 +194,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             let connectedResources = doc._from ==  doc._to ? {
                 self: {
                     resource: document(doc._from),
-                    context: doc.connectedResources.from.context
+                    context: doc.connectedResources.self.context
                 }
             } : {
                 to: {
@@ -333,6 +333,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.self,
             text,
+            note: text,
+            name: text,
             connectedResources: {
                 self: {
                     resource: resourceCompositeIdentifier,
@@ -372,6 +374,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.dual,
             text,
+            note: text,
+            name: text,
             connectedResources: {
                 from: {
                     resource: fromMemberCompositeIdentifier,

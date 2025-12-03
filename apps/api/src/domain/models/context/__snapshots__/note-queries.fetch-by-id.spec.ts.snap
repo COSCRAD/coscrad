@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a note: fetch by Id when the user is unauthenticated when the note is public when there is a connection with the given ID should return the expected result 1`] = `
+{
+  "audio": {
+    "items": [],
+  },
+  "connectedResources": {
+    "from": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "connections": [],
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+        "name": "widget for the from member",
+        "notes": [],
+        "type": "widget",
+      },
+    },
+    "to": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "connections": [],
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+        "name": "widget for the to member",
+        "notes": [],
+        "type": "widget",
+      },
+    },
+  },
+  "connectionType": "self",
+  "tags": [],
+  "text": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "this is the note for breeze",
+      },
+    ],
+  },
+  "type": "note",
+}
+`;
+
+exports[`when querying for a note: fetch by Id when the user is unauthenticated when the note is public when there is a note with the given ID should find it 1`] = `
+{
+  "audio": {
+    "items": [],
+  },
+  "connectedResources": {
+    "self": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "connections": [],
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+        "name": "widget for the from member",
+        "notes": [],
+        "type": "widget",
+      },
+    },
+  },
+  "connectionType": "self",
+  "tags": [],
+  "text": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "this is the note for breeze",
+      },
+    ],
+  },
+  "type": "note",
+}
+`;

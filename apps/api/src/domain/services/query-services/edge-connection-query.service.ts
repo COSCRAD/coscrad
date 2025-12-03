@@ -1,9 +1,7 @@
 import {
-    CategorizableType,
     ICategorizableIndexQueryResult,
     ICommandFormAndLabels,
     INoteViewModel,
-    WithTags,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -12,15 +10,14 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilities';
-import mixTagsIntoViewModel from '../../../app/controllers/utilities/mixTagsIntoViewModel';
 import { InternalError } from '../../../lib/errors/InternalError';
-import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
-import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { buildAllAggregateDescriptions } from '../../../queries/resourceDescriptions';
-import { EdgeConnection } from '../../models/context/edge-connection.entity';
-import { validAggregateOrThrow } from '../../models/shared/functional';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../models/context/repositories/note-query-repository.interface';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
-import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
+import { AggregateId } from '../../types/AggregateId';
 import { AggregateType } from '../../types/AggregateType';
 import { isNullOrUndefined } from '../../utilities/validation/is-null-or-undefined';
 import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
@@ -31,7 +28,8 @@ import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
  */
 export class EdgeConnectionQueryService {
     constructor(
-        @Inject(REPOSITORY_PROVIDER_TOKEN) private readonly repositoryProvider: IRepositoryProvider,
+        @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly noteQueryRepository: INoteQueryRepository,
         @Inject(CommandInfoService) private readonly commandInfoService: CommandInfoService,
         @Inject(ConfigService) private readonly configService: ConfigService
     ) {}
@@ -52,33 +50,27 @@ export class EdgeConnectionQueryService {
         return result;
     }
 
+    async fetchById(id: AggregateId, _systemUser?: CoscradUserWithGroups) {
+        return this.noteQueryRepository.fetchById(id);
+    }
+
     /**
      * In the future, we may want to use Access Control Lists on notes as well.
      */
     async fetchMany(
-        systemUser: CoscradUserWithGroups
+        _systemUser?: CoscradUserWithGroups
     ): Promise<ICategorizableIndexQueryResult<INoteViewModel>> {
-        const queryResult = await this.repositoryProvider.getEdgeConnectionRepository().fetchMany();
-
-        const validDomainModels = queryResult.filter(validAggregateOrThrow);
-
-        const tagFetchResult = await this.repositoryProvider.getTagRepository().fetchMany();
-
-        const allTags = tagFetchResult.filter(validAggregateOrThrow);
-
-        const mixinTags = (viewModel: NoteViewModel): WithTags<INoteViewModel> =>
-            mixTagsIntoViewModel(viewModel, allTags, CategorizableType.note);
-
-        const indexScopedActions = this.fetchUserActions(systemUser, EdgeConnection);
+        const { entities, page } = await this.noteQueryRepository.fetchMany();
 
         return {
-            indexScopedActions,
-            entities: validDomainModels.map((domainModel) => ({
-                ...mixinTags(new NoteViewModel(domainModel)),
-                actions: this.fetchUserActions(systemUser, domainModel),
+            entities: entities.map((e) => ({
+                ...e,
+                actions: [],
             })),
-            page: 1,
-            count: validDomainModels.length,
+            page,
+            count: entities.length,
+            // TODO insert available commands
+            indexScopedActions: [],
         };
     }
 

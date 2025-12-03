@@ -579,16 +579,16 @@ export default async (
             {
                 provide: EdgeConnectionQueryService,
                 useFactory: (
-                    repositoryProvider: ArangoRepositoryProvider,
+                    noteRepository: ArangoNoteQueryRepository,
                     commandInfoService: CommandInfoService,
                     configService: ConfigService
                 ) =>
                     new EdgeConnectionQueryService(
-                        repositoryProvider,
+                        noteRepository,
                         commandInfoService,
                         configService
                     ),
-                inject: [REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
+                inject: [NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN, CommandInfoService, ConfigService],
             },
             {
                 provide: TagQueryService,
