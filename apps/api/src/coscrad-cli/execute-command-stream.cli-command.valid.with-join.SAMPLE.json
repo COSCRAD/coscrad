@@ -53,5 +53,30 @@
             },
             "termId": "APPEND_THIS_ID:1"
         }
+    },
+    {
+        "type": "CONNECT_RESOURCES_WITH_NOTE",
+        "payload": {
+            "aggregateCompositeIdentifier": {
+                "type": "note",
+                "id": "GENERATE_THIS_ID:note1"
+            },
+            "fromMemberCompositeIdentifier": {
+                "type": "term",
+                "id": "APPEND_THIS_ID:1"
+            },
+            "fromMemberContext": {
+                "type": "general"
+            },
+            "toMemberCompositeIdentifier": {
+                "type": "vocabularyList",
+                "id": "APPEND_THIS_ID:v22"
+            },
+            "toMemberContext": {
+                "type": "general"
+            },
+            "text": "This note came from a command with a special case in the slug parsing logic and connects term 1 to vocabulary list v22",
+            "languageCode": "en"
+        }
     }
 ]

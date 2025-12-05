@@ -4,9 +4,11 @@ import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domai
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { DTO } from '../../../../../types/DTO';
-import { QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { EdgeConnectionContext } from '../../context.entity';
-import { INoteQueryRepository } from '../../repositories/note-query-repository.interface';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../repositories/note-query-repository.interface';
 import { NoteAboutResourceCreated } from './note-about-resource-created.event';
 
 export interface INoteCreationDto {
@@ -22,7 +24,7 @@ export interface IQueryRepositoryForAnnotatable {
 @CoscradEventConsumer('NOTE_ABOUT_RESOURCE_CREATED')
 export class NoteAboutResourceCreatedEventHandler implements ICoscradEventHandler {
     constructor(
-        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly noteRepository: INoteQueryRepository
     ) {}
 

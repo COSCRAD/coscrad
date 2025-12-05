@@ -119,6 +119,7 @@ core dependencies and removed dependencies no longer in use.
 
 #### Relevant PRs
 
+-   fix: add special case for replace slugs in RESOURCES_CONNECTED_WITH_NOTES (#800)
 -   bump nestjs from 9 to 11 (#768)
 -   bump several dependencies (#766)
 -   build: bump node to 24.6.0 (#763)
