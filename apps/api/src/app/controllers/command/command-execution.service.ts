@@ -19,7 +19,10 @@ import {
     IIdManager,
     UniquelyIdentifiableType,
 } from '../../../domain/interfaces/id-manager.interface';
-import { ConnectResourcesWithNote } from '../../../domain/models/context/commands';
+import {
+    ConnectResourcesWithNote,
+    CreateNoteAboutResource,
+} from '../../../domain/models/context/commands';
 import validateCommandPayloadType from '../../../domain/models/shared/command-handlers/utilities/validateCommandPayloadType';
 import CommandExecutionError from '../../../domain/models/shared/common-command-errors/CommandExecutionError';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -432,6 +435,20 @@ export class CommandExecutionService {
                         fsaToExecute,
                         'payload.toMemberCompositeIdentifier.id',
                         slugToUuid.get(toSlugDefinition[1])
+                    );
+                }
+            } else if (fsa.type === 'CREATE_NOTE_ABOUT_RESOURCE') {
+                const payload = fsa.payload as CreateNoteAboutResource;
+
+                const selfMemberSlugDefinition = parseSlugDefinition(
+                    payload.resourceCompositeIdentifier.id
+                );
+
+                if (!isInternalError(selfMemberSlugDefinition)) {
+                    fsaToExecute = cloneWithOverridesByDeepPath(
+                        fsaToExecute,
+                        'payload.resourceCompositeIdentifier.id',
+                        slugToUuid.get(selfMemberSlugDefinition[1])
                     );
                 }
             } else if (commandTypeToReferentialPropertyPaths.has(commandType)) {
