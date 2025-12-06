@@ -448,7 +448,7 @@ describe(`ArangoSongQueryRepository`, () => {
 
             const {
                 selfContext,
-                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                other: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
                 role: foundConnectionRoleForResource,

@@ -124,7 +124,7 @@ class WidgetQueryRepository {
                         myRole === EdgeConnectionMemberRole.from
                             ? edge.connectedResources.from.context
                             : edge.connectedResources.to.context,
-                    otherCompositeIdentifier:
+                    other:
                         myRole === EdgeConnectionMemberRole.from
                             ? edge.connectedResources.to.resource
                             : edge.connectedResources.from.resource,

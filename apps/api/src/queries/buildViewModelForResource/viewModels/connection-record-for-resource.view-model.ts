@@ -19,7 +19,7 @@ import { DTO } from '../../../types/DTO';
         selfContext: {
             type: EdgeConnectionContextType.general,
         },
-        otherCompositeIdentifier: {
+        other: {
             type: ResourceType.audioItem,
             id: buildDummyUuid(123),
         },
@@ -37,7 +37,7 @@ export class ConnectionRecordForResourceViewModel {
 
     selfContext: IEdgeConnectionContext;
 
-    otherCompositeIdentifier: ResourceCompositeIdentifier;
+    other: ResourceCompositeIdentifier;
 
     otherContext: IEdgeConnectionContext;
 
@@ -46,13 +46,13 @@ export class ConnectionRecordForResourceViewModel {
     constructor(dto: DTO<ConnectionRecordForResourceViewModel>) {
         if (!dto) return;
 
-        const { id, note, selfContext, otherCompositeIdentifier, otherContext, role } = dto;
+        const { id, note, selfContext, other: otherCompositeIdentifier, otherContext, role } = dto;
 
         this.id = id;
 
         this.selfContext = selfContext;
 
-        this.otherCompositeIdentifier = otherCompositeIdentifier;
+        this.other = otherCompositeIdentifier;
 
         this.otherContext = otherContext;
 

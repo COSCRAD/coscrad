@@ -1,30 +1,35 @@
 import {
+    EdgeConnectionMemberRole,
+    EdgeConnectionType,
     IMultilingualTextItem,
     IToken,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
+import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { UserQueryOptions } from '../../../../app/controllers/resources/term.controller';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
-import {
-    CoscradBooleanOperator,
-    CoscradConditionBlockType,
-    CoscradSimpleCondition,
-} from '../../../../lib/coscrad-query-language';
+import { compileAqlFilterBlock } from '../../../../lib/coscrad-query-language/aql/compile-aql-filter-block';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import mapEntityDTOToDatabaseDocument, {
+    ArangoDatabaseDocument,
+} from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
-import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ContributionSummary } from '../../user-management';
@@ -39,10 +44,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
-        // AUDIO_ITEM_QUERY_REPOSITORY?
-        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         @Inject(COSCRAD_LOGGER_TOKEN)
-        private readonly logger: ICoscradLogger
+        private readonly _logger: ICoscradLogger
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
@@ -319,37 +322,295 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         });
     }
 
-    async fetchById(id: AggregateId, user?: CoscradUserWithGroups): Promise<Maybe<TermViewModel>> {
-        const idEquals: CoscradSimpleCondition = {
-            type: CoscradConditionBlockType.SIMPLE,
-            operator: CoscradBooleanOperator.TEXT_EQUALS,
-            params: [id],
-            field: 'id',
-        };
+    async fetchById(
+        id: AggregateId,
+        user?: CoscradUserWithGroups
+    ): Promise<Maybe<ResultOrError<TermViewModel>>> {
+        const collectionId = 'term__VIEWS';
 
-        const result = await this.database.fetchForUser({
-            filter: idEquals,
-            user,
+        // const result = await this.database.fetchForUser({
+        //     filter: idEquals,
+        //     user,
+        // });
+
+        const docRef = 'doc';
+
+        const bindVars: Record<string, unknown> = {};
+
+        /**
+         * Note that we could use `CoscradQueryLanguage` to `And` the incoming
+         * user filter with a `CAN_USER` block. We do not do this, because we want
+         * to prevent public users from accessing the `AccessControlList` field
+         * in queries as this opens up injection attacks.
+         *
+         * If there is ever a reason for a resource to name the `accessControlList`
+         * property differently, we can make this property name an instance variable
+         * for this class.
+         */
+        let filterBlockForUser = `
+                filter @isAdmin || (has(${docRef},"isPublished") && ${docRef}.isPublished)
+                `;
+
+        bindVars.isAdmin = user?.isAdmin() || false;
+
+        if (user) {
+            bindVars.userId = user.id;
+
+            bindVars.groupIds = user.groups.map(({ id }) => id);
+
+            // if the resource is not published, we need to defer to the ACL list
+            filterBlockForUser += `|| (contains(${docRef}.accessControlList.allowedUserIds,@userId)
+                || length(intersection(${docRef}.accessControlList.allowedGroupIds,@groupIds)) > 0)
+                `;
+        }
+
+        // Should we ensure that the query returns the `next` page number \ offset?
+        const aqlQueryString = `
+                let allResults = (
+                    for ${docRef}, edge in 0..1 any "${collectionId}/${id}" graph web_of_knowledge
+                    ${filterBlockForUser}
+                    return {
+                        doc: ${docRef},
+                        edge
+                    }
+                )
+        
+                return allResults
+                `;
+
+        const cursor = await this.database.query({ query: aqlQueryString, bindVars }).catch((e) => {
+            throw e;
         });
+
+        const resultsList = await cursor.all();
+
+        const result = resultsList[0];
 
         if (isInternalError(result)) {
             // TODO We might consider returning this error.
             throw result;
         }
 
-        const { selected } = result;
-
-        if (selected.length === 0) {
+        if (result.length === 0) {
             return NotFound;
         }
 
-        const asView = mapDatabaseDocumentToAggregateDTO(selected[0]);
+        // TODO share this logic with `fetchMany`
+        const [{ doc: termDoc }, ...connectedDocsAndEdges] = result;
+
+        const { notes, connections } = connectedDocsAndEdges.reduce(
+            (acc, { doc: otherDoc, edge }) => {
+                if (edge.connectionType === EdgeConnectionType.self) {
+                    const noteRecord: NoteRecordForResourceViewModel = {
+                        id: edge._key,
+                        note: new MultilingualText(edge.text),
+                        context: edge.connectedResources.self.context,
+                    };
+
+                    if (!acc.notes.some((note) => note.id === noteRecord.id)) {
+                        acc.notes.push(noteRecord);
+                    }
+
+                    return acc;
+                }
+
+                const myRole =
+                    edge._to == `term__VIEWS/${id}`
+                        ? EdgeConnectionMemberRole.to
+                        : EdgeConnectionMemberRole.from;
+
+                const connection: ConnectionRecordForResourceViewModel = {
+                    id: edge._key,
+                    note: new MultilingualText(edge.text),
+                    selfContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.from.context
+                            : edge.connectedResources.to.context,
+                    /**
+                     * Note that this is the full view DTO for
+                     * the other resource, not just a composite identifier.
+                     *
+                     * TODO Is there any other mapping that neeeds to
+                     * be done here?
+                     */
+                    other: mapDatabaseDocumentToAggregateDTO(otherDoc),
+                    otherContext:
+                        myRole === EdgeConnectionMemberRole.from
+                            ? edge.connectedResources.to.context
+                            : edge.connectedResources.from.context,
+                    role: EdgeConnectionMemberRole.to,
+                };
+
+                acc.connections.push(connection);
+
+                return acc;
+            },
+            {
+                notes: [],
+                connections: [],
+            }
+        );
+
+        const asView = clonePlainObjectWithOverrides(
+            mapDatabaseDocumentToAggregateDTO(termDoc as ArangoDatabaseDocument<TermViewModel>),
+            {
+                notes,
+                connections,
+            }
+        );
 
         return TermViewModel.fromDto(asView);
     }
 
-    async fetchMany(queryOptions?: UserQueryOptions) {
-        const result = await this.database.fetchForUser(queryOptions);
+    async fetchMany(options?: UserQueryOptions & { user?: CoscradUserWithGroups }) {
+        const docRef = 'doc';
+
+        const filterCondition = isNonEmptyObject(options?.filter) ? options.filter : undefined;
+
+        let filterBlock: string;
+
+        let letStatements = '';
+
+        const collectionName = 'term__VIEWS';
+
+        const bindVars: Record<string, unknown> = {
+            '@collectionName': collectionName,
+        };
+
+        /**
+         * Note that we could use `CoscradQueryLanguage` to `And` the incoming
+         * user filter with a `CAN_USER` block. We do not do this, because we want
+         * to prevent public users from accessing the `AccessControlList` field
+         * in queries as this opens up injection attacks.
+         *
+         * If there is ever a reason for a resource to name the `accessControlList`
+         * property differently, we can make this property name an instance variable
+         * for this class.
+         */
+        let filterBlockForUser = `
+                filter @isAdmin || (has(${docRef},"isPublished") && ${docRef}.isPublished)
+                `;
+
+        bindVars.isAdmin = options?.user?.isAdmin() || false;
+
+        if (options?.user) {
+            bindVars.userId = options.user.id;
+
+            bindVars.groupIds = options.user.groups.map(({ id }) => id);
+
+            // if the resource is not published, we need to defer to the ACL list
+            filterBlockForUser += `|| (contains(${docRef}.accessControlList.allowedUserIds,@userId)
+                || length(intersection(${docRef}.accessControlList.allowedGroupIds,@groupIds)) > 0)
+                `;
+        }
+
+        if (filterCondition) {
+            const compileResult = compileAqlFilterBlock(filterCondition, docRef);
+
+            if (isInternalError(compileResult)) {
+                return new InternalError(`The query you have provided is invalid.`, [
+                    compileResult,
+                ]);
+            }
+
+            const { bindVars: subqueryBindVars, filterStatement: filterStatements } = compileResult;
+
+            filterBlock = `filter ${filterStatements}`;
+
+            Object.assign(bindVars, subqueryBindVars);
+
+            letStatements = isNonEmptyString(compileResult.letStatement)
+                ? compileResult.letStatement
+                : '';
+        } else {
+            filterBlock = '';
+        }
+
+        /**
+         * We may want to handle this at a higher level (controller \ middleware).
+         * This logic guarantees that we do not have the risk of AQL injection,
+         * even though the `offset` and `size` are not part of the `bindVars`.
+         *
+         * The one thing to be careful about is the UX \ DX associated with
+         * defaulting to a standard value when the value provided is invalid. It
+         * lacks inentionality. Maybe we can do an additional check in the
+         * controller \ middleware.
+         */
+
+        const DEFAULT_SIZE = 100;
+
+        const MAX_SIZE = 1000;
+
+        const userProvidedSize = options?.pagination?.size;
+
+        const size =
+            Number.isInteger(userProvidedSize) &&
+            userProvidedSize > 0 &&
+            userProvidedSize <= MAX_SIZE
+                ? userProvidedSize
+                : DEFAULT_SIZE;
+
+        const DEFAULT_OFFSET = 0;
+
+        const userProvidedPage = options?.pagination?.page;
+
+        const offset =
+            Number.isInteger(userProvidedPage) && userProvidedPage >= 0
+                ? (userProvidedPage - 1) * size
+                : DEFAULT_OFFSET;
+
+        const limitBlock = `
+                    limit ${offset}, ${size}
+                `;
+
+        const sortBlock = `
+                    sort ${docRef}.name.items[0].text, ${docRef}._key
+                `;
+
+        // Should we ensure that the query returns the `next` page number \ offset?
+        const aqlQueryString = `
+                let allResults = (
+                    for ${docRef} in @@collectionName
+                    ${sortBlock}
+                    ${letStatements}
+                    ${filterBlockForUser}
+                    ${filterBlock}
+                    let docsAndEdges = (
+                        for graphDoc, edge in 0..1 any ${docRef} graph web_of_knowledge
+                        return {
+                            doc: graphDoc,
+                            edge
+                        }
+                    )
+
+                    return docsAndEdges
+                )
+        
+                let count = (
+                    for r in allResults
+                    collect with count into l
+                    return l
+                )
+        
+                let selected = (
+                    for r in allResults
+                    ${limitBlock}
+                    return r
+                )
+        
+                return {
+                    selected,
+                    count: count[0]
+                }
+                `;
+
+        const cursor = await this.database.query({ query: aqlQueryString, bindVars }).catch((e) => {
+            throw e;
+        });
+
+        const resultsList = await cursor.all();
+
+        const result = resultsList[0];
 
         if (isInternalError(result)) {
             throw new InternalError(
@@ -360,16 +621,77 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const { selected, count } = result;
 
-        const buildResult = selected.map((doc) => {
-            const dto = mapDatabaseDocumentToAggregateDTO(doc);
+        const buildResult = selected.map((docsAndEdges) => {
+            const [{ doc: termDoc }, ...connectedDocsAndEdges] = docsAndEdges;
 
-            return TermViewModel.fromDto(dto);
+            const { notes, connections } = connectedDocsAndEdges.reduce(
+                (acc, { doc: otherDoc, edge }) => {
+                    if (edge.connectionType === EdgeConnectionType.self) {
+                        const noteRecord: NoteRecordForResourceViewModel = {
+                            id: edge._key,
+                            note: new MultilingualText(edge.text),
+                            context: edge.connectedResources.self.context,
+                        };
+
+                        if (!acc.notes.some((note) => note.id === noteRecord.id)) {
+                            acc.notes.push(noteRecord);
+                        }
+
+                        return acc;
+                    }
+
+                    const myRole =
+                        edge._to == `term__VIEWS/${termDoc.id}`
+                            ? EdgeConnectionMemberRole.to
+                            : EdgeConnectionMemberRole.from;
+
+                    const connection: ConnectionRecordForResourceViewModel = {
+                        id: edge._key,
+                        note: new MultilingualText(edge.text),
+                        selfContext:
+                            myRole === EdgeConnectionMemberRole.from
+                                ? edge.connectedResources.from.context
+                                : edge.connectedResources.to.context,
+                        /**
+                         * Note that this is the full view DTO for
+                         * the other resource, not just a composite identifier.
+                         *
+                         * TODO Is there any other mapping that neeeds to
+                         * be done here?
+                         */
+                        other: mapDatabaseDocumentToAggregateDTO(otherDoc),
+                        otherContext:
+                            myRole === EdgeConnectionMemberRole.from
+                                ? edge.connectedResources.to.context
+                                : edge.connectedResources.from.context,
+                        role: EdgeConnectionMemberRole.to,
+                    };
+
+                    acc.connections.push(connection);
+
+                    return acc;
+                },
+                {
+                    notes: [],
+                    connections: [],
+                }
+            );
+
+            const asView = clonePlainObjectWithOverrides(
+                mapDatabaseDocumentToAggregateDTO(termDoc as ArangoDatabaseDocument<TermViewModel>),
+                {
+                    notes,
+                    connections,
+                }
+            );
+
+            return TermViewModel.fromDto(asView);
         });
 
         return {
             entities: buildResult,
             // TODO return this from the AQL query as well as it resolves the actual pagination params to use by applying defaults
-            page: queryOptions?.pagination?.page || 1,
+            page: options?.pagination?.page || 1,
             count,
         };
     }

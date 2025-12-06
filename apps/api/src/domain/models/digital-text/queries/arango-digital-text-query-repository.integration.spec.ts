@@ -168,7 +168,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                     note: buildMultilingualTextWithSingleItem(
                         `this is why the texts are connected`
                     ),
-                    otherCompositeIdentifier: {
+                    other: {
                         type: ResourceType.digitalText,
                         id: buildDummyUuid(901),
                     },
@@ -443,7 +443,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
             const {
                 selfContext,
-                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                other: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,

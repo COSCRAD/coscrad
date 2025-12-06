@@ -117,7 +117,7 @@ class WidgetQueryRepository {
                         myRole === EdgeConnectionMemberRole.from
                             ? edge.connectedResources.from.context
                             : edge.connectedResources.to.context,
-                    otherCompositeIdentifier:
+                    other:
                         myRole === EdgeConnectionMemberRole.from
                             ? edge.connectedResources.to.resource
                             : edge.connectedResources.from.resource,
@@ -260,7 +260,7 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
                 const newConnectionForToMember = updatedToMember.connections[0];
 
-                expect(newConnectionForToMember.otherCompositeIdentifier).toEqual({
+                expect(newConnectionForToMember.other).toEqual({
                     type: WIDGET_RESOURCE_TYPE,
                     id: existingWidgetViewForFromMember.id,
                 });
@@ -291,7 +291,7 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
                 const {
                     id: connectionId,
                     selfContext,
-                    otherCompositeIdentifier,
+                    other: otherCompositeIdentifier,
                     otherContext,
                     note,
                 } = updatedFromMember.connections[0];
@@ -356,7 +356,7 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
                 expect(updatedFromMember.connections).toHaveLength(2);
 
                 const connectedResourceIds = new Set(
-                    updatedFromMember.connections.map(({ otherCompositeIdentifier: { id } }) => id)
+                    updatedFromMember.connections.map(({ other: { id } }) => id)
                 );
 
                 expect(connectedResourceIds.has(existingWidgetViewForToMember.id)).toBe(true);

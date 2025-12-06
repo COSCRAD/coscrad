@@ -3,7 +3,7 @@ import {
     CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionMemberRole,
-    IEdgeConnectionContext,
+    EdgeConnectionType,
     LanguageCode,
     MultilingualTextItemRole,
     ResourceType,
@@ -15,7 +15,7 @@ import buildMockConfigService from '../../../../app/config/__tests__/utilities/b
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
@@ -52,7 +52,11 @@ import {
     IVideoQueryRepository,
     VIDEO_QUERY_REPOSITORY_TOKEN,
 } from '../../audio-visual/video/queries';
-import { EdgeConnection } from '../../context/edge-connection.entity';
+import {
+    INoteCreationRecord,
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../context/repositories/note-query-repository.interface';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { CoscradContributor } from '../../user-management/contributor';
@@ -65,6 +69,8 @@ import { PromptTermCreated } from '../commands';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
 
+const termIds = [1, 2, 3].map(buildDummyUuid);
+
 const testAdminUser = new CoscradUserWithGroups(
     buildTestInstance(CoscradUser, {
         roles: [CoscradUserRole.superAdmin],
@@ -72,12 +78,42 @@ const testAdminUser = new CoscradUserWithGroups(
     []
 );
 
+const CONNECTED_RESOURCE_TYPE = 'widget' as ResourceType;
+
+const CONNECTED_RESOURCE_COLLECTION = 'widget__VIEWS';
+
+const connectedWidget = {
+    type: CONNECTED_RESOURCE_TYPE,
+    id: buildDummyUuid(1),
+    name: 'related widget',
+};
+
+const generalContext = {
+    type: 'general',
+};
+
+const targetTermId = termIds[0];
+
+const connectingNoteInfo: INoteCreationRecord = {
+    id: buildDummyUuid(301),
+    connectionType: EdgeConnectionType.dual,
+    text: buildMultilingualTextWithSingleItem('This is why the widget is related to this term'),
+};
+
+const selfNoteInfo: INoteCreationRecord = {
+    id: buildDummyUuid(302),
+    connectionType: EdgeConnectionType.dual,
+    text: buildMultilingualTextWithSingleItem('This is a note about the term'),
+};
+
 describe(`ArangoTermQueryRepository`, () => {
     let testQueryRepository: ITermQueryRepository;
 
     let vocabularyListQueryRepository: IVocabularyListQueryRepository;
 
     let audioItemQueryRepository: IAudioItemQueryRepository;
+
+    let noteQueryRepository: INoteQueryRepository;
 
     let videoQueryRepository: IVideoQueryRepository;
 
@@ -105,6 +141,8 @@ describe(`ArangoTermQueryRepository`, () => {
         await moduleRef.init();
 
         app = moduleRef.createNestApplication();
+
+        await app.init();
 
         const connectionProvider = app.get(ArangoConnectionProvider);
 
@@ -136,14 +174,12 @@ describe(`ArangoTermQueryRepository`, () => {
             mapEntityDTOToDatabaseDocument
         );
 
-        app.init();
+        noteQueryRepository = app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN);
     });
 
     afterAll(async () => {
         databaseProvider.close();
     });
-
-    const termIds = [1, 2, 3].map(buildDummyUuid);
 
     const buildTermText = (id: string) => `term ${id}`;
 
@@ -207,12 +243,37 @@ describe(`ArangoTermQueryRepository`, () => {
     );
 
     describe(`fetchById`, () => {
-        const targetTermId = termIds[0];
-
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
+            await databaseProvider.getDatabaseForCollection(CONNECTED_RESOURCE_COLLECTION).clear();
+
             await testQueryRepository.create(termViews[0]);
+
+            await databaseProvider
+                .getDatabaseForCollection(CONNECTED_RESOURCE_COLLECTION)
+                .create(mapEntityDTOToDatabaseDocument(connectedWidget));
+
+            /**
+             * We connect the `connectedWidget` to the `targetTerm` in the
+             * query db.
+             */
+            await noteQueryRepository.connectResourcesWithNote(
+                connectingNoteInfo,
+                { type: AggregateType.term, id: targetTermId },
+                generalContext,
+                connectedWidget,
+                generalContext
+            );
+
+            await noteQueryRepository.createNoteAbout(
+                selfNoteInfo,
+                {
+                    id: targetTermId,
+                    type: AggregateType.term,
+                },
+                generalContext
+            );
         });
 
         describe(`when there is a term with the given ID`, () => {
@@ -222,13 +283,32 @@ describe(`ArangoTermQueryRepository`, () => {
 
                     expect(result).not.toBe(NotFound);
 
-                    const { name } = result as TermViewModel;
+                    const { name, connections, notes } = result as TermViewModel;
 
                     const foundOriginalTextForTerm = name.items.find(
                         ({ languageCode }) => languageCode === originalLanguageCode
                     ).text;
 
                     expect(foundOriginalTextForTerm).toBe(termText);
+
+                    expect(connections).toHaveLength(1);
+
+                    expect(notes).toHaveLength(1);
+
+                    const { context, note } = notes[0];
+
+                    expect(context).toEqual(generalContext);
+
+                    expect(note.toString()).toEqual(
+                        new MultilingualText(selfNoteInfo.text).toString()
+                    );
+
+                    // This should be the entire "other"
+                    const { other } = connections[0];
+
+                    expect(other.id).toBe(connectedWidget.id);
+
+                    expect(other.type).toBe(CONNECTED_RESOURCE_TYPE);
                 });
             });
         });
@@ -246,17 +326,77 @@ describe(`ArangoTermQueryRepository`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
+            await databaseProvider.getDatabaseForCollection(CONNECTED_RESOURCE_COLLECTION).clear();
+
             for (const term of termViews) {
                 await testQueryRepository.create(term);
             }
+
+            await databaseProvider
+                .getDatabaseForCollection(CONNECTED_RESOURCE_COLLECTION)
+                .create(mapEntityDTOToDatabaseDocument(connectedWidget));
+
+            /**
+             * We connect the `connectedWidget` to the `targetTerm` in the
+             * query db.
+             */
+            await noteQueryRepository.connectResourcesWithNote(
+                connectingNoteInfo,
+                { type: AggregateType.term, id: targetTermId },
+                generalContext,
+                connectedWidget,
+                generalContext
+            );
+
+            await noteQueryRepository.createNoteAbout(
+                selfNoteInfo,
+                {
+                    id: targetTermId,
+                    type: AggregateType.term,
+                },
+                generalContext
+            );
         });
 
         it(`should return the expected term views`, async () => {
-            const { entities: result } = await testQueryRepository.fetchMany({
+            const resultOrError = await testQueryRepository.fetchMany({
                 user: testAdminUser,
             });
 
+            if (isInternalError(resultOrError)) {
+                expect(resultOrError).not.toBeInstanceOf(InternalError);
+
+                throw new Error(`test failed`);
+            }
+
+            const { entities: result } = resultOrError;
+
             expect(result).toHaveLength(termViews.length);
+
+            const { name, connections, notes } = result[0] as TermViewModel;
+
+            const foundOriginalTextForTerm = name.items.find(
+                ({ languageCode }) => languageCode === originalLanguageCode
+            ).text;
+
+            expect(foundOriginalTextForTerm).toBe(termText);
+
+            expect(connections).toHaveLength(1);
+
+            expect(notes).toHaveLength(1);
+
+            const { context, note } = notes[0];
+
+            expect(context).toEqual(generalContext);
+
+            expect(note.toString()).toEqual(new MultilingualText(selfNoteInfo.text).toString());
+
+            // This should be the entire "other"
+            const { other } = connections[0];
+
+            expect(other.id).toBe(connectedWidget.id);
+
+            expect(other.type).toBe(CONNECTED_RESOURCE_TYPE);
         });
     });
 
@@ -346,23 +486,25 @@ describe(`ArangoTermQueryRepository`, () => {
         });
     });
 
-    describe(`createNoteAbout`, () => {
+    /**
+     * Note that it is the `NoteRepository`'s responsiblity to create notes. But
+     * it is the `TermQueryRepository`'s job to join the notes and connections
+     * when running queries. The note query repository does not know about
+     * specific resource types, but instead uses a toy widget model.
+     *
+     * This test proves that the note and term query repositories are working
+     * together as intended.
+     */
+    describe(`NoteQueryRepository - createNoteAbout`, () => {
         const targetTerm = buildTestInstance(TermViewModel, {
             notes: [],
         });
 
-        const targetNote = buildTestInstance(EdgeConnection, {
-            members: [
-                {
-                    compositeIdentifier: {
-                        type: ResourceType.video,
-                        id: targetTerm.id,
-                    },
-                    context: { type: EdgeConnectionContextType.general },
-                    role: EdgeConnectionMemberRole.self,
-                },
-            ],
-        });
+        const targetNote: INoteCreationRecord = {
+            id: buildDummyUuid(657),
+            connectionType: EdgeConnectionType.self,
+            text: buildMultilingualTextWithSingleItem('Note for this term'),
+        };
 
         beforeEach(async () => {
             await databaseProvider
@@ -381,11 +523,7 @@ describe(`ArangoTermQueryRepository`, () => {
         });
 
         it(`should append a note to the term`, async () => {
-            await testQueryRepository.createNoteAbout(targetTerm.id, {
-                noteId: targetNote.id,
-                context: targetNote.members[0].context,
-                text: targetNote.note,
-            });
+            await noteQueryRepository.createNoteAbout(targetNote, targetTerm, generalContext);
 
             const { notes } = (await testQueryRepository.fetchById(
                 targetTerm.id,
@@ -396,11 +534,26 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const { note } = notes[0];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual(new MultilingualText(targetNote.text).toDTO());
         });
     });
 
-    describe(`createConnection`, () => {
+    // See the note for `createNoteAbout`
+    describe(`NoteQueryRepository - createConnection`, () => {
+        const generalContext = {
+            type: EdgeConnectionContextType.general,
+        };
+
+        const otherCompositeIdentifier = {
+            type: 'widget' as ResourceType,
+            id: buildDummyUuid(88),
+        };
+
+        const widgetDto = {
+            ...otherCompositeIdentifier,
+            name: 'awesome widget',
+        };
+
         const targetTerm = buildTestInstance(TermViewModel, {
             // no connections to start
             connections: [],
@@ -409,19 +562,18 @@ describe(`ArangoTermQueryRepository`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
+            await databaseProvider.getDatabaseForCollection('widget__VIEWS').clear();
+
             await testQueryRepository.create(targetTerm);
+
+            await databaseProvider
+                .getDatabaseForCollection<{ id: string; type: string; name: string }>(
+                    'widget__VIEWS'
+                )
+                .create(mapEntityDTOToDatabaseDocument(widgetDto));
         });
 
         it(`should add the connection info`, async () => {
-            const generalContext: IEdgeConnectionContext = {
-                type: EdgeConnectionContextType.general,
-            };
-
-            const otherCompositeIdentifier = {
-                type: 'widget' as ResourceType,
-                id: buildDummyUuid(88),
-            };
-
             const noteId = buildDummyUuid(89);
 
             const textForNote = 'This is why the widget is relevant to the term.';
@@ -430,14 +582,17 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const role = EdgeConnectionMemberRole.to;
 
-            await testQueryRepository.createConnection(targetTerm.id, {
-                noteId,
-                selfContext: generalContext,
-                otherContext: generalContext,
+            await noteQueryRepository.connectResourcesWithNote(
+                {
+                    id: noteId,
+                    connectionType: EdgeConnectionType.dual,
+                    text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
+                },
+                targetTerm.getCompositeIdentifier(),
+                generalContext,
                 otherCompositeIdentifier,
-                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
-                role,
-            });
+                generalContext
+            );
 
             const { connections } = (await testQueryRepository.fetchById(
                 targetTerm.id,
@@ -448,7 +603,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const {
                 selfContext,
-                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                other: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
@@ -458,7 +613,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             expect(otherContext).toEqual(generalContext);
 
-            expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
+            expect(foundCompositeIdentifierForConnectedResource).toEqual(widgetDto);
 
             const { languageCode: foundLanguageCode, text: foundNoteText } =
                 note.getOriginalTextItem();
@@ -493,7 +648,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const updatedTerm = await testQueryRepository.fetchById(targetTerm.id, testAdminUser);
 
-            if (isNotFound(updatedTerm)) {
+            if (isNotFound(updatedTerm) || isInternalError(updatedTerm)) {
                 expect(updatedTerm).not.toBe(NotFound);
 
                 throw new InternalError('test failed');
@@ -548,8 +703,10 @@ describe(`ArangoTermQueryRepository`, () => {
 
             const updatedTerm = await testQueryRepository.fetchById(targetTerm.id, testAdminUser);
 
-            if (isNotFound(updatedTerm)) {
+            if (isNotFound(updatedTerm) || isInternalError(updatedTerm)) {
                 expect(updatedTerm).not.toBe(NotFound);
+
+                expect(updatedTerm).not.toBeInstanceOf(Error);
 
                 throw new InternalError('test failed');
             }
@@ -960,7 +1117,7 @@ describe(`ArangoTermQueryRepository`, () => {
                     testAdminUser
                 );
 
-                if (isNotFound(searchResult)) {
+                if (isNotFound(searchResult) || isInternalError(searchResult)) {
                     throw new InternalError(
                         `Unexpected missing term: ${targetTerm.id} in test case.`
                     );
@@ -1011,6 +1168,10 @@ describe(`ArangoTermQueryRepository`, () => {
 
                     const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
 
+                    if (isInternalError(queryResponseForUpdatedViews)) {
+                        throw new Error(`test failed unexpectedly`);
+                    }
+
                     queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(1);
 
@@ -1056,6 +1217,10 @@ describe(`ArangoTermQueryRepository`, () => {
                     );
 
                     const queryResponseForUpdatedViews = await testQueryRepository.fetchMany();
+
+                    if (isInternalError(queryResponseForUpdatedViews)) {
+                        throw new Error(`test failed unexpectedly`);
+                    }
 
                     queryResponseForUpdatedViews.entities.forEach(({ vocabularyLists }) => {
                         expect(vocabularyLists).toHaveLength(2);

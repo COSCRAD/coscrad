@@ -109,7 +109,7 @@ export class BaseArangoResourceViewQueryBuilder {
         const newConnection = ConnectionRecordForResourceViewModel.fromDto({
             id: noteId,
             selfContext,
-            otherCompositeIdentifier,
+            other: otherCompositeIdentifier,
             otherContext,
             note: new MultilingualText(text),
             role,
