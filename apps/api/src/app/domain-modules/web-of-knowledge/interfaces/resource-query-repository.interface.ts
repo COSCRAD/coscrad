@@ -1,5 +1,4 @@
 import { IQueryRepositoryForConnectable } from '../../../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
-import { IQueryRepositoryForAnnotatable } from '../../../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../../../domain/models/shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import {
     ICountable,
@@ -18,7 +17,6 @@ export type FetchManyQueryOptions = Partial<UserQueryOptions> & {
 export interface IResourceQueryRepository<T = unknown>
     extends ICountable,
         IPublishable,
-        IQueryRepositoryForAnnotatable,
         IQueryRepositoryForConnectable,
         IQueryRepositoryForTaggable,
         IQueryRepositoryForAttributable,

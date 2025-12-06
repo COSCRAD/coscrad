@@ -497,7 +497,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             const {
                 selfContext,
-                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                other: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,

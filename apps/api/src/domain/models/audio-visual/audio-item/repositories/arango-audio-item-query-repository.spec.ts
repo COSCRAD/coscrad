@@ -496,7 +496,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             const {
                 selfContext,
-                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                other: foundCompositeIdentifierForConnectedResource,
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
