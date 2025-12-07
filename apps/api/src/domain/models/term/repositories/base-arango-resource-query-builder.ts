@@ -73,7 +73,7 @@ export class BaseArangoResourceViewQueryBuilder {
     }
 
     fetchManyWithNotes(
-        options?: UserQueryOptions & { user?: CoscradUserWithGroups }
+        options?: Partial<UserQueryOptions & { user?: CoscradUserWithGroups }>
     ): ResultOrError<AqlQuery> {
         const docRef = 'doc';
 
