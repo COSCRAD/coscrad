@@ -10,9 +10,14 @@ import { Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { UserQueryOptions } from '../../../../app/controllers/resources/term.controller';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
+import {
+    CoscradBooleanOperator,
+    CoscradConditionBlockType,
+    CoscradSimpleCondition,
+} from '../../../../lib/coscrad-query-language';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
-import { NotFound } from '../../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
@@ -324,143 +329,40 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         id: AggregateId,
         user?: CoscradUserWithGroups
     ): Promise<Maybe<ResultOrError<TermViewModel>>> {
-        const collectionId = 'term__VIEWS';
+        const hasIdFilter: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.TEXT_EQUALS,
+            params: [id],
+            field: 'id',
+        };
 
-        // const result = await this.database.fetchForUser({
-        //     filter: idEquals,
-        //     user,
-        // });
-
-        const docRef = 'doc';
-
-        const bindVars: Record<string, unknown> = {};
-
-        /**
-         * Note that we could use `CoscradQueryLanguage` to `And` the incoming
-         * user filter with a `CAN_USER` block. We do not do this, because we want
-         * to prevent public users from accessing the `AccessControlList` field
-         * in queries as this opens up injection attacks.
-         *
-         * If there is ever a reason for a resource to name the `accessControlList`
-         * property differently, we can make this property name an instance variable
-         * for this class.
-         */
-        let filterBlockForUser = `
-                filter @isAdmin || (has(${docRef},"isPublished") && ${docRef}.isPublished)
-                `;
-
-        bindVars.isAdmin = user?.isAdmin() || false;
-
-        if (user) {
-            bindVars.userId = user.id;
-
-            bindVars.groupIds = user.groups.map(({ id }) => id);
-
-            // if the resource is not published, we need to defer to the ACL list
-            filterBlockForUser += `|| (contains(${docRef}.accessControlList.allowedUserIds,@userId)
-                || length(intersection(${docRef}.accessControlList.allowedGroupIds,@groupIds)) > 0)
-                `;
-        }
-
-        // Should we ensure that the query returns the `next` page number \ offset?
-        const aqlQueryString = `
-                let allResults = (
-                    for ${docRef}, edge in 0..1 any "${collectionId}/${id}" graph web_of_knowledge
-                    ${filterBlockForUser}
-                    return {
-                        doc: ${docRef},
-                        edge
-                    }
-                )
-        
-                return allResults
-                `;
-
-        const cursor = await this.database.query({ query: aqlQueryString, bindVars }).catch((e) => {
-            throw e;
+        const searchResult = await this.fetchMany({
+            filter: hasIdFilter,
+            user,
         });
 
-        const resultsList = await cursor.all();
-
-        const result = resultsList[0];
-
-        if (isInternalError(result)) {
-            // TODO We might consider returning this error.
-            throw result;
+        if (isNotFound(searchResult) || isInternalError(searchResult)) {
+            return searchResult;
         }
 
-        if (result.length === 0) {
+        const { entities } = searchResult;
+
+        if (entities.length === 0) {
             return NotFound;
         }
 
-        // TODO share this logic with `fetchMany`
-        const [{ doc: termDoc }, ...connectedDocsAndEdges] = result;
+        if (entities.length > 1) {
+            throw new InternalError(
+                `Unexpectedly received ${entities.length} results for a fetchById query`
+            );
+        }
 
-        const { notes, connections } = connectedDocsAndEdges.reduce(
-            (acc, { doc: otherDoc, edge }) => {
-                if (edge.connectionType === EdgeConnectionType.self) {
-                    const noteRecord: NoteRecordForResourceViewModel = {
-                        id: edge._key,
-                        note: new MultilingualText(edge.text),
-                        context: edge.connectedResources.self.context,
-                    };
+        const termDoc = entities[0];
 
-                    if (!acc.notes.some((note) => note.id === noteRecord.id)) {
-                        acc.notes.push(noteRecord);
-                    }
-
-                    return acc;
-                }
-
-                const myRole =
-                    edge._to == `term__VIEWS/${id}`
-                        ? EdgeConnectionMemberRole.to
-                        : EdgeConnectionMemberRole.from;
-
-                const connection: ConnectionRecordForResourceViewModel = {
-                    id: edge._key,
-                    note: new MultilingualText(edge.text),
-                    selfContext:
-                        myRole === EdgeConnectionMemberRole.from
-                            ? edge.connectedResources.from.context
-                            : edge.connectedResources.to.context,
-                    /**
-                     * Note that this is the full view DTO for
-                     * the other resource, not just a composite identifier.
-                     *
-                     * TODO Is there any other mapping that neeeds to
-                     * be done here?
-                     */
-                    other: mapDatabaseDocumentToAggregateDTO(otherDoc),
-                    otherContext:
-                        myRole === EdgeConnectionMemberRole.from
-                            ? edge.connectedResources.to.context
-                            : edge.connectedResources.from.context,
-                    role: EdgeConnectionMemberRole.to,
-                };
-
-                acc.connections.push(connection);
-
-                return acc;
-            },
-            {
-                notes: [],
-                connections: [],
-            }
-        );
-
-        const asView = clonePlainObjectWithOverrides(
-            mapDatabaseDocumentToAggregateDTO(termDoc as ArangoDatabaseDocument<TermViewModel>),
-            {
-                notes,
-                connections,
-            }
-        );
-
-        return TermViewModel.fromDto(asView);
+        return termDoc;
     }
 
-    async fetchMany(options?: UserQueryOptions & { user?: CoscradUserWithGroups }) {
+    async fetchMany(options?: Partial<UserQueryOptions & { user?: CoscradUserWithGroups }>) {
         const compiledQuery = this.baseResourceQueryBuilder.fetchManyWithNotes(options);
 
         if (isInternalError(compiledQuery)) {
