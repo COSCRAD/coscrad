@@ -1,6 +1,4 @@
 import {
-    EdgeConnectionMemberRole,
-    EdgeConnectionType,
     IMultilingualTextItem,
     IToken,
     LanguageCode,
@@ -18,7 +16,6 @@ import {
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
-import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -26,11 +23,8 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/
 import mapEntityDTOToDatabaseDocument, {
     ArangoDatabaseDocument,
 } from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
-import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
-import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
@@ -384,68 +378,9 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const { selected, count } = result;
 
-        const buildResult = selected.map((docsAndEdges) => {
-            const [{ doc: termDoc }, ...connectedDocsAndEdges] = docsAndEdges;
-
-            const { notes, connections } = connectedDocsAndEdges.reduce(
-                (acc, { doc: otherDoc, edge }) => {
-                    if (edge.connectionType === EdgeConnectionType.self) {
-                        const noteRecord: NoteRecordForResourceViewModel = {
-                            id: edge._key,
-                            note: new MultilingualText(edge.text),
-                            context: edge.connectedResources.self.context,
-                        };
-
-                        if (!acc.notes.some((note) => note.id === noteRecord.id)) {
-                            acc.notes.push(noteRecord);
-                        }
-
-                        return acc;
-                    }
-
-                    const myRole =
-                        edge._to == `term__VIEWS/${termDoc.id}`
-                            ? EdgeConnectionMemberRole.to
-                            : EdgeConnectionMemberRole.from;
-
-                    const connection: ConnectionRecordForResourceViewModel = {
-                        id: edge._key,
-                        note: new MultilingualText(edge.text),
-                        selfContext:
-                            myRole === EdgeConnectionMemberRole.from
-                                ? edge.connectedResources.from.context
-                                : edge.connectedResources.to.context,
-                        /**
-                         * Note that this is the full view DTO for
-                         * the other resource, not just a composite identifier.
-                         *
-                         * TODO Is there any other mapping that neeeds to
-                         * be done here?
-                         */
-                        other: mapDatabaseDocumentToAggregateDTO(otherDoc),
-                        otherContext:
-                            myRole === EdgeConnectionMemberRole.from
-                                ? edge.connectedResources.to.context
-                                : edge.connectedResources.from.context,
-                        role: EdgeConnectionMemberRole.to,
-                    };
-
-                    acc.connections.push(connection);
-
-                    return acc;
-                },
-                {
-                    notes: [],
-                    connections: [],
-                }
-            );
-
-            const asView = clonePlainObjectWithOverrides(
-                mapDatabaseDocumentToAggregateDTO(termDoc as ArangoDatabaseDocument<TermViewModel>),
-                {
-                    notes,
-                    connections,
-                }
+        const buildResult = selected.map((termDoc) => {
+            const asView = mapDatabaseDocumentToAggregateDTO(
+                termDoc as ArangoDatabaseDocument<TermViewModel>
             );
 
             return TermViewModel.fromDto(asView);

@@ -613,6 +613,13 @@ describe(`ArangoTermQueryRepository`, () => {
 
             expect(otherContext).toEqual(generalContext);
 
+            // @ts-expect-error These are surfacing from the DB layer
+            delete foundCompositeIdentifierForConnectedResource._key;
+            // @ts-expect-error These are surfacing from the DB layer
+            delete foundCompositeIdentifierForConnectedResource._id;
+            // @ts-expect-error These are surfacing from the DB layer
+            delete foundCompositeIdentifierForConnectedResource._rev;
+
             expect(foundCompositeIdentifierForConnectedResource).toEqual(widgetDto);
 
             const { languageCode: foundLanguageCode, text: foundNoteText } =
