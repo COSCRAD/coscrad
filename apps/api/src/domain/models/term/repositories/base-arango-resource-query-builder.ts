@@ -177,6 +177,14 @@ export class BaseArangoResourceViewQueryBuilder {
                             sort ${docRef}.name.items[0].text, ${docRef}._key
                         `;
 
+        /**
+         * TODO We need to leverage the `thin mapping layer` to convert the `other`
+         * document to a view DTO at a higher level.
+         * We should also have a resource view model factory that can take a view
+         * DTO and build the correct instance based on the type. We can do this using
+         * the `UnionFactory` approach and dynamic registration.
+         */
+
         // Should we ensure that the query returns the `next` page number \ offset?
         const aqlQueryString = `
                         let allResults = (
@@ -187,6 +195,10 @@ export class BaseArangoResourceViewQueryBuilder {
                             ${filterBlock}
                             let docsAndEdges = (
                                 for graphDoc, edge in 0..1 any ${docRef} graph web_of_knowledge
+                                options {
+                                    "uniqueEdges": "path",
+                                    bfs: true
+                                }
                                 return {
                                     doc: graphDoc,
                                     edge
@@ -205,12 +217,40 @@ export class BaseArangoResourceViewQueryBuilder {
                         let selected = (
                             for r in allResults
                             ${limitBlock}
-                            return r
+                            let notes = (
+                                for docAndEdge in r
+                                let edge = docAndEdge.edge
+                                filter edge.connectionType == 'self'
+                                return distinct {
+                                    id: edge._key,
+                                    note: edge.text,
+                                    context: edge.connectedResources.self.context,
+                                }
+                            )
+
+                            let connections = (
+                                for docAndEdge in r
+                                let edge = docAndEdge.edge
+                                filter edge.connectionType == 'dual'
+                                let myRole = edge._to == r[0].doc._id ? 'to' : 'from'
+                                let other = merge(docAndEdge.doc, { id: docAndEdge.doc._key })
+                                return distinct {
+                                    id: edge._key,
+                                    note: edge.text,
+                                    selfContext: myRole == 'to' ? edge.connectedResources.to.context : edge.connectedResources.from.context,
+                                    other,
+                                    otherContext: myRole == 'to' ? edge.connectedResources.from.context : edge.connectedResources.to.context,
+                                    role: myRole,
+                                }
+                            )
+
+                            return merge(r[0].doc,{ notes,connections })
                         )
                 
                         return {
                             selected,
-                            count: count[0]
+                            count: count[0],
+                            docsAndEdges: allResults
                         }
                         `;
 
