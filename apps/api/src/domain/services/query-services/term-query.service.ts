@@ -14,9 +14,11 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
+import { isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { PublishResource } from '../../models/shared/common-commands';
 import { AddAudioForTerm } from '../../models/term/commands';
@@ -75,10 +77,12 @@ export class TermQueryService {
     async fetchById(
         id: AggregateId,
         userWithGroups?: CoscradUserWithGroups
-    ): Promise<Maybe<ITermViewModel>> {
+    ): Promise<ResultOrError<Maybe<ITermViewModel>>> {
         const result = await this.termQueryRepository.fetchById(id, userWithGroups);
 
         if (isNotFound(result)) return result;
+
+        if (isInternalError(result)) return result;
 
         const { mediaItemId } = result;
 
@@ -98,11 +102,15 @@ export class TermQueryService {
     async fetchMany(
         userWithGroups?: CoscradUserWithGroups,
         options?: UserQueryOptions
-    ): Promise<IIndexQueryResult<ITermViewModel>> {
-        const { entities, page, count } = await this.termQueryRepository.fetchMany({
+    ): Promise<ResultOrError<IIndexQueryResult<ITermViewModel>>> {
+        const result = await this.termQueryRepository.fetchMany({
             ...options,
             user: userWithGroups,
         });
+
+        if (isInternalError(result)) return result;
+
+        const { entities, page, count } = result;
 
         return {
             // TODO ensure actions show up on entities
