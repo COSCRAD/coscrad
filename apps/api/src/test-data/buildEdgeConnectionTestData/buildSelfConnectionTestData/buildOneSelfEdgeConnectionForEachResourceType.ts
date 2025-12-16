@@ -371,4 +371,9 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
             type: AggregateType.note,
             audioForNote: MultilingualAudio.buildEmpty(),
         }))
-        .map((dto) => buildTestInstance(EdgeConnection, dto));
+        .map((dto) =>
+            buildTestInstance(EdgeConnection, {
+                ...dto,
+                connectionType: EdgeConnectionType.dual,
+            })
+        );

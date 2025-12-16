@@ -178,7 +178,10 @@ const toConnections = buildOneToConnectionForInstanceOfEachResourceType();
 
 const additionalDualConnectionsForBibliographicCitations: EdgeConnection[] =
     additionalDualConnectionsForBibliographicCitationDTOs.map((dto) =>
-        buildTestInstance(EdgeConnection, dto)
+        buildTestInstance(EdgeConnection, {
+            ...dto,
+            connectionType: EdgeConnectionType.dual,
+        })
     );
 
 export default (uniqueIdOffset: number): EdgeConnection[] => {

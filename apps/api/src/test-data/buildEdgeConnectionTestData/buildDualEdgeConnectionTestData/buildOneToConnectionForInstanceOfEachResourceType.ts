@@ -1,4 +1,4 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { EdgeConnectionType, LanguageCode } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
@@ -290,4 +290,9 @@ const dtosWithoutTypeProperty: DTO<
  * `EdgeConnectionContextType`.
  */
 export default (): EdgeConnection[] =>
-    dtosWithoutTypeProperty.map((partialDTO) => buildTestInstance(EdgeConnection, partialDTO));
+    dtosWithoutTypeProperty.map((partialDTO) =>
+        buildTestInstance(EdgeConnection, {
+            ...partialDTO,
+            connectionType: EdgeConnectionType.dual,
+        })
+    );
