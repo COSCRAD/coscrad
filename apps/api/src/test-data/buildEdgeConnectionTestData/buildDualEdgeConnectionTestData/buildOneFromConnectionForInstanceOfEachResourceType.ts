@@ -14,10 +14,11 @@ import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
+import { buildTestInstance } from '../../utilities';
 
 // type is the same for all, use map to mix this in below
 const dtosWithoutTypeProperty: DTO<
-    Omit<EdgeConnection, 'type' | 'connectionType' | 'audioForNote'>
+    Omit<EdgeConnection, 'type' | 'connectionType' | 'audioForNote' | 'isPublished'>
 >[] = [
     {
         id: '3001',
@@ -109,12 +110,11 @@ const dtosWithoutTypeProperty: DTO<
  * `EdgeConnectionContextType`.
  */
 export default (): EdgeConnection[] =>
-    dtosWithoutTypeProperty.map(
-        (partialDTO) =>
-            new EdgeConnection({
-                ...partialDTO,
-                connectionType: EdgeConnectionType.dual,
-                type: AggregateType.note,
-                audioForNote: MultilingualAudio.buildEmpty(),
-            })
+    dtosWithoutTypeProperty.map((partialDTO) =>
+        buildTestInstance(EdgeConnection, {
+            ...partialDTO,
+            connectionType: EdgeConnectionType.dual,
+            type: AggregateType.note,
+            audioForNote: MultilingualAudio.buildEmpty(),
+        })
     );

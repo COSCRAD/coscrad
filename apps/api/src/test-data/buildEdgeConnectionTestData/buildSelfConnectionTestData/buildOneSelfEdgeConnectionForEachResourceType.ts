@@ -15,12 +15,13 @@ import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
+import { buildTestInstance } from '../../utilities';
 
 const role = EdgeConnectionMemberRole.self;
 
 const edgeConnectionDTOs: Omit<
     DTO<EdgeConnection>,
-    'type' | 'id' | 'connectionType' | 'audioForNote'
+    'type' | 'id' | 'connectionType' | 'audioForNote' | 'isPublished'
 >[] = [
     {
         note: buildMultilingualTextWithSingleItem(
@@ -370,4 +371,4 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
             type: AggregateType.note,
             audioForNote: MultilingualAudio.buildEmpty(),
         }))
-        .map((dto) => new EdgeConnection(dto));
+        .map((dto) => buildTestInstance(EdgeConnection, dto));
