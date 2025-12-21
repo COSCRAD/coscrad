@@ -1,14 +1,16 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import { EdgeConnectionModule } from '../../../../../app/domain-modules/edge-connection.module';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
@@ -93,7 +95,14 @@ describe(commandType, () => {
                 PersistenceModule.forRootAsync(),
                 EdgeConnectionModule,
             ],
-        }).compile();
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
+            )
+            .compile();
 
         app = testModule.createNestApplication();
 

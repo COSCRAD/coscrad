@@ -273,6 +273,10 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         await cursor.all();
     }
 
+    async publish(id: AggregateId): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.publish(id));
+    }
+
     async addAudio(
         noteId: AggregateId,
         audioItemId: AggregateId,
@@ -316,6 +320,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         const view = new EventSourcedNoteViewModel({
             type: CategorizableType.note,
             id,
+            // notes are unpublished upon creation
+            isPublished: false,
             connectionType: EdgeConnectionType.self,
             text,
             connectedResources: {
@@ -351,6 +357,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         const view = new EventSourcedNoteViewModel({
             type: CategorizableType.note,
             id,
+            // connections are unpublished upon creation
+            isPublished: false,
             connectionType: EdgeConnectionType.dual,
             text,
             connectedResources: {

@@ -34,6 +34,8 @@ import { ResourcesConnectedWithNote } from '../../domain/models/context/commands
 import { ResourcesConnectedWithNoteEventHandler } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { EdgePublished } from '../../domain/models/context/commands/publish-note/edge-published.event';
+import { EdgePublishedEventHandler } from '../../domain/models/context/commands/publish-note/edge-published.event-handler';
 import { PublishEdge } from '../../domain/models/context/commands/publish-note/publish-edge.command';
 import { PublishEdgeCommandHandler } from '../../domain/models/context/commands/publish-note/publish-edge.command-handler';
 import { NoteTranslatedEventHandler } from '../../domain/models/context/commands/translate-note/note-translated.event-handler';
@@ -70,6 +72,7 @@ import { CoscradNLPModule } from '../../lib/nlp';
             ResourcesConnectedWithNote,
             NoteTranslated,
             AudioAddedForNote,
+            EdgePublished,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -85,6 +88,7 @@ import { CoscradNLPModule } from '../../lib/nlp';
         ResourcesConnectedWithNoteEventHandler,
         NoteTranslatedEventHandler,
         AudioAddedForNoteEventHandler,
+        EdgePublishedEventHandler,
     ],
     exports: [EdgeConnectionQueryService],
 })
