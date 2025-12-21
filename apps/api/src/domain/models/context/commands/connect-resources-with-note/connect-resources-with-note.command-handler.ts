@@ -42,6 +42,8 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
+            // You must run `PUBLISH_NOTE` to publish this connection
+            isPublished: false,
             audioForNote: MultilingualAudio.buildEmpty(),
             connectionType: EdgeConnectionType.dual,
             // TODO [https://www.pivotaltracker.com/story/show/185394771] make this Multilingual Text

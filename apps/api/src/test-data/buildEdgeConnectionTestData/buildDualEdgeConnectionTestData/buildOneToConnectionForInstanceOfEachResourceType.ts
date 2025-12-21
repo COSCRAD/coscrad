@@ -289,10 +289,13 @@ const dtosWithoutTypeProperty: DTO<
  * that we add a variety of test data for each new `ResourceType` and
  * `EdgeConnectionContextType`.
  */
-export default (): EdgeConnection[] =>
-    dtosWithoutTypeProperty.map((partialDTO) =>
-        buildTestInstance(EdgeConnection, {
+export default (): EdgeConnection[] => {
+    const edges = dtosWithoutTypeProperty.map((partialDTO) => {
+        return buildTestInstance(EdgeConnection, {
             ...partialDTO,
             connectionType: EdgeConnectionType.dual,
-        })
-    );
+        });
+    });
+
+    return edges;
+};

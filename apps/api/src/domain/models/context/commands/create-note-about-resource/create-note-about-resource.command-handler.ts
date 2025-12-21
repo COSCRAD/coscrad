@@ -37,6 +37,8 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
+            // A NOTE_PUBLISHED event is required before this becomes `true`
+            isPublished: false,
             audioForNote: MultilingualAudio.buildEmpty(),
             connectionType: EdgeConnectionType.self,
             note: new MultilingualText({

@@ -14,8 +14,8 @@ import { ResourceType } from '../../../domain/types/ResourceType';
 import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
 import { buildTestInstance } from '../../utilities';
 
-export default (): EdgeConnection[] =>
-    [
+export default (): EdgeConnection[] => {
+    const edges = [
         {
             id: '3301',
             note: buildMultilingualTextWithSingleItem(
@@ -136,11 +136,14 @@ export default (): EdgeConnection[] =>
                 },
             ],
         },
-    ].map((partialDTO) =>
-        buildTestInstance(EdgeConnection, {
+    ].map((partialDTO) => {
+        return buildTestInstance(EdgeConnection, {
             ...partialDTO,
             connectionType: EdgeConnectionType.dual,
             type: AggregateType.note,
             audioForNote: MultilingualAudio.buildEmpty(),
-        })
-    );
+        });
+    });
+
+    return edges;
+};

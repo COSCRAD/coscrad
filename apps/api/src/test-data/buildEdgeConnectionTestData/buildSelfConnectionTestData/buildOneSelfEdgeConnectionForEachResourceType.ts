@@ -374,6 +374,6 @@ export default (uniqueIdOffset: number): EdgeConnection[] =>
         .map((dto) =>
             buildTestInstance(EdgeConnection, {
                 ...dto,
-                connectionType: EdgeConnectionType.dual,
+                connectionType: EdgeConnectionType.self,
             })
         );

@@ -1268,7 +1268,7 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
   },
   "isPublished": {
     "coscradDataType": "BOOLEAN",
-    "description": "is this note visable to the public",
+    "description": "Is this note visible to the public?",
     "isArray": false,
     "isOptional": false,
     "isPrivate": false,
