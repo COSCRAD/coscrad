@@ -354,7 +354,56 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
       "type": "ADD_AUDIO_FOR_TERM",
     },
   ],
-  "connections": [],
+  "connections": [
+    {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+      "isPublished": true,
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "test note",
+          },
+        ],
+      },
+      "other": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
+        "type": "audioItem",
+      },
+      "otherContext": {
+        "type": "general",
+      },
+      "role": "from",
+      "selfContext": {
+        "type": "general",
+      },
+    },
+    {
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+      "isPublished": false,
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "test note",
+          },
+        ],
+      },
+      "other": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
+        "type": "audioItem",
+      },
+      "otherContext": {
+        "type": "general",
+      },
+      "role": "from",
+      "selfContext": {
+        "type": "general",
+      },
+    },
+  ],
   "contributions": [
     {
       "contributorIds": [
@@ -381,7 +430,40 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
       },
     ],
   },
-  "notes": [],
+  "notes": [
+    {
+      "context": {
+        "type": "general",
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": true,
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "test note",
+          },
+        ],
+      },
+    },
+    {
+      "context": {
+        "type": "general",
+      },
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": false,
+      "note": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "test note",
+          },
+        ],
+      },
+    },
+  ],
   "possibleAudioFilenames": [],
   "tags": [],
   "tokens": [

@@ -32,6 +32,8 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { buildTestInstance } from '../../test-data/utilities';
+import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
+import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
 // Set up endpoints: index endpoint, id endpoint
@@ -132,6 +134,36 @@ const privateTermThatUserCanAccess = clonePlainObjectWithOverrides(dummyTerm, {
 // TODO Add happy path cases for a prompt term
 // const promptTermId = buildDummyUuid(2)
 
+const notes = [
+    buildTestInstance(NoteRecordForResourceViewModel, {
+        id: buildDummyUuid(101),
+        isPublished: true,
+    }),
+    buildTestInstance(NoteRecordForResourceViewModel, {
+        id: buildDummyUuid(101),
+        isPublished: false,
+    }),
+];
+
+const connections = [
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: true,
+    }),
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: false,
+    }),
+];
+
+targetTermView.notes = notes;
+
+targetTermView.connections = connections;
+
+privateTermThatUserCanAccess.notes = notes;
+
+privateTermThatUserCanAccess.connections = connections;
+
 describe(`when querying for a term: fetch by Id`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
@@ -210,6 +242,12 @@ describe(`when querying for a term: fetch by Id`, () => {
                     expect(result.actions).toEqual([]);
 
                     assertResourceHasContributionFor(dummyContributor, result);
+
+                    // only the public note should be visible
+                    expect(result.notes).toHaveLength(1);
+
+                    // only the public connection should be visible
+                    expect(result.connections).toHaveLength(1);
                 });
             });
 
@@ -284,6 +322,14 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         // Commands should be visible to admin
                         expect(res.body.actions).not.toEqual([]);
+
+                        const result = res.body;
+
+                        // the private note should also be visible
+                        expect(result.notes).toHaveLength(2);
+
+                        // the private connection should also be visible
+                        expect(result.connections).toHaveLength(2);
                     });
                 });
 
@@ -309,6 +355,14 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         // Commands should be visible to admin
                         expect(res.body.actions).not.toEqual([]);
+
+                        const result = res.body;
+
+                        // the private note should also be visible
+                        expect(result.notes).toHaveLength(2);
+
+                        // the private connection should also be visible
+                        expect(result.connections).toHaveLength(2);
                     });
                 });
 
@@ -480,6 +534,14 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         // We don't expose actions to non-admin users
                         expect(res.body.actions).toEqual([]);
+
+                        const result = res.body;
+
+                        // only the public note should be visible
+                        expect(result.notes).toHaveLength(1);
+
+                        // only the public connection should be visible
+                        expect(result.connections).toHaveLength(1);
                     });
                 });
 
@@ -519,6 +581,13 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         // We don't expose actions to non-admin users
                         expect(res.body.actions).toEqual([]);
+
+                        const result = res.body;
+                        // only the public note should be visible
+                        expect(result.notes).toHaveLength(1);
+
+                        // only the public connection should be visible
+                        expect(result.connections).toHaveLength(1);
                     });
                 });
             });
