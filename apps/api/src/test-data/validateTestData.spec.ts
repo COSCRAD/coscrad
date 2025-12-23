@@ -104,10 +104,6 @@ describe('buildTestData', () => {
                             ? validMessage
                             : validationResult.toString();
 
-                        if (!isValid(validationResult)) {
-                            console.log(`something went wrong :()`);
-                        }
-
                         expect(validationMessage).toBe(validMessage);
                     });
 

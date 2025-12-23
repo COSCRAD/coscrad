@@ -5,7 +5,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { PublishEdge } from './publish-edge.command';
 
-export type NotePublishedPayload = PublishEdge;
+export type EdgePublishedPayload = PublishEdge;
 
 const testEventId = buildDummyUuid(1);
 
@@ -26,6 +26,6 @@ const testEventId = buildDummyUuid(1);
         },
     },
 })
-export class EdgePublished extends BaseEvent<NotePublishedPayload> {
+export class EdgePublished extends BaseEvent<EdgePublishedPayload> {
     readonly type = 'EDGE_PUBLISHED';
 }

@@ -42,7 +42,7 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
         const createDto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
-            // You must run `PUBLISH_NOTE` to publish this connection
+            // You must run PUBLISH_EDGE` to publish this connection
             isPublished: false,
             audioForNote: MultilingualAudio.buildEmpty(),
             connectionType: EdgeConnectionType.dual,
