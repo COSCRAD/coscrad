@@ -68,6 +68,7 @@ const validBookSelfConnection = new EdgeConnection({
     type: AggregateType.note,
     connectionType: EdgeConnectionType.self,
     id: '12345',
+    isPublished: true,
     note: buildMultilingualTextWithSingleItem('This is an awesome note', LanguageCode.English),
     members: [buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self)],
     audioForNote: MultilingualAudio.buildEmpty().addAudio(
@@ -84,6 +85,7 @@ const validBookToTranscribedAudioDualConnection = new EdgeConnection({
         buildValidTranscribedAudioConnectionMemberDto(EdgeConnectionMemberRole.to),
     ],
     id: dummyUuid,
+    isPublished: false,
     note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
     audioForNote: MultilingualAudio.buildEmpty().addAudio(
         audioItemId,
@@ -233,7 +235,7 @@ export default (): EdgeConnectionValidatorTestCase[] => [
                     type: AggregateType.note,
                     connectionType: EdgeConnectionType.dual,
                     id: dummyUuid,
-
+                    isPublished: true,
                     members: [
                         buildValidBookEdgeConnectionMemberDto(EdgeConnectionMemberRole.self),
                         buildValidTranscribedAudioConnectionMemberDto(

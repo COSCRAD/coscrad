@@ -62,6 +62,7 @@ const validDualConnection: EdgeConnection = new EdgeConnection({
         validSongFromMemberDTO,
     ],
     id: dummyUuid,
+    isPublished: true,
     note: buildMultilingualTextWithSingleItem(
         'this dual connection is legit',
         LanguageCode.English
