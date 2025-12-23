@@ -389,7 +389,40 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "notes": [],
+      "notes": [
+        {
+          "context": {
+            "type": "general",
+          },
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+          "isPublished": false,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "this note is not yet published",
+              },
+            ],
+          },
+        },
+        {
+          "context": {
+            "type": "general",
+          },
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+          "isPublished": true,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "this is the note for breeze",
+              },
+            ],
+          },
+        },
+      ],
       "possibleAudioFilenames": [],
       "tags": [],
       "tokens": [
@@ -1205,7 +1238,40 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "notes": [],
+      "notes": [
+        {
+          "context": {
+            "type": "general",
+          },
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100110",
+          "isPublished": true,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+        },
+        {
+          "context": {
+            "type": "general",
+          },
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100111",
+          "isPublished": false,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+        },
+      ],
       "possibleAudioFilenames": [],
       "tags": [],
       "tokens": [

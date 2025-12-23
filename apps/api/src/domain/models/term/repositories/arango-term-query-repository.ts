@@ -20,9 +20,7 @@ import { ArangoConnectionProvider } from '../../../../persistence/database/arang
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDocument, {
-    ArangoDatabaseDocument,
-} from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
@@ -333,6 +331,10 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         const searchResult = await this.fetchMany({
             filter: hasIdFilter,
             user,
+            pagination: {
+                size: 1,
+                page: 1,
+            },
         });
 
         if (isNotFound(searchResult) || isInternalError(searchResult)) {
@@ -356,18 +358,8 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         return termDoc;
     }
 
-    async fetchMany(options?: Partial<UserQueryOptions & { user?: CoscradUserWithGroups }>) {
-        const compiledQuery = this.baseResourceQueryBuilder.fetchManyWithNotes(options);
-
-        if (isInternalError(compiledQuery)) {
-            return compiledQuery;
-        }
-
-        const cursor = await this.database.query(compiledQuery);
-
-        const resultsList = await cursor.all();
-
-        const result = resultsList[0];
+    async fetchMany(queryOptions?: UserQueryOptions & { user: CoscradUserWithGroups }) {
+        const result = await this.database.fetchForUser(queryOptions);
 
         if (isInternalError(result)) {
             throw new InternalError(
@@ -378,18 +370,18 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
         const { selected, count } = result;
 
-        const buildResult = selected.map((termDoc) => {
-            const asView = mapDatabaseDocumentToAggregateDTO(
-                termDoc as ArangoDatabaseDocument<TermViewModel>
-            );
+        const buildResult = selected.map((doc) => {
+            const dto = mapDatabaseDocumentToAggregateDTO(doc);
 
-            return TermViewModel.fromDto(asView);
+            dto.notes = dto.notes.filter((n) => queryOptions?.user?.isAdmin() || n.isPublished);
+
+            return TermViewModel.fromDto(dto);
         });
 
         return {
             entities: buildResult,
             // TODO return this from the AQL query as well as it resolves the actual pagination params to use by applying defaults
-            page: options?.pagination?.page || 1,
+            page: queryOptions?.pagination?.page || 1,
             count,
         };
     }

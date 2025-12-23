@@ -274,6 +274,7 @@ export class BaseArangoResourceViewQueryBuilder {
 
         const newNote = new NoteRecordForResourceViewModel({
             id: noteId,
+            isPublished: false,
             context,
             note: text,
         });

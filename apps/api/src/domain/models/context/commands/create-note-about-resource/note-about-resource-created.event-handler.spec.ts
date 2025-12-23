@@ -56,6 +56,7 @@ const noteText = 'my note';
 const knownNotes: NoteRecordForResourceViewModel[] = [
     {
         id: buildDummyUuid(55),
+        isPublished: true,
         note: buildMultilingualTextWithSingleItem(noteText),
         context: { type: EdgeConnectionContextType.general },
     },
@@ -101,6 +102,7 @@ class WidgetQueryRepository {
                 if (edge.connectionType === EdgeConnectionType.self) {
                     const noteRecord: NoteRecordForResourceViewModel = {
                         id: edge._key,
+                        isPublished: edge.isPublished,
                         note: new MultilingualText(edge.text),
                         context: edge.connectedResources.self,
                     };

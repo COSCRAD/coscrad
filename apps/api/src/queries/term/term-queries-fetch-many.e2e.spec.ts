@@ -1,6 +1,7 @@
 import {
     AggregateType,
     CoscradUserRole,
+    EdgeConnectionContextType,
     HttpStatusCode,
     IToken,
     LanguageCode,
@@ -11,9 +12,15 @@ import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
 import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
 import { assertResourceHasContributionFor } from '../../domain/models/__tests__';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { EventSourcedNoteViewModel } from '../../domain/models/context/note.view-model.event-sourced';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../domain/models/context/repositories/note-query-repository.interface';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { TermCreated } from '../../domain/models/term/commands';
 import {
@@ -33,7 +40,12 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { buildTestInstance } from '../../test-data/utilities';
+import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
+
+const generalContext = {
+    type: EdgeConnectionContextType.general,
+};
 
 const indexEndpoint = `/resources/terms`;
 
@@ -153,6 +165,59 @@ const privateTermUserCannotAccess = clonePlainObjectWithOverrides(publicTermView
 
 // const promptTermId = buildDummyUuid(2)
 
+// const connectedTerm = buildTestInstance(TermViewModel, {
+//     id: buildDummyUuid(9),
+// });
+
+const publicNoteForPublicTerm = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(101),
+    isPublished: true,
+    connectedResources: {
+        self: {
+            resource: publicTermView,
+            context: {
+                type: EdgeConnectionContextType.general,
+            },
+        },
+    },
+});
+
+const privateNoteForPublicTerm = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(102),
+    text: buildMultilingualTextWithSingleItem(`this note is not yet published`),
+    connectedResources: {
+        self: {
+            resource: publicTermView,
+            context: {
+                type: EdgeConnectionContextType.general,
+            },
+        },
+    },
+});
+
+/**
+ * TODO Where do we want to handle this mapping layer?
+ */
+publicTermView.notes = [privateNoteForPublicTerm, publicNoteForPublicTerm].map(
+    (note) =>
+        new NoteRecordForResourceViewModel({
+            ...note,
+            note: note.text,
+            context: note.connectedResources.self.context,
+        })
+);
+
+privateTermThatUserCanAccess.notes = [
+    buildTestInstance(NoteRecordForResourceViewModel, {
+        id: buildDummyUuid(110),
+        isPublished: true,
+    }),
+    buildTestInstance(NoteRecordForResourceViewModel, {
+        id: buildDummyUuid(111),
+        isPublished: false,
+    }),
+];
+
 describe(`when querying for a term: fetch many`, () => {
     const testDatabaseName = generateDatabaseNameForTestSuite();
 
@@ -187,6 +252,14 @@ describe(`when querying for a term: fetch many`, () => {
 
             seedTerms = async (terms: TermViewModel[]) => {
                 await termQueryRepository.createMany(terms);
+
+                await app
+                    .get<INoteQueryRepository>(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+                    .createNoteAbout(publicNoteForPublicTerm, publicTermView, generalContext);
+
+                await app
+                    .get<INoteQueryRepository>(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+                    .createNoteAbout(privateNoteForPublicTerm, publicTermView, generalContext);
             };
         });
 
@@ -233,6 +306,9 @@ describe(`when querying for a term: fetch many`, () => {
                     .fetchMany();
 
                 assertResourceHasContributionFor(dummyContributor, result);
+
+                // the public should only see the public note
+                expect(result.notes).toHaveLength(1);
             });
         });
 
@@ -278,6 +354,14 @@ describe(`when querying for a term: fetch many`, () => {
 
             seedTerms = async (terms: TermViewModel[]) => {
                 await termQueryRepository.createMany(terms);
+
+                await app
+                    .get<INoteQueryRepository>(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+                    .createNoteAbout(publicNoteForPublicTerm, publicTermView, generalContext);
+
+                await app
+                    .get<INoteQueryRepository>(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+                    .createNoteAbout(privateNoteForPublicTerm, publicTermView, generalContext);
             };
         });
 
@@ -347,6 +431,9 @@ describe(`when querying for a term: fetch many`, () => {
                     const result = entities[0] as TermViewModel;
 
                     expect(result.id).toBe(termIdUnpublishedWithUserAccessId);
+
+                    // the public should only see the public note
+                    expect(result.notes).toHaveLength(1);
                 });
             });
         });
@@ -378,6 +465,10 @@ describe(`when querying for a term: fetch many`, () => {
 
                 seedTerms = async (terms: TermViewModel[]) => {
                     await termQueryRepository.createMany(terms);
+
+                    await app
+                        .get<INoteQueryRepository>(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
+                        .createNoteAbout(publicNoteForPublicTerm, publicTermView, generalContext);
                 };
             });
 
