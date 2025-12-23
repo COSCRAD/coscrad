@@ -28,6 +28,10 @@ export default (
     }
 
     if (edgeConnectionType === EdgeConnectionType.dual) {
+        if (!members[0]) {
+            throw new InternalError(`Missing edge connection member`);
+        }
+
         return {
             [`_${members[0].role}`]: convertResourceCompositeIdentifierToArangoDocumentHandle(
                 members[0].compositeIdentifier as ResourceCompositeIdentifier

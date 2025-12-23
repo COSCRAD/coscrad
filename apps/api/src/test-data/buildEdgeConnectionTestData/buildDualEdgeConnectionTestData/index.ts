@@ -16,6 +16,7 @@ import { ResourceType } from '../../../domain/types/ResourceType';
 import { InternalError } from '../../../lib/errors/InternalError';
 import formatResourceCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../types/DTO';
+import { buildTestInstance } from '../../utilities';
 import buildOneSelfEdgeConnectionForEachResourceType from '../buildSelfConnectionTestData/buildOneSelfEdgeConnectionForEachResourceType';
 import buildOneDualEdgeConnectionForEveryContextType from './buildOneDualEdgeConnectionForEveryContextType';
 import buildOneFromConnectionForInstanceOfEachResourceType from './buildOneFromConnectionForInstanceOfEachResourceType';
@@ -103,7 +104,7 @@ const generateComprehensiveDualEdgeConnectionTestData = (
         };
     });
 
-    return edgeConnectionDTOs.map((dto) => new EdgeConnection(dto));
+    return edgeConnectionDTOs.map((dto) => buildTestInstance(EdgeConnection, dto));
 };
 
 /**
@@ -176,8 +177,11 @@ const fromConnections = buildOneFromConnectionForInstanceOfEachResourceType();
 const toConnections = buildOneToConnectionForInstanceOfEachResourceType();
 
 const additionalDualConnectionsForBibliographicCitations: EdgeConnection[] =
-    additionalDualConnectionsForBibliographicCitationDTOs.map(
-        (dto) => new EdgeConnection({ ...dto, audioForNote: MultilingualAudio.buildEmpty() })
+    additionalDualConnectionsForBibliographicCitationDTOs.map((dto) =>
+        buildTestInstance(EdgeConnection, {
+            ...dto,
+            connectionType: EdgeConnectionType.dual,
+        })
     );
 
 export default (uniqueIdOffset: number): EdgeConnection[] => {

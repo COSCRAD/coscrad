@@ -200,6 +200,7 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
             ],
             note,
             id: idOfNoteForAudiovisualItem,
+            isPublished: true,
             audioForNote: MultilingualAudio.buildEmpty().addAudio(
                 audioItemId,
                 noteLanguageCode

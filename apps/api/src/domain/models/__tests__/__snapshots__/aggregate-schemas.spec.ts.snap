@@ -1266,6 +1266,14 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
     "isPrivate": false,
     "label": "ID",
   },
+  "isPublished": {
+    "coscradDataType": "BOOLEAN",
+    "description": "Is this note visible to the public?",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "is published",
+  },
   "members": {
     "complexDataType": "NESTED_TYPE",
     "description": "the resource for the note or the resources involved in the connection",

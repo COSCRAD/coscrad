@@ -46,6 +46,7 @@ const selfDocument: ArangoEdgeDocument = {
     _key: '5',
     _to: 'audio_items/55',
     _from: 'audio_items/55',
+    isPublished: true,
     type: AggregateType.note,
     eventHistory: [],
     connectionType: EdgeConnectionType.self,
@@ -62,6 +63,7 @@ const selfDocument: ArangoEdgeDocument = {
 const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
     type: AggregateType.note,
+    isPublished: true,
     connectionType: EdgeConnectionType.self,
     note: buildMultilingualTextWithSingleItem('These pages are about deer', languageCodeForNote),
     members: [
@@ -82,6 +84,7 @@ const dualEdgeDocument: ArangoEdgeDocument = {
     _key: '234',
     _to: 'digital_texts/11',
     _from: 'audio_items/55',
+    isPublished: false,
     connectionType: EdgeConnectionType.dual,
     eventHistory: [],
     type: AggregateType.note,
@@ -106,6 +109,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
     type: AggregateType.note,
     connectionType: EdgeConnectionType.dual,
     id: '234',
+    isPublished: false,
     note: buildMultilingualTextWithSingleItem(
         'the elder discusses this book in this part of the recording',
         languageCodeForNote

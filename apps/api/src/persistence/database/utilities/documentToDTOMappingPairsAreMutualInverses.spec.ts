@@ -41,6 +41,7 @@ const edgeConnections: DTO<EdgeConnection>[] = [
         connectionType: EdgeConnectionType.self,
         id: '1',
         note: buildMultilingualTextWithSingleItem('the note', LanguageCode.English),
+        isPublished: false,
         members: [
             {
                 role: EdgeConnectionMemberRole.self,

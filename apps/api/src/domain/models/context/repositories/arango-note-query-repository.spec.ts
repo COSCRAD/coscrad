@@ -638,6 +638,36 @@ describe(`ArangoNoteQueryRepository`, () => {
         });
     });
 
+    describe(`publish`, () => {
+        describe(`when the target is not yet published`, () => {
+            const unpublishedEdgeView = buildTestInstance(EventSourcedNoteViewModel, {
+                isPublished: false,
+            });
+
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
+
+                await testQueryRepository.createNoteAbout(
+                    unpublishedEdgeView,
+                    testWidget.getCompositeIdentifier(),
+                    generalContext
+                );
+            });
+
+            it(`should publsih the connection`, async () => {
+                await testQueryRepository.publish(unpublishedEdgeView.id);
+
+                const updatedEdgeView = (await testQueryRepository.fetchById(
+                    unpublishedEdgeView.id
+                )) as EventSourcedNoteViewModel;
+
+                expect(updatedEdgeView.isPublished).toBe(true);
+            });
+        });
+    });
+
     describe(`addAudio`, () => {
         describe(`when there is no audio to begin with`, () => {
             const audioId = buildDummyUuid(44);

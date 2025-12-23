@@ -1,4 +1,5 @@
 import {
+    BooleanDataType,
     CompositeIdentifier,
     CoscradEnum,
     Enum,
@@ -28,6 +29,7 @@ export { isEdgeConnectionType } from '@coscrad/api-interfaces';
 export { EdgeConnectionMemberRole, EdgeConnectionType, IEdgeConnectionMember };
 
 import {
+    EdgeConnectionContextType,
     EdgeConnectionMemberRole,
     EdgeConnectionType,
     IEdgeConnectionMember,
@@ -56,8 +58,21 @@ import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
 import { ContextUnionType } from './edge-connection-context-union';
+import { EdgeAlreadyPublishedError } from './errors';
 import { CannotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
 
+@CoscradDataExample<EdgeConnectionMember>({
+    example: {
+        role: EdgeConnectionMemberRole.self,
+        compositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(555),
+        },
+        context: {
+            type: EdgeConnectionContextType.general,
+        },
+    },
+})
 export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnectionContext>
     extends BaseDomainModel
     implements IEdgeConnectionMember
@@ -103,6 +118,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
     example: {
         type: 'note',
         id: buildDummyUuid(2),
+        isPublished: false,
         members: [],
         connectionType: EdgeConnectionType.self,
         note: buildMultilingualTextWithSingleItem('this is the note'),
@@ -155,14 +171,32 @@ export class EdgeConnection extends Aggregate {
     })
     audioForNote: MultilingualAudio;
 
+    @BooleanDataType({
+        label: 'is published',
+        description: 'Is this note visible to the public?',
+    })
+    isPublished: boolean;
+
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
 
         if (!dto) return;
 
-        const { members, note, connectionType: type, audioForNote: audioForNoteDto } = dto;
+        const {
+            members,
+            note,
+            connectionType: type,
+            audioForNote: audioForNoteDto,
+            isPublished,
+        } = dto;
 
         this.connectionType = type;
+
+        if (typeof isPublished === 'boolean') {
+            this.isPublished = isPublished;
+        } else {
+            this.isPublished = false;
+        }
 
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
@@ -251,6 +285,17 @@ export class EdgeConnection extends Aggregate {
             type: AggregateType.note,
             id: this.id,
         } as const);
+
+    @UpdateMethod()
+    publish(): ResultOrError<EdgeConnection> {
+        if (this.isPublished) {
+            return new EdgeAlreadyPublishedError(this.id);
+        }
+
+        this.isPublished = true;
+
+        return this;
+    }
 
     @UpdateMethod()
     translateNote(
@@ -349,6 +394,7 @@ export class EdgeConnection extends Aggregate {
              */
             connectionType: EdgeConnectionType.self,
             note: buildMultilingualTextWithSingleItem(text, languageCode),
+            isPublished: false,
             members: [
                 // a self-connection has one member, the subject of the note
                 new EdgeConnectionMember({
@@ -389,6 +435,7 @@ export class EdgeConnection extends Aggregate {
             audioForNote: MultilingualAudio.buildEmpty(),
             note: buildMultilingualTextWithSingleItem(text, languageCode),
             connectionType: EdgeConnectionType.dual,
+            isPublished: false,
             members: [
                 new EdgeConnectionMember({
                     compositeIdentifier: fromMemberCompositeIdentifier,

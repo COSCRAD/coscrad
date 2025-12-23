@@ -11,4 +11,6 @@ export default (
      * the `{resourceType}__VIEWS` collections, override the following logic.
      */
     getCollectionId: (rt: string) => string = getArangoCollectionIDFromResourceType
-): ArangoDocumentHandle => `${getCollectionId(resourceType)}/${id}`;
+): ArangoDocumentHandle => {
+    return `${getCollectionId(resourceType)}/${id}`;
+};

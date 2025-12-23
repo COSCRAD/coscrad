@@ -29,6 +29,7 @@ const languageCodeForAudio = LanguageCode.English;
 
 const selfEdgeConnection = new EdgeConnection({
     id: '123',
+    isPublished: true,
     connectionType: EdgeConnectionType.self,
     type: AggregateType.note,
     note: buildMultilingualTextWithSingleItem('These pages are about bears', LanguageCode.English),
@@ -90,6 +91,7 @@ const buildValidTranscribedAudioConnectionMember = (
 const dualEdgeConnection = new EdgeConnection({
     type: AggregateType.note,
     connectionType: EdgeConnectionType.dual,
+    isPublished: true,
     members: [
         buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
@@ -110,6 +112,7 @@ const testCases: TestCase[] = [
             _from: 'digital_texts/2',
             _to: 'digital_texts/2',
             _key: '123',
+            isPublished: true,
             connectionType: EdgeConnectionType.self,
             eventHistory: [],
             note: buildMultilingualTextWithSingleItem(
@@ -136,6 +139,7 @@ const testCases: TestCase[] = [
             _from: 'digital_texts/1123',
             _to: 'audio_items/15',
             _key: '123',
+            isPublished: true,
             connectionType: EdgeConnectionType.dual,
             eventHistory: [],
             note: buildMultilingualTextWithSingleItem(

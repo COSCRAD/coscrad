@@ -1,19 +1,17 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { EdgeConnectionType, LanguageCode } from '@coscrad/api-interfaces';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
-    EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
-import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
-import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import { DTO } from '../../../types/DTO';
 import { buildTestVocabularyListEdgeConnectionMember } from '../../buildVocabularyListTestData';
+import { buildTestInstance } from '../../utilities';
 
 const vocListMemberFor3105 = buildTestVocabularyListEdgeConnectionMember(
     EdgeConnectionContextType.textField,
@@ -22,7 +20,7 @@ const vocListMemberFor3105 = buildTestVocabularyListEdgeConnectionMember(
 
 // type is the same for all, use map to mix this in below
 const dtosWithoutTypeProperty: DTO<
-    Omit<EdgeConnection, 'type' | 'connectionType' | 'audioForNote'>
+    Omit<EdgeConnection, 'type' | 'connectionType' | 'audioForNote' | 'isPublished'>
 >[] = [
     {
         id: '3101',
@@ -291,13 +289,13 @@ const dtosWithoutTypeProperty: DTO<
  * that we add a variety of test data for each new `ResourceType` and
  * `EdgeConnectionContextType`.
  */
-export default (): EdgeConnection[] =>
-    dtosWithoutTypeProperty.map(
-        (partialDTO) =>
-            new EdgeConnection({
-                ...partialDTO,
-                connectionType: EdgeConnectionType.dual,
-                type: AggregateType.note,
-                audioForNote: MultilingualAudio.buildEmpty(),
-            })
-    );
+export default (): EdgeConnection[] => {
+    const edges = dtosWithoutTypeProperty.map((partialDTO) => {
+        return buildTestInstance(EdgeConnection, {
+            ...partialDTO,
+            connectionType: EdgeConnectionType.dual,
+        });
+    });
+
+    return edges;
+};

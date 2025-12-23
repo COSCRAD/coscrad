@@ -5,7 +5,7 @@ import {
     IEdgeConnectionContext,
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
-import { NestedDataType, UUID } from '@coscrad/data-types';
+import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { TagViewModel } from '../../../queries/buildViewModelForResource/viewModels';
@@ -67,6 +67,7 @@ class ConnectedResources {
     example: {
         type: AggregateType.note,
         id: buildDummyUuid(5),
+        isPublished: false,
         // name: buildMultilingualTextWithSingleItem('breeze'),
         text: buildMultilingualTextWithSingleItem('this is the note for breeze'),
         audio: MultilingualAudio.buildEmpty(),
@@ -121,11 +122,18 @@ export class EventSourcedNoteViewModel {
     })
     audio: MultilingualAudio;
 
+    @BooleanDataType({
+        label: 'is published',
+        description: 'is this note published?',
+    })
+    isPublished: boolean;
+
     constructor({
         connectionType,
+        id,
+        isPublished,
         text,
         connectedResources,
-        id,
         tags,
         audio,
     }: DTO<EventSourcedNoteViewModel>) {
@@ -152,6 +160,8 @@ export class EventSourcedNoteViewModel {
         if (audio.items.length > 1) {
             console.log('foo u 2');
         }
+
+        this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
     }
 
     public toDto(): DTO<EventSourcedNoteViewModel> {

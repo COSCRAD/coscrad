@@ -21,6 +21,8 @@ type ArangoEdgeMemberContext = {
 type ArangoEdgeDocumentWithoutSystemAttributes = {
     type: typeof AggregateType.note;
 
+    isPublished: boolean;
+
     connectionType: EdgeConnectionType;
 
     note: DTO<MultilingualText>;

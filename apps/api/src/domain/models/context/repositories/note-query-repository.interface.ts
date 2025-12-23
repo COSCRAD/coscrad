@@ -10,6 +10,7 @@ import {
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
 import { AggregateId } from '../../../types/AggregateId';
+import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 
@@ -23,7 +24,7 @@ export interface INoteCreationRecord {
     text: IMultilingualText;
 }
 
-export interface INoteQueryRepository extends IQueryRepositoryForTaggable {
+export interface INoteQueryRepository extends IQueryRepositoryForTaggable, IPublishable {
     fetchById(id: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>>;
 
     fetchMany(
