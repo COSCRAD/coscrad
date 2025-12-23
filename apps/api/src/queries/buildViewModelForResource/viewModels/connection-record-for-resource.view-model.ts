@@ -15,6 +15,7 @@ import { DTO } from '../../../types/DTO';
 @CoscradDataExample<ConnectionRecordForResourceViewModel>({
     example: {
         id: buildDummyUuid(1),
+        isPublished: false,
         note: buildMultilingualTextWithSingleItem('test note'),
         selfContext: {
             type: EdgeConnectionContextType.general,
@@ -33,6 +34,8 @@ export class ConnectionRecordForResourceViewModel {
     // this is the note (edge-connection) ID
     id: string;
 
+    isPublished: boolean;
+
     note: MultilingualText;
 
     selfContext: IEdgeConnectionContext;
@@ -46,7 +49,15 @@ export class ConnectionRecordForResourceViewModel {
     constructor(dto: DTO<ConnectionRecordForResourceViewModel>) {
         if (!dto) return;
 
-        const { id, note, selfContext, other: otherCompositeIdentifier, otherContext, role } = dto;
+        const {
+            id,
+            note,
+            selfContext,
+            other: otherCompositeIdentifier,
+            otherContext,
+            role,
+            isPublished,
+        } = dto;
 
         this.id = id;
 
@@ -60,6 +71,12 @@ export class ConnectionRecordForResourceViewModel {
 
         if (!isNullOrUndefined(note)) {
             this.note = new MultilingualText(note);
+        }
+
+        if (typeof isPublished === 'boolean') {
+            this.isPublished = isPublished;
+        } else {
+            this.isPublished = false;
         }
     }
 

@@ -40,6 +40,7 @@ import generateDatabaseNameForTestSuite from '../../persistence/repositories/__t
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { buildTestInstance } from '../../test-data/utilities';
+import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TermViewModel } from '../buildViewModelForResource/viewModels/term.view-model';
 
@@ -165,9 +166,9 @@ const privateTermUserCannotAccess = clonePlainObjectWithOverrides(publicTermView
 
 // const promptTermId = buildDummyUuid(2)
 
-// const connectedTerm = buildTestInstance(TermViewModel, {
-//     id: buildDummyUuid(9),
-// });
+const connectedTerm = buildTestInstance(TermViewModel, {
+    id: buildDummyUuid(9),
+});
 
 const publicNoteForPublicTerm = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(101),
@@ -207,6 +208,19 @@ publicTermView.notes = [privateNoteForPublicTerm, publicNoteForPublicTerm].map(
         })
 );
 
+publicTermView.connections = [
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: true,
+        other: connectedTerm,
+    }),
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: false,
+        other: connectedTerm,
+    }),
+];
+
 privateTermThatUserCanAccess.notes = [
     buildTestInstance(NoteRecordForResourceViewModel, {
         id: buildDummyUuid(110),
@@ -215,6 +229,19 @@ privateTermThatUserCanAccess.notes = [
     buildTestInstance(NoteRecordForResourceViewModel, {
         id: buildDummyUuid(111),
         isPublished: false,
+    }),
+];
+
+privateTermThatUserCanAccess.connections = [
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: true,
+        other: connectedTerm,
+    }),
+    buildTestInstance(ConnectionRecordForResourceViewModel, {
+        id: buildDummyUuid(201),
+        isPublished: false,
+        other: connectedTerm,
     }),
 ];
 
@@ -309,6 +336,9 @@ describe(`when querying for a term: fetch many`, () => {
 
                 // the public should only see the public note
                 expect(result.notes).toHaveLength(1);
+
+                // the public should only see the public connection
+                expect(result.connections).toHaveLength(1);
             });
         });
 
@@ -434,6 +464,9 @@ describe(`when querying for a term: fetch many`, () => {
 
                     // the public should only see the public note
                     expect(result.notes).toHaveLength(1);
+
+                    // the public should only see the public connection
+                    expect(result.connections).toHaveLength(1);
                 });
             });
         });

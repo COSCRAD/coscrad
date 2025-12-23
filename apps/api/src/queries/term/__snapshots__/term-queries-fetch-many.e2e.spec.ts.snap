@@ -357,7 +357,110 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "connections": [],
+      "connections": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+          "isPublished": true,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+          "other": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "connections": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100009",
+            "isPublished": true,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "term (in the language)",
+                },
+                {
+                  "languageCode": "en",
+                  "role": "free translation",
+                  "text": "term (in English)",
+                },
+              ],
+            },
+            "notes": [],
+            "possibleAudioFilenames": [],
+            "tags": [],
+            "tokens": [],
+            "type": "term",
+            "vocabularyLists": [],
+          },
+          "otherContext": {
+            "type": "general",
+          },
+          "role": "from",
+          "selfContext": {
+            "type": "general",
+          },
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+          "isPublished": false,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+          "other": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "connections": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100009",
+            "isPublished": true,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "term (in the language)",
+                },
+                {
+                  "languageCode": "en",
+                  "role": "free translation",
+                  "text": "term (in English)",
+                },
+              ],
+            },
+            "notes": [],
+            "possibleAudioFilenames": [],
+            "tags": [],
+            "tokens": [],
+            "type": "term",
+            "vocabularyLists": [],
+          },
+          "otherContext": {
+            "type": "general",
+          },
+          "role": "from",
+          "selfContext": {
+            "type": "general",
+          },
+        },
+      ],
       "contributions": [
         {
           "contributorIds": [
@@ -1206,7 +1309,110 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "connections": [],
+      "connections": [
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+          "isPublished": true,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+          "other": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "connections": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100009",
+            "isPublished": true,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "term (in the language)",
+                },
+                {
+                  "languageCode": "en",
+                  "role": "free translation",
+                  "text": "term (in English)",
+                },
+              ],
+            },
+            "notes": [],
+            "possibleAudioFilenames": [],
+            "tags": [],
+            "tokens": [],
+            "type": "term",
+            "vocabularyLists": [],
+          },
+          "otherContext": {
+            "type": "general",
+          },
+          "role": "from",
+          "selfContext": {
+            "type": "general",
+          },
+        },
+        {
+          "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100201",
+          "isPublished": false,
+          "note": {
+            "items": [
+              {
+                "languageCode": "en",
+                "role": "original",
+                "text": "test note",
+              },
+            ],
+          },
+          "other": {
+            "accessControlList": {
+              "allowedGroupIds": [],
+              "allowedUserIds": [],
+            },
+            "actions": [],
+            "connections": [],
+            "contributions": [],
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100009",
+            "isPublished": true,
+            "name": {
+              "items": [
+                {
+                  "languageCode": "clc",
+                  "role": "original",
+                  "text": "term (in the language)",
+                },
+                {
+                  "languageCode": "en",
+                  "role": "free translation",
+                  "text": "term (in English)",
+                },
+              ],
+            },
+            "notes": [],
+            "possibleAudioFilenames": [],
+            "tags": [],
+            "tokens": [],
+            "type": "term",
+            "vocabularyLists": [],
+          },
+          "otherContext": {
+            "type": "general",
+          },
+          "role": "from",
+          "selfContext": {
+            "type": "general",
+          },
+        },
+      ],
       "contributions": [
         {
           "contributorIds": [

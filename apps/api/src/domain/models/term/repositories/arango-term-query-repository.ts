@@ -373,7 +373,12 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         const buildResult = selected.map((doc) => {
             const dto = mapDatabaseDocumentToAggregateDTO(doc);
 
+            // TODO how do we share this with other resource types?
             dto.notes = dto.notes.filter((n) => queryOptions?.user?.isAdmin() || n.isPublished);
+
+            dto.connections = dto.connections.filter(
+                (c) => queryOptions?.user?.isAdmin() || c.isPublished
+            );
 
             return TermViewModel.fromDto(dto);
         });

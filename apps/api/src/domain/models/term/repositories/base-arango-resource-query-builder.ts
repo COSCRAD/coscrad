@@ -305,6 +305,7 @@ export class BaseArangoResourceViewQueryBuilder {
     ) {
         const newConnection = ConnectionRecordForResourceViewModel.fromDto({
             id: noteId,
+            isPublished: false,
             selfContext,
             other: otherCompositeIdentifier,
             otherContext,
