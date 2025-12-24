@@ -22,6 +22,7 @@ import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-com
 import { ExportAudioItemLineagesCliCommand } from './export-audio-item-lineages.cli-command';
 import { ExportMediaAnnotationsCliCommand } from './export-media-annotations.cli-command';
 import { ExportSchemasCliCommand } from './export-schemas.cli-command';
+import { ExportTermsCliCommand } from './export-terms.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
 import { ListMigrationsCliCommand } from './list-migrations.cli-command';
 import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from './logging';
@@ -49,6 +50,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         SeedTestDataWithCommand,
         SeedTestUuids,
         IngestMediaItemsCliCommand,
+        ExportTermsCliCommand,
         ExportMediaAnnotationsCliCommand,
         ExportAudioItemLineagesCliCommand,
         ExportSchemasCliCommand,
