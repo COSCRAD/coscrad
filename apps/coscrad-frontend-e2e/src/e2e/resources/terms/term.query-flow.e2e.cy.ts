@@ -698,7 +698,7 @@ describe(`Term index-to-detail flow`, () => {
                     cy.visit(`/Resources/Terms/${idForTermToView}`);
                 });
 
-                it.only(`it should display the note text:\n${noteText}`, () => {
+                it(`it should display the note text:\n${noteText}`, () => {
                     cy.openPanel('notes');
 
                     cy.contains(noteText);
