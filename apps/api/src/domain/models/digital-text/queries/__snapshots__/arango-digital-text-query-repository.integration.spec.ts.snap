@@ -67,53 +67,47 @@ DigitalTextViewModel {
       },
     ],
   },
-  "notes": [
-    NoteRecordForResourceViewModel {
+  "notes": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100010": {
       "context": {
         "type": "general",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100010",
-      "note": MultilingualText {
-        "items": [
-          MultilingualTextItem {
-            "languageCode": "en",
-            "role": "original",
-            "text": "note # 10",
-          },
-        ],
+      "note": {
+        "original": {
+          "languageCode": "en",
+          "text": "note # 10",
+        },
+        "translations": {},
       },
     },
-    NoteRecordForResourceViewModel {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100020": {
       "context": {
         "type": "general",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100020",
-      "note": MultilingualText {
-        "items": [
-          MultilingualTextItem {
-            "languageCode": "en",
-            "role": "original",
-            "text": "note # 20",
-          },
-        ],
+      "note": {
+        "original": {
+          "languageCode": "en",
+          "text": "note # 20",
+        },
+        "translations": {},
       },
     },
-    NoteRecordForResourceViewModel {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100030": {
       "context": {
         "type": "general",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100030",
-      "note": MultilingualText {
-        "items": [
-          MultilingualTextItem {
-            "languageCode": "en",
-            "role": "original",
-            "text": "note # 30",
-          },
-        ],
+      "note": {
+        "original": {
+          "languageCode": "en",
+          "text": "note # 30",
+        },
+        "translations": {},
       },
     },
-  ],
+  },
   "pages": [
     DigitalTextPage {
       "audio": MultilingualAudio {

@@ -7,6 +7,7 @@ import { AccessControlList } from '../../../domain/models/shared/access-control/
 import { ContributionSummary } from '../../../domain/models/user-management';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
 import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { TagViewModel } from './tag.view-model';
@@ -47,7 +48,7 @@ export abstract class BaseEventSourcedResourceViewModel
         description: 'a list of contextualized notes about this resource',
         isArray: true,
     })
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<AggregateId, NoteRecordForResourceViewModel> = {};
 
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
@@ -85,8 +86,7 @@ export abstract class BaseEventSourcedResourceViewModel
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        if (isNonEmptyObject(notes)) this.notes = cloneToPlainObject(notes);
     }
 
     abstract getAvailableCommands(): string[];

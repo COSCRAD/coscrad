@@ -70,17 +70,26 @@ export class BaseArangoResourceViewQueryBuilder {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @resourceId
-        LET newNotes = [@newNote]
+        LET newNotes = {
+            [@newNote.id]: @newNote
+        }
         UPDATE doc WITH {
-            notes: doc.notes == null ? newNotes : APPEND(doc.notes,newNotes)
+            notes: doc.notes == null ? newNotes : MERGE(doc.notes,newNotes)
         }
         IN @@collectionName
+        RETURN NEW
         `;
 
         const newNote = new NoteRecordForResourceViewModel({
             id: noteId,
             context,
-            note: text,
+            note: {
+                original: {
+                    languageCode: text.items[0].languageCode,
+                    text: text.items[0].text,
+                },
+                translations: {},
+            },
         });
 
         const bindVars = {

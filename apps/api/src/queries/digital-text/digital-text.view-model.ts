@@ -41,7 +41,7 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
         pages: [],
         audioForTitle: MultilingualAudio.buildEmpty(),
         accessControlList: new AccessControlList(),
-        notes: [],
+        notes: {},
         connections: [],
         contributions: [],
     },
@@ -94,14 +94,7 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     public audioForTitle: MultilingualAudio;
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'contextualized notes about this digital text',
-        isArray: true,
-        // i.e., can be empty
-        isOptional: true,
-    })
-    public notes: NoteRecordForResourceViewModel[];
+    public notes: Record<string, NoteRecordForResourceViewModel>;
 
     @NestedDataType(ConnectionRecordForResourceViewModel, {
         label: 'connections',
@@ -168,10 +161,10 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             ? new MultilingualAudio(audioForTitle)
             : MultilingualAudio.buildEmpty();
 
-        if (Array.isArray(notes)) {
-            this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));
+        if (isNonEmptyObject(notes)) {
+            this.notes = notes;
         } else {
-            this.notes = [];
+            this.notes = {};
         }
 
         if (Array.isArray(connections)) {

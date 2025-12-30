@@ -153,15 +153,26 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                     label,
                 })
             ),
-            notes: [10, 20, 30].map((sequenceNumber) =>
-                buildTestInstance(NoteRecordForResourceViewModel, {
-                    id: buildDummyUuid(sequenceNumber),
-                    note: buildMultilingualTextWithSingleItem(`note # ${sequenceNumber}`),
-                    context: {
-                        type: EdgeConnectionContextType.general,
-                    },
-                })
-            ),
+            notes: [10, 20, 30]
+                .map((sequenceNumber) =>
+                    buildTestInstance(NoteRecordForResourceViewModel, {
+                        id: buildDummyUuid(sequenceNumber),
+                        note: {
+                            original: {
+                                text: `note # ${sequenceNumber}`,
+                                languageCode: LanguageCode.English,
+                            },
+                        },
+                        context: {
+                            type: EdgeConnectionContextType.general,
+                        },
+                    })
+                )
+                .reduce((acc: Record<string, NoteRecordForResourceViewModel>, note) => {
+                    acc[note.id] = note;
+
+                    return acc;
+                }, {}),
             connections: [
                 buildTestInstance(ConnectionRecordForResourceViewModel, {
                     id: buildDummyUuid(40),
@@ -345,7 +356,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
-            notes: [],
+            notes: {},
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -388,11 +399,17 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 targetDigitalText.id
             )) as DigitalTextViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    text: targetNote.note.items[0].text,
+                    languageCode: targetNote.note.items[0].languageCode,
+                },
+                translations: {},
+            });
         });
     });
 

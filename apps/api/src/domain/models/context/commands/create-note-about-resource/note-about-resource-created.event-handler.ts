@@ -14,6 +14,7 @@ import { NoteAboutResourceCreated } from './note-about-resource-created.event';
 export interface INoteCreationDto {
     noteId: AggregateId;
     context: DTO<EdgeConnectionContext>;
+    // should this be `IMultilingualTextItem`?
     text: IMultilingualText;
 }
 

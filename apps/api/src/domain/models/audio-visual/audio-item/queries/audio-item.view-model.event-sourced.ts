@@ -40,7 +40,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         accessControlList: new AccessControlList(),
         isPublished: false,
         tags: [],
-        notes: [],
+        notes: {},
         connections: [],
     },
 })
@@ -59,7 +59,9 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
      * TODO update `IAudioItemViewModel` in `api-interfaces`
      */
     transcript?: Transcript;
-    notes: NoteRecordForResourceViewModel[];
+
+    notes: Record<AggregateId, NoteRecordForResourceViewModel>;
+
     connections: ConnectionRecordForResourceViewModel[];
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
@@ -67,7 +69,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
 
         if (!dto) return;
 
-        const { mediaItemId, accessControlList, isPublished, transcript, notes, connections } = dto;
+        const { mediaItemId, accessControlList, isPublished, transcript, connections } = dto;
 
         this.mediaItemId = mediaItemId;
 
@@ -90,9 +92,6 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             this.transcript = Transcript.buildEmpty();
             this.text = '';
         }
-
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
 
         if (Array.isArray(connections))
             this.connections = connections.map((n) =>
@@ -167,7 +166,8 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
             tags: [],
-            notes: [],
+            // none initially
+            notes: {},
             connections: [],
         });
     }

@@ -82,7 +82,7 @@ export class VocabularyListRecordForTerm {
         ),
         contributions: [],
         tags: [],
-        notes: [],
+        notes: {},
         connections: [],
         vocabularyLists: [],
         tokens: [],
@@ -137,12 +137,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    // TODO @LookupTable
+    // @NestedDataType(NoteRecordForResourceViewModel, {
+    //     label: 'notes',
+    //     description: 'a list of contextualized notes about this resource',
+    //     isArray: true,
+    // })
+    notes: Record<AggregateId, NoteRecordForResourceViewModel> = {};
 
     @NestedDataType(ConnectionRecordForResourceViewModel, {
         label: 'connections',
@@ -151,6 +152,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     connections: ConnectionRecordForResourceViewModel[];
     // end TODO extend base
+
     /**
      * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-300]
      * We really want to have a full nested view of the multilingual audio,
@@ -258,8 +260,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        if (isNonEmptyObject(notes)) this.notes = cloneToPlainObject(notes);
 
         if (Array.isArray(connections))
             this.connections = connections.map((n) =>
@@ -322,7 +323,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             contributions: [],
             vocabularyLists: [], // none yet
             name: buildMultilingualTextWithSingleItem(text, languageCode),
-            notes: [], // none at creation
+            notes: {}, // none at creation
             connections: [],
             tokens: [], // appended externally
             possibleAudioFilenames: [],
@@ -388,7 +389,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             ],
             vocabularyLists: [],
             tags: [],
-            notes: [], // none at creation
+            notes: {}, // none at creation
             connections: [],
             tokens: [], // appended externally
             possibleAudioFilenames: [],

@@ -81,9 +81,13 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
     }
 
     async createNoteAbout(resourceId: string, noteCreationDto: INoteCreationDto) {
-        await this.database.query(
+        const cursor = await this.database.query(
             this.baseResourceQueryBuilder.createNoteAbout(resourceId, noteCreationDto)
         );
+
+        const result = await cursor.all();
+
+        console.log(result);
     }
 
     async createConnection(id: string, dto: IResourceConnectionDto): Promise<void> {

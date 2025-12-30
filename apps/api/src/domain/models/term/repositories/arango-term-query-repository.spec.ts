@@ -348,10 +348,20 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetTerm = buildTestInstance(TermViewModel, {
-            notes: [],
+            notes: {},
         });
 
+        const targetNoteText = 'This is the note for the term';
+
+        const targetNoteLanguageCode = LanguageCode.English;
+
+        const targetNoteMultilingualText = buildMultilingualTextWithSingleItem(
+            targetNoteText,
+            targetNoteLanguageCode
+        );
+
         const targetNote = buildTestInstance(EdgeConnection, {
+            note: targetNoteMultilingualText,
             members: [
                 {
                     compositeIdentifier: {
@@ -392,11 +402,17 @@ describe(`ArangoTermQueryRepository`, () => {
                 testAdminUser
             )) as TermViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    languageCode: LanguageCode.English,
+                    text: targetNoteText,
+                },
+                translations: {},
+            });
         });
     });
 
