@@ -6,9 +6,14 @@ import {
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../../coscrad-cli/logging';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
+import {
+    IQueryRepositoryProvider,
+    QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../../shared/common-commands/publish-resource/resource-published.event-handler';
 import {
     INoteQueryRepository,
     NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -46,7 +51,11 @@ export interface IQueryRepositoryForConnectable {
 export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly noteRepository: INoteQueryRepository
+        private readonly noteRepository: INoteQueryRepository,
+        @Inject(QUERY_REPOSITORY_PROVIDER_TOKEN)
+        private readonly resourceRepositoryProvider: IQueryRepositoryProvider,
+        @Inject(COSCRAD_LOGGER_TOKEN)
+        private readonly logger: ICoscradLogger
     ) {}
 
     async handle({
@@ -75,7 +84,47 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
                 toMemberContext
             )
             .catch((e) => {
-                throw e;
+                this.logger.log(
+                    `Event consumer [ResourcesConnectedWithNoteEventHandler] failed with the following error:\n${
+                        typeof e?.toString === 'function' ? e.toString() : 'unknown error'
+                    }`
+                );
+            });
+
+        const multilingualTextForNote = buildMultilingualTextWithSingleItem(
+            textForNote,
+            languageCodeForNote
+        );
+
+        /**
+         * TODO We need to find an extensible way to cascade updates (in this
+         * case to notes \ connections) from notes to the denormalized
+         * property on resource documents, and to cascade updates that affect
+         * "eager joins" in general.
+         */
+
+        // denormalize a view of the Connection onto the to member's view
+        await this.resourceRepositoryProvider
+            .forResource(toMemberCompositeIdentifier.type)
+            .createConnection(toMemberCompositeIdentifier.id, {
+                noteId,
+                otherCompositeIdentifier: fromMemberCompositeIdentifier,
+                selfContext: toMemberContext,
+                otherContext: fromMemberContext,
+                text: multilingualTextForNote,
+                role: EdgeConnectionMemberRole.to,
+            });
+
+        // denormalize a view of the Connection onto the from member's view
+        await this.resourceRepositoryProvider
+            .forResource(fromMemberCompositeIdentifier.type)
+            .createConnection(fromMemberCompositeIdentifier.id, {
+                noteId,
+                otherCompositeIdentifier: toMemberCompositeIdentifier,
+                selfContext: fromMemberCompositeIdentifier,
+                otherContext: toMemberContext,
+                text: multilingualTextForNote,
+                role: EdgeConnectionMemberRole.to,
             });
     }
 }

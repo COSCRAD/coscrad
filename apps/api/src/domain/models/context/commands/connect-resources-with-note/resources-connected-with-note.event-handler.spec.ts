@@ -32,7 +32,6 @@ import { TestEventStream } from '../../../../../test-data/events';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../repositories/note-query-repository.interface';
 import { ResourcesConnectedWithNote } from './resources-connected-with-note.event';
 import { ResourcesConnectedWithNoteEventHandler } from './resources-connected-with-note.event-handler';
 
@@ -225,9 +224,7 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
         testQueryRepository = new WidgetQueryRepository(connectionProvider);
 
-        resourcesConnectedWithNoteEventHandler = new ResourcesConnectedWithNoteEventHandler(
-            app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
-        );
+        resourcesConnectedWithNoteEventHandler = app.get(ResourcesConnectedWithNoteEventHandler);
 
         await connectionProvider.createCollectionIfNotExists(WIDGET_COLLECTION);
     });

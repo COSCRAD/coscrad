@@ -286,6 +286,12 @@ export class PersistenceModule implements OnApplicationShutdown {
             imports: [ConfigModule, EventModule, DynamicDataTypeModule],
             providers: [
                 arangoConnectionProvider,
+                {
+                    provide: ArangoDatabaseProvider,
+                    useFactory: (connectionProvider: ArangoConnectionProvider) =>
+                        new ArangoDatabaseProvider(connectionProvider),
+                    inject: [ArangoConnectionProvider],
+                },
                 repositoryProvider,
                 idRepositoryProvider,
                 arangoDatabaseProvider,
