@@ -123,23 +123,20 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
       },
     ],
   },
-  "notes": [
-    {
+  "notes": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
       "context": {
         "type": "general",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
       "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "test note",
-          },
-        ],
+        "original": {
+          "languageCode": "en",
+          "text": "test note",
+        },
       },
     },
-  ],
+  },
   "pages": [
     {
       "audio": {
@@ -296,7 +293,6 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           },
         ],
       },
-      "notes": [],
       "pages": [],
       "tags": [
         {
@@ -439,23 +435,20 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           },
         ],
       },
-      "notes": [
-        {
+      "notes": {
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
           "context": {
             "type": "general",
           },
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
           "note": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "test note",
-              },
-            ],
+            "original": {
+              "languageCode": "en",
+              "text": "test note",
+            },
           },
         },
-      ],
+      },
       "pages": [
         {
           "audio": {
@@ -724,23 +717,20 @@ exports[`When querying for a digital text when the user is a project admin detai
       },
     ],
   },
-  "notes": [
-    {
+  "notes": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
       "context": {
         "type": "general",
       },
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
       "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "test note",
-          },
-        ],
+        "original": {
+          "languageCode": "en",
+          "text": "test note",
+        },
       },
     },
-  ],
+  },
   "pages": [
     {
       "audio": {
@@ -897,7 +887,6 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
-      "notes": [],
       "pages": [],
       "tags": [
         {
@@ -1040,23 +1029,20 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
-      "notes": [
-        {
+      "notes": {
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
           "context": {
             "type": "general",
           },
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
           "note": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "test note",
-              },
-            ],
+            "original": {
+              "languageCode": "en",
+              "text": "test note",
+            },
           },
         },
-      ],
+      },
       "pages": [
         {
           "audio": {

@@ -11,6 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import {
     ConnectionRecordForResourceViewModel,
     TagViewModel,
@@ -43,7 +44,7 @@ import { PhotographCreated } from '../commands';
         isPublished: false,
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
-        notes: [],
+        notes: {},
         connections: [],
     },
 })
@@ -91,12 +92,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
     @NestedDataType(ConnectionRecordForResourceViewModel, {
@@ -188,8 +184,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
         if (Array.isArray(connections))
@@ -235,7 +230,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             contributions: [], // joined above
             accessControlList: new AccessControlList(),
             isPublished: false,
-            notes: [],
+            notes: {},
             connections: [],
         });
     }

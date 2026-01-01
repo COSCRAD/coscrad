@@ -381,7 +381,7 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
       },
     ],
   },
-  "notes": [],
+  "notes": {},
   "possibleAudioFilenames": [],
   "tags": [],
   "tokens": [

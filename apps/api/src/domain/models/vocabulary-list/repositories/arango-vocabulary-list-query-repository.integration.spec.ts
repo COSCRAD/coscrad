@@ -399,7 +399,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetView = buildTestInstance(VocabularyListViewModel, {
-            notes: [],
+            notes: {},
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -442,11 +442,17 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 targetView.id
             )) as VocabularyListViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    text: targetNote.note.items[0].text,
+                    languageCode: targetNote.note.items[0].languageCode,
+                },
+                translations: {},
+            });
         });
     });
 

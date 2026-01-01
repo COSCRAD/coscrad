@@ -19,7 +19,7 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -289,18 +289,18 @@ describe(`ArangoSongQueryRepository`, () => {
     });
 
     describe(`tag`, () => {
-        const existingTagLabel = 'plants';
+        const existingTagLabel = 'plants (existing tag)';
 
-        const existingTag: TagViewModel = {
+        const existingTag = buildTestInstance(EventSourcedTagViewModel, {
             id: buildDummyUuid(90),
             label: existingTagLabel,
             name: buildMultilingualTextWithSingleItem(existingTagLabel),
             members: [],
-        };
+        });
 
         const newTagId = buildDummyUuid(91);
 
-        const newTagLabel = 'animals';
+        const newTagLabel = 'animals (new tag)';
 
         // TODO use event sourced setup?
         const newTag = buildTestInstance(Tag, {
@@ -320,12 +320,13 @@ describe(`ArangoSongQueryRepository`, () => {
             await testQueryRepository.create(targetTerm);
 
             /**
-             * TODO Remove this. We should seed the tag view in the query database
-             * instead.
+             * TODO We should replay events for this tag instead of coupling
+             * to the tag__VIEWS collection. In this case, `ArangoTagQueryRepository.tag`
+             * should take in a full `TagRecordForResource`.
              */
             await databaseProvider
-                .getDatabaseForCollection(ArangoCollectionId.tags)
-                .create(mapEntityDTOToDatabaseDocument(newTag.toDTO()));
+                .getDatabaseForCollection('tag__VIEWS')
+                .create(mapEntityDTOToDatabaseDocument(newTag));
         });
 
         it(`should tag the song`, async () => {
@@ -394,11 +395,17 @@ describe(`ArangoSongQueryRepository`, () => {
 
             const { notes } = updatedView;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    text: targetNote.note.items[0].text,
+                    languageCode: targetNote.note.items[0].languageCode,
+                },
+                translations: {},
+            });
         });
     });
 
@@ -413,7 +420,7 @@ describe(`ArangoSongQueryRepository`, () => {
             await testQueryRepository.create(targetSong);
         });
 
-        it.only(`should add the connection info`, async () => {
+        it(`should add the connection info`, async () => {
             const generalContext: IEdgeConnectionContext = {
                 type: EdgeConnectionContextType.general,
             };

@@ -8,6 +8,7 @@ import {
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
@@ -124,8 +125,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
 
         if (Array.isArray(connections))
             this.connections = connections.map((n) =>

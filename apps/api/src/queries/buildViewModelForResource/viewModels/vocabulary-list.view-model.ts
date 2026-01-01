@@ -174,7 +174,7 @@ export class VocabularyListEntryViewModel {
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
         tags: [],
-        notes: [],
+        notes: {},
         connections: [],
     },
 })
@@ -221,12 +221,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
     @NestedDataType(ConnectionRecordForResourceViewModel, {
@@ -321,8 +316,11 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        if (isNonEmptyObject(notes)) {
+            this.notes = cloneToPlainObject(notes);
+        } else {
+            this.notes = {};
+        }
         // end TODO extend base
 
         if (Array.isArray(connections))
@@ -423,7 +421,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             form: {
                 fields: [],
             },
-            notes: [], // empty at first
+            notes: {}, // empty at first
             connections: [],
         };
 
