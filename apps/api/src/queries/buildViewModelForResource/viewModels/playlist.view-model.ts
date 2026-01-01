@@ -329,6 +329,8 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
             };
         }
 
+        // TODO handle note permissions here
+
         return NotFound;
     }
 

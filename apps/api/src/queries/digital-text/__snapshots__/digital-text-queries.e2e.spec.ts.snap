@@ -134,6 +134,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
           "languageCode": "en",
           "text": "test note",
         },
+        "translations": {},
       },
     },
   },
@@ -293,6 +294,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
           },
         ],
       },
+      "notes": {},
       "pages": [],
       "tags": [
         {
@@ -446,6 +448,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
               "languageCode": "en",
               "text": "test note",
             },
+            "translations": {},
           },
         },
       },
@@ -728,6 +731,7 @@ exports[`When querying for a digital text when the user is a project admin detai
           "languageCode": "en",
           "text": "test note",
         },
+        "translations": {},
       },
     },
   },
@@ -887,6 +891,7 @@ exports[`When querying for a digital text when the user is a project admin index
           },
         ],
       },
+      "notes": {},
       "pages": [],
       "tags": [
         {
@@ -1040,6 +1045,7 @@ exports[`When querying for a digital text when the user is a project admin index
               "languageCode": "en",
               "text": "test note",
             },
+            "translations": {},
           },
         },
       },

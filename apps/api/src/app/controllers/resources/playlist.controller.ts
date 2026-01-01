@@ -16,7 +16,9 @@ export class PlaylistController {
         ViewModelType: PlaylistViewModel,
     })
     async fetchById(@Request() req, @Param('id') id: string) {
-        return this.playlistQueryService.fetchById(id, req.user || undefined);
+        const result = await this.playlistQueryService.fetchById(id, req.user || undefined);
+
+        return result;
     }
 
     @ResourceIndexEndpoint({

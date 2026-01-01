@@ -86,8 +86,5 @@ export interface ITermViewModel extends IBaseResourceViewModel {
 
     tokens: IToken[];
 
-    // Lookup table where the keys are note IDs
-    notes: Record<string, INoteRecordForResource>;
-
     connections: IConnectedResourceRecord[];
 }

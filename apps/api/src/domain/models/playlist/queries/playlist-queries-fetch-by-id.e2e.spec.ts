@@ -13,6 +13,7 @@ import { clonePlainObjectWithOverrides } from '../../../../lib/utilities/clonePl
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import {
     PlaylistEpisodeViewModel,
     PlaylistViewModel,
@@ -56,11 +57,25 @@ const playlistName = 'Smooth Jazz';
 
 const originalLanguageCode = LanguageCode.English;
 
+const testNote = buildTestInstance(NoteRecordForResourceViewModel, {
+    id: buildDummyUuid(101),
+    note: {
+        original: {
+            text: 'this is the test note for the given playlist',
+            languageCode: LanguageCode.English,
+        },
+        translations: {},
+    },
+});
+
 const publishedPlaylistWithNoSpecialAccess = buildTestInstance(PlaylistViewModel, {
     accessControlList: new AccessControlList(),
     isPublished: true,
     name: buildMultilingualTextWithSingleItem(playlistName, originalLanguageCode),
     episodes: [publicEpisode, privateEpisodeWithNoSpecialAccess],
+    notes: {
+        [testNote.id]: testNote,
+    },
 });
 
 describe(`when querying for a single playlist- by ID`, () => {
@@ -314,6 +329,8 @@ describe(`when querying for a single playlist- by ID`, () => {
                             // we included 1 public and 1 private episode- an admin should see both
                             expect(body.episodes).toHaveLength(2);
 
+                            // TODO Add some notes and check that ACL is respected for notes
+
                             /**
                              * We snapshot just one response as a contract test
                              * for the `by ID` query endpoint for playlists.
@@ -354,176 +371,7 @@ describe(`when querying for a single playlist- by ID`, () => {
                              * will also capture the structure of properties such
                              * as `actions`, which are only visible to admin
                              */
-                            expect(body).toMatchInlineSnapshot(`
-{
-  "actions": [
-    {
-      "description": "Make a resource visible to the public",
-      "form": {
-        "fields": [],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Publish Resource",
-      "type": "PUBLISH_RESOURCE",
-    },
-    {
-      "description": "Assign a tag to a resource or note",
-      "form": {
-        "fields": [
-          {
-            "constraints": [],
-            "description": "system-wide unique identifier for the resource or note being tagged",
-            "label": "Tagged Member's Composite Identifier",
-            "name": "taggedMemberCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Tag Resource or Note",
-      "type": "TAG_RESOURCE_OR_NOTE",
-    },
-    {
-      "description": "creates a note about this particular resource",
-      "form": {
-        "fields": [
-          {
-            "constraints": [],
-            "description": "system-wide unique identifier for the resource about which we are making a note",
-            "label": "CompositeIdentifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-          {
-            "constraints": [
-              {
-                "message": "must be a non-empty string",
-                "name": "non-empty string",
-              },
-              {
-                "message": "must be a defined value",
-                "name": "defined value",
-              },
-            ],
-            "description": "text for the note",
-            "label": "text",
-            "name": "text",
-            "type": "TEXT_FIELD",
-          },
-          {
-            "constraints": [
-              {
-                "message": "Must be a valid \${propertyLabel}",
-                "name": "IS_ENUM",
-              },
-              {
-                "message": "Required",
-                "name": "defined value",
-              },
-            ],
-            "description": "the language in which you are writing the note",
-            "label": "language code",
-            "name": "languageCode",
-            "options": [
-              {
-                "display": "Chilcotin",
-                "value": "clc",
-              },
-              {
-                "display": "Haida",
-                "value": "hai",
-              },
-              {
-                "display": "English",
-                "value": "en",
-              },
-              {
-                "display": "French",
-                "value": "fra",
-              },
-              {
-                "display": "Chinook",
-                "value": "chn",
-              },
-              {
-                "display": "Zapotec",
-                "value": "zap",
-              },
-              {
-                "display": "Spanish",
-                "value": "spa",
-              },
-            ],
-            "type": "STATIC_SELECT",
-          },
-        ],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Create Note",
-      "type": "CREATE_NOTE_ABOUT_RESOURCE",
-    },
-  ],
-  "connections": [],
-  "contributions": [],
-  "episodes": [
-    {
-      "isPublished": true,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Episode 1",
-          },
-        ],
-      },
-    },
-    {
-      "isPublished": false,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Episode 1",
-          },
-        ],
-      },
-    },
-  ],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-  "isPublished": false,
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "Smooth Jazz",
-      },
-    ],
-  },
-  "notes": [],
-  "tags": [],
-  "type": "playlist",
-}
-`);
+                            expect(body).toMatchSnapshot();
                         },
                     });
                 });
@@ -603,176 +451,7 @@ describe(`when querying for a single playlist- by ID`, () => {
                              * will also capture the structure of properties such
                              * as `actions`, which are only visible to admin
                              */
-                            expect(body).toMatchInlineSnapshot(`
-{
-  "actions": [
-    {
-      "description": "Make a resource visible to the public",
-      "form": {
-        "fields": [],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Publish Resource",
-      "type": "PUBLISH_RESOURCE",
-    },
-    {
-      "description": "Assign a tag to a resource or note",
-      "form": {
-        "fields": [
-          {
-            "constraints": [],
-            "description": "system-wide unique identifier for the resource or note being tagged",
-            "label": "Tagged Member's Composite Identifier",
-            "name": "taggedMemberCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-        ],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Tag Resource or Note",
-      "type": "TAG_RESOURCE_OR_NOTE",
-    },
-    {
-      "description": "creates a note about this particular resource",
-      "form": {
-        "fields": [
-          {
-            "constraints": [],
-            "description": "system-wide unique identifier for the resource about which we are making a note",
-            "label": "CompositeIdentifier",
-            "name": "resourceCompositeIdentifier",
-            "type": "JSON_INPUT",
-          },
-          {
-            "constraints": [
-              {
-                "message": "must be a non-empty string",
-                "name": "non-empty string",
-              },
-              {
-                "message": "must be a defined value",
-                "name": "defined value",
-              },
-            ],
-            "description": "text for the note",
-            "label": "text",
-            "name": "text",
-            "type": "TEXT_FIELD",
-          },
-          {
-            "constraints": [
-              {
-                "message": "Must be a valid \${propertyLabel}",
-                "name": "IS_ENUM",
-              },
-              {
-                "message": "Required",
-                "name": "defined value",
-              },
-            ],
-            "description": "the language in which you are writing the note",
-            "label": "language code",
-            "name": "languageCode",
-            "options": [
-              {
-                "display": "Chilcotin",
-                "value": "clc",
-              },
-              {
-                "display": "Haida",
-                "value": "hai",
-              },
-              {
-                "display": "English",
-                "value": "en",
-              },
-              {
-                "display": "French",
-                "value": "fra",
-              },
-              {
-                "display": "Chinook",
-                "value": "chn",
-              },
-              {
-                "display": "Zapotec",
-                "value": "zap",
-              },
-              {
-                "display": "Spanish",
-                "value": "spa",
-              },
-            ],
-            "type": "STATIC_SELECT",
-          },
-        ],
-        "prepopulatedFields": {
-          "aggregateCompositeIdentifier": {
-            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-            "type": "playlist",
-          },
-        },
-      },
-      "label": "Create Note",
-      "type": "CREATE_NOTE_ABOUT_RESOURCE",
-    },
-  ],
-  "connections": [],
-  "contributions": [],
-  "episodes": [
-    {
-      "isPublished": true,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Episode 1",
-          },
-        ],
-      },
-    },
-    {
-      "isPublished": false,
-      "mediaItemUrl": "https://jaybam.com/home/api/resources/mediaItems/download/9b1deb4d-3b7d-4bad-9bdd-2b0d7b100567",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Episode 1",
-          },
-        ],
-      },
-    },
-  ],
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b109001",
-  "isPublished": false,
-  "name": {
-    "items": [
-      {
-        "languageCode": "en",
-        "role": "original",
-        "text": "Smooth Jazz",
-      },
-    ],
-  },
-  "notes": [],
-  "tags": [],
-  "type": "playlist",
-}
-`);
+                            expect(body).toMatchSnapshot();
                         },
                     });
                 });
