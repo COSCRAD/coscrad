@@ -354,7 +354,7 @@ exports[`when querying for a term: fetch by Id when the user is authenticated wh
       "type": "ADD_AUDIO_FOR_TERM",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [
     {
       "contributorIds": [

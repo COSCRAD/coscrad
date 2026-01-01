@@ -350,7 +350,7 @@ describe(`ArangoSongQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetView = buildTestInstance(EventSourcedSongViewModel, {
-            notes: [],
+            notes: {},
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -451,7 +451,7 @@ describe(`ArangoSongQueryRepository`, () => {
                 targetSong.id
             )) as EventSourcedSongViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -459,7 +459,7 @@ describe(`ArangoSongQueryRepository`, () => {
                 otherContext,
                 note,
                 role: foundConnectionRoleForResource,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -467,8 +467,9 @@ describe(`ArangoSongQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

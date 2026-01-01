@@ -175,7 +175,7 @@ export class VocabularyListEntryViewModel {
         accessControlList: new AccessControlList().toDTO(),
         tags: [],
         notes: {},
-        connections: [],
+        connections: {},
     },
 })
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -224,12 +224,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     @ApiProperty({
         type: VocabularyListEntryViewModel,
@@ -323,10 +318,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
         }
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         // super(dto);
         // this.id = dto.id;
@@ -422,7 +414,7 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
                 fields: [],
             },
             notes: {}, // empty at first
-            connections: [],
+            connections: {},
         };
 
         const view = new VocabularyListViewModel(dto);

@@ -58,6 +58,8 @@ const publicDigitalText = buildTestInstance(DigitalTextViewModel, {
 
 const testNote = buildTestInstance(NoteRecordForResourceViewModel, {});
 
+const testConnection = buildTestInstance(ConnectionRecordForResourceViewModel);
+
 const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
     id: buildDummyUuid(102),
     name: buildMultilingualTextWithSingleItem('private text'),
@@ -68,7 +70,10 @@ const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
     notes: {
         [testNote.id]: testNote,
     },
-    connections: [buildTestInstance(ConnectionRecordForResourceViewModel)],
+    connections: {
+        [testConnection.id]: testConnection,
+    },
+
     pages: ['i', 'ii', 'iii'].map((pageId) =>
         buildTestInstance(DigitalTextPage, {
             identifier: pageId,

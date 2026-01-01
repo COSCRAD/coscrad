@@ -81,7 +81,7 @@ exports[`when querying for a vocabulary list: fetch by ID when the user is a pro
       "type": "TRANSLATE_VOCABULARY_LIST_NAME",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [],
   "entries": [
     {

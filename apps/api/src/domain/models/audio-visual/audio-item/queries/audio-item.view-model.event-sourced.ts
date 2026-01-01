@@ -10,6 +10,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../../../domain/commo
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { NotFound } from '../../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { ConnectionRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { BaseEventSourcedResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
@@ -41,7 +42,7 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         isPublished: false,
         tags: [],
         notes: {},
-        connections: [],
+        connections: {},
     },
 })
 export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceViewModel {
@@ -62,7 +63,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
 
     notes: Record<AggregateId, NoteRecordForResourceViewModel>;
 
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<AggregateId, ConnectionRecordForResourceViewModel>;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         super(dto);
@@ -93,10 +94,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             this.text = '';
         }
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
     }
 
     public forUser(
@@ -168,7 +166,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             tags: [],
             // none initially
             notes: {},
-            connections: [],
+            connections: {},
         });
     }
 

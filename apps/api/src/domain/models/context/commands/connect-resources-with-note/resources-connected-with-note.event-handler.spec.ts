@@ -13,8 +13,7 @@ import { DynamicDataTypeFinderService } from '../../../../../../src/validation';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../../../../coscrad-cli/logging';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { NotFound } from '../../../../../lib/types/not-found';
@@ -111,7 +110,13 @@ class WidgetQueryRepository {
 
                 const connection: ConnectionRecordForResourceViewModel = {
                     id: edge._key,
-                    note: new MultilingualText(edge.text),
+                    note: {
+                        original: {
+                            text: edge.text.items[0].text,
+                            languageCode: edge.text.items[0].languageCode,
+                        },
+                        translations: {},
+                    },
                     selfContext:
                         myRole === EdgeConnectionMemberRole.from
                             ? edge.connectedResources.from.context
@@ -196,6 +201,13 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
             imports: [PersistenceModule.forRootAsync()],
+            providers: [
+                {
+                    provide: COSCRAD_LOGGER_TOKEN,
+                    useClass: ConsoleCoscradCliLogger,
+                },
+                ResourcesConnectedWithNoteEventHandler,
+            ],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -266,13 +278,15 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
                 expect(newConnectionForToMember.role).toBe(EdgeConnectionMemberRole.to);
 
-                const expectedNote = // this looks too much like the implementation
-                    buildMultilingualTextWithSingleItem(
-                        resourcesConnected.payload.text,
-                        resourcesConnected.payload.languageCode
-                    );
+                const expectedNoteRecord = {
+                    original: {
+                        text: resourcesConnected.payload.text,
+                        languageCode: resourcesConnected.payload.languageCode,
+                    },
+                    translations: {},
+                };
 
-                expect(newConnectionForToMember.note.toDTO()).toEqual(expectedNote.toDTO());
+                expect(newConnectionForToMember.note).toEqual(expectedNoteRecord);
 
                 expect(newConnectionForToMember.id).toBe(
                     resourcesConnected.payload.aggregateCompositeIdentifier.id
@@ -297,7 +311,7 @@ describe(`ResourcesConnectedWithNoteEventHandler`, () => {
 
                 expect(otherContext).toEqual(generalContext);
 
-                expect(note.toDTO()).toEqual(expectedNote.toDTO());
+                expect(note).toEqual(expectedNoteRecord);
 
                 expect(connectionId).toBe(
                     resourcesConnected.payload.aggregateCompositeIdentifier.id

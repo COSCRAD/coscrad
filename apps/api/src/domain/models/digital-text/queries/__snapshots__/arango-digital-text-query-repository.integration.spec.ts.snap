@@ -11,17 +11,15 @@ DigitalTextViewModel {
   "audioForTitle": MultilingualAudio {
     "items": [],
   },
-  "connections": [
-    ConnectionRecordForResourceViewModel {
+  "connections": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100040": {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100040",
-      "note": MultilingualText {
-        "items": [
-          MultilingualTextItem {
-            "languageCode": "en",
-            "role": "original",
-            "text": "this is why the texts are connected",
-          },
-        ],
+      "note": {
+        "original": {
+          "languageCode": "en",
+          "text": "this is why the texts are connected",
+        },
+        "translations": {},
       },
       "otherCompositeIdentifier": {
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100901",
@@ -35,7 +33,7 @@ DigitalTextViewModel {
         "type": "general",
       },
     },
-  ],
+  },
   "contributions": [
     ContributionSummary {
       "contributorIds": [

@@ -47,7 +47,7 @@ import { VideoCreated } from '../commands';
         isPublished: false,
         tags: [],
         notes: {},
-        connections: [],
+        connections: {},
     },
 })
 export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -94,12 +94,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
     notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     actions: ICommandFormAndLabels[];
     mediaItemId: AggregateId;
@@ -143,10 +138,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
         this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         const { mediaItemId, transcript } = dto;
 
@@ -194,7 +186,7 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
             accessControlList: new AccessControlList(),
             tags: [],
             notes: {},
-            connections: [],
+            connections: {},
         });
     }
 

@@ -113,7 +113,7 @@ export class PlaylistEpisodeViewModel {
         tags: [],
         accessControlList: new AccessControlList(),
         notes: {},
-        connections: [],
+        connections: {},
     },
 })
 export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -163,14 +163,9 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
     tags: EventSourcedTagViewModel[];
 
     notes: Record<string, NoteRecordForResourceViewModel>;
-    // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
+    // end TODO extend base
 
     /**
      * TODO[https://www.pivotaltracker.com/story/show/184634347]
@@ -229,10 +224,7 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
         this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         if (!dto) return;
 

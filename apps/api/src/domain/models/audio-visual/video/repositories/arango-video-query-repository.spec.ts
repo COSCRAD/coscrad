@@ -291,7 +291,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
     describe(`connectResourcesWith`, () => {
         const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -331,7 +331,7 @@ describe(`ArangoVideoQueryRepository`, () => {
                 targetVideo.id
             )) as EventSourcedVideoViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -339,7 +339,7 @@ describe(`ArangoVideoQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -347,8 +347,9 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

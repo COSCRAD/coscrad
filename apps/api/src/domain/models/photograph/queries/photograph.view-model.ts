@@ -45,7 +45,7 @@ import { PhotographCreated } from '../commands';
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
         notes: {},
-        connections: [],
+        connections: {},
     },
 })
 export class PhotographViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -95,12 +95,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
     notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections about this resource',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     @UUID({
         label: 'media item',
@@ -187,10 +182,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
         this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         if (!dto) return;
 
@@ -231,7 +223,7 @@ export class PhotographViewModel implements HasAggregateId, DetailScopedCommandW
             accessControlList: new AccessControlList(),
             isPublished: false,
             notes: {},
-            connections: [],
+            connections: {},
         });
     }
 

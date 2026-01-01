@@ -287,7 +287,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
     describe(`connectResourcesWith`, () => {
         const targetPlaylist = buildTestInstance(PlaylistViewModel, {
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -327,7 +327,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
                 targetPlaylist.id
             )) as PlaylistViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -335,7 +335,7 @@ describe(`ArangoPlaylistQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -343,8 +343,9 @@ describe(`ArangoPlaylistQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

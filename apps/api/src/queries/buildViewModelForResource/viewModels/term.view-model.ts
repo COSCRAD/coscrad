@@ -83,7 +83,7 @@ export class VocabularyListRecordForTerm {
         contributions: [],
         tags: [],
         notes: {},
-        connections: [],
+        connections: {},
         vocabularyLists: [],
         tokens: [],
         possibleAudioFilenames: [],
@@ -145,12 +145,13 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     // })
     notes: Record<AggregateId, NoteRecordForResourceViewModel> = {};
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    // TODO @LookupTable
+    // @NestedDataType(ConnectionRecordForResourceViewModel, {
+    //     label: 'connections',
+    //     description: 'a list of contextualized connections to other resources about with a note',
+    //     isArray: true,
+    // })
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
     // end TODO extend base
 
     /**
@@ -260,12 +261,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (isNonEmptyObject(notes)) this.notes = cloneToPlainObject(notes);
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
         // end TODO extend base
 
         this.possibleAudioFilenames = Array.isArray(possibleAudioFilenames)
@@ -324,7 +322,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             vocabularyLists: [], // none yet
             name: buildMultilingualTextWithSingleItem(text, languageCode),
             notes: {}, // none at creation
-            connections: [],
+            connections: {},
             tokens: [], // appended externally
             possibleAudioFilenames: [],
         });
@@ -390,7 +388,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             vocabularyLists: [],
             tags: [],
             notes: {}, // none at creation
-            connections: [],
+            connections: {},
             tokens: [], // appended externally
             possibleAudioFilenames: [],
         });

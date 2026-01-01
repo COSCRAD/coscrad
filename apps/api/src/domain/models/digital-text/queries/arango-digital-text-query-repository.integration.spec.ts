@@ -146,6 +146,27 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
             })
         );
 
+        const testConnection = buildTestInstance(ConnectionRecordForResourceViewModel, {
+            id: buildDummyUuid(40),
+            note: {
+                original: {
+                    text: `this is why the texts are connected`,
+                    languageCode: LanguageCode.English,
+                },
+                translations: {},
+            },
+            otherCompositeIdentifier: {
+                type: ResourceType.digitalText,
+                id: buildDummyUuid(901),
+            },
+            otherContext: {
+                type: EdgeConnectionContextType.general,
+            },
+            selfContext: {
+                type: EdgeConnectionContextType.general,
+            },
+        });
+
         const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
             id: digitalTextId,
             tags: ['plants', 'animals'].map((label) =>
@@ -173,24 +194,9 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
                     return acc;
                 }, {}),
-            connections: [
-                buildTestInstance(ConnectionRecordForResourceViewModel, {
-                    id: buildDummyUuid(40),
-                    note: buildMultilingualTextWithSingleItem(
-                        `this is why the texts are connected`
-                    ),
-                    otherCompositeIdentifier: {
-                        type: ResourceType.digitalText,
-                        id: buildDummyUuid(901),
-                    },
-                    otherContext: {
-                        type: EdgeConnectionContextType.general,
-                    },
-                    selfContext: {
-                        type: EdgeConnectionContextType.general,
-                    },
-                }),
-            ],
+            connections: {
+                [testConnection.id]: testConnection,
+            },
             name: buildMultilingualTextFromBilingualText(
                 {
                     text: 'English title',
@@ -416,7 +422,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
     describe(`createConnection`, () => {
         const targetDigitalText = buildTestInstance(DigitalTextViewModel, {
             // no connections to start
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -456,7 +462,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 targetDigitalText.id
             )) as DigitalTextViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -464,7 +470,7 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -472,8 +478,9 @@ describe(`ArangoDigitalTextQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

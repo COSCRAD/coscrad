@@ -86,17 +86,15 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
   "audioForTitle": {
     "items": [],
   },
-  "connections": [
-    {
+  "connections": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
       "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "test note",
-          },
-        ],
+        "original": {
+          "languageCode": "en",
+          "text": "test note",
+        },
+        "translations": {},
       },
       "otherCompositeIdentifier": {
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
@@ -110,7 +108,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin detai
         "type": "general",
       },
     },
-  ],
+  },
   "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
   "isPublished": false,
@@ -281,7 +279,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
       "audioForTitle": {
         "items": [],
       },
-      "connections": [],
+      "connections": {},
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "isPublished": true,
@@ -400,17 +398,15 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
       "audioForTitle": {
         "items": [],
       },
-      "connections": [
-        {
+      "connections": {
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
           "note": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "test note",
-              },
-            ],
+            "original": {
+              "languageCode": "en",
+              "text": "test note",
+            },
+            "translations": {},
           },
           "otherCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
@@ -424,7 +420,7 @@ exports[`When querying for a digital text when the user is a COSCRAD admin index
             "type": "general",
           },
         },
-      ],
+      },
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "isPublished": false,
@@ -683,17 +679,15 @@ exports[`When querying for a digital text when the user is a project admin detai
   "audioForTitle": {
     "items": [],
   },
-  "connections": [
-    {
+  "connections": {
+    "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
       "note": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "test note",
-          },
-        ],
+        "original": {
+          "languageCode": "en",
+          "text": "test note",
+        },
+        "translations": {},
       },
       "otherCompositeIdentifier": {
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
@@ -707,7 +701,7 @@ exports[`When querying for a digital text when the user is a project admin detai
         "type": "general",
       },
     },
-  ],
+  },
   "contributions": [],
   "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
   "isPublished": false,
@@ -878,7 +872,7 @@ exports[`When querying for a digital text when the user is a project admin index
       "audioForTitle": {
         "items": [],
       },
-      "connections": [],
+      "connections": {},
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
       "isPublished": true,
@@ -997,17 +991,15 @@ exports[`When querying for a digital text when the user is a project admin index
       "audioForTitle": {
         "items": [],
       },
-      "connections": [
-        {
+      "connections": {
+        "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001": {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
           "note": {
-            "items": [
-              {
-                "languageCode": "en",
-                "role": "original",
-                "text": "test note",
-              },
-            ],
+            "original": {
+              "languageCode": "en",
+              "text": "test note",
+            },
+            "translations": {},
           },
           "otherCompositeIdentifier": {
             "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100123",
@@ -1021,7 +1013,7 @@ exports[`When querying for a digital text when the user is a project admin index
             "type": "general",
           },
         },
-      ],
+      },
       "contributions": [],
       "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
       "isPublished": false,

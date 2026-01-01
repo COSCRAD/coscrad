@@ -90,41 +90,5 @@ export class ResourcesConnectedWithNoteEventHandler implements ICoscradEventHand
                     }`
                 );
             });
-
-        const multilingualTextForNote = buildMultilingualTextWithSingleItem(
-            textForNote,
-            languageCodeForNote
-        );
-
-        /**
-         * TODO We need to find an extensible way to cascade updates (in this
-         * case to notes \ connections) from notes to the denormalized
-         * property on resource documents, and to cascade updates that affect
-         * "eager joins" in general.
-         */
-
-        // denormalize a view of the Connection onto the to member's view
-        await this.resourceRepositoryProvider
-            .forResource(toMemberCompositeIdentifier.type)
-            .createConnection(toMemberCompositeIdentifier.id, {
-                noteId,
-                otherCompositeIdentifier: fromMemberCompositeIdentifier,
-                selfContext: toMemberContext,
-                otherContext: fromMemberContext,
-                text: multilingualTextForNote,
-                role: EdgeConnectionMemberRole.to,
-            });
-
-        // denormalize a view of the Connection onto the from member's view
-        await this.resourceRepositoryProvider
-            .forResource(fromMemberCompositeIdentifier.type)
-            .createConnection(fromMemberCompositeIdentifier.id, {
-                noteId,
-                otherCompositeIdentifier: toMemberCompositeIdentifier,
-                selfContext: fromMemberCompositeIdentifier,
-                otherContext: toMemberContext,
-                text: multilingualTextForNote,
-                role: EdgeConnectionMemberRole.to,
-            });
     }
 }

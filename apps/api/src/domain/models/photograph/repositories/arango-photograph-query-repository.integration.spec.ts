@@ -489,7 +489,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
     describe(`connectResourcesWith`, () => {
         const targetPhotograph = buildTestInstance(PhotographViewModel, {
             // no connections to start
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -529,7 +529,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
                 targetPhotograph.id
             )) as PhotographViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -537,7 +537,7 @@ describe(`ArangoPhotographQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -545,8 +545,9 @@ describe(`ArangoPhotographQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 
