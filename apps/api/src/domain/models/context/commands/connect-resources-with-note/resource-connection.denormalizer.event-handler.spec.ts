@@ -43,22 +43,21 @@ class Widget {
 
     name: string;
 
-    // TODO Make this a Map<AggregateId,NoteRecordForResourceViewModel>
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 }
 
 const targetToWidget: Widget = {
     id: '123',
     type: WIDGET_TYPE,
     name: 'blue widget',
-    connections: [],
+    connections: {},
 };
 
 const targetFromWidget: Widget = {
     id: '124',
     type: WIDGET_TYPE,
     name: 'red widget',
-    connections: [],
+    connections: {},
 };
 
 @Injectable()
@@ -213,14 +212,21 @@ describe(`ResourceConnectionDenormalizer`, () => {
                 event.payload.languageCode
             );
 
-            expect(updatedToMemberView.connections).toHaveLength(1);
+            expect(Object.keys(updatedToMemberView.connections)).toHaveLength(1);
 
             // Validate the to member connection record
-            const toMemberConnection = updatedToMemberView.connections[0];
+            const toMemberConnection =
+                updatedToMemberView.connections[event.payload.aggregateCompositeIdentifier.id];
 
             expect(toMemberConnection.id).toBe(noteId);
 
-            expect(toMemberConnection.note).toEqual(expectedNoteText.toDTO());
+            expect(toMemberConnection.note).toEqual({
+                original: {
+                    text: expectedNoteText.items[0].text,
+                    languageCode: expectedNoteText.items[0].languageCode,
+                },
+                translations: {},
+            });
 
             expect(toMemberConnection.otherCompositeIdentifier).toEqual({
                 type: WIDGET_TYPE,
@@ -237,14 +243,21 @@ describe(`ResourceConnectionDenormalizer`, () => {
                 targetFromWidget.id
             )) as Widget;
 
-            expect(updatedFromMemberView.connections).toHaveLength(1);
+            expect(Object.keys(updatedFromMemberView.connections)).toHaveLength(1);
 
             // Validate the from member connection record
-            const fromMemberConnection = updatedFromMemberView.connections[0];
+            const fromMemberConnection =
+                updatedFromMemberView.connections[event.payload.aggregateCompositeIdentifier.id];
 
             expect(fromMemberConnection.id).toBe(noteId);
 
-            expect(fromMemberConnection.note).toEqual(expectedNoteText.toDTO());
+            expect(fromMemberConnection.note).toEqual({
+                original: {
+                    text: expectedNoteText.items[0].text,
+                    languageCode: expectedNoteText.items[0].languageCode,
+                },
+                translations: {},
+            });
 
             expect(fromMemberConnection.otherCompositeIdentifier).toEqual({
                 type: WIDGET_TYPE,
