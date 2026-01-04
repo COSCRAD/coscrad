@@ -5,7 +5,7 @@ import { BibliographicCitationDataUnionType } from '../../../../domain/models/bi
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { AggregateId } from '../../../../domain/types/AggregateId';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
-import { BaseDomainProjectionResourceViewModel } from '../base-resource.view-model';
+import { BaseDomainProjectionResourceViewModel } from '../base-domain-projection-resource.view-model';
 
 export class BibliographicCitationViewModel extends BaseDomainProjectionResourceViewModel {
     readonly type = ResourceType.bibliographicCitation;

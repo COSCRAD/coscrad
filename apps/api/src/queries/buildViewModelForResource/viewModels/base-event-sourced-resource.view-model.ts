@@ -14,7 +14,7 @@ import { TagViewModel } from './tag.view-model';
 import { EventSourcedTagViewModel } from './tag.view-model.event-sourced';
 
 /**
- * We are slowly phasing out the `BaseResourceViewModel`, which is state-based,
+ * We are slowly phasing out the `BaseDomainProjectionResourceViewModel`, which is state-based,
  * in favor of event sourced views.
  */
 export abstract class BaseEventSourcedResourceViewModel
