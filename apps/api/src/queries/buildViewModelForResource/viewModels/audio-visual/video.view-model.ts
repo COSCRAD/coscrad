@@ -7,9 +7,9 @@ import { Video } from '../../../../domain/models/audio-visual/video/entities/vid
 import { MediaItem } from '../../../../domain/models/media-item/entities/media-item.entity';
 import { CoscradContributor } from '../../../../domain/models/user-management/contributor';
 import { isNullOrUndefined } from '../../../../domain/utilities/validation/is-null-or-undefined';
-import { BaseResourceViewModel } from '../base-resource.view-model';
+import { BaseDomainProjectionResourceViewModel } from '../base-resource.view-model';
 
-export class VideoViewModel extends BaseResourceViewModel {
+export class VideoViewModel extends BaseDomainProjectionResourceViewModel {
     public readonly type = ResourceType.video;
 
     @NestedDataType(MultilingualText, {
