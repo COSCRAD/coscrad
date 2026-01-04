@@ -37,15 +37,14 @@ class Widget {
 
     name: string;
 
-    // TODO Make this a Map<AggregateId,NoteRecordForResourceViewModel>
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<string, NoteRecordForResourceViewModel>;
 }
 
 const targetWidget: Widget = {
     id: '123',
     type: WIDGET_TYPE,
     name: 'blue widget',
-    notes: [],
+    notes: {},
 };
 
 @Injectable()
@@ -177,7 +176,7 @@ describe(`ResourceNoteDenormalizer`, () => {
                 targetWidget.id
             )) as Widget;
 
-            expect(updatedResourceView.notes).toHaveLength(1);
+            expect(Object.keys(updatedResourceView.notes)).toHaveLength(1);
         });
     });
 });

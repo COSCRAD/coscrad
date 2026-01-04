@@ -124,7 +124,7 @@ exports[`when querying for a single playlist- by ID when the user is a COSCRAD a
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [],
   "episodes": [
     {
@@ -309,7 +309,7 @@ exports[`when querying for a single playlist- by ID when the user is a COSCRAD a
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [],
   "episodes": [
     {
@@ -494,7 +494,7 @@ exports[`when querying for a single playlist- by ID when the user is a project a
       "type": "CREATE_NOTE_ABOUT_RESOURCE",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [],
   "episodes": [
     {

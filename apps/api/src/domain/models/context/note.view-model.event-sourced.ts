@@ -157,6 +157,10 @@ export class EventSourcedNoteViewModel {
             this.audio = MultilingualAudio.buildEmpty();
         }
 
+        if (audio.items.length > 1) {
+            console.log('foo u 2');
+        }
+
         this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;
     }
 
