@@ -41,7 +41,7 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
-    const connectResourceCompositeIds = viewModel.connections.map(
+    const connectResourceCompositeIds = Object.values(viewModel.connections || {}).map(
         ({ otherCompositeIdentifier }) => otherCompositeIdentifier
     );
 
