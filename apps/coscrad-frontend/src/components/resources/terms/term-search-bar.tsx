@@ -23,6 +23,7 @@ import {
     setTermFilters,
     useLoadableTerms,
 } from '../../../store/slices/resources';
+import { HeadingLabel } from '../../../utils/generic-components/presenters/tables';
 
 /**
  * Clearly this doesn't belong here. However, we want to generalize it to
@@ -131,7 +132,7 @@ const interpretCoscradQueryFromUserSearchText = (
 interface SearchBarProps {
     specialCharacterReplacements?: Record<string, string>;
 
-    scopes: string[];
+    scopes: HeadingLabel<ITermViewModel>[];
 }
 
 /**
@@ -261,22 +262,17 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
                 <MenuItem sx={{ minWidth: 120 }} value={ALL_PROPERTIES_SEARCH_KEY}>
                     {labelForSearchAllPropertiesOption}
                 </MenuItem>
-                {scopes.map((selectedFilterProperty: keyof ITermViewModel & string) => (
-                    <MenuItem
-                        key={selectedFilterProperty}
-                        value={selectedFilterProperty}
-                        sx={{ minWidth: 120 }}
-                    >
-                        {/* THIS SHOULD BE A LABEL */}
-                        {
-                            selectedFilterProperty
-                            // headingLabels.find(
-                            //     ({ propertyKey: labelPropertyKey }) =>
-                            //         labelPropertyKey === selectedFilterProperty
-                            // )?.headingLabel
-                        }
-                    </MenuItem>
-                ))}
+                {scopes.map(
+                    ({ propertyKey: selectedFilterProperty, headingLabel: propertyLabel }) => (
+                        <MenuItem
+                            key={selectedFilterProperty}
+                            value={selectedFilterProperty}
+                            sx={{ minWidth: 120 }}
+                        >
+                            {propertyLabel}
+                        </MenuItem>
+                    )
+                )}
             </Select>
         </FormControl>
     );
