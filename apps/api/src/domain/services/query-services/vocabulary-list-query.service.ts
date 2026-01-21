@@ -105,6 +105,20 @@ export class VocabularyListQueryService {
                     variableValues,
                 }));
 
+                // mappedEntity.table = {
+                //     dynamicColumnHeadings: [
+                //         {
+                //             headingLabel: 'foo',
+                //             allowedValuesAndLabels: [],
+                //             propertyKey: 'filterPropertyfooValue',
+                //             type: DropboxOrCheckbox.dropbox,
+                //         },
+                //     ],
+                //     data: [],
+                // };
+
+                console.log({ entities });
+
                 return entity as unknown as Omit<VocabularyListViewModel, 'actions'> & {
                     actions: ICommandFormAndLabels[];
                 };

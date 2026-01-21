@@ -1,5 +1,5 @@
 import { FormFieldType, IFormField } from '@coscrad/api-interfaces';
-import { VocabularyListFilter } from './vocabulary-list-detail.full-view.presenter';
+import { VocabularyListFilter } from './entries/vocabulary-list-entry.carousel.presenter';
 import { VocabularyListSelect } from './vocabulary-list-select';
 
 type VocabularyListFormElementProps = {

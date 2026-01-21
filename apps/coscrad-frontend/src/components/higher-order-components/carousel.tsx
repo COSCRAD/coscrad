@@ -32,7 +32,7 @@ export const Carousel = <T,>({ propsForItems, Presenter }: CarouselProps<T>) => 
     const propsForSelectedItem = propsForItems[indexToUse];
 
     return (
-        <Box>
+        <Box data-testid="carousel">
             <Presenter {...propsForSelectedItem} />
             <Box sx={{ textAlign: 'center', marginTop: 2 }}>
                 <Button
