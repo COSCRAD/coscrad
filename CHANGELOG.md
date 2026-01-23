@@ -1,6 +1,6 @@
 # COSCRAD/coscrad Change Log
 
-## <next>
+## v0.1.1
 
 ### Digital Representations of Bibliographic Citations on the Client
 
