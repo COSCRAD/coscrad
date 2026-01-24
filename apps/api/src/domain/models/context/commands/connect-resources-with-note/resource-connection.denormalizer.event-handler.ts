@@ -44,13 +44,12 @@ export class ResourceConnectionDenormalizer implements ICoscradEventHandler {
         );
 
         /**
-         * TODO We should make `createConnection` idempotent or else find a pattern
-         * that splits these 2 writes into separate event handlers. If one
-         * write failes, we don't want to write the successful connection twice.
-         *
-         * A good way to do this is to make the `connections` a `Map<AggregateId,ConnectionRecordForResourceViewModel>`
-         * and overwrite \ merge updates to this lookup table. This will also help
-         * with improving fine-grained reactivity in Redux on the client.
+         * Note that by running these 2 writes in parallel, we assume that the
+         * underlying repository implementation of `createConnection` is idempotent.
+         * The natural way we implement this is to persist the connections as a
+         * lookup table from connection.id to a connection record on the given
+         * resource document. Such lookup tables (objects) are mergeable in a
+         * natural way that also provides natural "fine-grained reactivity".
          */
         await Promise.all([
             repositoryForFromMember.createConnection(fromMemberCompositeIdentifier.id, {

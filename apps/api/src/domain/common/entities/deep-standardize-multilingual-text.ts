@@ -40,5 +40,5 @@ export const deepStandardizeMultilingualText = <T>(
         }, {} as T);
     }
 
-    return target; // should be {}
+    return target; // at this point, we know `target` is {}
 };
