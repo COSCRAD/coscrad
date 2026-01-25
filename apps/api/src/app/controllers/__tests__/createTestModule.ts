@@ -92,6 +92,7 @@ import {
     ConnectResourcesWithNoteCommandHandler,
 } from '../../../domain/models/context/commands/connect-resources-with-note';
 import { ResourcesConnectedWithNote } from '../../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event';
+import { NoteAboutResourceCreated } from '../../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { EdgeConnectionContextUnion } from '../../../domain/models/context/edge-connection-context-union';
 import {
     EdgeConnection,
@@ -405,6 +406,7 @@ export const buildAllDataClassProviders = () =>
         AudioAddedForDigitalTextPage,
         PhotographAddedToDigitalTextPage,
         SongCreated,
+        NoteAboutResourceCreated,
         NoteTranslated,
         AudioAddedForNote,
         SongTitleTranslated,

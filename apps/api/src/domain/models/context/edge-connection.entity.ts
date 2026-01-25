@@ -61,6 +61,7 @@ import { ContextUnionType } from './edge-connection-context-union';
 import { EdgeAlreadyPublishedError } from './errors';
 import { CannotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
 
+// TODO move this class to a different file
 @CoscradDataExample<EdgeConnectionMember>({
     example: {
         role: EdgeConnectionMemberRole.self,
