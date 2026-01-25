@@ -18,7 +18,6 @@ import { buildCommandExecutionFormsAndLabels } from '../../higher-order-componen
 import { CategorizablePageLayout } from '../../higher-order-components/categorizable-page-layout';
 import { Loading } from '../../loading';
 import { NotFoundPresenter } from '../../not-found';
-import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { thumbnailCategorizableDetailPresenterFactory } from '../factories/thumbnail-categorizable-detail-presenter-factory';
 
 interface TermPageProps {
@@ -42,7 +41,7 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
 
     const actionsFromApi = viewModel.actions as IBackendCommandFormAndLabels[];
 
-    const connectResourceCompositeIds = viewModel.connections.map(
+    const connectResourceCompositeIds = Object.values(viewModel.connections || {}).map(
         ({ otherCompositeIdentifier }) => otherCompositeIdentifier
     );
 
@@ -84,13 +83,14 @@ export const TermDetailPage = ({ DetailPresenter }: TermPageProps): JSX.Element 
                         id,
                         // TODO make sure these are populated from the back-end
                     }}
-                    notes={viewModel.notes.map((note) => {
+                    notes={Object.values(viewModel.notes).map((note) => {
                         const { id, note: text, context } = note;
 
                         /**
                          * In the future, we should expose the translations as well.
+                         * These are available by language code via text.translations.
                          */
-                        const singleLanguageText = findOriginalTextItem(text).text;
+                        const singleLanguageText = text.original.text;
 
                         return {
                             id,

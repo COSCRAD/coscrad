@@ -8,8 +8,8 @@ import {
 import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
-import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
@@ -39,7 +39,7 @@ const testEventId = buildDummyUuid(1);
         audioItemId: buildDummyUuid(50),
         mediaItemId: buildDummyUuid(49),
         lengthMilliseconds: 1500,
-        notes: [],
+        notes: {},
         tags: [],
         connections: [],
     },
@@ -51,8 +51,11 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
     isPublished: boolean;
     accessControlList: AccessControlList;
     contributions: ContributionSummary[];
-    notes: NoteRecordForResourceViewModel[];
+
+    notes: Record<string, ConnectionRecordForResourceViewModel>;
+
     connections: ConnectionRecordForResourceViewModel[];
+
     tags: EventSourcedTagViewModel[];
 
     @FromSong
@@ -124,13 +127,9 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
     }
 
     getCompositeIdentifier(): { type: AggregateType; id: AggregateId } {
@@ -191,7 +190,7 @@ export class EventSourcedSongViewModel implements HasAggregateId, DetailScopedCo
             // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-76?atlOrigin=eyJpIjoiNjRhMTdkZmVlOWFiNDAxZThmZGZiYmViY2Y5ODE4MTUiLCJwIjoiaiJ9] join in media info
             lengthMilliseconds: 0,
             tags: [],
-            notes: [],
+            notes: {},
             connections: [],
         });
     }

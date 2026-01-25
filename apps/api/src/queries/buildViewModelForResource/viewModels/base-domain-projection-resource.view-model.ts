@@ -10,6 +10,7 @@ import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import capitalizeFirstLetter from '../../../lib/utilities/strings/capitalizeFirstLetter';
 import { BaseViewModel, Nameable } from './base.view-model';
+import { NoteRecordForResourceViewModel } from './note-record-for-resource.view-model';
 import { HasViewModelId } from './types/ViewModelId';
 
 interface Accreditable {
@@ -20,7 +21,19 @@ interface Accreditable {
     }[];
 }
 
-export class BaseResourceViewModel
+/**
+ * We used to project view models off the domain state. This was inefficient
+ * due to requiring extensive in-memory joins and sending large amounts of
+ * external state from the db.
+ *
+ * We now eagerly build materialized views in a separate query database (full CQRS pattern).
+ *
+ * The one benefit of the old pattern is that you have strong consistency. The
+ * query DB is eventually consistent. If there is ever a case where a report (e.g. audit report)
+ * is required to have this level of accuracy, you should project off the domain
+ * (event stream or domain snapshots) directly.
+ */
+export class BaseDomainProjectionResourceViewModel
     extends BaseViewModel
     implements HasAggregateId, DetailScopedCommandWriteContext
 {
@@ -30,6 +43,14 @@ export class BaseResourceViewModel
         isArray: true,
     })
     readonly contributions: ContributionSummary[];
+
+    /**
+     * TODO We need to leverage a query DB for bibliographic citations.
+     * TODO We need to leverage a query DB for videos.
+     *
+     * For now, `videos` and `bibliographic citations` will come back with no notes.
+     */
+    readonly notes: Record<string, NoteRecordForResourceViewModel> = {};
 
     constructor(
         domainModel: HasViewModelId & Nameable & Accreditable,

@@ -42,6 +42,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -122,6 +123,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [],
       "type": "bibliographicCitation",
     },
@@ -149,6 +151,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",
@@ -224,6 +227,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110002",
@@ -304,6 +308,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [],
       "type": "bibliographicCitation",
     },
@@ -331,6 +336,7 @@ exports[`When fetching multiple resources GET /resources/bibliographicCitations 
           },
         ],
       },
+      "notes": {},
       "tags": [
         {
           "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110006",

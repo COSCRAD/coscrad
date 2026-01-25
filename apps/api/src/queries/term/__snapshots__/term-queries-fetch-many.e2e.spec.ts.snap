@@ -357,7 +357,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -389,7 +389,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "possibleAudioFilenames": [],
       "tags": [],
       "tokens": [
@@ -764,7 +764,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -796,7 +796,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "possibleAudioFilenames": [],
       "tags": [],
       "tokens": [
@@ -1173,7 +1173,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           "type": "ADD_AUDIO_FOR_TERM",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -1205,7 +1205,7 @@ exports[`when querying for a term: fetch many when the user is a project admin s
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "possibleAudioFilenames": [],
       "tags": [],
       "tokens": [

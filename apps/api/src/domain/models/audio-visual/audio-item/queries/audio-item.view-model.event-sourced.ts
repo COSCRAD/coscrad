@@ -10,6 +10,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../../../domain/commo
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
 import { NotFound } from '../../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { ConnectionRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { BaseEventSourcedResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/base-event-sourced-resource.view-model';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
@@ -40,8 +41,8 @@ import { AudioItemCreated } from '../commands/create-audio-item/audio-item-creat
         accessControlList: new AccessControlList(),
         isPublished: false,
         tags: [],
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
     },
 })
 export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceViewModel {
@@ -59,15 +60,17 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
      * TODO update `IAudioItemViewModel` in `api-interfaces`
      */
     transcript?: Transcript;
-    notes: NoteRecordForResourceViewModel[];
-    connections: ConnectionRecordForResourceViewModel[];
+
+    notes: Record<AggregateId, NoteRecordForResourceViewModel>;
+
+    connections: Record<AggregateId, ConnectionRecordForResourceViewModel>;
 
     constructor(dto: DTO<EventSourcedAudioItemViewModel>) {
         super(dto);
 
         if (!dto) return;
 
-        const { mediaItemId, accessControlList, isPublished, transcript, notes, connections } = dto;
+        const { mediaItemId, accessControlList, isPublished, transcript, connections } = dto;
 
         this.mediaItemId = mediaItemId;
 
@@ -91,13 +94,7 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             this.text = '';
         }
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
-
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
     }
 
     public forUser(
@@ -167,8 +164,9 @@ export class EventSourcedAudioItemViewModel extends BaseEventSourcedResourceView
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
             tags: [],
-            notes: [],
-            connections: [],
+            // none initially
+            notes: {},
+            connections: {},
         });
     }
 

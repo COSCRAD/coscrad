@@ -8,6 +8,7 @@ import {
 import { BooleanDataType, NestedDataType, UUID } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { DetailScopedCommandWriteContext } from '../../../../../app/controllers/command/services/command-info-service';
+import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import {
     ConnectionRecordForResourceViewModel,
     TagViewModel,
@@ -45,8 +46,8 @@ import { VideoCreated } from '../commands';
         accessControlList: new AccessControlList(),
         isPublished: false,
         tags: [],
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
     },
 })
 export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -90,20 +91,10 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     actions: ICommandFormAndLabels[];
     mediaItemId: AggregateId;
@@ -144,14 +135,10 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         const { mediaItemId, transcript } = dto;
 
@@ -198,8 +185,8 @@ export class EventSourcedVideoViewModel implements HasAggregateId, DetailScopedC
             // in order to grant access, we need a `RESOURCE_READ_ACCESS_GRANTED_TO_USER`
             accessControlList: new AccessControlList(),
             tags: [],
-            notes: [],
-            connections: [],
+            notes: {},
+            connections: {},
         });
     }
 

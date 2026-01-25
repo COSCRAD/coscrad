@@ -23,6 +23,7 @@ import { AggregateId } from '../../domain/types/AggregateId';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
 import { Maybe } from '../../lib/types/maybe';
 import { NotFound } from '../../lib/types/not-found';
+import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../test-data/utilities';
 import { DTO } from '../../types/DTO';
 import { ConnectionRecordForResourceViewModel } from '../buildViewModelForResource/viewModels';
@@ -41,8 +42,8 @@ import { ApplyEvent } from '../event-sourcing/apply-event.interface';
         pages: [],
         audioForTitle: MultilingualAudio.buildEmpty(),
         accessControlList: new AccessControlList(),
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
         contributions: [],
     },
 })
@@ -94,24 +95,9 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
     })
     public audioForTitle: MultilingualAudio;
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'contextualized notes about this digital text',
-        isArray: true,
-        // i.e., can be empty
-        isOptional: true,
-    })
-    public notes: NoteRecordForResourceViewModel[];
+    public notes: Record<string, NoteRecordForResourceViewModel>;
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description:
-            'a list of contextualized connections to other resources in the web-of-knowledge',
-        isArray: true,
-        // i.e., can be empty
-        isOptional: true,
-    })
-    public connections: ConnectionRecordForResourceViewModel[];
+    public connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
@@ -168,16 +154,16 @@ export class DigitalTextViewModel implements ApplyEvent<DigitalTextViewModel> {
             ? new MultilingualAudio(audioForTitle)
             : MultilingualAudio.buildEmpty();
 
-        if (Array.isArray(notes)) {
-            this.notes = notes.map((n) => new NoteRecordForResourceViewModel(n));
+        if (isNonEmptyObject(notes)) {
+            this.notes = notes;
         } else {
-            this.notes = [];
+            this.notes = {};
         }
 
-        if (Array.isArray(connections)) {
-            this.connections = connections.map((c) => new ConnectionRecordForResourceViewModel(c));
+        if (isNonEmptyObject(connections)) {
+            this.connections = cloneToPlainObject(connections);
         } else {
-            this.connections = [];
+            this.connections = {};
         }
 
         if (Array.isArray(contributions)) {

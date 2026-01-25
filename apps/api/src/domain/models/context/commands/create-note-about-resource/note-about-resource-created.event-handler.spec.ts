@@ -1,9 +1,4 @@
-import {
-    EdgeConnectionContextType,
-    EdgeConnectionMemberRole,
-    EdgeConnectionType,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { EdgeConnectionContextType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -14,7 +9,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../../../domain/commo
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { Maybe } from '../../../../../lib/types/maybe';
-import { NotFound } from '../../../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../../persistence/database/arango-database-for-collection';
@@ -23,24 +18,43 @@ import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/databa
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { ConnectionRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../repositories/note-query-repository.interface';
+import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
+import { EventSourcedNoteViewModel } from '../../note.view-model.event-sourced';
+import {
+    INoteQueryRepository,
+    NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
+} from '../../repositories/note-query-repository.interface';
 import { NoteAboutResourceCreated } from './note-about-resource-created.event';
-import { NoteAboutResourceCreatedEventHandler } from './note-about-resource-created.event-handler';
+import {
+    INoteCreationDto,
+    IQueryRepositoryForAnnotatable,
+    NoteAboutResourceCreatedEventHandler,
+} from './note-about-resource-created.event-handler';
 
 const WIDGET_COLLECTION = 'widget__VIEWS';
 
+const WIDGET = 'widget' as ResourceType;
+
 class WidgetViewModel {
     id: string;
+    readonly type = WIDGET;
     name: MultilingualText;
     notes: NoteRecordForResourceViewModel[];
 
-    constructor({ id, name, notes }: DTO<WidgetViewModel>) {
+    constructor({
+        id,
+        name,
+        notes,
+    }: {
+        id: string;
+        name: DTO<MultilingualText>;
+        notes: NoteRecordForResourceViewModel[];
+    }) {
         this.id = id;
 
         this.name = new MultilingualText(name);
@@ -56,7 +70,13 @@ const noteText = 'my note';
 const knownNotes: NoteRecordForResourceViewModel[] = [
     {
         id: buildDummyUuid(55),
-        note: buildMultilingualTextWithSingleItem(noteText),
+        note: {
+            original: {
+                text: noteText,
+                languageCode: LanguageCode.English,
+            },
+            translations: {},
+        },
         context: { type: EdgeConnectionContextType.general },
     },
 ];
@@ -67,92 +87,30 @@ const existingWidgetView = new WidgetViewModel({
     notes: [],
 });
 
-class WidgetQueryRepository {
+class WidgetQueryRepository implements IQueryRepositoryForAnnotatable {
     private readonly arangoDb: ArangoDatabaseForCollection<WidgetViewModel>;
 
+    private readonly baseQueryBuilder: BaseArangoResourceViewQueryBuilder;
+
     constructor(connectionProvider: ArangoConnectionProvider) {
-        this.arangoDb = new ArangoDatabaseForCollection(
+        this.arangoDb = new ArangoDatabaseForCollection<WidgetViewModel>(
             new ArangoDatabase(connectionProvider.getConnection()),
             WIDGET_COLLECTION
         );
+
+        this.baseQueryBuilder = new BaseArangoResourceViewQueryBuilder(WIDGET_COLLECTION);
     }
 
     async fetchById(id: string): Promise<Maybe<WidgetViewModel>> {
-        const aql = `
-        for doc,edge in 0..1 any "${WIDGET_COLLECTION}/${id}" graph web_of_knowledge
-        return {
-            doc,
-            edge
-        }
-        `;
+        const doc = await this.arangoDb.fetchById(id);
 
-        const cursor = await this.arangoDb.query({ query: aql, bindVars: {} });
-
-        const results = await cursor.all();
-
-        if (results.length === 0) {
-            return NotFound;
+        if (isNotFound(doc)) {
+            return doc;
         }
 
-        const [{ doc: widgetDoc }, ...connectedDocsAndEdges] = results;
+        const widgetViewDto = mapDatabaseDocumentToAggregateDTO(doc);
 
-        const { notes, connections } = connectedDocsAndEdges.reduce(
-            (acc, { doc: _doc, edge }) => {
-                if (edge.connectionType === EdgeConnectionType.self) {
-                    const noteRecord: NoteRecordForResourceViewModel = {
-                        id: edge._key,
-                        note: new MultilingualText(edge.text),
-                        context: edge.connectedResources.self,
-                    };
-
-                    if (!acc.notes.some((note) => note.id === noteRecord.id)) {
-                        acc.notes.push(noteRecord);
-                    }
-
-                    return acc;
-                }
-
-                const myRole =
-                    edge._to == `widget__VIEWS/${id}`
-                        ? EdgeConnectionMemberRole.to
-                        : EdgeConnectionMemberRole.from;
-
-                const connection: ConnectionRecordForResourceViewModel = {
-                    id: edge.id,
-                    note: new MultilingualText(edge.text),
-                    selfContext:
-                        myRole === EdgeConnectionMemberRole.from
-                            ? edge.connectedResources.from.context
-                            : edge.connectedResources.to.context,
-                    otherCompositeIdentifier:
-                        myRole === EdgeConnectionMemberRole.from
-                            ? edge.connectedResources.to.resource
-                            : edge.connectedResources.from.resource,
-                    otherContext:
-                        myRole === EdgeConnectionMemberRole.from
-                            ? edge.connectedResources.to.context
-                            : edge.connectedResources.from.context,
-                    role: EdgeConnectionMemberRole.to,
-                };
-
-                acc.connections.push(connection);
-
-                return acc;
-            },
-            {
-                notes: [],
-                connections: [],
-            }
-        );
-
-        const widgetDocWithNotes = mapDatabaseDocumentToAggregateDTO({
-            ...widgetDoc,
-            notes,
-            connections,
-        });
-
-        // @ts-expect-error TODO Add a type assertion to the query result at the top level
-        return new WidgetViewModel(widgetDocWithNotes);
+        return new WidgetViewModel(widgetViewDto);
     }
 
     async create(w: WidgetViewModel): Promise<void> {
@@ -163,6 +121,10 @@ class WidgetQueryRepository {
 
     async update(id: AggregateId, w: DeepPartial<DTO<WidgetViewModel>>): Promise<void> {
         await this.arangoDb.update(id, w);
+    }
+
+    async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
+        await this.arangoDb.query(this.baseQueryBuilder.createNoteAbout(id, dto));
     }
 }
 
@@ -188,6 +150,8 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
     let app: INestApplication;
 
     let noteAboutResourceCreatedEventHandler: NoteAboutResourceCreatedEventHandler;
+
+    let noteQueryRepository: INoteQueryRepository;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -219,6 +183,8 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
         );
 
         await connectionProvider.createCollectionIfNotExists(WIDGET_COLLECTION);
+
+        noteQueryRepository = app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN);
     });
 
     afterAll(async () => {
@@ -237,13 +203,32 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
         it(`should create the note`, async () => {
             await noteAboutResourceCreatedEventHandler.handle(noteCreated);
 
-            const updatedView = (await testQueryRepository.fetchById(
-                existingWidgetView.id
-            )) as WidgetViewModel;
+            const updatedView = await noteQueryRepository.fetchById(
+                noteCreated.payload.aggregateCompositeIdentifier.id
+            );
 
-            expect(updatedView.notes).toHaveLength(1);
+            expect(updatedView).not.toBe(NotFound);
 
-            expect(updatedView.notes[0].note.getOriginalTextItem().text).toBe(noteText);
+            const {
+                text: textForUpdatedView,
+                connectedResources: { to, from, self },
+            } = updatedView as EventSourcedNoteViewModel;
+
+            const originalText = textForUpdatedView.getOriginalTextItem();
+
+            expect(originalText.languageCode).toEqual(noteCreated.payload.languageCode);
+
+            expect(originalText.text).toEqual(noteCreated.payload.text);
+
+            expect(updatedView);
+
+            expect(to).toBeFalsy();
+
+            expect(from).toBeFalsy();
+
+            expect(self.resource.id).toBe(noteCreated.payload.resourceCompositeIdentifier.id);
+
+            expect(self.resource.type).toBe(noteCreated.payload.resourceCompositeIdentifier.type);
         });
     });
 });

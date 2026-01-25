@@ -18,6 +18,7 @@ import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { ConnectionRecordForResourceViewModel } from './connection-record-for-resource.view-model';
@@ -111,8 +112,8 @@ export class PlaylistEpisodeViewModel {
         contributions: [],
         tags: [],
         accessControlList: new AccessControlList(),
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
     },
 })
 export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -161,20 +162,10 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
-    // end TODO extend base
+    notes: Record<string, NoteRecordForResourceViewModel>;
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
+    // end TODO extend base
 
     /**
      * TODO[https://www.pivotaltracker.com/story/show/184634347]
@@ -230,14 +221,10 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         if (!dto) return;
 
@@ -333,6 +320,8 @@ export class PlaylistViewModel implements HasAggregateId, DetailScopedCommandWri
                 episodes: Omit<PlaylistEpisodeViewModel, 'accessControlList'>[];
             };
         }
+
+        // TODO handle note permissions here
 
         return NotFound;
     }

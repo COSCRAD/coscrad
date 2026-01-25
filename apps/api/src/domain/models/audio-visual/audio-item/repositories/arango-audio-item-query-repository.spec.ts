@@ -393,11 +393,18 @@ describe(`ArangoAudioItemQueryRepository`, () => {
     describe(`createNoteAbout`, () => {
         const existingNote = buildTestInstance(NoteRecordForResourceViewModel, {
             id: buildDummyUuid(299),
-            note: buildMultilingualTextWithSingleItem('I am already there'),
+            note: {
+                original: {
+                    text: 'I am already there',
+                    languageCode: LanguageCode.English,
+                },
+            },
         });
 
         const targetView = buildTestInstance(EventSourcedAudioItemViewModel, {
-            notes: [existingNote],
+            notes: {
+                [existingNote.id]: existingNote,
+            },
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -441,18 +448,23 @@ describe(`ArangoAudioItemQueryRepository`, () => {
             )) as EventSourcedAudioItemViewModel;
 
             // this includes the 1 existing note
-            expect(notes).toHaveLength(2);
+            expect(Object.keys(notes)).toHaveLength(2);
 
             // TODO should the note properity have "text?"
-            const { note } = notes.find(({ id }) => id === targetNote.id);
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            const { text: expectedText, languageCode: expectedLanguageCode } =
+                targetNote.note.getOriginalTextItem();
+
+            expect(note.original.text).toEqual(expectedText);
+
+            expect(note.original.languageCode).toEqual(expectedLanguageCode);
         });
     });
 
     describe(`connectResourcesWith`, () => {
         const targetAudioItem = buildTestInstance(EventSourcedAudioItemViewModel, {
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -492,7 +504,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 targetAudioItem.id
             )) as EventSourcedAudioItemViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -500,7 +512,7 @@ describe(`ArangoAudioItemQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -508,8 +520,9 @@ describe(`ArangoAudioItemQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

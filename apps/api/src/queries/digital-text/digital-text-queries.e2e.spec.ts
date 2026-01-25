@@ -56,6 +56,10 @@ const publicDigitalText = buildTestInstance(DigitalTextViewModel, {
     tags: [buildTestInstance(EventSourcedTagViewModel)],
 });
 
+const testNote = buildTestInstance(NoteRecordForResourceViewModel, {});
+
+const testConnection = buildTestInstance(ConnectionRecordForResourceViewModel);
+
 const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
     id: buildDummyUuid(102),
     name: buildMultilingualTextWithSingleItem('private text'),
@@ -63,8 +67,13 @@ const privateDigitalText = buildTestInstance(DigitalTextViewModel, {
     // empty
     accessControlList: new AccessControlList(),
     tags: [buildTestInstance(EventSourcedTagViewModel)],
-    notes: [buildTestInstance(NoteRecordForResourceViewModel, {})],
-    connections: [buildTestInstance(ConnectionRecordForResourceViewModel)],
+    notes: {
+        [testNote.id]: testNote,
+    },
+    connections: {
+        [testConnection.id]: testConnection,
+    },
+
     pages: ['i', 'ii', 'iii'].map((pageId) =>
         buildTestInstance(DigitalTextPage, {
             identifier: pageId,

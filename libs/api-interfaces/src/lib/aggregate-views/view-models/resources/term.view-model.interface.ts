@@ -46,6 +46,30 @@ type IConnectedResourceRecord = {
     role: typeof EdgeConnectionMemberRole.to | typeof EdgeConnectionMemberRole.from;
 };
 
+export interface IMultilingualTextRecord {
+    original: {
+        text: string;
+        languageCode: LanguageCode;
+    };
+    translations: Partial<
+        Record<
+            LanguageCode,
+            {
+                free?: string;
+                literal?: string;
+                // gloss?: string;
+            }
+        >
+    >;
+}
+
+export interface INoteRecordForResource {
+    id: string;
+    context: IEdgeConnectionContext;
+    // TODO make this `text`
+    note: IMultilingualTextRecord;
+}
+
 export interface ITermViewModel extends IBaseResourceViewModel {
     audioURL?: string;
 
@@ -61,8 +85,6 @@ export interface ITermViewModel extends IBaseResourceViewModel {
     vocabularyLists: IVocabularyListRecordForTerm[];
 
     tokens: IToken[];
-
-    notes: { id: string; context: IEdgeConnectionContext; note: IMultilingualText }[];
 
     connections: IConnectedResourceRecord[];
 }

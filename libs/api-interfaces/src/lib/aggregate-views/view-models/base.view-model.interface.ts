@@ -1,6 +1,7 @@
 import { ICommandFormAndLabels } from '../../commands';
 import { HasId } from './has-id.interface';
 import { IMultilingualText } from './resources/common';
+import { INoteRecordForResource } from './resources/term.view-model.interface';
 
 interface ICoscradDate {
     // can we make this number as well?
@@ -23,5 +24,9 @@ export interface IBaseViewModel extends HasId {
 
 export interface IBaseResourceViewModel extends IBaseViewModel {
     contributions: IContributionSummary[];
+
     actions: ICommandFormAndLabels[];
+
+    // Lookup table where the keys are note IDs
+    notes: Record<string, INoteRecordForResource>;
 }

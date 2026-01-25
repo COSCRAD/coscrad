@@ -174,8 +174,8 @@ export class VocabularyListEntryViewModel {
         contributions: [],
         accessControlList: new AccessControlList().toDTO(),
         tags: [],
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
     },
 })
 export class VocabularyListViewModel implements HasAggregateId, DetailScopedCommandWriteContext {
@@ -221,20 +221,10 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    notes: Record<string, NoteRecordForResourceViewModel>;
     // end TODO extend base
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
 
     @ApiProperty({
         type: VocabularyListEntryViewModel,
@@ -321,14 +311,14 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        if (isNonEmptyObject(notes)) {
+            this.notes = cloneToPlainObject(notes);
+        } else {
+            this.notes = {};
+        }
         // end TODO extend base
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
 
         // super(dto);
         // this.id = dto.id;
@@ -423,8 +413,8 @@ export class VocabularyListViewModel implements HasAggregateId, DetailScopedComm
             form: {
                 fields: [],
             },
-            notes: [], // empty at first
-            connections: [],
+            notes: {}, // empty at first
+            connections: {},
         };
 
         const view = new VocabularyListViewModel(dto);

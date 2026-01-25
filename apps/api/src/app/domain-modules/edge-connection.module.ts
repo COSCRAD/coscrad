@@ -17,6 +17,7 @@ import { NoteViewModel } from '../../queries/edgeConnectionViewModels/note.view-
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { EdgeConnectionController } from '../controllers/edge-connection.controller';
 
+import { ConsoleCoscradCliLogger, COSCRAD_LOGGER_TOKEN } from '../../coscrad-cli/logging';
 import {
     AddAudioForNote,
     AddAudioForNoteCommandHandler,
@@ -30,10 +31,12 @@ import {
     TranslateNoteCommandHandler,
 } from '../../domain/models/context/commands';
 import { AudioAddedForNoteEventHandler } from '../../domain/models/context/commands/add-audio-for-note/audio-added-for-note.event-handler';
+import { ResourceConnectionDenormalizer } from '../../domain/models/context/commands/connect-resources-with-note/resource-connection.denormalizer.event-handler';
 import { ResourcesConnectedWithNote } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event';
 import { ResourcesConnectedWithNoteEventHandler } from '../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
+import { ResourceNoteDenormalizer } from '../../domain/models/context/commands/create-note-about-resource/resource-note.denormalizer.event-handler';
 import { EdgePublished } from '../../domain/models/context/commands/publish-note/edge-published.event';
 import { EdgePublishedEventHandler } from '../../domain/models/context/commands/publish-note/edge-published.event-handler';
 import { PublishEdge } from '../../domain/models/context/commands/publish-note/publish-edge.command';
@@ -46,6 +49,10 @@ import { CoscradNLPModule } from '../../lib/nlp';
     imports: [PersistenceModule, CommandModule, IdGenerationModule, CoscradNLPModule],
     controllers: [EdgeConnectionController],
     providers: [
+        {
+            provide: COSCRAD_LOGGER_TOKEN,
+            useValue: new ConsoleCoscradCliLogger(),
+        },
         CommandInfoService,
         EdgeConnectionQueryService,
         // Data Classes
@@ -89,6 +96,9 @@ import { CoscradNLPModule } from '../../lib/nlp';
         NoteTranslatedEventHandler,
         AudioAddedForNoteEventHandler,
         EdgePublishedEventHandler,
+        // Denormalizers
+        ResourceNoteDenormalizer,
+        ResourceConnectionDenormalizer,
     ],
     exports: [EdgeConnectionQueryService],
 })

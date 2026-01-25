@@ -82,8 +82,8 @@ export class VocabularyListRecordForTerm {
         ),
         contributions: [],
         tags: [],
-        notes: [],
-        connections: [],
+        notes: {},
+        connections: {},
         vocabularyLists: [],
         tokens: [],
         possibleAudioFilenames: [],
@@ -137,20 +137,23 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     })
     tags: EventSourcedTagViewModel[];
 
-    @NestedDataType(NoteRecordForResourceViewModel, {
-        label: 'notes',
-        description: 'a list of contextualized notes about this resource',
-        isArray: true,
-    })
-    notes: NoteRecordForResourceViewModel[];
+    // TODO @LookupTable
+    // @NestedDataType(NoteRecordForResourceViewModel, {
+    //     label: 'notes',
+    //     description: 'a list of contextualized notes about this resource',
+    //     isArray: true,
+    // })
+    notes: Record<AggregateId, NoteRecordForResourceViewModel> = {};
 
-    @NestedDataType(ConnectionRecordForResourceViewModel, {
-        label: 'connections',
-        description: 'a list of contextualized connections to other resources about with a note',
-        isArray: true,
-    })
-    connections: ConnectionRecordForResourceViewModel[];
+    // TODO @LookupTable
+    // @NestedDataType(ConnectionRecordForResourceViewModel, {
+    //     label: 'connections',
+    //     description: 'a list of contextualized connections to other resources about with a note',
+    //     isArray: true,
+    // })
+    connections: Record<string, ConnectionRecordForResourceViewModel>;
     // end TODO extend base
+
     /**
      * TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-300]
      * We really want to have a full nested view of the multilingual audio,
@@ -258,13 +261,9 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
-        if (Array.isArray(notes))
-            this.notes = notes.map((n) => NoteRecordForResourceViewModel.fromDto(n));
+        this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
 
-        if (Array.isArray(connections))
-            this.connections = connections.map((n) =>
-                ConnectionRecordForResourceViewModel.fromDto(n)
-            );
+        this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
         // end TODO extend base
 
         this.possibleAudioFilenames = Array.isArray(possibleAudioFilenames)
@@ -322,8 +321,8 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             contributions: [],
             vocabularyLists: [], // none yet
             name: buildMultilingualTextWithSingleItem(text, languageCode),
-            notes: [], // none at creation
-            connections: [],
+            notes: {}, // none at creation
+            connections: {},
             tokens: [], // appended externally
             possibleAudioFilenames: [],
         });
@@ -388,8 +387,8 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
             ],
             vocabularyLists: [],
             tags: [],
-            notes: [], // none at creation
-            connections: [],
+            notes: {}, // none at creation
+            connections: {},
             tokens: [], // appended externally
             possibleAudioFilenames: [],
         });

@@ -232,7 +232,7 @@ describe(`ArangoVideoQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
-            notes: [],
+            notes: {},
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -275,17 +275,23 @@ describe(`ArangoVideoQueryRepository`, () => {
                 targetVideo.id
             )) as EventSourcedVideoViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    text: targetNote.note.items[0].text,
+                    languageCode: targetNote.note.items[0].languageCode,
+                },
+                translations: {},
+            });
         });
     });
 
     describe(`connectResourcesWith`, () => {
         const targetVideo = buildTestInstance(EventSourcedVideoViewModel, {
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -325,7 +331,7 @@ describe(`ArangoVideoQueryRepository`, () => {
                 targetVideo.id
             )) as EventSourcedVideoViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -333,7 +339,7 @@ describe(`ArangoVideoQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -341,8 +347,9 @@ describe(`ArangoVideoQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

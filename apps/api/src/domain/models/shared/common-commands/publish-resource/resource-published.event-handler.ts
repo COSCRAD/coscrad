@@ -1,18 +1,11 @@
 import { Inject } from '@nestjs/common';
+import { IResourceQueryRepository } from '../../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
-import { Maybe } from '../../../../../lib/types/maybe';
-import { IAccessible } from '../grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { ResourcePublished } from './resource-published.event';
 
 export interface ICountable {
     count(): Promise<number>;
-}
-
-interface GenericRepository<T = unknown> extends ICountable {
-    create(entity: T): Promise<void>;
-    fetchById(id: string): Promise<Maybe<T>>;
-    fetchMany(): Promise<T[]>;
 }
 
 export interface IPublishable {
@@ -22,11 +15,7 @@ export interface IPublishable {
 export const QUERY_REPOSITORY_PROVIDER_TOKEN = 'QUERY_REPOSITORY_PROVIDER_TOKEN';
 
 export interface IQueryRepositoryProvider {
-    forResource<
-        T extends IPublishable & IAccessible & GenericRepository = IPublishable &
-            IAccessible &
-            GenericRepository
-    >(
+    forResource<T extends IResourceQueryRepository = IResourceQueryRepository>(
         resourceType: string
     ): T;
 }

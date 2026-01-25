@@ -39,4 +39,6 @@ export const deepStandardizeMultilingualText = <T>(
             return accumulatedObject;
         }, {} as T);
     }
+
+    return target; // at this point, we know `target` is {}
 };

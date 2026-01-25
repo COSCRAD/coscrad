@@ -348,10 +348,20 @@ describe(`ArangoTermQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetTerm = buildTestInstance(TermViewModel, {
-            notes: [],
+            notes: {},
         });
 
+        const targetNoteText = 'This is the note for the term';
+
+        const targetNoteLanguageCode = LanguageCode.English;
+
+        const targetNoteMultilingualText = buildMultilingualTextWithSingleItem(
+            targetNoteText,
+            targetNoteLanguageCode
+        );
+
         const targetNote = buildTestInstance(EdgeConnection, {
+            note: targetNoteMultilingualText,
             members: [
                 {
                     compositeIdentifier: {
@@ -392,18 +402,24 @@ describe(`ArangoTermQueryRepository`, () => {
                 testAdminUser
             )) as TermViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    languageCode: LanguageCode.English,
+                    text: targetNoteText,
+                },
+                translations: {},
+            });
         });
     });
 
     describe(`createConnection`, () => {
         const targetTerm = buildTestInstance(TermViewModel, {
             // no connections to start
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -444,7 +460,7 @@ describe(`ArangoTermQueryRepository`, () => {
                 testAdminUser
             )) as TermViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -452,7 +468,7 @@ describe(`ArangoTermQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -460,8 +476,9 @@ describe(`ArangoTermQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

@@ -231,7 +231,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
       "type": "CONNECT_RESOURCES_WITH_NOTE",
     },
   ],
-  "connections": [],
+  "connections": {},
   "contributions": [
     {
       "contributorIds": [
@@ -260,7 +260,7 @@ exports[`when querying for a photograph: fetch by Id when the user is authentica
       },
     ],
   },
-  "notes": [],
+  "notes": {},
   "photographer": "Jeff Thomas",
   "tags": [],
   "type": "photograph",

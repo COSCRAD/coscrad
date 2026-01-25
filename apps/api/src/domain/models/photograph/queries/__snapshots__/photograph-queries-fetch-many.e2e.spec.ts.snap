@@ -234,7 +234,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "type": "CONNECT_RESOURCES_WITH_NOTE",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -268,7 +268,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "photographer": "Jane Deer",
       "tags": [],
       "type": "photograph",
@@ -506,7 +506,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "type": "CONNECT_RESOURCES_WITH_NOTE",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -540,7 +540,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "photographer": "Jane Deer",
       "tags": [],
       "type": "photograph",
@@ -776,7 +776,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           "type": "CONNECT_RESOURCES_WITH_NOTE",
         },
       ],
-      "connections": [],
+      "connections": {},
       "contributions": [
         {
           "contributorIds": [
@@ -810,7 +810,7 @@ exports[`when querying for a photograph: fetch many when the user is a project a
           },
         ],
       },
-      "notes": [],
+      "notes": {},
       "photographer": "Jane Deer",
       "tags": [],
       "type": "photograph",

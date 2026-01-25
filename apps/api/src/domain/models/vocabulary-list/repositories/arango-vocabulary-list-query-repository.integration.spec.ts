@@ -399,7 +399,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
     describe(`createNoteAbout`, () => {
         const targetView = buildTestInstance(VocabularyListViewModel, {
-            notes: [],
+            notes: {},
         });
 
         const targetNote = buildTestInstance(EdgeConnection, {
@@ -442,18 +442,24 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 targetView.id
             )) as VocabularyListViewModel;
 
-            expect(notes).toHaveLength(1);
+            expect(Object.keys(notes)).toHaveLength(1);
 
-            const { note } = notes[0];
+            const { note } = notes[targetNote.id];
 
-            expect(note.toDTO()).toEqual(targetNote.note.toDTO());
+            expect(note).toEqual({
+                original: {
+                    text: targetNote.note.items[0].text,
+                    languageCode: targetNote.note.items[0].languageCode,
+                },
+                translations: {},
+            });
         });
     });
 
     describe(`connectResourcesWith`, () => {
         const targetVocabularyList = buildTestInstance(VocabularyListViewModel, {
             // no connections to start
-            connections: [],
+            connections: {},
         });
 
         beforeEach(async () => {
@@ -493,7 +499,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 targetVocabularyList.id
             )) as VocabularyListViewModel;
 
-            expect(connections).toHaveLength(1);
+            expect(Object.keys(connections)).toHaveLength(1);
 
             const {
                 selfContext,
@@ -501,7 +507,7 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
                 otherContext,
                 note,
                 role: edgeConnectionMemberRole,
-            } = connections[0];
+            } = connections[noteId];
 
             expect(selfContext).toEqual(generalContext);
 
@@ -509,8 +515,9 @@ describe(`ArangoVocabularyListQueryRepository`, () => {
 
             expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
 
-            const { languageCode: foundLanguageCode, text: foundNoteText } =
-                note.getOriginalTextItem();
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
 
             expect(foundNoteText).toEqual(textForNote);
 

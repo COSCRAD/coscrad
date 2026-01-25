@@ -123,9 +123,9 @@ describe(`DigitalTextCreatedEventHandler`, () => {
 
             expect(tags).toEqual([]);
 
-            expect(notes).toEqual([]);
+            expect(notes).toEqual({});
 
-            expect(connections).toEqual([]);
+            expect(connections).toEqual({});
 
             expect(pages).toEqual([]);
 

@@ -2,7 +2,6 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { AqlQuery } from 'arangojs/aql';
 import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
@@ -70,9 +69,11 @@ export class BaseArangoResourceViewQueryBuilder {
         const query = `
         FOR doc IN @@collectionName
         FILTER doc._key == @resourceId
-        LET newNotes = [@newNote]
+        LET newNotes = {
+            [@newNote.id]: @newNote
+        }
         UPDATE doc WITH {
-            notes: doc.notes == null ? newNotes : APPEND(doc.notes,newNotes)
+            notes: doc.notes == null ? newNotes : MERGE(doc.notes,newNotes)
         }
         IN @@collectionName
         `;
@@ -80,7 +81,13 @@ export class BaseArangoResourceViewQueryBuilder {
         const newNote = new NoteRecordForResourceViewModel({
             id: noteId,
             context,
-            note: text,
+            note: {
+                original: {
+                    languageCode: text.items[0].languageCode,
+                    text: text.items[0].text,
+                },
+                translations: {},
+            },
         });
 
         const bindVars = {
@@ -111,15 +118,23 @@ export class BaseArangoResourceViewQueryBuilder {
             selfContext,
             otherCompositeIdentifier,
             otherContext,
-            note: new MultilingualText(text),
+            note: {
+                original: {
+                    text: text.items[0].text,
+                    languageCode: text.items[0].languageCode,
+                },
+                // none at first
+                translations: {},
+            },
             role,
         }); // .toDto() ?
 
         const query = `
             FOR doc IN @@collectionName
             FILTER doc._key == @id
+            LET connectionUpdates = { [@newConnection.id]: @newConnection }
             UPDATE doc WITH {
-                connections: doc.connections == null ? [@newConnection] : APPEND(doc.connections,[@newConnection])
+                connections: doc.connections == null ? connectionUpdates : MERGE(doc.connections,connectionUpdates)
             } IN @@collectionName
         `;
 
