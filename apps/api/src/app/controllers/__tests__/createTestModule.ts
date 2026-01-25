@@ -91,6 +91,7 @@ import {
     ConnectResourcesWithNote,
     ConnectResourcesWithNoteCommandHandler,
 } from '../../../domain/models/context/commands/connect-resources-with-note';
+import { ResourcesConnectedWithNote } from '../../../domain/models/context/commands/connect-resources-with-note/resources-connected-with-note.event';
 import { EdgeConnectionContextUnion } from '../../../domain/models/context/edge-connection-context-union';
 import {
     EdgeConnection,
@@ -440,6 +441,7 @@ export const buildAllDataClassProviders = () =>
         LineItemTranslated,
         LineItemsImportedToTranscript,
         TranslationsImportedForTranscript,
+        ResourcesConnectedWithNote,
         // Aggregate Root Domain Models
         DigitalText,
         Song,

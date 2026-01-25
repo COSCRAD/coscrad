@@ -44,7 +44,7 @@ import { CoscradDataExample } from '../../../test-data/utilities/coscrad-data-ex
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import { UpdateMethod } from '../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../decorators';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
@@ -127,6 +127,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
 })
 @Injectable()
 @RegisterIndexScopedCommands([])
+@AggregateRoot(AggregateType.note)
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 
@@ -351,7 +352,7 @@ export class EdgeConnection extends Aggregate {
         return this.addAudioForNote(audioItemId, languageCode);
     }
 
-    static fromEventHistory(
+    public static fromEventHistory(
         eventHistory: BaseEvent[],
         targetId: AggregateId
     ): Maybe<ResultOrError<EdgeConnection>> {
