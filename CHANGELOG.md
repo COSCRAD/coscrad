@@ -21,6 +21,7 @@ eagerly cached in a separate query database, as is done for resources.
 
 #### Relevant Commits
 
+-   perf: denormalize note and connection queries (#808)
 -   feat: introduce PUBLISH_EDGE (#807)
 -   feat: support data lineage for digital texts (#799)
 -   feat: expose tags on note queries (#795)
