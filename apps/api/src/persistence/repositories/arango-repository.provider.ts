@@ -52,12 +52,20 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
     }
 
     getEdgeConnectionRepository() {
-        return new ArangoRepositoryForAggregate<EdgeConnection>(
+        // TODO ensure the snapshot and even writes are atomic \ durable
+        const snapshotRepository = new ArangoRepositoryForAggregate<EdgeConnection>(
             this.databaseProvider,
             ArangoCollectionId.edgeConnectionCollectionID,
             buildInstanceFactory(EdgeConnection),
             mapArangoEdgeDocumentToEdgeConnectionDTO,
             mapEdgeConnectionDTOToArangoEdgeDocument
+        );
+
+        return new ArangoCommandRepositoryForAggregateRoot(
+            this.eventRepository,
+            snapshotRepository,
+            AggregateType.note,
+            this.dynamicDataTypeFinderService
         );
     }
 
