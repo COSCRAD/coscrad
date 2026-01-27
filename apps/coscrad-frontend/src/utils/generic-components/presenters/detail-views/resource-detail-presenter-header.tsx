@@ -30,7 +30,7 @@ export const ResourceDetailPresenterHeader = ({
     NamePresenter = ResourceNamePresenter,
 }: ResourceDetailPresenterHeaderProps): JSX.Element => {
     return (
-        <Grid container direction="row" spacing={1} alignItems="center" mb={2}>
+        <Grid container direction="row" spacing={1} alignItems="center" mb={2} mt={4}>
             <Grid item>
                 <NamePresenter name={name} variant={variant} />
             </Grid>

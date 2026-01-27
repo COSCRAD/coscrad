@@ -1,14 +1,16 @@
 import { IContributionSummary } from '@coscrad/api-interfaces';
 import { ListRounded } from '@mui/icons-material';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
 import PersonIcon from '@mui/icons-material/Person';
 import {
-    Box,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Divider,
     IconButton,
     List,
     ListItem,
     ListItemIcon,
-    Paper,
     Typography,
 } from '@mui/material';
 
@@ -17,21 +19,36 @@ export const ContributionsPresenter = ({
 }: {
     contributions: IContributionSummary[];
 }): JSX.Element => (
-    <>
-        <Box
-            elevation={0}
-            component={Paper}
-            sx={{ flexGrow: 1 }}
-            data-testid="resource-contributions"
+    <Accordion elevation={0} disableGutters data-testid="resource-contributions">
+        <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+                minHeight: '25px', // Adjust to a smaller value (e.g., 40px)
+                '&.Mui-expanded': {
+                    minHeight: '25px', // Ensure it stays compact when expanded
+                },
+                maxHeight: '40px',
+            }}
         >
-            <IconButton>
-                <ListRounded />
-            </IconButton>
-            Contributions
-        </Box>
+            <Typography
+                variant="body1"
+                fontWeight="fontWeightBold"
+                component="div"
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px', // Optional: adds spacing between the icon and text
+                }}
+            >
+                <IconButton>
+                    <ListRounded />
+                </IconButton>
+                Contributions
+            </Typography>
+        </AccordionSummary>
 
-        <Box ml={1}>
-            <List>
+        <AccordionDetails>
+            <List sx={{ ml: 1 }}>
                 {contributions.map((contribution, index) => (
                     <ListItem
                         disableGutters
@@ -44,8 +61,8 @@ export const ContributionsPresenter = ({
                     </ListItem>
                 ))}
             </List>
-        </Box>
-    </>
+        </AccordionDetails>
+    </Accordion>
 );
 
 interface ContributionPresenterProps {

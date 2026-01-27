@@ -1,5 +1,5 @@
 import { IContributionSummary, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
 import { ContributionsPresenter } from './contributions-presenter';
@@ -57,12 +57,10 @@ export const ResourceDetailFullViewPresenter = ({
                 <div data-testid={buildDataAttributeForAggregateDetailComponent(type, id)} />
                 {children}
                 {contributions.length > 0 ? (
-                    <Box ml={1}>
-                        <ContributionsPresenter
-                            contributions={contributions}
-                            data-testid="resource-contributions"
-                        />
-                    </Box>
+                    <ContributionsPresenter
+                        contributions={contributions}
+                        data-testid="resource-contributions"
+                    />
                 ) : null}
             </Grid>
         </Grid>
