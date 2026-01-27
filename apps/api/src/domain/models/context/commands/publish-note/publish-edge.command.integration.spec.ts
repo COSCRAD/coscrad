@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, EdgeConnectionContextType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -22,18 +22,19 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import {
-    EdgeConnection,
-    EdgeConnectionMember,
-    EdgeConnectionMemberRole,
-    EdgeConnectionType,
-} from '../../edge-connection.entity';
+import { EdgeConnection } from '../../edge-connection.entity';
 import { EdgeAlreadyPublishedError } from '../../errors';
+import { ResourcesConnectedWithNote } from '../connect-resources-with-note/resources-connected-with-note.event';
+import { NoteAboutResourceCreated } from '../create-note-about-resource/note-about-resource-created.event';
 import { PublishEdge } from './publish-edge.command';
 
 const commandType = 'PUBLISH_EDGE';
 
 const targetEdgeId = buildDummyUuid(88);
+
+const generalContext = {
+    type: EdgeConnectionContextType.general,
+};
 
 const buildValidCommandFSA = () => ({
     type: commandType,
@@ -42,39 +43,6 @@ const buildValidCommandFSA = () => ({
             id: targetEdgeId,
         },
     }),
-});
-
-const unpublishedNote = buildTestInstance(EdgeConnection, {
-    id: targetEdgeId,
-    isPublished: false,
-    connectionType: EdgeConnectionType.self,
-    members: [
-        buildTestInstance(EdgeConnectionMember, {
-            role: EdgeConnectionMemberRole.self,
-        }),
-    ],
-});
-
-const unpublishedConnection = buildTestInstance(EdgeConnection, {
-    id: targetEdgeId,
-    isPublished: false,
-    connectionType: EdgeConnectionType.dual,
-    members: [
-        buildTestInstance(EdgeConnectionMember, {
-            role: EdgeConnectionMemberRole.from,
-            compositeIdentifier: {
-                type: AggregateType.song,
-                id: buildDummyUuid(203),
-            },
-        }),
-        buildTestInstance(EdgeConnectionMember, {
-            role: EdgeConnectionMemberRole.to,
-            compositeIdentifier: {
-                type: AggregateType.term,
-                id: buildDummyUuid(303),
-            },
-        }),
-    ],
 });
 
 describe(commandType, () => {
@@ -130,6 +98,22 @@ describe(commandType, () => {
     describe(`when the command is valid`, () => {
         describe(`when a (self) note is being published`, () => {
             it(`should publish the note`, async () => {
+                const eventHistoryForNote = [
+                    buildTestInstance(NoteAboutResourceCreated, {
+                        payload: {
+                            aggregateCompositeIdentifier: {
+                                id: targetEdgeId,
+                            },
+                            resourceContext: generalContext,
+                        },
+                    }),
+                ];
+
+                const unpublishedNote = EdgeConnection.fromEventHistory(
+                    eventHistoryForNote,
+                    targetEdgeId
+                ) as EdgeConnection;
+
                 await assertCommandSuccess(
                     { testRepositoryProvider, commandHandlerService },
                     {
@@ -160,6 +144,21 @@ describe(commandType, () => {
 
         describe(`when a connection (edge connection) is being published`, () => {
             it(`should publish the connection`, async () => {
+                const unpublishedConnection = EdgeConnection.fromEventHistory(
+                    [
+                        buildTestInstance(ResourcesConnectedWithNote, {
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    id: targetEdgeId,
+                                },
+                                toMemberContext: generalContext,
+                                fromMemberContext: generalContext,
+                            },
+                        }),
+                    ],
+                    targetEdgeId
+                ) as EdgeConnection;
+
                 await assertCommandSuccess(
                     { testRepositoryProvider, commandHandlerService },
                     {
@@ -238,6 +237,48 @@ describe(commandType, () => {
         describe(`when the edge is already published`, () => {
             describe(`when the edge is a note`, () => {
                 it(`should return the expected error`, async () => {
+                    const eventHistoryForNote = [
+                        buildTestInstance(NoteAboutResourceCreated, {
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    id: targetEdgeId,
+                                },
+                                resourceContext: generalContext,
+                            },
+                        }),
+                    ];
+
+                    const unpublishedNote = EdgeConnection.fromEventHistory(
+                        eventHistoryForNote,
+                        targetEdgeId
+                    ) as EdgeConnection;
+
+                    await assertCommandSuccess(
+                        { testRepositoryProvider, commandHandlerService },
+                        {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await testRepositoryProvider
+                                    .getEdgeConnectionRepository()
+                                    .create(unpublishedNote);
+                            },
+                            buildValidCommandFSA,
+                            checkStateOnSuccess: async () => {
+                                const updatedEdge = (await testRepositoryProvider
+                                    .getEdgeConnectionRepository()
+                                    .fetchById(targetEdgeId)) as EdgeConnection;
+
+                                expect(updatedEdge.isPublished).toBe(true);
+
+                                assertEventRecordPersisted(
+                                    updatedEdge,
+                                    'EDGE_PUBLISHED',
+                                    dummySystemUserId
+                                );
+                            },
+                        }
+                    );
+
                     await assertCommandError(
                         {
                             testRepositoryProvider,
@@ -246,9 +287,7 @@ describe(commandType, () => {
                         {
                             systemUserId: dummySystemUserId,
                             seedInitialState: async () => {
-                                await testRepositoryProvider.getEdgeConnectionRepository().create(
-                                    unpublishedNote.publish() as EdgeConnection // this will succeed
-                                );
+                                Promise.resolve();
                             },
                             buildCommandFSA: buildValidCommandFSA,
                             checkError: (error) => {
@@ -266,6 +305,54 @@ describe(commandType, () => {
 
             describe(`when the edge is a connection`, () => {
                 it(`should return the expected error`, async () => {
+                    const unpublishedConnection = EdgeConnection.fromEventHistory(
+                        [
+                            buildTestInstance(ResourcesConnectedWithNote, {
+                                payload: {
+                                    aggregateCompositeIdentifier: {
+                                        id: targetEdgeId,
+                                    },
+                                    toMemberContext: generalContext,
+                                    fromMemberContext: generalContext,
+                                },
+                            }),
+                        ],
+                        targetEdgeId
+                    ) as EdgeConnection;
+
+                    await assertCommandSuccess(
+                        { testRepositoryProvider, commandHandlerService },
+                        {
+                            systemUserId: dummySystemUserId,
+                            seedInitialState: async () => {
+                                await testRepositoryProvider
+                                    .getEdgeConnectionRepository()
+                                    .create(unpublishedConnection);
+                            },
+                            buildValidCommandFSA: () => ({
+                                type: commandType,
+                                payload: buildTestInstance(PublishEdge, {
+                                    aggregateCompositeIdentifier: {
+                                        id: targetEdgeId,
+                                    },
+                                }),
+                            }),
+                            checkStateOnSuccess: async () => {
+                                const updatedEdge = (await testRepositoryProvider
+                                    .getEdgeConnectionRepository()
+                                    .fetchById(targetEdgeId)) as EdgeConnection;
+
+                                expect(updatedEdge.isPublished).toBe(true);
+
+                                assertEventRecordPersisted(
+                                    updatedEdge,
+                                    'EDGE_PUBLISHED',
+                                    dummySystemUserId
+                                );
+                            },
+                        }
+                    );
+
                     await assertCommandError(
                         {
                             testRepositoryProvider,
@@ -274,9 +361,7 @@ describe(commandType, () => {
                         {
                             systemUserId: dummySystemUserId,
                             seedInitialState: async () => {
-                                await testRepositoryProvider.getEdgeConnectionRepository().create(
-                                    unpublishedConnection.publish() as EdgeConnection // this will succeed
-                                );
+                                Promise.resolve();
                             },
                             buildCommandFSA: buildValidCommandFSA,
                             checkError: (error) => {

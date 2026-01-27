@@ -57,6 +57,7 @@ import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-aud
 import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { ContextUnionType } from './edge-connection-context-union';
 import { EdgeAlreadyPublishedError } from './errors';
 import { CannotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
@@ -353,6 +354,10 @@ export class EdgeConnection extends Aggregate {
         return this.addAudioForNote(audioItemId, languageCode);
     }
 
+    handleEdgePublished(_event: EdgePublished) {
+        return this.publish();
+    }
+
     public static fromEventHistory(
         eventHistory: BaseEvent[],
         targetId: AggregateId
@@ -386,26 +391,30 @@ export class EdgeConnection extends Aggregate {
             languageCode,
         },
     }: NoteAboutResourceCreated): ResultOrError<EdgeConnection> {
+        const audioForNote = MultilingualAudio.buildEmpty();
+
+        const selfMember = // a self-connection has one member, the subject of the note
+            new EdgeConnectionMember({
+                compositeIdentifier: resourceCompositeIdentifier,
+                // TODO Use the context union factory
+                context: resourceContext,
+                role: EdgeConnectionMemberRole.self,
+            });
+
+        const note = buildMultilingualTextWithSingleItem(text, languageCode);
+
         const buildResult = new EdgeConnection({
             type: AggregateType.note,
             id,
-            audioForNote: MultilingualAudio.buildEmpty(),
+            audioForNote,
             /**
              * A "self note" is a note about a resource with context, represented
              * as a self connection back to the resource node in the graph.
              */
             connectionType: EdgeConnectionType.self,
-            note: buildMultilingualTextWithSingleItem(text, languageCode),
+            note,
             isPublished: false,
-            members: [
-                // a self-connection has one member, the subject of the note
-                new EdgeConnectionMember({
-                    compositeIdentifier: resourceCompositeIdentifier,
-                    // TODO Use the context union factory
-                    context: resourceContext,
-                    role: EdgeConnectionMemberRole.self,
-                }),
-            ],
+            members: [selfMember],
         });
 
         const invariantValidationResult = buildResult.validateInvariants();

@@ -115,16 +115,9 @@ describe(commandType, () => {
                         edgeConnectionCompositeIdentifier
                     );
 
-                    await testRepositoryProvider
-                        .getEdgeConnectionRepository()
-                        .create(
-                            EdgeConnection.fromEventHistory(
-                                eventHistory,
-                                edgeConnectionId
-                            ) as EdgeConnection
-                        );
-
                     await app.get(ArangoEventRepository).appendEvents(eventHistory);
+
+                    console.log('done');
                 },
                 checkStateOnSuccess: async () => {
                     const edgeConnectionSearchResult = await testRepositoryProvider

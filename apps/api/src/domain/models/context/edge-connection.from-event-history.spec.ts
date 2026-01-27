@@ -22,6 +22,7 @@ import {
 } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { EdgeConnectionContextUnion } from './edge-connection-context-union';
 import { EdgeConnection, EdgeConnectionMember } from './edge-connection.entity';
 import { FreeMultilineContext } from './free-multiline-context/free-multiline-context.entity';
@@ -86,7 +87,7 @@ const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnec
     },
 });
 
-const noteTranslated = new TestEventStream()
+const notePublished = new TestEventStream()
     .andThen<NoteAboutResourceCreated>({
         type: 'NOTE_ABOUT_RESOURCE_CREATED',
         payload: {
@@ -94,14 +95,18 @@ const noteTranslated = new TestEventStream()
             languageCode: originalLanguageCode,
         },
     })
-    .andThen<NoteTranslated>({
-        type: 'NOTE_TRANSLATED',
-        payload: {
-            aggregateCompositeIdentifier,
-            text: noteTranslation,
-            languageCode: translationLanguageCode,
-        },
+    .andThen<EdgePublished>({
+        type: 'EDGE_PUBLISHED',
     });
+
+const noteTranslated = notePublished.andThen<NoteTranslated>({
+    type: 'NOTE_TRANSLATED',
+    payload: {
+        aggregateCompositeIdentifier,
+        text: noteTranslation,
+        languageCode: translationLanguageCode,
+    },
+});
 
 const audioItemId = buildDummyUuid(12);
 
@@ -199,6 +204,21 @@ describe(`EdgeConnection.fromEventHistory`, () => {
         });
 
         describe(`when there are update events`, () => {
+            describe(`when there is an update event: EDGE_PUBLISHED`, () => {
+                it(`should return the expected edge connection`, () => {
+                    const result = EdgeConnection.fromEventHistory(
+                        notePublished.as(aggregateCompositeIdentifier),
+                        edgeConnectionId
+                    );
+
+                    expect(result).toBeInstanceOf(EdgeConnection);
+
+                    const { isPublished } = result as EdgeConnection;
+
+                    expect(isPublished).toBe(true);
+                });
+            });
+
             describe(`when there is an update event: NOTE_TRANSLATED`, () => {
                 it(`should return the expected edge connection`, () => {
                     const result = EdgeConnection.fromEventHistory(

@@ -3,22 +3,28 @@ import { CoscradEventFactory } from '../../domain/common/events/coscrad-event-fa
 import { BaseEvent } from '../../domain/models/shared/events/base-event.entity';
 import { AggregateCompositeIdentifier } from '../../domain/types/AggregateCompositeIdentifier';
 import { isNullOrUndefined } from '../../domain/utilities/validation/is-null-or-undefined';
+import { DTO } from '../../types/DTO';
 import { ArangoDatabaseForCollection } from '../database/arango-database-for-collection';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../database/database.provider';
 import mapDatabaseDocumentToAggregateDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
-import mapEntityDTOToDatabaseDTO, {
-    ArangoDocumentForAggregateRoot,
-} from '../database/utilities/mapEntityDTOToDatabaseDocument';
+import { ArangoDocumentForAggregateRoot } from '../database/utilities/mapEntityDTOToDatabaseDocument';
 import { IEventRepository } from './arango-command-repository-for-aggregate-root';
 
 type AggregateContextIdentifier =
     | AggregateCompositeIdentifier
     | Pick<AggregateCompositeIdentifier, 'type'>;
 
+const mapEventDtoToArangoDocument = (e: DTO<BaseEvent>) => {
+    return {
+        ...e,
+        id: e.id,
+    };
+};
+
 @Injectable()
 export class ArangoEventRepository implements IEventRepository {
-    private readonly arangoEventDatabase: ArangoDatabaseForCollection<BaseEvent>;
+    private readonly arangoEventDatabase: ArangoDatabaseForCollection<DTO<BaseEvent>>;
 
     constructor(
         databaseProvider: ArangoDatabaseProvider,
@@ -99,23 +105,17 @@ export class ArangoEventRepository implements IEventRepository {
     }
 
     async appendEvent(event: BaseEvent): Promise<void> {
-        const databaseDocumentWithoutId = mapEntityDTOToDatabaseDTO(event);
-
-        const databaseDocument = {
-            ...databaseDocumentWithoutId,
-            id: event.meta.id,
-        };
+        const databaseDocument = mapEventDtoToArangoDocument(event);
 
         // TODO Why not event.toDTO() ?
+        // @ts-expect-error Fix this
         await this.arangoEventDatabase.create(databaseDocument);
     }
 
     async appendEvents(events: BaseEvent[]): Promise<void> {
-        const documents = events.map(mapEntityDTOToDatabaseDTO).map((docWithoutId) => ({
-            ...docWithoutId,
-            id: docWithoutId.meta.id,
-        }));
+        const documents = events.map((e) => mapEventDtoToArangoDocument(e));
 
+        // @ts-expect-error Fix this
         await this.arangoEventDatabase.createMany(documents);
     }
 
