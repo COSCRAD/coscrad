@@ -24,6 +24,8 @@ export default (envFilePrefix: string): string => {
     const path = `${process.cwd()}${baseDir}${envFilePrefix}.env`;
 
     if (!existsSync(path)) {
+        console.warn(`Warning: Expected to find a .env file at: ${path}`);
+
         /**
          * We don't want to throw here. We **could** return not found
          * and let the client explicitly decide what to do. But it's important

@@ -24,6 +24,7 @@ export class MemoryMatchCardImportDto {
     @LanguageCodeEnum({
         label: 'language code for text',
         description: `the language code for this card's text`,
+        isOptional: true,
     })
     languageCodeForText?: string;
 
