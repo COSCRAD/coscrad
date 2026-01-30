@@ -66,6 +66,7 @@ describe(commandType, () => {
         ResourceType.playlist,
         ResourceType.audioItem,
         ResourceType.video,
+        CategorizableType.note,
     ];
 
     Object.values(CategorizableType)
