@@ -81,7 +81,7 @@ describe(`Memory Match game play`, () => {
             });
 
             it(`should display a "not found" message`, () => {
-                cy.contains('Not Found');
+                cy.contains('No result');
             });
         });
 
@@ -90,6 +90,10 @@ describe(`Memory Match game play`, () => {
                 cy.clearDatabase();
 
                 cy.seedDatabase(`memory_match_rounds`, [testMemoryRound]);
+            });
+
+            beforeEach(() => {
+                cy.visit(indexRoute);
             });
 
             describe(`when no filters have been selected`, () => {

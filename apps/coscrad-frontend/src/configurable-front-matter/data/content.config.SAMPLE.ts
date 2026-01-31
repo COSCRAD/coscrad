@@ -138,4 +138,7 @@ export const contentConfig: ConfigurableContent = {
             },
         },
     ],
+    memoryMatch: {
+        isEnabled: true,
+    },
 };

@@ -117,4 +117,7 @@ export const contentConfig: ConfigurableContent = {
             'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=',
     },
     shouldEnableMemoryMatch: false,
+    memoryMatch: {
+        isEnabled: true,
+    },
 };

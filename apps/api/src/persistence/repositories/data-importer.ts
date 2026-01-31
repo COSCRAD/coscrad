@@ -70,6 +70,7 @@ export class DataImporter {
                     // TODO Is there a better way to deal with this one-off collection?
                     'games' as ArangoCollectionId
                 )
+                .concat('memory_match_rounds' as ArangoCollectionId)
                 .map((collectionName) =>
                     this.databaseProvider.getDBInstance().deleteAll(collectionName)
                 )
