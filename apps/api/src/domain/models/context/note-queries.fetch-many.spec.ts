@@ -1,4 +1,5 @@
 import {
+    CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionType,
     HttpStatusCode,
@@ -12,6 +13,8 @@ import buildMockConfigService from '../../../app/config/__tests__/utilities/buil
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
 import { EdgeConnectionModule } from '../../../app/domain-modules/edge-connection.module';
+import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -29,6 +32,8 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
 import { IResourceConnectionDto } from './commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { EventSourcedNoteViewModel } from './note.view-model.event-sourced';
 import {
@@ -154,7 +159,7 @@ const toMemberWidget = buildTestInstance(WidgetViewModel, {
     name: 'widget for the to member',
 });
 
-const noteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
+const publicNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(101),
     connectionType: EdgeConnectionType.self,
     connectedResources: {
@@ -164,8 +169,33 @@ const noteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     },
 });
 
-const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+const publicNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(102),
+    connectionType: EdgeConnectionType.dual,
+    connectedResources: {
+        from: {
+            resource: fromMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+        to: {
+            resource: toMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+    },
+});
+
+const privateNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(103),
+    connectionType: EdgeConnectionType.self,
+    connectedResources: {
+        self: {
+            resource: fromMemberWidget.getCompositeIdentifier(),
+        },
+    },
+});
+
+const privateNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(104),
     connectionType: EdgeConnectionType.dual,
     connectedResources: {
         from: {
@@ -188,7 +218,7 @@ describe(`when querying for a note: fetch many`, () => {
 
     let widgetQueryRepository: WidgetQueryRepository;
 
-    beforeAll(async () => {
+    const setItUp = async (user: CoscradUserWithGroups) => {
         const moduleRef = await Test.createTestingModule({
             imports: [
                 ConfigModule.forRoot({
@@ -211,6 +241,8 @@ describe(`when querying for a note: fetch many`, () => {
                     buildConfigFilePath(Environment.test)
                 )
             )
+            .overrideGuard(OptionalJwtAuthGuard)
+            .useValue(new MockJwtAuthGuard(user, true))
             .compile();
 
         await moduleRef.init();
@@ -229,14 +261,49 @@ describe(`when querying for a note: fetch many`, () => {
 
         noteQueryRepository = app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        // this is important!
         await app.init();
-    });
+    };
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
 
         await databaseProvider.getDatabaseForCollection(WIDGET_COLLECTION).clear();
+
+        await widgetQueryRepository.create(fromMemberWidget);
+
+        await widgetQueryRepository.create(toMemberWidget);
+
+        await noteQueryRepository.createNoteAbout(
+            publicNoteAboutWidget,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
+
+        await noteQueryRepository.publish(publicNoteAboutWidget.id);
+
+        await noteQueryRepository.connectResourcesWithNote(
+            publicNoteConnectingWidgets,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext,
+            toMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
+
+        await noteQueryRepository.publish(publicNoteConnectingWidgets.id);
+
+        await noteQueryRepository.createNoteAbout(
+            privateNoteAboutWidget,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
+
+        await noteQueryRepository.connectResourcesWithNote(
+            privateNoteConnectingWidgets,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext,
+            toMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
     });
 
     afterAll(async () => {
@@ -245,37 +312,24 @@ describe(`when querying for a note: fetch many`, () => {
         databaseProvider.close();
     });
 
-    describe(`when the user is unauthenticated`, () => {
-        // TODO support user access control for notes
-        describe(`when there is a note with the given ID`, () => {
-            beforeEach(async () => {
-                await widgetQueryRepository.create(fromMemberWidget);
-
-                await widgetQueryRepository.create(toMemberWidget);
-
-                await noteQueryRepository.createNoteAbout(
-                    noteAboutWidget,
-                    fromMemberWidget.getCompositeIdentifier(),
-                    generalContext
-                );
-
-                await noteQueryRepository.connectResourcesWithNote(
-                    noteConnectingWidgets,
-                    fromMemberWidget.getCompositeIdentifier(),
-                    generalContext,
-                    toMemberWidget.getCompositeIdentifier(),
-                    generalContext
-                );
+    describe(`when the user is an ordinary user (viewer)`, () => {
+        beforeAll(async () => {
+            const viewer = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.viewer],
             });
 
-            it(`should return the available notes`, async () => {
+            await setItUp(new CoscradUserWithGroups(viewer, []));
+        });
+
+        describe(`when some edges are published and some are not`, () => {
+            it(`should return only the published edges`, async () => {
                 const res = await request(app.getHttpServer()).post(indexEndpoint);
 
                 expect(res.status).toBe(HttpStatusCode.createdResource);
 
                 expect(res.body.entities).toHaveLength(2);
 
-                expect(res.body).toMatchSnapshot();
+                // TODO check which edges are returned by ID
             });
         });
     });

@@ -50,9 +50,11 @@ export class EdgeConnectionController {
         return this.edgeConnectionQueryService.fetchById(id, req.user || undefined);
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
     @Post('')
-    async fetchManyNotes(@Req() _req): Promise<IIndexQueryResult<INoteViewModel>> {
-        const allNotes = await this.edgeConnectionQueryService.fetchMany();
+    async fetchManyNotes(@Req() req): Promise<IIndexQueryResult<INoteViewModel>> {
+        const allNotes = await this.edgeConnectionQueryService.fetchMany(req?.user || undefined);
 
         return allNotes;
     }

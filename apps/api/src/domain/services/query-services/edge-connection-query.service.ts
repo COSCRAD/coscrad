@@ -58,9 +58,11 @@ export class EdgeConnectionQueryService {
      * In the future, we may want to use Access Control Lists on notes as well.
      */
     async fetchMany(
-        _systemUser?: CoscradUserWithGroups
+        systemUser?: CoscradUserWithGroups
     ): Promise<ICategorizableIndexQueryResult<INoteViewModel>> {
-        const { entities, page } = await this.noteQueryRepository.fetchMany();
+        const { entities, page } = await this.noteQueryRepository.fetchMany({
+            user: systemUser,
+        });
 
         return {
             entities: entities.map((e) => ({
