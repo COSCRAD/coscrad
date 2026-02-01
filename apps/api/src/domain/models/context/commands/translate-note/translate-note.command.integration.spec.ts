@@ -116,8 +116,6 @@ describe(commandType, () => {
                     );
 
                     await app.get(ArangoEventRepository).appendEvents(eventHistory);
-
-                    console.log('done');
                 },
                 checkStateOnSuccess: async () => {
                     const edgeConnectionSearchResult = await testRepositoryProvider

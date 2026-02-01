@@ -12,7 +12,7 @@ import generateDatabaseNameForTestSuite from './__tests__/generateDatabaseNameFo
 
 /**
  * We may not want to test this as it constitutes testing implementation details.
- * Do we havve complete coverage of the repository through the command and e2e
+ * Do we have complete coverage of the repository through the command and e2e
  * tests? If so, we should stick with those to avoid being bogged down when refactoring.
  */
 describe.skip('Repository provider > getEdgeConnectionRepository', () => {
