@@ -1,5 +1,15 @@
 # COSCRAD/coscrad Change Log
 
+## <NEXT>
+
+### Optimized Note Queries
+
+In this release, we have continued to improve note and connection queries in terms
+of performance as well as consistency with the way queries are handled for
+resources.
+
+-   refactor: persist note and connection events globally (#810)
+
 ## v0.1.1
 
 ### Digital Representations of Bibliographic Citations on the Client
