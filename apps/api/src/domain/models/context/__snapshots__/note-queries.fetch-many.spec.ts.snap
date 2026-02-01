@@ -24,6 +24,7 @@ exports[`when querying for a note: fetch many when the user is unauthenticated w
         },
       },
       "connectionType": "self",
+      "isPublished": false,
       "tags": [],
       "text": {
         "items": [
@@ -67,7 +68,8 @@ exports[`when querying for a note: fetch many when the user is unauthenticated w
           },
         },
       },
-      "connectionType": "self",
+      "connectionType": "dual",
+      "isPublished": false,
       "tags": [],
       "text": {
         "items": [

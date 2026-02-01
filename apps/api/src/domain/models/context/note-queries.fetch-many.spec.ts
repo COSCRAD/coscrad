@@ -27,7 +27,6 @@ import { NoteRecordForResourceViewModel } from '../../../queries/buildViewModelF
 import { buildTestInstance, CoscradDataExample } from '../../../test-data/utilities';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { IResourceConnectionDto } from './commands/connect-resources-with-note/resources-connected-with-note.event-handler';
@@ -129,7 +128,10 @@ class WidgetQueryRepository {
                 selfContext,
                 otherCompositeIdentifier: compositeIdentifier,
                 otherContext,
-                note: new MultilingualText(text),
+                note: {
+                    original: text.items[0],
+                    translations: {},
+                },
                 role,
             })
         );

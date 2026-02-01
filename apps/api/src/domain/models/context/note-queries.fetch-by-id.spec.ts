@@ -1,4 +1,5 @@
 import {
+    CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionType,
     HttpStatusCode,
@@ -13,6 +14,8 @@ import buildMockConfigService from '../../../app/config/__tests__/utilities/buil
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
 import { EdgeConnectionModule } from '../../../app/domain-modules/edge-connection.module';
+import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
+import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
@@ -27,9 +30,10 @@ import { ConnectionRecordForResourceViewModel } from '../../../queries/buildView
 import { NoteRecordForResourceViewModel } from '../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
-import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
 import { IResourceConnectionDto } from './commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { EventSourcedNoteViewModel } from './note.view-model.event-sourced';
 import {
@@ -129,7 +133,13 @@ class WidgetQueryRepository {
                 selfContext,
                 otherCompositeIdentifier: compositeIdentifier,
                 otherContext,
-                note: new MultilingualText(text),
+                note: {
+                    original: {
+                        text: text.items[0].text,
+                        languageCode: text.items[0].languageCode,
+                    },
+                    translations: {},
+                },
                 role,
             })
         );
@@ -158,6 +168,26 @@ const noteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     },
 });
 
+const toMemberWidget = buildTestInstance(WidgetViewModel, {
+    id: buildDummyUuid(105),
+    name: 'widget for the to member',
+});
+
+const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(101),
+    connectionType: EdgeConnectionType.dual,
+    connectedResources: {
+        from: {
+            resource: fromMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+        to: {
+            resource: toMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+    },
+});
+
 describe(`when querying for a note: fetch by Id`, () => {
     let app: INestApplication;
 
@@ -167,7 +197,7 @@ describe(`when querying for a note: fetch by Id`, () => {
 
     let widgetQueryRepository: WidgetQueryRepository;
 
-    beforeAll(async () => {
+    const setItUp = async (userWithGroups?: CoscradUserWithGroups) => {
         const moduleRef = await Test.createTestingModule({
             imports: [
                 ConfigModule.forRoot({
@@ -190,6 +220,8 @@ describe(`when querying for a note: fetch by Id`, () => {
                     buildConfigFilePath(Environment.test)
                 )
             )
+            .overrideGuard(OptionalJwtAuthGuard)
+            .useValue(new MockJwtAuthGuard(userWithGroups, true))
             .compile();
 
         await moduleRef.init();
@@ -210,7 +242,7 @@ describe(`when querying for a note: fetch by Id`, () => {
 
         // this is important!
         await app.init();
-    });
+    };
 
     beforeEach(async () => {
         await databaseProvider.clearViews();
@@ -225,7 +257,11 @@ describe(`when querying for a note: fetch by Id`, () => {
     });
 
     describe(`when the user is unauthenticated`, () => {
-        // TODO support user access control for notes
+        beforeAll(async () => {
+            // no user on the request
+            await setItUp();
+        });
+
         describe(`when the note is public`, () => {
             describe(`when there is a note with the given ID`, () => {
                 beforeEach(async () => {
@@ -236,9 +272,263 @@ describe(`when querying for a note: fetch by Id`, () => {
                         fromMemberWidget.getCompositeIdentifier(),
                         generalContext
                     );
+
+                    await noteQueryRepository.publish(noteAboutWidget.id);
                 });
 
                 it(`should find it`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    // TODO Do we want to format multilingual text as a lookup table by language code here?
+                    expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
+                });
+            });
+
+            describe(`when there is a connection with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await widgetQueryRepository.create(toMemberWidget);
+
+                    await noteQueryRepository.connectResourcesWithNote(
+                        noteConnectingWidgets,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext,
+                        toMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteConnectingWidgets.id);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(noteAboutWidget.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteConnectingWidgets.text.items);
+                });
+            });
+        });
+
+        describe(`when the edge is not published`, () => {
+            describe(`when searching for an unpublished note`, () => {
+                describe(`when there is a note with the given ID`, () => {
+                    beforeEach(async () => {
+                        await widgetQueryRepository.create(fromMemberWidget);
+
+                        await noteQueryRepository.createNoteAbout(
+                            noteAboutWidget,
+                            fromMemberWidget.getCompositeIdentifier(),
+                            generalContext
+                        );
+                    });
+
+                    it(`should return not found`, async () => {
+                        const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                        const res = await request(app.getHttpServer()).get(endpoint);
+
+                        expect(res.status).toBe(HttpStatusCode.notFound);
+                    });
+                });
+            });
+        });
+
+        describe(`when the note does not exist`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(buildDummyUuid(404))
+                );
+
+                expect(res.status).toBe(HttpStatusCode.notFound);
+            });
+        });
+    });
+
+    describe(`when the user is an ordinary user (viewer)`, () => {
+        beforeAll(async () => {
+            const ordinaryUser = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.viewer],
+            });
+
+            await setItUp(new CoscradUserWithGroups(ordinaryUser, []));
+        });
+
+        describe(`when the note is public`, () => {
+            describe(`when there is a note with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await noteQueryRepository.createNoteAbout(
+                        noteAboutWidget,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteAboutWidget.id);
+                });
+
+                it(`should find it`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
+                });
+            });
+
+            describe(`when there is a connection with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await widgetQueryRepository.create(toMemberWidget);
+
+                    await noteQueryRepository.connectResourcesWithNote(
+                        noteConnectingWidgets,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext,
+                        toMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteConnectingWidgets.id);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(noteAboutWidget.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteConnectingWidgets.text.items);
+                });
+            });
+        });
+
+        describe(`when the edge is not published`, () => {
+            describe(`when searching for an unpublished note`, () => {
+                describe(`when there is a note with the given ID`, () => {
+                    beforeEach(async () => {
+                        await widgetQueryRepository.create(fromMemberWidget);
+
+                        await noteQueryRepository.createNoteAbout(
+                            noteAboutWidget,
+                            fromMemberWidget.getCompositeIdentifier(),
+                            generalContext
+                        );
+                    });
+
+                    it(`should return not found`, async () => {
+                        const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                        const res = await request(app.getHttpServer()).get(endpoint);
+
+                        expect(res.status).toBe(HttpStatusCode.notFound);
+                    });
+                });
+            });
+        });
+
+        describe(`when the note does not exist`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(buildDummyUuid(404))
+                );
+
+                expect(res.status).toBe(HttpStatusCode.notFound);
+            });
+        });
+    });
+
+    describe(`when the user is a system (COSCRAD) admin`, () => {
+        beforeAll(async () => {
+            const coscradAdminUser = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.superAdmin],
+            });
+
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        describe(`when the note is public`, () => {
+            describe(`when there is a note with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await noteQueryRepository.createNoteAbout(
+                        noteAboutWidget,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteAboutWidget.id);
+                });
+
+                it(`should find it`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
+                });
+            });
+
+            describe(`when there is a connection with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await widgetQueryRepository.create(toMemberWidget);
+
+                    await noteQueryRepository.connectResourcesWithNote(
+                        noteConnectingWidgets,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext,
+                        toMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteConnectingWidgets.id);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(noteAboutWidget.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteConnectingWidgets.text.items);
+                });
+            });
+        });
+
+        /**
+         * TODO What about when one of the resources is not published?
+         */
+        describe(`when the edge is not published`, () => {
+            describe(`when searching for an unpublished note`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await noteQueryRepository.createNoteAbout(
+                        noteAboutWidget,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+                });
+
+                it(`should return the note`, async () => {
                     const endpoint = buildDetailEndpoint(noteAboutWidget.id);
 
                     const res = await request(app.getHttpServer()).get(endpoint);
@@ -249,27 +539,7 @@ describe(`when querying for a note: fetch by Id`, () => {
                 });
             });
 
-            describe(`when there is a connection with the given ID`, () => {
-                const toMemberWidget = buildTestInstance(WidgetViewModel, {
-                    id: buildDummyUuid(105),
-                    name: 'widget for the to member',
-                });
-
-                const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
-                    id: buildDummyUuid(101),
-                    connectionType: EdgeConnectionType.dual,
-                    connectedResources: {
-                        from: {
-                            resource: fromMemberWidget.getCompositeIdentifier(),
-                            context: generalContext,
-                        },
-                        to: {
-                            resource: toMemberWidget.getCompositeIdentifier(),
-                            context: generalContext,
-                        },
-                    },
-                });
-
+            describe(`when searching for an unpublished connection`, () => {
                 beforeEach(async () => {
                     await widgetQueryRepository.create(fromMemberWidget);
 
@@ -284,10 +554,10 @@ describe(`when querying for a note: fetch by Id`, () => {
                     );
                 });
 
-                it(`should return the expected result`, async () => {
-                    const res = await request(app.getHttpServer()).get(
-                        buildDetailEndpoint(noteAboutWidget.id)
-                    );
+                it(`should return the connection`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
 
                     expect(res.status).toBe(HttpStatusCode.ok);
 
@@ -296,7 +566,134 @@ describe(`when querying for a note: fetch by Id`, () => {
             });
         });
 
-        describe(`when the note does not exist`, () => {
+        describe(`when the edge does not exist`, () => {
+            it(`should return not found`, async () => {
+                const res = await request(app.getHttpServer()).get(
+                    buildDetailEndpoint(buildDummyUuid(404))
+                );
+
+                expect(res.status).toBe(HttpStatusCode.notFound);
+            });
+        });
+    });
+
+    describe(`when the user is a project admin`, () => {
+        beforeAll(async () => {
+            const coscradAdminUser = buildTestInstance(CoscradUser, {
+                roles: [CoscradUserRole.projectAdmin],
+            });
+
+            await setItUp(new CoscradUserWithGroups(coscradAdminUser, []));
+        });
+
+        describe(`when the note is public`, () => {
+            describe(`when there is a note with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await noteQueryRepository.createNoteAbout(
+                        noteAboutWidget,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteAboutWidget.id);
+                });
+
+                it(`should find it`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
+                });
+            });
+
+            describe(`when there is a connection with the given ID`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await widgetQueryRepository.create(toMemberWidget);
+
+                    await noteQueryRepository.connectResourcesWithNote(
+                        noteConnectingWidgets,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext,
+                        toMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+
+                    await noteQueryRepository.publish(noteConnectingWidgets.id);
+                });
+
+                it(`should return the expected result`, async () => {
+                    const res = await request(app.getHttpServer()).get(
+                        buildDetailEndpoint(noteAboutWidget.id)
+                    );
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteConnectingWidgets.text.items);
+                });
+            });
+        });
+
+        /**
+         * TODO What about when one of the resources is not published?
+         */
+        describe(`when the edge is not published`, () => {
+            describe(`when searching for an unpublished note`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await noteQueryRepository.createNoteAbout(
+                        noteAboutWidget,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+                });
+
+                it(`should return the note`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
+                });
+            });
+
+            describe(`when searching for an unpublished connection`, () => {
+                beforeEach(async () => {
+                    await widgetQueryRepository.create(fromMemberWidget);
+
+                    await widgetQueryRepository.create(toMemberWidget);
+
+                    await noteQueryRepository.connectResourcesWithNote(
+                        noteConnectingWidgets,
+                        fromMemberWidget.getCompositeIdentifier(),
+                        generalContext,
+                        toMemberWidget.getCompositeIdentifier(),
+                        generalContext
+                    );
+                });
+
+                it(`should return the connection`, async () => {
+                    const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                    const res = await request(app.getHttpServer()).get(endpoint);
+
+                    expect(res.status).toBe(HttpStatusCode.ok);
+
+                    expect(res.body.text.items).toEqual(noteConnectingWidgets.text.items);
+                });
+            });
+        });
+
+        describe(`when the edge does not exist`, () => {
             it(`should return not found`, async () => {
                 const res = await request(app.getHttpServer()).get(
                     buildDetailEndpoint(buildDummyUuid(404))

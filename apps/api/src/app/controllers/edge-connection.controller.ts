@@ -1,8 +1,19 @@
 import { IIndexQueryResult, INoteViewModel } from '@coscrad/api-interfaces';
-import { Controller, Get, Param, Post, Req, UseFilters, UseInterceptors } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+    Controller,
+    Get,
+    Param,
+    Post,
+    Req,
+    UseFilters,
+    UseGuards,
+    UseInterceptors,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { OptionalJwtAuthGuard } from '../../authorization/optional-jwt-auth-guard';
 import { EdgeConnectionQueryService } from '../../domain/services/query-services/edge-connection-query.service';
 import { AggregateId } from '../../domain/types/AggregateId';
+import buildByIdApiParamMetadata from './resources/common/buildByIdApiParamMetadata';
 import { QueryResponseTransformInterceptor } from './response-mapping';
 import {
     CoscradInternalErrorFilter,
@@ -31,9 +42,12 @@ export class EdgeConnectionController {
         return this.edgeConnectionQueryService.fetchSchema();
     }
 
+    @ApiBearerAuth('JWT')
+    @UseGuards(OptionalJwtAuthGuard)
+    @ApiParam(buildByIdApiParamMetadata())
     @Get('/:id')
-    async fetchById(@Param('id') id: AggregateId) {
-        return this.edgeConnectionQueryService.fetchById(id);
+    async fetchById(@Req() req, @Param('id') id: AggregateId) {
+        return this.edgeConnectionQueryService.fetchById(id, req.user || undefined);
     }
 
     @Post('')

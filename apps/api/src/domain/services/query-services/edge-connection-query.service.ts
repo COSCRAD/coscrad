@@ -50,8 +50,8 @@ export class EdgeConnectionQueryService {
         return result;
     }
 
-    async fetchById(id: AggregateId, _systemUser?: CoscradUserWithGroups) {
-        return this.noteQueryRepository.fetchById(id);
+    async fetchById(id: AggregateId, systemUser?: CoscradUserWithGroups) {
+        return this.noteQueryRepository.fetchById(id, systemUser);
     }
 
     /**

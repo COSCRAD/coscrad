@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`when querying for a note: fetch by Id when the user is unauthenticated when the note is public when there is a connection with the given ID should return the expected result 1`] = `
+exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished connection should return the connection 1`] = `
 {
   "audio": {
     "items": [],
@@ -11,10 +11,7 @@ exports[`when querying for a note: fetch by Id when the user is unauthenticated 
         "type": "general",
       },
       "resource": {
-        "connections": [],
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
-        "name": "widget for the from member",
-        "notes": [],
         "type": "widget",
       },
     },
@@ -23,15 +20,14 @@ exports[`when querying for a note: fetch by Id when the user is unauthenticated 
         "type": "general",
       },
       "resource": {
-        "connections": [],
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
-        "name": "widget for the to member",
-        "notes": [],
         "type": "widget",
       },
     },
   },
-  "connectionType": "self",
+  "connectionType": "dual",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+  "isPublished": false,
   "tags": [],
   "text": {
     "items": [
@@ -46,7 +42,7 @@ exports[`when querying for a note: fetch by Id when the user is unauthenticated 
 }
 `;
 
-exports[`when querying for a note: fetch by Id when the user is unauthenticated when the note is public when there is a note with the given ID should find it 1`] = `
+exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished note should return the note 1`] = `
 {
   "audio": {
     "items": [],
@@ -57,15 +53,14 @@ exports[`when querying for a note: fetch by Id when the user is unauthenticated 
         "type": "general",
       },
       "resource": {
-        "connections": [],
         "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
-        "name": "widget for the from member",
-        "notes": [],
         "type": "widget",
       },
     },
   },
   "connectionType": "self",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+  "isPublished": false,
   "tags": [],
   "text": {
     "items": [
