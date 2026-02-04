@@ -51,7 +51,9 @@ import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
 } from '../build-aggregate-root-from-event-history';
+import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
+import UserAlreadyHasReadAccessError from '../shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 import { AudioAddedForNote, NoteTranslated } from './commands';
@@ -179,6 +181,8 @@ export class EdgeConnection extends Aggregate {
         description: 'Is this note visible to the public?',
     })
     isPublished: boolean;
+    // TODO should we add a type annotation?
+    queryAccessControlList?: AccessControlList;
 
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
@@ -191,6 +195,7 @@ export class EdgeConnection extends Aggregate {
             connectionType: type,
             audioForNote: audioForNoteDto,
             isPublished,
+            queryAccessControlList: aclDto,
         } = dto;
 
         this.connectionType = type;
@@ -200,6 +205,7 @@ export class EdgeConnection extends Aggregate {
         } else {
             this.isPublished = false;
         }
+        this.queryAccessControlList = new AccessControlList(aclDto);
 
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
@@ -334,6 +340,14 @@ export class EdgeConnection extends Aggregate {
         this.audioForNote = audioUpdateResult;
 
         return this;
+    }
+
+    @UpdateMethod()
+    grantReadAccessToUser(userId: AggregateId): ResultOrError<EdgeConnection> {
+        if (this.queryAccessControlList.canUser(userId))
+            return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
+
+        this.queryAccessControlList = this.queryAccessControlList.allowUser(userId);
     }
 
     getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {

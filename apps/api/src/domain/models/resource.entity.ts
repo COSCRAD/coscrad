@@ -98,6 +98,7 @@ export abstract class Resource extends Aggregate {
             : [];
     }
 
+    // TODO add update method decorator
     grantReadAccessToUser<T extends Resource>(this: T, userId: AggregateId): ResultOrError<T> {
         if (this.queryAccessControlList.canUser(userId))
             return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
