@@ -103,6 +103,10 @@ const assertWidgetDocumentMatchesWidget = (actual: unknown, widget: WidgetViewMo
     expect(rawWidgetDoc).toEqual(dto);
 };
 
+const unpublishedEdgeView = buildTestInstance(EventSourcedNoteViewModel, {
+    isPublished: false,
+});
+
 describe(`ArangoNoteQueryRepository`, () => {
     let testQueryRepository: INoteQueryRepository;
 
@@ -640,10 +644,6 @@ describe(`ArangoNoteQueryRepository`, () => {
 
     describe(`publish`, () => {
         describe(`when the target is not yet published`, () => {
-            const unpublishedEdgeView = buildTestInstance(EventSourcedNoteViewModel, {
-                isPublished: false,
-            });
-
             beforeEach(async () => {
                 await databaseProvider.clearViews();
 
@@ -664,6 +664,27 @@ describe(`ArangoNoteQueryRepository`, () => {
                 )) as EventSourcedNoteViewModel;
 
                 expect(updatedEdgeView.isPublished).toBe(true);
+            });
+        });
+    });
+
+    describe(`allowUser`, () => {
+        const userId = buildDummyUuid(12);
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
+        });
+
+        describe(`when the target exists`, () => {
+            it(`should allow access to the given user`, async () => {
+                await testQueryRepository.allowUser(unpublishedEdgeView.id, userId);
+
+                const updatedEdgeView = (await testQueryRepository.fetchById(
+                    unpublishedEdgeView.id
+                )) as EventSourcedNoteViewModel;
+
+                expect(updatedEdgeView.accessControlList.canUser(userId)).toBe(true);
             });
         });
     });

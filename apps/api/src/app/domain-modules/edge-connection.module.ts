@@ -40,6 +40,7 @@ import { ResourceNoteDenormalizer } from '../../domain/models/context/commands/c
 import { GrantUserReadAccessToNote } from '../../domain/models/context/commands/grant-user-read-access-to-note/grant-user-read-access-to-note.command';
 import { GrantUserReadAccessToNoteCommandHandler } from '../../domain/models/context/commands/grant-user-read-access-to-note/grant-user-read-access-to-note.command-handler';
 import { NoteReadAccessGrantedToUser } from '../../domain/models/context/commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event';
+import { NoteReadAccessGrantedToUserEventHandler } from '../../domain/models/context/commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event-handler';
 import { EdgePublished } from '../../domain/models/context/commands/publish-note/edge-published.event';
 import { EdgePublishedEventHandler } from '../../domain/models/context/commands/publish-note/edge-published.event-handler';
 import { PublishEdge } from '../../domain/models/context/commands/publish-note/publish-edge.command';
@@ -102,6 +103,7 @@ import { CoscradNLPModule } from '../../lib/nlp';
         NoteTranslatedEventHandler,
         AudioAddedForNoteEventHandler,
         EdgePublishedEventHandler,
+        NoteReadAccessGrantedToUserEventHandler,
         // Denormalizers
         ResourceNoteDenormalizer,
         ResourceConnectionDenormalizer,
