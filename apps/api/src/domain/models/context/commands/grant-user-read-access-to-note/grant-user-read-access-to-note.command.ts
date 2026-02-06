@@ -1,6 +1,6 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, UUID } from '@coscrad/data-types';
+import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../../../../src/test-data/utilities';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -27,6 +27,7 @@ export class GrantUserReadAccessToNote implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
+    @ReferenceTo(AggregateType.user)
     @UUID({
         label: 'userId',
         description: 'the ID of the user who will be given permission to view this note',

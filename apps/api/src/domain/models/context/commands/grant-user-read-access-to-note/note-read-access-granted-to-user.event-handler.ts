@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common';
+import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../../coscrad-cli/logging';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../repositories/note-query-repository.interface';
@@ -12,7 +13,9 @@ export interface IAccessible {
 export class NoteReadAccessGrantedToUserEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
-        private readonly queryRepopsitory: IAccessible
+        private readonly queryRepopsitory: IAccessible,
+        @Inject(COSCRAD_LOGGER_TOKEN)
+        private readonly logger: ICoscradLogger
     ) {}
 
     async handle({
