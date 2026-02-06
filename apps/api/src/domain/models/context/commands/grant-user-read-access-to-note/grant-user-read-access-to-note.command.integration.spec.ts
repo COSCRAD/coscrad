@@ -1,4 +1,4 @@
-import { CoscradUserRole } from '@coscrad/api-interfaces';
+import { AggregateType, CoscradUserRole } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -274,7 +274,38 @@ describe(commandType, () => {
         });
 
         describe(`when the edge connection does not exist`, () => {
-            it.todo(`should return the expected error response`);
+            it(`should return the expected error response`, async () => {
+                const missingCompositeId = {
+                    type: AggregateType.note,
+                    id: buildDummyUuid(404),
+                };
+
+                const validPayload = buildTestInstance(GrantUserReadAccessToNote, {
+                    aggregateCompositeIdentifier: missingCompositeId,
+                    userId,
+                });
+
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        // no existing note is added
+
+                        await testRepositoryProvider.getUserRepository().create(existingUser);
+                    },
+                    buildCommandFSA: () => ({
+                        type: commandType,
+                        payload: validPayload,
+                    }),
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(missingCompositeId),
+                            ])
+                        );
+                    },
+                });
+            });
         });
     });
 });
