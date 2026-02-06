@@ -59,6 +59,7 @@ import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-aud
 import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { NoteReadAccessGrantedToUser } from './commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event';
 import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { ContextUnionType } from './edge-connection-context-union';
 import { EdgeAlreadyPublishedError } from './errors';
@@ -348,6 +349,8 @@ export class EdgeConnection extends Aggregate {
             return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
 
         this.queryAccessControlList = this.queryAccessControlList.allowUser(userId);
+
+        return this;
     }
 
     getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {
@@ -370,6 +373,10 @@ export class EdgeConnection extends Aggregate {
 
     handleEdgePublished(_event: EdgePublished) {
         return this.publish();
+    }
+
+    handleNoteReadAccessGrantedToUser({ payload: { userId } }: NoteReadAccessGrantedToUser) {
+        return this.grantReadAccessToUser(userId);
     }
 
     public static fromEventHistory(

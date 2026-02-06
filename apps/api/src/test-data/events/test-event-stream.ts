@@ -100,6 +100,7 @@ import {
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
+import { Ctor } from '../../lib/types/Ctor';
 import clonePlainObjectWithoutProperty from '../../lib/utilities/clonePlainObjectWithoutProperty';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -922,7 +923,8 @@ export class TestEventStream {
     }
 
     andThen<T extends BaseEvent>(
-        eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>
+        eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>,
+        eventCtor?: Ctor<BaseEvent>
     ): TestEventStream {
         const { type: eventType, meta: metaOverrides } = eventTypeAndPayloadOverrides;
 
@@ -931,9 +933,22 @@ export class TestEventStream {
          * now instead of waiting until we lazily execute the builder.
          */
         if (!this.eventBuilderMap.has(eventType)) {
-            throw new InternalError(
-                `Failed to find a test event builder for events of type: ${eventType}`
-            );
+            if (!eventCtor) {
+                throw new InternalError(
+                    `Failed to find a test event builder for events of type: ${eventType}. You must include the event class constructor or register an event builder manually in TestEventStream`
+                );
+            }
+
+            const builder: EventBuilder<BaseEvent> = (
+                payloadOverrides: DeepPartial<BaseEvent['payload']>,
+                metaDataBuilder: EventMetadataBuilder
+            ): BaseEvent =>
+                buildTestInstance(eventCtor, {
+                    payload: payloadOverrides,
+                    meta: metaDataBuilder(),
+                });
+
+            this.eventBuilderMap.set(eventType, builder);
         }
 
         /**

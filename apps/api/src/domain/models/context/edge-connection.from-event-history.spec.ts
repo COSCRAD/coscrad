@@ -22,6 +22,7 @@ import {
 } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { NoteReadAccessGrantedToUser } from './commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event';
 import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { EdgeConnectionContextUnion } from './edge-connection-context-union';
 import { EdgeConnection, EdgeConnectionMember } from './edge-connection.entity';
@@ -87,17 +88,17 @@ const resourcesConnectedWithNote = new TestEventStream().andThen<ResourcesConnec
     },
 });
 
-const notePublished = new TestEventStream()
-    .andThen<NoteAboutResourceCreated>({
-        type: 'NOTE_ABOUT_RESOURCE_CREATED',
-        payload: {
-            text: noteText,
-            languageCode: originalLanguageCode,
-        },
-    })
-    .andThen<EdgePublished>({
-        type: 'EDGE_PUBLISHED',
-    });
+const noteCreated = new TestEventStream().andThen<NoteAboutResourceCreated>({
+    type: 'NOTE_ABOUT_RESOURCE_CREATED',
+    payload: {
+        text: noteText,
+        languageCode: originalLanguageCode,
+    },
+});
+
+const notePublished = noteCreated.andThen<EdgePublished>({
+    type: 'EDGE_PUBLISHED',
+});
 
 const noteTranslated = notePublished.andThen<NoteTranslated>({
     type: 'NOTE_TRANSLATED',
@@ -216,6 +217,30 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                     const { isPublished } = result as EdgeConnection;
 
                     expect(isPublished).toBe(true);
+                });
+            });
+
+            describe(`when there is an update event: NOTE_READ_ACCESS_GRANTED_TO_USER`, () => {
+                it(`should return an edge connection that grants the given user read access`, () => {
+                    const userId = buildDummyUuid(124);
+
+                    const noteReadAccessGranted = noteCreated.andThen<NoteReadAccessGrantedToUser>({
+                        type: 'NOTE_READ_ACCESS_GRANTED_TO_USER',
+                        payload: {
+                            userId,
+                        },
+                    });
+
+                    const result = EdgeConnection.fromEventHistory(
+                        noteReadAccessGranted.as(aggregateCompositeIdentifier),
+                        edgeConnectionId
+                    );
+
+                    expect(result).toBeInstanceOf(EdgeConnection);
+
+                    expect((result as EdgeConnection).queryAccessControlList.canUser(userId)).toBe(
+                        true
+                    );
                 });
             });
 

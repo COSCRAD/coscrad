@@ -1,11 +1,15 @@
+import { CoscradUserRole } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
+import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
+import { Environment } from '../../../../../app/config/constants/environment';
 import { EdgeConnectionModule } from '../../../../../app/domain-modules/edge-connection.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -13,18 +17,31 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../../../validation';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import UserAlreadyHasReadAccessError from '../../../shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { NoteAboutResourceCreated } from '../create-note-about-resource/note-about-resource-created.event';
 import { GrantUserReadAccessToNote } from './grant-user-read-access-to-note.command';
+import { NoteReadAccessGrantedToUser } from './note-read-access-granted-to-user.event';
 
 const commandType = 'GRANT_USER_READ_ACCESS_TO_NOTE';
 
 const userId = buildDummyUuid(1);
+
+const existingUser = buildTestInstance(CoscradUser, {
+    id: userId,
+    roles: [CoscradUserRole.viewer],
+});
+
+const existingNoteId = buildDummyUuid(123);
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -38,6 +55,11 @@ describe(commandType, () => {
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
             imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
                 PersistenceModule.forRootAsync(),
                 DynamicDataTypeModule,
                 EdgeConnectionModule,
@@ -77,6 +99,8 @@ describe(commandType, () => {
         };
 
         databaseProvider = app.get(ArangoDatabaseProvider);
+
+        testRepositoryProvider = app.get(TestRepositoryProvider);
     });
 
     beforeEach(async () => {
@@ -91,12 +115,6 @@ describe(commandType, () => {
 
     describe(`when the command is valid`, () => {
         it(`should succeed`, async () => {
-            const validPayload = buildTestInstance(GrantUserReadAccessToNote, {
-                userId,
-            });
-
-            const existingNoteId = buildDummyUuid(123);
-
             const eventHistoryForExistingNote = new TestEventStream()
                 // there will be an empty ACL at this point
                 .andThen<NoteAboutResourceCreated>({
@@ -111,12 +129,19 @@ describe(commandType, () => {
                 existingNoteId
             ) as EdgeConnection;
 
-            await testRepositoryProvider.getEdgeConnectionRepository().create(existingNote);
+            const validPayload = buildTestInstance(GrantUserReadAccessToNote, {
+                aggregateCompositeIdentifier: existingNote.getCompositeIdentifier(),
+                userId,
+            });
 
             await assertCommandSuccess(commandAssertionDependencies, {
                 systemUserId: dummySystemUserId,
                 seedInitialState: async () => {
-                    Promise.resolve();
+                    await testRepositoryProvider
+                        .getEventRepository()
+                        .appendEvents(eventHistoryForExistingNote);
+
+                    await testRepositoryProvider.getUserRepository().create(existingUser);
                 },
                 buildValidCommandFSA: () => ({
                     type: commandType,
@@ -136,6 +161,120 @@ describe(commandType, () => {
                     );
                 },
             });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the user does not exist`, () => {
+            it(`should return the expected error response`, async () => {
+                const eventHistoryForExistingNote = new TestEventStream()
+                    // there will be an empty ACL at this point
+                    .andThen<NoteAboutResourceCreated>({
+                        type: 'NOTE_ABOUT_RESOURCE_CREATED',
+                    })
+                    .as({
+                        id: existingNoteId,
+                    });
+
+                const existingNote = EdgeConnection.fromEventHistory(
+                    eventHistoryForExistingNote,
+                    existingNoteId
+                ) as EdgeConnection;
+
+                const validPayload = buildTestInstance(GrantUserReadAccessToNote, {
+                    aggregateCompositeIdentifier: existingNote.getCompositeIdentifier(),
+                    userId,
+                });
+
+                // we skip adding the user to the DB here
+                // await testRepositoryProvider.getUserRepository().create(existingUser);
+
+                await assertCommandError(commandAssertionDependencies, {
+                    buildCommandFSA: () => ({
+                        type: commandType,
+                        payload: validPayload,
+                    }),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForExistingNote);
+                    },
+                    systemUserId: dummySystemUserId,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(existingUser.getCompositeIdentifier()),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the user already has read access`, () => {
+            it(`should return the expected error response`, async () => {
+                const eventHistoryForExistingNote = new TestEventStream()
+                    // there will be an empty ACL at this point
+                    .andThen<NoteAboutResourceCreated>(
+                        {
+                            type: 'NOTE_ABOUT_RESOURCE_CREATED',
+                        },
+                        NoteAboutResourceCreated
+                    )
+                    .andThen<NoteReadAccessGrantedToUser>(
+                        {
+                            type: 'NOTE_READ_ACCESS_GRANTED_TO_USER',
+                            payload: {
+                                userId,
+                            },
+                        },
+                        NoteReadAccessGrantedToUser
+                    )
+                    .as({
+                        id: existingNoteId,
+                    });
+
+                const existingNote = EdgeConnection.fromEventHistory(
+                    eventHistoryForExistingNote,
+                    existingNoteId
+                ) as EdgeConnection;
+
+                const validPayload = buildTestInstance(GrantUserReadAccessToNote, {
+                    aggregateCompositeIdentifier: existingNote.getCompositeIdentifier(),
+                    userId,
+                });
+
+                await assertCommandError(commandAssertionDependencies, {
+                    systemUserId: dummySystemUserId,
+                    buildCommandFSA: () => ({
+                        type: commandType,
+                        payload: validPayload,
+                    }),
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .getEventRepository()
+                            .appendEvents(eventHistoryForExistingNote);
+
+                        await testRepositoryProvider.getUserRepository().create(existingUser);
+                    },
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new UserAlreadyHasReadAccessError(
+                                    userId,
+                                    existingNote.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the edge connection does not exist`, () => {
+            it.todo(`should return the expected error response`);
         });
     });
 });

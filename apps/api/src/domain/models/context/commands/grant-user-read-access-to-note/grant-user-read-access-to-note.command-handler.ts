@@ -1,4 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
@@ -14,6 +15,7 @@ import { EdgeConnection } from '../../edge-connection.entity';
 import { GrantUserReadAccessToNote } from './grant-user-read-access-to-note.command';
 import { NoteReadAccessGrantedToUser } from './note-read-access-granted-to-user.event';
 
+@CommandHandler(GrantUserReadAccessToNote)
 export class GrantUserReadAccessToNoteCommandHandler extends BaseUpdateCommandHandler<EdgeConnection> {
     protected async fetchRequiredExternalState(
         command: GrantUserReadAccessToNote
