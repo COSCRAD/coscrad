@@ -1,4 +1,5 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -26,6 +27,7 @@ const testEventId = buildDummyUuid(1);
         },
     },
 })
+@CoscradEvent('EDGE_PUBLISHED')
 export class EdgePublished extends BaseEvent<EdgePublishedPayload> {
     readonly type = 'EDGE_PUBLISHED';
 }

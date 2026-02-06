@@ -44,7 +44,7 @@ import { CoscradDataExample } from '../../../test-data/utilities/coscrad-data-ex
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import { UpdateMethod } from '../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../decorators';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
@@ -57,10 +57,12 @@ import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-aud
 import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { ContextUnionType } from './edge-connection-context-union';
 import { EdgeAlreadyPublishedError } from './errors';
 import { CannotAddAudioForNoteInGivenLanguageError } from './errors/cannot-add-audio-for-note-in-given-language.error';
 
+// TODO move this class to a different file
 @CoscradDataExample<EdgeConnectionMember>({
     example: {
         role: EdgeConnectionMemberRole.self,
@@ -127,6 +129,7 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
 })
 @Injectable()
 @RegisterIndexScopedCommands([])
+@AggregateRoot(AggregateType.note)
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 
@@ -351,7 +354,11 @@ export class EdgeConnection extends Aggregate {
         return this.addAudioForNote(audioItemId, languageCode);
     }
 
-    static fromEventHistory(
+    handleEdgePublished(_event: EdgePublished) {
+        return this.publish();
+    }
+
+    public static fromEventHistory(
         eventHistory: BaseEvent[],
         targetId: AggregateId
     ): Maybe<ResultOrError<EdgeConnection>> {
@@ -384,26 +391,30 @@ export class EdgeConnection extends Aggregate {
             languageCode,
         },
     }: NoteAboutResourceCreated): ResultOrError<EdgeConnection> {
+        const audioForNote = MultilingualAudio.buildEmpty();
+
+        const selfMember = // a self-connection has one member, the subject of the note
+            new EdgeConnectionMember({
+                compositeIdentifier: resourceCompositeIdentifier,
+                // TODO Use the context union factory
+                context: resourceContext,
+                role: EdgeConnectionMemberRole.self,
+            });
+
+        const note = buildMultilingualTextWithSingleItem(text, languageCode);
+
         const buildResult = new EdgeConnection({
             type: AggregateType.note,
             id,
-            audioForNote: MultilingualAudio.buildEmpty(),
+            audioForNote,
             /**
              * A "self note" is a note about a resource with context, represented
              * as a self connection back to the resource node in the graph.
              */
             connectionType: EdgeConnectionType.self,
-            note: buildMultilingualTextWithSingleItem(text, languageCode),
+            note,
             isPublished: false,
-            members: [
-                // a self-connection has one member, the subject of the note
-                new EdgeConnectionMember({
-                    compositeIdentifier: resourceCompositeIdentifier,
-                    // TODO Use the context union factory
-                    context: resourceContext,
-                    role: EdgeConnectionMemberRole.self,
-                }),
-            ],
+            members: [selfMember],
         });
 
         const invariantValidationResult = buildResult.validateInvariants();

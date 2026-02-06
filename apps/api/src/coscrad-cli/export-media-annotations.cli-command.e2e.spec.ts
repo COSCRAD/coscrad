@@ -1,4 +1,4 @@
-import { EdgeConnectionType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandModule } from '@coscrad/commands';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,21 +11,15 @@ import { Environment } from '../app/config/constants/environment';
 import { EdgeConnectionModule } from '../app/domain-modules/edge-connection.module';
 import getValidAggregateInstanceForTest from '../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { CoscradEventFactory, EventModule } from '../domain/common';
-import { buildMultilingualTextWithSingleItem } from '../domain/common/build-multilingual-text-with-single-item';
 import buildDummyUuid from '../domain/models/__tests__/utilities/buildDummyUuid';
 import { AudioVisualModule } from '../domain/models/audio-visual/application/audio-visual.module';
 import { AudioItemCreated } from '../domain/models/audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { AudioItem } from '../domain/models/audio-visual/audio-item/entities/audio-item.entity';
 import { VideoCreated } from '../domain/models/audio-visual/video';
 import { Video } from '../domain/models/audio-visual/video/entities/video.entity';
-import {
-    EdgeConnection,
-    EdgeConnectionMember,
-    EdgeConnectionMemberRole,
-} from '../domain/models/context/edge-connection.entity';
+import { NoteAboutResourceCreated } from '../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { TimeRangeContext } from '../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../domain/models/context/types/EdgeConnectionContextType';
-import { MultilingualAudio } from '../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../domain/types/DeluxeInMemoryStore';
 import { REPOSITORY_PROVIDER_TOKEN } from '../persistence/constants/persistenceConstants';
@@ -155,8 +149,6 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         const noteLanguageCode = LanguageCode.English;
 
-        const note = buildMultilingualTextWithSingleItem(noteText, noteLanguageCode);
-
         const audioItemId = buildDummyUuid(456);
 
         const aggregateCompositeId = {
@@ -188,24 +180,19 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
         const idOfNoteForAudiovisualItem = buildDummyUuid(123);
 
-        const noteForAudiovisualItem = new EdgeConnection({
-            type: AggregateType.note,
-            connectionType: EdgeConnectionType.self,
-            members: [
-                new EdgeConnectionMember({
-                    compositeIdentifier: existingAudioItem.getCompositeIdentifier(),
-                    context,
-                    role: EdgeConnectionMemberRole.self,
-                }),
-            ],
-            note,
-            id: idOfNoteForAudiovisualItem,
-            isPublished: true,
-            audioForNote: MultilingualAudio.buildEmpty().addAudio(
-                audioItemId,
-                noteLanguageCode
-            ) as MultilingualAudio,
-        });
+        const eventHistoryForNoteAboutAudioItem = new TestEventStream()
+            .andThen<NoteAboutResourceCreated>({
+                type: 'NOTE_ABOUT_RESOURCE_CREATED',
+                payload: {
+                    text: noteText,
+                    languageCode: noteLanguageCode,
+                    resourceCompositeIdentifier: existingAudioItem.getCompositeIdentifier(),
+                    resourceContext: context,
+                },
+            })
+            .as({
+                id: idOfNoteForAudiovisualItem,
+            });
 
         const dummyTag = getValidAggregateInstanceForTest(AggregateType.tag);
 
@@ -235,10 +222,11 @@ describe(`CLI Command: **${cliCommandName}**`, () => {
 
                 await eventRepository.appendEvents(eventHistoryForAudioItem);
 
+                await eventRepository.appendEvents(eventHistoryForNoteAboutAudioItem);
+
                 await testRepositoryProvider.addFullSnapshot(
                     new DeluxeInMemoryStore({
                         [AggregateType.tag]: tagsForNote,
-                        [AggregateType.note]: [noteForAudiovisualItem],
                     }).fetchFullSnapshotInLegacyFormat()
                 );
             });

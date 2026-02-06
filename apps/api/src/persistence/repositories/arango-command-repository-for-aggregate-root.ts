@@ -1,4 +1,5 @@
 import { AGGREGATE_COMPOSITE_IDENTIFIER, ICommandBase } from '@coscrad/api-interfaces';
+import { isFunction } from '@coscrad/validation-constraints';
 import { Inject } from '@nestjs/common';
 import { AggregateTypeMetadata, getAggregateTypeForTarget } from '../../domain/decorators';
 import { Aggregate } from '../../domain/models/aggregate.entity';
@@ -230,6 +231,12 @@ export class ArangoCommandRepositoryForAggregateRoot<TAggregate extends Aggregat
         if (isNullOrUndefined(Ctor)) {
             throw new InternalError(
                 `Failed to find a domain model class for aggregate type: ${this.aggregateType}`
+            );
+        }
+
+        if (!isFunction(Ctor.fromEventHistory)) {
+            throw new InternalError(
+                `Failed to find a static fromEventHistory method for event sourced aggregate root with type: ${this.aggregateType}`
             );
         }
 
