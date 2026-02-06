@@ -10,6 +10,7 @@ import {
 import { PageRangeContext } from '../../../domain/models/context/page-range-context/page-range.context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -23,6 +24,8 @@ type TestCase = {
     expectedResult: ArangoEdgeDocument;
 };
 
+const accessControlListDto = new AccessControlList().allowUser('123').allowGroup('555').toDTO();
+
 const audioItemId = buildDummyUuid(555);
 
 const languageCodeForAudio = LanguageCode.English;
@@ -33,6 +36,7 @@ const selfEdgeConnection = new EdgeConnection({
     connectionType: EdgeConnectionType.self,
     type: AggregateType.note,
     note: buildMultilingualTextWithSingleItem('These pages are about bears', LanguageCode.English),
+    queryAccessControlList: accessControlListDto,
     members: [
         {
             role: EdgeConnectionMemberRole.self,
@@ -89,14 +93,16 @@ const buildValidTranscribedAudioConnectionMember = (
 });
 
 const dualEdgeConnection = new EdgeConnection({
+    id: '123',
     type: AggregateType.note,
+    queryAccessControlList: accessControlListDto,
+
     connectionType: EdgeConnectionType.dual,
     isPublished: true,
     members: [
         buildValidBookEdgeConnectionMember(EdgeConnectionMemberRole.from),
         buildValidTranscribedAudioConnectionMember(EdgeConnectionMemberRole.to),
     ],
-    id: '123',
     note: buildMultilingualTextWithSingleItem('These are both about bears', LanguageCode.English),
     audioForNote: MultilingualAudio.buildEmpty().addAudio(
         audioItemId,
@@ -113,6 +119,7 @@ const testCases: TestCase[] = [
             _to: 'digital_texts/2',
             _key: '123',
             isPublished: true,
+            queryAccessControlList: accessControlListDto,
             connectionType: EdgeConnectionType.self,
             eventHistory: [],
             note: buildMultilingualTextWithSingleItem(
@@ -140,6 +147,8 @@ const testCases: TestCase[] = [
             _to: 'audio_items/15',
             _key: '123',
             isPublished: true,
+            queryAccessControlList: accessControlListDto,
+
             connectionType: EdgeConnectionType.dual,
             eventHistory: [],
             note: buildMultilingualTextWithSingleItem(

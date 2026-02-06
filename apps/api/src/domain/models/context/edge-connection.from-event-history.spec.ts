@@ -224,12 +224,15 @@ describe(`EdgeConnection.fromEventHistory`, () => {
                 it(`should return an edge connection that grants the given user read access`, () => {
                     const userId = buildDummyUuid(124);
 
-                    const noteReadAccessGranted = noteCreated.andThen<NoteReadAccessGrantedToUser>({
-                        type: 'NOTE_READ_ACCESS_GRANTED_TO_USER',
-                        payload: {
-                            userId,
+                    const noteReadAccessGranted = noteCreated.andThen<NoteReadAccessGrantedToUser>(
+                        {
+                            type: 'NOTE_READ_ACCESS_GRANTED_TO_USER',
+                            payload: {
+                                userId,
+                            },
                         },
-                    });
+                        NoteReadAccessGrantedToUser
+                    );
 
                     const result = EdgeConnection.fromEventHistory(
                         noteReadAccessGranted.as(aggregateCompositeIdentifier),

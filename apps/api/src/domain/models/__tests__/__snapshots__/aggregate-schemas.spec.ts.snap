@@ -1574,6 +1574,16 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "queryAccessControlList": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "list of users and groups who have read access to this resource",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "query ACL",
+    "name": "AccessControlList",
+    "schema": {},
+  },
 }
 `;
 

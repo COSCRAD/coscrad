@@ -182,7 +182,11 @@ export class EdgeConnection extends Aggregate {
         description: 'Is this note visible to the public?',
     })
     isPublished: boolean;
-    // TODO should we add a type annotation?
+
+    @NestedDataType(AccessControlList, {
+        label: 'query ACL',
+        description: 'list of users and groups who have read access to this resource',
+    })
     queryAccessControlList?: AccessControlList;
 
     constructor(dto: DTO<EdgeConnection>) {
