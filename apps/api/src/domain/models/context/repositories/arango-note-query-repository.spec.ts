@@ -674,6 +674,12 @@ describe(`ArangoNoteQueryRepository`, () => {
             await databaseProvider.clearViews();
 
             await widgetDatabase.create(mapEntityDTOToDatabaseDocument(testWidget));
+
+            await testQueryRepository.createNoteAbout(
+                unpublishedEdgeView,
+                testWidget.getCompositeIdentifier(),
+                generalContext
+            );
         });
 
         describe(`when the target exists`, () => {
