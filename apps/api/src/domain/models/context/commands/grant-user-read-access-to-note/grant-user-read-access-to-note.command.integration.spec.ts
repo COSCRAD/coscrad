@@ -23,6 +23,7 @@ import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/a
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import UserAlreadyHasReadAccessError from '../../../shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -204,7 +205,10 @@ describe(commandType, () => {
                         assertErrorAsExpected(
                             result,
                             new CommandExecutionError([
-                                new AggregateNotFoundError(existingUser.getCompositeIdentifier()),
+                                new InvalidExternalReferenceByAggregateError(
+                                    existingNote.getCompositeIdentifier(),
+                                    [existingUser.getCompositeIdentifier()]
+                                ),
                             ])
                         );
                     },
