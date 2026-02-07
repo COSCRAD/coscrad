@@ -32,6 +32,7 @@ import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
 import { IResourceConnectionDto } from './commands/connect-resources-with-note/resources-connected-with-note.event-handler';
@@ -46,6 +47,8 @@ const indexEndpoint = `/webOfKnowledge`;
 const WIDGET_COLLECTION = 'widget__VIEWS';
 
 const WIDGET_RESOURCE_TYPE = 'widget' as ResourceType;
+
+const userId = buildDummyUuid(101);
 
 @CoscradDataExample<WidgetViewModel>({
     example: {
@@ -159,6 +162,12 @@ const toMemberWidget = buildTestInstance(WidgetViewModel, {
     name: 'widget for the to member',
 });
 
+/**
+ * WARNING Not all properties in the following view models are actually
+ * used. We manually call `publish` and `grantAccess` in the repository.
+ * This is because the creation API for the `INoteQueryRepository` does not
+ * allow one to create a published note or a note with a non-empty ACL.
+ */
 const publicNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(101),
     connectionType: EdgeConnectionType.self,
@@ -169,8 +178,34 @@ const publicNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     },
 });
 
-const publicNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+const privateNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     id: buildDummyUuid(102),
+    isPublished: false,
+    connectionType: EdgeConnectionType.self,
+    connectedResources: {
+        self: {
+            resource: fromMemberWidget.getCompositeIdentifier(),
+        },
+    },
+});
+
+const privateNoteAboutWidgetThatOrinaryUserCanAccess = buildTestInstance(
+    EventSourcedNoteViewModel,
+    {
+        id: buildDummyUuid(103),
+        isPublished: false,
+        accessControlList: new AccessControlList().allowUser(userId),
+        connectionType: EdgeConnectionType.self,
+        connectedResources: {
+            self: {
+                resource: fromMemberWidget.getCompositeIdentifier(),
+            },
+        },
+    }
+);
+
+const publicNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(104),
     connectionType: EdgeConnectionType.dual,
     connectedResources: {
         from: {
@@ -184,18 +219,26 @@ const publicNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel,
     },
 });
 
-const privateNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
-    id: buildDummyUuid(103),
-    connectionType: EdgeConnectionType.self,
+const privateNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(105),
+    isPublished: false,
+    connectionType: EdgeConnectionType.dual,
     connectedResources: {
-        self: {
+        from: {
             resource: fromMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
+        },
+        to: {
+            resource: toMemberWidget.getCompositeIdentifier(),
+            context: generalContext,
         },
     },
 });
 
-const privateNoteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
-    id: buildDummyUuid(104),
+const privateNoteConnectingWidgetsWithUserAccess = buildTestInstance(EventSourcedNoteViewModel, {
+    id: buildDummyUuid(106),
+    isPublished: false,
+    accessControlList: new AccessControlList().allowUser(userId),
     connectionType: EdgeConnectionType.dual,
     connectedResources: {
         from: {
@@ -273,6 +316,7 @@ describe(`when querying for a note: fetch many`, () => {
 
         await widgetQueryRepository.create(toMemberWidget);
 
+        // public simple note
         await noteQueryRepository.createNoteAbout(
             publicNoteAboutWidget,
             fromMemberWidget.getCompositeIdentifier(),
@@ -281,6 +325,26 @@ describe(`when querying for a note: fetch many`, () => {
 
         await noteQueryRepository.publish(publicNoteAboutWidget.id);
 
+        // fully private simple note
+        await noteQueryRepository.createNoteAbout(
+            privateNoteAboutWidget,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
+
+        // private simple note with user in query ACL
+        await noteQueryRepository.createNoteAbout(
+            privateNoteAboutWidgetThatOrinaryUserCanAccess,
+            fromMemberWidget.getCompositeIdentifier(),
+            generalContext
+        );
+
+        await noteQueryRepository.allowUser(
+            privateNoteAboutWidgetThatOrinaryUserCanAccess.id,
+            userId
+        );
+
+        // public connecting note
         await noteQueryRepository.connectResourcesWithNote(
             publicNoteConnectingWidgets,
             fromMemberWidget.getCompositeIdentifier(),
@@ -291,12 +355,18 @@ describe(`when querying for a note: fetch many`, () => {
 
         await noteQueryRepository.publish(publicNoteConnectingWidgets.id);
 
-        await noteQueryRepository.createNoteAbout(
-            privateNoteAboutWidget,
+        // private connection with user in ACL
+        await noteQueryRepository.connectResourcesWithNote(
+            privateNoteConnectingWidgetsWithUserAccess,
             fromMemberWidget.getCompositeIdentifier(),
+            generalContext,
+            toMemberWidget.getCompositeIdentifier(),
             generalContext
         );
 
+        await noteQueryRepository.allowUser(privateNoteConnectingWidgetsWithUserAccess.id, userId);
+
+        // fully private connection
         await noteQueryRepository.connectResourcesWithNote(
             privateNoteConnectingWidgets,
             fromMemberWidget.getCompositeIdentifier(),
@@ -312,13 +382,10 @@ describe(`when querying for a note: fetch many`, () => {
         databaseProvider.close();
     });
 
-    describe(`when the user is an ordinary user (viewer)`, () => {
+    describe(`when the user unauthenticated (public request)`, () => {
         beforeAll(async () => {
-            const viewer = buildTestInstance(CoscradUser, {
-                roles: [CoscradUserRole.viewer],
-            });
-
-            await setItUp(new CoscradUserWithGroups(viewer, []));
+            // no user
+            await setItUp(undefined);
         });
 
         describe(`when some edges are published and some are not`, () => {
@@ -329,7 +396,106 @@ describe(`when querying for a note: fetch many`, () => {
 
                 expect(res.body.entities).toHaveLength(2);
 
-                // TODO check which edges are returned by ID
+                const foundIds = res.body.entities.map(({ id }) => id);
+
+                expect(foundIds).toContain(publicNoteAboutWidget.id);
+                expect(foundIds).toContain(publicNoteConnectingWidgets.id);
+
+                // a public user should not see edges that are not flagged as published
+            });
+        });
+    });
+
+    describe(`when the user is an ordinary user (viewer)`, () => {
+        beforeAll(async () => {
+            const viewer = buildTestInstance(CoscradUser, {
+                id: userId,
+                roles: [CoscradUserRole.viewer],
+            });
+
+            await setItUp(new CoscradUserWithGroups(viewer, []));
+        });
+
+        describe(`when some edges are published and some are not`, () => {
+            it(`should return only the published edges and edges for which the user is in the query ACL`, async () => {
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                expect(res.body.entities).toHaveLength(4);
+
+                const foundIds = res.body.entities.map(({ id }) => id);
+
+                expect(foundIds).toContain(publicNoteAboutWidget.id);
+                expect(foundIds).toContain(publicNoteConnectingWidgets.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
+
+                // this user should not see the private notes \ connections with an empty ACL
+            });
+        });
+    });
+
+    describe(`when the user is a project admin`, () => {
+        beforeAll(async () => {
+            const projectAdmin = buildTestInstance(CoscradUser, {
+                id: userId,
+                roles: [CoscradUserRole.projectAdmin],
+            });
+
+            await setItUp(new CoscradUserWithGroups(projectAdmin, []));
+        });
+
+        describe(`when some edges are published and some are not`, () => {
+            it(`should return only the published edges and edges for which the user is in the query ACL`, async () => {
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                expect(res.body.entities).toHaveLength(6);
+
+                const foundIds = res.body.entities.map(({ id }) => id);
+
+                expect(foundIds).toContain(publicNoteAboutWidget.id);
+                expect(foundIds).toContain(publicNoteConnectingWidgets.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
+                expect(foundIds).toContain(privateNoteAboutWidget.id);
+                expect(foundIds).toContain(privateNoteConnectingWidgets.id);
+
+                // this user should not see the private notes \ connections with an empty ACL
+            });
+        });
+    });
+
+    describe(`when the user is a system (COSCRAD) admin`, () => {
+        beforeAll(async () => {
+            const superAdmin = buildTestInstance(CoscradUser, {
+                id: userId,
+                roles: [CoscradUserRole.superAdmin],
+            });
+
+            await setItUp(new CoscradUserWithGroups(superAdmin, []));
+        });
+
+        describe(`when some edges are published and some are not`, () => {
+            it(`should return only the published edges and edges for which the user is in the query ACL`, async () => {
+                const res = await request(app.getHttpServer()).post(indexEndpoint);
+
+                expect(res.status).toBe(HttpStatusCode.createdResource);
+
+                expect(res.body.entities).toHaveLength(6);
+
+                const foundIds = res.body.entities.map(({ id }) => id);
+
+                expect(foundIds).toContain(publicNoteAboutWidget.id);
+                expect(foundIds).toContain(publicNoteConnectingWidgets.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
+                expect(foundIds).toContain(privateNoteAboutWidget.id);
+                expect(foundIds).toContain(privateNoteConnectingWidgets.id);
+
+                // this user should not see the private notes \ connections with an empty ACL
             });
         });
     });

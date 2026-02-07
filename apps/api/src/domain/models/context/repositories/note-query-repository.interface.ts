@@ -9,7 +9,9 @@ import {
 } from '@coscrad/api-interfaces';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
+import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
 import { IPublishable } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
@@ -25,7 +27,10 @@ export interface INoteCreationRecord {
     text: IMultilingualText;
 }
 
-export interface INoteQueryRepository extends IQueryRepositoryForTaggable, IPublishable {
+export interface INoteQueryRepository
+    extends IQueryRepositoryForTaggable,
+        IPublishable,
+        IAccessible {
     fetchById(
         id: AggregateId,
         user?: CoscradUserWithGroups
@@ -33,7 +38,7 @@ export interface INoteQueryRepository extends IQueryRepositoryForTaggable, IPubl
 
     fetchMany(
         options?: FetchManyQueryOptions
-    ): Promise<PaginatedResponse<EventSourcedNoteViewModel>>;
+    ): Promise<ResultOrError<PaginatedResponse<EventSourcedNoteViewModel>>>;
 
     createMany(notes: EventSourcedNoteViewModel[]): Promise<void>;
 

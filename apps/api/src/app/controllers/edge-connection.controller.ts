@@ -1,4 +1,3 @@
-import { IIndexQueryResult, INoteViewModel } from '@coscrad/api-interfaces';
 import {
     Controller,
     Get,
@@ -53,7 +52,7 @@ export class EdgeConnectionController {
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
     @Post('')
-    async fetchManyNotes(@Req() req): Promise<IIndexQueryResult<INoteViewModel>> {
+    async fetchManyNotes(@Req() req) {
         const allNotes = await this.edgeConnectionQueryService.fetchMany(req?.user || undefined);
 
         return allNotes;

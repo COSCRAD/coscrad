@@ -24,6 +24,7 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import convertResourceCompositeIdentifierToArangoDocumentHandle from '../../../../persistence/database/utilities/convertResourceCompositeIdentifierToArangoDocumentHandle';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
@@ -113,11 +114,15 @@ const mapArangoDocumentToNoteDto = (document) => {
         };
     }
 
+    dto.id = document._key;
+
     delete dto._from;
 
     delete dto._to;
 
     delete dto._key;
+
+    delete dto._rev;
 
     delete dto._id;
 
@@ -179,47 +184,25 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
 
     async fetchMany(
         options?: FetchManyQueryOptions
-    ): Promise<PaginatedResponse<EventSourcedNoteViewModel>> {
-        if (options) {
-            throw new InternalError(`user query options are not available for notes`);
+    ): Promise<ResultOrError<PaginatedResponse<EventSourcedNoteViewModel>>> {
+        const documentSearchResult = await this.database.fetchForUser(options);
+
+        if (isInternalError(documentSearchResult)) {
+            return documentSearchResult;
         }
 
-        const aql = `
-            for doc in note__VIEWS
-            let connectedResources = doc._from ==  doc._to ? {
-                self: {
-                    resource: document(doc._from),
-                    context: doc.connectedResources.self.context
-                }
-            } : {
-                to: {
-                    resource: document(doc._to),
-                    context: doc.connectedResources.to.context
-                },
-                from: {
-                    resource: document(doc._from),
-                    context: doc.connectedResources.from.context
-                }
-            }
-            return MERGE(doc,{
-                connectedResources
-            })
-        `;
+        const { selected, count } = documentSearchResult;
 
-        const cursor = await this.database.query({
-            query: aql,
-            bindVars: {},
-        });
-
-        const documents = await cursor.all();
+        const documents = selected;
 
         const dtos = documents.map(mapArangoDocumentToNoteDto);
 
-        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-363] Support pagination.
+        const entities = dtos.map((dto) => EventSourcedNoteViewModel.fromDto(dto));
+
         return {
-            page: 1,
-            count: 1,
-            entities: dtos.map((dto) => EventSourcedNoteViewModel.fromDto(dto)),
+            page: options?.pagination?.page || 1,
+            count,
+            entities,
         };
     }
 

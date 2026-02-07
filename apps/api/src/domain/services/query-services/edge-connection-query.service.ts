@@ -10,8 +10,9 @@ import {
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
 import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilities';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { buildAllAggregateDescriptions } from '../../../queries/resourceDescriptions';
+import { ResultOrError } from '../../../types/ResultOrError';
 import {
     INoteQueryRepository,
     NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -59,10 +60,16 @@ export class EdgeConnectionQueryService {
      */
     async fetchMany(
         systemUser?: CoscradUserWithGroups
-    ): Promise<ICategorizableIndexQueryResult<INoteViewModel>> {
-        const { entities, page } = await this.noteQueryRepository.fetchMany({
+    ): Promise<ResultOrError<ICategorizableIndexQueryResult<INoteViewModel>>> {
+        const result = await this.noteQueryRepository.fetchMany({
             user: systemUser,
         });
+
+        if (isInternalError(result)) {
+            return result;
+        }
+
+        const { count, entities, page } = result;
 
         return {
             entities: entities.map((e) => ({
@@ -70,7 +77,7 @@ export class EdgeConnectionQueryService {
                 actions: [],
             })),
             page,
-            count: entities.length,
+            count,
             // TODO insert available commands
             indexScopedActions: [],
         };
