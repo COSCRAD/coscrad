@@ -50,10 +50,12 @@ import { VideoAddedForTerm } from '../commands/add-video-for-term/video-added-fo
 import { CREATE_PROMPT_TERM } from '../commands/create-prompt-term/constants';
 import { CREATE_TERM } from '../commands/create-term/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
+import { PromptRegisteredForExistingTerm } from '../commands/register-prompt-for-existing-term/prompt-registered-for-existing-term.event';
 import { TRANSLATE_TERM } from '../commands/translate-term/constants';
 import {
     CannotElicitTermWithoutPromptError,
     CannotOverrideAudioForTermError,
+    CannotPromptFromExistingPromptTerm,
     PromptLanguageMustBeUniqueError,
 } from '../errors';
 import { CannotOverridePhotographForTermError } from '../errors/cannot-override-photograph-for-term.error';
@@ -277,6 +279,29 @@ export class Term extends Resource {
         return this;
     }
 
+    @UpdateMethod()
+    registerPrompt(text: string): ResultOrError<Term> {
+        if (this.isPromptTerm) return new CannotPromptFromExistingPromptTerm(this.id);
+
+        const existingTextItem = this.text.getOriginalTextItem();
+
+        // currently the prompts are assumed to be in english
+        const newMultilingualText = buildMultilingualTextWithSingleItem(text).translate({
+            ...existingTextItem,
+            role: MultilingualTextItemRole.elicitedFromPrompt,
+        });
+
+        if (isInternalError(newMultilingualText)) {
+            return newMultilingualText;
+        }
+
+        this.text = newMultilingualText;
+
+        this.isPromptTerm = true;
+
+        return this;
+    }
+
     protected getResourceSpecificAvailableCommands(): string[] {
         return [TRANSLATE_TERM];
     }
@@ -355,6 +380,10 @@ export class Term extends Resource {
 
     handleVideoAddedForTerm({ payload: { videoId } }: VideoAddedForTerm) {
         return this.addVideo(videoId);
+    }
+
+    handlePromptRegisteredForExistingTerm({ payload: { text } }: PromptRegisteredForExistingTerm) {
+        return this.registerPrompt(text);
     }
 
     private static createTermFromTermCreated(event: TermCreated) {

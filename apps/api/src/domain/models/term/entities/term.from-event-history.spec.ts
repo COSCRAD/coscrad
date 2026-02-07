@@ -22,6 +22,7 @@ import { VideoAddedForTerm } from '../commands/add-video-for-term/video-added-fo
 import { PROMPT_TERM_CREATED } from '../commands/create-prompt-term/constants';
 import { TERM_ELICITED_FROM_PROMPT } from '../commands/elicit-term-from-prompt/constants';
 import { LiteralTranslationOfTermProvided } from '../commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
+import { PromptRegisteredForExistingTerm } from '../commands/register-prompt-for-existing-term/prompt-registered-for-existing-term.event';
 import { TERM_TRANSLATED } from '../commands/translate-term/constants';
 import { Term } from './term.entity';
 
@@ -116,6 +117,41 @@ describe(`Term.fromEventHistory`, () => {
                     const { eventHistory } = result as Term;
 
                     expect(eventHistory).toHaveLength(1);
+                });
+            });
+
+            describe(`when a prompt has been registered for an existing term`, () => {
+                it(`should convert the term to a prompt term`, () => {
+                    const promptText = 'kitty';
+
+                    const result = Term.fromEventHistory(
+                        termCreated
+                            .andThen<PromptRegisteredForExistingTerm>({
+                                type: 'PROMPT_REGISTERED_FOR_EXISTING_TERM',
+                                payload: {
+                                    text: promptText,
+                                },
+                            })
+                            .as({
+                                type: AggregateType.term,
+                                id: termId,
+                            }),
+                        termId
+                    );
+
+                    expect(result).toBeInstanceOf(Term);
+
+                    const updatedTerm = result as Term;
+
+                    expect(updatedTerm.isPromptTerm).toBe(true);
+
+                    const originalTextItem = updatedTerm.text.getOriginalTextItem();
+
+                    expect(originalTextItem.languageCode).toBe(LanguageCode.English);
+
+                    expect(originalTextItem.text).toBe(promptText);
+
+                    expect(updatedTerm.text.has(originalLanguageCode)).toBe(true);
                 });
             });
 
