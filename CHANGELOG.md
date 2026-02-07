@@ -2,12 +2,13 @@
 
 ## <NEXT>
 
-### Optimized Note Queries
+### Full Support for Notes and Connections
 
 In this release, we have continued to improve note and connection queries in terms
 of performance as well as consistency with the way queries are handled for
 resources.
 
+-   feat: introduce GRANT_USER_READ_ACCESS_TO_NOTE (#811)
 -   refactor: persist note and connection events globally (#810)
 
 ## v0.1.1
