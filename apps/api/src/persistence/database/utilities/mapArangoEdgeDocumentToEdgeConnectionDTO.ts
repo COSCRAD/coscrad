@@ -96,6 +96,7 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
         _from,
         eventHistory,
         isPublished,
+        queryAccessControlList,
     } = document;
 
     if ([_to, _from, id].some(isNullOrUndefined)) {
@@ -120,6 +121,7 @@ export default (document: ArangoEdgeDocument): DTO<EdgeConnection> => {
     return {
         type: AggregateType.note,
         isPublished,
+        queryAccessControlList,
         connectionType: determineEdgeConnectionTypeFromDocument(document),
         audioForNote,
         id,
