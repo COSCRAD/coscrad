@@ -4,6 +4,7 @@ import {
     EdgeConnectionMemberRole,
     EdgeConnectionType,
 } from '../../../domain/models/context/edge-connection.entity';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { BaseEvent } from '../../../domain/models/shared/events/base-event.entity';
 import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
@@ -20,6 +21,8 @@ type ArangoEdgeMemberContext = {
 
 type ArangoEdgeDocumentWithoutSystemAttributes = {
     type: typeof AggregateType.note;
+
+    queryAccessControlList: DTO<AccessControlList>;
 
     isPublished: boolean;
 

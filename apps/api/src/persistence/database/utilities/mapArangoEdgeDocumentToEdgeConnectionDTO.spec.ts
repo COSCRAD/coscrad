@@ -10,6 +10,7 @@ import {
 import { GeneralContext } from '../../../domain/models/context/general-context/general-context.entity';
 import { TimeRangeContext } from '../../../domain/models/context/time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../../domain/models/context/types/EdgeConnectionContextType';
+import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import { MultilingualAudio } from '../../../domain/models/shared/multilingual-audio/multilingual-audio.entity';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { ResourceType } from '../../../domain/types/ResourceType';
@@ -47,6 +48,8 @@ const selfDocument: ArangoEdgeDocument = {
     _to: 'audio_items/55',
     _from: 'audio_items/55',
     isPublished: true,
+    queryAccessControlList: new AccessControlList(),
+
     type: AggregateType.note,
     eventHistory: [],
     connectionType: EdgeConnectionType.self,
@@ -64,6 +67,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
     type: AggregateType.note,
     isPublished: true,
+    queryAccessControlList: new AccessControlList(),
     connectionType: EdgeConnectionType.self,
     note: buildMultilingualTextWithSingleItem('These pages are about deer', languageCodeForNote),
     members: [
@@ -85,6 +89,8 @@ const dualEdgeDocument: ArangoEdgeDocument = {
     _to: 'digital_texts/11',
     _from: 'audio_items/55',
     isPublished: false,
+    queryAccessControlList: new AccessControlList(),
+
     connectionType: EdgeConnectionType.dual,
     eventHistory: [],
     type: AggregateType.note,
@@ -110,6 +116,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
     connectionType: EdgeConnectionType.dual,
     id: '234',
     isPublished: false,
+    queryAccessControlList: new AccessControlList(),
     note: buildMultilingualTextWithSingleItem(
         'the elder discusses this book in this part of the recording',
         languageCodeForNote

@@ -120,7 +120,8 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
     // TODO Put this on the Aggregate classes
     protected abstract validateExternalState(
         state: InMemorySnapshot,
-        instance: TAggregate
+        instance: TAggregate,
+        command?: ICommand
     ): Valid | InternalError;
 
     // can we make this `buildEvents` now?
@@ -225,7 +226,8 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
 
         const externalStateValidationResult = this.validateExternalState(
             externalState,
-            updatedInstance
+            updatedInstance,
+            command
         );
 
         if (isInternalError(externalStateValidationResult))

@@ -37,6 +37,10 @@ import { ResourcesConnectedWithNoteEventHandler } from '../../domain/models/cont
 import { NoteAboutResourceCreated } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../domain/models/context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ResourceNoteDenormalizer } from '../../domain/models/context/commands/create-note-about-resource/resource-note.denormalizer.event-handler';
+import { GrantUserReadAccessToNote } from '../../domain/models/context/commands/grant-user-read-access-to-note/grant-note-read-access-to-user.command';
+import { GrantUserReadAccessToNoteCommandHandler } from '../../domain/models/context/commands/grant-user-read-access-to-note/grant-note-read-access-to-user.command-handler';
+import { NoteReadAccessGrantedToUser } from '../../domain/models/context/commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event';
+import { NoteReadAccessGrantedToUserEventHandler } from '../../domain/models/context/commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event-handler';
 import { EdgePublished } from '../../domain/models/context/commands/publish-note/edge-published.event';
 import { EdgePublishedEventHandler } from '../../domain/models/context/commands/publish-note/edge-published.event-handler';
 import { PublishEdge } from '../../domain/models/context/commands/publish-note/publish-edge.command';
@@ -74,12 +78,14 @@ import { CoscradNLPModule } from '../../lib/nlp';
             ConnectResourcesWithNote,
             TranslateNote,
             AddAudioForNote,
+            GrantUserReadAccessToNote,
             // Events
             NoteAboutResourceCreated,
             ResourcesConnectedWithNote,
             NoteTranslated,
             AudioAddedForNote,
             EdgePublished,
+            NoteReadAccessGrantedToUser,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -90,12 +96,14 @@ import { CoscradNLPModule } from '../../lib/nlp';
         TranslateNoteCommandHandler,
         AddAudioForNoteCommandHandler,
         PublishEdgeCommandHandler,
+        GrantUserReadAccessToNoteCommandHandler,
         // Event Handlers
         NoteAboutResourceCreatedEventHandler,
         ResourcesConnectedWithNoteEventHandler,
         NoteTranslatedEventHandler,
         AudioAddedForNoteEventHandler,
         EdgePublishedEventHandler,
+        NoteReadAccessGrantedToUserEventHandler,
         // Denormalizers
         ResourceNoteDenormalizer,
         ResourceConnectionDenormalizer,

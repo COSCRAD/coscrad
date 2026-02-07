@@ -16,6 +16,7 @@ import { buildMultilingualTextWithSingleItem } from '../../common/build-multilin
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateId } from '../../types/AggregateId';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 
 class EdgeConnectionMemberViewModel {
@@ -68,6 +69,7 @@ class ConnectedResources {
         type: AggregateType.note,
         id: buildDummyUuid(5),
         isPublished: false,
+        accessControlList: new AccessControlList(),
         // name: buildMultilingualTextWithSingleItem('breeze'),
         text: buildMultilingualTextWithSingleItem('this is the note for breeze'),
         audio: MultilingualAudio.buildEmpty(),
@@ -128,6 +130,13 @@ export class EventSourcedNoteViewModel {
     })
     isPublished: boolean;
 
+    // TODO remove this in queries
+    @NestedDataType(AccessControlList, {
+        label: 'query ACL',
+        description: 'a list of users and groups that can access this note',
+    })
+    accessControlList: AccessControlList;
+
     constructor({
         connectionType,
         id,
@@ -136,6 +145,7 @@ export class EventSourcedNoteViewModel {
         connectedResources,
         tags,
         audio,
+        accessControlList: queryAccessControlList,
     }: DTO<EventSourcedNoteViewModel>) {
         this.id = id;
 
@@ -159,6 +169,10 @@ export class EventSourcedNoteViewModel {
 
         if (audio.items.length > 1) {
             console.log('foo u 2');
+        }
+
+        if (isNonEmptyObject(queryAccessControlList)) {
+            this.accessControlList = new AccessControlList(queryAccessControlList);
         }
 
         this.isPublished = typeof isPublished === 'boolean' ? isPublished : false;

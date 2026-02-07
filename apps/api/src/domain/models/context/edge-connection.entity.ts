@@ -51,12 +51,15 @@ import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
 } from '../build-aggregate-root-from-event-history';
+import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
+import UserAlreadyHasReadAccessError from '../shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
 import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
+import { NoteReadAccessGrantedToUser } from './commands/grant-user-read-access-to-note/note-read-access-granted-to-user.event';
 import { EdgePublished } from './commands/publish-note/edge-published.event';
 import { ContextUnionType } from './edge-connection-context-union';
 import { EdgeAlreadyPublishedError } from './errors';
@@ -180,6 +183,12 @@ export class EdgeConnection extends Aggregate {
     })
     isPublished: boolean;
 
+    @NestedDataType(AccessControlList, {
+        label: 'query ACL',
+        description: 'list of users and groups who have read access to this resource',
+    })
+    queryAccessControlList?: AccessControlList;
+
     constructor(dto: DTO<EdgeConnection>) {
         super(dto);
 
@@ -191,6 +200,7 @@ export class EdgeConnection extends Aggregate {
             connectionType: type,
             audioForNote: audioForNoteDto,
             isPublished,
+            queryAccessControlList: aclDto,
         } = dto;
 
         this.connectionType = type;
@@ -200,6 +210,7 @@ export class EdgeConnection extends Aggregate {
         } else {
             this.isPublished = false;
         }
+        this.queryAccessControlList = new AccessControlList(aclDto);
 
         this.members = members.map((dto) => new EdgeConnectionMember(dto));
 
@@ -336,6 +347,16 @@ export class EdgeConnection extends Aggregate {
         return this;
     }
 
+    @UpdateMethod()
+    grantReadAccessToUser(userId: AggregateId): ResultOrError<EdgeConnection> {
+        if (this.queryAccessControlList.canUser(userId))
+            return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
+
+        this.queryAccessControlList = this.queryAccessControlList.allowUser(userId);
+
+        return this;
+    }
+
     getMemberWithRole(role: EdgeConnectionMemberRole): Maybe<EdgeConnectionMember> {
         return this.members.find((member) => member.role === role) || NotFound;
     }
@@ -356,6 +377,10 @@ export class EdgeConnection extends Aggregate {
 
     handleEdgePublished(_event: EdgePublished) {
         return this.publish();
+    }
+
+    handleNoteReadAccessGrantedToUser({ payload: { userId } }: NoteReadAccessGrantedToUser) {
+        return this.grantReadAccessToUser(userId);
     }
 
     public static fromEventHistory(

@@ -20,6 +20,7 @@ import convertResourceCompositeIdentifierToArangoDocumentHandle from '../../../.
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import { DTO } from '../../../../types/DTO';
 import { AggregateId } from '../../../types/AggregateId';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
@@ -277,6 +278,12 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         await this.database.query(this.baseResourceQueryBuilder.publish(id));
     }
 
+    async allowUser(noteId: AggregateId, userId: AggregateId): Promise<void> {
+        const query = this.baseResourceQueryBuilder.allowUser(noteId, userId);
+
+        await this.database.query(query);
+    }
+
     async addAudio(
         noteId: AggregateId,
         audioItemId: AggregateId,
@@ -322,6 +329,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             id,
             // notes are unpublished upon creation
             isPublished: false,
+            // empty by default
+            accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.self,
             text,
             connectedResources: {
@@ -359,6 +368,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             id,
             // connections are unpublished upon creation
             isPublished: false,
+            // empty by default
+            accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.dual,
             text,
             connectedResources: {

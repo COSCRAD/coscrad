@@ -98,6 +98,7 @@ export abstract class Resource extends Aggregate {
             : [];
     }
 
+    @UpdateMethod()
     grantReadAccessToUser<T extends Resource>(this: T, userId: AggregateId): ResultOrError<T> {
         if (this.queryAccessControlList.canUser(userId))
             return new UserAlreadyHasReadAccessError(userId, this.getCompositeIdentifier());
@@ -105,13 +106,6 @@ export abstract class Resource extends Aggregate {
         return this.safeClone({
             queryAccessControlList: this.queryAccessControlList.allowUser(userId),
         } as DeepPartial<DTO<T>>);
-    }
-
-    handleResourceReadAccessGrantedToUser<T extends Resource>(
-        this: T,
-        { payload: { userId } }: ResourceReadAccessGrantedToUser
-    ) {
-        return this.grantReadAccessToUser(userId);
     }
 
     @UpdateMethod()
@@ -167,6 +161,13 @@ export abstract class Resource extends Aggregate {
             contributorIds,
             type: contributionType,
         });
+    }
+
+    handleResourceReadAccessGrantedToUser<T extends Resource>(
+        this: T,
+        { payload: { userId } }: ResourceReadAccessGrantedToUser
+    ) {
+        return this.grantReadAccessToUser(userId);
     }
 
     getAllowedContextTypes() {

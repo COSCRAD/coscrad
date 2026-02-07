@@ -66,6 +66,11 @@ export class AccessControlList extends BaseDomainModel {
         return hasAccess;
     }
 
+    getIdsOfUsersWithAccess() {
+        // shallow clone
+        return [...this.allowedUserIds];
+    }
+
     canGroup(groupId: AggregateId) {
         return this.allowedGroupIds.includes(groupId);
     }
