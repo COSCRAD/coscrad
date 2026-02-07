@@ -11,6 +11,7 @@ import {
 } from '../../../app/controllers/command/services/command-info-service';
 import { mixLinkIntoViewModelDescription } from '../../../app/controllers/utilities';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { isNotFound } from '../../../lib/types/not-found';
 import { buildAllAggregateDescriptions } from '../../../queries/resourceDescriptions';
 import { ResultOrError } from '../../../types/ResultOrError';
 import {
@@ -52,7 +53,16 @@ export class EdgeConnectionQueryService {
     }
 
     async fetchById(id: AggregateId, systemUser?: CoscradUserWithGroups) {
-        return this.noteQueryRepository.fetchById(id, systemUser);
+        const result = await this.noteQueryRepository.fetchById(id, systemUser);
+
+        if (isInternalError(result) || isNotFound(result)) {
+            return result;
+        }
+
+        // we do not want to expose other user IDs to non-admin users at this point
+        delete result.accessControlList;
+
+        return result;
     }
 
     /**
@@ -72,10 +82,15 @@ export class EdgeConnectionQueryService {
         const { count, entities, page } = result;
 
         return {
-            entities: entities.map((e) => ({
-                ...e,
-                actions: [],
-            })),
+            entities: entities.map((e) => {
+                // we do not want to expose other user IDs to non-admin users at this point
+                delete e.accessControlList;
+
+                return {
+                    ...e,
+                    actions: [],
+                };
+            }),
             page,
             count,
             // TODO insert available commands

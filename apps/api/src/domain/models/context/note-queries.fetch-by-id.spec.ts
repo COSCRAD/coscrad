@@ -41,6 +41,8 @@ import {
     NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
 } from './repositories/note-query-repository.interface';
 
+const userId = buildDummyUuid(125);
+
 const buildDetailEndpoint = (id: AggregateId) => `/webOfKnowledge/${id}`;
 
 const WIDGET_COLLECTION = 'widget__VIEWS';
@@ -355,6 +357,7 @@ describe(`when querying for a note: fetch by Id`, () => {
     describe(`when the user is an ordinary user (viewer)`, () => {
         beforeAll(async () => {
             const ordinaryUser = buildTestInstance(CoscradUser, {
+                id: userId,
                 roles: [CoscradUserRole.viewer],
             });
 
@@ -415,9 +418,33 @@ describe(`when querying for a note: fetch by Id`, () => {
             });
         });
 
-        describe(`when the edge is not published`, () => {
-            describe(`when searching for an unpublished note`, () => {
-                describe(`when there is a note with the given ID`, () => {
+        describe(`when the note or connection is private`, () => {
+            describe(`when the user does not have ACL based read access`, () => {
+                describe(`when searching for an unpublished note`, () => {
+                    describe(`when there is a note with the given ID`, () => {
+                        beforeEach(async () => {
+                            await widgetQueryRepository.create(fromMemberWidget);
+
+                            await noteQueryRepository.createNoteAbout(
+                                noteAboutWidget,
+                                fromMemberWidget.getCompositeIdentifier(),
+                                generalContext
+                            );
+                        });
+
+                        it(`should return not found`, async () => {
+                            const endpoint = buildDetailEndpoint(noteAboutWidget.id);
+
+                            const res = await request(app.getHttpServer()).get(endpoint);
+
+                            expect(res.status).toBe(HttpStatusCode.notFound);
+                        });
+                    });
+                });
+            });
+
+            describe(`when the user has ACL based read access`, () => {
+                describe(`when searching for a simple note`, () => {
                     beforeEach(async () => {
                         await widgetQueryRepository.create(fromMemberWidget);
 
@@ -426,14 +453,18 @@ describe(`when querying for a note: fetch by Id`, () => {
                             fromMemberWidget.getCompositeIdentifier(),
                             generalContext
                         );
+
+                        await noteQueryRepository.allowUser(noteAboutWidget.id, userId);
                     });
 
-                    it(`should return not found`, async () => {
+                    it(`should return the expected result`, async () => {
                         const endpoint = buildDetailEndpoint(noteAboutWidget.id);
 
                         const res = await request(app.getHttpServer()).get(endpoint);
 
-                        expect(res.status).toBe(HttpStatusCode.notFound);
+                        expect(res.status).toBe(HttpStatusCode.ok);
+
+                        expect(res.body.text.items).toEqual(noteAboutWidget.text.items);
                     });
                 });
             });
