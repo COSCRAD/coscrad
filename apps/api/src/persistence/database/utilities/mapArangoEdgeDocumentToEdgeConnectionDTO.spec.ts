@@ -67,6 +67,7 @@ const selfEdgeConnection: DTO<EdgeConnection> = {
     id: '5',
     type: AggregateType.note,
     isPublished: true,
+    queryAccessControlList: new AccessControlList(),
     connectionType: EdgeConnectionType.self,
     note: buildMultilingualTextWithSingleItem('These pages are about deer', languageCodeForNote),
     members: [
@@ -115,6 +116,7 @@ const dualEdgeConnection: DTO<EdgeConnection> = {
     connectionType: EdgeConnectionType.dual,
     id: '234',
     isPublished: false,
+    queryAccessControlList: new AccessControlList(),
     note: buildMultilingualTextWithSingleItem(
         'the elder discusses this book in this part of the recording',
         languageCodeForNote
