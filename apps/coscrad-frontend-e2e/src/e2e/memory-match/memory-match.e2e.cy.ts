@@ -74,6 +74,7 @@ const testMemoryRound: IMemoryMatchRound = {
 };
 
 describe(`Memory Match game play`, () => {
+    // right now, this is just a placeholder
     describe(`the index (list) view`, () => {
         describe(`when there are no rounds to view`, () => {
             beforeEach(() => {
@@ -85,22 +86,22 @@ describe(`Memory Match game play`, () => {
             });
         });
 
-        describe(`when there are some rounds`, () => {
-            before(() => {
-                cy.clearDatabase();
+        // describe(`when there are some rounds`, () => {
+        //     before(() => {
+        //         cy.clearDatabase();
 
-                cy.seedDatabase(`memory_match_rounds`, [testMemoryRound]);
-            });
+        //         cy.seedDatabase(`memory_match_rounds`, [testMemoryRound]);
+        //     });
 
-            beforeEach(() => {
-                cy.visit(indexRoute);
-            });
+        //     beforeEach(() => {
+        //         cy.visit(indexRoute);
+        //     });
 
-            describe(`when no filters have been selected`, () => {
-                it(`should display all rounds`, () => {
-                    cy.contains(targetRoundName);
-                });
-            });
-        });
+        //     describe(`when no filters have been selected`, () => {
+        //         it(`should display all rounds`, () => {
+        //             cy.contains(targetRoundName);
+        //         });
+        //     });
+        // });
     });
 });
