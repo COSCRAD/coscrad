@@ -68,7 +68,7 @@ export class AccessControlList extends BaseDomainModel {
 
     getIdsOfUsersWithAccess() {
         // shallow clone
-        return this.allowedUserIds.map((i) => i);
+        return [...this.allowedUserIds];
     }
 
     canGroup(groupId: AggregateId) {

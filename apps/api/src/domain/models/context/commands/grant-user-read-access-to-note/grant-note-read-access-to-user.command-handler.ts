@@ -1,18 +1,18 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { Valid } from '../../../../../domain/domainModelValidators/Valid';
-import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
-import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { ResultOrError } from '../../../../../types/ResultOrError';
+import { Valid } from '../../../../domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { InMemorySnapshot } from '../../../../types/ResourceType';
 import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-update-command-handler';
 import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { EdgeConnection } from '../../edge-connection.entity';
-import { GrantUserReadAccessToNote } from './grant-user-read-access-to-note.command';
+import { GrantUserReadAccessToNote } from './grant-note-read-access-to-user.command';
 import { NoteReadAccessGrantedToUser } from './note-read-access-granted-to-user.event';
 
 @CommandHandler(GrantUserReadAccessToNote)

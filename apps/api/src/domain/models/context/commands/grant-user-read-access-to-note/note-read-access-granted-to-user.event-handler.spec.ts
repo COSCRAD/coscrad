@@ -27,6 +27,8 @@ const targetEdgeId = buildDummyUuid(101);
 
 const userId = buildDummyUuid(123);
 
+const WIDGET_TYPE = 'widget' as ResourceType;
+
 const readAccessGranted = buildTestInstance(NoteReadAccessGrantedToUser, {
     payload: {
         aggregateCompositeIdentifier: {
@@ -36,10 +38,29 @@ const readAccessGranted = buildTestInstance(NoteReadAccessGrantedToUser, {
     },
 });
 
-const testWidgetDoc = {
+const testFromWidgetDoc = {
     _key: buildDummyUuid(123),
     label: 'my widget',
 };
+
+const fromMemberCompositeId = {
+    type: WIDGET_TYPE,
+    id: testFromWidgetDoc._key,
+};
+
+const testToWidgetDoc = {
+    _key: buildDummyUuid(124),
+    label: 'another widget',
+};
+
+const toMemberCompositeId = {
+    type: WIDGET_TYPE,
+    id: testToWidgetDoc._key,
+};
+
+const generalContext = {
+    type: 'general',
+} as const;
 
 describe(`NoteReadAccessGrantedToUserEventHandler`, () => {
     let handler: NoteReadAccessGrantedToUserEventHandler;
@@ -78,45 +99,87 @@ describe(`NoteReadAccessGrantedToUserEventHandler`, () => {
     });
 
     describe(`when the note view exists`, () => {
-        beforeEach(async () => {
-            await app.get(ArangoDatabaseProvider).clearViews();
+        describe(`when it is a simple note`, () => {
+            beforeEach(async () => {
+                await app.get(ArangoDatabaseProvider).clearViews();
 
-            await app
-                .get(ArangoDatabaseProvider)
-                .getDatabaseForCollection('widget__VIEWS')
-                .create(testWidgetDoc);
+                await app
+                    .get(ArangoDatabaseProvider)
+                    .getDatabaseForCollection('widget__VIEWS')
+                    .create(testFromWidgetDoc);
 
-            await edgeQueryRepository.createNoteAbout(
-                buildTestInstance(EventSourcedNoteViewModel, {
-                    id: targetEdgeId,
-                    connectionType: EdgeConnectionType.self,
-                    connectedResources: {
-                        self: {
-                            resource: {
-                                type: 'widget' as ResourceType,
-                                id: buildDummyUuid(34),
+                await edgeQueryRepository.createNoteAbout(
+                    buildTestInstance(EventSourcedNoteViewModel, {
+                        id: targetEdgeId,
+                        connectionType: EdgeConnectionType.self,
+                        connectedResources: {
+                            self: {
+                                resource: {
+                                    type: 'widget' as ResourceType,
+                                    id: buildDummyUuid(34),
+                                },
                             },
                         },
+                    }),
+                    {
+                        type: 'widget' as ResourceType,
+                        id: testFromWidgetDoc._key,
                     },
-                }),
-                {
-                    type: 'widget' as ResourceType,
-                    id: testWidgetDoc._key,
-                },
-                {
-                    type: EdgeConnectionContextType.general,
-                }
-            );
+                    {
+                        type: EdgeConnectionContextType.general,
+                    }
+                );
+            });
+
+            it(`should add the user to the query ACL`, async () => {
+                await handler.handle(readAccessGranted);
+
+                const updatedView = (await edgeQueryRepository.fetchById(
+                    targetEdgeId
+                )) as EventSourcedNoteViewModel;
+
+                expect(updatedView.accessControlList.canUser(userId)).toBe(true);
+            });
         });
 
-        it(`should add the user to the query ACL`, async () => {
-            await handler.handle(readAccessGranted);
+        describe(`when it is a connection`, () => {
+            beforeEach(async () => {
+                await app.get(ArangoDatabaseProvider).clearViews();
 
-            const updatedView = (await edgeQueryRepository.fetchById(
-                targetEdgeId
-            )) as EventSourcedNoteViewModel;
+                await app
+                    .get(ArangoDatabaseProvider)
+                    .getDatabaseForCollection('widget__VIEWS')
+                    .createMany([testFromWidgetDoc, testToWidgetDoc]);
 
-            expect(updatedView.accessControlList.canUser(userId)).toBe(true);
+                await edgeQueryRepository.connectResourcesWithNote(
+                    buildTestInstance(EventSourcedNoteViewModel, {
+                        id: targetEdgeId,
+                        connectionType: EdgeConnectionType.self,
+                        connectedResources: {
+                            from: {
+                                resource: fromMemberCompositeId,
+                            },
+                            to: {
+                                resource: toMemberCompositeId,
+                            },
+                        },
+                    }),
+                    fromMemberCompositeId,
+                    generalContext,
+                    toMemberCompositeId,
+                    generalContext
+                );
+            });
+
+            it(`should add the user to the query ACL`, async () => {
+                await handler.handle(readAccessGranted);
+
+                const updatedView = (await edgeQueryRepository.fetchById(
+                    targetEdgeId
+                )) as EventSourcedNoteViewModel;
+
+                expect(updatedView.accessControlList.canUser(userId)).toBe(true);
+            });
         });
     });
 });

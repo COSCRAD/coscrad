@@ -1,8 +1,8 @@
 import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { NestedDataType, ReferenceTo, UUID } from '@coscrad/data-types';
-import { CoscradDataExample } from '../../../../../../src/test-data/utilities';
-import { AggregateId } from '../../../../../domain/types/AggregateId';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { AggregateId } from '../../../../types/AggregateId';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EdgeConnectionCompositeIdentifier } from '../create-note-about-resource';
 
@@ -16,7 +16,7 @@ import { EdgeConnectionCompositeIdentifier } from '../create-note-about-resource
     },
 })
 @Command({
-    type: 'GRANT_USER_READ_ACCESS_TO_NOTE',
+    type: 'GRANT_NOTE_READ_ACCESS_TO_USER',
     label: 'Grant Read Access to Note',
     description: 'Allow a user to view (but not edit) a given note',
 })

@@ -5,9 +5,9 @@ import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
-import { GrantUserReadAccessToNote } from './grant-user-read-access-to-note.command';
+import { GrantUserReadAccessToNote } from './grant-note-read-access-to-user.command';
 
-const commandType = 'PUBLISH_EDGE';
+const commandType = 'GRANT_NOTE_READ_ACCESS_TO_USER';
 
 const commandFsaFactory = new DummyCommandFsaFactory<GrantUserReadAccessToNote>(() => ({
     type: commandType,

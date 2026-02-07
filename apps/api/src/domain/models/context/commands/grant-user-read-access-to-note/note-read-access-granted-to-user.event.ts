@@ -1,3 +1,4 @@
+import { NestedDataType, UUID } from '@coscrad/data-types';
 import { CoscradEvent } from '../../../../../domain/common';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
@@ -6,11 +7,20 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { EdgeConnectionCompositeIdentifier } from '../create-note-about-resource';
 
-export type NoteReadAccessGrantedToUserPayload = {
+export class NoteReadAccessGrantedToUserPayload {
+    @NestedDataType(EdgeConnectionCompositeIdentifier, {
+        label: 'composite identifier',
+        description: 'global reference to this note',
+    })
     readonly aggregateCompositeIdentifier: EdgeConnectionCompositeIdentifier;
 
+    @UUID({
+        label: 'user ID',
+        description:
+            'unique system identifier for the user who has been granted access to this note',
+    })
     readonly userId: AggregateId;
-};
+}
 
 const testEventId = buildDummyUuid(1);
 
