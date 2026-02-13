@@ -518,6 +518,7 @@ const buildPromptRegisteredForExistingTerm = (
             id: buildDummyUuid(7),
         },
         text: 'singing',
+        languageCode: LanguageCode.English,
     };
 
     return new PromptRegisteredForExistingTerm(

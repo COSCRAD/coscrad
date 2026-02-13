@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
@@ -37,6 +38,10 @@ export class RegisterPromptForExistingTermCommandHandler extends BaseUpdateComma
         payload: RegisterPromptForExistingTerm,
         eventMeta: EventRecordMetadata
     ): BaseEvent {
-        return new PromptRegisteredForExistingTerm(payload, eventMeta);
+        // we currently only support english prompts
+        return new PromptRegisteredForExistingTerm(
+            { ...payload, languageCode: LanguageCode.English },
+            eventMeta
+        );
     }
 }

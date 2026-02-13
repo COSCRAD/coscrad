@@ -42,9 +42,6 @@ const lettersInElicitedTerm = [
     [sCap, 'i', 'n', 'j', 'e', 'n'],
 ];
 
-// 'ŝ' is the one from the virtual keyboard
-const _foo = [0, 1].map((index) => 'ŝ'.charCodeAt(index));
-
 const elicitedTermText = `Lha ŝinjen`;
 
 const promptTermCreated = new TestEventStream().andThen<PromptTermCreated>({

@@ -1,12 +1,18 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
-import { RegisterPromptForExistingTerm } from './register-prompt-for-existing-term.command';
+import { TermCompositeIdentifier } from '../create-term';
 
-export type PromptRegisteredForExistingTermPayload = RegisterPromptForExistingTerm;
+export class PromptRegisteredForExistingTermPayload {
+    aggregateCompositeIdentifier: TermCompositeIdentifier;
+
+    text: string;
+
+    languageCode: LanguageCode;
+}
 
 const testEventId = buildDummyUuid(5);
 
@@ -20,6 +26,7 @@ const testEventId = buildDummyUuid(5);
                 id: buildDummyUuid(3),
             },
             text: 'I am not fast',
+            languageCode: LanguageCode.English,
         },
         meta: {
             userId: buildDummyUuid(76),
