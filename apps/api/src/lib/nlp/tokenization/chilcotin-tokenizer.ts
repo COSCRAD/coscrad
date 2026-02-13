@@ -1,6 +1,7 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { ITokenizer, Token } from '../types/tokenizer.dto';
+import { Token } from '../types/tokenizer.dto';
 import { ChilcotinAlphabetParser } from './chilcotin-alphabet-parser';
+import { ITokenizer } from './tokenizer.interface';
 
 /**
  * TODO Split this out into an `@coscrad/nlp` lib. This could potentially belong with
