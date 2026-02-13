@@ -18,7 +18,9 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
+import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
+import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -51,6 +53,14 @@ const validFsa = {
         aggregateCompositeIdentifier: { id: termId },
     }),
 };
+
+const existingPromptTerm = buildTestTerm({
+    isPromptTerm: true,
+    text: buildMultilingualTextWithSingleItem('existing text in english', LanguageCode.English),
+    aggregateCompositeIdentifier: {
+        id: termId,
+    },
+});
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -185,7 +195,65 @@ describe(commandType, () => {
         });
 
         describe(`when the language code of the prompt is the same as the language code for the existing text`, () => {
-            it(`should fail with the expected error`, async () => {});
+            it(`should fail with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(AggregateType.term)
+                            .create(existingPromptTerm);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        assertErrorAsExpected(
+                            error,
+                            new CommandExecutionError([
+                                new CannotPromptFromExistingPromptTerm(
+                                    validFsa.payload.aggregateCompositeIdentifier.id
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
         });
+
+        describe(`when the payload has an invalid type`, () => {
+            describe(`when the aggregate type is not term`, () => {
+                Object.values(AggregateType)
+                    .filter((aggregateType) => aggregateType !== AggregateType.term)
+                    .forEach((invalidType) => {
+                        describe(`when aggregateType is ${invalidType}`, () => {
+                            it(`should fail with a type error`, async () => {
+                                await assertCommandFailsDueToTypeError(
+                                    assertionHelperDependencies,
+                                    {
+                                        propertyName: `aggregateCompositeIdentifier`,
+                                        invalidValue: {
+                                            type: invalidType,
+                                            id: existingTerm.id,
+                                        },
+                                    },
+                                    validFsa
+                                );
+                            });
+                        });
+                    });
+            });
+        });
+
+        generateCommandFuzzTestCases(RegisterPromptForExistingTerm).forEach(
+            ({ description, propertyName, invalidValue }) => {
+                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                    it('should fail with the appropriate error', async () => {
+                        await assertCommandFailsDueToTypeError(
+                            assertionHelperDependencies,
+                            { propertyName, invalidValue },
+                            validFsa
+                        );
+                    });
+                });
+            }
+        );
     });
 });

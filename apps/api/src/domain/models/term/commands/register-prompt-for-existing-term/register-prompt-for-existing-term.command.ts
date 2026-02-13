@@ -31,7 +31,7 @@ export class RegisterPromptForExistingTerm implements ICommandBase {
         description: 'text for the term (in English)',
     })
     /**
-     * English only for now
+     * in the future we will support a languageCode. For now, we default to English
      */
     text: string;
 }
