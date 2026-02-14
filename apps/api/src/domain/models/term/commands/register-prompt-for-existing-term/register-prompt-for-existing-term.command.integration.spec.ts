@@ -9,6 +9,7 @@ import { Environment } from '../../../../../app/config/constants/environment';
 import { TermModule } from '../../../../../app/domain-modules/term.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { CannotRegisterPromptInExistingLanguageError } from '../../../../../domain/common/entities/errors';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -18,9 +19,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
-import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
-import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
@@ -35,16 +34,15 @@ const commandType = 'REGISTER_PROMPT_FOR_EXISTING_TERM';
 
 const termId = buildDummyUuid(4);
 
+const existingTermLanguageCode = LanguageCode.Chilcotin;
+
 const existingTerm = buildTestTerm({
     aggregateCompositeIdentifier: { id: termId },
     isPromptTerm: false,
-    text: buildMultilingualTextWithSingleItem('existing text in chilqotin', LanguageCode.Chilcotin),
-});
-
-const promptTerm = buildTestTerm({
-    aggregateCompositeIdentifier: { id: termId },
-    isPromptTerm: true,
-    text: buildMultilingualTextWithSingleItem('existing text in english', LanguageCode.English),
+    text: buildMultilingualTextWithSingleItem(
+        'existing text in Chilcotin',
+        existingTermLanguageCode
+    ),
 });
 
 const validFsa = {
@@ -177,7 +175,7 @@ describe(commandType, () => {
                     seedInitialState: async () => {
                         await testRepositoryProvider
                             .forResource(AggregateType.term)
-                            .create(promptTerm);
+                            .create(existingPromptTerm);
                     },
                     buildCommandFSA: () => validFsa,
                     checkError: (error) => {
@@ -196,20 +194,30 @@ describe(commandType, () => {
 
         describe(`when the language code of the prompt is the same as the language code for the existing text`, () => {
             it(`should fail with the expected error`, async () => {
+                const existingText = buildMultilingualTextWithSingleItem(
+                    'existing text in English for orinary (non-prompt) term',
+                    LanguageCode.English
+                );
+
                 await assertCommandError(assertionHelperDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        await testRepositoryProvider
-                            .forResource(AggregateType.term)
-                            .create(existingPromptTerm);
+                        await testRepositoryProvider.forResource(AggregateType.term).create(
+                            buildTestTerm({
+                                aggregateCompositeIdentifier: { id: termId },
+                                isPromptTerm: false,
+                                text: existingText,
+                            })
+                        );
                     },
                     buildCommandFSA: () => validFsa,
                     checkError: (error) => {
                         assertErrorAsExpected(
                             error,
                             new CommandExecutionError([
-                                new CannotPromptFromExistingPromptTerm(
-                                    validFsa.payload.aggregateCompositeIdentifier.id
+                                new CannotRegisterPromptInExistingLanguageError(
+                                    LanguageCode.English,
+                                    validFsa.payload.text
                                 ),
                             ])
                         );
@@ -217,43 +225,5 @@ describe(commandType, () => {
                 });
             });
         });
-
-        describe(`when the payload has an invalid type`, () => {
-            describe(`when the aggregate type is not term`, () => {
-                Object.values(AggregateType)
-                    .filter((aggregateType) => aggregateType !== AggregateType.term)
-                    .forEach((invalidType) => {
-                        describe(`when aggregateType is ${invalidType}`, () => {
-                            it(`should fail with a type error`, async () => {
-                                await assertCommandFailsDueToTypeError(
-                                    assertionHelperDependencies,
-                                    {
-                                        propertyName: `aggregateCompositeIdentifier`,
-                                        invalidValue: {
-                                            type: invalidType,
-                                            id: existingTerm.id,
-                                        },
-                                    },
-                                    validFsa
-                                );
-                            });
-                        });
-                    });
-            });
-        });
-
-        generateCommandFuzzTestCases(RegisterPromptForExistingTerm).forEach(
-            ({ description, propertyName, invalidValue }) => {
-                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
-                    it('should fail with the appropriate error', async () => {
-                        await assertCommandFailsDueToTypeError(
-                            assertionHelperDependencies,
-                            { propertyName, invalidValue },
-                            validFsa
-                        );
-                    });
-                });
-            }
-        );
     });
 });

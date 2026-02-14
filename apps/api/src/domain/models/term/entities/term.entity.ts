@@ -15,6 +15,7 @@ import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { CannotRegisterPromptInExistingLanguageError } from '../../../common/entities/errors';
 import {
     MultilingualText,
     MultilingualTextItem,
@@ -280,10 +281,17 @@ export class Term extends Resource {
     }
 
     @UpdateMethod()
-    registerPrompt(text: string): ResultOrError<Term> {
+    registerPrompt(
+        text: string,
+        languageCode: LanguageCode = LanguageCode.English
+    ): ResultOrError<Term> {
         if (this.isPromptTerm) return new CannotPromptFromExistingPromptTerm(this.id);
 
         const existingTextItem = this.text.getOriginalTextItem();
+
+        if (existingTextItem.languageCode === languageCode) {
+            return new CannotRegisterPromptInExistingLanguageError(languageCode, text);
+        }
 
         // currently the prompts are assumed to be in english
         const newMultilingualText = buildMultilingualTextWithSingleItem(text).translate({

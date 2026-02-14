@@ -16,9 +16,9 @@ import { RegisterPromptForExistingTerm } from './register-prompt-for-existing-te
 export class RegisterPromptForExistingTermCommandHandler extends BaseUpdateCommandHandler<Term> {
     protected actOnInstance(
         instance: Term,
-        { aggregateCompositeIdentifier: { id } }: RegisterPromptForExistingTerm
+        { text }: RegisterPromptForExistingTerm
     ): ResultOrError<Term> {
-        return instance.registerPrompt(id);
+        return instance.registerPrompt(text);
     }
 
     protected async fetchRequiredExternalState(
