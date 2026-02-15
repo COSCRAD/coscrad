@@ -36,7 +36,6 @@ export const focusDualConnectionOnResource =
         );
 
         return {
-            // @ts-expect-error Do we really need to expose the `ResourceType` enum to the client?
             compositeIdentifier: other.resource,
             selfContext: self.context,
             otherContext: other.context,

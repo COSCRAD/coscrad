@@ -13,13 +13,15 @@ type ConnectionMember = {
     context: IEdgeConnectionContext;
 };
 
+export interface IConnectionMembers {
+    self?: ConnectionMember;
+    to?: ConnectionMember;
+    from?: ConnectionMember;
+}
+
 export interface INoteViewModel extends IBaseViewModel {
     connectionType: EdgeConnectionType;
     // TODO remove this in favor of `text`
     note: IMultilingualText;
-    connectedResources: {
-        self?: ConnectionMember;
-        to?: ConnectionMember;
-        from?: ConnectionMember;
-    };
+    connectedResources: IConnectionMembers;
 }
