@@ -1,6 +1,7 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../domain/common';
 import { BaseEvent } from '../../../../../queries/event-sourcing';
+import { formatLanguageCode } from '../../../../../queries/presentation/formatLanguageCode';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
@@ -39,4 +40,8 @@ const testEventId = buildDummyUuid(5);
 @CoscradEvent('PROMPT_REGISTERED_FOR_EXISTING_TERM')
 export class PromptRegisteredForExistingTerm extends BaseEvent<PromptRegisteredForExistingTermPayload> {
     readonly type = 'PROMPT_REGISTERED_FOR_EXISTING_TERM';
+
+    override buildAttributionStatement(): string {
+        return `original ${formatLanguageCode(this.payload.languageCode)} prompt created by: `;
+    }
 }
