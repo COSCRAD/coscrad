@@ -2,6 +2,7 @@ import {
     EdgeConnectionType,
     LanguageCode,
     MultilingualTextItemRole,
+    PaginatedResponse,
     ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
@@ -465,7 +466,8 @@ describe(`ArangoNoteQueryRepository`, () => {
         });
 
         it(`should return the notes along with joined resource views`, async () => {
-            const result = await testQueryRepository.fetchMany();
+            const result =
+                (await testQueryRepository.fetchMany()) as PaginatedResponse<EventSourcedNoteViewModel>;
 
             expect(result.entities).toHaveLength(allNotes.length);
 

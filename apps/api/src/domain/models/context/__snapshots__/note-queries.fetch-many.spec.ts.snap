@@ -1,0 +1,224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a note: fetch many when the user is a system (COSCRAD) admin when some edges are published and some are not should return only the published edges and edges for which the user is in the query ACL 1`] = `
+{
+  "count": 6,
+  "entities": [
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "self": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+      "isPublished": true,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "self": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100102",
+      "isPublished": false,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "self": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "self",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100103",
+      "isPublished": false,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "from": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+        "to": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100006",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100104",
+      "isPublished": true,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "from": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+        "to": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100006",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+      "isPublished": false,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+    {
+      "actions": [],
+      "audio": {
+        "items": [],
+      },
+      "connectedResources": {
+        "from": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+            "type": "widget",
+          },
+        },
+        "to": {
+          "context": {
+            "type": "general",
+          },
+          "resource": {
+            "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100006",
+            "type": "widget",
+          },
+        },
+      },
+      "connectionType": "dual",
+      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100106",
+      "isPublished": false,
+      "tags": [],
+      "text": {
+        "items": [
+          {
+            "languageCode": "en",
+            "role": "original",
+            "text": "this is the note for breeze",
+          },
+        ],
+      },
+      "type": "note",
+    },
+  ],
+  "indexScopedActions": [],
+  "page": 1,
+}
+`;

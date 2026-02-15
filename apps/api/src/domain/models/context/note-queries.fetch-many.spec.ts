@@ -153,7 +153,6 @@ const generalContext = { type: EdgeConnectionContextType.general };
 const fromMemberWidget = buildTestInstance(WidgetViewModel, {
     id: buildDummyUuid(5),
     name: 'widget for the from member',
-    // TODO decide what to do with this
     notes: [],
 });
 
@@ -252,6 +251,7 @@ const privateNoteConnectingWidgetsWithUserAccess = buildTestInstance(EventSource
     },
 });
 
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-392] Ensure there is one connection test case for each self-note test case
 describe(`when querying for a note: fetch many`, () => {
     let app: INestApplication;
 
@@ -496,6 +496,8 @@ describe(`when querying for a note: fetch many`, () => {
                 expect(foundIds).toContain(privateNoteConnectingWidgets.id);
 
                 // this user should not see the private notes \ connections with an empty ACL
+
+                expect(res.body).toMatchSnapshot();
             });
         });
     });

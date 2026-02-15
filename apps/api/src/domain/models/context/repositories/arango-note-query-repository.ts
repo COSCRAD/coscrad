@@ -148,7 +148,7 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
     async fetchById(
         noteId: AggregateId,
         user?: CoscradUserWithGroups
-    ): Promise<Maybe<EventSourcedNoteViewModel>> {
+    ): Promise<ResultOrError<Maybe<EventSourcedNoteViewModel>>> {
         /**
          * Where should we enforce ACL access to the denormalized views of the
          * resources that are on the note? There's no guarantee that the user
@@ -167,8 +167,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         });
 
         if (isInternalError(result)) {
-            // should this be a returned error?
-            throw result;
+            // surface the bad-user input error
+            return result;
         }
 
         const { selected } = result;

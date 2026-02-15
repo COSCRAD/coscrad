@@ -34,7 +34,7 @@ export interface INoteQueryRepository
     fetchById(
         id: AggregateId,
         user?: CoscradUserWithGroups
-    ): Promise<Maybe<EventSourcedNoteViewModel>>;
+    ): Promise<ResultOrError<Maybe<EventSourcedNoteViewModel>>>;
 
     fetchMany(
         options?: FetchManyQueryOptions

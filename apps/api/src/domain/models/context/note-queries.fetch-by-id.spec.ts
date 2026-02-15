@@ -190,6 +190,7 @@ const noteConnectingWidgets = buildTestInstance(EventSourcedNoteViewModel, {
     },
 });
 
+// TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-392] Ensure there is one connection test case for each self-note test case
 describe(`when querying for a note: fetch by Id`, () => {
     let app: INestApplication;
 
@@ -242,7 +243,6 @@ describe(`when querying for a note: fetch by Id`, () => {
 
         noteQueryRepository = app.get(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN);
 
-        // this is important!
         await app.init();
     };
 
@@ -545,7 +545,12 @@ describe(`when querying for a note: fetch by Id`, () => {
         });
 
         /**
-         * TODO What about when one of the resources is not published?
+         * Note that we currently only expose resource composite identifiers in
+         * `connectedResources[{to|from|self}].resource`. The client must
+         * "fork join" to get the full view of the given resource. If we denormalize
+         * the resource documents onto the note documents, we will have to filter
+         * based on the ACL \ publication status for each `resoruce` in note
+         * queries.
          */
         describe(`when the edge is not published`, () => {
             describe(`when searching for an unpublished note`, () => {
@@ -671,9 +676,6 @@ describe(`when querying for a note: fetch by Id`, () => {
             });
         });
 
-        /**
-         * TODO What about when one of the resources is not published?
-         */
         describe(`when the edge is not published`, () => {
             describe(`when searching for an unpublished note`, () => {
                 beforeEach(async () => {
