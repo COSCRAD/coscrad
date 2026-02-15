@@ -190,6 +190,59 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
         await cursor.all();
     }
 
+    async registerPromptForExistingTerm(
+        termId: AggregateId,
+        languageCode: LanguageCode,
+        text: string
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+                    text: @text,
+                    languageCode: @languageCode,
+                    role: @originalRole
+        }
+        
+        let newTranslationItemSearchResults = (
+            for i in doc.name.items
+            filter i.role == @originalRole
+            return i
+        )
+        
+        filter length(newTranslationItemSearchResults) == 1
+
+        let oldOriginalAsTranslationItem = {
+            text: newTranslationItemSearchResults[0].text,
+            languageCode: newTranslationItemSearchResults[0].languageCode,
+            role: @elicitedFromPromptRole
+        }
+
+        update doc with {
+            name: {
+                items: [newItem, oldOriginalAsTranslationItem]
+            }
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'term__VIEWS',
+            id: termId,
+            text,
+            languageCode,
+            originalRole: MultilingualTextItemRole.original,
+            elicitedFromPromptRole: MultilingualTextItemRole.elicitedFromPrompt,
+        };
+
+        const cursor = await this.database.query({ query, bindVars }).catch((reason) => {
+            throw new InternalError(
+                `Failed to register a prompt for existing term via Arango term query repository: ${reason}`
+            );
+        });
+
+        await cursor.all();
+    }
+
     async addAudio(termId: AggregateId, _languageCode: LanguageCode, audioItemId: string) {
         /**
          * TODO We need to find an extensible way to cascade updates across denormalized

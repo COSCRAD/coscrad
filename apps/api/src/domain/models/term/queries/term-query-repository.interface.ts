@@ -63,6 +63,12 @@ export interface ITermQueryRepository
         tokens: IToken[]
     ): Promise<void>;
 
+    registerPromptForExistingTerm(
+        termId: AggregateId,
+        langaugeCode: LanguageCode,
+        text: string
+    ): Promise<void>;
+
     // TODO Is it the ID that we want here or the URL?
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 

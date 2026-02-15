@@ -79,6 +79,10 @@ import {
     LiteralTranslationOfTermProvided,
     LiteralTranslationOfTermProvidedPayload,
 } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
+import {
+    PromptRegisteredForExistingTerm,
+    PromptRegisteredForExistingTermPayload,
+} from '../../domain/models/term/commands/register-prompt-for-existing-term/prompt-registered-for-existing-term.event';
 import { TERM_TRANSLATED } from '../../domain/models/term/commands/translate-term/constants';
 import {
     EntriesImportedToVocabularyList,
@@ -504,6 +508,25 @@ const buildTermElicitedFromPrompt = (
     );
 };
 
+const buildPromptRegisteredForExistingTerm = (
+    payloadOverrides: DeepPartial<PromptRegisteredForExistingTermPayload>,
+    buildMetadata: EventMetadataBuilder
+) => {
+    const defaultPayload: PromptRegisteredForExistingTermPayload = {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.term,
+            id: buildDummyUuid(7),
+        },
+        text: 'singing',
+        languageCode: LanguageCode.English,
+    };
+
+    return new PromptRegisteredForExistingTerm(
+        clonePlainObjectWithOverrides(defaultPayload, payloadOverrides),
+        buildMetadata()
+    );
+};
+
 const buildAudioAddedForTerm = (
     payloadOverrides: DeepPartial<AudioAddedForTermPayload>,
     buildMetadata: EventMetadataBuilder
@@ -858,6 +881,10 @@ export class TestEventStream {
             .registerBuilder('PHOTOGRAPH_ADDED_FOR_TERM', buildPhotographAddedForTerm)
             .registerBuilder(PROMPT_TERM_CREATED, buildPromptTermCreated)
             .registerBuilder(TERM_ELICITED_FROM_PROMPT, buildTermElicitedFromPrompt)
+            .registerBuilder(
+                'PROMPT_REGISTERED_FOR_EXISTING_TERM',
+                buildPromptRegisteredForExistingTerm
+            )
             .registerBuilder(`SONG_CREATED`, buildSongCreated)
             .registerBuilder(`SONG_TITLE_TRANSLATED`, buildSongTitleTranslated)
             .registerBuilder(`LYRICS_ADDED_FOR_SONG`, buildLyricsAddedForSong)

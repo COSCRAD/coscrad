@@ -21,6 +21,8 @@ import { PromptTermCreatedEventHandler } from '../../domain/models/term/commands
 import { TermCreatedEventHandler } from '../../domain/models/term/commands/create-term/term-created.event-handler';
 import { LiteralTranslationOfTermProvided } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event';
 import { LiteralTranslationOfTermProvidedEventHandler } from '../../domain/models/term/commands/provide-literal-translation-of-term/literal-translation-of-term-provided.event-handler';
+import { PromptRegisteredForExistingTerm } from '../../domain/models/term/commands/register-prompt-for-existing-term/prompt-registered-for-existing-term.event';
+import { PromptRegisteredForExistingTermEventHandler } from '../../domain/models/term/commands/register-prompt-for-existing-term/prompt-registered-for-existing-term.event-handler';
 import { TermTranslatedEventHandler } from '../../domain/models/term/commands/translate-term/term-translated.event-handler';
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
@@ -77,6 +79,7 @@ import { TermCommandsModule } from './term.commands.module';
             LiteralTranslationOfTermProvided,
             PhotographAddedForTerm,
             VideoAddedForTerm,
+            PromptRegisteredForExistingTerm,
         ].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
@@ -90,6 +93,7 @@ import { TermCommandsModule } from './term.commands.module';
         PhotographAddedForTermEventHandler,
         VideoAddedForTermEventHandler,
         LiteralTranslationOfTermProvidedEventHandler,
+        PromptRegisteredForExistingTermEventHandler,
     ],
     exports: [TermQueryService],
 })

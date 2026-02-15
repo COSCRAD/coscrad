@@ -2,11 +2,25 @@
 
 ## <NEXT>
 
+### Expanded dictionary admin workflow
+
+In the past we have imported large verb paradigms without English translations.
+This is because the English translation was understood by the speaker from a few
+queues in the verb paradigm template and in consultation with the data processing
+team. Users would like to see the original prompts. As such, we now support
+registering a prompt after a term has already been created.
+
+#### Relevant Commits
+
+-   feat: introduce REGISTER_PROMPT_FOR_EXISTING_TERM (#812)
+
 ### Full Support for Notes and Connections
 
 In this release, we have continued to improve note and connection queries in terms
 of performance as well as consistency with the way queries are handled for
 resources.
+
+#### Relevant Commits
 
 -   feat: introduce GRANT_NOTE_READ_ACCESS_TO_USER (#811)
 -   refactor: persist note and connection events globally (#810)
