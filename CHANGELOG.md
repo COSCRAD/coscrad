@@ -2,6 +2,15 @@
 
 ## <NEXT>
 
+### Gameplay for Memory Match
+
+Admin support for managing memory rounds was added in a recent release. In this release,
+we support gameplay by end-users.
+
+#### Relevant Commits
+
+-   infra: add feature flag for memory-match gameplay (#797)
+
 ### Expanded dictionary admin workflow
 
 In the past we have imported large verb paradigms without English translations.
