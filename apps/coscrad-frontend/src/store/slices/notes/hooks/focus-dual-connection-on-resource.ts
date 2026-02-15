@@ -32,7 +32,7 @@ export const focusDualConnectionOnResource =
             }: {
                 resource: ResourceCompositeIdentifier;
                 context: IEdgeConnectionContext;
-            }) => isTargetCompositeIdentifier(compositeIdentifier)
+            }) => !isTargetCompositeIdentifier(compositeIdentifier)
         );
 
         return {

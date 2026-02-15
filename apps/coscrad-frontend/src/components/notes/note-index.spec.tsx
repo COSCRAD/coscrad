@@ -22,7 +22,10 @@ const act = () =>
         </MemoryRouter>
     );
 
-describe(`NoteIndex`, () => {
+/**
+ * We are now using Cypress to test the note \ connection index-to-detail UX flow.
+ */
+describe.skip(`NoteIndex`, () => {
     describe('when the API request is valid', () => {
         setupTestServer(
             buildMockSuccessfulGETHandler({

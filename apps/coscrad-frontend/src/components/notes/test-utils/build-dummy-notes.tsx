@@ -44,7 +44,12 @@ const selfEdgeConnections: INoteViewModel[] = buildOneMemberForEveryResourceType
     id: index.toString(),
     name: buildMultilingualTextFromEnglishOriginal(`name for self-note: ${index}`),
     note: buildMultilingualTextFromEnglishOriginal(`note for item ${index}`),
-    connectedResources: [member],
+    connectedResources: {
+        self: {
+            resource: member.compositeIdentifier,
+            context: member.context,
+        },
+    },
 }));
 
 // TODO share formatters with back end
@@ -54,24 +59,42 @@ export const buildDummyDualEdgeConnection = (
     fromCompositeIdentifier: ResourceCompositeIdentifier,
     toCompositeIdentifier: ResourceCompositeIdentifier,
     id: string
-): INoteViewModel => ({
-    connectionType: EdgeConnectionType.dual,
-    id,
-    name: buildMultilingualTextFromEnglishOriginal(
-        `This is why ${formatCompositeIdentifier(
-            fromCompositeIdentifier
-        )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
-    ),
-    note: buildMultilingualTextFromEnglishOriginal(
-        `This is why ${formatCompositeIdentifier(
-            fromCompositeIdentifier
-        )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
-    ),
-    connectedResources: [
-        buildMemberWithGeneralContext(fromCompositeIdentifier, EdgeConnectionMemberRole.from),
-        buildMemberWithGeneralContext(toCompositeIdentifier, EdgeConnectionMemberRole.to),
-    ],
-});
+): INoteViewModel => {
+    const toMember = buildMemberWithGeneralContext(
+        toCompositeIdentifier,
+        EdgeConnectionMemberRole.to
+    );
+
+    const fromMember = buildMemberWithGeneralContext(
+        fromCompositeIdentifier,
+        EdgeConnectionMemberRole.from
+    );
+
+    return {
+        connectionType: EdgeConnectionType.dual,
+        id,
+        name: buildMultilingualTextFromEnglishOriginal(
+            `This is why ${formatCompositeIdentifier(
+                fromCompositeIdentifier
+            )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
+        ),
+        note: buildMultilingualTextFromEnglishOriginal(
+            `This is why ${formatCompositeIdentifier(
+                fromCompositeIdentifier
+            )} is connected to ${formatCompositeIdentifier(toCompositeIdentifier)}`
+        ),
+        connectedResources: {
+            to: {
+                resource: toMember.compositeIdentifier,
+                context: toMember.context,
+            },
+            from: {
+                resource: fromMember.compositeIdentifier,
+                context: fromMember.context,
+            },
+        },
+    };
+};
 
 const dualEdgeConnections: INoteViewModel[] = [
     {
@@ -80,22 +103,22 @@ const dualEdgeConnections: INoteViewModel[] = [
         note: buildMultilingualTextFromEnglishOriginal(
             `This is why book 123 is related to media item 29`
         ),
-        connectedResources: [
-            buildMemberWithGeneralContext(
-                {
+        connectedResources: {
+            to: {
+                resource: {
                     type: ResourceType.digitalText,
                     id: '123789',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-            buildMemberWithGeneralContext(
-                {
+                context: generalContext,
+            },
+            from: {
+                resource: {
                     type: ResourceType.mediaItem,
                     id: '29',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-        ],
+                context: generalContext,
+            },
+        },
     },
     {
         id: '112',
@@ -103,22 +126,22 @@ const dualEdgeConnections: INoteViewModel[] = [
         note: buildMultilingualTextFromEnglishOriginal(
             `This is why term 5 is related to audio item 8`
         ),
-        connectedResources: [
-            buildMemberWithGeneralContext(
-                {
+        connectedResources: {
+            to: {
+                resource: {
                     type: ResourceType.term,
                     id: '5',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-            buildMemberWithGeneralContext(
-                {
+                context: generalContext,
+            },
+            from: {
+                resource: {
                     type: ResourceType.audioItem,
                     id: '8',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-        ],
+                context: generalContext,
+            },
+        },
     },
     {
         id: '113',
@@ -126,22 +149,22 @@ const dualEdgeConnections: INoteViewModel[] = [
         note: buildMultilingualTextFromEnglishOriginal(
             `This is why spatial feature 12 is related to photograph 293`
         ),
-        connectedResources: [
-            buildMemberWithGeneralContext(
-                {
+        connectedResources: {
+            to: {
+                resource: {
                     type: ResourceType.spatialFeature,
                     id: '12',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-            buildMemberWithGeneralContext(
-                {
+                context: generalContext,
+            },
+            from: {
+                context: generalContext,
+                resource: {
                     type: ResourceType.photograph,
                     id: '293',
                 },
-                EdgeConnectionMemberRole.to
-            ),
-        ],
+            },
+        },
     },
 ].map((partial) => ({
     ...partial,
