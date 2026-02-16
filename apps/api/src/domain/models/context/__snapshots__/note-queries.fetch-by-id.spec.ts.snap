@@ -2,6 +2,7 @@
 
 exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished connection should return the connection 1`] = `
 {
+  "actions": [],
   "audio": {
     "items": [],
   },
@@ -44,6 +45,7 @@ exports[`when querying for a note: fetch by Id when the user is a system (COSCRA
 
 exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished note should return the note 1`] = `
 {
+  "actions": [],
   "audio": {
     "items": [],
   },
