@@ -48,13 +48,17 @@ export const useLoadableSelfNotesForResource = (
 
     const selfNotesForThisResource = data.entities
         .filter(
-            ({ connectedResources: relatedResources, connectionType }: INoteViewModel) =>
+            ({ connectedResources, connectionType }: INoteViewModel) =>
                 connectionType === EdgeConnectionType.self &&
-                isTargetCompositeIdentifier(relatedResources[0].compositeIdentifier)
+                isTargetCompositeIdentifier(
+                    connectedResources?.self?.resource as ResourceCompositeIdentifier
+                )
         )
-        .map(({ id, note, connectedResources: relatedResources }) => ({
+        .map(({ id, note, connectedResources }) => ({
             id,
             /**
+             * TODO remove this
+             *
              * `note.note` would be confusing. Note that we are aliasing in our
              * view layer to translate our domain model (Edge Connections) to
              * more user specific form. It could be that we've missed an important
@@ -69,7 +73,7 @@ export const useLoadableSelfNotesForResource = (
              * multilingual experience.
              */
             text: findOriginalTextItem(note).text,
-            context: relatedResources[0].context,
+            context: connectedResources.self.context,
         }));
 
     return {
