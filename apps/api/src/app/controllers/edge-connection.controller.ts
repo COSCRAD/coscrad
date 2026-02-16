@@ -25,7 +25,7 @@ import {
  * and `IDetailQueryResult`).
  *
  */
-@ApiTags('web of knowledge (edge connections)')
+@ApiTags('web of knowledge (edge connections and notes)')
 @Controller('webOfKnowledge')
 @UseFilters(
     new CoscradNotFoundFilter(),
@@ -36,10 +36,11 @@ import {
 export class EdgeConnectionController {
     constructor(private readonly edgeConnectionQueryService: EdgeConnectionQueryService) {}
 
-    @Get('')
-    async getSchema() {
-        return this.edgeConnectionQueryService.fetchSchema();
-    }
+    // TODO Publish view schemas directly or via API docs
+    // @Get('/schema')
+    // async getSchema() {
+    //     return this.edgeConnectionQueryService.fetchSchema();
+    // }
 
     @ApiBearerAuth('JWT')
     @UseGuards(OptionalJwtAuthGuard)
