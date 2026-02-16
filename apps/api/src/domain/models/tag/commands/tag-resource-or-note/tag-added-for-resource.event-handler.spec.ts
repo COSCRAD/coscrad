@@ -1,5 +1,6 @@
 import {
     AggregateType,
+    CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionType,
     ResourceType,
@@ -33,6 +34,8 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedNoteViewModel } from '../../../context/note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from '../../../context/repositories/arango-note-query-repository';
 import { INoteQueryRepository } from '../../../context/repositories/note-query-repository.interface';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { ArangoTagQueryRepository } from '../../repositories/arango-tag-query-repository';
 import { ITagQueryRepository } from '../../repositories/tag-query-repository.interface';
 import { ResourceOrNoteTagged } from './resource-or-note-tagged.event';
@@ -141,6 +144,12 @@ const existingWidgetView = new WidgetViewModel({
     // none to start
     tags: [],
 });
+
+const adminUser = buildTestInstance(CoscradUser, {
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+const adminUserWithGroups = new CoscradUserWithGroups(adminUser, []);
 
 describe(`TagAddedForResourceEventHandler`, () => {
     let testQueryRepository: IWidgetQueryRepository;
@@ -287,7 +296,8 @@ describe(`TagAddedForResourceEventHandler`, () => {
             await resourceOrNoteTaggedEventHandler.handle(noteTagged);
 
             const updatedNote = (await noteQueryRepository.fetchById(
-                existingNoteView.id
+                existingNoteView.id,
+                adminUserWithGroups
             )) as EventSourcedNoteViewModel;
 
             const tagSearchResult = updatedNote.tags.find(({ id }) => id === targetTagId);

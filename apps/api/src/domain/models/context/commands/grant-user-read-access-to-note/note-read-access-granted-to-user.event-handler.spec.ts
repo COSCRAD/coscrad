@@ -1,4 +1,5 @@
 import {
+    CoscradUserRole,
     EdgeConnectionContextType,
     EdgeConnectionType,
     ResourceType,
@@ -15,6 +16,8 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { EventSourcedNoteViewModel } from '../../note.view-model.event-sourced';
 import {
     INoteQueryRepository,
@@ -61,6 +64,12 @@ const toMemberCompositeId = {
 const generalContext = {
     type: 'general',
 } as const;
+
+const adminUser = buildTestInstance(CoscradUser, {
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+const testUserWithGroups = new CoscradUserWithGroups(adminUser, []);
 
 describe(`NoteReadAccessGrantedToUserEventHandler`, () => {
     let handler: NoteReadAccessGrantedToUserEventHandler;
@@ -135,7 +144,8 @@ describe(`NoteReadAccessGrantedToUserEventHandler`, () => {
                 await handler.handle(readAccessGranted);
 
                 const updatedView = (await edgeQueryRepository.fetchById(
-                    targetEdgeId
+                    targetEdgeId,
+                    testUserWithGroups
                 )) as EventSourcedNoteViewModel;
 
                 expect(updatedView.accessControlList.canUser(userId)).toBe(true);
@@ -175,7 +185,8 @@ describe(`NoteReadAccessGrantedToUserEventHandler`, () => {
                 await handler.handle(readAccessGranted);
 
                 const updatedView = (await edgeQueryRepository.fetchById(
-                    targetEdgeId
+                    targetEdgeId,
+                    testUserWithGroups
                 )) as EventSourcedNoteViewModel;
 
                 expect(updatedView.accessControlList.canUser(userId)).toBe(true);

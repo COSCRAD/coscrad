@@ -1,4 +1,5 @@
 import {
+    CoscradUserRole,
     EdgeConnectionType,
     LanguageCode,
     MultilingualTextItemRole,
@@ -35,6 +36,8 @@ import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/qu
 import { ArangoAudioItemQueryRepository } from '../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { GeneralContext } from '../general-context/general-context.entity';
 import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from './arango-note-query-repository';
@@ -89,7 +92,13 @@ const testWidget = new WidgetViewModel({
 const generalContext = new GeneralContext();
 
 const assertWidgetDocumentMatchesWidget = (actual: unknown, widget: WidgetViewModel) => {
-    const dto = widget.toDto();
+    /**
+     * Note that currently only the composite identifiers appear on the
+     * denormalized resource record(s) on note views. In the future, we will
+     * maintain a seaprate ACL \ publication status and then we can store all
+     * properties.
+     */
+    const expectedCompositeIdentifier = widget.getCompositeIdentifier();
 
     const rawWidgetDoc = actual as WidgetViewModel & {
         _id: string;
@@ -97,16 +106,32 @@ const assertWidgetDocumentMatchesWidget = (actual: unknown, widget: WidgetViewMo
         _rev: string;
     };
 
-    delete rawWidgetDoc._id;
-    delete rawWidgetDoc._key;
-    delete rawWidgetDoc._rev;
+    const actualCompositeIdentifier = {
+        id: rawWidgetDoc.id,
+        type: rawWidgetDoc.type,
+    };
 
-    expect(rawWidgetDoc).toEqual(dto);
+    expect(actualCompositeIdentifier).toEqual(expectedCompositeIdentifier);
 };
 
 const unpublishedEdgeView = buildTestInstance(EventSourcedNoteViewModel, {
     isPublished: false,
 });
+
+const toWidgetId = buildDummyUuid(99);
+
+const toWidget = new WidgetViewModel({
+    id: toWidgetId,
+    type: WIDGET_TYPE,
+    rating: 99,
+    tags: [],
+});
+
+const adminUser = buildTestInstance(CoscradUser, {
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+const adminUserWithGroups = new CoscradUserWithGroups(adminUser, []);
 
 describe(`ArangoNoteQueryRepository`, () => {
     let testQueryRepository: INoteQueryRepository;
@@ -118,6 +143,18 @@ describe(`ArangoNoteQueryRepository`, () => {
     let app: INestApplication;
 
     let widgetDatabase: ArangoDatabaseForCollection<WidgetViewModel>;
+
+    const fetchUpdatedView = async (id: string): Promise<EventSourcedNoteViewModel> => {
+        /**
+         * We put the admin user in the closure to keep the assertions simple.
+         * Note that we have strong e2e tests (note-queries.X) that ensure
+         * publication status and read ACLs are respected, so we don't test
+         * this at the current integration level.
+         */
+        const result = await testQueryRepository.fetchById(id, adminUserWithGroups);
+
+        return result as EventSourcedNoteViewModel;
+    };
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -199,10 +236,12 @@ describe(`ArangoNoteQueryRepository`, () => {
                         testWidget.getCompositeIdentifier(),
                         generalContext
                     );
+
+                    await testQueryRepository.publish(existingNote.id);
                 });
 
                 it(`should return the note`, async () => {
-                    const result = await testQueryRepository.fetchById(existingNote.id);
+                    const result = await fetchUpdatedView(existingNote.id);
 
                     expect(result).not.toBe(NotFound);
 
@@ -221,7 +260,7 @@ describe(`ArangoNoteQueryRepository`, () => {
 
                     expect(context).toEqual(generalContext);
 
-                    expect(cloneToPlainObject(resource)).toEqual(testWidget.toDto());
+                    assertWidgetDocumentMatchesWidget(resource, testWidget);
 
                     assertWidgetDocumentMatchesWidget(resource, testWidget);
 
@@ -230,15 +269,6 @@ describe(`ArangoNoteQueryRepository`, () => {
             });
 
             describe(`when the note is a connecting-note`, () => {
-                const toWidgetId = buildDummyUuid(99);
-
-                const toWidget = new WidgetViewModel({
-                    id: toWidgetId,
-                    type: WIDGET_TYPE,
-                    rating: 99,
-                    tags: [],
-                });
-
                 beforeEach(async () => {
                     await widgetDatabase.createMany(
                         [testWidget, toWidget].map(mapEntityDTOToDatabaseDocument)
@@ -254,7 +284,9 @@ describe(`ArangoNoteQueryRepository`, () => {
                         generalContext
                     );
 
-                    const searchResult = await testQueryRepository.fetchById(existingNote.id);
+                    await testQueryRepository.publish(existingNote.id);
+
+                    const searchResult = await fetchUpdatedView(existingNote.id);
 
                     expect(searchResult).not.toBe(NotFound);
 
@@ -275,7 +307,12 @@ describe(`ArangoNoteQueryRepository`, () => {
             });
         });
 
-        describe(`when the widget has been updated after note creation`, () => {
+        /**
+         * We do not currently support this behaviour. Once we support
+         * maintaining a dedicated ACL and publication status on the resource
+         * records on `note__VIEW` docs we can opt into this.
+         */
+        describe.skip(`when the widget has been updated after note creation`, () => {
             const updatedRating = 1234;
 
             describe(`when the widget has been updated after creating a self-note`, () => {
@@ -294,7 +331,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                         rating: updatedRating,
                     });
 
-                    const result = await testQueryRepository.fetchById(existingNote.id);
+                    const result = await fetchUpdatedView(existingNote.id);
 
                     expect(result).not.toBe(NotFound);
 
@@ -317,15 +354,6 @@ describe(`ArangoNoteQueryRepository`, () => {
             });
 
             describe(`when the widget has been updated after creating a connection`, () => {
-                const toWidgetId = buildDummyUuid(99);
-
-                const toWidget = new WidgetViewModel({
-                    id: toWidgetId,
-                    type: WIDGET_TYPE,
-                    rating: 99,
-                    tags: [],
-                });
-
                 beforeEach(async () => {
                     await widgetDatabase.createMany(
                         [testWidget, toWidget].map(mapEntityDTOToDatabaseDocument)
@@ -351,7 +379,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                         rating: updatedToWidgetRating,
                     });
 
-                    const searchResult = await testQueryRepository.fetchById(existingNote.id);
+                    const searchResult = await fetchUpdatedView(existingNote.id);
 
                     expect(searchResult).not.toBe(NotFound);
 
@@ -371,7 +399,7 @@ describe(`ArangoNoteQueryRepository`, () => {
 
         describe(`when the note does not exist`, () => {
             it(`should return not found`, async () => {
-                const result = await testQueryRepository.fetchById(buildDummyUuid(404));
+                const result = await fetchUpdatedView(buildDummyUuid(404));
 
                 expect(result).toBe(NotFound);
             });
@@ -390,13 +418,6 @@ describe(`ArangoNoteQueryRepository`, () => {
             id: buildDummyUuid(102),
             type: WIDGET_TYPE,
             rating: 2,
-            tags: [],
-        });
-
-        const toWidget = new WidgetViewModel({
-            id: buildDummyUuid(103),
-            type: WIDGET_TYPE,
-            rating: 3,
             tags: [],
         });
 
@@ -466,12 +487,13 @@ describe(`ArangoNoteQueryRepository`, () => {
         });
 
         it(`should return the notes along with joined resource views`, async () => {
-            const result =
-                (await testQueryRepository.fetchMany()) as PaginatedResponse<EventSourcedNoteViewModel>;
+            const result = (await testQueryRepository.fetchMany({
+                user: adminUserWithGroups,
+            })) as PaginatedResponse<EventSourcedNoteViewModel>;
 
             expect(result.entities).toHaveLength(allNotes.length);
 
-            const selfNote = await testQueryRepository.fetchById(existingSelfNote.id);
+            const selfNote = await fetchUpdatedView(existingSelfNote.id);
 
             expect(selfNote).not.toBe(NotFound);
 
@@ -491,7 +513,7 @@ describe(`ArangoNoteQueryRepository`, () => {
 
             expect(from).toBeFalsy();
 
-            const connection = await testQueryRepository.fetchById(existingConnection.id);
+            const connection = await fetchUpdatedView(existingConnection.id);
 
             expect(connection).not.toBe(NotFound);
 
@@ -578,9 +600,7 @@ describe(`ArangoNoteQueryRepository`, () => {
         it(`should tag the note`, async () => {
             await testQueryRepository.tag(targetNote.id, newTag.id);
 
-            const { tags } = (await testQueryRepository.fetchById(
-                targetNote.id
-            )) as EventSourcedNoteViewModel;
+            const { tags } = await fetchUpdatedView(targetNote.id);
 
             expect(tags).toHaveLength(1);
 
@@ -628,9 +648,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                 languageCode: translationLanguageCode,
             });
 
-            const updatedView = (await testQueryRepository.fetchById(
-                noteWithoutTranslation.id
-            )) as EventSourcedNoteViewModel;
+            const updatedView = await fetchUpdatedView(noteWithoutTranslation.id);
 
             const foo = updatedView.text.getTranslation(translationLanguageCode);
 
@@ -663,6 +681,7 @@ describe(`ArangoNoteQueryRepository`, () => {
 
                 const updatedEdgeView = (await testQueryRepository.fetchById(
                     unpublishedEdgeView.id
+                    // no admin user is required here to access the published result
                 )) as EventSourcedNoteViewModel;
 
                 expect(updatedEdgeView.isPublished).toBe(true);
@@ -689,7 +708,14 @@ describe(`ArangoNoteQueryRepository`, () => {
                 await testQueryRepository.allowUser(unpublishedEdgeView.id, userId);
 
                 const updatedEdgeView = (await testQueryRepository.fetchById(
-                    unpublishedEdgeView.id
+                    unpublishedEdgeView.id,
+                    new CoscradUserWithGroups(
+                        buildTestInstance(CoscradUser, {
+                            id: userId,
+                            roles: [CoscradUserRole.viewer],
+                        }),
+                        []
+                    )
                 )) as EventSourcedNoteViewModel;
 
                 expect(updatedEdgeView.accessControlList.canUser(userId)).toBe(true);
@@ -740,9 +766,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                     originalLanguageCode
                 );
 
-                const updatedView = (await testQueryRepository.fetchById(
-                    noteWithNoAudio.id
-                )) as EventSourcedNoteViewModel;
+                const updatedView = await fetchUpdatedView(noteWithNoAudio.id);
 
                 expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
 
@@ -808,9 +832,7 @@ describe(`ArangoNoteQueryRepository`, () => {
                     translationLanguageCode
                 );
 
-                const updatedView = (await testQueryRepository.fetchById(
-                    noteWithNoAudio.id
-                )) as EventSourcedNoteViewModel;
+                const updatedView = await fetchUpdatedView(noteWithNoAudio.id);
 
                 expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
 

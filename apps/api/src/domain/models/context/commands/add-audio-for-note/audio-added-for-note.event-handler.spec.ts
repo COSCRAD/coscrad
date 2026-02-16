@@ -1,4 +1,9 @@
-import { EdgeConnectionContextType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import {
+    CoscradUserRole,
+    EdgeConnectionContextType,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -15,6 +20,8 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { EventSourcedAudioItemViewModel } from '../../../audio-visual/audio-item/queries';
 import { ArangoAudioItemQueryRepository } from '../../../audio-visual/audio-item/repositories/arango-audio-item-query-repository';
 import { MultilingualAudio } from '../../../shared/multilingual-audio/multilingual-audio.entity';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { EventSourcedNoteViewModel } from '../../note.view-model.event-sourced';
 import { ArangoNoteQueryRepository } from '../../repositories/arango-note-query-repository';
 import { INoteQueryRepository } from '../../repositories/note-query-repository.interface';
@@ -47,6 +54,12 @@ const existingAudioItemId = buildDummyUuid(123);
 const existingAudio = buildTestInstance(EventSourcedAudioItemViewModel, {
     id: existingAudioItemId,
 });
+
+const adminUser = buildTestInstance(CoscradUser, {
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+const adminUserWithGroups = new CoscradUserWithGroups(adminUser, []);
 
 describe(`AudioAddedForNoteEventHandler`, () => {
     let testQueryRepository: INoteQueryRepository;
@@ -121,7 +134,8 @@ describe(`AudioAddedForNoteEventHandler`, () => {
             await audioAddedForNoteEventHandler.handle(audioAddedForNote);
 
             const updatedView = (await testQueryRepository.fetchById(
-                noteId
+                noteId,
+                adminUserWithGroups
             )) as EventSourcedNoteViewModel;
 
             expect(updatedView.audio.hasAudioIn(originalLanguageCode));
@@ -175,7 +189,8 @@ describe(`AudioAddedForNoteEventHandler`, () => {
             await audioAddedForNoteEventHandler.handle(audioAddedForNote);
 
             const updatedView = (await testQueryRepository.fetchById(
-                noteId
+                noteId,
+                adminUserWithGroups
             )) as EventSourcedNoteViewModel;
 
             expect(updatedView.audio.hasAudioIn(originalLanguageCode)).toBe(true);
