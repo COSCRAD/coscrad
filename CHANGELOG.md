@@ -31,6 +31,7 @@ resources.
 
 #### Relevant Commits
 
+-   perf: leverage query database for note queries (#804)
 -   feat: introduce GRANT_NOTE_READ_ACCESS_TO_USER (#811)
 -   refactor: persist note and connection events globally (#810)
 

@@ -1,6 +1,5 @@
 import {
     AggregateType,
-    EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
     LanguageCode,
@@ -8,7 +7,6 @@ import {
     ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { buildMemberWithGeneralContext } from '../../../../../components/notes/test-utils';
 import { buildDummySongs } from '../../../../../components/resources/songs/test-utils/build-dummy-songs';
 import { getConfig } from '../../../../../config';
 import {
@@ -55,12 +53,14 @@ const dummyNotes: INoteViewModel[] = Array(NUMBER_OF_DUMMY_NOTES)
                     },
                 ],
             },
-            connectedResources: [
-                buildMemberWithGeneralContext(
-                    compositeIdentifierOfFocus,
-                    EdgeConnectionMemberRole.self
-                ),
-            ],
+            connectedResources: {
+                self: {
+                    resource: compositeIdentifierOfFocus,
+                    context: {
+                        type: 'general',
+                    },
+                },
+            },
         })
     );
 
@@ -69,7 +69,7 @@ const act = () =>
         <SelfNotesPanelContainer compositeIdentifier={compositeIdentifierOfFocus} />
     );
 
-const noteEndpoint = `${getConfig().apiUrl}/connections/notes`;
+const noteEndpoint = `${getConfig().apiUrl}/webOfKnowledge`;
 
 describe(`Self Notes Panel`, () => {
     describe('when the API request succeeds', () => {

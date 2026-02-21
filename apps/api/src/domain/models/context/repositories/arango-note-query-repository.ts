@@ -9,7 +9,12 @@ import {
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import {
+    CoscradBooleanOperator,
+    CoscradConditionBlockType,
+    CoscradSimpleCondition,
+} from '../../../../lib/coscrad-query-language';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -19,11 +24,13 @@ import { ArangoDatabaseForCollection } from '../../../../persistence/database/ar
 import convertResourceCompositeIdentifierToArangoDocumentHandle from '../../../../persistence/database/utilities/convertResourceCompositeIdentifierToArangoDocumentHandle';
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import { DTO } from '../../../../types/DTO';
+import { ResultOrError } from '../../../../types/ResultOrError';
 import { AggregateId } from '../../../types/AggregateId';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { MultilingualAudioItem } from '../../shared/multilingual-audio/multilingual-audio-item.entity';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
 import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base-arango-resource-query-builder';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { EventSourcedNoteViewModel } from '../note.view-model.event-sourced';
 import { INoteCreationRecord, INoteQueryRepository } from './note-query-repository.interface';
 
@@ -107,11 +114,15 @@ const mapArangoDocumentToNoteDto = (document) => {
         };
     }
 
+    dto.id = document._key;
+
     delete dto._from;
 
     delete dto._to;
 
     delete dto._key;
+
+    delete dto._rev;
 
     delete dto._id;
 
@@ -134,97 +145,64 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
         this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(this.collectionName);
     }
 
-    async fetchById(noteId: AggregateId): Promise<Maybe<EventSourcedNoteViewModel>> {
-        const aql = `
-        for doc in note__VIEWS
-        filter doc._key == @noteId
-        let connectedResources = doc._to == doc._from ? {
-            self: {
-                resource: document(doc._from),
-                context: doc.connectedResources.self.context
-            }
-        } : {
-            from: {
-                resource: document(doc._from),
-                context: doc.connectedResources.from.context
-            },
-            to: {
-                resource: document(doc._to),
-                context: doc.connectedResources.to.context
-            }  
+    async fetchById(
+        noteId: AggregateId,
+        user?: CoscradUserWithGroups
+    ): Promise<ResultOrError<Maybe<EventSourcedNoteViewModel>>> {
+        /**
+         * Where should we enforce ACL access to the denormalized views of the
+         * resources that are on the note? There's no guarantee that the user
+         * has access to the subject(s) of the note.
+         */
+        const idEquals: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.TEXT_EQUALS,
+            params: [noteId],
+            field: 'id',
+        };
+
+        const result = await this.database.fetchForUser({
+            filter: idEquals,
+            user,
+        });
+
+        if (isInternalError(result)) {
+            // surface the bad-user input error
+            return result;
         }
-        return MERGE(doc,{
-            connectedResources
-        })
-        `;
 
-        const cursor = await this.database
-            .query({
-                query: aql,
-                bindVars: {
-                    noteId,
-                },
-            })
-            .catch((e) => {
-                throw e;
-            });
+        const { selected } = result;
 
-        const results = await cursor.all();
-
-        if (results.length === 0) {
+        if (selected.length === 0) {
             return NotFound;
         }
 
-        // TODO handle the case when the corresponding resource document is missing (system error)
+        const noteDto = mapDatabaseDocumentToAggregateDTO(selected[0]);
 
-        const dto = mapArangoDocumentToNoteDto(results[0]);
-
-        return EventSourcedNoteViewModel.fromDto(dto);
+        return EventSourcedNoteViewModel.fromDto(noteDto);
     }
 
     async fetchMany(
         options?: FetchManyQueryOptions
-    ): Promise<PaginatedResponse<EventSourcedNoteViewModel>> {
-        if (options) {
-            throw new InternalError(`user query options are not available for notes`);
+    ): Promise<ResultOrError<PaginatedResponse<EventSourcedNoteViewModel>>> {
+        const documentSearchResult = await this.database.fetchForUser(options);
+
+        if (isInternalError(documentSearchResult)) {
+            return documentSearchResult;
         }
 
-        const aql = `
-            for doc in note__VIEWS
-            let connectedResources = doc._from ==  doc._to ? {
-                self: {
-                    resource: document(doc._from),
-                    context: doc.connectedResources.from.context
-                }
-            } : {
-                to: {
-                    resource: document(doc._to),
-                    context: doc.connectedResources.to.context
-                },
-                from: {
-                    resource: document(doc._from),
-                    context: doc.connectedResources.from.context
-                }
-            }
-            return MERGE(doc,{
-                connectedResources
-            })
-        `;
+        const { selected, count } = documentSearchResult;
 
-        const cursor = await this.database.query({
-            query: aql,
-            bindVars: {},
-        });
-
-        const documents = await cursor.all();
+        const documents = selected;
 
         const dtos = documents.map(mapArangoDocumentToNoteDto);
 
-        // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-363] Support pagination.
+        const entities = dtos.map((dto) => EventSourcedNoteViewModel.fromDto(dto));
+
         return {
-            page: 1,
-            count: 1,
-            entities: dtos.map((dto) => EventSourcedNoteViewModel.fromDto(dto)),
+            page: options?.pagination?.page || 1,
+            count,
+            entities,
         };
     }
 
@@ -333,6 +311,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.self,
             text,
+            note: text,
+            name: text,
             connectedResources: {
                 self: {
                     resource: resourceCompositeIdentifier,
@@ -372,6 +352,8 @@ export class ArangoNoteQueryRepository implements INoteQueryRepository {
             accessControlList: new AccessControlList(),
             connectionType: EdgeConnectionType.dual,
             text,
+            note: text,
+            name: text,
             connectedResources: {
                 from: {
                     resource: fromMemberCompositeIdentifier,

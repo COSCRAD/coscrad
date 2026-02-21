@@ -1,5 +1,5 @@
-import { CategorizableType } from '@coscrad/api-interfaces';
-import { isNull } from '@coscrad/validation-constraints';
+import { CategorizableCompositeIdentifier, CategorizableType } from '@coscrad/api-interfaces';
+import { isNull, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { NOT_FOUND } from '../../store/slices/interfaces/maybe-loadable.interface';
 import { useLoadableNoteById } from '../../store/slices/notes/hooks';
 import { useIdFromLocation } from '../../utils/custom-hooks/use-id-from-location';
@@ -19,7 +19,15 @@ export const NoteDetailPageContainer = (): JSX.Element => {
     const compositeIdentifiers =
         data === NOT_FOUND || isNull(data)
             ? []
-            : data.connectedResources.map(({ compositeIdentifier }) => compositeIdentifier);
+            : [
+                  data.connectedResources.from,
+                  data.connectedResources.to,
+                  data.connectedResources.self,
+              ].flatMap((member) =>
+                  !isNullOrUndefined(member)
+                      ? [member.resource as CategorizableCompositeIdentifier]
+                      : []
+              );
 
     const loadableCategorizables = useLoadableCategorizables(compositeIdentifiers);
 

@@ -64,6 +64,9 @@ class ConnectedResources {
         }
     }
 }
+
+const sampleNoteText = buildMultilingualTextWithSingleItem('this is the note for breeze');
+
 @CoscradDataExample<EventSourcedNoteViewModel>({
     example: {
         type: AggregateType.note,
@@ -71,7 +74,9 @@ class ConnectedResources {
         isPublished: false,
         accessControlList: new AccessControlList(),
         // name: buildMultilingualTextWithSingleItem('breeze'),
-        text: buildMultilingualTextWithSingleItem('this is the note for breeze'),
+        text: sampleNoteText,
+        name: sampleNoteText,
+        note: sampleNoteText,
         audio: MultilingualAudio.buildEmpty(),
         tags: [],
         connectedResources: {
@@ -105,6 +110,19 @@ export class EventSourcedNoteViewModel {
         description: 'text for this note, including translations',
     })
     text: MultilingualText;
+
+    @NestedDataType(MultilingualText, {
+        label: 'text',
+        description: 'name of this note (the same as its text)',
+    })
+    name: MultilingualText;
+
+    // TODO remove this from the interface \ client use
+    @NestedDataType(MultilingualText, {
+        label: 'text',
+        description: 'text for this note, including translations',
+    })
+    note: MultilingualText;
 
     connectedResources: ConnectedResources;
 

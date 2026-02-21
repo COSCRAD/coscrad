@@ -5,5 +5,6 @@ import { NOTES } from '../constants';
 
 export const fetchNotes = createFetchThunk<INoteViewModel[]>(
     `${NOTES}/fetch`,
-    `${getConfig().apiUrl}/connections/notes`
+    // this returns simple notes and connections
+    `${getConfig().apiUrl}/webOfKnowledge`
 );

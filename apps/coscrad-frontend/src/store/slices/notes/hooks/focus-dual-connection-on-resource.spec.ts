@@ -1,5 +1,4 @@
 import {
-    EdgeConnectionMemberRole,
     EdgeConnectionType,
     INoteViewModel,
     LanguageCode,
@@ -44,18 +43,16 @@ const dummyEdgeConnection: INoteViewModel = {
     connectionType: EdgeConnectionType.dual,
     name: noteMultilingualText,
     note: noteMultilingualText,
-    connectedResources: [
-        {
-            compositeIdentifier: termCompositeIdentifier,
+    connectedResources: {
+        to: {
+            resource: termCompositeIdentifier,
             context: termContext,
-            role: EdgeConnectionMemberRole.to,
         },
-        {
-            compositeIdentifier: bookCompositeIdentifier,
+        from: {
+            resource: bookCompositeIdentifier,
             context: bookContext,
-            role: EdgeConnectionMemberRole.from,
         },
-    ],
+    },
 };
 
 const expectedOutput: ConnectedResource = {

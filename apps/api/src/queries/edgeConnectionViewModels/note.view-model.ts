@@ -1,4 +1,8 @@
-import { EdgeConnectionType, INoteViewModel } from '@coscrad/api-interfaces';
+import {
+    EdgeConnectionType,
+    IEdgeConnectionContext,
+    INoteViewModel,
+} from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { MultilingualText } from '../../domain/common/entities/multilingual-text';
@@ -8,6 +12,22 @@ import {
 } from '../../domain/models/context/edge-connection.entity';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../buildViewModelForResource/viewModels/base.view-model';
+
+class CompositeIdentifier {
+    type: string;
+    id: string;
+}
+
+class EdgeConnectionMemberViewModel {
+    resource: CompositeIdentifier;
+    context: IEdgeConnectionContext;
+}
+
+class ConnectedResourcesRecord {
+    self?: EdgeConnectionMemberViewModel;
+    to?: EdgeConnectionMemberViewModel;
+    from?: EdgeConnectionMemberViewModel;
+}
 
 export class NoteViewModel extends BaseViewModel implements INoteViewModel {
     // TODO expose as part of schema
@@ -29,7 +49,7 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
         // TODO reword
         description: 'the 1 (self note) or 2 (dual connection) resources that this note connects',
     })
-    readonly connectedResources: EdgeConnectionMember[] = [];
+    readonly connectedResources: ConnectedResourcesRecord = {};
 
     constructor(edgeConnection: EdgeConnection) {
         super(edgeConnection);

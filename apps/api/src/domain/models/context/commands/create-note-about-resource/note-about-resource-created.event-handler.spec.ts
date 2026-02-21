@@ -1,4 +1,9 @@
-import { EdgeConnectionContextType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
+import {
+    CoscradUserRole,
+    EdgeConnectionContextType,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
@@ -20,10 +25,13 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { NoteRecordForResourceViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DeepPartial } from '../../../../../types/DeepPartial';
 import { DTO } from '../../../../../types/DTO';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { BaseArangoResourceViewQueryBuilder } from '../../../term/repositories/base-arango-resource-query-builder';
+import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import { EventSourcedNoteViewModel } from '../../note.view-model.event-sourced';
 import {
     INoteQueryRepository,
@@ -128,6 +136,12 @@ class WidgetQueryRepository implements IQueryRepositoryForAnnotatable {
     }
 }
 
+const adminUser = buildTestInstance(CoscradUser, {
+    roles: [CoscradUserRole.projectAdmin],
+});
+
+const adminUserWithGroups = new CoscradUserWithGroups(adminUser, []);
+
 describe(`NoteAboutResourceCreatedEventHandler`, () => {
     const noteCreated = new TestEventStream().buildSingle<NoteAboutResourceCreated>({
         type: 'NOTE_ABOUT_RESOURCE_CREATED',
@@ -204,7 +218,8 @@ describe(`NoteAboutResourceCreatedEventHandler`, () => {
             await noteAboutResourceCreatedEventHandler.handle(noteCreated);
 
             const updatedView = await noteQueryRepository.fetchById(
-                noteCreated.payload.aggregateCompositeIdentifier.id
+                noteCreated.payload.aggregateCompositeIdentifier.id,
+                adminUserWithGroups
             );
 
             expect(updatedView).not.toBe(NotFound);

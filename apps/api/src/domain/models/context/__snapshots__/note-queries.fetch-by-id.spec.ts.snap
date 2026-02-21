@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished connection should return the connection 1`] = `
+{
+  "actions": [],
+  "audio": {
+    "items": [],
+  },
+  "connectedResources": {
+    "from": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+        "type": "widget",
+      },
+    },
+    "to": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100105",
+        "type": "widget",
+      },
+    },
+  },
+  "connectionType": "dual",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+  "isPublished": false,
+  "tags": [],
+  "text": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "this is the note for breeze",
+      },
+    ],
+  },
+  "type": "note",
+}
+`;
+
+exports[`when querying for a note: fetch by Id when the user is a system (COSCRAD) admin when the edge is not published when searching for an unpublished note should return the note 1`] = `
+{
+  "actions": [],
+  "audio": {
+    "items": [],
+  },
+  "connectedResources": {
+    "self": {
+      "context": {
+        "type": "general",
+      },
+      "resource": {
+        "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100005",
+        "type": "widget",
+      },
+    },
+  },
+  "connectionType": "self",
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100101",
+  "isPublished": false,
+  "tags": [],
+  "text": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "this is the note for breeze",
+      },
+    ],
+  },
+  "type": "note",
+}
+`;
