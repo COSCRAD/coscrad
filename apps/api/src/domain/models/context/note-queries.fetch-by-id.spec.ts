@@ -549,7 +549,7 @@ describe(`when querying for a note: fetch by Id`, () => {
          * `connectedResources[{to|from|self}].resource`. The client must
          * "fork join" to get the full view of the given resource. If we denormalize
          * the resource documents onto the note documents, we will have to filter
-         * based on the ACL \ publication status for each `resoruce` in note
+         * based on the ACL \ publication status for each `resource` in note
          * queries.
          */
         describe(`when the edge is not published`, () => {
