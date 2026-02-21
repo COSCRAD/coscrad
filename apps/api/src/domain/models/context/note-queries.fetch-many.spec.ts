@@ -188,7 +188,7 @@ const privateNoteAboutWidget = buildTestInstance(EventSourcedNoteViewModel, {
     },
 });
 
-const privateNoteAboutWidgetThatOrinaryUserCanAccess = buildTestInstance(
+const privateNoteAboutWidgetThatOrdinaryUserCanAccess = buildTestInstance(
     EventSourcedNoteViewModel,
     {
         id: buildDummyUuid(103),
@@ -334,13 +334,13 @@ describe(`when querying for a note: fetch many`, () => {
 
         // private simple note with user in query ACL
         await noteQueryRepository.createNoteAbout(
-            privateNoteAboutWidgetThatOrinaryUserCanAccess,
+            privateNoteAboutWidgetThatOrdinaryUserCanAccess,
             fromMemberWidget.getCompositeIdentifier(),
             generalContext
         );
 
         await noteQueryRepository.allowUser(
-            privateNoteAboutWidgetThatOrinaryUserCanAccess.id,
+            privateNoteAboutWidgetThatOrdinaryUserCanAccess.id,
             userId
         );
 
@@ -428,7 +428,7 @@ describe(`when querying for a note: fetch many`, () => {
 
                 expect(foundIds).toContain(publicNoteAboutWidget.id);
                 expect(foundIds).toContain(publicNoteConnectingWidgets.id);
-                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrdinaryUserCanAccess.id);
                 expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
 
                 // this user should not see the private notes \ connections with an empty ACL
@@ -458,7 +458,7 @@ describe(`when querying for a note: fetch many`, () => {
 
                 expect(foundIds).toContain(publicNoteAboutWidget.id);
                 expect(foundIds).toContain(publicNoteConnectingWidgets.id);
-                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrdinaryUserCanAccess.id);
                 expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
                 expect(foundIds).toContain(privateNoteAboutWidget.id);
                 expect(foundIds).toContain(privateNoteConnectingWidgets.id);
@@ -490,7 +490,7 @@ describe(`when querying for a note: fetch many`, () => {
 
                 expect(foundIds).toContain(publicNoteAboutWidget.id);
                 expect(foundIds).toContain(publicNoteConnectingWidgets.id);
-                expect(foundIds).toContain(privateNoteAboutWidgetThatOrinaryUserCanAccess.id);
+                expect(foundIds).toContain(privateNoteAboutWidgetThatOrdinaryUserCanAccess.id);
                 expect(foundIds).toContain(privateNoteConnectingWidgetsWithUserAccess.id);
                 expect(foundIds).toContain(privateNoteAboutWidget.id);
                 expect(foundIds).toContain(privateNoteConnectingWidgets.id);
