@@ -1,16 +1,21 @@
-import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
+import { ISpatialFeatureProperties, LanguageCode } from '@coscrad/api-interfaces';
 import { NonEmptyString, URL } from '@coscrad/data-types';
+import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
+import { ResultOrError } from '../../../../../types/ResultOrError';
 import BaseDomainModel from '../../../base-domain-model.entity';
+import { CannotReplaceTraditionalNameError } from '../../errors';
 
+@CoscradDataExample<SpatialFeatureProperties>({
+    example: {
+        description: 'this is a big lake',
+        traditionalName: buildMultilingualTextWithSingleItem('Big Lake'),
+    },
+})
 export class SpatialFeatureProperties extends BaseDomainModel implements ISpatialFeatureProperties {
-    // TODO Make this multilingual text
-    @NonEmptyString({
-        label: 'name',
-        description: 'a place name (in any language)',
-    })
-    readonly name: string;
-
     @NonEmptyString({
         label: 'description',
         description: 'a description of the place',
@@ -25,17 +30,38 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
     // TODO We may want to make this a media item ID
     readonly imageUrl?: string;
 
+    traditionalName: MultilingualText;
+
     constructor(dto: DTO<SpatialFeatureProperties>) {
         super();
 
         if (!dto) return;
 
-        const { name, description, imageUrl } = dto;
-
-        this.name = name;
+        const { description, imageUrl, traditionalName } = dto;
 
         this.description = description;
 
         this.imageUrl = imageUrl;
+
+        if (isNonEmptyObject(traditionalName)) {
+            this.traditionalName = new MultilingualText(traditionalName);
+        }
+    }
+
+    // TODO add update method?
+    addTraditionalName(
+        text: string,
+        languageCode: LanguageCode
+    ): ResultOrError<SpatialFeatureProperties> {
+        if (!isNullOrUndefined(this.traditionalName)) {
+            return new CannotReplaceTraditionalNameError(
+                text,
+                this.traditionalName.getOriginalTextItem().text
+            );
+        }
+
+        this.traditionalName = buildMultilingualTextWithSingleItem(text, languageCode);
+
+        return this;
     }
 }

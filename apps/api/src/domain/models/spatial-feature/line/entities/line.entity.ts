@@ -1,4 +1,3 @@
-import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
@@ -21,7 +20,7 @@ export class Line extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
 
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Line>) {
         super({ ...dto, type: ResourceType.spatialFeature });
