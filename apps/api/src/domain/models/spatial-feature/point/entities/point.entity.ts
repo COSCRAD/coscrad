@@ -1,20 +1,23 @@
-import { AggregateType, ISpatialFeatureProperties } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { NestedDataType } from '@coscrad/data-types';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
     CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
@@ -30,13 +33,26 @@ import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT, PointCreated } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
+@CoscradDataExample<Point>({
+    example: {
+        type: ResourceType.spatialFeature,
+        geometry: { type: GeometricFeatureType.point, coordinates: [120, 80] },
+        properties: { description: 'this is my favourite place' },
+        published: false,
+        id: buildDummyUuid(21),
+    },
+})
 @RegisterIndexScopedCommands([CREATE_POINT])
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
 
-    readonly properties: ISpatialFeatureProperties;
+    @NestedDataType(SpatialFeatureProperties, {
+        label: 'properties',
+        description: 'custom properties to supplement the geospatial data',
+    })
+    properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -58,8 +74,7 @@ export class Point extends Resource implements ISpatialFeature {
     }
 
     getName(): MultilingualText {
-        // TODO Make this multilingual text
-        return buildMultilingualTextWithSingleItem(this.properties.name);
+        return this.properties.getName();
     }
 
     validateExternalState(externalState: InMemorySnapshot): ValidationResult {
@@ -111,6 +126,19 @@ export class Point extends Resource implements ISpatialFeature {
         return [];
     }
 
+    @UpdateMethod()
+    addTraditionalName(text: string, languageCode: LanguageCode): ResultOrError<Point> {
+        const updatedProperties = this.properties.addTraditionalName(text, languageCode);
+
+        if (isInternalError(updatedProperties)) {
+            return updatedProperties;
+        }
+
+        this.properties = updatedProperties;
+
+        return this;
+    }
+
     static fromEventHistory(
         eventHistory: BaseEvent[],
         id: AggregateId
@@ -135,7 +163,6 @@ export class Point extends Resource implements ISpatialFeature {
             aggregateCompositeIdentifier: { id },
             lattitude,
             longitude,
-            name,
             description,
         },
     }: PointCreated): ResultOrError<Point> {
@@ -147,8 +174,6 @@ export class Point extends Resource implements ISpatialFeature {
                 coordinates: [lattitude, longitude],
             },
             properties: {
-                // TODO make this multilingual
-                name,
                 description,
             },
             published: false,

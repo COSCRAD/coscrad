@@ -1,5 +1,5 @@
 import { ISpatialFeatureProperties, LanguageCode } from '@coscrad/api-interfaces';
-import { NonEmptyString, URL } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
@@ -30,7 +30,11 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
     // TODO We may want to make this a media item ID
     readonly imageUrl?: string;
 
-    traditionalName: MultilingualText;
+    @NestedDataType(MultilingualText, {
+        label: 'traditional name',
+        description: 'the name this place was traditionally called by locals',
+    })
+    traditionalName?: MultilingualText;
 
     constructor(dto: DTO<SpatialFeatureProperties>) {
         super();
@@ -46,6 +50,14 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
         if (isNonEmptyObject(traditionalName)) {
             this.traditionalName = new MultilingualText(traditionalName);
         }
+    }
+
+    getName(): MultilingualText {
+        if (isNonEmptyObject(this.traditionalName)) {
+            return this.traditionalName;
+        }
+
+        return buildMultilingualTextWithSingleItem(this.description);
     }
 
     // TODO add update method?

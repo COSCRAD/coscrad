@@ -1,10 +1,10 @@
 import {
     GeometricFeatureType,
-    ISpatialFeatureProperties,
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
+import { SpatialFeatureProperties } from '../../../../domain/models/spatial-feature/point/entities/spatial-feature-properties.entity';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { BaseViewModel } from '../base.view-model';
 
@@ -29,7 +29,7 @@ export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFe
      * This name is in keeping with the GEOJSON standard. It holds all non-geometry
      * properties that are associated with the identity of this spatial feature.
      */
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
     constructor(spatialFeature: ISpatialFeature) {
         super(spatialFeature);

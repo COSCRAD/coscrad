@@ -1,8 +1,21 @@
-import { ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../../test-data/utilities';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { SpatialFeatureCompositeIdentifier } from '../../../point/commands';
 
+@CoscradDataExample<AddTraditionalNameForSpatialFeature>({
+    example: {
+        aggregateCompositeIdentifier: {
+            id: buildDummyUuid(7),
+            type: AggregateType.spatialFeature,
+        },
+        text: 'Text for the spatial feature',
+        languageCode: LanguageCode.English,
+    },
+})
 @Command({
     type: 'ADD_TRADITIONAL_NAME_FOR_SPATIAL_FEATURE',
     label: 'add traditional name for spatial feature',
@@ -15,7 +28,15 @@ export class AddTraditionalNameForSpatialFeature implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
+    @NonEmptyString({
+        label: 'text for the spatial feature',
+        description: 'text for the spatial feature',
+    })
     readonly text: string;
 
-    readonly languageCode: string;
+    @LanguageCodeEnum({
+        label: 'language code for spatial feature',
+        description: 'language code for spatial feature',
+    })
+    readonly languageCode: LanguageCode;
 }

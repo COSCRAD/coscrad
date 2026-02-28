@@ -54,8 +54,8 @@ export class CreatePoint implements ICommandBase {
 
     // TODO support elevation
 
+    // TODO How should this command work now?
     // TODO add languageCode for name
-    @FromDomainModel(SpatialFeatureProperties)
     readonly name: string;
 
     @FromDomainModel(SpatialFeatureProperties)

@@ -8,7 +8,7 @@ import { IMultilingualText } from '../common';
  * This is because we are strictly adhering to the GEO JSON standard.
  */
 export interface ISpatialFeatureProperties {
-    traditionalName: IMultilingualText;
+    traditionalName?: IMultilingualText;
     /**
      * While one can add arbitrarily many notes about the given spatial feature,
      * the single description is what will be shown on a pop up associated with

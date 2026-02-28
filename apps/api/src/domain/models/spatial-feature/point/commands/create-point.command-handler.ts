@@ -19,7 +19,8 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
         aggregateCompositeIdentifier: { id },
         lattitude,
         longitude,
-        name,
+        // TODO remove this
+        // name,
         description,
         imageUrl,
     }: CreatePoint): ResultOrError<Point> {
@@ -31,7 +32,8 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
                 coordinates: [lattitude, longitude],
             },
             properties: {
-                name,
+                // this too
+                // name,
                 description,
                 imageUrl,
             },

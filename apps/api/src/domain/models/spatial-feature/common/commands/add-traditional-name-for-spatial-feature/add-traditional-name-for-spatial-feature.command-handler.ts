@@ -1,34 +1,54 @@
-import { ICommand } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
+import {
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../../domain/domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { BaseEvent } from '../../../../../../queries/event-sourcing';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { BaseUpdateCommandHandler } from '../../../../shared/command-handlers/base-update-command-handler';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
-import { SpatialFeatureProperties } from '../../../point/entities/spatial-feature-properties.entity';
+import { Point } from '../../../point/entities/point.entity';
+import { AddTraditionalNameForSpatialFeature } from './add-traditional-name-for-spatial-feature.command';
+import { TraditionalNameAddedForSpatialFeature } from './traditional-name-added-for-spatial-feature.event';
 
-export class AddTraditionalNameForSpatialFeatureCommandHandler extends BaseUpdateCommandHandler<SpatialFeatureProperties> {
+@CommandHandler(AddTraditionalNameForSpatialFeature)
+export class AddTraditionalNameForSpatialFeatureCommandHandler extends BaseUpdateCommandHandler<Point> {
     protected actOnInstance(
-        _instance: SpatialFeatureProperties,
-        _command: ICommand
-    ): ResultOrError<SpatialFeatureProperties> {
-        throw new Error('Method not implemented.');
+        instance: Point,
+        { text, languageCode }: AddTraditionalNameForSpatialFeature
+    ): ResultOrError<Point> {
+        return instance.addTraditionalName(text, languageCode);
     }
 
     protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
-        throw new Error('Method not implemented.');
+        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
     }
 
     protected validateExternalState(
-        _state: InMemorySnapshot,
-        _instance: SpatialFeatureProperties,
-        _command?: ICommand
+        state: InMemorySnapshot,
+        instance: Point
     ): Valid | InternalError {
-        throw new Error('Method not implemented.');
+        return instance.validateExternalState(state);
     }
 
-    protected buildEvent(_payload: ICommand, _eventMeta: EventRecordMetadata): BaseEvent {
-        throw new Error('Method not implemented.');
+    protected buildEvent(
+        { aggregateCompositeIdentifier, text, languageCode }: AddTraditionalNameForSpatialFeature,
+        eventMeta: EventRecordMetadata
+    ): BaseEvent {
+        return new TraditionalNameAddedForSpatialFeature(
+            {
+                aggregateCompositeIdentifier,
+                text: new MultilingualTextItem({
+                    text,
+                    languageCode,
+                    role: MultilingualTextItemRole.original,
+                }),
+            },
+            eventMeta
+        );
     }
 }
