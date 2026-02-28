@@ -1,5 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { Module } from '@nestjs/common';
+import { PersistenceModule } from '../../persistence/persistence.module';
 import { formatLanguageCode } from '../../queries/presentation/formatLanguageCode';
 import { InternalError } from '../errors/InternalError';
 import { ArangoFullTextSearchQueryRepository } from './full-text-search/arango-full-text-search-query-repository';
@@ -10,6 +11,7 @@ import { ChilcotinTokenizer, TOKENIZER_PROVIDER_INJECTION_TOKEN } from './tokeni
  * TODO Make this a separate lib in the monorepo.
  */
 @Module({
+    imports: [PersistenceModule],
     providers: [
         {
             provide: TOKENIZER_PROVIDER_INJECTION_TOKEN,
