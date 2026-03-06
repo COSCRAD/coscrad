@@ -8,6 +8,7 @@ import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePat
 import { Environment } from '../../../../../../app/config/constants/environment';
 import { SpatialFeatureModule } from '../../../../../../app/domain-modules/spatial-feature.module';
 import { CoscradEventFactory } from '../../../../../../domain/common';
+import { buildMultilingualTextWithSingleItem } from '../../../../../../domain/common/build-multilingual-text-with-single-item';
 import { ID_MANAGER_TOKEN } from '../../../../../../domain/interfaces/id-manager.interface';
 import { ArangoDatabaseProvider } from '../../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
@@ -15,6 +16,7 @@ import generateDatabaseNameForTestSuite from '../../../../../../persistence/repo
 import TestRepositoryProvider from '../../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../../validation';
+import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
@@ -37,7 +39,9 @@ const validPayload = buildTestInstance(AddTraditionalNameForSpatialFeature, {
 });
 
 const existingPoint = buildTestInstance(Point, {
+    id: spatialFeatureId,
     properties: {
+        contemporaryName: buildMultilingualTextWithSingleItem('Parking Lot C27'),
         traditionalName: undefined,
     },
 });
@@ -125,6 +129,46 @@ describe(commandType, () => {
 
                     expect(originalTextItem.text).toBe(newTraditionalNameText);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the target spatial feature already has a traditional name`, () => {
+            it(`should return the expected error response`, async () => {
+                const textForTraditionalName = 'blue creek';
+
+                const languageCodeForTraditionalName = LanguageCode.Chilcotin;
+
+                const existingTraditionalName = buildMultilingualTextWithSingleItem(
+                    textForTraditionalName,
+                    languageCodeForTraditionalName
+                );
+
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.spatialFeature)
+                            .create(
+                                existingPoint.clone({
+                                    properties: {
+                                        traditionalName: existingTraditionalName,
+                                    },
+                                })
+                            );
+                    },
+                    buildCommandFSA: () => ({
+                        type: commandType,
+                        payload: buildTestInstance(AddTraditionalNameForSpatialFeature, {
+                            aggregateCompositeIdentifier: {
+                                id: existingPoint.id,
+                            },
+                            text: textForTraditionalName,
+                            languageCode: languageCodeForTraditionalName,
+                        }),
+                    }),
+                });
             });
         });
     });

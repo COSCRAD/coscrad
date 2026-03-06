@@ -1,3 +1,5 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
+import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { Point } from '../../domain/models/spatial-feature/point/entities/point.entity';
 import { Position2D } from '../../domain/models/spatial-feature/types/Coordinates/Position2D';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
@@ -31,7 +33,10 @@ export default (): Point[] =>
             new Point({
                 ...partialDto,
                 properties: {
-                    name: `Name of Point with ID: ${partialDto.id}`,
+                    traditionalName: buildMultilingualTextWithSingleItem(
+                        `Name of Point with ID: ${partialDto.id}`,
+                        LanguageCode.Chilcotin
+                    ),
                     description: `Description for point ${partialDto.id}`,
                     imageUrl:
                         'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',

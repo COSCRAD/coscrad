@@ -2,6 +2,15 @@
 
 ## <NEXT>
 
+### Traditional Names for Places
+
+We have added support for assigning both traditional and contemporary names
+for spatial features. Each of these names is multilingual and can be traslated from any original langauge to any target language(s).
+
+#### Relevant commits
+
+-   feat: introduce ADD_TRADITIONAL_NAME_FOR_SPATIAL_FEATURE (#813)
+
 ### Gameplay for Memory Match
 
 Admin support for managing memory rounds was added in a recent release. In this release,

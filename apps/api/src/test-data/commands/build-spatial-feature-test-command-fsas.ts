@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { CREATE_POINT } from '../../domain/models/spatial-feature/point/commands';
@@ -15,7 +16,10 @@ const createPointPayload: CreatePoint = {
     },
     lattitude: 52.1417,
     longitude: -122.1417,
-    name: 'Cool Point',
+    contemporaryName: {
+        text: 'Cool Point',
+        languageCode: LanguageCode.English,
+    },
     description: 'This is just test data',
     imageUrl: `https://www.coscrad.org/ADDME.jpg`,
 };

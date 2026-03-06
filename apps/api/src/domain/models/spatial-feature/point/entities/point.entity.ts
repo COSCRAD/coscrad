@@ -1,7 +1,8 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { isDeepStrictEqual } from 'util';
+import { isNumberWithinRange } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
@@ -15,7 +16,6 @@ import { ResultOrError } from '../../../../../types/ResultOrError';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
@@ -23,20 +23,20 @@ import {
     buildAggregateRootFromEventHistory,
 } from '../../../build-aggregate-root-from-event-history';
 import { Resource } from '../../../resource.entity';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
-import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT, PointCreated } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
+const POINT = 'Point';
+
 @CoscradDataExample<Point>({
     example: {
         type: ResourceType.spatialFeature,
-        geometry: { type: GeometricFeatureType.point, coordinates: [120, 80] },
+        geometry: { type: POINT, coordinates: [80, 120] },
         properties: { description: 'this is my favourite place' },
         published: false,
         id: buildDummyUuid(21),
@@ -46,7 +46,7 @@ import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
-    readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
+    readonly geometry: IGeometricFeature<'Point', PointCoordinates>;
 
     @NestedDataType(SpatialFeatureProperties, {
         label: 'properties',
@@ -67,7 +67,7 @@ export class Point extends Resource implements ISpatialFeature {
          * clone to avoid shared references and hence unwanted side-effects.
          */
         this.geometry = cloneToPlainObject(
-            geometryDTO as IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>
+            geometryDTO as IGeometricFeature<'Point', PointCoordinates>
         );
 
         this.properties = new SpatialFeatureProperties(propertiesDTO);
@@ -77,44 +77,50 @@ export class Point extends Resource implements ISpatialFeature {
         return this.properties.getName();
     }
 
-    validateExternalState(externalState: InMemorySnapshot): ValidationResult {
-        const otherSpatialFeatures = new DeluxeInMemoryStore(externalState).fetchAllOfType(
-            AggregateType.spatialFeature
-        );
-
-        const spatialFeaturesWithTheSameName = otherSpatialFeatures.filter((sf) => {
-            const thisName = this.getName().getOriginalTextItem();
-
-            const thatName = sf.getName().getOriginalTextItem();
-
-            return isDeepStrictEqual(thisName, thatName);
-        });
-
-        const nameDuplicationErrors = spatialFeaturesWithTheSameName.map(
-            (spatialFeature) =>
-                new InternalError(
-                    `There is already a spatialFeature with the name: ${spatialFeature
-                        .getName()
-                        .getOriginalTextItem()}`
-                )
-        );
-
-        return nameDuplicationErrors.length > 0
-            ? new InvalidExternalStateError(nameDuplicationErrors)
-            : Valid;
+    validateExternalState(_externalState: InMemorySnapshot): ValidationResult {
+        return Valid;
     }
 
     protected validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
         const { coordinates } = this.geometry;
 
         /**
+         * TODO Does this mean the nested `Properties` should run its own schema-based validation?
+         * We should fuzz-test this model.
+         *
          * Note that **all** invariant validation rules are validated within
          * the following function. We opt-out of the decorator-based
          * 'simple-invariant' validation for geometric models because it is
          *  more transparent to keep all coordinates as plain-old objects and not
          * instances of nested classes.
          */
-        return validatePosition2D(coordinates);
+        allErrors.push(...validatePosition2D(coordinates));
+
+        const [lattitude, longitude] = coordinates;
+
+        if (!isNumberWithinRange(lattitude, [-90, 90])) {
+            allErrors.push(
+                new InternalError(
+                    `Invalid lattiduue: ${lattitude} encountered for point(${
+                        this.id
+                    }) ${this.getName()}. Lattitude must fall between -90 and 90`
+                )
+            );
+        }
+
+        if (!isNumberWithinRange(longitude, [-180, 180])) {
+            allErrors.push(
+                new InternalError(
+                    `Invalid longitude: ${longitude} encountered for point(${this.id}). Longitude must fall between -180 and 180.`
+                )
+            );
+        }
+
+        allErrors.push(...this.properties.validateComplexInvariants());
+
+        return allErrors;
     }
 
     // Should we have a base class? Does this logic vary amongst subtypes?
@@ -163,6 +169,8 @@ export class Point extends Resource implements ISpatialFeature {
             aggregateCompositeIdentifier: { id },
             lattitude,
             longitude,
+            traditionalName,
+            contemporaryName,
             description,
         },
     }: PointCreated): ResultOrError<Point> {
@@ -170,10 +178,22 @@ export class Point extends Resource implements ISpatialFeature {
             type: AggregateType.spatialFeature,
             id,
             geometry: {
-                type: GeometricFeatureType.point,
+                type: POINT,
                 coordinates: [lattitude, longitude],
             },
             properties: {
+                traditionalName: traditionalName
+                    ? buildMultilingualTextWithSingleItem(
+                          traditionalName.text,
+                          traditionalName.languageCode
+                      )
+                    : undefined,
+                contemporaryName: contemporaryName
+                    ? buildMultilingualTextWithSingleItem(
+                          contemporaryName.text,
+                          contemporaryName.languageCode
+                      )
+                    : undefined,
                 description,
             },
             published: false,

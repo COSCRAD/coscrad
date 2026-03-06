@@ -29,14 +29,15 @@ export class AddTraditionalNameForSpatialFeature implements ICommandBase {
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
     @NonEmptyString({
-        label: 'text for the spatial feature',
-        description: 'text for the spatial feature',
+        label: 'traditional name',
+        description: 'text for the traditional name of this spatial feature',
     })
     readonly text: string;
 
     @LanguageCodeEnum({
-        label: 'language code for spatial feature',
-        description: 'language code for spatial feature',
+        label: 'language code for traditional name',
+        description:
+            'language in which you are providing a traditional name for this spatial feature',
     })
     readonly languageCode: LanguageCode;
 }

@@ -9,6 +9,7 @@ import { IMultilingualText } from '../common';
  */
 export interface ISpatialFeatureProperties {
     traditionalName?: IMultilingualText;
+    contemporaryName?: IMultilingualText;
     /**
      * While one can add arbitrarily many notes about the given spatial feature,
      * the single description is what will be shown on a pop up associated with

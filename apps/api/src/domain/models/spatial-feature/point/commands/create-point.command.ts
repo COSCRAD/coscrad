@@ -1,10 +1,39 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { FiniteNumber, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import {
+    FiniteNumber,
+    FromDomainModel,
+    NestedDataType,
+    NonEmptyString,
+    UUID,
+} from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { AggregateId } from '../../../../types/AggregateId';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 import { SpatialFeatureProperties } from '../entities/spatial-feature-properties.entity';
 import { CREATE_POINT } from './constants';
+
+@CoscradDataExample<MultilingualTextItemForCommand>({
+    example: {
+        text: 'windy valley',
+        languageCode: LanguageCode.Chilcotin,
+    },
+})
+class MultilingualTextItemForCommand {
+    @NonEmptyString({
+        label: 'text',
+        description: 'text for the given langauge',
+    })
+    text: string;
+
+    @LanguageCodeEnum({
+        label: 'language code',
+        description: 'the language of the provided text',
+    })
+    languageCode: LanguageCode;
+}
 
 export class SpatialFeatureCompositeIdentifier {
     @AggregateTypeProperty([AggregateType.spatialFeature])
@@ -17,6 +46,20 @@ export class SpatialFeatureCompositeIdentifier {
     id: AggregateId;
 }
 
+@CoscradDataExample<CreatePoint>({
+    example: {
+        aggregateCompositeIdentifier: {
+            id: buildDummyUuid(123),
+            type: AggregateType.spatialFeature,
+        },
+        lattitude: 51.9,
+        longitude: 123,
+        description: 'a traditional village',
+        // note that one of these must be explicitly specified when calling `buildTestInstance`
+        // traditionalName
+        // contemporaryName
+    },
+})
 @Command({
     type: CREATE_POINT,
     label: 'Create Point',
@@ -54,9 +97,22 @@ export class CreatePoint implements ICommandBase {
 
     // TODO support elevation
 
-    // TODO How should this command work now?
-    // TODO add languageCode for name
-    readonly name: string;
+    /**
+     * Note that one of `traditionalName` and `contemporaryName` must be specified.
+     */
+    @NestedDataType(MultilingualTextItemForCommand, {
+        label: 'traditional name',
+        description: 'What was this place traditionally called by locals?',
+        isOptional: true,
+    })
+    readonly traditionalName?: MultilingualTextItemForCommand;
+
+    @NestedDataType(MultilingualTextItemForCommand, {
+        label: 'contemporary-name',
+        description: 'What is the contemporary (colonial) name for this place?',
+        isOptional: true,
+    })
+    readonly contemporaryName?: MultilingualTextItemForCommand;
 
     @FromDomainModel(SpatialFeatureProperties)
     readonly description: string;

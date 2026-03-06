@@ -5083,6 +5083,65 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
         },
       },
+      "contemporaryName": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "What is the contemporary (colonial) name for this place?",
+        "isArray": false,
+        "isOptional": true,
+        "isPrivate": false,
+        "label": "contemporary-name",
+        "name": "MultilingualTextItemForCommand",
+        "schema": {
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "the language of the provided text",
+            "enumLabel": "language code",
+            "enumName": "LanguageCode",
+            "isArray": false,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "language code",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "en",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "text": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "text for the given langauge",
+            "isArray": false,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "text",
+          },
+        },
+      },
       "description": {
         "coscradDataType": "NON_EMPTY_STRING",
         "description": "a description of the place",
@@ -5115,13 +5174,64 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "isPrivate": false,
         "label": "longitude",
       },
-      "name": {
-        "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a place name (in any language)",
+      "traditionalName": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "What was this place traditionally called by locals?",
         "isArray": false,
-        "isOptional": false,
+        "isOptional": true,
         "isPrivate": false,
-        "label": "name",
+        "label": "traditional name",
+        "name": "MultilingualTextItemForCommand",
+        "schema": {
+          "languageCode": {
+            "complexDataType": "ENUM",
+            "description": "the language of the provided text",
+            "enumLabel": "language code",
+            "enumName": "LanguageCode",
+            "isArray": false,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "language code",
+            "labelsAndValues": [
+              {
+                "label": "Chilcotin",
+                "value": "clc",
+              },
+              {
+                "label": "Haida",
+                "value": "hai",
+              },
+              {
+                "label": "English",
+                "value": "en",
+              },
+              {
+                "label": "French",
+                "value": "fra",
+              },
+              {
+                "label": "Chinook",
+                "value": "chn",
+              },
+              {
+                "label": "Zapotec",
+                "value": "zap",
+              },
+              {
+                "label": "Spanish",
+                "value": "spa",
+              },
+            ],
+          },
+          "text": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "text for the given langauge",
+            "isArray": false,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "text",
+          },
+        },
       },
     },
     "type": "CREATE_POINT",

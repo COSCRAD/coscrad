@@ -3,11 +3,12 @@ import { NestedDataType, NonEmptyString, URL } from '@coscrad/data-types';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
+import { InternalError } from '../../../../../lib/errors/InternalError';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import BaseDomainModel from '../../../base-domain-model.entity';
-import { CannotReplaceTraditionalNameError } from '../../errors';
+import { CannotReplaceTraditionalNameError, SpatialFeatureMustHaveANameError } from '../../errors';
 
 @CoscradDataExample<SpatialFeatureProperties>({
     example: {
@@ -33,15 +34,23 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
     @NestedDataType(MultilingualText, {
         label: 'traditional name',
         description: 'the name this place was traditionally called by locals',
+        isOptional: true,
     })
     traditionalName?: MultilingualText;
+
+    @NestedDataType(MultilingualText, {
+        label: 'contemporary name',
+        description: 'a more recently introduced, typically colonial name for this place',
+        isOptional: true,
+    })
+    contemporaryName?: MultilingualText;
 
     constructor(dto: DTO<SpatialFeatureProperties>) {
         super();
 
         if (!dto) return;
 
-        const { description, imageUrl, traditionalName } = dto;
+        const { description, imageUrl, traditionalName, contemporaryName } = dto;
 
         this.description = description;
 
@@ -50,6 +59,10 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
         if (isNonEmptyObject(traditionalName)) {
             this.traditionalName = new MultilingualText(traditionalName);
         }
+
+        if (isNonEmptyObject(contemporaryName)) {
+            this.contemporaryName = new MultilingualText(contemporaryName);
+        }
     }
 
     getName(): MultilingualText {
@@ -57,10 +70,14 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
             return this.traditionalName;
         }
 
+        if (isNonEmptyObject(this.contemporaryName)) {
+            return this.contemporaryName;
+        }
+
+        // this shouldn't happen because it is an invariant rule that one of `traditionalName` or `contemporaryName` must be defined
         return buildMultilingualTextWithSingleItem(this.description);
     }
 
-    // TODO add update method?
     addTraditionalName(
         text: string,
         languageCode: LanguageCode
@@ -75,5 +92,15 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
         this.traditionalName = buildMultilingualTextWithSingleItem(text, languageCode);
 
         return this;
+    }
+
+    validateComplexInvariants(): InternalError[] {
+        const allErrors: InternalError[] = [];
+
+        if (!this.traditionalName && !this.contemporaryName) {
+            allErrors.push(new SpatialFeatureMustHaveANameError());
+        }
+
+        return allErrors;
     }
 }

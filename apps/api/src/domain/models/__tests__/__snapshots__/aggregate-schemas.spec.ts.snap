@@ -2296,6 +2296,237 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
       },
     },
   },
+  "properties": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "custom properties to supplement the geospatial data",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "properties",
+    "name": "SpatialFeatureProperties",
+    "schema": {
+      "contemporaryName": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "a more recently introduced, typically colonial name for this place",
+        "isArray": false,
+        "isOptional": true,
+        "isPrivate": false,
+        "label": "contemporary name",
+        "name": "MultilingualText",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "items",
+            "name": "MultilingualTextItem",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
+      "description": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "a description of the place",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "description",
+      },
+      "imageUrl": {
+        "coscradDataType": "URL",
+        "description": "a full URL link to an image to display with this spatial feature",
+        "isArray": false,
+        "isOptional": true,
+        "isPrivate": false,
+        "label": "image link",
+      },
+      "traditionalName": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "the name this place was traditionally called by locals",
+        "isArray": false,
+        "isOptional": true,
+        "isPrivate": false,
+        "label": "traditional name",
+        "name": "MultilingualText",
+        "schema": {
+          "items": {
+            "complexDataType": "NESTED_TYPE",
+            "description": "one item for each provided language",
+            "isArray": true,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "items",
+            "name": "MultilingualTextItem",
+            "schema": {
+              "languageCode": {
+                "complexDataType": "ENUM",
+                "description": "an official identifier of the language",
+                "enumLabel": "Language_Code",
+                "enumName": "LangaugeCode",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "language code",
+                "labelsAndValues": [
+                  {
+                    "label": "Chilcotin",
+                    "value": "clc",
+                  },
+                  {
+                    "label": "Haida",
+                    "value": "hai",
+                  },
+                  {
+                    "label": "English",
+                    "value": "en",
+                  },
+                  {
+                    "label": "French",
+                    "value": "fra",
+                  },
+                  {
+                    "label": "Chinook",
+                    "value": "chn",
+                  },
+                  {
+                    "label": "Zapotec",
+                    "value": "zap",
+                  },
+                  {
+                    "label": "Spanish",
+                    "value": "spa",
+                  },
+                ],
+              },
+              "role": {
+                "complexDataType": "ENUM",
+                "description": "role of this text in the translation process",
+                "enumLabel": "text item role",
+                "enumName": "Multilingual Text Item Role",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "text item role",
+                "labelsAndValues": [
+                  {
+                    "label": "original",
+                    "value": "original",
+                  },
+                  {
+                    "label": "glossed to",
+                    "value": "glossed to",
+                  },
+                  {
+                    "label": "free translation",
+                    "value": "free translation",
+                  },
+                  {
+                    "label": "literal translation",
+                    "value": "literal translation",
+                  },
+                  {
+                    "label": "elicited from a prompt",
+                    "value": "elicited from a prompt",
+                  },
+                ],
+              },
+              "text": {
+                "coscradDataType": "NON_EMPTY_STRING",
+                "description": "plain text in the given language",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "text",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 }
 `;
 

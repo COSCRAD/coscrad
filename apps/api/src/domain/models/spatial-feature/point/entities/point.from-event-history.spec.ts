@@ -1,3 +1,5 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { TestEventStream } from '../../../../../test-data/events';
 import { AggregateType } from '../../../../types/AggregateType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -22,7 +24,11 @@ const pointCreated = new TestEventStream().andThen<PointCreated>({
     payload: {
         lattitude,
         longitude,
-        name: pointName,
+        traditionalName: new MultilingualTextItem({
+            text: pointName,
+            languageCode: LanguageCode.Chilcotin,
+            role: MultilingualTextItemRole.original,
+        }),
     },
 });
 

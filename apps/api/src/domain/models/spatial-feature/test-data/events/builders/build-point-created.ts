@@ -1,4 +1,5 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { MultilingualTextItem } from '../../../../../../domain/common/entities/multilingual-text';
 import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { EventMetadataBuilder } from '../../../../../../test-data/events';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
@@ -15,7 +16,11 @@ export const buildPointCreated = (
         },
         lattitude: 54.2,
         longitude: 52.8,
-        name: 'the club',
+        contemporaryName: new MultilingualTextItem({
+            text: 'the club',
+            languageCode: LanguageCode.English,
+            role: MultilingualTextItemRole.original,
+        }),
         description: 'this is where we hang out on vacation',
     };
 

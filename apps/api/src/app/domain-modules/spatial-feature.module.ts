@@ -1,5 +1,7 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { AddTraditionalNameForSpatialFeature } from '../../domain/models/spatial-feature/common/commands/add-traditional-name-for-spatial-feature/add-traditional-name-for-spatial-feature.command';
+import { AddTraditionalNameForSpatialFeatureCommandHandler } from '../../domain/models/spatial-feature/common/commands/add-traditional-name-for-spatial-feature/add-traditional-name-for-spatial-feature.command-handler';
 import { Line } from '../../domain/models/spatial-feature/line/entities/line.entity';
 import {
     CreatePoint,
@@ -26,8 +28,9 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
         CommandInfoService,
         SpatialFeatureQueryService,
         CreatePointCommandHandler,
+        AddTraditionalNameForSpatialFeatureCommandHandler,
         // Data Classes
-        ...[CreatePoint, Line].map((ctor) => ({
+        ...[CreatePoint, AddTraditionalNameForSpatialFeature, Line].map((ctor) => ({
             provide: ctor,
             useValue: ctor,
         })),

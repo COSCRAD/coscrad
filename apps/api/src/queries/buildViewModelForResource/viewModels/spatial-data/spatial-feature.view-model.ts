@@ -3,6 +3,7 @@ import {
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import { SpatialFeatureProperties } from '../../../../domain/models/spatial-feature/point/entities/spatial-feature-properties.entity';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -29,7 +30,7 @@ export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFe
      * This name is in keeping with the GEOJSON standard. It holds all non-geometry
      * properties that are associated with the identity of this spatial feature.
      */
-    readonly properties: SpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties & { name: MultilingualText };
 
     constructor(spatialFeature: ISpatialFeature) {
         super(spatialFeature);
@@ -39,5 +40,7 @@ export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFe
         this.geometry = cloneToPlainObject(geometry);
 
         this.properties = cloneToPlainObject(properties);
+
+        this.properties.name = spatialFeature.getName();
     }
 }
