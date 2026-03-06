@@ -1,7 +1,8 @@
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import buildTestDataInFlatFormat from '../../../test-data/buildTestDataInFlatFormat';
 import { DTO } from '../../../types/DTO';
+import getValidAggregateInstanceForTest from '../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';
@@ -23,7 +24,15 @@ const userDtoOverrides: Partial<DTO<CoscradUser>> = {
 
 const spatialFeatureDtoOverrides: Partial<DTO<ISpatialFeature>> = {
     properties: {
-        name: `unique name`,
+        traditionalName: {
+            items: [
+                {
+                    languageCode: LanguageCode.Chilcotin,
+                    text: '',
+                    role: MultilingualTextItemRole.original,
+                },
+            ],
+        },
         description: `I have my own name and promise not to take yours!`,
     },
 };

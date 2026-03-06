@@ -719,7 +719,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 100",
           },
@@ -728,7 +728,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 100",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 100",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 100",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -790,7 +807,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 101",
           },
@@ -799,7 +816,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 101",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 101",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 101",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -857,7 +891,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 102",
           },
@@ -866,7 +900,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 102",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 102",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 102",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -932,7 +983,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 103",
           },
@@ -941,7 +992,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 103",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 103",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 103",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -959,7 +1027,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 104",
           },
@@ -968,7 +1036,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 104",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 104",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 104",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1012,16 +1097,42 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Windy Path",
           },
         ],
       },
       "properties": {
+        "contemporaryName": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "It means windy path",
+            },
+          ],
+        },
         "description": "One amazing hike!",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
-        "name": "Windy Path",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Windy Path",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Windy Path",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1055,16 +1166,42 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
-            "text": "Point with ID: 300 Name",
+            "text": "Traditional Name of Point with ID: 300 Name",
           },
         ],
       },
       "properties": {
+        "contemporaryName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Contemporary Name of Point with ID: 300 Name",
+            },
+          ],
+        },
         "description": "Description for polygon 300",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
-        "name": "Point with ID: 300 Name",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Traditional Name of Point with ID: 300 Name",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Traditional Name of Point with ID: 300 Name",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1092,7 +1229,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 100",
           },
@@ -1101,7 +1238,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "properties": {
         "description": "Description for point 100",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 100",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 100",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 100",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -1163,7 +1317,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 101",
           },
@@ -1172,7 +1326,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "properties": {
         "description": "Description for point 101",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 101",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 101",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 101",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -1230,7 +1401,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 102",
           },
@@ -1239,7 +1410,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "properties": {
         "description": "Description for point 102",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 102",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 102",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 102",
+            },
+          ],
+        },
       },
       "tags": [
         {
@@ -1305,7 +1493,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 103",
           },
@@ -1314,7 +1502,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "properties": {
         "description": "Description for point 103",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 103",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 103",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 103",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1332,7 +1537,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Name of Point with ID: 104",
           },
@@ -1341,7 +1546,24 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "properties": {
         "description": "Description for point 104",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-        "name": "Name of Point with ID: 104",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 104",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Name of Point with ID: 104",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1385,16 +1607,42 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
             "text": "Windy Path",
           },
         ],
       },
       "properties": {
+        "contemporaryName": {
+          "items": [
+            {
+              "languageCode": "en",
+              "role": "original",
+              "text": "It means windy path",
+            },
+          ],
+        },
         "description": "One amazing hike!",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
-        "name": "Windy Path",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Windy Path",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Windy Path",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",
@@ -1428,16 +1676,42 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
       "name": {
         "items": [
           {
-            "languageCode": "en",
+            "languageCode": "clc",
             "role": "original",
-            "text": "Point with ID: 300 Name",
+            "text": "Traditional Name of Point with ID: 300 Name",
           },
         ],
       },
       "properties": {
+        "contemporaryName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Contemporary Name of Point with ID: 300 Name",
+            },
+          ],
+        },
         "description": "Description for polygon 300",
         "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
-        "name": "Point with ID: 300 Name",
+        "name": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Traditional Name of Point with ID: 300 Name",
+            },
+          ],
+        },
+        "traditionalName": {
+          "items": [
+            {
+              "languageCode": "clc",
+              "role": "original",
+              "text": "Traditional Name of Point with ID: 300 Name",
+            },
+          ],
+        },
       },
       "tags": [],
       "type": "spatialFeature",

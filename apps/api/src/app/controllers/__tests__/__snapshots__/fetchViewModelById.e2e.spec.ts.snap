@@ -127,7 +127,7 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "name": {
     "items": [
       {
-        "languageCode": "en",
+        "languageCode": "clc",
         "role": "original",
         "text": "Name of Point with ID: 100",
       },
@@ -136,7 +136,24 @@ exports[`GET  (fetch view models) When querying for a single View Model by ID GE
   "properties": {
     "description": "Description for point 100",
     "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
-    "name": "Name of Point with ID: 100",
+    "name": {
+      "items": [
+        {
+          "languageCode": "clc",
+          "role": "original",
+          "text": "Name of Point with ID: 100",
+        },
+      ],
+    },
+    "traditionalName": {
+      "items": [
+        {
+          "languageCode": "clc",
+          "role": "original",
+          "text": "Name of Point with ID: 100",
+        },
+      ],
+    },
   },
   "tags": [
     {
