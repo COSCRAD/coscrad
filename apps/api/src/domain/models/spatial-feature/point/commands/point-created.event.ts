@@ -49,7 +49,7 @@ export class PointCreatedPayload {
 
     @NestedDataType(MultilingualTextItem, {
         label: 'contemporary-name',
-        description: 'What is the contemporary (colonial) name for this place?',
+        description: 'What is the contemporary name for this place?',
         isOptional: true,
     })
     readonly contemporaryName?: MultilingualTextItem;

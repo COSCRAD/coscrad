@@ -40,7 +40,7 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
 
     @NestedDataType(MultilingualText, {
         label: 'contemporary name',
-        description: 'a more recently introduced, typically colonial name for this place',
+        description: 'a more recently introduced name for this place',
         isOptional: true,
     })
     contemporaryName?: MultilingualText;
