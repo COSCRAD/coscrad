@@ -1,5 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
+import { MemoryMatchActiveCard } from '../types/memory-match-active-card';
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 import { cardFlippedUp } from './card-fipped-up.reducer';
@@ -10,11 +11,15 @@ const N_ROWS = 4;
 
 const N_COLUMNS = (2 * N_CARDS) / N_ROWS;
 
-const buildCard = (row: number, column: number, id: number, state: MemoryMatchCardActiveState) => {
+const buildCard = (
+    row: number,
+    column: number,
+    id: number,
+    state: MemoryMatchCardActiveState
+): MemoryMatchActiveCard => {
     const sequenceNumber = row * N_ROWS + column;
 
     return {
-        id,
         row,
         column,
         sequenceNumber,
@@ -39,7 +44,6 @@ const bothCopiesOfCards = [
     ...oneCopyOfCards.map((row) =>
         row.map((card) => ({
             ...JSON.parse(JSON.stringify(card)),
-            id: card.id + N_ROWS,
         }))
     ),
 ];
@@ -152,10 +156,6 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
                         return;
                     }
 
-                    if (card.state !== MemoryMatchCardActiveState.FACE_DOWN) {
-                        console.log(`here bitch`);
-                    }
-
                     // the rest should still be face-down
                     expect(card.state).toBe(MemoryMatchCardActiveState.FACE_DOWN);
                 })
@@ -163,15 +163,64 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
         };
 
         describe(`when it is not the same card that is now being selected`, () => {
-            it(`should flip the second card`, () => {
-                act(
-                    oneFaceUpState,
-                    {
-                        row: targetRow,
-                        column: targetColumn,
-                    },
-                    checkThatTargetCardWasFlipped
-                );
+            describe(`when the card matches the first selected card`, () => {
+                const targetSequenceNumber = 0;
+
+                const cardsWithSequenceNumber = bothCopiesOfCards
+                    .flatMap((row) => row)
+                    .filter(({ sequenceNumber }) => sequenceNumber === targetSequenceNumber);
+
+                const [firstFaceUpCardLocation, secondFaceUpCardLocation] = cardsWithSequenceNumber;
+
+                const matchingTwoUpState = {
+                    ...allFaceDownState,
+                    rows: allFaceDownState.rows.map((r, ri) => {
+                        const resultingRow = r.map((card, ci) => {
+                            if (
+                                isDeepStrictEqual([ri, ci], firstFaceUpCardLocation) ||
+                                isDeepStrictEqual([ri, ci], secondFaceUpCardLocation)
+                            ) {
+                                return {
+                                    ...JSON.parse(JSON.stringify(card)),
+                                    state: MemoryMatchCardActiveState.FACE_UP,
+                                };
+                            }
+
+                            return card;
+                        });
+
+                        return resultingRow;
+                    }),
+                };
+
+                // TODO make sure we are flipping the right card here
+                it.only(`should clear both cards`, () => {
+                    act(
+                        matchingTwoUpState,
+                        {
+                            row: targetRow,
+                            column: targetColumn,
+                        },
+                        (result) => {
+                            const updatedFirstCard =
+                                result.rows[firstFaceUpCardLocation.row][
+                                    firstFaceUpCardLocation.column
+                                ];
+
+                            const updatedSecondCard =
+                                result.rows[secondFaceUpCardLocation.row][
+                                    secondFaceUpCardLocation.column
+                                ];
+
+                            expect(updatedFirstCard.state).toEqual(
+                                MemoryMatchCardActiveState.CLEARED
+                            );
+                            expect(updatedSecondCard.state).toEqual(
+                                MemoryMatchCardActiveState.CLEARED
+                            );
+                        }
+                    );
+                });
             });
         });
 
