@@ -1,11 +1,14 @@
 import {
+    AggregateType,
     GeometricFeatureType,
     ISpatialFeatureProperties,
     ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { BaseViewModel } from '../base.view-model';
 
 type GeometryViewModel = {
@@ -17,6 +20,23 @@ type GeometryViewModel = {
  * We have a single `SpatialFeatureViewModel` and  deal with
  * discriminating the union client-side.
  */
+@CoscradDataExample<SpatialFeatureViewModel>({
+    example: {
+        type: AggregateType.spatialFeature,
+        id: buildDummyUuid(6),
+        name: {
+            items: [],
+        },
+        geometry: {
+            type: GeometricFeatureType.point,
+            coordinates: [52, -123],
+        },
+        properties: {
+            name: 'my creek',
+            description: 'a nice little town',
+        },
+    },
+})
 export class SpatialFeatureViewModel extends BaseViewModel implements ISpatialFeatureViewModel {
     readonly type = ResourceType.spatialFeature;
 
