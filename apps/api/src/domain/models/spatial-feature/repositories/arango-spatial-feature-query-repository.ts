@@ -1,10 +1,20 @@
+import { PaginatedResponse } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
+import {
+    CoscradBooleanOperator,
+    CoscradConditionBlockType,
+    CoscradSimpleCondition,
+} from '../../../../lib/coscrad-query-language';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
-import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { AggregateId } from '../../../types/AggregateId';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
@@ -12,9 +22,10 @@ import { BaseArangoResourceViewQueryBuilder } from '../../term/repositories/base
 import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { ISpatialFeatureQueryRepository } from '../queries/spatial-feature-query-repository.interface';
+import { EventSourcedSpatialFeatureViewModel } from '../queries/spatial-feature.view-model.event-sourced';
 
 export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<SpatialFeatureViewModel>;
+    private readonly database: ArangoDatabaseForCollection<EventSourcedSpatialFeatureViewModel>;
 
     private readonly baseResourceQueryRepository: BaseArangoResourceViewQueryBuilder;
 
@@ -25,39 +36,103 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
-            'spatial_feature__VIEWS'
+            'spatialFeature__VIEWS'
         );
     }
 
-    create(_view: SpatialFeatureViewModel): Promise<void> {
+    async create(view: EventSourcedSpatialFeatureViewModel): Promise<void> {
+        const document = mapEntityDTOToDatabaseDocument(view);
+
+        await this.database.create(document).catch((error) => {
+            throw new InternalError(error);
+        });
+    }
+
+    async createMany(_views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    fetchById(_id: string, _user?: CoscradUserWithGroups): Promise<Maybe<SpatialFeatureViewModel>> {
+    async fetchById(
+        id: string,
+        user?: CoscradUserWithGroups
+    ): Promise<Maybe<EventSourcedSpatialFeatureViewModel>> {
+        const idEquals: CoscradSimpleCondition = {
+            type: CoscradConditionBlockType.SIMPLE,
+            operator: CoscradBooleanOperator.TEXT_EQUALS,
+            params: [id],
+            field: 'id',
+        };
+
+        const result = await this.database.fetchForUser({
+            filter: idEquals,
+            user,
+        });
+
+        if (isInternalError(result)) {
+            throw result;
+        }
+
+        const { selected } = result;
+
+        if (selected.length === 0) {
+            return NotFound;
+        }
+
+        const asView = mapDatabaseDocumentToAggregateDTO(selected[0]);
+
+        return EventSourcedSpatialFeatureViewModel.fromDto(asView);
+    }
+
+    async fetchMany(
+        options?: FetchManyQueryOptions
+    ): Promise<PaginatedResponse<EventSourcedSpatialFeatureViewModel>> {
+        const result = await this.database.fetchForUser(options);
+
+        if (isInternalError(result)) {
+            throw new InternalError(
+                `
+                Encountered an unexpected database error when fetching all spatial features
+                `,
+                [result]
+            );
+        }
+
+        const { selected, count } = result;
+
+        const buildResult = selected.map((doc) => {
+            const dto = mapDatabaseDocumentToAggregateDTO(doc);
+
+            return EventSourcedSpatialFeatureViewModel.fromDto(dto);
+        });
+
+        return {
+            entities: buildResult,
+            page: options?.pagination.page || 1,
+            count,
+        };
+    }
+
+    async createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {
+    async createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
+    async tag(_id: string, _tagId: string): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    tag(_id: string, _tagId: string): Promise<void> {
+    async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
+    async allowUser(_aggregateId: AggregateId, _userId: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    allowUser(_aggregateId: AggregateId, _userId: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
-
-    publish(_id: AggregateId): Promise<void> {
+    async publish(_id: AggregateId): Promise<void> {
         throw new Error('Method not implemented.');
     }
 }

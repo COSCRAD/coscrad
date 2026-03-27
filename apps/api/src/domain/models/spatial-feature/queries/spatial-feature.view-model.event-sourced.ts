@@ -1,24 +1,22 @@
 import {
-    AggregateType,
     GeometricFeatureType,
     IMultilingualText,
     ISpatialFeatureProperties,
-    ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { buildMultilingualTextWithSingleItem } from '../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
-import { Aggregate } from '../../../../domain/models/aggregate.entity';
-
-import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
-import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import { Ctor } from '../../../../lib/types/Ctor';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
+import { ViewModelId } from '../../../../queries/buildViewModelForResource/viewModels';
+import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
-import { ViewModelId } from '../types/ViewModelId';
+import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { Aggregate } from '../../aggregate.entity';
+import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
 
 type PointTuple = [number, number];
 
@@ -27,28 +25,22 @@ type GeometryViewModel = {
     coordinates: PointTuple | PointTuple[] | PointTuple[][];
 };
 
-/**
- * We have a single `SpatialFeatureViewModel` and  deal with
- * discriminating the union client-side.
- */
-@CoscradDataExample<SpatialFeatureViewModel>({
+@CoscradDataExample<EventSourcedSpatialFeatureViewModel>({
     example: {
-        type: AggregateType.spatialFeature,
-        id: buildDummyUuid(6),
-        name: {
-            items: [],
-        },
+        type: ResourceType.spatialFeature,
+        id: buildDummyUuid(4),
+        name: buildMultilingualTextWithSingleItem('test point name'),
         geometry: {
             type: GeometricFeatureType.point,
-            coordinates: [52, -123],
+            coordinates: [-123, 52],
         },
         properties: {
-            name: 'my creek',
-            description: 'a nice little town',
+            name: 'the point',
+            description: 'is pointing',
         },
     },
 })
-export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
+export class EventSourcedSpatialFeatureViewModel {
     readonly type = ResourceType.spatialFeature;
 
     @ApiProperty({
@@ -86,6 +78,8 @@ export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
 
         this.properties = cloneToPlainObject(properties);
     }
+
+    // TODO static fromPointCreated
 
     static fromDto(dto: DTO<SpatialFeatureViewModel>): SpatialFeatureViewModel {
         return new SpatialFeatureViewModel(dto);

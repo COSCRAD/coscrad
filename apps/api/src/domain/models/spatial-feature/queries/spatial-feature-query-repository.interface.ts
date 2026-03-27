@@ -1,3 +1,5 @@
+import { PaginatedResponse } from '@coscrad/api-interfaces';
+import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
 import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { IQueryRepositoryForConnectable } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
@@ -17,5 +19,9 @@ export interface ISpatialFeatureQueryRepository
         IPublishable {
     create(view: SpatialFeatureViewModel): Promise<void>;
 
+    createMany(views: SpatialFeatureViewModel[]): Promise<void>;
+
     fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<SpatialFeatureViewModel>>;
+
+    fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<SpatialFeatureViewModel>>;
 }
