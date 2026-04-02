@@ -13,6 +13,7 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
+import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
@@ -141,4 +142,74 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             expect(result).toHaveLength(spatialFeatureIds.length);
         });
     });
+
+    describe(`count`, () => {
+        describe(`when there are spatial feature views in the database`, () => {
+            beforeEach(async () => {
+                await databaseProvider.clearViews();
+
+                for (const spatialFeature of spatialFeatureViews) {
+                    await testQueryRepository.create(spatialFeature);
+                }
+            });
+
+            it(`should return the expected result`, async () => {
+                const result = await testQueryRepository.count();
+
+                expect(result).toBe(spatialFeatureViews.length);
+            });
+        });
+    });
+
+    describe(`create`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+        });
+
+        it(`should create the currect spatial feature view`, async () => {
+            const spatialFeatureToCreate = spatialFeatureViews[0];
+
+            await testQueryRepository.create(spatialFeatureToCreate);
+
+            const searchResult = await testQueryRepository.fetchById(
+                spatialFeatureToCreate.id,
+                testAdminUser
+            );
+
+            expect(searchResult).not.toBe(NotFound);
+
+            const foundSpatialFeatureView = searchResult as EventSourcedSpatialFeatureViewModel;
+
+            const name = new MultilingualText(foundSpatialFeatureView.name);
+
+            expect(name.getOriginalTextItem()).toBe(spatialFeatureName);
+        });
+    });
+
+    // describe(`createNoteAbout`, () => {
+    //     const targetSpatialFeature = buildTestInstance(TermViewModel, {
+    //         notes: {},
+    //     });
+
+    //     const targetNoteText = 'this is a note for the term';
+
+    //     const targetNoteLanguageCode = LanguageCode.English;
+
+    //     const targetNoteMultilingualText = buildMultilingualTextWithSingleItem(
+    //         targetNoteText,
+    //         targetNoteLanguageCode
+    //     );
+
+    //     const targetNote = buildTestInstance(EventSourcedSpatialFeatureViewModel, {});
+
+    //     beforeEach(async () => {
+    //         await databaseProvider
+    //             .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+    //             .clear();
+
+    //         await databaseProvider.clearViews();
+
+    //         await testQueryRepository.create(targetSpatialFeature);
+    //     });
+    // });
 });

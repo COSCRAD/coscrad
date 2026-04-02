@@ -107,9 +107,13 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
 
         return {
             entities: buildResult,
-            page: options?.pagination.page || 1,
+            page: options?.pagination?.page || 1,
             count,
         };
+    }
+
+    async count(): Promise<number> {
+        return this.database.getCount();
     }
 
     async createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {

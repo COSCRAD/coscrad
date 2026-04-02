@@ -24,4 +24,6 @@ export interface ISpatialFeatureQueryRepository
     fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<SpatialFeatureViewModel>>;
 
     fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<SpatialFeatureViewModel>>;
+
+    count(options?: FetchManyQueryOptions): Promise<number>;
 }
