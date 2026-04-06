@@ -5,11 +5,11 @@ import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-st
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 import { cardFlippedUp } from './card-fipped-up.reducer';
 
-const N_CARDS = 12;
+const N_CARDS = 24;
 
-const N_ROWS = 4;
+const N_ROWS = 6;
 
-const N_COLUMNS = (2 * N_CARDS) / N_ROWS;
+const N_COLUMNS = N_CARDS / N_ROWS;
 
 const buildCard = (
     row: number,
@@ -29,7 +29,7 @@ const buildCard = (
     };
 };
 
-const oneCopyOfCards = Array(N_ROWS)
+const oneCopyOfCards = Array(N_ROWS / 2)
     .fill(null)
     .map((_, row) =>
         Array(N_COLUMNS)
@@ -39,14 +39,19 @@ const oneCopyOfCards = Array(N_ROWS)
             )
     );
 
-const bothCopiesOfCards = [
-    ...oneCopyOfCards,
-    ...oneCopyOfCards.map((row) =>
-        row.map((card) => ({
+const secondCopyOfCards = oneCopyOfCards.map((row) =>
+    row.map((card) => {
+        const result = {
             ...JSON.parse(JSON.stringify(card)),
-        }))
-    ),
-];
+            row: card.row + N_ROWS / 2,
+            column: card.column,
+        };
+
+        return result;
+    })
+);
+
+const bothCopiesOfCards = [...oneCopyOfCards, ...secondCopyOfCards];
 
 const allFaceDownState: MemoryMatchActiveRound = {
     id: '123',
@@ -172,14 +177,12 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
 
                 const [firstFaceUpCardLocation, secondFaceUpCardLocation] = cardsWithSequenceNumber;
 
-                const matchingTwoUpState = {
+                const stateWithFirstMatchingCardFaceUp = {
                     ...allFaceDownState,
                     rows: allFaceDownState.rows.map((r, ri) => {
                         const resultingRow = r.map((card, ci) => {
-                            if (
-                                isDeepStrictEqual([ri, ci], firstFaceUpCardLocation) ||
-                                isDeepStrictEqual([ri, ci], secondFaceUpCardLocation)
-                            ) {
+                            // the first card is face up already
+                            if (isDeepStrictEqual([ri, ci], firstFaceUpCardLocation)) {
                                 return {
                                     ...JSON.parse(JSON.stringify(card)),
                                     state: MemoryMatchCardActiveState.FACE_UP,
@@ -194,9 +197,9 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
                 };
 
                 // TODO make sure we are flipping the right card here
-                it.only(`should clear both cards`, () => {
+                it.only(`should flip both cards face up`, () => {
                     act(
-                        matchingTwoUpState,
+                        stateWithFirstMatchingCardFaceUp,
                         {
                             row: targetRow,
                             column: targetColumn,
@@ -213,10 +216,11 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
                                 ];
 
                             expect(updatedFirstCard.state).toEqual(
-                                MemoryMatchCardActiveState.CLEARED
+                                MemoryMatchCardActiveState.FACE_UP
                             );
+
                             expect(updatedSecondCard.state).toEqual(
-                                MemoryMatchCardActiveState.CLEARED
+                                MemoryMatchCardActiveState.FACE_UP
                             );
                         }
                     );
