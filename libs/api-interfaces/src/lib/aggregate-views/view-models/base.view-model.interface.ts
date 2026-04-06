@@ -23,8 +23,17 @@ export interface IBaseViewModel extends HasId {
 }
 
 export interface IBaseResourceViewModel extends IBaseViewModel {
+    /**
+     * This is an array because order is the primary identity. The items are
+     * immutable once pushed. Additionoal items will be appended as commands
+     * succeed.
+     */
     contributions: IContributionSummary[];
 
+    /**
+     * TODO We should phase out this property as we move away from the dynamic
+     * command form admin UX approach.
+     */
     actions: ICommandFormAndLabels[];
 
     // Lookup table where the keys are note IDs
