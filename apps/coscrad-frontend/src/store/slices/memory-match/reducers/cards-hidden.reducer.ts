@@ -1,7 +1,7 @@
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 
-export const cardsHidden = (
+export const cardsHiddenReducer = (
     state: MemoryMatchActiveRound,
     _action: { type: string }
 ): MemoryMatchActiveRound => {

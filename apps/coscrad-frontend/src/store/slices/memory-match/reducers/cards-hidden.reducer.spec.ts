@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from 'util';
 import { MemoryMatchActiveCard } from '../types/memory-match-active-card';
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
-import { cardsHidden } from './cards-hidden.reducer';
+import { cardsHiddenReducer } from './cards-hidden.reducer';
 
 const N_UNIQUE_CARDS = 12;
 
@@ -89,7 +89,7 @@ const act = (
 ) => {
     const input = JSON.parse(JSON.stringify(initialState));
 
-    const result = cardsHidden(input, {
+    const result = cardsHiddenReducer(input, {
         type: 'CARD_FLIPPED',
         // payload, // there is no payload required for this action- should it be `{}`?
     });

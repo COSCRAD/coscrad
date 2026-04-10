@@ -2,7 +2,7 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { MemoryMatchActiveCard } from '../types/memory-match-active-card';
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
-import { roundReset } from './round-reset.reducer';
+import { roundResetReducer } from './round-reset.reducer';
 
 const N_UNIQUE_CARDS = 12;
 
@@ -88,7 +88,7 @@ const act = (
 ) => {
     const input = JSON.parse(JSON.stringify(initialState));
 
-    const result = roundReset(input, {
+    const result = roundResetReducer(input, {
         type: 'CARD_FLIPPED',
     });
 

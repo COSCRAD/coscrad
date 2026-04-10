@@ -13,7 +13,7 @@ export type CardFlippedUpActionPayload = {
     column: number;
 };
 
-export const cardFlippedUp = (
+export const cardFlippedUpReducer = (
     state: MemoryMatchActiveRound,
     action: { type: string; payload: CardFlippedUpActionPayload }
 ): MemoryMatchActiveRound => {

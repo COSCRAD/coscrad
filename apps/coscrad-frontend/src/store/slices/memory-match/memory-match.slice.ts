@@ -1,22 +1,60 @@
 import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ILoadable } from '../interfaces/loadable.interface';
 import { NOT_FOUND } from '../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../utils';
 import { MEMORY_MATCH_ROUNDS } from './constants';
+import {
+    cardFlippedDownReducer,
+    cardFlippedUpReducer,
+    matchingCardsClearedReducer,
+    roundResetReducer,
+} from './reducers';
+import { cardsHiddenReducer } from './reducers/cards-hidden.reducer';
 import { fetchMemoryMatchRounds } from './thunks';
 import { fetchMemoryMatchRoundById } from './thunks/fetch-memory-round-by-id';
 import { MemoryMatchIndexState } from './types';
+import { MemoryMatchActiveRound } from './types/memory-match-active-round';
 
 const initialState = buildInitialLoadableState<MemoryMatchIndexState>(); // page size?
 
-const MemoryMatchSlice = createSlice({
+type ActiveRoundReducer<T> = (
+    state: MemoryMatchActiveRound,
+    action: PayloadAction<T>
+) => MemoryMatchActiveRound;
+
+type MemoryMatchReducer<T> = (
+    state: ILoadable<MemoryMatchIndexState>,
+    action: PayloadAction<T>
+) => ILoadable<MemoryMatchIndexState>;
+
+const bindActiveRoundReducer = <T>(reducer: ActiveRoundReducer<T>): MemoryMatchReducer<T> => {
+    const boundReducer: MemoryMatchReducer<T> = (
+        state: ILoadable<MemoryMatchIndexState>,
+        action: PayloadAction<T>
+    ) => {
+        if (!state.data?.active) {
+            return state;
+        }
+
+        state.data.active = reducer(state.data.active, action);
+
+        return state;
+    };
+
+    return boundReducer;
+};
+
+const memoryMatchSlice = createSlice({
     name: MEMORY_MATCH_ROUNDS,
     initialState,
-    /**
-     * TODO This is where we can manage the game play state.
-     */
-    reducers: {},
+    reducers: {
+        cardFlippedUp: bindActiveRoundReducer(cardFlippedUpReducer),
+        cardFlippedDown: bindActiveRoundReducer(cardFlippedDownReducer),
+        roundReset: bindActiveRoundReducer(roundResetReducer),
+        matchingCardsCleared: bindActiveRoundReducer(matchingCardsClearedReducer),
+        cardsHidden: bindActiveRoundReducer(cardsHiddenReducer),
+    },
     extraReducers: (builder) => {
         // Index queries - fetch many
         builder.addCase(
@@ -123,4 +161,7 @@ const MemoryMatchSlice = createSlice({
     },
 });
 
-export const MemoryMatchReducer = MemoryMatchSlice.reducer;
+export const { cardFlippedDown, cardFlippedUp, matchingCardsCleared, cardsHidden, roundReset } =
+    memoryMatchSlice.actions;
+
+export const MemoryMatchReducer = memoryMatchSlice.reducer;

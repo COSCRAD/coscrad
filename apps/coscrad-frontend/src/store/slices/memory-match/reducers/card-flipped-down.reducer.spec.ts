@@ -2,7 +2,7 @@ import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces'
 import { isDeepStrictEqual } from 'util';
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
-import { cardFlippedDown } from './card-flipped-down.reducer';
+import { cardFlippedDownReducer } from './card-flipped-down.reducer';
 
 const firstSelectedCardLocation = [1, 2];
 
@@ -72,7 +72,7 @@ const act = (
 ) => {
     const input = JSON.parse(JSON.stringify(initialState));
 
-    const result = cardFlippedDown(input, {
+    const result = cardFlippedDownReducer(input, {
         type: 'CARD_FLIPPED',
         payload,
     });

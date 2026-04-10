@@ -3,7 +3,7 @@ import { isDeepStrictEqual } from 'util';
 import { MemoryMatchActiveCard } from '../types/memory-match-active-card';
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
-import { cardFlippedUp } from './card-fipped-up.reducer';
+import { cardFlippedUpReducer } from './card-fipped-up.reducer';
 
 const N_UNIQUE_CARDS = 12;
 
@@ -88,7 +88,7 @@ const act = (
 ) => {
     const input = JSON.parse(JSON.stringify(initialState));
 
-    const result = cardFlippedUp(input, {
+    const result = cardFlippedUpReducer(input, {
         type: 'CARD_FLIPPED',
         payload,
     });
