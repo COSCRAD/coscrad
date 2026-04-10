@@ -5,16 +5,17 @@ import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-st
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 import { cardFlippedUp } from './card-fipped-up.reducer';
 
-const N_CARDS = 24;
+const N_UNIQUE_CARDS = 12;
+
+const TOTAL_CARDS = 2 * N_UNIQUE_CARDS;
 
 const N_ROWS = 6;
 
-const N_COLUMNS = N_CARDS / N_ROWS;
+const N_COLUMNS = TOTAL_CARDS / N_ROWS;
 
 const buildCard = (
     row: number,
     column: number,
-    id: number,
     state: MemoryMatchCardActiveState
 ): MemoryMatchActiveCard => {
     const sequenceNumber = row * N_ROWS + column;
@@ -29,17 +30,15 @@ const buildCard = (
     };
 };
 
-const oneCopyOfCards = Array(N_ROWS / 2)
+const oneCopyOfCards: MemoryMatchActiveCard[][] = Array(N_ROWS / 2)
     .fill(null)
     .map((_, row) =>
         Array(N_COLUMNS)
             .fill(null)
-            .map((_, col) =>
-                buildCard(row, col, row * N_ROWS + col, MemoryMatchCardActiveState.FACE_DOWN)
-            )
+            .map((_, col) => buildCard(row, col, MemoryMatchCardActiveState.FACE_DOWN))
     );
 
-const secondCopyOfCards = oneCopyOfCards.map((row) =>
+const secondCopyOfCards: MemoryMatchActiveCard[][] = oneCopyOfCards.map((row) =>
     row.map((card) => {
         const result = {
             ...JSON.parse(JSON.stringify(card)),
@@ -52,6 +51,18 @@ const secondCopyOfCards = oneCopyOfCards.map((row) =>
 );
 
 const bothCopiesOfCards = [...oneCopyOfCards, ...secondCopyOfCards];
+
+const targetSequenceNumber = 0;
+
+const cardsWithTargetSequenceNumber = bothCopiesOfCards.flatMap((row) =>
+    row.flatMap((c) => (c.sequenceNumber === targetSequenceNumber ? [c] : []))
+);
+
+if (cardsWithTargetSequenceNumber.length !== 2) {
+    throw new Error(
+        `Invalid test setup. Expected two cards with sequence number: ${targetSequenceNumber}, but recieved: ${cardsWithTargetSequenceNumber.length}`
+    );
+}
 
 const allFaceDownState: MemoryMatchActiveRound = {
     id: '123',
@@ -85,40 +96,18 @@ const act = (
     checkResult(result);
 };
 
-const alreadyFaceUpRow = 1;
-
-const alreadyFaceUpColumn = 2;
-
-const oneFaceUpState = {
-    ...JSON.parse(JSON.stringify(allFaceDownState)),
-    rows: allFaceDownState.rows.map((r, ri) => {
-        const resultingRow = r.map((card, ci) => {
-            if (ri === alreadyFaceUpRow && ci === alreadyFaceUpColumn) {
-                return {
-                    ...JSON.parse(JSON.stringify(card)),
-                    state: MemoryMatchCardActiveState.FACE_UP,
-                };
-            }
-
-            return card;
-        });
-
-        return resultingRow;
-    }),
-};
-
-const targetRow = 0;
-
-const targetColumn = 1;
-
 describe(`cardFlippedUp (memory match reducer)`, () => {
     describe(`when no cards are yet selected`, () => {
+        const targetRow = 2;
+
+        const targetColumn = 1;
+
         it(`should flip the target card`, () => {
             act(
                 allFaceDownState,
                 {
-                    row: 2,
-                    column: 1,
+                    row: targetRow,
+                    column: targetColumn,
                 },
                 (result) => {
                     expect(result.rows[2][1].state).toBe(MemoryMatchCardActiveState.FACE_UP);
@@ -143,61 +132,37 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
     });
 
     describe(`when one card is already selected`, () => {
-        const checkThatTargetCardWasFlipped = (result) => {
-            expect(result.rows[targetRow][targetColumn].state).toBe(
-                MemoryMatchCardActiveState.FACE_UP
-            );
+        const [alreadyFaceUpCard, cardThatMatchesAlreadyFaceUpCard] = cardsWithTargetSequenceNumber;
 
-            expect(result.rows[alreadyFaceUpRow][alreadyFaceUpColumn].state).toBe(
-                MemoryMatchCardActiveState.FACE_UP
-            );
+        const oneFaceUpState = {
+            ...JSON.parse(JSON.stringify(allFaceDownState)),
+            rows: allFaceDownState.rows.map((r, ri) => {
+                const resultingRow = r.map((card, ci) => {
+                    if (ri === alreadyFaceUpCard.row && ci === alreadyFaceUpCard.column) {
+                        const faceUpCard = {
+                            ...JSON.parse(JSON.stringify(card)),
+                            state: MemoryMatchCardActiveState.FACE_UP,
+                        };
 
-            result.rows.forEach((row, ri) =>
-                row.forEach((card, ci) => {
-                    if (
-                        isDeepStrictEqual([ri, ci], [targetRow, targetColumn]) ||
-                        isDeepStrictEqual([ri, ci], [alreadyFaceUpRow, alreadyFaceUpColumn])
-                    ) {
-                        return;
+                        return faceUpCard;
                     }
 
-                    // the rest should still be face-down
-                    expect(card.state).toBe(MemoryMatchCardActiveState.FACE_DOWN);
-                })
-            );
+                    return card;
+                });
+
+                return resultingRow;
+            }),
         };
 
         describe(`when it is not the same card that is now being selected`, () => {
             describe(`when the card matches the first selected card`, () => {
-                const targetSequenceNumber = 0;
+                const cardToFlip = cardThatMatchesAlreadyFaceUpCard;
 
-                const cardsWithSequenceNumber = bothCopiesOfCards
-                    .flatMap((row) => row)
-                    .filter(({ sequenceNumber }) => sequenceNumber === targetSequenceNumber);
+                const { column: targetColumn, row: targetRow } = cardToFlip;
 
-                const [firstFaceUpCardLocation, secondFaceUpCardLocation] = cardsWithSequenceNumber;
+                const stateWithFirstMatchingCardFaceUp = oneFaceUpState;
 
-                const stateWithFirstMatchingCardFaceUp = {
-                    ...allFaceDownState,
-                    rows: allFaceDownState.rows.map((r, ri) => {
-                        const resultingRow = r.map((card, ci) => {
-                            // the first card is face up already
-                            if (isDeepStrictEqual([ri, ci], firstFaceUpCardLocation)) {
-                                return {
-                                    ...JSON.parse(JSON.stringify(card)),
-                                    state: MemoryMatchCardActiveState.FACE_UP,
-                                };
-                            }
-
-                            return card;
-                        });
-
-                        return resultingRow;
-                    }),
-                };
-
-                // TODO make sure we are flipping the right card here
-                it.only(`should flip both cards face up`, () => {
+                it(`should flip both cards face up`, () => {
                     act(
                         stateWithFirstMatchingCardFaceUp,
                         {
@@ -206,13 +171,11 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
                         },
                         (result) => {
                             const updatedFirstCard =
-                                result.rows[firstFaceUpCardLocation.row][
-                                    firstFaceUpCardLocation.column
-                                ];
+                                result.rows[alreadyFaceUpCard.row][alreadyFaceUpCard.column];
 
                             const updatedSecondCard =
-                                result.rows[secondFaceUpCardLocation.row][
-                                    secondFaceUpCardLocation.column
+                                result.rows[cardThatMatchesAlreadyFaceUpCard.row][
+                                    cardThatMatchesAlreadyFaceUpCard.column
                                 ];
 
                             expect(updatedFirstCard.state).toEqual(
@@ -228,19 +191,41 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
             });
         });
 
+        describe(`when the card to flip has already been selected`, () => {
+            it(`should leave the state unchanged`, () => {
+                act(
+                    oneFaceUpState,
+                    {
+                        row: alreadyFaceUpCard.row,
+                        column: alreadyFaceUpCard.column,
+                    },
+                    (result) => {
+                        expect(result).toEqual(oneFaceUpState);
+                    }
+                );
+            });
+        });
+
         describe(`when the flipped card has already been selected`, () => {
-            act(
-                oneFaceUpState,
-                { row: targetRow, column: targetColumn },
-                checkThatTargetCardWasFlipped
-            );
+            it(`should leave the state unchanged`, () => {
+                act(
+                    oneFaceUpState,
+                    {
+                        row: alreadyFaceUpCard.row,
+                        column: alreadyFaceUpCard.column,
+                    },
+                    (result) => {
+                        expect(result).toEqual(oneFaceUpState);
+                    }
+                );
+            });
         });
     });
 
     describe(`when two cards are already selected`, () => {
         const firstFaceUpCardLocation = [3, 2];
 
-        const secondFaceUpCardLocation = [1, 4];
+        const secondFaceUpCardLocation = [1, 3];
 
         const payload = {
             row: 2,
@@ -256,10 +241,12 @@ describe(`cardFlippedUp (memory match reducer)`, () => {
                             isDeepStrictEqual([ri, ci], firstFaceUpCardLocation) ||
                             isDeepStrictEqual([ri, ci], secondFaceUpCardLocation)
                         ) {
-                            return {
+                            const faceUpCard = {
                                 ...JSON.parse(JSON.stringify(card)),
                                 state: MemoryMatchCardActiveState.FACE_UP,
                             };
+
+                            return faceUpCard;
                         }
 
                         return card;
