@@ -11,9 +11,9 @@ import {
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { isNotFound, NotFound } from '../../../../lib/types/not-found';
@@ -23,8 +23,8 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
@@ -34,14 +34,12 @@ import {
 } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
@@ -61,6 +59,8 @@ import { CoscradUser } from '../../user-management/user/entities/user/coscrad-us
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import { IVocabularyListQueryRepository } from '../../vocabulary-list/queries';
 import { ArangoVocabularyListQueryRepository } from '../../vocabulary-list/repositories';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { PromptTermCreated } from '../commands';
 import { ITermQueryRepository } from '../queries/term-query-repository.interface';
 import { ArangoTermQueryRepository } from './arango-term-query-repository';
@@ -155,6 +155,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     const textTranslation = 'foobar';
 
+    // TODO get rid of this, and use build test instance
     const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
 
     const contributorIds = [101, 102, 103].map(buildDummyUuid);

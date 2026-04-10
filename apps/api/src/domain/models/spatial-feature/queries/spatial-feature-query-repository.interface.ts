@@ -10,6 +10,8 @@ import { IQueryRepositoryForAttributable } from '../../shared/common-event-handl
 import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 
+export const SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN = 'SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN';
+
 export interface ISpatialFeatureQueryRepository
     extends IQueryRepositoryForAnnotatable,
         IQueryRepositoryForConnectable,

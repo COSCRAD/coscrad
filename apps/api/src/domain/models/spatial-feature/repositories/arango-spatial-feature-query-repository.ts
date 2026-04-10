@@ -27,7 +27,7 @@ import { EventSourcedSpatialFeatureViewModel } from '../queries/spatial-feature.
 export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQueryRepository {
     private readonly database: ArangoDatabaseForCollection<EventSourcedSpatialFeatureViewModel>;
 
-    private readonly baseResourceQueryRepository: BaseArangoResourceViewQueryBuilder;
+    private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
@@ -36,6 +36,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     ) {
         this.database = new ArangoDatabaseForCollection(
             new ArangoDatabase(arangoConnectionProvider.getConnection()),
+            'spatialFeature__VIEWS'
+        );
+
+        this.baseResourceQueryBuilder = new BaseArangoResourceViewQueryBuilder(
             'spatialFeature__VIEWS'
         );
     }
@@ -48,8 +52,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         });
     }
 
-    async createMany(_views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createMany(views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
+        const documents = views.map(mapEntityDTOToDatabaseDocument);
+
+        await this.database.createMany(documents);
     }
 
     async fetchById(
@@ -116,24 +122,32 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         return this.database.getCount();
     }
 
-    async createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
     }
 
     async createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    async tag(_id: string, _tagId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async tag(id: string, tagId: string): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.tag(id, tagId));
     }
 
     async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    async allowUser(_aggregateId: AggregateId, _userId: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
+    async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.allowUser(aggregateId, userId);
+
+        const cursor = await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to allow user access to spatial feature via SpatialFeatureRepository: ${reason}`
+            );
+        });
+
+        await cursor.all();
     }
 
     async publish(_id: AggregateId): Promise<void> {

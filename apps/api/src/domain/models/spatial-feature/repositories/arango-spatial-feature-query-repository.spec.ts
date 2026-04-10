@@ -1,25 +1,39 @@
-import { CoscradUserRole, LanguageCode } from '@coscrad/api-interfaces';
+import {
+    CoscradUserRole,
+    EdgeConnectionContextType,
+    EdgeConnectionMemberRole,
+    IEdgeConnectionContext,
+    LanguageCode,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
-import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
+import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
+import { SpatialFeatureModule } from '../../../../app/domain-modules/spatial-feature.module';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
+import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { EdgeConnection } from '../../context/edge-connection.entity';
+import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
-import { ISpatialFeatureQueryRepository } from '../queries/spatial-feature-query-repository.interface';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import {
+    ISpatialFeatureQueryRepository,
+    SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
+} from '../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../queries/spatial-feature.view-model.event-sourced';
-import { ArangoSpatialFeatureQueryRepository } from './arango-spatial-feature-query-repository';
 
 const testAdminUser = new CoscradUserWithGroups(
     buildTestInstance(CoscradUser, {
@@ -37,7 +51,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync()],
+            imports: [PersistenceModule.forRootAsync(), SpatialFeatureModule],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -58,12 +72,9 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
         databaseProvider = new ArangoDatabaseProvider(connectionProvider);
 
-        testQueryRepository = new ArangoSpatialFeatureQueryRepository(
-            connectionProvider,
-            new ConsoleCoscradCliLogger()
-        );
+        await app.init();
 
-        app.init();
+        testQueryRepository = app.get(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN);
     });
 
     afterAll(async () => {
@@ -77,6 +88,20 @@ describe(`ArangoSpatialFeatureRepository`, () => {
     const spatialFeatureName = buildTextForSpatialFeatureName(spatialFeatureIds[0]);
 
     const originalLanguageCode = LanguageCode.Chilcotin;
+
+    // const contributorIds = [102, 103, 104].map(buildDummyUuid);
+
+    // const contributorIdsAndNames = contributorIds.map((contributorId) => ({
+    //     contributorId,
+    //     fullName: new FullName({
+    //         firstName: 'user',
+    //         lastName: contributorId,
+    //     }),
+    // }));
+
+    // const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
+    //     dummyContributor.clone({ id: contributorId, fullName })
+    // );
 
     const spatialFeatureViews: EventSourcedSpatialFeatureViewModel[] = spatialFeatureIds.map((id) =>
         buildTestInstance(EventSourcedSpatialFeatureViewModel, {
@@ -166,7 +191,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             await databaseProvider.clearViews();
         });
 
-        it(`should create the currect spatial feature view`, async () => {
+        it(`should create the correct spatial feature view`, async () => {
             const spatialFeatureToCreate = spatialFeatureViews[0];
 
             await testQueryRepository.create(spatialFeatureToCreate);
@@ -182,34 +207,210 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
             const name = new MultilingualText(foundSpatialFeatureView.name);
 
-            expect(name.getOriginalTextItem()).toBe(spatialFeatureName);
+            expect(name.getOriginalTextItem().text).toBe(spatialFeatureName);
         });
     });
 
-    // describe(`createNoteAbout`, () => {
-    //     const targetSpatialFeature = buildTestInstance(TermViewModel, {
-    //         notes: {},
-    //     });
+    describe(`createMany`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+        });
 
-    //     const targetNoteText = 'this is a note for the term';
+        it(`should create the expected spatial feature views`, async () => {
+            await testQueryRepository.createMany(spatialFeatureViews);
 
-    //     const targetNoteLanguageCode = LanguageCode.English;
+            const actualCount = await testQueryRepository.count();
 
-    //     const targetNoteMultilingualText = buildMultilingualTextWithSingleItem(
-    //         targetNoteText,
-    //         targetNoteLanguageCode
-    //     );
+            expect(actualCount).toBe(spatialFeatureViews.length);
+        });
+    });
 
-    //     const targetNote = buildTestInstance(EventSourcedSpatialFeatureViewModel, {});
+    describe(`tag`, () => {
+        const existingTagLabel = 'trees';
 
-    //     beforeEach(async () => {
-    //         await databaseProvider
-    //             .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
-    //             .clear();
+        const existingTag: TagViewModel = {
+            id: buildDummyUuid(9),
+            label: existingTagLabel,
+            name: buildMultilingualTextWithSingleItem(existingTagLabel),
+            members: [],
+        };
 
-    //         await databaseProvider.clearViews();
+        const newTagId = buildDummyUuid(19);
 
-    //         await testQueryRepository.create(targetSpatialFeature);
-    //     });
-    // });
+        const newTagLabel = 'mammals';
+
+        const newTag = buildTestInstance(EventSourcedTagViewModel, {
+            id: newTagId,
+            label: newTagLabel,
+        });
+
+        const targetSpatialFeature = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+            tags: [existingTag],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.getDatabaseForCollection(ArangoCollectionId.tags).clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+
+            await app.get(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN).create(newTag);
+        });
+
+        it(`should tag the spatial feature`, async () => {
+            await testQueryRepository.tag(targetSpatialFeature.id, newTag.id);
+
+            const { tags } = (await testQueryRepository.fetchById(
+                targetSpatialFeature.id,
+                testAdminUser
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            expect(tags).toHaveLength(2);
+
+            const tagSearchResult = tags.find(({ id }) => id === newTag.id);
+
+            expect(tagSearchResult).toBeTruthy();
+
+            const { label } = tagSearchResult;
+
+            expect(label).toBe(newTagLabel);
+        });
+    });
+
+    describe(`createNoteAbout`, () => {
+        const targetSpatialFeature = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+            notes: {},
+        });
+
+        const targetNoteText = 'this is a note for the spatial feature';
+
+        const targetNoteLanguageCode = LanguageCode.English;
+
+        const targetNoteMultilingualText = buildMultilingualTextWithSingleItem(
+            targetNoteText,
+            targetNoteLanguageCode
+        );
+
+        const targetNote = buildTestInstance(EdgeConnection, {
+            note: targetNoteMultilingualText,
+            members: [
+                {
+                    compositeIdentifier: {
+                        type: ResourceType.video,
+                        id: targetSpatialFeature.id,
+                    },
+                    context: { type: EdgeConnectionContextType.general },
+                    role: EdgeConnectionMemberRole.self,
+                },
+            ],
+        });
+
+        beforeEach(async () => {
+            await databaseProvider
+                .getDatabaseForCollection(ArangoCollectionId.edgeConnectionCollectionID)
+                .clear();
+
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should append a note to the spatial feature`, async () => {
+            await testQueryRepository.createNoteAbout(targetSpatialFeature.id, {
+                noteId: targetNote.id,
+                context: targetNote.members[0].context,
+                text: targetNote.note,
+            });
+
+            const { notes } = (await testQueryRepository.fetchById(
+                targetSpatialFeature.id,
+                testAdminUser
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            expect(Object.keys(notes)).toHaveLength(1);
+
+            const { note } = notes[targetNote.id];
+
+            expect(note).toEqual({
+                original: {
+                    languageCode: LanguageCode.English,
+                    text: targetNoteText,
+                },
+                translations: {},
+            });
+        });
+    });
+
+    describe(`createConnection`, () => {
+        const targetSpatialFeature = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+            connections: {},
+        });
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should add the connection info`, async () => {
+            const generalContext: IEdgeConnectionContext = {
+                type: EdgeConnectionContextType.general,
+            };
+
+            const otherCompositeIdentifier = {
+                type: 'widget' as ResourceType,
+                id: buildDummyUuid(98),
+            };
+
+            const noteId = buildDummyUuid(43);
+
+            const textForNote = 'this is why the widget is relevant to the spatial feature';
+
+            const languageCodeForNote = LanguageCode.Chilcotin;
+
+            const role = EdgeConnectionMemberRole.to;
+
+            await testQueryRepository.createConnection(targetSpatialFeature.id, {
+                noteId,
+                selfContext: generalContext,
+                otherContext: generalContext,
+                otherCompositeIdentifier,
+                text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
+                role,
+            });
+        });
+    });
+
+    describe(`allowUser`, () => {
+        const targetSpatialFeature = spatialFeatureViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should add the user to the ACL`, async () => {
+            const userId = buildDummyUuid(567);
+
+            await testQueryRepository.allowUser(targetSpatialFeature.id, userId);
+        });
+    });
+
+    describe(`attribute`, () => {
+        const targetSpatialFeature = spatialFeatureViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await databaseProvider.getDatabaseForCollection('contributors').clear();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should add the attribute`, async () => {
+            throw new Error('not implemented');
+        });
+    });
 });
