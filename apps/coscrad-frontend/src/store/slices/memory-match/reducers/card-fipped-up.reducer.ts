@@ -8,14 +8,14 @@ const getSelectedCards = (state: MemoryMatchActiveRound): MemoryMatchActiveCard[
         column.filter((card) => card.state === MemoryMatchCardActiveState.FACE_UP)
     );
 
-type CardFlippedUpPayload = {
+export type CardFlippedUpActionPayload = {
     row: number;
     column: number;
 };
 
 export const cardFlippedUp = (
     state: MemoryMatchActiveRound,
-    action: { type: string; payload: CardFlippedUpPayload }
+    action: { type: string; payload: CardFlippedUpActionPayload }
 ): MemoryMatchActiveRound => {
     const previouslySelectedCards = getSelectedCards(state);
 

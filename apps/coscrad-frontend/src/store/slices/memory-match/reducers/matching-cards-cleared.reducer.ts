@@ -1,13 +1,13 @@
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 
-type CardClearedPayload = {
+export type MatchingCardsClearedActionPayload = {
     sequenceNumber: number;
 };
 
-export const cardClearedReducer = (
+export const matchingCardsClearedReducer = (
     state: MemoryMatchActiveRound,
-    { payload }: { type: string; payload: CardClearedPayload }
+    { payload }: { type: string; payload: MatchingCardsClearedActionPayload }
 ): MemoryMatchActiveRound => {
     const { sequenceNumber } = payload;
 

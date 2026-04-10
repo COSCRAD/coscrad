@@ -1,14 +1,14 @@
 import { MemoryMatchCardActiveState } from '../types/memory-match-active-card-state.enum';
 import { MemoryMatchActiveRound } from '../types/memory-match-active-round';
 
-type CardFlippedDownPayload = {
+export type CardFlippedDownActionPayload = {
     row: number;
     column: number;
 };
 
 export const cardFlippedDown = (
     state: MemoryMatchActiveRound,
-    { payload: { row, column } }: { type: string; payload: CardFlippedDownPayload }
+    { payload: { row, column } }: { type: string; payload: CardFlippedDownActionPayload }
 ): MemoryMatchActiveRound => {
     state.rows[row][column].state = MemoryMatchCardActiveState.FACE_DOWN;
 

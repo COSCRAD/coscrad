@@ -180,22 +180,32 @@ const assertRoundHasBeenReset = (result: unknown) => {
 
 describe(`roundResetReducer`, () => {
     describe(`when no cards have been cleared`, () => {
-        act(allFaceDownState, assertRoundHasBeenReset);
+        it(`should reset the state`, () => {
+            act(allFaceDownState, assertRoundHasBeenReset);
+        });
     });
 
     describe(`when one card is face up`, () => {
-        act(oneFaceUpState, assertRoundHasBeenReset);
+        it(`should reset the state`, () => {
+            act(oneFaceUpState, assertRoundHasBeenReset);
+        });
     });
 
     describe(`when two cards are face up`, () => {
-        act(twoFaceUpState, assertRoundHasBeenReset);
+        it(`should reset the state`, () => {
+            act(twoFaceUpState, assertRoundHasBeenReset);
+        });
     });
 
     describe(`when two cards have been cleared`, () => {
-        act(twoClearedState, assertRoundHasBeenReset);
+        it(`should reset the state`, () => {
+            act(twoClearedState, assertRoundHasBeenReset);
+        });
     });
 
     describe(`when the entire board has been cleared`, () => {
-        act(allClearedState, assertRoundHasBeenReset);
+        it(`should reset the state`, () => {
+            act(allClearedState, assertRoundHasBeenReset);
+        });
     });
 });
