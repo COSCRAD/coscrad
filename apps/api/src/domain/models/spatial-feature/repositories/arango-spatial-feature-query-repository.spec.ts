@@ -17,17 +17,24 @@ import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
+import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
+import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
+import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TagViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
+import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { TAG_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../tag/repositories/tag-query-repository.interface';
+import { CoscradContributor } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
+import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
     ISpatialFeatureQueryRepository,
@@ -46,6 +53,8 @@ describe(`ArangoSpatialFeatureRepository`, () => {
     let testQueryRepository: ISpatialFeatureQueryRepository;
 
     let databaseProvider: ArangoDatabaseProvider;
+
+    let contributorRepository: IRepositoryForAggregate<CoscradContributor>;
 
     let app: INestApplication;
 
@@ -75,6 +84,14 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         await app.init();
 
         testQueryRepository = app.get(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN);
+
+        contributorRepository = new ArangoRepositoryForAggregate(
+            databaseProvider,
+            ArangoCollectionId.contributors,
+            buildInstanceFactory(CoscradContributor),
+            mapDatabaseDocumentToAggregateDTO,
+            mapEntityDTOToDatabaseDocument
+        );
     });
 
     afterAll(async () => {
@@ -89,19 +106,21 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
     const originalLanguageCode = LanguageCode.Chilcotin;
 
-    // const contributorIds = [102, 103, 104].map(buildDummyUuid);
+    const dummyContributor = buildTestInstance;
 
-    // const contributorIdsAndNames = contributorIds.map((contributorId) => ({
-    //     contributorId,
-    //     fullName: new FullName({
-    //         firstName: 'user',
-    //         lastName: contributorId,
-    //     }),
-    // }));
+    const contributorIds = [102, 103, 104].map(buildDummyUuid);
 
-    // const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
-    //     dummyContributor.clone({ id: contributorId, fullName })
-    // );
+    const contributorIdsAndNames = contributorIds.map((contributorId) => ({
+        contributorId,
+        fullName: new FullName({
+            firstName: 'user',
+            lastName: contributorId,
+        }),
+    }));
+
+    const testContributors = contributorIdsAndNames.map(({ contributorId, fullName }) =>
+        dummyContributor.clone({ id: contributorId, fullName })
+    );
 
     const spatialFeatureViews: EventSourcedSpatialFeatureViewModel[] = spatialFeatureIds.map((id) =>
         buildTestInstance(EventSourcedSpatialFeatureViewModel, {
@@ -379,6 +398,37 @@ describe(`ArangoSpatialFeatureRepository`, () => {
                 text: buildMultilingualTextWithSingleItem(textForNote, languageCodeForNote),
                 role,
             });
+
+            const { connections } = (await testQueryRepository.fetchById(
+                targetSpatialFeature.id,
+                testAdminUser
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            expect(Object.keys(connections)).toHaveLength(1);
+
+            const {
+                selfContext,
+                otherCompositeIdentifier: foundCompositeIdentifierForConnectedResource,
+                otherContext,
+                note,
+                role: edgeConnectionMemberRole,
+            } = connections[noteId];
+
+            expect(selfContext).toEqual(generalContext);
+
+            expect(otherContext).toEqual(generalContext);
+
+            expect(foundCompositeIdentifierForConnectedResource).toEqual(otherCompositeIdentifier);
+
+            const {
+                original: { languageCode: foundLanguageCode, text: foundNoteText },
+            } = note;
+
+            expect(foundNoteText).toEqual(textForNote);
+
+            expect(foundLanguageCode).toEqual(languageCodeForNote);
+
+            expect(edgeConnectionMemberRole).toEqual(role);
         });
     });
 
@@ -398,6 +448,27 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         });
     });
 
+    describe(`publish`, () => {
+        const targetSpatialFeature = spatialFeatureViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should publish the given spatial feature`, async () => {
+            await testQueryRepository.publish(targetSpatialFeature.id);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                targetSpatialFeature.id,
+                testAdminUser
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            expect(updatedView.isPublished).toBe(true);
+        });
+    });
+
     describe(`attribute`, () => {
         const targetSpatialFeature = spatialFeatureViews[0];
 
@@ -407,6 +478,8 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             await databaseProvider.getDatabaseForCollection('contributors').clear();
 
             await testQueryRepository.create(targetSpatialFeature);
+
+            await contributorRepository.createMany(testContributors);
         });
 
         it(`should add the attribute`, async () => {

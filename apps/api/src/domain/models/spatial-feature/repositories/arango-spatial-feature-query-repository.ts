@@ -126,8 +126,8 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
     }
 
-    async createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createConnection(id: string, dto: IResourceConnectionDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 
     async tag(id: string, tagId: string): Promise<void> {
@@ -150,7 +150,15 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         await cursor.all();
     }
 
-    async publish(_id: AggregateId): Promise<void> {
-        throw new Error('Method not implemented.');
+    async publish(id: AggregateId): Promise<void> {
+        const query = this.baseResourceQueryBuilder.publish(id);
+
+        const cursor = await await this.database.query(query).catch((reason) => {
+            throw new InternalError(
+                `Failed to publish spatial feature via spatialFeatureRepository: ${reason}`
+            );
+        });
+
+        await cursor.all();
     }
 }

@@ -4,8 +4,8 @@ import {
     ISpatialFeatureProperties,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
-import { isNonEmptyObject } from '@coscrad/validation-constraints';
+import { BooleanDataType, FromDomainModel, NestedDataType } from '@coscrad/data-types';
+import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
 import { Ctor } from '../../../../lib/types/Ctor';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
@@ -22,6 +22,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { Aggregate } from '../../aggregate.entity';
+import { ContributionSummary } from '../../user-management';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
 
@@ -36,10 +37,12 @@ type GeometryViewModel = {
     example: {
         type: ResourceType.spatialFeature,
         id: buildDummyUuid(4),
+        isPublished: true,
         name: buildMultilingualTextWithSingleItem('test point name'),
         tags: [],
         notes: {},
         connections: {},
+        contributions: [],
         geometry: {
             type: GeometricFeatureType.point,
             coordinates: [-123, 52],
@@ -66,6 +69,18 @@ export class EventSourcedSpatialFeatureViewModel {
     })
     readonly name: IMultilingualText;
 
+    @BooleanDataType({
+        label: 'is published',
+        description: 'indicates whether this resource is available to the public',
+    })
+    isPublished: boolean;
+
+    @NestedDataType(ContributionSummary, {
+        label: 'contributions',
+        description: 'a list of all contributions to the development of this resource',
+    })
+    contributions: ContributionSummary[];
+
     @NestedDataType(EventSourcedTagViewModel, {
         label: 'tags',
         description: 'a summary of the tags that have been applied to this resource',
@@ -89,9 +104,21 @@ export class EventSourcedSpatialFeatureViewModel {
     readonly properties: ISpatialFeatureProperties;
 
     constructor(viewModelDto: DTO<EventSourcedSpatialFeatureViewModel>) {
-        const { geometry, properties, id, name, tags, notes, connections } = viewModelDto;
+        const {
+            geometry,
+            properties,
+            id,
+            name,
+            tags,
+            notes,
+            connections,
+            isPublished,
+            contributions,
+        } = viewModelDto;
 
         this.id = id;
+
+        this.isPublished = isBoolean(isPublished) ? isPublished : false;
 
         this.name = new MultilingualText(name);
 
@@ -100,6 +127,10 @@ export class EventSourcedSpatialFeatureViewModel {
         this.notes = isNonEmptyObject(notes) ? cloneToPlainObject(notes) : {};
 
         this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
+
+        this.contributions = Array.isArray(contributions)
+            ? contributions.map((c) => ContributionSummary.fromDto(c))
+            : [];
 
         this.geometry = cloneToPlainObject(geometry);
 
