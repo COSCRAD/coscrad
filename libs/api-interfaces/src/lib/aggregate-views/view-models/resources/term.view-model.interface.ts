@@ -53,7 +53,8 @@ export interface IMultilingualTextRecord {
         // or should this be an `AudioViewForResource`?
         // audioUrl?: URL;
         text: string;
-        tokens: IToken;
+        // We don't support tokenization for all languages.
+        tokens?: IToken[];
         languageCode: LanguageCode;
     };
     translations: Partial<
@@ -124,6 +125,13 @@ export interface ITermViewModel {
     // end from base
 
     text: IMultilingualTextRecord;
+
+    /**
+     * This is duplicated because the front-end expects a "name"
+     * property for standardized presentation in index and detail
+     * presenters.
+     */
+    name: IMultilingualTextRecord;
 
     audioURL?: string; // removed - use `text.original.audioUrl`
 

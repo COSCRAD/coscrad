@@ -17,6 +17,8 @@ import { DTO } from '../../../types/DTO';
             original: {
                 text: 'test note',
                 languageCode: LanguageCode.English,
+                // TODO populate this
+                // tokens: [],
             },
             translations: {},
         },
