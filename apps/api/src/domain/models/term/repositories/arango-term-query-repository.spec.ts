@@ -39,7 +39,6 @@ import { buildMultilingualTextWithSingleItem } from '../../../common/build-multi
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AudioItemCreated } from '../../audio-visual/audio-item/commands/create-audio-item/audio-item-created.event';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
 import { IAudioItemQueryRepository } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
@@ -155,8 +154,7 @@ describe(`ArangoTermQueryRepository`, () => {
 
     const textTranslation = 'foobar';
 
-    // TODO get rid of this, and use build test instance
-    const dummyContributor = getValidAggregateInstanceForTest(AggregateType.contributor);
+    const dummyContributor = buildTestInstance(CoscradContributor);
 
     const contributorIds = [101, 102, 103].map(buildDummyUuid);
 

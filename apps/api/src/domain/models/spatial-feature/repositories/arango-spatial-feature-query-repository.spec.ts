@@ -36,6 +36,8 @@ import { CoscradUserWithGroups } from '../../user-management/user/entities/user/
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import { PointCreated } from '../point/commands';
 import {
     ISpatialFeatureQueryRepository,
     SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
@@ -106,7 +108,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
     const originalLanguageCode = LanguageCode.Chilcotin;
 
-    const dummyContributor = buildTestInstance;
+    const dummyContributor = buildTestInstance(CoscradContributor);
 
     const contributorIds = [102, 103, 104].map(buildDummyUuid);
 
@@ -122,6 +124,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         dummyContributor.clone({ id: contributorId, fullName })
     );
 
+    // TODO add examples of point, line and polygon
     const spatialFeatureViews: EventSourcedSpatialFeatureViewModel[] = spatialFeatureIds.map((id) =>
         buildTestInstance(EventSourcedSpatialFeatureViewModel, {
             id,
@@ -441,6 +444,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             await testQueryRepository.create(targetSpatialFeature);
         });
 
+        // TODO run as the target user
         it(`should add the user to the ACL`, async () => {
             const userId = buildDummyUuid(567);
 
@@ -462,7 +466,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
             const updatedView = (await testQueryRepository.fetchById(
                 targetSpatialFeature.id,
-                testAdminUser
+                undefined
             )) as EventSourcedSpatialFeatureViewModel;
 
             expect(updatedView.isPublished).toBe(true);
@@ -482,8 +486,73 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             await contributorRepository.createMany(testContributors);
         });
 
-        it(`should add the attribute`, async () => {
-            throw new Error('not implemented');
+        describe(`when there are contributor IDs on the event meta`, () => {
+            it(`should add the given contributions`, async () => {
+                const testTimestamp = dummyDateNow;
+
+                await testQueryRepository.attribute(
+                    targetSpatialFeature.id,
+                    buildTestInstance(PointCreated, {
+                        type: 'POINT_CREATED',
+                        meta: {
+                            contributorIds: testContributors.map((c) => c.id),
+                            dateCreated: testTimestamp,
+                        },
+                    }).buildContributionSummary()
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetSpatialFeature.id,
+                    testAdminUser
+                )) as EventSourcedSpatialFeatureViewModel;
+
+                const missingAttributions = updatedView.contributions.filter(
+                    (contributionRecord) => {
+                        !contributorIds.some((id) =>
+                            contributionRecord.contributorIds.includes(id)
+                        );
+                    }
+                );
+
+                expect(missingAttributions).toHaveLength(0);
+
+                const contributionForCreationEvent = updatedView.contributions.find(
+                    ({ type }) => type === 'POINT_CREATED'
+                );
+
+                expect(contributionForCreationEvent.statement).toMatchSnapshot();
+
+                expect(contributionForCreationEvent.contributorIds).toEqual(
+                    testContributors.map(({ id }) => id)
+                );
+
+                expect(contributionForCreationEvent.timestamp).toEqual(testTimestamp);
+            });
+        });
+
+        describe(`when there are no contributor IDs on the event meta`, () => {
+            it(`should default the message to admin`, async () => {
+                await testQueryRepository.attribute(
+                    targetSpatialFeature.id,
+                    buildTestInstance(PointCreated, {
+                        type: 'POINT_CREATED',
+                        meta: {
+                            contributorIds: [],
+                        },
+                    }).buildContributionSummary()
+                );
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    targetSpatialFeature.id,
+                    testAdminUser
+                )) as EventSourcedSpatialFeatureViewModel;
+
+                const targetContribution = updatedView.contributions[0];
+
+                expect(targetContribution.contributorIds).toHaveLength(0);
+
+                expect(targetContribution.statement.includes('by: (data entry) admin')).toBe(true);
+            });
         });
     });
 });

@@ -134,8 +134,14 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         await this.database.query(this.baseResourceQueryBuilder.tag(id, tagId));
     }
 
-    async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
-        throw new Error('Method not implemented.');
+    async attribute(id: string, contributionSummary: ContributionSummary): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(id, contributionSummary);
+
+        await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to add attribution for spatial feature via VideoRepository: ${reason}`
+            );
+        });
     }
 
     async allowUser(aggregateId: AggregateId, userId: AggregateId): Promise<void> {
