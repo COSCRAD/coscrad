@@ -72,7 +72,7 @@ export interface ITermQueryRepository
     // TODO Is it the ID that we want here or the URL?
     addAudio(id: AggregateId, languageCode: LanguageCode, audioItemId: string): Promise<void>;
 
-    addPhotograph(id: AggregateId, photographId: AggregateId);
+    addPhotograph(id: AggregateId, photographId: AggregateId): Promise<void>;
 
     addVideo(id: AggregateId, videoId: AggregateId): Promise<void>;
 

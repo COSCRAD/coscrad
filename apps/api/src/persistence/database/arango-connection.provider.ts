@@ -111,6 +111,8 @@ export class ArangoConnectionProvider {
 
             'digitalText__VIEWS',
 
+            'spatialFeature__VIEWS',
+
             'tag__VIEWS',
 
             'widget__VIEWS',

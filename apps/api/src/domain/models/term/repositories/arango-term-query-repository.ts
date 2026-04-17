@@ -24,7 +24,6 @@ import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/uti
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { AggregateId } from '../../../types/AggregateId';
 import { EventSourcedAudioItemViewModel } from '../../audio-visual/audio-item/queries';
-import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../audio-visual/audio-item/queries/audio-item-query-repository.interface';
 import { IResourceConnectionDto } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { INoteCreationDto } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ContributionSummary } from '../../user-management';
@@ -39,8 +38,6 @@ export class ArangoTermQueryRepository implements ITermQueryRepository {
 
     constructor(
         arangoConnectionProvider: ArangoConnectionProvider,
-        // AUDIO_ITEM_QUERY_REPOSITORY?
-        @Inject(AUDIO_QUERY_REPOSITORY_TOKEN)
         @Inject(COSCRAD_LOGGER_TOKEN)
         private readonly logger: ICoscradLogger
     ) {

@@ -10,6 +10,7 @@ import { HasViewModelId, ViewModelId } from './types/ViewModelId';
 export interface Nameable {
     getName(): MultilingualText;
 }
+// TODO Remove this
 export class BaseViewModel implements IBaseViewModel {
     @ApiProperty({
         example: '12',

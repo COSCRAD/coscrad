@@ -16,7 +16,7 @@ export class SpatialFeatureQueryService extends ResourceQueryService<
     protected readonly type = ResourceType.spatialFeature;
 
     buildViewModel(spatialFeatureInstance: ISpatialFeature): ISpatialFeatureViewModel {
-        return new SpatialFeatureViewModel(spatialFeatureInstance);
+        return SpatialFeatureViewModel.fromDomainModel(spatialFeatureInstance);
     }
 
     getDomainModelCtors(): DomainModelCtor<BaseDomainModel>[] {
