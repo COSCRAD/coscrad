@@ -1,19 +1,19 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { Resource } from '../../../domain/models/resource.entity';
+import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../domain/models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
-import { Resource } from '../../../domain/models/resource.entity';
-import { ResourcePublished } from '../../../domain/models/shared/common-commands/publish-resource/resource-published.event';
 import { AggregateType } from '../../../domain/types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { clonePlainObjectWithOverrides } from '../../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { IEventRepository } from '../../../persistence/repositories/arango-command-repository-for-aggregate-root';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
+import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
@@ -83,6 +83,8 @@ describe('When fetching multiple resources', () => {
         AggregateType.song,
         AggregateType.audioItem,
         AggregateType.video,
+        // TODO include this
+        // AggregateType.spatialFeature
     ];
 
     Object.values(ResourceType)

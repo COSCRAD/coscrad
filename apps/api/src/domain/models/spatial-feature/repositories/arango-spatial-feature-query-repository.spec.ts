@@ -87,6 +87,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
         testQueryRepository = app.get(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN);
 
+        // TODO Once we have a query DB for contributors, we need to leverage this.
         contributorRepository = new ArangoRepositoryForAggregate(
             databaseProvider,
             ArangoCollectionId.contributors,
@@ -176,9 +177,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
 
-            for (const view of spatialFeatureViews) {
-                await testQueryRepository.create(view);
-            }
+            await testQueryRepository.createMany(spatialFeatureViews);
         });
 
         it('should return the expected spatial feature views', async () => {
@@ -195,9 +194,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
             beforeEach(async () => {
                 await databaseProvider.clearViews();
 
-                for (const spatialFeature of spatialFeatureViews) {
-                    await testQueryRepository.create(spatialFeature);
-                }
+                await testQueryRepository.createMany(spatialFeatureViews);
             });
 
             it(`should return the expected result`, async () => {
@@ -507,11 +504,8 @@ describe(`ArangoSpatialFeatureRepository`, () => {
                 )) as EventSourcedSpatialFeatureViewModel;
 
                 const missingAttributions = updatedView.contributions.filter(
-                    (contributionRecord) => {
-                        !contributorIds.some((id) =>
-                            contributionRecord.contributorIds.includes(id)
-                        );
-                    }
+                    (contributionRecord) =>
+                        !contributorIds.some((id) => contributionRecord.contributorIds.includes(id))
                 );
 
                 expect(missingAttributions).toHaveLength(0);
