@@ -1,4 +1,4 @@
-import { IBaseResourceViewModel } from '../base.view-model.interface';
+import { IContributionSummary } from '../base.view-model.interface';
 import { LanguageCode } from '../multilingual-text';
 import { EdgeConnectionMemberRole, IEdgeConnectionContext } from '../note';
 import { IMultilingualText } from './common';
@@ -46,6 +46,11 @@ type IConnectedResourceRecord = {
     role: typeof EdgeConnectionMemberRole.to | typeof EdgeConnectionMemberRole.from;
 };
 
+/**
+ * TODO At some point we may want to leverage the Config on the back-end
+ * to write info about the primary and secondary text so that less work
+ * needs to be done on the client.
+ */
 export interface IMultilingualTextRecord {
     original: {
         text: string;
@@ -70,21 +75,46 @@ export interface INoteRecordForResource {
     note: IMultilingualTextRecord;
 }
 
-export interface ITermViewModel extends IBaseResourceViewModel {
+export interface ITermViewModel {
+    id: string;
+
+    name: IMultilingualTextRecord;
+
+    /**
+     * These were originally on the base. Eventually, we can leverage a base
+     * model that uses composable state, i.e., records by ID instead of arrays
+     * for nested entities.
+     */
+    contributions: IContributionSummary[];
+
+    /**
+     * Terms do not leverage a dynamic command form for an admin UX.
+     */
+    // actions: ICommandFormAndLabels[];
+
+    // Lookup table where the keys are note IDs
+    notes: Record<string, INoteRecordForResource>;
+
+    /**
+     * What we want to do in the long run is to put the audio alongside the
+     * corresponding text in a `MultilingualAudioText` item.
+     */
     audioURL?: string;
 
     mediaItemId?: string;
 
     // mimeType?: MIMEType; Do we want this?
 
-    sourceProject?: string;
-
     // TODO put this on the base interface
     isPublished: boolean;
 
-    vocabularyLists: IVocabularyListRecordForTerm[];
+    vocabularyListsById: Record<string, IVocabularyListRecordForTerm>;
 
+    /**
+     * In the future, this should be nested on a `MultilingaulAudioText` property
+     * with the raw text \ langauge code.
+     */
     tokens: IToken[];
 
-    connections: IConnectedResourceRecord[];
+    connectionsById: Record<string, IConnectedResourceRecord>;
 }

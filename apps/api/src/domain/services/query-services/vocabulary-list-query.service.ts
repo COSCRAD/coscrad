@@ -53,7 +53,7 @@ export class VocabularyListQueryService {
                 string | boolean
             >;
 
-            entryWithName.term.name = entryWithoutName.term.text;
+            entryWithName.term.name = entryWithoutName.term.text.toMultilingualTextRecord();
 
             return entryWithName;
         });

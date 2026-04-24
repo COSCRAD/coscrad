@@ -1,6 +1,7 @@
 import {
     IMultilingualText,
     IMultilingualTextItem,
+    IMultilingualTextRecord,
     LanguageCode,
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
@@ -13,8 +14,8 @@ import {
 import { InternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import { NotFound } from '../../../lib/types/not-found';
-import { DTO } from '../../../types/DTO';
 import { DeepPartial } from '../../../types/DeepPartial';
+import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { Valid } from '../../domainModelValidators/Valid';
 import { DuplicateLanguageInMultilingualTextError } from '../../models/audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
@@ -205,6 +206,25 @@ export class MultilingualText extends BaseDomainModel implements IMultilingualTe
                     : item.text,
             })),
         } as DeepPartial<DTO<this>>);
+    }
+
+    toMultilingualTextRecord(): IMultilingualTextRecord {
+        const translations = this.items.reduce((acc, item) => {
+            acc[item.languageCode] = {
+                [item.role]: {
+                    text: item.text,
+                },
+            };
+
+            return acc;
+        }, {});
+
+        const result: IMultilingualTextRecord = {
+            original: this.getOriginalTextItem(),
+            translations,
+        };
+
+        return result;
     }
 
     validateComplexInvariants(): ResultOrError<Valid> {

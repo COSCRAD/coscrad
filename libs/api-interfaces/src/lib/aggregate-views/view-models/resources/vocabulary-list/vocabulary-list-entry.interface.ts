@@ -1,6 +1,5 @@
 import { IContributionSummary } from '../../base.view-model.interface';
-import { IMultilingualText } from '../common';
-import { ITermViewModel, IToken } from '../term.view-model.interface';
+import { IMultilingualTextRecord, ITermViewModel, IToken } from '../term.view-model.interface';
 
 export interface ITermViewForVocabularyListEntry {
     id: string;
@@ -9,7 +8,7 @@ export interface ITermViewForVocabularyListEntry {
 
     mediaItemId?: string;
 
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
 
     // mimeType?: MIMEType; Do we want this?
 

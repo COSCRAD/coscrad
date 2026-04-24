@@ -11,7 +11,6 @@ import { ICoscradEvent } from '../../../domain/common';
 import { buildMultilingualTextFromBilingualText } from '../../../domain/common/build-multilingual-text-from-bilingual-text';
 import { buildMultilingualTextWithSingleItem } from '../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../domain/common/entities/multilingual-text';
-import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import {
     PromptTermCreated,
@@ -20,6 +19,7 @@ import {
 } from '../../../domain/models/term/commands';
 import { ContributionSummary } from '../../../domain/models/user-management/contributor/views';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { HasAggregateId } from '../../../domain/types/HasAggregateId';
 import { isInternalError } from '../../../lib/errors/InternalError';
@@ -178,6 +178,7 @@ export class TermViewModel implements HasAggregateId, DetailScopedCommandWriteCo
     vocabularyLists: VocabularyListRecordForTerm[];
 
     // TODO remove this in favor of `getAvailableActions()`
+    // TODO Can we remove this altogether since we are not doing the dynamic command forms for Terms?
     actions: string[];
 
     @NestedDataType(Token, {

@@ -9,23 +9,19 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Inject, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CommandFSA } from '../../../app/controllers/command/command-fsa/command-fsa.entity';
-import {
-    CommandContext,
-    CommandInfoService,
-} from '../../../app/controllers/command/services/command-info-service';
+import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
 import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
+import { MultilingualText } from '../../common/entities/multilingual-text';
 import { EventSourcedAudioItemViewModel } from '../../models/audio-visual/audio-item/queries';
 import { PublishResource } from '../../models/shared/common-commands';
 import { AddAudioForTerm } from '../../models/term/commands';
-import { Term } from '../../models/term/entities/term.entity';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../models/term/queries';
 import { CoscradUserWithGroups } from '../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
-import { fetchActionsForUser } from './utilities/fetch-actions-for-user';
 
 interface DiscoverAudioForTermsOptions {
     shouldPublishTerms: boolean;
@@ -80,19 +76,7 @@ export class TermQueryService {
 
         if (isNotFound(result)) return result;
 
-        const { mediaItemId } = result;
-
-        const audioItemURL = isNullOrUndefined(mediaItemId)
-            ? undefined
-            : this.buildAudioUrl(mediaItemId);
-
-        const transformed = result as unknown as ITermViewModel;
-
-        transformed.audioURL = audioItemURL;
-
-        transformed.actions = this.fetchUserActions(userWithGroups, [result]);
-
-        return transformed;
+        return this.transform(result);
     }
 
     async fetchMany(
@@ -107,21 +91,10 @@ export class TermQueryService {
         return {
             // TODO ensure actions show up on entities
             entities: entities.map((e) => {
-                const entity = e as unknown as ITermViewModel;
-
-                Object.assign(entity, { audioURL: this.buildAudioUrl(e.mediaItemId) });
-
-                (entity as unknown as ITermViewModel).audioURL = this.buildAudioUrl(e.mediaItemId);
-
-                (entity as unknown as ITermViewModel).actions = this.fetchUserActions(
-                    userWithGroups,
-                    [e]
-                );
-
-                return entity as ITermViewModel;
+                return this.transform(e);
             }),
-            // TODO Should we register index-scoped commands in the view layer instead?
-            indexScopedActions: this.fetchUserActions(userWithGroups, [Term]),
+            // We don't use dynamic command forms for Terms any more.
+            indexScopedActions: [],
             page,
             count,
         };
@@ -191,14 +164,27 @@ export class TermQueryService {
         return this.termQueryRepository.subscribeToUpdates();
     }
 
-    // TODO share this code with other query services
-    private fetchUserActions(
-        systemUser: CoscradUserWithGroups,
-        commandContexts: CommandContext[]
-    ): ICommandFormAndLabels[] {
-        return commandContexts.flatMap((commandContext) =>
-            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
-        );
+    private transform(
+        termView: TermViewModel
+    ): ITermViewModel & { actions: ICommandFormAndLabels[] } {
+        const { mediaItemId } = termView;
+
+        const audioItemURL = isNullOrUndefined(mediaItemId)
+            ? undefined
+            : this.buildAudioUrl(mediaItemId);
+
+        const transformed = termView as unknown as ITermViewModel & {
+            actions: ICommandFormAndLabels[];
+        };
+
+        transformed.audioURL = audioItemURL;
+
+        transformed.name = new MultilingualText(termView.name).toMultilingualTextRecord();
+
+        // TODO Remove this. The term detail query response does not need `actions`.
+        transformed.actions = [];
+
+        return transformed;
     }
 
     private buildAudioUrl(mediaItemId?: AggregateId): string | undefined {
