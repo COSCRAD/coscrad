@@ -1,8 +1,9 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { CoscradEvent } from '../../../../../domain/common';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
-import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
@@ -20,7 +21,7 @@ export class PointCreatedPayload {
         label: 'coordinates for this',
         description: 'a place where the coordinates are',
     })
-    coordinates: GeometricFeature;
+    location: GeometricFeature;
 
     @NestedDataType(MultilingualTextItem, {
         label: 'name for the spatial feature',
@@ -42,10 +43,15 @@ const testEventId = buildDummyUuid(41);
                 type: AggregateType.spatialFeature,
                 id: buildDummyUuid(14),
             },
-            name: 'the chill spot',
-            description: 'the best place to relax',
-            lattitude: 123,
-            longitude: 321,
+            name: buildMultilingualTextWithSingleItem(
+                "Blake's Stomping Grounds"
+            ).getOriginalTextItem(),
+            description:
+                buildMultilingualTextWithSingleItem('Formerly Called the 7').getOriginalTextItem(),
+            location: buildTestInstance(GeometricFeature, {
+                type: GeometricFeatureType.point,
+                coordinates: [52.1322203, -122.145229],
+            }),
         },
         meta: {
             userId: buildDummyUuid(444),

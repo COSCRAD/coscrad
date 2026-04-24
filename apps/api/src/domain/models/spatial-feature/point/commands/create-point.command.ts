@@ -1,9 +1,10 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { FiniteNumber, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
-import { SpatialFeatureProperties } from '../entities/spatial-feature-properties.entity';
+import { GeometricFeature } from '../../Geometric-Feature';
 import { CREATE_POINT } from './constants';
 
 export class SpatialFeatureCompositeIdentifier {
@@ -36,31 +37,35 @@ export class CreatePoint implements ICommandBase {
      * - [Lattitude (Wikipedia)](https://en.wikipedia.org/wiki/Latitude)
      *
      */
-    @FiniteNumber({
-        label: `lattitude`,
-        description: 'lattitude',
+    @NestedDataType(GeometricFeature, {
+        label: 'label for the coordinates',
+        description: 'description for the coordinates',
     })
-    readonly lattitude: number;
-
-    /**
-     * TODO Restrict the range of this
-     * - [Longitude (Wikipedia)](https://en.wikipedia.org/wiki/Longitude)
-     */
-    @FiniteNumber({
-        label: `longitude`,
-        description: `longitude`,
-    })
-    readonly longitude: number;
+    location: GeometricFeature;
 
     // TODO support elevation
 
-    // TODO add languageCode for name
-    @FromDomainModel(SpatialFeatureProperties)
+    @NonEmptyString({
+        label: 'name',
+        description: 'name for this place',
+    })
     readonly name: string;
 
-    @FromDomainModel(SpatialFeatureProperties)
+    @LanguageCodeEnum({
+        label: 'language code for name',
+        description: 'the language in which you are naming this point on the map',
+    })
+    languageCodeForName: LanguageCode;
+
+    @NonEmptyString({
+        label: 'description',
+        description: 'short descripton of this place',
+    })
     readonly description: string;
 
-    @FromDomainModel(SpatialFeatureProperties)
+    @NonEmptyString({
+        label: 'image URL',
+        description: 'descripton of this place',
+    })
     readonly imageUrl?: string;
 }

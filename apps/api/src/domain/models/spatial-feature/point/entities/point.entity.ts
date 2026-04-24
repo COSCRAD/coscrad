@@ -1,4 +1,4 @@
-import { AggregateType, ISpatialFeatureProperties } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -16,8 +16,8 @@ import { AggregateCompositeIdentifier } from '../../../../types/AggregateComposi
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../../build-aggregate-root-from-event-history';
 import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
@@ -36,7 +36,7 @@ export class Point extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
 
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -58,8 +58,7 @@ export class Point extends Resource implements ISpatialFeature {
     }
 
     getName(): MultilingualText {
-        // TODO Make this multilingual text
-        return buildMultilingualTextWithSingleItem(this.properties.name);
+        return this.properties.name;
     }
 
     validateExternalState(externalState: InMemorySnapshot): ValidationResult {
@@ -133,8 +132,7 @@ export class Point extends Resource implements ISpatialFeature {
     static buildPointFromPointCreated({
         payload: {
             aggregateCompositeIdentifier: { id },
-            lattitude,
-            longitude,
+            location: coordinates,
             name,
             description,
         },
@@ -144,12 +142,14 @@ export class Point extends Resource implements ISpatialFeature {
             id,
             geometry: {
                 type: GeometricFeatureType.point,
-                coordinates: [lattitude, longitude],
+                coordinates: coordinates.coordinates,
             },
             properties: {
-                // TODO make this multilingual
-                name,
-                description,
+                name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+                description: buildMultilingualTextWithSingleItem(
+                    description.text,
+                    description.languageCode
+                ),
             },
             published: false,
         });

@@ -1,9 +1,7 @@
-import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../../../types/DTO';
-import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../types/AggregateCompositeIdentifier';
 import { ResourceType } from '../../../../types/ResourceType';
@@ -21,7 +19,7 @@ export class Line extends Resource implements ISpatialFeature {
 
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
 
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Line>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -46,8 +44,7 @@ export class Line extends Resource implements ISpatialFeature {
     }
 
     getName(): MultilingualText {
-        // TODO Make this multilingual text
-        return buildMultilingualTextWithSingleItem(this.properties.name);
+        return this.properties.name;
     }
 
     protected validateComplexInvariants(): InternalError[] {

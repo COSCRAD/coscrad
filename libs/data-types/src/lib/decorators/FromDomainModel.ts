@@ -14,6 +14,11 @@ import getCoscradDataSchemaFromPrototype, {
  * In the future, we may want to provide flexibility to rename the property on the
  * view model.
  */
+/**
+ *
+ * @deprecated use the correct datatype decorator directly
+ *
+ */
 export function FromDomainModel<T extends Ctor<unknown>>(
     DomainModelCtor: T,
     // TODO Constrain this to be a keyof an instance of the given class

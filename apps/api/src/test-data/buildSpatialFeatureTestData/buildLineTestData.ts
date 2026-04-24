@@ -1,3 +1,4 @@
+import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
 import { Line } from '../../domain/models/spatial-feature/line/entities/line.entity';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import { ResourceType } from '../../domain/types/ResourceType';
@@ -21,8 +22,8 @@ const dtos: DTO<Line>[] = [
             ],
         },
         properties: {
-            name: 'Windy Path',
-            description: 'One amazing hike!',
+            name: buildMultilingualTextWithSingleItem('Windy Path'),
+            description: buildMultilingualTextWithSingleItem('One amazing hike!'),
             imageUrl: 'https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png',
         },
     },

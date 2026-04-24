@@ -1,5 +1,13 @@
-import { AggregateType, GeometricFeatureType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    GeometricFeatureType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { Valid } from '../../../../domainModelValidators/Valid';
@@ -11,15 +19,15 @@ import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMet
 import { validAggregateOrThrow } from '../../../shared/functional';
 import { Point } from '../entities/point.entity';
 import { CreatePoint } from './create-point.command';
-import { PointCreated } from './point-created.event';
+import { PointCreated, PointCreatedPayload } from './point-created.event';
 
 @CommandHandler(CreatePoint)
 export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
-        lattitude,
-        longitude,
+        location: coordinates,
         name,
+        languageCodeForName,
         description,
         imageUrl,
     }: CreatePoint): ResultOrError<Point> {
@@ -28,11 +36,11 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
             id,
             geometry: {
                 type: GeometricFeatureType.point,
-                coordinates: [lattitude, longitude],
+                coordinates: [coordinates[32]],
             },
             properties: {
-                name,
-                description,
+                name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+                description: buildMultilingualTextWithSingleItem(description),
                 imageUrl,
             },
             // You must run a `PUBLISH_RESOURCE` command to publish this point
@@ -58,6 +66,21 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     }
 
     protected buildEvent(command: CreatePoint, eventMeta: EventRecordMetadata): BaseEvent {
-        return new PointCreated(command, eventMeta);
+        const eventPayload: PointCreatedPayload = {
+            aggregateCompositeIdentifier: command.aggregateCompositeIdentifier,
+            location: command.location,
+            name: new MultilingualTextItem({
+                languageCode: command.languageCodeForName,
+                text: command.name,
+                role: MultilingualTextItemRole.original,
+            }),
+            description: new MultilingualTextItem({
+                text: command.description,
+                languageCode: LanguageCode.English,
+                role: MultilingualTextItemRole.original,
+            }),
+        };
+
+        return new PointCreated(eventPayload, eventMeta);
     }
 }

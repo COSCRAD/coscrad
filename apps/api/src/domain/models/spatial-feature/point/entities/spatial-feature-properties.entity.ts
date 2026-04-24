@@ -1,21 +1,22 @@
 import { ISpatialFeatureProperties } from '@coscrad/api-interfaces';
-import { NonEmptyString, URL } from '@coscrad/data-types';
+import { NestedDataType, URL } from '@coscrad/data-types';
+import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { DTO } from '../../../../../types/DTO';
 import BaseDomainModel from '../../../base-domain-model.entity';
 
 export class SpatialFeatureProperties extends BaseDomainModel implements ISpatialFeatureProperties {
     // TODO Make this multilingual text
-    @NonEmptyString({
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'a place name (in any language)',
     })
-    readonly name: string;
+    readonly name: MultilingualText;
 
-    @NonEmptyString({
+    @NestedDataType(MultilingualText, {
         label: 'description',
         description: 'a description of the place',
     })
-    readonly description: string;
+    readonly description: MultilingualText;
 
     @URL({
         isOptional: true,
@@ -32,9 +33,9 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
 
         const { name, description, imageUrl } = dto;
 
-        this.name = name;
+        this.name = new MultilingualText(name);
 
-        this.description = description;
+        this.description = new MultilingualText(description);
 
         this.imageUrl = imageUrl;
     }
