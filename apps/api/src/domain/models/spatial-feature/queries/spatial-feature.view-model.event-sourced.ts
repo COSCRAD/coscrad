@@ -1,9 +1,4 @@
-import {
-    GeometricFeatureType,
-    IMultilingualText,
-    ISpatialFeatureProperties,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { GeometricFeatureType, ResourceType } from '@coscrad/api-interfaces';
 import { BooleanDataType, FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
@@ -25,6 +20,8 @@ import { Aggregate } from '../../aggregate.entity';
 import { ContributionSummary } from '../../user-management';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
+import { PointCreated } from '../point/commands';
+import { SpatialFeatureProperties } from '../point/entities/spatial-feature-properties.entity';
 
 type PointTuple = [number, number];
 
@@ -48,8 +45,8 @@ type GeometryViewModel = {
             coordinates: [-123, 52],
         },
         properties: {
-            name: 'the point',
-            description: 'is pointing',
+            name: buildMultilingualTextWithSingleItem('the point'),
+            description: buildMultilingualTextWithSingleItem('is pointing'),
         },
     },
 })
@@ -67,7 +64,7 @@ export class EventSourcedSpatialFeatureViewModel {
         description: `multilingual text name of the entity`,
         label: `name`,
     })
-    readonly name: IMultilingualText;
+    readonly name: MultilingualText;
 
     @BooleanDataType({
         label: 'is published',
@@ -101,26 +98,24 @@ export class EventSourcedSpatialFeatureViewModel {
      * This name is in keeping with the GEOJSON standard. It holds all non-geometry
      * properties that are associated with the identity of this spatial feature.
      */
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
-    constructor(viewModelDto: DTO<EventSourcedSpatialFeatureViewModel>) {
-        const {
-            geometry,
-            properties,
-            id,
-            name,
-            tags,
-            notes,
-            connections,
-            isPublished,
-            contributions,
-        } = viewModelDto;
+    constructor(viewModelDto: {
+        id: string;
+        isPublished: boolean;
+        contributions: DTO<ContributionSummary>[];
+        tags: DTO<EventSourcedTagViewModel>[];
+        notes: Record<AggregateId, NoteRecordForResourceViewModel>;
+        connections: Record<string, ConnectionRecordForResourceViewModel>;
+        geometry: DTO<GeometryViewModel>;
+        properties: DTO<SpatialFeatureProperties>;
+    }) {
+        const { geometry, properties, id, tags, notes, connections, isPublished, contributions } =
+            viewModelDto;
 
         this.id = id;
 
         this.isPublished = isBoolean(isPublished) ? isPublished : false;
-
-        this.name = new MultilingualText(name);
 
         this.tags = Array.isArray(tags) ? tags.map((t) => new EventSourcedTagViewModel(t)) : [];
 
@@ -134,7 +129,9 @@ export class EventSourcedSpatialFeatureViewModel {
 
         this.geometry = cloneToPlainObject(geometry);
 
-        this.properties = cloneToPlainObject(properties);
+        this.properties = new SpatialFeatureProperties(properties);
+
+        this.name = this.properties.name;
     }
 
     // TODO static fromPointCreated
@@ -143,6 +140,36 @@ export class EventSourcedSpatialFeatureViewModel {
         dto: DTO<EventSourcedSpatialFeatureViewModel>
     ): EventSourcedSpatialFeatureViewModel {
         return new EventSourcedSpatialFeatureViewModel(dto);
+    }
+
+    static fromPointCreated(event: PointCreated): EventSourcedSpatialFeatureViewModel {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+                location,
+                name,
+                description,
+            },
+        } = event;
+
+        const instance = new EventSourcedSpatialFeatureViewModel({
+            id,
+            geometry: location,
+            properties: new SpatialFeatureProperties({
+                name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+                description: buildMultilingualTextWithSingleItem(
+                    description.text,
+                    description.languageCode
+                ),
+            }),
+            isPublished: false,
+            contributions: [],
+            connections: {},
+            tags: [],
+            notes: {},
+        });
+
+        return instance;
     }
 
     static fromDomainModel({
@@ -159,7 +186,7 @@ export class EventSourcedSpatialFeatureViewModel {
         return new SpatialFeatureViewModel({
             id,
             // TODO make this full ML Text
-            name: buildMultilingualTextWithSingleItem(properties.name),
+            name: buildMultilingualTextWithSingleItem('name'),
             type,
             properties,
             geometry: geometryView,

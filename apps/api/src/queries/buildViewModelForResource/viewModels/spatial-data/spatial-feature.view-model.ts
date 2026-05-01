@@ -11,8 +11,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { buildMultilingualTextWithSingleItem } from '../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { Aggregate } from '../../../../domain/models/aggregate.entity';
-import { PointCreated } from '../../../../domain/models/spatial-feature/point/commands';
-import { InternalError } from '../../../../lib/errors/InternalError';
 
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
 import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
@@ -91,12 +89,6 @@ export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
 
     static fromDto(dto: DTO<SpatialFeatureViewModel>): SpatialFeatureViewModel {
         return new SpatialFeatureViewModel(dto);
-    }
-
-    static fromPointCreated(_event: PointCreated): SpatialFeatureViewModel {
-        throw new InternalError(`No implementado.`);
-
-        // return new SpatialFeatureViewModel({...})
     }
 
     static fromDomainModel({

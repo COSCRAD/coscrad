@@ -6,6 +6,7 @@ import {
     CreatePoint,
     CreatePointCommandHandler,
 } from '../../domain/models/spatial-feature/point/commands';
+import { PointCreatedEventHandler } from '../../domain/models/spatial-feature/point/commands/point-created.event-handler';
 import { SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN } from '../../domain/models/spatial-feature/queries/spatial-feature-query-repository.interface';
 import { ArangoSpatialFeatureQueryRepository } from '../../domain/models/spatial-feature/repositories/arango-spatial-feature-query-repository';
 import { SpatialFeatureQueryService } from '../../domain/services/query-services/spatial-feature-query.service';
@@ -44,6 +45,8 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
             provide: ctor,
             useValue: ctor,
         })),
+        // Event Handlers
+        PointCreatedEventHandler,
     ],
 })
 export class SpatialFeatureModule {}

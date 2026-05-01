@@ -9,6 +9,7 @@ import { IPublishable } from '../../shared/common-commands/publish-resource/reso
 import { IQueryRepositoryForAttributable } from '../../shared/common-event-handlers/attributor.event-handler';
 import { IQueryRepositoryForTaggable } from '../../tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
+import { EventSourcedSpatialFeatureViewModel } from './spatial-feature.view-model.event-sourced';
 
 export const SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN = 'SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN';
 
@@ -23,9 +24,14 @@ export interface ISpatialFeatureQueryRepository
 
     createMany(views: SpatialFeatureViewModel[]): Promise<void>;
 
-    fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<SpatialFeatureViewModel>>;
+    fetchById(
+        id: string,
+        user?: CoscradUserWithGroups
+    ): Promise<Maybe<EventSourcedSpatialFeatureViewModel>>;
 
-    fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<SpatialFeatureViewModel>>;
+    fetchMany(
+        options?: FetchManyQueryOptions
+    ): Promise<PaginatedResponse<EventSourcedSpatialFeatureViewModel>>;
 
     count(options?: FetchManyQueryOptions): Promise<number>;
 }
