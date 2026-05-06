@@ -282,8 +282,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
-                        // Commands should be visible to admin
-                        expect(res.body.actions).not.toEqual([]);
+                        // Dynamic forms are now disabled for Terms
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
 
@@ -307,8 +307,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
-                        // Commands should be visible to admin
-                        expect(res.body.actions).not.toEqual([]);
+                        // Dynamic forms are now disabled for Terms
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
 
@@ -328,8 +328,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
-                        // Commands should be visible to admin
-                        expect(res.body.actions).not.toEqual([]);
+                        // Dynamic forms are now disabled for Terms
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
             });
@@ -385,8 +385,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         const { actions } = term;
 
-                        // admin should see commands
-                        expect(actions).not.toHaveLength(0);
+                        // Dynamic forms are now disabled for Terms
+                        expect(actions).toHaveLength(0);
 
                         /**
                          * TODO We should add a separate test that checks
@@ -413,8 +413,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
-                        // Commands should be visible to admin
-                        expect(res.body.actions).not.toEqual([]);
+                        // Dynamic forms are now disabled for Terms
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
 
@@ -432,8 +432,8 @@ describe(`when querying for a term: fetch by Id`, () => {
 
                         expect(res.status).toBe(httpStatusCodes.ok);
 
-                        // Commands should be visible to admin
-                        expect(res.body.actions).not.toEqual([]);
+                        // Dynamic forms are now disabled for Terms
+                        expect(res.body.actions).toEqual([]);
                     });
                 });
             });
