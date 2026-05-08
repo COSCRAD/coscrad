@@ -52,7 +52,7 @@ export class MultilingualTextItem extends BaseDomainModel implements IMultilingu
                 value,
             })),
             enumLabel: 'Language_Code',
-            enumName: 'LangaugeCode',
+            enumName: 'LanguageCode',
         },
         {
             label: 'language code',
