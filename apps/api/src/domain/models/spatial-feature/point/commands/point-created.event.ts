@@ -8,6 +8,7 @@ import { BaseEvent } from '../../../shared/events/base-event.entity';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { GeometricFeature } from '../../Geometric-Feature';
+import { PointCoordinates } from '../entities/point-coordinates.entity';
 import { SpatialFeatureCompositeIdentifier } from './create-point.command';
 
 export class PointCreatedPayload {
@@ -50,7 +51,10 @@ const testEventId = buildDummyUuid(41);
                 buildMultilingualTextWithSingleItem('Formerly Called the 7').getOriginalTextItem(),
             location: buildTestInstance(GeometricFeature, {
                 type: GeometricFeatureType.point,
-                coordinates: [52.1322203, -122.145229],
+                coordinates: new PointCoordinates({
+                    lattitude: 50.123,
+                    longitude: -122.2,
+                }),
             }),
         },
         meta: {

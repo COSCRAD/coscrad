@@ -1,12 +1,17 @@
-import { FiniteNumber, NonEmptyString } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../test-data/utilities';
+import { DTO } from '../../../types/DTO';
+import { PointCoordinates } from './point/entities/point-coordinates.entity';
 import { GeometricFeatureType } from './types/GeometricFeatureType';
 
 @CoscradDataExample<GeometricFeature>({
     example: {
         // @ts-expect-error avoid circular build dependacy
         type: 'Point',
-        coordinates: [52, -122],
+        coordinates: new PointCoordinates({
+            lattitude: 52.8,
+            longitude: -122.2,
+        }),
     },
 })
 export class GeometricFeature {
@@ -17,11 +22,16 @@ export class GeometricFeature {
     })
     type: GeometricFeatureType;
 
-    // TODO Use a Point class here
-    @FiniteNumber({
-        isArray: true,
+    /**
+     * TODO Make this a union when implementing `Line` and/or `Polygon`
+     */
+    @NestedDataType(PointCoordinates, {
         label: 'coordinates',
-        description: 'the geometric coordinates for the given feature',
+        description: 'geospatial location of this geometric feature',
     })
-    coordinates: [number, number];
+    coordinates: PointCoordinates;
+
+    constructor({ type, coordinates }: DTO<GeometricFeature>) {
+        return new GeometricFeature({ type, coordinates });
+    }
 }

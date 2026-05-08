@@ -5,7 +5,6 @@ import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
-import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -22,10 +21,8 @@ import {
 import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
+import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
-import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
-import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT, PointCreated } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
@@ -34,7 +31,7 @@ import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
-    readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
+    readonly geometry: GeometricFeature;
 
     readonly properties: SpatialFeatureProperties;
 
@@ -50,9 +47,7 @@ export class Point extends Resource implements ISpatialFeature {
          * issues that come with additional layers of OOP. Nonetheless, we deep
          * clone to avoid shared references and hence unwanted side-effects.
          */
-        this.geometry = cloneToPlainObject(
-            geometryDTO as IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>
-        );
+        this.geometry = new GeometricFeature(geometryDTO);
 
         this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
@@ -140,10 +135,7 @@ export class Point extends Resource implements ISpatialFeature {
         const buildResult = new Point({
             type: AggregateType.spatialFeature,
             id,
-            geometry: {
-                type: GeometricFeatureType.point,
-                coordinates: coordinates.coordinates,
-            },
+            geometry: new GeometricFeature(coordinates),
             properties: {
                 name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
                 description: buildMultilingualTextWithSingleItem(
