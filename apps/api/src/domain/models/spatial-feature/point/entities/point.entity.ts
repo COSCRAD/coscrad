@@ -1,4 +1,4 @@
-import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType, LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -113,6 +113,18 @@ export class Point extends Resource implements ISpatialFeature {
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
+    }
+
+    translateName(translation: string, languageCode: LanguageCode) {
+        const textUpdateResult = this.translateName(translation, languageCode);
+
+        if (isInternalError(textUpdateResult)) {
+            return textUpdateResult;
+        }
+
+        this.translateName = textUpdateResult;
+
+        return this;
     }
 
     static fromEventHistory(
