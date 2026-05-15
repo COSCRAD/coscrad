@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { useLoadableTags } from '../../../store/slices/tagSlice/hooks/use-loadable-tags';
 import { ErrorDisplay } from '../../error-display/error-display';
 import { Loading } from '../../loading';
-import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 
 export interface TagResourceOrNoteProps {
     onSubmitForm: (fsa?: { type: string; payload: Record<string, unknown> }) => void;
@@ -52,7 +51,7 @@ export const TagResourceOrNoteForm = ({
                                 // TODO Filter out the tags that have already been used
                                 .map(({ id, name }) => ({
                                     id,
-                                    name: findOriginalTextItem(name).text,
+                                    name: name.original.text,
                                 }))
                                 .map(({ id, name }) => (
                                     <MenuItem key={`id`} value={id}>

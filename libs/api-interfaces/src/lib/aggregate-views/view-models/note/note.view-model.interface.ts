@@ -1,5 +1,5 @@
 import { IBaseViewModel } from '../base.view-model.interface';
-import { IMultilingualText } from '../resources/common';
+import { IMultilingualTextRecord } from '../resources';
 import { IEdgeConnectionContext } from './edge-connection-context.interface';
 import { EdgeConnectionType } from './edge-connection-type';
 
@@ -22,6 +22,6 @@ export interface IConnectionMembers {
 export interface INoteViewModel extends IBaseViewModel {
     connectionType: EdgeConnectionType;
     // TODO remove this in favor of `text`
-    note: IMultilingualText;
+    note: IMultilingualTextRecord;
     connectedResources: IConnectionMembers;
 }

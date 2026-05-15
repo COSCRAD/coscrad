@@ -2,7 +2,6 @@ import {
     AggregateType,
     ICategorizableDetailQueryResult,
     IPhotographViewModel,
-    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { SinglePropertyPresenter } from '../../../utils/generic-components';
@@ -23,9 +22,7 @@ export const PhotographDetailFullViewPresenter = ({
         src: imageUrl,
         width: 2000,
         height: 1329,
-        title:
-            name?.items.find(({ role }) => role === MultilingualTextItemRole.original)?.text ||
-            `photograph/${id}`,
+        title: name.original.text || `photograph/${id}`,
     };
 
     return (

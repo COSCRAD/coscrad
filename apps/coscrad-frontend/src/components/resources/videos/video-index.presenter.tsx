@@ -1,9 +1,10 @@
 import {
     AggregateType,
-    IMultilingualText,
     IMultilingualTextItem,
+    IMultilingualTextRecord,
     IVideoViewModel,
     LanguageCode,
+    MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { useContext } from 'react';
@@ -20,8 +21,37 @@ import { renderMultilingualTextItem } from '../utils/render-cell-for-single-lang
 import { renderContributionsTextCell } from '../utils/render-contributions-text-cell';
 import { renderMediaLengthInSeconds } from '../utils/render-media-length-in-seconds-cell';
 
-const inLanguage = (languageCodeToFind: LanguageCode, multilingualText: IMultilingualText) =>
-    multilingualText.items.find(({ languageCode }) => languageCode === languageCodeToFind);
+const inLanguage = (
+    languageCodeToFind: LanguageCode,
+    multilingualText: IMultilingualTextRecord
+): IMultilingualTextItem | undefined => {
+    if (multilingualText.original.languageCode === languageCodeToFind)
+        return {
+            text: multilingualText.original.text,
+            languageCode: languageCodeToFind,
+            role: MultilingualTextItemRole.original,
+        };
+
+    const translations = multilingualText.translations;
+
+    if (isNullOrUndefined(translations)) return undefined;
+
+    if (!isNullOrUndefined(translations[languageCodeToFind].free))
+        return {
+            text: translations[languageCodeToFind].free,
+            languageCode: languageCodeToFind,
+            role: MultilingualTextItemRole.freeTranslation,
+        };
+
+    if (!isNullOrUndefined(translations[languageCodeToFind].literal))
+        return {
+            text: translations[languageCodeToFind].literal,
+            languageCode: languageCodeToFind,
+            role: MultilingualTextItemRole.literalTranslation,
+        };
+
+    return undefined;
+};
 
 type VideoTableRow = Omit<IVideoViewModel, 'name'> & {
     name: IMultilingualTextItem;

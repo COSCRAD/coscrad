@@ -1,18 +1,21 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
+import { IMultilingualTextRecord } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { parseLanguageCode } from './parse-language-code-from-query';
 
+// This function name would need to change if we're using IMultilingualTextRecord
 export const doesSomeMultilingualTextItemInclude = (
-    multilingualText: IMultilingualText,
+    multilingualText: IMultilingualTextRecord,
     query: string
 ) => {
     const languageCodeInQuery = parseLanguageCode(query);
 
     if (isNullOrUndefined(languageCodeInQuery)) {
         // language independent search
-        return multilingualText.items.some(({ text }) =>
-            text.toLowerCase().includes(query.toLowerCase())
-        );
+        const textForSearch = `${Object.values(multilingualText.translations).join(' ')} ${
+            multilingualText.original.text
+        }`;
+
+        return textForSearch.toLowerCase().includes(query.toLowerCase());
     }
 
     const splitQuery = query.split(`{${languageCodeInQuery}}:`);
@@ -21,11 +24,15 @@ export const doesSomeMultilingualTextItemInclude = (
 
     const searchTerms = query.split(`{${languageCodeInQuery}}:`)[1];
 
-    return multilingualText.items.some(({ text, languageCode }) => {
-        const isThereAMatch =
-            text.toLowerCase().includes(searchTerms.toLowerCase()) &&
-            languageCodeInQuery === languageCode;
+    if (multilingualText.original.languageCode === languageCodeInQuery)
+        return multilingualText.original.text.toLowerCase().includes(searchTerms.toLowerCase());
 
-        return isThereAMatch;
-    });
+    if (isNullOrUndefined(multilingualText.translations[languageCodeInQuery])) return undefined;
+
+    const languageTextToSearch = multilingualText.translations[languageCodeInQuery];
+
+    return Object.values(languageTextToSearch)
+        .join(' ')
+        .toLowerCase()
+        .includes(searchTerms.toLowerCase());
 };

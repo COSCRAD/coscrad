@@ -1,4 +1,4 @@
-import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { IMultilingualTextRecord, ResourceType } from '@coscrad/api-interfaces';
 import { Grid } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import { ReactElement } from 'react';
@@ -6,7 +6,7 @@ import { IdInfoIcon } from '../id-info-icon/id-info-icon';
 import { ResourceNamePresenter } from '../resource-name-presenter';
 
 export interface ResourceNamePresenterProps {
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
     variant: Variant;
 }
 
@@ -17,7 +17,7 @@ export interface ResourceNamePresenter {
 interface ResourceDetailPresenterHeaderProps {
     id: string;
     type: ResourceType;
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
     variant: Variant;
     NamePresenter?: ResourceNamePresenter;
 }

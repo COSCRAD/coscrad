@@ -1,4 +1,4 @@
-import { IMultilingualText } from '@coscrad/api-interfaces';
+import { IMultilingualTextRecord } from '@coscrad/api-interfaces';
 import { Box } from '@mui/material';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
@@ -7,7 +7,7 @@ import { groupMultilingualTextItems } from './group-multilingual-text-items';
 import { ExpandableMultilingualTextWithTranslationsPresenter } from './multilingual-text-with-translations-presenter';
 
 export interface MultilingualTextPresenterProps {
-    text: IMultilingualText;
+    text: IMultilingualTextRecord;
 }
 
 export const MultilingualTextPresenter = ({

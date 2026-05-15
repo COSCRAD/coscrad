@@ -5,7 +5,6 @@ import {
     IBibliographicCitationViewModel,
     IMediaItemViewModel,
 } from '@coscrad/api-interfaces';
-import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 import { buildBibliographicCitationJointViewModel } from '../bibliographic-citations/joint-view';
 
 export type AggregateStringSummarizer<T extends IBaseViewModel> = (viewModel: T) => string;
@@ -22,14 +21,17 @@ export const aggregateStringSummarizerFactory = (
         };
 
     if (aggregateType === AggregateType.mediaItem)
-        return ({ name }: IMediaItemViewModel): string => findOriginalTextItem(name).text;
+        return ({ name }: IMediaItemViewModel): string => name.original.text;
 
     if (aggregateType === AggregateType.audioItem)
-        return ({ name }: IAudioItemViewModel): string =>
-            name.items.map(({ text, languageCode }) => `${text} (${languageCode})`).join(', ');
+        return ({
+            name: {
+                original: { text, languageCode },
+            },
+        }: IAudioItemViewModel): string => `${text} (${languageCode})`;
 
     // TODO Support string summarizers for other aggregate types as needed
 
     // Fallback to simply showing the name in the original language
-    return (viewModel: IBaseViewModel) => findOriginalTextItem(viewModel.name).text;
+    return (viewModel: IBaseViewModel) => viewModel.name.original.text;
 };

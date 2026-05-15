@@ -5,6 +5,7 @@ import { PlaylistIndexState } from '../../../store/slices/resources/playlists/ty
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
@@ -52,9 +53,7 @@ export const PlaylistIndexPresenter = ({ entities: playlists }: PlaylistIndexSta
 
     const matchers: Matchers<IPlayListViewModel> = {
         name: (multilingualText, searchString) =>
-            multilingualText.items.some(({ text }) =>
-                text.toLowerCase().includes(searchString.toLowerCase())
-            ),
+            doesSomeMultilingualTextItemInclude(multilingualText, searchString),
         episodes: (episodes, searchString) =>
             doesCountSatisfyStringCriterion(episodes.length, searchString),
     };

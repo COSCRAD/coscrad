@@ -5,7 +5,6 @@ import {
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
 import { isNull } from '@coscrad/validation-constraints';
-import { findOriginalTextItem } from '../../../../components/notes/shared/find-original-text-item';
 import { ILoadable } from '../../interfaces/loadable.interface';
 import { compositeIdentifierMatches } from './composite-identifiers-match';
 import { useLoadableNotes } from './use-loadable-notes';
@@ -72,7 +71,7 @@ export const useLoadableSelfNotesForResource = (
              * we can localize notes using language codes and provide a rich
              * multilingual experience.
              */
-            text: findOriginalTextItem(note).text,
+            text: note.original.text,
             context: connectedResources.self.context,
         }));
 

@@ -1,4 +1,8 @@
-import { IContributionSummary, IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import {
+    IContributionSummary,
+    IMultilingualTextRecord,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { buildDataAttributeForAggregateDetailComponent } from './build-data-attribute-for-aggregate-detail-component';
@@ -15,7 +19,7 @@ export interface ResourceDetailFullViewPresenterProps {
     videoUrl?: string;
     audioUrl?: string;
     contributions: IContributionSummary[];
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
     type: ResourceType;
     children?: ReactNode;
     NamePresenter?: ResourceNamePresenter;

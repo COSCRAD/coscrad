@@ -6,7 +6,7 @@ import { ResourceCompositeIdentifier } from './resource-composite-identifier';
 
 export interface IVocabularyListRecordForTerm {
     id: string;
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
     // TODO size
 }
 
@@ -68,6 +68,7 @@ export interface IMultilingualTextRecord {
     >;
 }
 
+// Should we move this out of the term view model to a higher level location?
 export interface INoteRecordForResource {
     id: string;
     context: IEdgeConnectionContext;

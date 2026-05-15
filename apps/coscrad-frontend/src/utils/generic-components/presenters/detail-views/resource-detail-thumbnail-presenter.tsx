@@ -1,4 +1,4 @@
-import { IMultilingualText, ResourceType } from '@coscrad/api-interfaces';
+import { IMultilingualTextRecord, ResourceType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Card, CardContent, Grid } from '@mui/material';
 import { ReactNode } from 'react';
@@ -11,7 +11,7 @@ import { ResourcePreviewIconFactory } from './resource-preview-icon';
 export interface ResourceDetailThumbnailPresenterProps {
     id: string;
     type: ResourceType;
-    name: IMultilingualText | string;
+    name: IMultilingualTextRecord | string;
     children?: ReactNode;
 }
 

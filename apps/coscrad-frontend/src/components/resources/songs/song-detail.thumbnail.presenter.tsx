@@ -1,6 +1,6 @@
 import {
     ICategorizableDetailQueryResult,
-    IMultilingualText,
+    IMultilingualTextRecord,
     ISongViewModel,
 } from '@coscrad/api-interfaces';
 import { AudioPlayer } from '@coscrad/media-player';
@@ -8,7 +8,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Card, Divider } from '@mui/material';
 import { BilingualTextPresenter } from '../utils/bilingual-text-presenter';
 
-const buildLyricsStatusMessage = (lyrics: IMultilingualText | null | undefined): string =>
+const buildLyricsStatusMessage = (lyrics: IMultilingualTextRecord | null | undefined): string =>
     isNullOrUndefined(lyrics) ? 'No Lyrics Available' : 'Lyrics are available for this song';
 
 export const SongDetailThumbnailPresenter = ({

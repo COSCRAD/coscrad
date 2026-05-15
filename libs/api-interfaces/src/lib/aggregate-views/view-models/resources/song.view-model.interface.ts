@@ -1,5 +1,5 @@
+import { IMultilingualTextRecord } from '.';
 import { IBaseResourceViewModel } from '../base.view-model.interface';
-import { IMultilingualText } from './common';
 
 export interface ISongViewModel extends IBaseResourceViewModel {
     // We'll want to replace the following two props with a single `MultilingualText`
@@ -8,7 +8,7 @@ export interface ISongViewModel extends IBaseResourceViewModel {
     titleEnglish?: string;
 
     // we may want to consider transcribed audio and three-way text for this
-    lyrics?: IMultilingualText;
+    lyrics?: IMultilingualTextRecord;
 
     audioURL: string;
 

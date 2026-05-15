@@ -3,13 +3,12 @@ import {
     IDetailQueryResult,
     IHttpErrorInfo,
     IIndexQueryResult,
+    IMultilingualTextRecord,
     ITermViewModel,
-    IVocabularyListRecordForTerm,
 } from '@coscrad/api-interfaces';
 import { ActionReducerMapBuilder, AsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { doesSomeMultilingualTextItemInclude } from '../../../../components/resources/utils/query-matchers';
 import {
-    doesTextIncludeCaseInsensitive,
     filterTableData,
     Matchers,
 } from '../../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
@@ -145,12 +144,34 @@ const initialState: TermSliceState = {
     pageSize: 100,
 };
 
+const iterateRecord = <K extends string, V>(
+    record: Record<K, V>,
+    callback: (key: K, value: V) => boolean
+): boolean => {
+    const result = (Object.entries(record) as [K, V][]).forEach(([key, value]): boolean => {
+        return callback(key, value);
+    });
+
+    return result;
+};
+
+// Need help making this work.  Type safe iteration over a record object
 const matchers: Matchers<ITermViewModel> = {
     name: doesSomeMultilingualTextItemInclude,
-    vocabularyLists: (vocabularyLists: IVocabularyListRecordForTerm[], searchTerm: string) =>
-        vocabularyLists.some(({ name }) =>
-            name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
-        ),
+    vocabularyListsById: (
+        vocabularyListsById: Record<string, IMultilingualTextRecord>,
+        searchTerm: string
+    ) => {
+        const isMatch = iterateRecord(vocabularyListsById, (_id, name: IMultilingualTextRecord) => {
+            return doesSomeMultilingualTextItemInclude(name, searchTerm);
+        });
+
+        return isMatch;
+    },
+
+    // some(({ name }) =>
+    //         name.items.some(({ text }) => doesTextIncludeCaseInsensitive(text, searchTerm))
+    //     ),
     tokens: (tokens, searchTerm) =>
         (tokens || []).some(({ characters }) =>
             characters.some((c) => {

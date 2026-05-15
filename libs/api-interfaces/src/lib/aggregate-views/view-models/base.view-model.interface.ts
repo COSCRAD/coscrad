@@ -1,7 +1,9 @@
 import { ICommandFormAndLabels } from '../../commands';
 import { HasId } from './has-id.interface';
-import { IMultilingualText } from './resources/common';
-import { INoteRecordForResource } from './resources/term.view-model.interface';
+import {
+    IMultilingualTextRecord,
+    INoteRecordForResource,
+} from './resources/term.view-model.interface';
 
 interface ICoscradDate {
     // can we make this number as well?
@@ -19,7 +21,7 @@ export interface IContributionSummary {
 }
 
 export interface IBaseViewModel extends HasId {
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
 }
 
 export interface IBaseResourceViewModel extends IBaseViewModel {

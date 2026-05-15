@@ -16,7 +16,6 @@ import {
     ResourceDetailFullViewPresenter,
 } from '../../../utils/generic-components/';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../utils/generic-components/presenters/detail-views/build-data-attribute-for-aggregate-detail-component';
-import { findOriginalTextItem } from '../../notes/shared/find-original-text-item';
 
 import { ResourceNamePresenterProps } from '../../../utils/generic-components/presenters/detail-views/resource-detail-presenter-header';
 import { FlatMultilingualTextPresenter } from '../../../utils/generic-components/presenters/flat-multilingual-text-presenter';
@@ -24,10 +23,10 @@ import { groupMultilingualTextItems } from '../../../utils/generic-components/pr
 
 const VocabularyListRecordForTermPresenter = ({
     id: termId,
-    vocabularyLists,
+    vocabularyListsById,
 }: {
     id: string;
-    vocabularyLists: IVocabularyListRecordForTerm[];
+    vocabularyListsById: Record<string, IVocabularyListRecordForTerm>;
 }): JSX.Element => (
     <Box>
         <Box
@@ -39,14 +38,14 @@ const VocabularyListRecordForTermPresenter = ({
             Vocabulary Lists for this Term
         </Box>
         <CommaSeparatedList>
-            {(vocabularyLists || []).map(({ name, id }) => {
-                const originalTextItem = findOriginalTextItem(name);
+            {Object.keys(vocabularyListsById).map((key) => {
+                const vocabularyListName = vocabularyListsById[key].name.original.text;
 
                 return (
                     <Link
-                        to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(id)}`}
+                        to={`/${routes.resources.ofType(ResourceType.vocabularyList).detail(key)}`}
                     >
-                        {originalTextItem.text}
+                        {vocabularyListName}
                     </Link>
                 );
             })}
@@ -75,7 +74,7 @@ export const TermDetailFullViewPresenter = ({
     name,
     contributions,
     audioURL,
-    vocabularyLists,
+    vocabularyListsById,
 }: ICategorizableDetailQueryResult<ITermViewModel>): JSX.Element => {
     return (
         <ResourceDetailFullViewPresenter
@@ -91,8 +90,11 @@ export const TermDetailFullViewPresenter = ({
             <Box id="media-player">
                 <AudioClipPlayer audioUrl={audioURL} />
             </Box>
-            {(vocabularyLists || []).length > 0 ? (
-                <VocabularyListRecordForTermPresenter id={id} vocabularyLists={vocabularyLists} />
+            {(Object.keys(vocabularyListsById) || {}).length > 0 ? (
+                <VocabularyListRecordForTermPresenter
+                    id={id}
+                    vocabularyListsById={vocabularyListsById}
+                />
             ) : null}
         </ResourceDetailFullViewPresenter>
     );

@@ -1,8 +1,8 @@
-import { IMultilingualText } from '../common';
+import { IMultilingualTextRecord } from '..';
 import { MIMEType } from '../media-items';
 
 export interface IPlaylistEpisode {
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
 
     mediaItemUrl: string;
 

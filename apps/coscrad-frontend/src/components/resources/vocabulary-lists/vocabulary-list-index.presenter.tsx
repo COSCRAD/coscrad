@@ -1,14 +1,11 @@
-import {
-    AggregateType,
-    IMultilingualText,
-    IVocabularyListViewModel,
-} from '@coscrad/api-interfaces';
+import { AggregateType, IVocabularyListViewModel } from '@coscrad/api-interfaces';
 import { useContext } from 'react';
 import { ConfigurableContentContext } from '../../../configurable-front-matter/configurable-content-provider';
 import { VocabularyListIndexState } from '../../../store/slices/resources/vocabulary-lists/types/vocabulary-list-index-state';
 import { HeadingLabel, IndexTable } from '../../../utils/generic-components/presenters/tables';
 import { Matchers } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/filter-table-data';
 import { CellRenderersDefinition } from '../../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { doesSomeMultilingualTextItemInclude } from '../utils/query-matchers';
 import { renderAggregateIdCell } from '../utils/render-aggregate-id-cell';
 import { renderMultilingualTextCell } from '../utils/render-multilingual-text-cell';
 
@@ -28,8 +25,8 @@ export const VocabularyListIndexPresenter = ({
     };
 
     const matchers: Matchers<IVocabularyListViewModel> = {
-        name: ({ items }: IMultilingualText, search) =>
-            items.some(({ text }) => text.toLowerCase().includes(search.toLowerCase())),
+        name: (multilingualText, searchString) =>
+            doesSomeMultilingualTextItemInclude(multilingualText, searchString),
     };
 
     return (

@@ -1,10 +1,10 @@
-import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
+import { IMultilingualTextRecord, LanguageCode } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
 import { groupMultilingualTextItems } from '../../../utils/generic-components/presenters/group-multilingual-text-items';
 import { BilingualTextPresenter } from './bilingual-text-presenter';
 
 export const renderMultilingualTextCell = (
-    text: IMultilingualText,
+    text: IMultilingualTextRecord,
     defaultLanguageCode: LanguageCode
 ) => {
     const { primaryMultilingualTextItem, translations } = groupMultilingualTextItems(

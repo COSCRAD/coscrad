@@ -70,7 +70,7 @@ const interpretCoscradQueryFromUserSearchText = (
         return {
             type: 'OR',
             // @ts-expect-error TODO let's sort out the full types in api-interfaces
-            conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
+            conditions: (['name', 'contributions', 'vocabularyListsById', 'tokens'] as const).map(
                 (field) =>
                     interpretCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
             ),
@@ -94,7 +94,7 @@ const interpretCoscradQueryFromUserSearchText = (
         return simpleFilter;
     }
 
-    if (scope === 'vocabularyLists') {
+    if (scope === 'vocabularyListsById') {
         return {
             type: 'SIMPLE',
             field: `vocabularyLists[*].name`,

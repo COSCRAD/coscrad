@@ -1,7 +1,7 @@
-import { IMultilingualText } from '../common';
+import { IMultilingualTextRecord } from '..';
 
 export interface IDigitalTextPage {
     identifier: string;
 
-    content?: IMultilingualText;
+    content?: IMultilingualTextRecord;
 }

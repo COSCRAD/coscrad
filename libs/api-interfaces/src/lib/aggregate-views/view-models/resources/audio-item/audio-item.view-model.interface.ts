@@ -1,5 +1,5 @@
+import { IMultilingualTextRecord } from '..';
 import { IBaseResourceViewModel } from '../../base.view-model.interface';
-import { IMultilingualText } from '../common/multilingual-text/multilingual-text.interface';
 import { MIMEType } from '../media-items';
 
 export interface IAudioItemViewModel extends IBaseResourceViewModel {
@@ -10,7 +10,7 @@ export interface IAudioItemViewModel extends IBaseResourceViewModel {
 
     isPublished: boolean;
 
-    name: IMultilingualText;
+    name: IMultilingualTextRecord;
 
     // aggregate ID
     mediaItemId: string;

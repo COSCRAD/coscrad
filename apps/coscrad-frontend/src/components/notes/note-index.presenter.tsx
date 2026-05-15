@@ -10,7 +10,6 @@ import { HeadingLabel, IndexTable } from '../../utils/generic-components/present
 import { CellRenderersDefinition } from '../../utils/generic-components/presenters/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { truncateText } from '../../utils/string-processor/shorten-string';
 import { renderAggregateIdCell } from '../resources/utils/render-aggregate-id-cell';
-import { findOriginalTextItem } from './shared/find-original-text-item';
 
 const MAX_NOTE_TEXT_LENGTH = 50; // 50 characters
 
@@ -68,7 +67,7 @@ export const NoteIndexPresenter = ({ entities: notes }: NoteIndexState): JSX.Ele
     const cellRenderersDefinition: CellRenderersDefinition<INoteViewModel> = {
         id: renderAggregateIdCell,
         // we may want to limit the note's text
-        note: ({ note }) => truncateText(findOriginalTextItem(note).text, MAX_NOTE_TEXT_LENGTH),
+        note: ({ note }) => truncateText(note.original.text, MAX_NOTE_TEXT_LENGTH),
         connectedResources: ({ connectedResources, connectionType }: INoteViewModel) => (
             // do we want a simple icon for this instead?
             <DisplayConnectedResourcesInfo

@@ -45,7 +45,7 @@ export const bootstrapIndexToDetailFlowRoutes = ({
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.term)
         .filter(({ categorizableType }) => categorizableType !== CategorizableType.note)
 
-        .flatMap(({ categorizableType, detailViewType, indexFilter }) => {
+        .flatMap(({ categorizableType, detailViewType }) => {
             /**
              * TODO Use a switch, lookup table, or OOP & polymorphism as soon as
              * you have a third view type.
@@ -69,7 +69,7 @@ export const bootstrapIndexToDetailFlowRoutes = ({
                             IndexPresenter={tableViewCategorizableIndexPresenterFactory(
                                 categorizableType
                             )}
-                            preFilter={indexFilter}
+                            // preFilter={indexFilter}
                             aggregateType={categorizableType}
                             simulatedKeyboard={simulatedKeyboard}
                         />
