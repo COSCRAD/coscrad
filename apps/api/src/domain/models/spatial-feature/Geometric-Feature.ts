@@ -31,7 +31,15 @@ export class GeometricFeature {
     })
     coordinates: PointCoordinates;
 
-    constructor({ type, coordinates }: DTO<GeometricFeature>) {
-        return new GeometricFeature({ type, coordinates });
+    constructor(dto: DTO<GeometricFeature>) {
+        const { type, coordinates } = dto;
+
+        this.type = type;
+
+        this.coordinates = new PointCoordinates(coordinates);
+    }
+
+    static fromDto(dto: DTO<GeometricFeature>) {
+        return new GeometricFeature(dto);
     }
 }
