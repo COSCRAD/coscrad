@@ -17,6 +17,7 @@ import validateAllCoordinatesInLinearStructure from '../../validation/validateAl
 export class Line extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
+    // @ts-expect-error TODO Fix this before introducing a `CREATE_LINE` command
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.line, LineCoordinates>;
 
     readonly properties: SpatialFeatureProperties;

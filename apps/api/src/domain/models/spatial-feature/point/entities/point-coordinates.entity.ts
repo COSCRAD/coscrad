@@ -31,6 +31,13 @@ export class PointCoordinates {
         this.longitude = longitude;
     }
 
+    /**
+     * This is used in views to ensure that we adhere to the GEOJson standard.
+     */
+    toTuple(): [number, number] {
+        return [this.lattitude, this.longitude];
+    }
+
     validateComplexInvariants(): InternalError[] {
         const allErrors: InternalError[] = [];
 
@@ -51,6 +58,10 @@ export class PointCoordinates {
         }
 
         return allErrors;
+    }
+
+    static fromTuple([lattitude, longitude]: [number, number]): PointCoordinates {
+        return new PointCoordinates({ lattitude, longitude });
     }
 
     static fromDto({

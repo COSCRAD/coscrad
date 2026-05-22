@@ -1,4 +1,5 @@
 import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
+import { PointCoordinates } from '../../domain/models/spatial-feature/point/entities/point-coordinates.entity';
 import { Point } from '../../domain/models/spatial-feature/point/entities/point.entity';
 import { Position2D } from '../../domain/models/spatial-feature/types/Coordinates/Position2D';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
@@ -21,11 +22,12 @@ const dtos: Omit<DTO<Point>, 'properties'>[] = pointCoordinates.map((point, inde
     geometry: {
         type: GeometricFeatureType.point,
 
-        coordinates: point,
+        coordinates: PointCoordinates.fromTuple(point),
     },
     published: true,
 }));
 
+// TODO remove the need for this file!
 export default (): Point[] =>
     dtos.map(
         (partialDto) =>

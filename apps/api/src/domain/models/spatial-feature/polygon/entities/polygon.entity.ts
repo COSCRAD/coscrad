@@ -16,6 +16,7 @@ import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 export class Polygon extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
+    // @ts-expect-error TODO Fix this before adding a `CREATE_POLYGON` command
     readonly geometry: IGeometricFeature<typeof GeometricFeatureType.polygon, PolygonCoordinates>;
 
     readonly properties: SpatialFeatureProperties;

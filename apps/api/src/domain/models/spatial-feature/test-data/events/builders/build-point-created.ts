@@ -4,6 +4,7 @@ import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/c
 import { EventMetadataBuilder } from '../../../../../../test-data/events';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { PointCreated, PointCreatedPayload } from '../../../point/commands';
+import { PointCoordinates } from '../../../point/entities/point-coordinates.entity';
 
 // TODO do we need this anymore?
 export const buildPointCreated = (
@@ -15,7 +16,10 @@ export const buildPointCreated = (
             type: AggregateType.spatialFeature,
             id: buildDummyUuid(1),
         },
-        location: { type: GeometricFeatureType.point, coordinates: [54.2, 52.8] },
+        location: {
+            type: GeometricFeatureType.point,
+            coordinates: PointCoordinates.fromTuple([54.2, 52.8]),
+        },
         name: buildMultilingualTextWithSingleItem('the club').getOriginalTextItem(),
         description: buildMultilingualTextWithSingleItem(
             'this is where we hang out on vacation'

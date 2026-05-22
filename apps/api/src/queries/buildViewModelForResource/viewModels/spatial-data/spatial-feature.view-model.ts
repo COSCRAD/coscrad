@@ -99,7 +99,8 @@ export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
     }: ISpatialFeature): SpatialFeatureViewModel {
         const geometryView: GeometryViewModel = {
             type: geometry.type,
-            coordinates: geometry.coordinates,
+            // `toPlain`? `toGeoJson`?
+            coordinates: geometry.coordinates.toTuple(),
         };
 
         return new SpatialFeatureViewModel({

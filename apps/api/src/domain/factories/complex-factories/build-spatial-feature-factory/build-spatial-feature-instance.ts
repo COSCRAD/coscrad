@@ -1,10 +1,9 @@
+import { NotImplementedException } from '@nestjs/common';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/InvalidGeometryTypeForSpatialFeatureError';
 import { ISpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.interface';
-import { Line } from '../../../models/spatial-feature/line/entities/line.entity';
 import { Point } from '../../../models/spatial-feature/point/entities/point.entity';
-import { Polygon } from '../../../models/spatial-feature/polygon/entities/polygon.entity';
 import { GeometricFeatureType } from '../../../models/spatial-feature/types/GeometricFeatureType';
 
 /**
@@ -15,13 +14,17 @@ export default (dto: DTO<ISpatialFeature>): ResultOrError<ISpatialFeature> => {
 
     switch (type) {
         case GeometricFeatureType.line:
-            return new Line(dto as DTO<Line>);
+            throw new NotImplementedException(
+                `Spatial features with a Line geometry are not yet supported`
+            );
 
         case GeometricFeatureType.point:
             return new Point(dto as DTO<Point>);
 
         case GeometricFeatureType.polygon:
-            return new Polygon(dto as DTO<Polygon>);
+            throw new NotImplementedException(
+                `Spatial features with a Line geometry are not yet supported`
+            );
 
         default:
             return new InvalidGeometryTypeForSpatialFeatureError(type);

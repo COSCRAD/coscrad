@@ -25,6 +25,7 @@ import { PointCreated, PointCreatedPayload } from './point-created.event';
 export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     protected createNewInstance({
         aggregateCompositeIdentifier: { id },
+        // TODO rename this
         location: coordinates,
         name,
         languageCodeForName,
@@ -36,7 +37,8 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
             id,
             geometry: {
                 type: GeometricFeatureType.point,
-                coordinates: [coordinates[32]],
+                // TODO fix this
+                coordinates: coordinates.coordinates,
             },
             properties: {
                 name: buildMultilingualTextWithSingleItem(name, languageCodeForName),

@@ -146,6 +146,7 @@ export class EventSourcedSpatialFeatureViewModel {
         const {
             payload: {
                 aggregateCompositeIdentifier: { id },
+                // TODO rename this
                 location,
                 name,
                 description,
@@ -154,7 +155,10 @@ export class EventSourcedSpatialFeatureViewModel {
 
         const instance = new EventSourcedSpatialFeatureViewModel({
             id,
-            geometry: location,
+            geometry: {
+                type: GeometricFeatureType.point,
+                coordinates: location.coordinates.toTuple(),
+            },
             properties: new SpatialFeatureProperties({
                 name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
                 description: buildMultilingualTextWithSingleItem(
@@ -180,7 +184,7 @@ export class EventSourcedSpatialFeatureViewModel {
     }: ISpatialFeature): SpatialFeatureViewModel {
         const geometryView: GeometryViewModel = {
             type: geometry.type,
-            coordinates: geometry.coordinates,
+            coordinates: geometry.coordinates.toTuple(),
         };
 
         return new SpatialFeatureViewModel({
