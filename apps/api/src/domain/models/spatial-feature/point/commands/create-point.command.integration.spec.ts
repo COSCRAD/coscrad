@@ -6,12 +6,12 @@ import { buildMultilingualTextWithSingleItem } from '../../../../../domain/commo
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { getCommandFsaForTest } from '../../../../__tests__/utilities/getCommandFsaForTest';
-import { getValidSpatialFeatureInstanceForTest } from '../../../../__tests__/utilities/getValidSpatialFeatureInstanceForTest';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -21,6 +21,7 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
+import { Point } from '../entities/point.entity';
 import { CreatePoint } from './create-point.command';
 
 const commandType = `CREATE_POINT`;
@@ -99,7 +100,7 @@ describe(commandType, () => {
                             systemUserId: dummySystemUserId,
                             initialState: new DeluxeInMemoryStore({
                                 [AggregateType.spatialFeature]: [
-                                    getValidSpatialFeatureInstanceForTest(featureType).clone({
+                                    buildTestInstance(Point, {
                                         properties: {
                                             name: buildMultilingualTextWithSingleItem(
                                                 pointName,

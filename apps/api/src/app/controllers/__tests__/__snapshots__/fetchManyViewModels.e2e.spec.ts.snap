@@ -704,7 +704,7 @@ exports[`When fetching multiple resources GET /resources/mediaItems when some of
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when all of the resources are published should fetch multiple resources of type spatialFeature 1`] = `
 {
-  "count": 7,
+  "count": 5,
   "entities": [
     {
       "actions": [],
@@ -1046,134 +1046,6 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
               "languageCode": "en",
               "role": "original",
               "text": "Name of Point with ID: 104",
-            },
-          ],
-        },
-      },
-      "tags": [],
-      "type": "spatialFeature",
-    },
-    {
-      "actions": [],
-      "geometry": {
-        "coordinates": [
-          [
-            52.3,
-            -124.2,
-          ],
-          [
-            52.35,
-            -124.85,
-          ],
-          [
-            52.21,
-            -124.9,
-          ],
-          [
-            52.05,
-            -125.1,
-          ],
-          [
-            52.15,
-            -125.1,
-          ],
-          [
-            52.33,
-            -125.22,
-          ],
-          [
-            52.45,
-            -125.39,
-          ],
-        ],
-        "type": "LineString",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Windy Path",
-          },
-        ],
-      },
-      "properties": {
-        "description": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "One amazing hike!",
-            },
-          ],
-        },
-        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
-        "name": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Windy Path",
-            },
-          ],
-        },
-      },
-      "tags": [],
-      "type": "spatialFeature",
-    },
-    {
-      "actions": [],
-      "geometry": {
-        "coordinates": [
-          [
-            [
-              52.47,
-              -123.6,
-            ],
-            [
-              52.42,
-              -123.95,
-            ],
-            [
-              52.05,
-              -123.95,
-            ],
-            [
-              52.05,
-              -123.685,
-            ],
-          ],
-        ],
-        "type": "Polygon",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Point with ID: 300 Name",
-          },
-        ],
-      },
-      "properties": {
-        "description": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Description for polygon 300",
-            },
-          ],
-        },
-        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
-        "name": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Point with ID: 300 Name",
             },
           ],
         },
@@ -1189,7 +1061,7 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when al
 
 exports[`When fetching multiple resources GET /resources/spatialFeatures when some of the resources are unpublished should return the expected number of results 1`] = `
 {
-  "count": 7,
+  "count": 5,
   "entities": [
     {
       "actions": [],
@@ -1531,134 +1403,6 @@ exports[`When fetching multiple resources GET /resources/spatialFeatures when so
               "languageCode": "en",
               "role": "original",
               "text": "Name of Point with ID: 104",
-            },
-          ],
-        },
-      },
-      "tags": [],
-      "type": "spatialFeature",
-    },
-    {
-      "actions": [],
-      "geometry": {
-        "coordinates": [
-          [
-            52.3,
-            -124.2,
-          ],
-          [
-            52.35,
-            -124.85,
-          ],
-          [
-            52.21,
-            -124.9,
-          ],
-          [
-            52.05,
-            -125.1,
-          ],
-          [
-            52.15,
-            -125.1,
-          ],
-          [
-            52.33,
-            -125.22,
-          ],
-          [
-            52.45,
-            -125.39,
-          ],
-        ],
-        "type": "LineString",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Windy Path",
-          },
-        ],
-      },
-      "properties": {
-        "description": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "One amazing hike!",
-            },
-          ],
-        },
-        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
-        "name": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Windy Path",
-            },
-          ],
-        },
-      },
-      "tags": [],
-      "type": "spatialFeature",
-    },
-    {
-      "actions": [],
-      "geometry": {
-        "coordinates": [
-          [
-            [
-              52.47,
-              -123.6,
-            ],
-            [
-              52.42,
-              -123.95,
-            ],
-            [
-              52.05,
-              -123.95,
-            ],
-            [
-              52.05,
-              -123.685,
-            ],
-          ],
-        ],
-        "type": "Polygon",
-      },
-      "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-      "name": {
-        "items": [
-          {
-            "languageCode": "en",
-            "role": "original",
-            "text": "Point with ID: 300 Name",
-          },
-        ],
-      },
-      "properties": {
-        "description": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Description for polygon 300",
-            },
-          ],
-        },
-        "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
-        "name": {
-          "items": [
-            {
-              "languageCode": "en",
-              "role": "original",
-              "text": "Point with ID: 300 Name",
             },
           ],
         },

@@ -5149,12 +5149,23 @@ exports[`command payload schemas Command payload schema should match the snapsho
         "name": "GeometricFeature",
         "schema": {
           "coordinates": {
-            "coscradDataType": "FINITE_NUMBER",
-            "description": "the geometric coordinates for the given feature",
-            "isArray": true,
+            "complexDataType": "NESTED_TYPE",
+            "description": "geospatial location of this geometric feature",
+            "isArray": false,
             "isOptional": false,
             "isPrivate": false,
             "label": "coordinates",
+            "name": "PointCoordinates",
+            "schema": {
+              "lattitude": {
+                "coscradDataType": "FINITE_NUMBER",
+                "description": "the lattitude coordinate for this point",
+                "isArray": false,
+                "isOptional": false,
+                "isPrivate": false,
+                "label": "lattitude",
+              },
+            },
           },
           "type": {
             "coscradDataType": "NON_EMPTY_STRING",

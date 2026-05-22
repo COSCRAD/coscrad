@@ -258,57 +258,6 @@ Song {
 }
 `;
 
-exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Line should succeed 1`] = `
-Line {
-  "eventHistory": [],
-  "geometry": {
-    "coordinates": [
-      [
-        52.3,
-        -124.2,
-      ],
-      [
-        52.35,
-        -124.85,
-      ],
-      [
-        52.21,
-        -124.9,
-      ],
-      [
-        52.05,
-        -125.1,
-      ],
-      [
-        52.15,
-        -125.1,
-      ],
-      [
-        52.33,
-        -125.22,
-      ],
-      [
-        52.45,
-        -125.39,
-      ],
-    ],
-    "type": "LineString",
-  },
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110001",
-  "properties": SpatialFeatureProperties {
-    "description": "One amazing hike!",
-    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/wind-energy-2029621_1280.png",
-    "name": "Windy Path",
-  },
-  "published": true,
-  "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": [],
-    "allowedUserIds": [],
-  },
-  "type": "spatialFeature",
-}
-`;
-
 exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Point should succeed 1`] = `
 Point {
   "eventHistory": [],
@@ -324,47 +273,6 @@ Point {
     "description": "Description for point 100",
     "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png",
     "name": "Name of Point with ID: 100",
-  },
-  "published": true,
-  "queryAccessControlList": AccessControlList {
-    "allowedGroupIds": [],
-    "allowedUserIds": [],
-  },
-  "type": "spatialFeature",
-}
-`;
-
-exports[`Aggregate factories when attempting to build an instance of type: spatialFeature from a DTO when the DTO is valid valid dto for a Spatial Feature of sub-type: Polygon should succeed 1`] = `
-Polygon {
-  "eventHistory": [],
-  "geometry": {
-    "coordinates": [
-      [
-        [
-          52.47,
-          -123.6,
-        ],
-        [
-          52.42,
-          -123.95,
-        ],
-        [
-          52.05,
-          -123.95,
-        ],
-        [
-          52.05,
-          -123.685,
-        ],
-      ],
-    ],
-    "type": "Polygon",
-  },
-  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b110300",
-  "properties": SpatialFeatureProperties {
-    "description": "Description for polygon 300",
-    "imageUrl": "https://coscrad.org/wp-content/uploads/2023/05/map-1272165_640.png",
-    "name": "Point with ID: 300 Name",
   },
   "published": true,
   "queryAccessControlList": AccessControlList {

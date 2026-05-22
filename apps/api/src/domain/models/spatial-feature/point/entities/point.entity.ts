@@ -1,4 +1,4 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
@@ -6,6 +6,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -21,11 +22,28 @@ import {
 import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { CREATE_POINT, PointCreated } from '../commands';
+import { PointCoordinates } from './point-coordinates.entity';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
+@CoscradDataExample<Point>({
+    example: {
+        type: ResourceType.spatialFeature,
+        published: false,
+        id: buildDummyUuid(123),
+        geometry: buildTestInstance(GeometricFeature, {
+            type: GeometricFeatureType.point,
+            coordinates: PointCoordinates.fromTuple([22, -55]),
+        }),
+        properties: {
+            description: buildMultilingualTextWithSingleItem('The place to be!'),
+            name: buildMultilingualTextWithSingleItem('My Point'),
+        },
+    },
+})
 @RegisterIndexScopedCommands([CREATE_POINT])
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
