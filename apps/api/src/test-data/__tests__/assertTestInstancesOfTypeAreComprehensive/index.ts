@@ -50,19 +50,17 @@ const aggregateTypeToComprehensiveAssertionFunction: {
     },
     // SpatialFeatureSubTypes
     [AggregateType.spatialFeature]: (_: AggregateType, snapshot: Snapshot) => {
-        const subTypesWithNoTestData = Object.values(GeometricFeatureType).reduce(
-            (acc, subtype) => {
-                if (
-                    !new DeluxeInMemoryStore(snapshot)
-                        .fetchAllOfType(AggregateType.spatialFeature)
-                        .some(({ geometry: { type } }: ISpatialFeature) => type === subtype)
-                )
-                    return [...acc, subtype];
+        // TODO update this list once we support lines and polygons
+        const subTypesWithNoTestData = [GeometricFeatureType.point].reduce((acc, subtype) => {
+            if (
+                !new DeluxeInMemoryStore(snapshot)
+                    .fetchAllOfType(AggregateType.spatialFeature)
+                    .some(({ geometry: { type } }: ISpatialFeature) => type === subtype)
+            )
+                return [...acc, subtype];
 
-                return acc;
-            },
-            []
-        );
+            return acc;
+        }, []);
 
         expect(subTypesWithNoTestData).toEqual([]);
     },

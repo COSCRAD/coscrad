@@ -23,7 +23,6 @@ import InvalidExternalStateError from '../../../shared/common-command-errors/Inv
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
-import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT, PointCreated } from '../commands';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
@@ -84,16 +83,9 @@ export class Point extends Resource implements ISpatialFeature {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        const { coordinates } = this.geometry;
+        const coordinateInvariantErrors = this.geometry.coordinates.validateComplexInvariants();
 
-        /**
-         * Note that **all** invariant validation rules are validated within
-         * the following function. We opt-out of the decorator-based
-         * 'simple-invariant' validation for geometric models because it is
-         *  more transparent to keep all coordinates as plain-old objects and not
-         * instances of nested classes.
-         */
-        return validatePosition2D(coordinates);
+        return coordinateInvariantErrors;
     }
 
     // Should we have a base class? Does this logic vary amongst subtypes?
