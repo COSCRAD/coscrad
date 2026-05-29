@@ -22,12 +22,14 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import { TestEventStream } from '../../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../../validation';
+import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { Point } from '../../entities/point.entity';
 import { PointCreated } from '../point-created.event';
+import { SpatialFeatureNameTranslated } from './spatial-feature-name-translated.event';
 import { TranslateSpatialFeatureName } from './translate-spatial-feature-name.command';
 
 const commandType = 'TRANSLATE_SPATIAL_FEATURE_NAME';
@@ -45,15 +47,15 @@ const translationLanguageCode = LanguageCode.English;
 
 const translationSpatialFeatureText = 'translation of spatial feature text';
 
-const eventHistoryForExistingPoint = new TestEventStream()
-    .andThen<PointCreated>({
-        type: 'POINT_CREATED',
-        payload: {
-            aggregateCompositeIdentifier: spatialFeatureCompositeIdentifier,
-            name: 'point name translation',
-        },
-    })
-    .as(spatialFeatureCompositeIdentifier);
+const pointCreated = new TestEventStream().andThen<PointCreated>({
+    type: 'POINT_CREATED',
+    payload: {
+        aggregateCompositeIdentifier: spatialFeatureCompositeIdentifier,
+        name: 'point name translation',
+    },
+});
+
+const eventHistoryForExistingPoint = pointCreated.as(spatialFeatureCompositeIdentifier);
 
 const validFsa = {
     type: commandType,
@@ -156,6 +158,46 @@ describe(commandType, () => {
                     expect(translationTextItem.role).toBe(MultilingualTextItemRole.freeTranslation);
                 },
             });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the translation language is the same as the original`, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.spatialFeature)
+                            .create(
+                                Point.fromEventHistory(
+                                    pointCreated
+                                        .andThen<SpatialFeatureNameTranslated>({
+                                            type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
+                                            payload: {
+                                                languageCode: translationLanguageCode,
+                                            },
+                                        })
+                                        .as(spatialFeatureCompositeIdentifier),
+                                    spatialFeatureId
+                                ) as Point
+                            );
+                        // todo then translate
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        expect(error.message).toContain('shoot Aaron!');
+                    },
+                });
+            });
+        });
+
+        describe(`when there is already a translation in the given languauge`, () => {
+            it.todo(`should return the expected error`);
+        });
+
+        describe(`when the spatial feature does not exist`, () => {
+            it.todo(`should return the expected error`);
         });
     });
 });

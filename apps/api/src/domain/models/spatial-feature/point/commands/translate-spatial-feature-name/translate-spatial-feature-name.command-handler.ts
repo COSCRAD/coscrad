@@ -1,4 +1,4 @@
-import { ICommand } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
 import { InternalError } from '../../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
@@ -9,6 +9,7 @@ import { EventRecordMetadata } from '../../../../shared/events/types/EventRecord
 import { Point } from '../../entities/point.entity';
 import { TranslateSpatialFeatureName } from './translate-spatial-feature-name.command';
 
+@CommandHandler(TranslateSpatialFeatureName)
 export class TranslateSpatialFeatureNameCommandHandler extends BaseUpdateCommandHandler<Point> {
     protected actOnInstance(
         _instance: Point,
