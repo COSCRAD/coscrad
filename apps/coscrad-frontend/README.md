@@ -8,7 +8,6 @@ This app serves as the client for COSCRAD `api`. Currently, we use a `content co
 to allow flexible configuration, including
 
 -   configuring index-to-detail flows
-    -   creating multiple such flows per resource type using "prefilters"
     -   applying custom labels and routes
 -   enabling or disabling the web-of-knowledge
     -   connected resources panel
