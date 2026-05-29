@@ -1,10 +1,4 @@
-import {
-    AggregateTypeToViewModel,
-    CategorizableType,
-    ICategorizableDetailQueryResult,
-    LanguageCode,
-    MIMEType,
-} from '@coscrad/api-interfaces';
+import { CategorizableType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
 import { CoscradConstraint } from '@coscrad/validation-constraints';
 import { ThemeOptions } from '@mui/material';
 
@@ -164,9 +158,6 @@ export type AggregateLabelOverrides = {
 
 export type IndexToDetailFlowDefinition<T extends CategorizableType> = {
     categorizableType: T;
-    indexFilter?: (
-        viewModel: ICategorizableDetailQueryResult<AggregateTypeToViewModel[T]>
-    ) => boolean;
     detailViewType: DetailViewType;
     labelOverrides?: AggregateLabelOverrides; // custom override for resource label
 };
