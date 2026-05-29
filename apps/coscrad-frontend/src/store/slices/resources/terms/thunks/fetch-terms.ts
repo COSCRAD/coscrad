@@ -104,30 +104,16 @@ export const fetchTerms = createAsyncThunk(
 
         const { apiUrl } = getConfig();
 
-        const { indexToDetailFlows } = getConfigurableContent();
-
-        const termIndexToDetailFlowConfig = indexToDetailFlows.find(
-            ({ categorizableType }) => categorizableType === CategorizableType.term
-        );
-
-        const identityFilter = (x: unknown) => x;
-
-        const preFilter = termIndexToDetailFlowConfig?.indexFilter || identityFilter;
-
         // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-339] do this on the back-end
         const newEntitiesWithAudioUrl = responseJson.entities.flatMap((entity) => {
-            const doesEntityPassFilter = preFilter(entity);
-
-            return doesEntityPassFilter
-                ? [
-                      {
-                          ...entity,
-                          audioURL: isNullOrUndefined(entity.audioURL)
-                              ? undefined
-                              : `${apiUrl}${entity.audioURL}`,
-                      },
-                  ]
-                : [];
+            return [
+                {
+                    ...entity,
+                    audioURL: isNullOrUndefined(entity.audioURL)
+                        ? undefined
+                        : `${apiUrl}${entity.audioURL}`,
+                },
+            ];
         });
 
         /**
@@ -156,10 +142,6 @@ createFetchThunk<IIndexQueryResult<ITermViewModel>>(
             ({ categorizableType }) => categorizableType === CategorizableType.term
         );
 
-        const identityFilter = (x: unknown) => x;
-
-        const preFilter = termIndexToDetailFlowConfig?.indexFilter || identityFilter;
-
         /**
          * TODO Phase the following mapping layer out in favour
          * of doing this work on the server.
@@ -167,18 +149,14 @@ createFetchThunk<IIndexQueryResult<ITermViewModel>>(
         return {
             ...serverResponse,
             entities: serverResponse.entities.flatMap((entity) => {
-                const doesEntityPassFilter = preFilter(entity);
-
-                return doesEntityPassFilter
-                    ? [
-                          {
-                              ...entity,
-                              audioURL: isNullOrUndefined(entity.audioURL)
-                                  ? undefined
-                                  : `${apiUrl}${entity.audioURL}`,
-                          },
-                      ]
-                    : [];
+                return [
+                    {
+                        ...entity,
+                        audioURL: isNullOrUndefined(entity.audioURL)
+                            ? undefined
+                            : `${apiUrl}${entity.audioURL}`,
+                    },
+                ];
             }),
         };
     }

@@ -32,6 +32,7 @@ describe('Tags index-to-detail flow', () => {
 
         cy.seedDataWithCommand(`CREATE_TAG`, {
             aggregateCompositeIdentifier: tagCompositeIdentifier,
+            label: tagLabelToFind,
         });
 
         cy.seedDataWithCommand(`CREATE_TERM`, {

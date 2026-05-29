@@ -1,8 +1,7 @@
-import { CategorizableType, HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
+import { HttpStatusCode, IHttpErrorInfo } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getConfig } from '../../../../../../src/config';
-import { getConfigurableContent } from '../../../../../../src/configurable-front-matter';
 import { RootState } from '../../../../../../src/store';
 import { NOT_FOUND } from '../../../interfaces/maybe-loadable.interface';
 import { buildAuthenticationHeaders } from '../../../utils/build-authentication-headers';
@@ -16,19 +15,9 @@ export const fetchTermById = createAsyncThunk(
     async (termId: string, thunkApi) => {
         const { apiUrl } = getConfig();
 
-        const { indexToDetailFlows } = getConfigurableContent();
-
         const endpoint = `${getApiResourcesBaseRoute()}/terms/${termId}`;
 
         const { getState } = thunkApi;
-
-        const termIndexToDetailFlowConfig = indexToDetailFlows.find(
-            ({ categorizableType }) => categorizableType === CategorizableType.term
-        );
-
-        const identityFilter = (x: unknown) => x;
-
-        const preFilter = termIndexToDetailFlowConfig?.indexFilter || identityFilter;
 
         const token = selectAuthToken(getState() as RootState);
 
@@ -39,7 +28,7 @@ export const fetchTermById = createAsyncThunk(
         const responseJson =
             response.status === HttpStatusCode.notFound ? NOT_FOUND : await response.json();
 
-        if (responseJson === NOT_FOUND || !preFilter(response)) {
+        if (responseJson === NOT_FOUND) {
             /**
              * TODO We should move this filter to the database. In that case,
              * We should filter by And(idEquals,...otherFilters).
