@@ -3,14 +3,9 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
-import {
-    Popup as LeafletPopup,
-    Marker as PointMarker,
-    Polygon as PolygonMarker,
-    Polyline as PolylineMarker,
-} from 'react-leaflet';
+import { Marker as PointMarker, Popup as LeafletPopup } from 'react-leaflet';
 import { SpatialFeatureDetailPresenter } from '../map';
-import { Line2D, MultiPolygon2D, Position2D } from '../types';
+import { Position2D } from '../types';
 
 interface MarkerPresenterProps<T = unknown> extends PropsWithChildren {
     spatialFeature: ISpatialFeatureViewModel<T>;
@@ -43,38 +38,6 @@ const lookupTable: {
         >
             {children}
         </PointMarker>
-    ),
-    [GeometricFeatureType.line]: ({
-        spatialFeature,
-        handleClick,
-        children,
-        elRef,
-    }: MarkerPresenterProps<Line2D>) => (
-        <PolylineMarker
-            positions={spatialFeature.geometry.coordinates}
-            eventHandlers={{
-                popupopen: () => handleClick(spatialFeature.id),
-            }}
-            ref={elRef}
-        >
-            {children}
-        </PolylineMarker>
-    ),
-    [GeometricFeatureType.polygon]: ({
-        spatialFeature,
-        handleClick,
-        children,
-        elRef,
-    }: MarkerPresenterProps<MultiPolygon2D>) => (
-        <PolygonMarker
-            positions={spatialFeature.geometry.coordinates}
-            eventHandlers={{
-                popupopen: () => handleClick(spatialFeature.id),
-            }}
-            ref={elRef}
-        >
-            {children}
-        </PolygonMarker>
     ),
 };
 
