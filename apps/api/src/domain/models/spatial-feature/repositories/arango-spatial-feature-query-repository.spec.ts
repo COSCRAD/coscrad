@@ -4,6 +4,7 @@ import {
     EdgeConnectionMemberRole,
     IEdgeConnectionContext,
     LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -411,7 +412,9 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
             const foundTranslation = searchResultForTranslation as MultilingualTextItem;
 
-            expect(foundTranslation.text).toBe(targetSpatialFeature.name);
+            expect(foundTranslation.text).toBe(translationTextForName);
+
+            expect(foundTranslation.role).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 

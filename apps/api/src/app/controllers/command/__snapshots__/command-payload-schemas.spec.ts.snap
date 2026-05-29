@@ -5134,18 +5134,80 @@ exports[`command payload schemas Command payload schema should match the snapsho
       "lattitude": {
         "coscradDataType": "FINITE_NUMBER",
         "description": "lattitude",
+      "imageUrl": {
+        "coscradDataType": "NON_EMPTY_STRING",
+        "description": "descripton of this place",
         "isArray": false,
         "isOptional": false,
         "isPrivate": false,
-        "label": "lattitude",
+        "label": "image URL",
       },
-      "longitude": {
-        "coscradDataType": "FINITE_NUMBER",
-        "description": "longitude",
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming this point on the map",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
         "isArray": false,
         "isOptional": false,
         "isPrivate": false,
-        "label": "longitude",
+        "label": "language code for name",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
+      },
+      "location": {
+        "complexDataType": "NESTED_TYPE",
+        "description": "description for the coordinates",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "label for the coordinates",
+        "name": "GeometricFeature",
+        "schema": {
+          "coordinates": {
+            "coscradDataType": "FINITE_NUMBER",
+            "description": "the geometric coordinates for the given feature",
+            "isArray": true,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "coordinates",
+          },
+          "type": {
+            "coscradDataType": "NON_EMPTY_STRING",
+            "description": "is this a point, line or polygon",
+            "isArray": false,
+            "isOptional": false,
+            "isPrivate": false,
+            "label": "type",
+          },
+        },
       },
       "name": {
         "coscradDataType": "NON_EMPTY_STRING",
