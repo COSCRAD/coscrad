@@ -17,13 +17,15 @@ import { ILoadable } from '../../interfaces/loadable.interface';
 import { NOT_FOUND } from '../../interfaces/maybe-loadable.interface';
 import { buildInitialLoadableState } from '../../utils';
 import { TERMS } from './constants';
-import { fetchTermById, fetchTerms, IUserDefinedFilter } from './thunks';
+import { fetchTermById, fetchTerms } from './thunks';
 import { TermSliceState } from './types';
 import { TermIndexState } from './types/term-index-state';
 
-export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
 
-export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
+interface IUserDefinedFilter<TViewModel> {
+    scope: keyof TViewModel | typeof ALL_PROPERTIES_SEARCH_KEY;
+}
 
 const buildReducersForFetchTermByIdThunk = <VThunkArg = any>(
     builder: ActionReducerMapBuilder<ILoadable<TermIndexState>>,

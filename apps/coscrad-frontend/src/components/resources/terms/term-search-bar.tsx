@@ -1,4 +1,4 @@
-import { ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
+import { ITermViewModel } from '@coscrad/api-interfaces';
 import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { SearchRounded } from '@mui/icons-material';
 import {
@@ -19,115 +19,10 @@ import {
     fetchTerms,
     filterTermsInMemory,
     IndexSearchScope,
-    IUserDefinedFilter,
     setTermFilters,
     useLoadableTerms,
 } from '../../../store/slices/resources';
 import { HeadingLabel } from '../../../utils/generic-components/presenters/tables';
-
-/**
- * Clearly this doesn't belong here. However, we want to generalize it to
- * work for other resource types. It's a matter of parsing the query string
- * based on the `CoscradDataType` of each field.
- *
- * We may end up moving this logic to the server.
- */
-const compileMultilingualTextContainsQuery = (
-    fieldName: keyof ITermViewModel,
-    queryString: string
-): IUserDefinedFilter<ITermViewModel> => {
-    const extractedLanguageCode = queryString.slice(1).split('}')[0];
-
-    const searchTermsWithLanguageCodeRemoved = queryString.split('}')[1];
-
-    if (Object.values(LanguageCode).some((lc) => lc === extractedLanguageCode)) {
-        return {
-            type: 'SIMPLE',
-            operator: 'MULTILINGUAL_TEXT_INCLUDES',
-            field: fieldName,
-            params: [searchTermsWithLanguageCodeRemoved, extractedLanguageCode],
-        };
-    }
-
-    /**
-     * If the language code is not a known language code, we naively search
-     * for the text, e.g., including `{foo}` in `{foo}Ooops`.
-     */
-    return {
-        type: 'SIMPLE',
-        field: fieldName,
-        operator: 'MULTILINGUAL_TEXT_INCLUDES',
-        params: [queryString],
-    };
-};
-
-const interpretCoscradQueryFromUserSearchText = (
-    scope: IndexSearchScope<ITermViewModel>,
-    queryString: string,
-    defaultLanguageCode: LanguageCode = LanguageCode.English
-): IUserDefinedFilter<ITermViewModel> => {
-    if (scope === ALL_PROPERTIES_SEARCH_KEY) {
-        return {
-            type: 'OR',
-            // @ts-expect-error TODO let's sort out the full types in api-interfaces
-            conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
-                (field) =>
-                    interpretCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
-            ),
-        };
-    }
-
-    if (scope === 'name') {
-        if (queryString.charAt(0) === '{' && queryString.includes('}')) {
-            return compileMultilingualTextContainsQuery(scope, queryString);
-        }
-    }
-
-    if (scope === 'contributions') {
-        const simpleFilter = {
-            type: 'SIMPLE',
-            field: `contributions[*].statement`,
-            operator: 'TEXT_INCLUDES',
-            params: [queryString],
-        };
-
-        return simpleFilter;
-    }
-
-    if (scope === 'vocabularyLists') {
-        return {
-            type: 'SIMPLE',
-            field: `vocabularyLists[*].name`,
-            operator: 'MULTILINGUAL_TEXT_INCLUDES',
-            // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-340] Include language code option
-            params: [queryString],
-        };
-    }
-
-    if (scope === 'tokens') {
-        return {
-            type: 'SIMPLE',
-            field: `tokens`,
-            // TODO support this
-            operator: 'MULTILINGUAL_TEXT_INCLUDES_LETTER',
-            /**
-             * Allow the user to specify the language code once we tokenize English as well.
-             * Right now, we assume that users will only search the Indigenous language
-             * that is default for the tenant.
-             */
-            params: [queryString, defaultLanguageCode],
-        };
-    }
-
-    const simpleFilter = {
-        type: 'SIMPLE',
-        field: scope,
-        operator: 'MULTILINGUAL_TEXT_INCLUDES',
-        params: [queryString],
-    };
-
-    return simpleFilter;
-};
 
 interface SearchBarProps {
     specialCharacterReplacements?: Record<string, string>;

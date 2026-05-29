@@ -13,7 +13,6 @@ import {
     CommandContext,
     CommandInfoService,
 } from '../../../app/controllers/command/services/command-info-service';
-import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
 import { Maybe } from '../../../lib/types/maybe';
 import { isNotFound } from '../../../lib/types/not-found';
 import { TermViewModel } from '../../../queries/buildViewModelForResource/viewModels/term.view-model';
@@ -97,7 +96,7 @@ export class TermQueryService {
 
     async fetchMany(
         userWithGroups?: CoscradUserWithGroups,
-        options?: UserQueryOptions
+        options?: DynamicQueryOptions
     ): Promise<IIndexQueryResult<ITermViewModel>> {
         const { entities, page, count } = await this.termQueryRepository.fetchMany({
             ...options,

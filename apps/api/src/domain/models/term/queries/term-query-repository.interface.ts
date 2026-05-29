@@ -1,5 +1,6 @@
 import {
     IMultilingualTextItem,
+    ITermViewModel,
     IToken,
     LanguageCode,
     PaginatedResponse,
@@ -47,8 +48,10 @@ export interface ITermQueryRepository
     create(view: TermViewModel): Promise<void>;
     createMany(views: TermViewModel[]): Promise<void>;
     fetchById(id: string, user?: CoscradUserWithGroups): Promise<Maybe<TermViewModel>>;
-    fetchMany(options?: FetchManyQueryOptions): Promise<PaginatedResponse<TermViewModel>>;
-    count(options?: FetchManyQueryOptions): Promise<number>;
+    fetchMany(
+        options?: FetchManyQueryOptions<ITermViewModel>
+    ): Promise<PaginatedResponse<TermViewModel>>;
+    count(options?: FetchManyQueryOptions<ITermViewModel>): Promise<number>;
 
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 

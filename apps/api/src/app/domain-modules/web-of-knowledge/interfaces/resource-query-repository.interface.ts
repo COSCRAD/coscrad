@@ -8,10 +8,16 @@ import {
 import { IQueryRepositoryForAttributable } from '../../../../domain/models/shared/common-event-handlers/attributor.event-handler';
 import { IQueryRepositoryForTaggable } from '../../../../domain/models/tag/commands/tag-resource-or-note/tag-added-for-resource.event-handler';
 import { CoscradUserWithGroups } from '../../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
+import { CoscradFilterCondition } from '../../../../lib/coscrad-query-language';
 import { Maybe } from '../../../../lib/types/maybe';
-import { UserQueryOptions } from '../../../controllers/resources/term.controller';
+import { PaginationOptions } from '../../../controllers/resources/term.controller';
 
-export type FetchManyQueryOptions = Partial<UserQueryOptions> & {
+export interface DynamicQueryOptions {
+    filter: CoscradFilterCondition;
+    pagination: PaginationOptions;
+}
+
+export type FetchManyQueryOptions = Partial<DynamicQueryOptions> & {
     user?: CoscradUserWithGroups;
 };
 

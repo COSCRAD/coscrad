@@ -18,26 +18,6 @@ import { getApiResourcesBaseRoute } from '../../shared';
 import { TERMS } from '../constants';
 import { selectTermFilter } from '../selectors';
 
-interface ISimpleCondition<_T> {
-    type: string;
-
-    /**
-     * Type safety is difficult here. It's not just `keyof T` that are supported
-     * but also things like `contributions[*].statement`.
-     */
-    field: string;
-
-    operator: string;
-
-    params: unknown[];
-}
-interface IComplexUserDefinedFilter<T> {
-    type: string;
-    conditions: ISimpleCondition<T>[];
-}
-
-export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
-
 /**
  * TODO Can we use an interface from `@api-interfaces`?
  */
