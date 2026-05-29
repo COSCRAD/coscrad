@@ -157,7 +157,7 @@ export class EventSourcedSpatialFeatureViewModel {
             id,
             geometry: {
                 type: GeometricFeatureType.point,
-                coordinates: location.coordinates.toTuple(),
+                coordinates: [location.coordinates.longitude, location.coordinates.lattitude],
             },
             properties: new SpatialFeatureProperties({
                 name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),

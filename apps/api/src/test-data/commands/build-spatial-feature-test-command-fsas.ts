@@ -2,8 +2,6 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandFSA } from '../../app/controllers/command/command-fsa/command-fsa.entity';
 import { CREATE_POINT } from '../../domain/models/spatial-feature/point/commands';
 import { CreatePoint } from '../../domain/models/spatial-feature/point/commands/create-point.command';
-import { PointCoordinates } from '../../domain/models/spatial-feature/point/entities/point-coordinates.entity';
-import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
 import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AggregateType } from '../../domain/types/AggregateType';
 
@@ -16,10 +14,8 @@ const createPointPayload: CreatePoint = {
         type,
         id,
     },
-    location: {
-        type: GeometricFeatureType.point,
-        coordinates: PointCoordinates.fromTuple([52, -122]),
-    },
+    lattitude: 52,
+    longitude: -122,
     name: 'Cool Point',
     languageCodeForName: LanguageCode.English,
     description: 'This is just test data',

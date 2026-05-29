@@ -26,7 +26,14 @@ export class PointCoordinates {
     // -180, 180 inclusive
     longitude: number;
 
-    constructor({ lattitude, longitude }: { lattitude: number; longitude: number }) {
+    constructor(dto: { lattitude: number; longitude: number }) {
+        if (!dto) {
+            // This is required for classtransformer to work in the `TestEventStream` helper
+            return;
+        }
+
+        const { lattitude, longitude } = dto;
+
         this.lattitude = lattitude;
         this.longitude = longitude;
     }

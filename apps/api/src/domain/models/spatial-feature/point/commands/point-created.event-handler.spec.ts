@@ -22,11 +22,13 @@ import { CoscradContributor } from '../../../user-management';
 import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { GeometricFeature } from '../../Geometric-Feature';
 import {
     ISpatialFeatureQueryRepository,
     SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
 } from '../../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../../queries/spatial-feature.view-model.event-sourced';
+import { PointCoordinates } from '../entities/point-coordinates.entity';
 import { PointCreated } from './point-created.event';
 import { PointCreatedEventHandler } from './point-created.event-handler';
 
@@ -52,7 +54,10 @@ const pointCreatedEvent = buildTestInstance(PointCreated, {
             text: `speed racer`,
             role: MultilingualTextItemRole.original,
         }),
-        location: { type: GeometricFeatureType.point, coordinates: [54.1, 45.2] },
+        location: new GeometricFeature({
+            type: GeometricFeatureType.point,
+            coordinates: PointCoordinates.fromTuple([54.1, 45.2]),
+        }),
         aggregateCompositeIdentifier: {
             id: pointId,
         },

@@ -1,10 +1,9 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { FiniteNumber, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
-import { GeometricFeature } from '../../Geometric-Feature';
 import { CREATE_POINT } from './constants';
 
 export class SpatialFeatureCompositeIdentifier {
@@ -30,18 +29,17 @@ export class CreatePoint implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
-    /**
-     * TODO Restrict the range of this. We need to be careful when doing so.
-     * References:
-     * - [GEO JSON Pole definitions](https://datatracker.ietf.org/doc/html/rfc7946#section-5.3)
-     * - [Lattitude (Wikipedia)](https://en.wikipedia.org/wiki/Latitude)
-     *
-     */
-    @NestedDataType(GeometricFeature, {
-        label: 'label for the coordinates',
-        description: 'description for the coordinates',
+    @FiniteNumber({
+        label: 'lattitude',
+        description: 'lattitude',
     })
-    location: GeometricFeature;
+    lattitude: number;
+
+    @FiniteNumber({
+        label: 'longitude',
+        description: 'longitude',
+    })
+    longitude: number;
 
     // TODO support elevation
 
