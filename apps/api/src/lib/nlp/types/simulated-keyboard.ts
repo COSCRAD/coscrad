@@ -1,6 +1,5 @@
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-
-type SpecialCharacterReplacements = Record<string, string>;
+import { RecordObject } from '../../../domain/site-configuration/record-object';
 
 export class SimulatedKeyboard {
     @NonEmptyString({
@@ -9,9 +8,9 @@ export class SimulatedKeyboard {
     })
     name: string;
 
-    @NestedDataType(SpecialCharacterReplacements, {
+    @NestedDataType(RecordObject, {
         label: 'special character replacements',
         description: 'special character replacements',
     })
-    specialCharacterReplacements: SpecialCharacterReplacements;
+    specialCharacterReplacements: RecordObject;
 }
