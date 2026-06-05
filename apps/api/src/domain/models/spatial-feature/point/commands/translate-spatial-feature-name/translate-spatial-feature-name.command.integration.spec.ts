@@ -41,7 +41,7 @@ const spatialFeatureCompositeIdentifier = {
     id: spatialFeatureId,
 };
 
-// const originalLanguageCode = LanguageCode.Chilcotin;
+const originalLanguageCode = LanguageCode.Chilcotin;
 
 const translationLanguageCode = LanguageCode.English;
 
@@ -51,7 +51,17 @@ const pointCreated = new TestEventStream().andThen<PointCreated>({
     type: 'POINT_CREATED',
     payload: {
         aggregateCompositeIdentifier: spatialFeatureCompositeIdentifier,
-        name: 'point name translation',
+        name: { text: 'point name translation', languageCode: originalLanguageCode },
+    },
+});
+
+const pointNameTranslated = pointCreated.andThen<SpatialFeatureNameTranslated>({
+    type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
+    payload: {
+        translationItem: {
+            text: translationSpatialFeatureText,
+            languageCode: translationLanguageCode,
+        },
     },
 });
 
@@ -122,17 +132,17 @@ describe(commandType, () => {
 
     describe(`when the command is valid`, () => {
         it(`should translate the text`, async () => {
+            const existingPoint = Point.fromEventHistory(
+                eventHistoryForExistingPoint,
+                spatialFeatureId
+            ) as Point;
+
             await assertCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
                 seedInitialState: async () => {
                     await testRepositoryProvider
                         .forResource(ResourceType.spatialFeature)
-                        .create(
-                            Point.fromEventHistory(
-                                eventHistoryForExistingPoint,
-                                spatialFeatureId
-                            ) as Point
-                        );
+                        .create(existingPoint);
                 },
                 buildValidCommandFSA: () => validFsa,
                 checkStateOnSuccess: async ({
@@ -175,7 +185,9 @@ describe(commandType, () => {
                                         .andThen<SpatialFeatureNameTranslated>({
                                             type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
                                             payload: {
-                                                languageCode: translationLanguageCode,
+                                                translationItem: {
+                                                    languageCode: translationLanguageCode,
+                                                },
                                             },
                                         })
                                         .as(spatialFeatureCompositeIdentifier),
@@ -186,18 +198,52 @@ describe(commandType, () => {
                     },
                     buildCommandFSA: () => validFsa,
                     checkError: (error) => {
-                        expect(error.message).toContain('shoot Aaron!');
+                        const message = error.toString();
+                        expect(message).toContain(originalLanguageCode);
+                        expect(message).toContain('cannot add');
                     },
                 });
             });
         });
 
         describe(`when there is already a translation in the given languauge`, () => {
-            it.todo(`should return the expected error`);
+            it(`should return the expected error`, async () => {
+                const existingPoint = Point.fromEventHistory(
+                    pointNameTranslated.as(spatialFeatureCompositeIdentifier),
+                    spatialFeatureId
+                ) as Point;
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.spatialFeature)
+                            .create(existingPoint);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        const message = error.toString();
+
+                        expect(message).toContain(translationLanguageCode);
+                    },
+                });
+            });
         });
 
         describe(`when the spatial feature does not exist`, () => {
-            it.todo(`should return the expected error`);
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        return Promise.resolve();
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        const message = error.toString();
+
+                        expect(message).toContain('Failed to update');
+                    },
+                });
+            });
         });
     });
 });

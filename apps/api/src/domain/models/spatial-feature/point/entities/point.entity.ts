@@ -27,6 +27,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { CREATE_POINT, PointCreated } from '../commands';
+import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
@@ -127,6 +128,14 @@ export class Point extends Resource implements ISpatialFeature {
         this.properties = updatedProperties;
 
         return this;
+    }
+
+    handleSpatialFeatureNameTranslated({
+        payload: {
+            translationItem: { text, languageCode },
+        },
+    }: SpatialFeatureNameTranslated) {
+        return this.translateName(text, languageCode);
     }
 
     static fromEventHistory(

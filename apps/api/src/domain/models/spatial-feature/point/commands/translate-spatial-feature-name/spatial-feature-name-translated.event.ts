@@ -1,11 +1,25 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { NestedDataType } from '@coscrad/data-types';
+import { MultilingualTextItem } from '../../../../../../domain/common/entities/multilingual-text';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
-import { TranslateSpatialFeatureName } from './translate-spatial-feature-name.command';
+import { SpatialFeatureCompositeIdentifier } from '../create-point.command';
 
-export type SpatialFeatureNameTranslatedPayload = TranslateSpatialFeatureName;
+export class SpatialFeatureNameTranslatedPayload {
+    @NestedDataType(SpatialFeatureCompositeIdentifier, {
+        label: 'composite identifier',
+        description: 'system-wide unique identifier',
+    })
+    readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
+
+    @NestedDataType(MultilingualTextItem, {
+        label: 'translation item',
+        description: 'the translation text and assoociated information',
+    })
+    readonly translationItem: MultilingualTextItem;
+}
 
 const testEventId = buildDummyUuid(6);
 
@@ -18,8 +32,11 @@ const testEventId = buildDummyUuid(6);
                 id: buildDummyUuid(34),
                 type: AggregateType.spatialFeature,
             },
-            translation: 'spatial feature text',
-            languageCode: LanguageCode.English,
+            translationItem: {
+                text: 'spatial feature text',
+                languageCode: LanguageCode.Chinook,
+                role: MultilingualTextItemRole.freeTranslation,
+            },
         },
         meta: {
             id: testEventId,
