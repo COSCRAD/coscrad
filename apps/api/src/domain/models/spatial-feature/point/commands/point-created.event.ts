@@ -18,11 +18,16 @@ export class PointCreatedPayload {
     })
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
+    /**
+     * We use this format to support generic geospatial indexing in the
+     * query database. The event consumer requires no knowledge of this
+     * event other than that it contains a `GeometricFeature` valued property.
+     */
     @NestedDataType(GeometricFeature, {
         label: 'coordinates for this',
         description: 'a place where the coordinates are',
     })
-    location: GeometricFeature;
+    geometricFeature: GeometricFeature;
 
     @NestedDataType(MultilingualTextItem, {
         label: 'name for the spatial feature',
@@ -49,7 +54,7 @@ const testEventId = buildDummyUuid(41);
             ).getOriginalTextItem(),
             description:
                 buildMultilingualTextWithSingleItem('Formerly Called the 7').getOriginalTextItem(),
-            location: buildTestInstance(GeometricFeature, {
+            geometricFeature: buildTestInstance(GeometricFeature, {
                 type: GeometricFeatureType.point,
                 coordinates: new PointCoordinates({
                     lattitude: 50.123,

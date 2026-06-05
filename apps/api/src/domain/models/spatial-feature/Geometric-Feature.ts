@@ -1,4 +1,4 @@
-import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { PointCoordinates } from './point/entities/point-coordinates.entity';
@@ -15,11 +15,23 @@ import { GeometricFeatureType } from './types/GeometricFeatureType';
     },
 })
 export class GeometricFeature {
-    // TODO use a proper decorator here
-    @NonEmptyString({
-        label: 'type',
-        description: 'is this a point, line or polygon',
-    })
+    // The API for this is a bit awkward. We should rework this at some point.
+    @ExternalEnum(
+        {
+            enumName: 'GeometricFeatureType',
+            enumLabel: 'geometric feature type',
+            labelsAndValues: [
+                {
+                    label: 'point',
+                    value: 'point',
+                },
+            ],
+        },
+        {
+            label: 'geometric feature type',
+            description: 'distinguishes points, lines, and polygons',
+        }
+    )
     type: GeometricFeatureType;
 
     /**

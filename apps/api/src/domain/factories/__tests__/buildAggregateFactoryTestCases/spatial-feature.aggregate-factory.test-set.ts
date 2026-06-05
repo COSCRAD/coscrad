@@ -13,8 +13,6 @@ const aggregateType = AggregateType.spatialFeature;
 
 const validPoint = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.point) as Point;
 
-// const validLine = getValidSpatialFeatureInstanceForTest(GeometricFeatureType.line) as Line;
-
 const validCases: AggregateFactoryValidTestCase<typeof aggregateType>[] =
     buildValidCasesForSubtypes(
         aggregateType,
@@ -54,23 +52,6 @@ export const buildSpatialFeatureFactoryTestSet = (): FactoryTestSuiteForAggregat
                 );
             },
         },
-        /**
-         * `Line` invalid test cases
-         */
-        // {
-        //     description: 'one of the coordinates is a string',
-        //     dto: validLine.clone<Line>({
-        //         geometry: {
-        //             type: GeometricFeatureType.line,
-        //             coordinates: [
-        //                 [3, 4],
-        //                 [4, 5],
-        //                 [12, 'foo' as unknown as number],
-        //                 [9, 7],
-        //             ],
-        //         },
-        //     }),
-
         //     // TODO [https://www.pivotaltracker.com/story/show/183014405] Check inner errors
         //     checkError: (result: unknown) =>
         //         assertErrorAsExpected(result, buildInvalidSpatialFeatureDtoError(validLine.id, [])),

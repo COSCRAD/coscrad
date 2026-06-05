@@ -148,7 +148,7 @@ export class EventSourcedSpatialFeatureViewModel {
             payload: {
                 aggregateCompositeIdentifier: { id },
                 // TODO rename this
-                location,
+                geometricFeature: location,
                 name,
                 description,
             },

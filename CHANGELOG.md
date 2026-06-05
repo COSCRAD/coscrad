@@ -2,7 +2,17 @@
 
 ## <NEXT>
 
-. we need to update this
+### Placenames and Maps
+
+We are updating the spatial feature work flow to allow multiple names and translations
+for spatial feature names. This will allow us to support multilingual maps.
+Our previous work on supporting spatial data was never completed and we are now
+circling back to this.
+
+#### Relevant Commits
+
+-   feat: update points to have multilingual names (#818)
+-   infra: add dedicated query repository for spatial features (#816)
 
 ### Gameplay for Memory Match
 

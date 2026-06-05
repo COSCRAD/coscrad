@@ -137,7 +137,7 @@ export class Point extends Resource implements ISpatialFeature {
     static buildPointFromPointCreated({
         payload: {
             aggregateCompositeIdentifier: { id },
-            location: coordinates,
+            geometricFeature: coordinates,
             name,
             description,
         },

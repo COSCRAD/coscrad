@@ -60,10 +60,4 @@ export class CreatePoint implements ICommandBase {
         description: 'short descripton of this place',
     })
     readonly description: string;
-
-    @NonEmptyString({
-        label: 'image URL',
-        description: 'descripton of this place',
-    })
-    readonly imageUrl?: string;
 }

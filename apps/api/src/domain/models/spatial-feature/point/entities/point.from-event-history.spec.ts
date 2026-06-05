@@ -22,7 +22,7 @@ const longitude = 85.1;
 const pointCreated = new TestEventStream().andThen<PointCreated>({
     type: 'POINT_CREATED',
     payload: {
-        location: {
+        geometricFeature: {
             type: GeometricFeatureType.point,
             coordinates: PointCoordinates.fromTuple([lattitude, longitude]),
         },

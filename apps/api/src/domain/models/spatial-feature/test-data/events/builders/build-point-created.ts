@@ -16,7 +16,7 @@ export const buildPointCreated = (
             type: AggregateType.spatialFeature,
             id: buildDummyUuid(1),
         },
-        location: {
+        geometricFeature: {
             type: GeometricFeatureType.point,
             coordinates: PointCoordinates.fromTuple([54.2, 52.8]),
         },

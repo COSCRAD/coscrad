@@ -54,7 +54,7 @@ const pointCreatedEvent = buildTestInstance(PointCreated, {
             text: `speed racer`,
             role: MultilingualTextItemRole.original,
         }),
-        location: new GeometricFeature({
+        geometricFeature: new GeometricFeature({
             type: GeometricFeatureType.point,
             coordinates: PointCoordinates.fromTuple([54.1, 45.2]),
         }),

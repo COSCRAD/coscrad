@@ -32,7 +32,6 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
         name,
         languageCodeForName,
         description,
-        imageUrl,
     }: CreatePoint): ResultOrError<Point> {
         return new Point({
             type: AggregateType.spatialFeature,
@@ -44,7 +43,6 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
             properties: {
                 name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
                 description: buildMultilingualTextWithSingleItem(description),
-                imageUrl,
             },
             // You must run a `PUBLISH_RESOURCE` command to publish this point
             published: false,
@@ -71,8 +69,7 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     protected buildEvent(command: CreatePoint, eventMeta: EventRecordMetadata): BaseEvent {
         const eventPayload: PointCreatedPayload = {
             aggregateCompositeIdentifier: command.aggregateCompositeIdentifier,
-            // TODO rename this
-            location: new GeometricFeature({
+            geometricFeature: new GeometricFeature({
                 type: GeometricFeatureType.point,
                 // TODO descctructure
                 coordinates: PointCoordinates.fromTuple([command.lattitude, command.longitude]),
