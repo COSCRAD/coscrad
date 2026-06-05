@@ -60,11 +60,14 @@ export class EventSourcedSpatialFeatureViewModel {
     @FromDomainModel(Aggregate as unknown as Ctor<unknown>)
     readonly id: ViewModelId;
 
-    @NestedDataType(MultilingualText, {
-        description: `multilingual text name of the entity`,
-        label: `name`,
-    })
-    readonly name: MultilingualText;
+    // @NestedDataType(MultilingualText, {
+    //     description: `multilingual text name of the entity`,
+    //     label: `name`,
+    // })
+    // @ComputedField ??
+    get name(): MultilingualText {
+        return this.properties.name;
+    }
 
     @BooleanDataType({
         label: 'is published',
@@ -130,8 +133,6 @@ export class EventSourcedSpatialFeatureViewModel {
         this.geometry = cloneToPlainObject(geometry);
 
         this.properties = new SpatialFeatureProperties(properties);
-
-        this.name = this.properties.name;
     }
 
     // TODO static fromPointCreated
