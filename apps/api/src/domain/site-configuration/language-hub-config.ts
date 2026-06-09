@@ -82,6 +82,13 @@ export class LanguageHubConfig {
     })
     indexToDetailFlows: ResourceConfig[];
 
+    // this should be part of the `IndexToDetailFlow` config
+    @NonEmptyString({
+        label: 'resource index label',
+        description: 'the index label for resources',
+    })
+    resourceIndexLabel: string;
+
     // could this be part of a `WebOfKnowledgeConfig` class ?
     @NonEmptyString({
         label: 'should enable web of knowledge for resources',
@@ -132,13 +139,6 @@ export class LanguageHubConfig {
         description: 'MUI theme overrides',
     })
     themeOverrides: ThemeOverrides;
-
-    // this should be part of the `IndexToDetailFlow` config
-    @NonEmptyString({
-        label: 'site',
-        description: 'akfsjldfjs',
-    })
-    resourceIndexLabel: string;
 
     // We may want a `LanguageConfig` in the future
     @ExternalEnum(
