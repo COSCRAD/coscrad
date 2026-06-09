@@ -17,6 +17,7 @@ import {
 } from '../constraints';
 import { CoscradConstraint } from '../constraints/coscrad-constraint.enum';
 import { isFunction } from '../constraints/is-function';
+import { isHexColorCode } from '../constraints/is-hex-color-code';
 import { isPageNumber } from '../constraints/is-page-number';
 import { PredicateFunction } from '../types';
 
@@ -80,6 +81,7 @@ const constraintsLookupTable: { [K in CoscradConstraint]: PredicateFunction } = 
         // TODO Make the id a `UUID`
         return [type, id].every(isNonEmptyString);
     },
+    [CoscradConstraint.isHexColorCode]: isHexColorCode,
     /**
      * TODO This is a hack. We decided that the complexity of dynamically
      * generating nested forms was too much. Instead, we decided to make

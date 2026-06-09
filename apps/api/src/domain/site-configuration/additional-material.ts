@@ -1,17 +1,17 @@
 import { NestedDataType } from '@coscrad/data-types';
-import { Media } from './media';
-import { PDF } from './pdf';
+import { MediaContentBlock } from './media-content-block';
+import { PdfContentBlock } from './pdf-content-block';
 
 export class AdditionalMaterial {
-    @NestedDataType(Media, {
+    @NestedDataType(MediaContentBlock, {
         label: 'media',
         description: 'media for additional materials',
     })
-    media: Media;
+    media: MediaContentBlock;
 
-    @NestedDataType(PDF, {
+    @NestedDataType(PdfContentBlock, {
         label: 'media',
         description: 'media for additional materials',
     })
-    pdf: PDF;
+    pdf: PdfContentBlock;
 }

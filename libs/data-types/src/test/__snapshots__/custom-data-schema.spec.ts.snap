@@ -7,6 +7,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: aliases",
     "isArray": true,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: aliases",
   },
   "averageRating": {
@@ -14,6 +15,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: averageRating",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: averageRating",
   },
   "catalogId": {
@@ -21,8 +23,17 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: catalogId",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: catalogId",
     "referenceTo": "widget",
+  },
+  "color": {
+    "coscradDataType": "HEX_COLOR_CODE",
+    "description": "description of property: color",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "label for property: color",
   },
   "creatorType": {
     "complexDataType": "ENUM",
@@ -31,6 +42,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "enumName": "BIBLIOGRAPHIC_SUBJECT_CREATOR_TYPE",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: creatorType",
     "labelsAndValues": [
       {
@@ -53,6 +65,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "discriminantPath": "type",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: data",
     "schemaDefinitions": [
       {
@@ -63,6 +76,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
             "description": "description of property: strength",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label for property: strength",
           },
         },
@@ -75,6 +89,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
             "description": "description of property: rating",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label for property: rating",
           },
         },
@@ -87,6 +102,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: iconUrl",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: iconUrl",
   },
   "id": {
@@ -94,6 +110,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: id",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: id",
   },
   "isActive": {
@@ -101,6 +118,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: isActive",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: isActive",
   },
   "locationId": {
@@ -108,6 +126,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: locationId",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: locationId",
   },
   "locationName": {
@@ -115,6 +134,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: locationName",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: locationName",
   },
   "maybeANumber": {
@@ -122,6 +142,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: maybeANumber",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: maybeANumber",
   },
   "muchness": {
@@ -129,6 +150,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: muchness",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: muchness",
   },
   "numberOfDownvotes": {
@@ -136,6 +158,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: numberOfDownvotes",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: numberOfDownvotes",
   },
   "numberOfLikes": {
@@ -143,6 +166,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: numkberOfLikes",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: numkberOfLikes",
   },
   "optionalISBN": {
@@ -150,6 +174,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: optionalISBN",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: optionalISBN",
   },
   "optionalRawData": {
@@ -157,6 +182,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: optionalRawData",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: optionalRawData",
   },
   "pageNumber": {
@@ -164,6 +190,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: pageNumber",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: pageNumber",
   },
   "parentWidgetId": {
@@ -171,6 +198,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: parentWidgetId",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: parentWidgetId",
     "referenceTo": "widget",
   },
@@ -179,13 +207,16 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: primaryWhatsit",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: primaryWhatsit",
+    "name": "Whatsit",
     "schema": {
       "whatsitId": {
         "coscradDataType": "UUID",
         "description": "description of property: whatsitId",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "label for property: whatsitId",
       },
       "whatsitName": {
@@ -193,6 +224,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
         "description": "description of property: whatsitName",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "label for property: whatsitName",
       },
     },
@@ -202,6 +234,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: rawDataObject",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: rawDataObject",
   },
   "requiredISBN": {
@@ -209,6 +242,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: requiredISBN",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: requiredISBN",
   },
   "rivetPoint": {
@@ -217,6 +251,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: rivetPoint",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: rivetPoint",
   },
   "role": {
@@ -226,6 +261,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "enumName": "COSCRAD_USER_ROLE",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: role",
     "labelsAndValues": [
       {
@@ -247,13 +283,16 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: secondaryWhatsit",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: secondaryWhatsit",
+    "name": "Whatsit",
     "schema": {
       "whatsitId": {
         "coscradDataType": "UUID",
         "description": "description of property: whatsitId",
         "isArray": false,
         "isOptional": false,
+        "isPrivate": false,
         "label": "label for property: whatsitId",
       },
       "whatsitName": {
@@ -261,6 +300,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
         "description": "description of property: whatsitName",
         "isArray": false,
         "isOptional": true,
+        "isPrivate": false,
         "label": "label for property: whatsitName",
       },
     },
@@ -270,6 +310,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: siblingWidgetIds",
     "isArray": true,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: siblingWidgetIds",
     "referenceTo": "widget",
   },
@@ -278,6 +319,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: specSheetUrl",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: specSheetUrl",
   },
   "widgetName": {
@@ -285,6 +327,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: widgetName",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: widgetName",
   },
   "width": {
@@ -292,6 +335,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: width",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: width",
   },
   "year": {
@@ -299,6 +343,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: year",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "label for property: year",
   },
   "yearUploaded": {
@@ -306,6 +351,7 @@ exports[`NonEmptyString should populate the appropriate metadata 1`] = `
     "description": "description of property: yearUploaded",
     "isArray": false,
     "isOptional": true,
+    "isPrivate": false,
     "label": "label for property: yearUploaded",
   },
 }

@@ -2,7 +2,7 @@ import { ExternalEnum, MIMEType, NonEmptyString, URL } from '@coscrad/data-types
 
 // Not sure which if any properties are optional
 
-export class Media {
+export class MediaContentBlock {
     @NonEmptyString({
         label: 'name',
         description: 'name of media',

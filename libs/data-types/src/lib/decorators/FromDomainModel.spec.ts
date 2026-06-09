@@ -64,18 +64,21 @@ describe(`@FromDomainModel`, () => {
 
         const expectedSchema: Record<string, SimpleCoscradPropertyTypeDefinition> = {
             numberOfStars: {
+                isPrivate: false,
                 coscradDataType: CoscradDataType.PositiveInteger,
                 isArray: false,
                 isOptional: false,
                 ...dummyNumberOfStarsOptions,
             },
             label: {
+                isPrivate: false,
                 coscradDataType: CoscradDataType.NonEmptyString,
                 isArray: false,
                 isOptional: true,
                 ...dummyLabelOptions,
             },
             links: {
+                isPrivate: false,
                 coscradDataType: CoscradDataType.URL,
                 isArray: true,
                 isOptional: false,

@@ -6,6 +6,7 @@ export * from './ExternalEnum';
 export * from './FiniteNumber';
 export * from './FixedValue';
 export * from './FromDomainModel';
+export * from './HexColorCode';
 export * from './ISBN';
 export * from './LookupTable';
 export * from './NestedDataType';

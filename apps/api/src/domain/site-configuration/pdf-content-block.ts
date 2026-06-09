@@ -2,7 +2,7 @@ import { NonEmptyString, URL } from '@coscrad/data-types';
 
 // Not sure which if any properties are optional
 
-export class PDF {
+export class PdfContentBlock {
     @NonEmptyString({
         label: 'name',
         description: 'name of the PDF document',

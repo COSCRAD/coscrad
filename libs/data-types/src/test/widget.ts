@@ -4,6 +4,7 @@ import {
     BindToViewState,
     Enum,
     FiniteNumber,
+    HexColorCode,
     ISBN,
     NestedDataType,
     NonNegativeFiniteNumber,
@@ -164,6 +165,9 @@ export class Widget {
     @NonNegativeFiniteNumber(buildDummyLabelAndDescription('rivetPoint'))
     rivetPoint = 66.74; // presumably this is less than the `width` in the toy model
 
+    @HexColorCode(buildDummyLabelAndDescription('color'))
+    color: string;
+
     constructor(dto: Widget) {
         Object.assign(this, dto);
     }
@@ -240,4 +244,6 @@ export const buildValidWidgetDto = (): Widget => ({
     rivetPoint: 20.123,
 
     pageNumber: '1230',
+
+    color: '#fff000',
 });

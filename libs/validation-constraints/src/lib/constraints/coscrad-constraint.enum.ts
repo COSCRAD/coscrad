@@ -19,4 +19,5 @@ export enum CoscradConstraint {
     isString = 'string',
     isMultilingualText = 'isMultilingualText',
     isPageNumber = 'isPageNumber',
+    isHexColorCode = 'isHexColorCode',
 }

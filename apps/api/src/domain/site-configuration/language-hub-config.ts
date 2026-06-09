@@ -1,4 +1,4 @@
-import { CategorizableType, LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { SimulatedKeyboard } from '../../lib/nlp/types/simulated-keyboard';
 import { AdditionalMaterial } from './additional-material';
@@ -7,13 +7,14 @@ import { ExternalLink } from './external-link';
 import { InternalLink } from './internal-link';
 import { MemoryMatchConfig } from './memory-match-config';
 import { RadioStreamConfig } from './radio-stream-config';
+import { ResourceConfig } from './resource-config';
 import { SocialMediaLinkDirectory } from './social-media-link-directory';
 import { ThemeOverrides } from './theme-overrides';
 
-class LanguageHubConfig {
+export class LanguageHubConfig {
     @NonEmptyString({
         label: 'site title',
-        description: 'the Site Title for this COSCRAD instance',
+        description: 'the Site Title for your language hub',
     })
     siteTitle: string;
 
@@ -21,77 +22,77 @@ class LanguageHubConfig {
 
     @NonEmptyString({
         label: 'subtitle',
-        description: 'subtitle for the site for this COSCRAD instance',
+        description: 'subtitle for your language hub',
     })
     subTitle: string; // ML Text
 
     @NonEmptyString({
         label: 'about',
-        description: 'about this COSCRAD instance',
+        description: 'text for your about page',
     })
     about: string; // ML Text
 
     @NonEmptyString({
         label: 'should enable admin mode',
-        description: 'boolean for enabling admin mode for this COSCRAD instance',
+        description:
+            'if true, the client will expose log in and command forms to authenticated admin users',
     })
     shouldEnableAdminMode: boolean;
 
     @NonEmptyString({
         label: 'site description',
-        description: 'description for the site for this COSCRAD instance',
+        description: 'description for your language hub',
     })
     siteDescription: string; // ML Text
 
     @NonEmptyString({
         label: 'site home image url',
-        description: 'the url for the home page of this COSCRAD instance',
+        description: 'a URL for the image to feature on your home page',
     })
     siteHomeImageUrl: string; // URL?
 
     @NonEmptyString({
         label: 'site favicon',
-        description: 'the favicon for the site for this COSCRAD instance',
+        description: 'the favicon for your site',
     })
     siteFavicon: string; // URL?
 
     @NonEmptyString({
         label: 'copyright holder',
-        description: 'the copyright holder for this COSCRAD instance',
+        description: `the copyright holder for your site and the content in this COSCRAD instance's DB`,
     })
     copyrightHolder: string;
 
     @NonEmptyString({
         label: 'coscrad logo url',
-        description: 'the url source for the logo for this COSCRAD instance',
+        description: 'a link to the COSCRAD logo',
     })
+    // TODO can't this be hardwired?
     coscradLogoUrl: string; // URL?
 
     @NonEmptyString({
         label: 'organization logo url',
-        description: 'the url source for the organization logo for this COSCRAD instance',
+        description: `link to your organization's logo`,
     })
     organizationLogoUrl: string; // URL?
 
-    // you need a separate `IndexToDetailFlowConfig` class
     @NonEmptyString({
         label: 'index to detail flows',
         description: 'the record of index to detail flows for site navigation',
     })
-    indexToDetailFlows: Record<CategorizableType, IndexToDetailFlowConfig | null>; // or a map?
+    indexToDetailFlows: ResourceConfig[];
 
     // could this be part of a `WebOfKnowledgeConfig` class ?
     @NonEmptyString({
         label: 'should enable web of knowledge for resources',
-        description:
-            'boolean for enabling the web of knowledge connections for this COSCRAD instance',
+        description: 'if true, notes and connections will be available in your language hub',
     })
     shouldEnableWebOfKnowledgeForResources: boolean;
 
     // eventually this will become a dynamic page
     @NonEmptyString({
         label: 'site credits',
-        description: 'the credits for this COSCRAD instance',
+        description: `a statement that acknowledges the general contributions of your team and knowledge keepers to the content available in your langauge hub`,
     })
     siteCredits: string; // ML Text? MLText with audio?
 
@@ -205,6 +206,11 @@ class LanguageHubConfig {
     })
     additionalMaterials: AdditionalMaterial[];
 
+    /**
+     * TODO In the long run, we should allow each feature module to append its
+     * config in a plug-in style system.
+     */
+    // We should make these properties optional and disable the feature if the feature-specific config is missing
     @NestedDataType(MemoryMatchConfig, {
         label: 'name',
         description: 'the name of the video',
