@@ -1,26 +1,22 @@
-import {
-    HexColorCode,
-    NestedDataType,
-    NonEmptyString,
-    NonNegativeFiniteNumber,
-} from '@coscrad/data-types';
+import { HexColorCode, NestedDataType, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import { DTO } from '../../types/DTO';
 
 export class TypeText {
-    @NonEmptyString({
+    @HexColorCode({
         label: 'primary',
-        description: 'primary',
+        description: 'the hex color code for primary text',
     })
     primary: string;
 
-    @NonEmptyString({
+    @HexColorCode({
         label: 'secondary',
-        description: 'secondary',
+        description: 'the hex color code for secondary text',
     })
     secondary: string;
 
-    @NonEmptyString({
+    @HexColorCode({
         label: 'disabled',
-        description: 'disabled',
+        description: 'the hex color code for disabled text',
     })
     disabled: string;
 }
@@ -31,68 +27,68 @@ export class TypeAction {
     // We need to validate that these are indeed legit colour codes
     // should this be stored as a `CustomColour` class?
     @HexColorCode({
-        label: 'disabled',
-        description: 'disabled',
+        label: 'active',
+        description: 'the hex color code for active',
     })
     active: string;
 
     @HexColorCode({
-        label: 'disabled',
-        description: 'disabled',
+        label: 'hover',
+        description: 'the hex color code for hover',
     })
     hover: string;
     // @ Percentage // decimal between 0 and 1
     @NonNegativeFiniteNumber({
         label: 'hover opacity',
-        description: 'hover opacity',
+        description: 'the hover opacity',
     })
     hoverOpacity: number;
 
     @HexColorCode({
-        label: 'disabled',
-        description: 'disabled',
+        label: 'selected',
+        description: 'the hex color code for selected',
     })
     selected: string;
 
     @NonNegativeFiniteNumber({
         label: 'selected opacity',
-        description: 'selected opacity',
+        description: 'the selected opacity',
     })
     selectedOpacity: number;
 
     @HexColorCode({
         label: 'disabled',
-        description: 'disabled',
+        description: 'the hex color code for disabled',
     })
     disabled: string;
 
     @NonNegativeFiniteNumber({
         label: 'disabled opacity',
-        description: 'disabled opacity',
+        description: 'the disabled opacity',
     })
     disabledOpacity: number;
 
     @HexColorCode({
-        label: 'disabled',
-        description: 'disabled',
+        label: 'disabled background',
+        description: 'the hex color code for disabled background',
     })
     disabledBackground: string;
 
     @HexColorCode({
-        label: 'disabled',
-        description: 'disabled',
+        label: 'focus',
+        description: 'the hex color code for focus',
     })
     focus: string;
 
     @NonNegativeFiniteNumber({
         label: 'focus opacity',
-        description: 'focus opacity',
+        description: 'the focus opacity',
     })
     focusOpacity: number;
 
     @NonNegativeFiniteNumber({
         label: 'activated opacity',
-        description: 'activated opacity',
+        description: 'the activated opacity',
     })
     activatedOpacity: number;
 }
@@ -101,25 +97,28 @@ export class TypeAction {
 export class PaletteColorOptions {
     @HexColorCode({
         label: 'light',
-        description: 'light',
+        description: 'the hex color code for light',
+        isOptional: true,
     })
     light?: string;
 
     @HexColorCode({
         label: 'main',
-        description: 'main',
+        description: 'the hex color code for main',
     })
     main: string;
 
     @HexColorCode({
         label: 'dark',
-        description: 'dark',
+        description: 'the hex color code for dark',
+        isOptional: true,
     })
     dark?: string;
 
     @HexColorCode({
         label: 'contrast text',
-        description: 'contrast text',
+        description: 'the contrast text',
+        isOptional: true,
     })
     contrastText?: string;
 }
@@ -127,13 +126,13 @@ export class PaletteColorOptions {
 export class TypeBackground {
     @HexColorCode({
         label: 'default',
-        description: 'default color code',
+        description: 'the hex color code for default',
     })
     default: string;
 
     @HexColorCode({
         label: 'paper',
-        description: 'paper color code',
+        description: 'the hex color code for paper',
     })
     paper: string;
 }
@@ -141,63 +140,78 @@ export class TypeBackground {
 export class PaletteOptions {
     @NestedDataType(PaletteColorOptions, {
         label: 'primary',
-        description: 'primary color palette',
+        description: 'the primary color palette',
+        isOptional: true,
     })
     primary?: PaletteColorOptions;
 
     @NestedDataType(PaletteColorOptions, {
         label: 'secondary',
-        description: 'secondary color palette',
+        description: 'the secondary color palette',
+        isOptional: true,
     })
     secondary?: PaletteColorOptions;
 
     @NestedDataType(PaletteColorOptions, {
         label: 'error',
-        description: 'error color palette',
+        description: 'the error color palette',
+        isOptional: true,
     })
     error?: PaletteColorOptions;
 
     @NestedDataType(PaletteColorOptions, {
         label: 'warning',
-        description: 'warning color palette',
+        description: 'the warning color palette',
+        isOptional: true,
     })
     warning?: PaletteColorOptions;
 
     @NestedDataType(PaletteColorOptions, {
         label: 'info',
-        description: 'info color palette',
+        description: 'the info color palette',
+        isOptional: true,
     })
     info?: PaletteColorOptions;
 
     @NestedDataType(PaletteColorOptions, {
         label: 'success',
-        description: 'success color palette',
+        description: 'the success color palette',
+        isOptional: true,
     })
     success?: PaletteColorOptions;
 
     @NonNegativeFiniteNumber({
         label: 'contrast threshold',
-        description: 'contrast threshold',
+        description: 'the contrast threshold',
+        isOptional: true,
     })
     contrastThreshold?: number;
 
+    @NestedDataType(TypeAction, {
+        label: 'text',
+        description: 'the text color palette',
+        isOptional: true,
+    })
     text?: Partial<TypeText>;
 
     @HexColorCode({
         label: 'divider',
-        description: 'divider color',
+        description: 'the divider color',
+        isOptional: true,
     })
     divider?: string;
 
     @NestedDataType(TypeAction, {
         label: 'action',
-        description: 'action color palette',
+        description: 'the action color palette',
+        isOptional: true,
     })
     action?: Partial<TypeAction>;
 
     @NestedDataType(TypeBackground, {
         label: 'background',
-        description: 'background color palette',
+        description: 'the background color palette',
+        isOptional: true,
     })
     background?: Partial<TypeBackground>;
 }
@@ -208,4 +222,12 @@ export class ThemeOverrides {
         description: 'MUI style palette configuration',
     })
     palette: PaletteOptions;
+
+    constructor(dto: DTO<ThemeOverrides>) {
+        if (!dto) return;
+
+        const { palette } = dto;
+
+        this.palette = palette;
+    }
 }

@@ -1,6 +1,9 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { SimulatedKeyboard } from '../../lib/nlp/types/simulated-keyboard';
+import { DeepPartial } from '../../types/DeepPartial';
+import { DTO } from '../../types/DTO';
 import { AdditionalMaterial } from './additional-material';
 import { AlphabetConfig } from './alphabet-config';
 import { ExternalLink } from './external-link';
@@ -177,13 +180,13 @@ export class LanguageHubConfig {
 
     @NestedDataType(InternalLink, {
         label: 'internal links',
-        description: 'internal ',
+        description: 'internal links',
     })
     internalLinks: InternalLink[];
 
     @NestedDataType(ExternalLink, {
-        label: 'internal links',
-        description: 'internal ',
+        label: 'external links',
+        description: 'external links',
     })
     externalLinks: ExternalLink[];
 
@@ -216,4 +219,107 @@ export class LanguageHubConfig {
         description: 'the name of the video',
     })
     memoryMatch: MemoryMatchConfig;
+
+    constructor(dto: DeepPartial<DTO<LanguageHubConfig>>) {
+        if (!dto) return;
+
+        const {
+            siteTitle,
+            subTitle,
+            about,
+            shouldEnableAdminMode,
+            siteDescription,
+            siteHomeImageUrl,
+            siteFavicon,
+            copyrightHolder,
+            coscradLogoUrl,
+            indexToDetailFlows,
+            resourceIndexLabel,
+            shouldEnableWebOfKnowledgeForResources,
+            siteCredits,
+            simulatedKeyboard,
+            listenLive,
+            notFoundMessage,
+            loadingMessage,
+            themeOverrides,
+            defaultLanguageCode,
+            phoneNumber,
+            email,
+            address,
+            internalLinks,
+            externalLinks,
+            socialMediaLinks,
+            alphabetConfig,
+            additionalMaterials,
+            memoryMatch,
+        } = dto;
+
+        this.siteTitle = siteTitle;
+
+        this.subTitle = subTitle;
+
+        this.about = about;
+
+        this.shouldEnableAdminMode = shouldEnableAdminMode;
+
+        this.siteDescription = siteDescription;
+
+        this.siteHomeImageUrl = siteHomeImageUrl;
+
+        this.siteFavicon = siteFavicon;
+
+        this.copyrightHolder = copyrightHolder;
+
+        this.coscradLogoUrl = coscradLogoUrl;
+
+        if (Array.isArray(indexToDetailFlows)) {
+            this.indexToDetailFlows = indexToDetailFlows.map((i) => new ResourceConfig(i));
+        }
+
+        this.resourceIndexLabel = resourceIndexLabel;
+
+        this.shouldEnableWebOfKnowledgeForResources = shouldEnableWebOfKnowledgeForResources;
+
+        this.siteCredits = siteCredits;
+
+        if (isNonEmptyObject(simulatedKeyboard)) {
+            this.simulatedKeyboard = new SimulatedKeyboard(
+                simulatedKeyboard as DTO<SimulatedKeyboard>
+            );
+        }
+
+        if (isNonEmptyObject(listenLive)) {
+            this.listenLive = new RadioStreamConfig(listenLive as DTO<RadioStreamConfig>);
+        }
+
+        this.notFoundMessage = notFoundMessage;
+
+        this.loadingMessage = loadingMessage;
+
+        this.themeOverrides = new ThemeOverrides(themeOverrides as DTO<ThemeOverrides>);
+
+        this.defaultLanguageCode = defaultLanguageCode;
+
+        this.phoneNumber = phoneNumber;
+
+        this.email = email;
+
+        this.address = address;
+
+        this.internalLinks = internalLinks.map((i) => new InternalLink(i as DTO<InternalLink>));
+
+        this.externalLinks = externalLinks.map((e) => new ExternalLink(e as DTO<ExternalLink>));
+
+        this.socialMediaLinks = new SocialMediaLinkDirectory(
+            socialMediaLinks as DTO<SocialMediaLinkDirectory>
+        );
+
+        this.alphabetConfig = new AlphabetConfig(alphabetConfig as DTO<AlphabetConfig>);
+
+        this.additionalMaterials = additionalMaterials.map(
+            (a) => new AdditionalMaterial(a as DTO<AdditionalMaterial>)
+        );
+
+        this.memoryMatch = new MemoryMatchConfig(memoryMatch as DTO<MemoryMatchConfig>);
+    }
 }

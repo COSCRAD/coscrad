@@ -1,4 +1,5 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
+import { DTO } from '../../types/DTO';
 
 export class InternalLink {
     @URL({
@@ -18,4 +19,16 @@ export class InternalLink {
         description: 'description for the internal link',
     })
     description: string;
+
+    constructor(dto: DTO<InternalLink>) {
+        if (!dto) return;
+
+        const { url, iconUrl, description } = dto;
+
+        this.url = url;
+
+        this.iconUrl = iconUrl;
+
+        this.description = description;
+    }
 }

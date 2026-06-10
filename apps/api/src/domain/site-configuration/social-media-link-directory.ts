@@ -1,4 +1,5 @@
 import { URL } from '@coscrad/data-types';
+import { DTO } from '../../types/DTO';
 
 export class SocialMediaLinkDirectory {
     @URL({
@@ -30,4 +31,20 @@ export class SocialMediaLinkDirectory {
         description: 'url for Instagram feed',
     })
     instagram: string;
+
+    constructor(dto: DTO<SocialMediaLinkDirectory>) {
+        if (!dto) return;
+
+        const { facebook, twitter, github, youtube, instagram } = dto;
+
+        this.facebook = facebook;
+
+        this.twitter = twitter;
+
+        this.github = github;
+
+        this.youtube = youtube;
+
+        this.instagram = instagram;
+    }
 }

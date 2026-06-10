@@ -18,4 +18,16 @@ export class ExternalLink {
         description: 'description for the External link',
     })
     description: string;
+
+    constructor(dto: DTO<ExternalLink>) {
+        if (!dto) return;
+
+        const { url, iconUrl, description } = dto;
+
+        this.url = url;
+
+        this.iconUrl = iconUrl;
+
+        this.description = description;
+    }
 }

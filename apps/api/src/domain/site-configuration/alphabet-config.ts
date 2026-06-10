@@ -1,4 +1,5 @@
 import { BooleanDataType, NonEmptyString, URL } from '@coscrad/data-types';
+import { DTO } from '../../types/DTO';
 
 export class AlphabetConfig {
     @BooleanDataType({
@@ -19,4 +20,16 @@ export class AlphabetConfig {
         description: 'base digital asset url for COSCRAD instance',
     })
     baseDigitalAssetUrl: string;
+
+    constructor(dto: DTO<AlphabetConfig>) {
+        if (!dto) return;
+
+        const { shouldEnableAlphabet, alphabetChartName, baseDigitalAssetUrl } = dto;
+
+        this.shouldEnableAlphabet = shouldEnableAlphabet;
+
+        this.alphabetChartName = alphabetChartName;
+
+        this.baseDigitalAssetUrl = baseDigitalAssetUrl;
+    }
 }
