@@ -1,5 +1,5 @@
 import { BooleanDataType } from '@coscrad/data-types';
-import { DTO } from '../../types/DTO';
+import { DTO } from '../../../types/DTO';
 
 export class MemoryMatchConfig {
     @BooleanDataType({

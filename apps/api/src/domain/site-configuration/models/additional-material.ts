@@ -1,5 +1,5 @@
 import { NestedDataType } from '@coscrad/data-types';
-import { DTO } from '../../types/DTO';
+import { DTO } from '../../../types/DTO';
 import { MediaContentBlock } from './media-content-block';
 import { PdfContentBlock } from './pdf-content-block';
 

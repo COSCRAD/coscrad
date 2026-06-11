@@ -1,8 +1,8 @@
 import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import formatAggregateType from '../../queries/presentation/formatAggregateType';
-import { DeepPartial } from '../../types/DeepPartial';
-import { DTO } from '../../types/DTO';
-import { CategorizableType } from '../types/CategorizableType';
+import formatAggregateType from '../../../queries/presentation/formatAggregateType';
+import { DeepPartial } from '../../../types/DeepPartial';
+import { DTO } from '../../../types/DTO';
+import { CategorizableType } from '../../types/CategorizableType';
 
 export class AggregateLabelOverrides {
     // TODO ML Text
@@ -79,8 +79,9 @@ export class ResourceConfig {
     @NestedDataType(AggregateLabelOverrides, {
         label: 'label overrides',
         description: 'label overrides',
+        isOptional: true,
     })
-    labelOverrides: AggregateLabelOverrides;
+    labelOverrides?: AggregateLabelOverrides;
 
     constructor(dto: DeepPartial<DTO<ResourceConfig>>) {
         if (!dto) return;

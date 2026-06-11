@@ -7,7 +7,7 @@ export class MediaContentBlock {
         label: 'name',
         description: 'name of media',
     })
-    title: string;
+    name: string;
 
     @URL({
         label: 'url',

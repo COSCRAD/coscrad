@@ -1,5 +1,5 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
-import { DeepPartial } from '../../types/DeepPartial';
+import { DeepPartial } from '../../../types/DeepPartial';
 
 // Not sure which if any properties are optional
 

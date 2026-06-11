@@ -7,7 +7,7 @@ export class PdfContentBlock {
         label: 'name',
         description: 'name of the PDF document',
     })
-    title: string;
+    name: string;
 
     @NonEmptyString({
         label: 'description',

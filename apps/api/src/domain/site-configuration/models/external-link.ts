@@ -1,17 +1,18 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
+import { DTO } from '../../../types/DTO';
 
 export class ExternalLink {
+    @URL({
+        label: 'title',
+        description: 'title for the External link icon',
+    })
+    title: string;
+
     @URL({
         label: 'url',
         description: 'url for the External link',
     })
     url: string;
-
-    @URL({
-        label: 'icon url',
-        description: 'url for the External link icon',
-    })
-    iconUrl: string;
 
     @NonEmptyString({
         label: 'description',
@@ -22,11 +23,11 @@ export class ExternalLink {
     constructor(dto: DTO<ExternalLink>) {
         if (!dto) return;
 
-        const { url, iconUrl, description } = dto;
+        const { title, url, description } = dto;
+
+        this.title = title;
 
         this.url = url;
-
-        this.iconUrl = iconUrl;
 
         this.description = description;
     }

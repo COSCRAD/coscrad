@@ -1,5 +1,5 @@
 import { NonEmptyString, URL } from '@coscrad/data-types';
-import { DTO } from '../../types/DTO';
+import { DTO } from '../../../types/DTO';
 
 export class InternalLink {
     @URL({

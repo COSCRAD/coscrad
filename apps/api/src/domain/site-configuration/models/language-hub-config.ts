@@ -1,20 +1,37 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { ExternalEnum, NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { ExternalEnum, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
-import { SimulatedKeyboard } from '../../lib/nlp/types/simulated-keyboard';
-import { DeepPartial } from '../../types/DeepPartial';
-import { DTO } from '../../types/DTO';
+import { InternalError } from '../../../lib/errors/InternalError';
+import { SimulatedKeyboard } from '../../../lib/nlp/types/simulated-keyboard';
+import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
+import { DeepPartial } from '../../../types/DeepPartial';
+import { DTO } from '../../../types/DTO';
+import validateSimpleInvariants from '../../domainModelValidators/utilities/validateSimpleInvariants';
+import { AggregateId } from '../../types/AggregateId';
+import { SocialMediaLinkDirectory } from '../social-media-link-directory';
+import { ThemeOverrides } from '../theme-overrides';
 import { AdditionalMaterial } from './additional-material';
 import { AlphabetConfig } from './alphabet-config';
+import { SiteConfigCreationDto } from './dtos/site-config-creation-dto';
 import { ExternalLink } from './external-link';
 import { InternalLink } from './internal-link';
 import { MemoryMatchConfig } from './memory-match-config';
 import { RadioStreamConfig } from './radio-stream-config';
 import { ResourceConfig } from './resource-config';
-import { SocialMediaLinkDirectory } from './social-media-link-directory';
-import { ThemeOverrides } from './theme-overrides';
 
 export class LanguageHubConfig {
+    @UUID({
+        label: 'site config ID',
+        description: 'A unique system identifier for a site configuration',
+    })
+    id: AggregateId;
+
+    @NonEmptyString({
+        label: 'name',
+        description: 'the name of this language hub configuration',
+    })
+    name: string;
+
     @NonEmptyString({
         label: 'site title',
         description: 'the Site Title for your language hub',
@@ -224,6 +241,7 @@ export class LanguageHubConfig {
         if (!dto) return;
 
         const {
+            name,
             siteTitle,
             subTitle,
             about,
@@ -253,6 +271,8 @@ export class LanguageHubConfig {
             additionalMaterials,
             memoryMatch,
         } = dto;
+
+        this.name = name;
 
         this.siteTitle = siteTitle;
 
@@ -321,5 +341,90 @@ export class LanguageHubConfig {
         );
 
         this.memoryMatch = new MemoryMatchConfig(memoryMatch as DTO<MemoryMatchConfig>);
+    }
+
+    validateInvariants(): InternalError[] {
+        const simpleValidationResult = validateSimpleInvariants(
+            Object.getPrototypeOf(this).constructor,
+            this
+        );
+
+        if (simpleValidationResult.length > 0) {
+            return simpleValidationResult;
+        }
+    }
+
+    public static fromCreationDto(id: AggregateId, dto: SiteConfigCreationDto) {
+        const {
+            name,
+            siteTitle,
+            subTitle,
+            about,
+            shouldEnableAdminMode,
+            siteDescription,
+            siteHomeImageUrl,
+            siteFavicon,
+            copyrightHolder,
+            coscradLogoUrl,
+            indexToDetailFlows,
+            resourceIndexLabel,
+            shouldEnableWebOfKnowledgeForResources,
+            siteCredits,
+            simulatedKeyboard,
+            listenLive,
+            notFoundMessage,
+            loadingMessage,
+            themeOverrides,
+            defaultLanguageCode,
+            phoneNumber,
+            email,
+            address,
+            internalLinks,
+            externalLinks,
+            socialMediaLinks,
+            alphabetConfig,
+            additionalMaterials,
+            memoryMatch,
+        } = dto;
+
+        return new LanguageHubConfig({
+            name,
+            siteTitle,
+            subTitle,
+            about,
+            shouldEnableAdminMode,
+            siteDescription,
+            siteHomeImageUrl,
+            siteFavicon,
+            copyrightHolder,
+            coscradLogoUrl,
+            indexToDetailFlows,
+            resourceIndexLabel,
+            shouldEnableWebOfKnowledgeForResources,
+            siteCredits,
+            simulatedKeyboard,
+            listenLive,
+            notFoundMessage,
+            loadingMessage,
+            themeOverrides,
+            defaultLanguageCode,
+            phoneNumber,
+            email,
+            address,
+            internalLinks,
+            externalLinks,
+            socialMediaLinks,
+            alphabetConfig,
+            additionalMaterials,
+            memoryMatch,
+        });
+    }
+
+    public static fromDto(dto: DTO<LanguageHubConfig>) {
+        return new LanguageHubConfig(dto);
+    }
+
+    toDTO(): DTO<LanguageHubConfig> {
+        return cloneToPlainObject(this);
     }
 }

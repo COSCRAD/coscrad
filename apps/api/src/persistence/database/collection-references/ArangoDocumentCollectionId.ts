@@ -10,6 +10,7 @@ const NonResourceCollectionId = {
     groups: 'groups',
     contributors: 'contributors',
     events: 'events',
+    site_configuration: 'site_configuration',
 } as const;
 
 /**
