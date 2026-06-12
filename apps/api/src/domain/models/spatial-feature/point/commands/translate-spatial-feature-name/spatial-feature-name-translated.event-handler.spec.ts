@@ -5,6 +5,7 @@ import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
+import { SpatialFeatureModule } from '../../../../../../app/domain-modules/spatial-feature.module';
 import { ConsoleCoscradCliLogger } from '../../../../../../coscrad-cli/logging';
 import {
     MultilingualText,
@@ -21,6 +22,7 @@ import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeatureQueryRepository } from '../../../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../../../queries/spatial-feature.view-model.event-sourced';
 import { ArangoSpatialFeatureQueryRepository } from '../../../repositories/arango-spatial-feature-query-repository';
+import { PointCoordinates } from '../../entities/point-coordinates.entity';
 import { PointCreated } from '../point-created.event';
 import { SpatialFeatureNameTranslated } from './spatial-feature-name-translated.event';
 import { SpatialFeatureNameTranslatedEventHandler } from './spatial-feature-name-translated.event-handler';
@@ -44,8 +46,8 @@ const pointCreated = new TestEventStream().andThen<PointCreated>({
             languageCode: originalLanguageCode,
         },
         description: 'description of point',
-        location: {
-            coordinates: [52.1322203, -122.145229],
+        geometricFeature: {
+            coordinates: PointCoordinates.fromTuple([52.1322203, -122.145229]),
         },
     },
 });
@@ -78,7 +80,7 @@ describe(`SpatialFeatureNameTranslatedEventHandler.handle`, () => {
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
-            imports: [PersistenceModule.forRootAsync(), CoscradNLPModule],
+            imports: [PersistenceModule.forRootAsync(), CoscradNLPModule, SpatialFeatureModule],
         })
             .overrideProvider(ConfigService)
             .useValue(
@@ -107,62 +109,59 @@ describe(`SpatialFeatureNameTranslatedEventHandler.handle`, () => {
         spatialFeatureNameTranslatedEventHandler = app.get(
             SpatialFeatureNameTranslatedEventHandler
         );
+    });
 
-        afterAll(async () => {
-            databaseProvider.close();
-        });
+    afterAll(async () => {
+        databaseProvider.close();
+    });
 
-        beforeEach(async () => {
-            await databaseProvider.clearViews();
+    beforeEach(async () => {
+        await databaseProvider.clearViews();
 
-            const existingView = EventSourcedSpatialFeatureViewModel.fromPointCreated(
-                creationEvent as PointCreated
+        const existingView = EventSourcedSpatialFeatureViewModel.fromPointCreated(
+            creationEvent as PointCreated
+        );
+
+        existingView.isPublished = true;
+
+        await testQueryRepository.create(existingView);
+    });
+
+    describe(`when the spatial feature exists`, () => {
+        it(`should update the view appropriately in the database`, async () => {
+            await spatialFeatureNameTranslatedEventHandler.handle(translatedEvent);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                spatialFeatureId
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            expect(updatedView.name.getOriginalTextItem()).toEqual({
+                text: spatialFeatureName,
+                languageCode: originalLanguageCode,
+                role: MultilingualTextItemRole.original,
+            });
+
+            expect(
+                updatedView.name.getTranslation(translationLanguageCode) as MultilingualTextItem
+            ).toEqual({
+                text: spatialFeatureNameTranslated,
+                languageCode: translationLanguageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            });
+
+            const updatedName = new MultilingualText(updatedView.name);
+
+            const translationItem = updatedName.getTranslation(
+                translatedEvent.payload.translationItem.languageCode
             );
 
-            existingView.isPublished = true;
+            expect(translationItem).not.toBe(NotFound);
 
-            await testQueryRepository.create(existingView);
-        });
+            const { text, languageCode } = translationItem as MultilingualTextItem;
 
-        describe(`when the spatial feature exists`, () => {
-            it.only(`should update the view appropriately in the database`, async () => {
-                await spatialFeatureNameTranslatedEventHandler.handle(translatedEvent);
+            expect(text).toBe(translatedEvent.payload.translationItem.text);
 
-                const updatedView = (await testQueryRepository.fetchById(
-                    spatialFeatureId
-                )) as EventSourcedSpatialFeatureViewModel;
-
-                expect(updatedView.name.getOriginalTextItem()).toEqual({
-                    text: spatialFeatureName,
-                    languageCode: originalLanguageCode,
-                    role: MultilingualTextItemRole.original,
-                });
-
-                expect(
-                    updatedView.name.getTranslation(
-                        translationLanguageCode
-                    ) as unknown as MultilingualTextItem
-                ).toEqual({
-                    text: spatialFeatureNameTranslated,
-                    languageCode: translationLanguageCode,
-                    role: MultilingualTextItemRole.freeTranslation,
-                });
-
-                const updatedName = new MultilingualText(updatedView.name);
-
-                const translationItem = updatedName.getTranslation(
-                    translatedEvent.payload.translationItem.languageCode
-                );
-
-                expect(translationItem).not.toBe(NotFound);
-
-                const { text, languageCode } =
-                    testQueryRepository as unknown as MultilingualTextItem;
-
-                expect(text).toBe(translatedEvent.payload.translationItem.text);
-
-                expect(languageCode).toBe(translatedEvent.payload.translationItem.languageCode);
-            });
+            expect(languageCode).toBe(translatedEvent.payload.translationItem.languageCode);
         });
     });
 });
