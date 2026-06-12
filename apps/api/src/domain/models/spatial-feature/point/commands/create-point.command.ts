@@ -2,8 +2,10 @@ import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfac
 import { Command } from '@coscrad/commands';
 import { FiniteNumber, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CREATE_POINT } from './constants';
 
 export class SpatialFeatureCompositeIdentifier {
@@ -17,6 +19,19 @@ export class SpatialFeatureCompositeIdentifier {
     id: AggregateId;
 }
 
+@CoscradDataExample<CreatePoint>({
+    example: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.spatialFeature,
+            id: buildDummyUuid(123),
+        },
+        lattitude: 49.0,
+        longitude: -123.3,
+        name: 'Big Rock',
+        languageCodeForName: LanguageCode.English,
+        description: 'There is a big rock here.',
+    },
+})
 @Command({
     type: CREATE_POINT,
     label: 'Create Point',
