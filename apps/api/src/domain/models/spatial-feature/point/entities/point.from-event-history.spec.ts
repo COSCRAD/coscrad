@@ -5,6 +5,7 @@ import { AggregateType } from '../../../../types/AggregateType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import { PointCreated } from '../commands';
+import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { Point } from './point.entity';
 
