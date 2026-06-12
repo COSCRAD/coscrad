@@ -48,6 +48,7 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
         })),
         // Event Handlers
         PointCreatedEventHandler,
+        SpatialFeatureNameTranslatedEventHandler,
     ],
 })
 export class SpatialFeatureModule {}
