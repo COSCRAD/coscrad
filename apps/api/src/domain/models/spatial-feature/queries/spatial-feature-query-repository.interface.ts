@@ -35,5 +35,9 @@ export interface ISpatialFeatureQueryRepository
 
     count(options?: FetchManyQueryOptions): Promise<number>;
 
-    translateSpatialFeatureName(translation: string, languageCode: LanguageCode): Promise<void>;
+    translateSpatialFeatureName(
+        id: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

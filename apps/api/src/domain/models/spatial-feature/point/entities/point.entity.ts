@@ -1,6 +1,7 @@
 import { AggregateType, GeometricFeatureType, LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
@@ -50,7 +51,7 @@ export class Point extends Resource implements ISpatialFeature {
 
     readonly geometry: GeometricFeature;
 
-    readonly properties: SpatialFeatureProperties;
+    properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -115,14 +116,15 @@ export class Point extends Resource implements ISpatialFeature {
         return [];
     }
 
+    @UpdateMethod()
     translateName(translation: string, languageCode: LanguageCode) {
-        const textUpdateResult = this.translateName(translation, languageCode);
+        const updatedProperties = this.properties.translateName(translation, languageCode);
 
-        if (isInternalError(textUpdateResult)) {
-            return textUpdateResult;
+        if (isInternalError(updatedProperties)) {
+            return updatedProperties;
         }
 
-        this.translateName = textUpdateResult;
+        this.properties = updatedProperties;
 
         return this;
     }
