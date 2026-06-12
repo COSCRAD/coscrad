@@ -112,7 +112,7 @@ const edgeConnectionDTOs: Omit<
             {
                 role,
                 compositeIdentifier: {
-                    id: '300',
+                    id: '100',
                     type: ResourceType.spatialFeature,
                 },
                 context: new GeneralContext(),

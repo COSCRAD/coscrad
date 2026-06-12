@@ -2,15 +2,16 @@ import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilitie
 import assertErrorAsExpected from '../../../lib/__tests__/assertErrorAsExpected';
 import buildTestDataInFlatFormat from '../../../test-data/buildTestDataInFlatFormat';
 import { DTO } from '../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { AggregateType } from '../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../types/DeluxeInMemoryStore';
 import { PartialSnapshot } from '../../types/PartialSnapshot';
-import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 import AggregateIdAlreadyInUseError from '../shared/common-command-errors/AggregateIdAlreadyInUseError';
 import InvalidExternalStateError from '../shared/common-command-errors/InvalidExternalStateError';
 import { ISpatialFeature } from '../spatial-feature/interfaces/spatial-feature.interface';
 import { CoscradUserGroup } from '../user-management/group/entities/coscrad-user-group.entity';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
+import { dummyUuid } from '../__tests__/utilities/dummyUuid';
 
 /**
  * The `CoscradUser` is exceptional in that an instance has additional fields that must
@@ -23,8 +24,10 @@ const userDtoOverrides: Partial<DTO<CoscradUser>> = {
 
 const spatialFeatureDtoOverrides: Partial<DTO<ISpatialFeature>> = {
     properties: {
-        name: `unique name`,
-        description: `I have my own name and promise not to take yours!`,
+        name: buildMultilingualTextWithSingleItem(`unique name`),
+        description: buildMultilingualTextWithSingleItem(
+            `I have my own name and promise not to take yours!`
+        ),
     },
 };
 

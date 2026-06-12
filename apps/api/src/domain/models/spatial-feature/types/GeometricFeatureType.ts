@@ -2,9 +2,7 @@ import { InternalError } from '../../../../lib/errors/InternalError';
 import { DomainModelCtor } from '../../../../lib/types/DomainModelCtor';
 import { CtorToInstance } from '../../../../lib/types/InstanceToCtor';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import { Line } from '../line/entities/line.entity';
 import { Point } from '../point/entities/point.entity';
-import { Polygon } from '../polygon/entities/polygon.entity';
 
 import { GeometricFeatureType } from '@coscrad/api-interfaces';
 
@@ -16,8 +14,8 @@ export { GeometricFeatureType };
  */
 export const geometricFeatureTypeToSpatialFeatureCtor = {
     [GeometricFeatureType.point]: Point,
-    [GeometricFeatureType.line]: Line,
-    [GeometricFeatureType.polygon]: Polygon,
+    // [GeometricFeatureType.line]: Line,
+    // [GeometricFeatureType.polygon]: Polygon,
 } as const;
 
 export type GeometricFeatureTypeToSpatialFeatureCtor = {

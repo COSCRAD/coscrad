@@ -9,9 +9,7 @@ import { FunctionalComponent } from '../../../utils/types/functional-component';
 type Presenter = FunctionalComponent<ICategorizableDetailQueryResult<ISpatialFeatureViewModel>>;
 
 const lookupTable: { [K in GeometricFeatureType]: Presenter } = {
-    [GeometricFeatureType.line]: GenericDetailPresenter,
     [GeometricFeatureType.point]: GenericDetailPresenter,
-    [GeometricFeatureType.polygon]: GenericDetailPresenter,
 };
 
 export const buildSpatialFeatureDetailPresenter = (

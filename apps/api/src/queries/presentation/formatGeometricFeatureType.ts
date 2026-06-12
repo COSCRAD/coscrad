@@ -4,9 +4,9 @@ import { InternalError } from '../../lib/errors/InternalError';
 import capitalizeEveryFirstLetter from '../../lib/utilities/strings/capitalizeEveryFirstLetter';
 
 const lookupTable: { [K in GeometricFeatureType]: string } = {
-    [GeometricFeatureType.line]: 'line',
+    // [GeometricFeatureType.line]: 'line',
     [GeometricFeatureType.point]: 'point',
-    [GeometricFeatureType.polygon]: 'polygon',
+    // [GeometricFeatureType.polygon]: 'polygon',
 };
 
 export const formatGeometricFeatureType = (geometricFeatureType: string): string => {

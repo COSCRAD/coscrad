@@ -1,7 +1,9 @@
 import { TestEventStream } from '../../../../../test-data/events';
 import { AggregateType } from '../../../../types/AggregateType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import { PointCreated } from '../commands';
+import { PointCoordinates } from './point-coordinates.entity';
 import { Point } from './point.entity';
 
 const spatialFeatureId = buildDummyUuid(1);
@@ -20,8 +22,10 @@ const longitude = 85.1;
 const pointCreated = new TestEventStream().andThen<PointCreated>({
     type: 'POINT_CREATED',
     payload: {
-        lattitude,
-        longitude,
+        geometricFeature: {
+            type: GeometricFeatureType.point,
+            coordinates: PointCoordinates.fromTuple([lattitude, longitude]),
+        },
         name: pointName,
     },
 });

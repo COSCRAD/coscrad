@@ -12,8 +12,8 @@ import { buildMultilingualTextWithSingleItem } from '../../../../domain/common/b
 import { MultilingualText } from '../../../../domain/common/entities/multilingual-text';
 import { Aggregate } from '../../../../domain/models/aggregate.entity';
 
-import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ISpatialFeature } from '../../../../domain/models/spatial-feature/interfaces/spatial-feature.interface';
+import buildDummyUuid from '../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { Ctor } from '../../../../lib/types/Ctor';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { CoscradDataExample } from '../../../../test-data/utilities';
@@ -43,8 +43,8 @@ type GeometryViewModel = {
             coordinates: [52, -123],
         },
         properties: {
-            name: 'my creek',
-            description: 'a nice little town',
+            name: buildMultilingualTextWithSingleItem('my creek'),
+            description: buildMultilingualTextWithSingleItem('a nice little town'),
         },
     },
 })
@@ -99,13 +99,13 @@ export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
     }: ISpatialFeature): SpatialFeatureViewModel {
         const geometryView: GeometryViewModel = {
             type: geometry.type,
-            coordinates: geometry.coordinates,
+            // `toPlain`? `toGeoJson`?
+            coordinates: geometry.coordinates.toTuple(),
         };
 
         return new SpatialFeatureViewModel({
             id,
-            // TODO make this full ML Text
-            name: buildMultilingualTextWithSingleItem(properties.name),
+            name: properties.name,
             type,
             properties,
             geometry: geometryView,

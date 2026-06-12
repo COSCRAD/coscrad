@@ -1,15 +1,17 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
+import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { getCommandFsaForTest } from '../../../../__tests__/utilities/getCommandFsaForTest';
-import { getValidSpatialFeatureInstanceForTest } from '../../../../__tests__/utilities/getValidSpatialFeatureInstanceForTest';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
+import { getCommandFsaForTest } from '../../../../__tests__/utilities/getCommandFsaForTest';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -19,11 +21,14 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
+import { Point } from '../entities/point.entity';
 import { CreatePoint } from './create-point.command';
 
 const commandType = `CREATE_POINT`;
 
 const pointName = 'Sunny Park Point';
+
+const originalLanguageCode = LanguageCode.English;
 
 const dummyFsa = getCommandFsaForTest<CreatePoint>(commandType, {
     aggregateCompositeIdentifier: { id: buildDummyUuid(55) },
@@ -78,7 +83,9 @@ describe(commandType, () => {
         it(`should succeed with the expected updates to the database`, async () => {
             await assertCreateCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
-                initialState: new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat(),
+                seedInitialState: async () => {
+                    await Promise.resolve();
+                },
                 buildValidCommandFSA: (id: AggregateType) => commandFsaFactory.build(id),
             });
         });
@@ -93,10 +100,15 @@ describe(commandType, () => {
                             systemUserId: dummySystemUserId,
                             initialState: new DeluxeInMemoryStore({
                                 [AggregateType.spatialFeature]: [
-                                    getValidSpatialFeatureInstanceForTest(featureType).clone({
+                                    buildTestInstance(Point, {
                                         properties: {
-                                            name: pointName,
-                                            description: 'My name is already taken!',
+                                            name: buildMultilingualTextWithSingleItem(
+                                                pointName,
+                                                originalLanguageCode
+                                            ),
+                                            description: buildMultilingualTextWithSingleItem(
+                                                'My name is already taken!'
+                                            ),
                                         },
                                     }),
                                 ],

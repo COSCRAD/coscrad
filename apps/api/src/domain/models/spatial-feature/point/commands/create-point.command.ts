@@ -1,9 +1,11 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { FiniteNumber, FromDomainModel, NestedDataType, UUID } from '@coscrad/data-types';
+import { FiniteNumber, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
+import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
-import { SpatialFeatureProperties } from '../entities/spatial-feature-properties.entity';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CREATE_POINT } from './constants';
 
 export class SpatialFeatureCompositeIdentifier {
@@ -17,6 +19,19 @@ export class SpatialFeatureCompositeIdentifier {
     id: AggregateId;
 }
 
+@CoscradDataExample<CreatePoint>({
+    example: {
+        aggregateCompositeIdentifier: {
+            type: AggregateType.spatialFeature,
+            id: buildDummyUuid(123),
+        },
+        lattitude: 49.0,
+        longitude: -123.3,
+        name: 'Big Rock',
+        languageCodeForName: LanguageCode.English,
+        description: 'There is a big rock here.',
+    },
+})
 @Command({
     type: CREATE_POINT,
     label: 'Create Point',
@@ -29,38 +44,35 @@ export class CreatePoint implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
-    /**
-     * TODO Restrict the range of this. We need to be careful when doing so.
-     * References:
-     * - [GEO JSON Pole definitions](https://datatracker.ietf.org/doc/html/rfc7946#section-5.3)
-     * - [Lattitude (Wikipedia)](https://en.wikipedia.org/wiki/Latitude)
-     *
-     */
     @FiniteNumber({
-        label: `lattitude`,
+        label: 'lattitude',
         description: 'lattitude',
     })
-    readonly lattitude: number;
+    lattitude: number;
 
-    /**
-     * TODO Restrict the range of this
-     * - [Longitude (Wikipedia)](https://en.wikipedia.org/wiki/Longitude)
-     */
     @FiniteNumber({
-        label: `longitude`,
-        description: `longitude`,
+        label: 'longitude',
+        description: 'longitude',
     })
-    readonly longitude: number;
+    longitude: number;
 
     // TODO support elevation
 
-    // TODO add languageCode for name
-    @FromDomainModel(SpatialFeatureProperties)
+    @NonEmptyString({
+        label: 'name',
+        description: 'name for this place',
+    })
     readonly name: string;
 
-    @FromDomainModel(SpatialFeatureProperties)
-    readonly description: string;
+    @LanguageCodeEnum({
+        label: 'language code for name',
+        description: 'the language in which you are naming this point on the map',
+    })
+    languageCodeForName: LanguageCode;
 
-    @FromDomainModel(SpatialFeatureProperties)
-    readonly imageUrl?: string;
+    @NonEmptyString({
+        label: 'description',
+        description: 'short descripton of this place',
+    })
+    readonly description: string;
 }

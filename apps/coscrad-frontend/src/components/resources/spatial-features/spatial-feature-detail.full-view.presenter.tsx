@@ -13,9 +13,7 @@ import { ResourceNamePresenter } from '../../../utils/generic-components/present
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { CoscradLeafletMap } from './leaflet';
 import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
-import { LineTextPresenter } from './thumbnail-presenters/line-text-presenter';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
-import { PolygonTextPresenter } from './thumbnail-presenters/polygon-text-presenter';
 
 const StyledCoscradMap = styled(Box)({
     marginBottom: '20px',
@@ -27,8 +25,6 @@ interface HasCoordinates<T = unknown> {
 
 const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordinates> } = {
     [GeometricFeatureType.point]: PointTextPresenter,
-    [GeometricFeatureType.line]: LineTextPresenter,
-    [GeometricFeatureType.polygon]: PolygonTextPresenter,
 };
 
 const StyledPlaceIcon = styled('img')({

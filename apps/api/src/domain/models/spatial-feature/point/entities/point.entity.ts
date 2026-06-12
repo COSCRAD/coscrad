@@ -1,12 +1,12 @@
-import { AggregateType, ISpatialFeatureProperties } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
-import cloneToPlainObject from '../../../../../lib/utilities/cloneToPlainObject';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -16,27 +16,41 @@ import { AggregateCompositeIdentifier } from '../../../../types/AggregateComposi
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../../build-aggregate-root-from-event-history';
 import { Resource } from '../../../resource.entity';
 import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { IGeometricFeature } from '../../interfaces/geometric-feature.interface';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
-import { PointCoordinates } from '../../types/Coordinates/PointCoordinates';
-import { GeometricFeatureType } from '../../types/GeometricFeatureType';
-import validatePosition2D from '../../validation/validatePosition2D';
 import { CREATE_POINT, PointCreated } from '../commands';
+import { PointCoordinates } from './point-coordinates.entity';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
+@CoscradDataExample<Point>({
+    example: {
+        type: ResourceType.spatialFeature,
+        published: false,
+        id: buildDummyUuid(123),
+        geometry: buildTestInstance(GeometricFeature, {
+            type: GeometricFeatureType.point,
+            coordinates: PointCoordinates.fromTuple([22, -55]),
+        }),
+        properties: {
+            description: buildMultilingualTextWithSingleItem('The place to be!'),
+            name: buildMultilingualTextWithSingleItem('My Point'),
+        },
+    },
+})
 @RegisterIndexScopedCommands([CREATE_POINT])
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
-    readonly geometry: IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>;
+    readonly geometry: GeometricFeature;
 
-    readonly properties: ISpatialFeatureProperties;
+    readonly properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -50,16 +64,13 @@ export class Point extends Resource implements ISpatialFeature {
          * issues that come with additional layers of OOP. Nonetheless, we deep
          * clone to avoid shared references and hence unwanted side-effects.
          */
-        this.geometry = cloneToPlainObject(
-            geometryDTO as IGeometricFeature<typeof GeometricFeatureType.point, PointCoordinates>
-        );
+        this.geometry = new GeometricFeature(geometryDTO);
 
         this.properties = new SpatialFeatureProperties(propertiesDTO);
     }
 
     getName(): MultilingualText {
-        // TODO Make this multilingual text
-        return buildMultilingualTextWithSingleItem(this.properties.name);
+        return this.properties.name;
     }
 
     validateExternalState(externalState: InMemorySnapshot): ValidationResult {
@@ -90,16 +101,9 @@ export class Point extends Resource implements ISpatialFeature {
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        const { coordinates } = this.geometry;
+        const coordinateInvariantErrors = this.geometry.coordinates.validateComplexInvariants();
 
-        /**
-         * Note that **all** invariant validation rules are validated within
-         * the following function. We opt-out of the decorator-based
-         * 'simple-invariant' validation for geometric models because it is
-         *  more transparent to keep all coordinates as plain-old objects and not
-         * instances of nested classes.
-         */
-        return validatePosition2D(coordinates);
+        return coordinateInvariantErrors;
     }
 
     // Should we have a base class? Does this logic vary amongst subtypes?
@@ -133,8 +137,7 @@ export class Point extends Resource implements ISpatialFeature {
     static buildPointFromPointCreated({
         payload: {
             aggregateCompositeIdentifier: { id },
-            lattitude,
-            longitude,
+            geometricFeature: coordinates,
             name,
             description,
         },
@@ -142,14 +145,13 @@ export class Point extends Resource implements ISpatialFeature {
         const buildResult = new Point({
             type: AggregateType.spatialFeature,
             id,
-            geometry: {
-                type: GeometricFeatureType.point,
-                coordinates: [lattitude, longitude],
-            },
+            geometry: new GeometricFeature(coordinates),
             properties: {
-                // TODO make this multilingual
-                name,
-                description,
+                name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+                description: buildMultilingualTextWithSingleItem(
+                    description.text,
+                    description.languageCode
+                ),
             },
             published: false,
         });

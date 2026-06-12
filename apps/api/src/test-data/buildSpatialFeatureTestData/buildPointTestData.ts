@@ -1,3 +1,5 @@
+import { buildMultilingualTextWithSingleItem } from '../../domain/common/build-multilingual-text-with-single-item';
+import { PointCoordinates } from '../../domain/models/spatial-feature/point/entities/point-coordinates.entity';
 import { Point } from '../../domain/models/spatial-feature/point/entities/point.entity';
 import { Position2D } from '../../domain/models/spatial-feature/types/Coordinates/Position2D';
 import { GeometricFeatureType } from '../../domain/models/spatial-feature/types/GeometricFeatureType';
@@ -20,19 +22,24 @@ const dtos: Omit<DTO<Point>, 'properties'>[] = pointCoordinates.map((point, inde
     geometry: {
         type: GeometricFeatureType.point,
 
-        coordinates: point,
+        coordinates: PointCoordinates.fromTuple(point),
     },
     published: true,
 }));
 
+// TODO remove the need for this file!
 export default (): Point[] =>
     dtos.map(
         (partialDto) =>
             new Point({
                 ...partialDto,
                 properties: {
-                    name: `Name of Point with ID: ${partialDto.id}`,
-                    description: `Description for point ${partialDto.id}`,
+                    name: buildMultilingualTextWithSingleItem(
+                        `Name of Point with ID: ${partialDto.id}`
+                    ),
+                    description: buildMultilingualTextWithSingleItem(
+                        `Description for point ${partialDto.id}`
+                    ),
                     imageUrl:
                         'https://coscrad.org/wp-content/uploads/2023/05/evergreen-2025158_1280.png',
                 },

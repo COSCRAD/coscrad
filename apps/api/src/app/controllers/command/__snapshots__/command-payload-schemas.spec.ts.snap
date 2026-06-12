@@ -5085,19 +5085,51 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "description": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a description of the place",
+        "description": "short descripton of this place",
         "isArray": false,
         "isOptional": false,
         "isPrivate": false,
         "label": "description",
       },
-      "imageUrl": {
-        "coscradDataType": "URL",
-        "description": "a full URL link to an image to display with this spatial feature",
+      "languageCodeForName": {
+        "complexDataType": "ENUM",
+        "description": "the language in which you are naming this point on the map",
+        "enumLabel": "language code",
+        "enumName": "LanguageCode",
         "isArray": false,
-        "isOptional": true,
+        "isOptional": false,
         "isPrivate": false,
-        "label": "image link",
+        "label": "language code for name",
+        "labelsAndValues": [
+          {
+            "label": "Chilcotin",
+            "value": "clc",
+          },
+          {
+            "label": "Haida",
+            "value": "hai",
+          },
+          {
+            "label": "English",
+            "value": "en",
+          },
+          {
+            "label": "French",
+            "value": "fra",
+          },
+          {
+            "label": "Chinook",
+            "value": "chn",
+          },
+          {
+            "label": "Zapotec",
+            "value": "zap",
+          },
+          {
+            "label": "Spanish",
+            "value": "spa",
+          },
+        ],
       },
       "lattitude": {
         "coscradDataType": "FINITE_NUMBER",
@@ -5117,7 +5149,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
       },
       "name": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "a place name (in any language)",
+        "description": "name for this place",
         "isArray": false,
         "isOptional": false,
         "isPrivate": false,
