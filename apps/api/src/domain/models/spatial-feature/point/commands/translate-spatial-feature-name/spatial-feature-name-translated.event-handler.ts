@@ -6,7 +6,7 @@ import {
 } from '../../../queries/spatial-feature-query-repository.interface';
 import { SpatialFeatureNameTranslated } from './spatial-feature-name-translated.event';
 
-@CoscradEventConsumer('SPATIAL_FEATURE_NAME_TRAMSLATED')
+@CoscradEventConsumer('SPATIAL_FEATURE_NAME_TRANSLATED')
 export class SpatialFeatureNameTranslatedEventHandler implements ICoscradEventHandler {
     constructor(
         @Inject(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN)
