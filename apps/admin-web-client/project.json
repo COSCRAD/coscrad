@@ -1,0 +1,97 @@
+{
+    "name": "admin-web-client",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/admin-web-client/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "babel",
+                "outputPath": "dist/apps/admin-web-client",
+                "index": "apps/admin-web-client/src/index.html",
+                "baseHref": "/",
+                "main": "apps/admin-web-client/src/main.tsx",
+                "tsConfig": "apps/admin-web-client/tsconfig.app.json",
+                "assets": [
+                    "apps/admin-web-client/src/favicon.ico",
+                    "apps/admin-web-client/src/assets"
+                ],
+                "styles": ["apps/admin-web-client/src/styles.css"],
+                "scripts": [],
+                "webpackConfig": "@nrwl/react/plugins/webpack"
+            },
+            "configurations": {
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/admin-web-client/src/environments/environment.ts",
+                            "with": "apps/admin-web-client/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                },
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/webpack:dev-server",
+            "options": {
+                "buildTarget": "admin-web-client:build",
+                "hmr": true
+            },
+            "configurations": {
+                "production": {
+                    "buildTarget": "admin-web-client:build:production",
+                    "hmr": false
+                },
+                "development": {
+                    "buildTarget": "admin-web-client:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "options": {
+                "lintFilePatterns": ["apps/admin-web-client/**/*.{ts,tsx,js,jsx}"]
+            },
+            "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/apps/admin-web-client"],
+            "options": {
+                "jestConfig": "apps/admin-web-client/jest.config.ts",
+                "passWithNoTests": false
+            }
+        },
+        "component-test": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "apps/coscrad-frontend/cypress.config.ts",
+                "testingType": "component",
+                "devServerTarget": "coscrad-frontend:build",
+                "skipServe": true
+            }
+        }
+    },
+    "tags": [],
+    "jest": {
+        "transform": {
+            "^.+\\.(ts|tsx|js|jsx)$": "ts-jest"
+        }
+    }
+}
