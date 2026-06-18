@@ -1,6 +1,5 @@
 import { AggregateType, CategorizableType } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { TermIndexPage } from '../../term-index.page';
 import { About } from '../components/about/about';
 import { AdditionalMaterials } from '../components/additional-materials/additional-materials';
 import { Credits } from '../components/credits/credits';
@@ -16,6 +15,7 @@ import { ResourceInfoContainer } from '../components/resource-info/resource-info
 import { TermDetailFullViewPresenter } from '../components/resources/terms/term-detail.full-view.presenter';
 import { TermDetailPage } from '../components/resources/terms/term-detail.page';
 import { TermDetailThumbnailPresenter } from '../components/resources/terms/term-detail.thumbnail.presenter';
+import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { TagDetailPresenter } from '../components/tags/tag-detail.presenter';
 import { TagIndexContainer } from '../components/tags/tag-index.container';
 import { CategoryTreeContainer } from '../components/tree-of-knowledge/category-tree.container';
