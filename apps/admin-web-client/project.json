@@ -1,7 +1,7 @@
 {
-    "name": "coscrad-frontend",
+    "name": "admin-web-client",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "apps/coscrad-frontend/src",
+    "sourceRoot": "apps/admin-web-client/src",
     "projectType": "application",
     "targets": {
         "build": {
@@ -10,17 +10,16 @@
             "defaultConfiguration": "production",
             "options": {
                 "compiler": "babel",
-                "outputPath": "dist/apps/coscrad-frontend",
-                "index": "apps/coscrad-frontend/src/index.html",
+                "outputPath": "dist/apps/admin-web-client",
+                "index": "apps/admin-web-client/src/index.html",
                 "baseHref": "/",
-                "main": "apps/coscrad-frontend/src/main.tsx",
-                "polyfills": "apps/coscrad-frontend/src/polyfills.ts",
-                "tsConfig": "apps/coscrad-frontend/tsconfig.app.json",
+                "main": "apps/admin-web-client/src/main.tsx",
+                "tsConfig": "apps/admin-web-client/tsconfig.app.json",
                 "assets": [
-                    "apps/coscrad-frontend/src/favicon.ico",
-                    "apps/coscrad-frontend/src/assets"
+                    "apps/admin-web-client/src/favicon.ico",
+                    "apps/admin-web-client/src/assets"
                 ],
-                "styles": ["apps/coscrad-frontend/src/styles.scss"],
+                "styles": ["apps/admin-web-client/src/styles.css"],
                 "scripts": [],
                 "webpackConfig": "@nrwl/react/plugins/webpack"
             },
@@ -28,8 +27,8 @@
                 "production": {
                     "fileReplacements": [
                         {
-                            "replace": "apps/coscrad-frontend/src/environments/environment.ts",
-                            "with": "apps/coscrad-frontend/src/environments/environment.prod.ts"
+                            "replace": "apps/admin-web-client/src/environments/environment.ts",
+                            "with": "apps/admin-web-client/src/environments/environment.prod.ts"
                         }
                     ],
                     "optimization": true,
@@ -50,16 +49,16 @@
         "serve": {
             "executor": "@nrwl/webpack:dev-server",
             "options": {
-                "buildTarget": "coscrad-frontend:build",
+                "buildTarget": "admin-web-client:build",
                 "hmr": true
             },
             "configurations": {
                 "production": {
-                    "buildTarget": "coscrad-frontend:build:production",
+                    "buildTarget": "admin-web-client:build:production",
                     "hmr": false
                 },
                 "development": {
-                    "buildTarget": "coscrad-frontend:build:development"
+                    "buildTarget": "admin-web-client:build:development"
                 }
             },
             "defaultConfiguration": "development"
@@ -67,15 +66,15 @@
         "lint": {
             "executor": "@nrwl/linter:eslint",
             "options": {
-                "lintFilePatterns": ["apps/coscrad-frontend/**/*.{ts,tsx,js,jsx}"]
+                "lintFilePatterns": ["apps/admin-web-client/**/*.{ts,tsx,js,jsx}"]
             },
             "outputs": ["{options.outputFile}"]
         },
         "test": {
             "executor": "@nrwl/jest:jest",
-            "outputs": ["{workspaceRoot}/coverage/apps/coscrad-frontend"],
+            "outputs": ["{workspaceRoot}/coverage/apps/admin-web-client"],
             "options": {
-                "jestConfig": "apps/coscrad-frontend/jest.config.ts",
+                "jestConfig": "apps/admin-web-client/jest.config.ts",
                 "passWithNoTests": false
             }
         },
