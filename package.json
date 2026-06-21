@@ -62,7 +62,7 @@
         "@nestjs/platform-express": "11.1.6",
         "@nestjs/serve-static": "5.0.3",
         "@nestjs/swagger": "11.2.0",
-        "@reduxjs/toolkit": "1.9.0",
+        "@reduxjs/toolkit": "2.11.2",
         "@types/auth0": "^2.35.0",
         "@types/inquirer": "9.0.9",
         "@types/multer": "^2.0.0",
