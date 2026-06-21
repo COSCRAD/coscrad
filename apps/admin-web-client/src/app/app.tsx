@@ -1,16 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
-
-import NxWelcome from './nx-welcome';
+import { TermIndex } from '../components/resources/terms/term-index.page';
 
 export function App() {
-    return (
-        <>
-            <NxWelcome title="admin-web-client" />
-
-            <div />
-        </>
-    );
+    return <TermIndex />;
 }
 
 export default App;
