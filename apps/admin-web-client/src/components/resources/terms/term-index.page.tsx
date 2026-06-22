@@ -1,22 +1,29 @@
 import { IMultilingualText, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { Stack, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { useFetchTermsQuery } from './store';
 
-const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
+export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
     const item = name.items.find((item) => item.role === MultilingualTextItemRole.original);
 
     return item.text;
 };
 
 type TermListingProps = {
+    id: string;
     name: IMultilingualText;
     isPublished: boolean;
 };
 
-export const TermListing = ({ name, isPublished }: TermListingProps): JSX.Element => {
+export const TermListing = ({ id, name, isPublished }: TermListingProps): JSX.Element => {
+    const linkUrl = `/terms/${id}`;
+
     return (
         <Typography variant="body1">
-            {findOriginalMultilingualTextItem(name)}, {isPublished ? 'Published' : 'Not Published'}
+            <Link to={linkUrl}>
+                {findOriginalMultilingualTextItem(name)},{' '}
+                {isPublished ? 'Published' : 'Not Published'}
+            </Link>
         </Typography>
     );
 };
@@ -48,9 +55,11 @@ export const TermIndex = (): JSX.Element => {
 
     return (
         <Stack>
-            {entities.map((term) => (
-                <TermListing name={term.name} isPublished={term.isPublished} />
-            ))}
+            {entities.map((term) => {
+                const { id, name, isPublished, notes } = term;
+
+                return <TermListing id={id} name={name} isPublished={isPublished} />;
+            })}
         </Stack>
     );
 };
