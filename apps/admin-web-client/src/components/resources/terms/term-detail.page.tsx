@@ -1,10 +1,15 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../../app/hooks';
+import { executeCommand } from '../../../store/slices/command-status';
+import { ImmersiveCreateNoteForm } from './create-note-form';
 import { useFetchTermByIdQuery } from './store';
 import { findOriginalMultilingualTextItem } from './term-index.page';
 
 export const TermDetail = (): JSX.Element => {
     const { id } = useParams();
+    const dispatch = useAppDispatch();
 
     const { data, isLoading, error } = useFetchTermByIdQuery(id);
 
@@ -49,6 +54,28 @@ export const TermDetail = (): JSX.Element => {
                     <Typography variant="body1">There are no notes for this term.</Typography>
                 )}
             </Stack>
+            <ImmersiveCreateNoteForm
+                onSubmit={(text, languageCode, noteId) => {
+                    dispatch(
+                        executeCommand({
+                            type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                            payload: {
+                                aggregateCompositeIdentifier: {
+                                    type: AggregateType.note,
+                                    id: noteId,
+                                },
+                                resourceCompositeIdentifier: {
+                                    type: AggregateType.digitalText,
+                                    id,
+                                },
+                                text,
+                                languageCode,
+                                resourceContext: { type: 'general' },
+                            },
+                        })
+                    );
+                }}
+            />
         </>
     );
 };
