@@ -32,5 +32,5 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "src/components/resources/terms/create-note-form.tsx.bk"  ]
 }
