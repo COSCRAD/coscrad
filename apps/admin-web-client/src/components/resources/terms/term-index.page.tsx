@@ -56,9 +56,11 @@ export const TermIndex = (): JSX.Element => {
     return (
         <Stack>
             {entities.map((term) => {
-                const { id, name, isPublished, notes } = term;
+                const { id, name, isPublished } = term;
 
-                return <TermListing id={id} name={name} isPublished={isPublished} />;
+                return (
+                    <TermListing key={`term-${id}`} id={id} name={name} isPublished={isPublished} />
+                );
             })}
         </Stack>
     );
