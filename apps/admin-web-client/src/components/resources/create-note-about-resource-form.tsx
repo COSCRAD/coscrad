@@ -1,7 +1,11 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { getConfig } from '../../config';
+import { useAppDispatch } from '../../app/hooks';
+import { executeCommand } from '../command-status';
+import { ErrorDisplay } from '../error-display/error-display';
+import { useLoadableGeneratedId } from '../id-generation';
+import { Loading } from '../loading';
 import { LanguageSelect } from './language-select';
 
 interface FormProps {
@@ -9,7 +13,9 @@ interface FormProps {
     resourceType: string;
 }
 
-export const CreateNoteForResourceForm = ({ resourceId, resourceType }: FormProps) => {
+export const CreateNoteAboutResourceForm = ({ resourceId, resourceType }: FormProps) => {
+    const dispatch = useAppDispatch();
+
     const [error, setError] = useState<Error | null>(null);
 
     const [text, setText] = useState('');
@@ -17,6 +23,12 @@ export const CreateNoteForResourceForm = ({ resourceId, resourceType }: FormProp
     const defaultLanguageCode = LanguageCode.English;
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
+
+    const { errorInfo, isLoading, data: generatedId } = useLoadableGeneratedId();
+
+    if (errorInfo) return <ErrorDisplay {...errorInfo} />;
+
+    if (isLoading) return <Loading />;
 
     /**
      * Could pass in a callback to the component from the parent specifying its
@@ -31,33 +43,31 @@ export const CreateNoteForResourceForm = ({ resourceId, resourceType }: FormProp
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent browser refresh
 
-        console.log('Form Submitted Successfully:', text, languageCode, resourceId);
+        console.log(
+            'Form Submitted Successfully:',
+            text,
+            languageCode,
+            `${resourceType}/${resourceId}`
+        );
 
-        const fsa = {
-            type: 'CREATE_NOTE_ABOUT_RESOURCE',
-            payload: {
-                aggregateCompositeIdentifier: {
-                    type: resourceType,
-                    id: resourceId,
+        dispatch(
+            executeCommand({
+                type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.note,
+                        id: generatedId,
+                    },
+                    resourceCompositeIdentifier: {
+                        type: resourceType,
+                        id: resourceId,
+                    },
+                    text: text,
+                    languageCode: languageCode,
+                    resourceContext: { type: 'general' },
                 },
-                text: text,
-                languageCode: languageCode,
-            },
-        };
-
-        try {
-            const response = await fetch(`${getConfig().apiUrl}/commands`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(fsa),
-            });
-
-            const result = (await response.json()) as { id: string };
-        } catch (error) {
-            setError(error as Error);
-        }
+            })
+        );
     };
 
     return (
