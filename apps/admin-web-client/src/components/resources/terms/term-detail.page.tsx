@@ -1,10 +1,12 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { CreateNoteForResourceForm } from '../create-note-for-resource-form';
+import { CreateNoteAboutResourceForm } from '../create-note-about-resource-form';
 import { useFetchTermByIdQuery } from './store';
 import { findOriginalMultilingualTextItem } from './term-index.page';
 
 export const TermDetail = (): JSX.Element => {
+    const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
     const { id } = useParams();
 
     const { data, isLoading, error } = useFetchTermByIdQuery(id);
@@ -41,16 +43,22 @@ export const TermDetail = (): JSX.Element => {
                     <>
                         <Typography variant="h6">Notes:</Typography>
                         {Object.values(notes).map((note) => {
-                            const { note: text } = note;
+                            const { id, note: text } = note;
 
-                            return <Typography variant="body1">{text.original.text}</Typography>;
+                            return (
+                                <Typography key={`noteid-${id}`} variant="body1">
+                                    {text.original.text}
+                                </Typography>
+                            );
                         })}
                     </>
                 ) : (
                     <Typography variant="body1">There are no notes for this term.</Typography>
                 )}
             </Stack>
-            <CreateNoteForResourceForm resourceId={id} resourceType="term" />
+            {isAuthenticated ? (
+                <CreateNoteAboutResourceForm resourceId={id} resourceType="term" />
+            ) : null}
         </>
     );
 };
