@@ -1,39 +1,38 @@
-import { ICategorizableIndexQueryResult, IGeospatialMapViewModel } from '@coscrad/api-interfaces';
-import { AnyAction, combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
-import { commandStatusReducer, COMMAND_STATUS } from './slices/command-status';
+import { COMMAND_STATUS, commandStatusReducer } from './slices/command-status';
 import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
 import { ILoadable } from './slices/interfaces/loadable.interface';
 import { noteReducer, NOTES } from './slices/notes';
 
 import {
-    audioItemReducer,
     AUDIO_ITEMS,
-    bibliographicCitationReducer,
+    audioItemReducer,
     BIBLIOGRAPHIC_CITATIONS,
-    DigitalTextReducer,
+    bibliographicCitationReducer,
     DIGITAL_TEXTS,
-    mediaItemReducer,
+    DigitalTextReducer,
     MEDIA_ITEMS,
+    mediaItemReducer,
     photographReducer,
     PHOTOGRAPHS,
     playlistReducer,
     PLAYLISTS,
-    resourceInfoReducer,
     RESOURCE_INFO,
+    resourceInfoReducer,
     songReducer,
     SONGS,
-    spatialFeatureReducer,
     SPATIAL_FEATURES,
+    spatialFeatureReducer,
     termReducer,
     TERMS,
     videoReducer,
     VIDEOS,
-    vocabularyListReducer,
     VOCABULARY_LISTS,
+    vocabularyListReducer,
 } from './slices/resources';
 import { tagReducer, TAGS } from './slices/tagSlice';
 
@@ -72,7 +71,7 @@ export const rootReducer = combineReducers({
     },
 });
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
+export const setupStore = (preloadedState?: Partial<RootState>) =>
     configureStore({
         reducer: rootReducer,
         preloadedState,

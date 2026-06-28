@@ -1,10 +1,34 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { Box, Divider } from '@mui/material';
+import { useEffect } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
+import { userLoginSucceeded } from '../components/auth/store/auth-slice';
+import { Home } from '../components/home/home';
 import { NavMenuPresenter } from '../components/nav-menu/nav-menu-presenter';
 import { TermDetail } from '../components/resources/terms/term-detail.page';
 import { TermIndex } from '../components/resources/terms/term-index.page';
+import { useAppDispatch } from './hooks';
 
 export function App() {
+    const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            console.log({ user: user.sub });
+
+            getAccessTokenSilently().then((token) => {
+                dispatch(
+                    userLoginSucceeded({
+                        userId: user?.sub,
+                        token,
+                    })
+                );
+            });
+        }
+    });
+
     return (
         <Box sx={{ marginTop: '50px', marginLeft: '40px' }}>
             <nav>
@@ -17,7 +41,7 @@ export function App() {
             <Divider sx={{ height: '20px', marginBottom: '10px' }} />
 
             <Routes>
-                <Route path="/" />
+                <Route path="/" element={<Home />} />
                 <Route path="/terms" element={<TermIndex />} />
                 <Route path="/terms/:id" element={<TermDetail />} />
             </Routes>
