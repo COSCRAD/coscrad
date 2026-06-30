@@ -1,7 +1,7 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useExecuteCommandMutation } from '../command-status/store';
+import { useExecuteCommandMutation } from '../commands/store';
 import { LanguageSelect } from '../shared/language-select';
 
 interface CreateNoteAboutResourceFormProps {
