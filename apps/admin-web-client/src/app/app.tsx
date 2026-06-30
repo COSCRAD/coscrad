@@ -5,7 +5,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 import { userLoginSucceeded } from '../components/auth/store/auth-slice';
 import { Home } from '../components/home/home';
 import { NavMenuPresenter } from '../components/nav-menu/nav-menu-presenter';
-import { TermDetail } from '../components/resources/terms/term-detail.page';
+import { TermDetailContainer } from '../components/resources/terms/term-detail-container';
 import { TermIndex } from '../components/resources/terms/term-index.page';
 import { useAppDispatch } from './hooks';
 
@@ -16,8 +16,6 @@ export function App() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            console.log({ user: user.sub });
-
             getAccessTokenSilently().then((token) => {
                 dispatch(
                     userLoginSucceeded({
@@ -43,7 +41,7 @@ export function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/terms" element={<TermIndex />} />
-                <Route path="/terms/:id" element={<TermDetail />} />
+                <Route path="/terms/:id" element={<TermDetailContainer />} />
             </Routes>
         </Box>
     );
