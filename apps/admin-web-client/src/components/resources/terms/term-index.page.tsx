@@ -6,7 +6,7 @@ import { useFetchTermsQuery } from './store';
 export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
     const item = name.items.find((item) => item.role === MultilingualTextItemRole.original);
 
-    return item.text;
+    return item;
 };
 
 type TermListingProps = {
@@ -18,11 +18,12 @@ type TermListingProps = {
 export const TermListing = ({ id, name, isPublished }: TermListingProps): JSX.Element => {
     const linkUrl = `/terms/${id}`;
 
+    const originalTermItem = findOriginalMultilingualTextItem(name);
+
     return (
         <Typography variant="body1">
             <Link to={linkUrl}>
-                {findOriginalMultilingualTextItem(name)},{' '}
-                {isPublished ? 'Published' : 'Not Published'}
+                {originalTermItem.text}, {isPublished ? 'Published' : 'Not Published'}
             </Link>
         </Typography>
     );
