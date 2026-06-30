@@ -1,13 +1,28 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import { ResourceType } from '@coscrad/api-interfaces';
 import { useParams } from 'react-router-dom';
+import { CommandExecutor } from '../../commands/command-executor';
 import { NotesAboutTerm } from './notes-about-term';
-import { TermDetailPage } from './term-detail.page';
+import { TermDetail } from './term-detail';
+import { TranslateTermForm } from './translate-term-form';
 
 export const TermDetailContainer = (): JSX.Element => {
     const { id } = useParams();
 
+    const { isAuthenticated } = useAuth0();
     return (
         <>
-            <TermDetailPage id={id} />
+            <TermDetail id={id} />
+            {isAuthenticated ? (
+                <CommandExecutor
+                    form={TranslateTermForm}
+                    context={{
+                        resourceId: id,
+                        resourceType: ResourceType.term,
+                        buttonLabel: 'TRANSLATE TERM',
+                    }}
+                />
+            ) : null}
             <NotesAboutTerm termId={id} />
         </>
     );
