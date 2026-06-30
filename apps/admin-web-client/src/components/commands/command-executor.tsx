@@ -60,12 +60,3 @@ export const CommandExecutor = ({ context, form: ProvidedForm }: FormProps): JSX
         </Box>
     );
 };
-
-// <CreateNoteAboutResourceForm
-//     generatedId={generatedId}
-//     resourceId={resourceId}
-//     resourceType={resourceType}
-//     onClose={() => {
-//         setIsActiveForm(false);
-//     }}
-// />
