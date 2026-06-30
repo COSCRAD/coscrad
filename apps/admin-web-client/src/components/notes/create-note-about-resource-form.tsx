@@ -2,22 +2,23 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useExecuteCommandMutation } from '../command-status/store';
-import { LanguageSelect } from '../resources/language-select';
+import { LanguageSelect } from '../shared/language-select';
 
-type CreateNoteAboutResourceFormProps = {
+interface CreateNoteAboutResourceFormProps {
+    context: {
+        resourceType: string;
+        resourceId: string;
+    };
     generatedId: string;
-    resourceId: string;
-    resourceType: string;
     onClose: () => void;
-};
+}
 
 export const CreateNoteAboutResourceForm = ({
     generatedId,
-    resourceId,
-    resourceType,
+    context,
     onClose,
 }: CreateNoteAboutResourceFormProps): JSX.Element => {
-    console.log(`${CreateNoteAboutResourceForm.name} rendered.`);
+    const { resourceId, resourceType } = context;
 
     const [text, setText] = useState('');
 
