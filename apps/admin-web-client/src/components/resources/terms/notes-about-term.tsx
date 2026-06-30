@@ -1,7 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
-import { Divider, Stack, Typography } from '@mui/material';
-import { CreateNoteAboutResourceContainer } from '../../notes/create-note-about-resource-container';
+import { Stack, Typography } from '@mui/material';
+import { CommandExecutor } from '../../commands/command-executor';
+import { CreateNoteAboutResourceForm } from '../../notes/create-note-about-resource-form';
 import { useFetchNotesAboutTermQuery } from '../../notes/store/notes.api';
 
 type NotesAboutTermProps = {
@@ -38,24 +39,28 @@ export const NotesAboutTerm = ({ termId }: NotesAboutTermProps): JSX.Element => 
             <Stack sx={{ marginTop: '20px' }}>
                 {isNonEmptyObject(data.notes) ? (
                     <>
-                        <Typography variant="h6">Notes:</Typography>
+                        <Typography variant="h5">Notes about term:</Typography>
                         {Object.values(data.notes).map((note) => {
                             const { id, note: text } = note;
 
                             return (
-                                <Typography key={`noteid-${id}`} variant="body1">
+                                <Typography
+                                    sx={{ marginLeft: '10px' }}
+                                    key={`noteid-${id}`}
+                                    variant="body1"
+                                >
                                     {text.original.text}
                                 </Typography>
                             );
                         })}
                     </>
-                ) : (
-                    <Typography variant="body1">There are no notes for this term.</Typography>
-                )}
+                ) : null}
             </Stack>
-            <Divider sx={{ height: '20px', marginBottom: '10px' }} />
             {isAuthenticated ? (
-                <CreateNoteAboutResourceContainer resourceId={termId} resourceType="term" />
+                <CommandExecutor
+                    form={CreateNoteAboutResourceForm}
+                    context={{ resourceId: termId, resourceType: 'term', buttonLabel: 'ADD NOTE' }}
+                />
             ) : null}
         </>
     );

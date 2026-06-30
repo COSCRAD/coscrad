@@ -1,10 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Divider } from '@mui/material';
+import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { userLoginSucceeded } from '../components/auth/store/auth-slice';
+import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
-import { NavMenuPresenter } from '../components/nav-menu/nav-menu-presenter';
 import { TermDetailContainer } from '../components/resources/terms/term-detail-container';
 import { TermIndex } from '../components/resources/terms/term-index.page';
 import { useAppDispatch } from './hooks';
@@ -28,21 +28,16 @@ export function App() {
     });
 
     return (
-        <Box sx={{ marginTop: '50px', marginLeft: '40px' }}>
-            <nav>
-                <Link to="/">Home</Link>
-                &nbsp;|&nbsp;
-                <Link to="/terms">Terms</Link>
-                <NavMenuPresenter />
-            </nav>
+        <Box>
+            <Header />
 
-            <Divider sx={{ height: '20px', marginBottom: '10px' }} />
-
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/terms" element={<TermIndex />} />
-                <Route path="/terms/:id" element={<TermDetailContainer />} />
-            </Routes>
+            <Box sx={{ paddingTop: '120px', marginLeft: '60px', width: '70%' }}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/terms" element={<TermIndex />} />
+                    <Route path="/terms/:id" element={<TermDetailContainer />} />
+                </Routes>
+            </Box>
         </Box>
     );
 }

@@ -1,26 +1,21 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useExecuteCommandMutation } from '../command-status/store';
-import { LanguageSelect } from '../shared/language-select';
+import { useExecuteCommandMutation } from '../../command-status/store';
+import { LanguageSelect } from '../../shared/language-select';
 
-interface CreateNoteAboutResourceFormProps {
+interface TranslateTermFormProps {
     context: {
-        resourceType: string;
+        resourceType: ResourceType;
         resourceId: string;
     };
-    generatedId: string;
     onClose: () => void;
 }
 
-export const CreateNoteAboutResourceForm = ({
-    generatedId,
-    context,
-    onClose,
-}: CreateNoteAboutResourceFormProps): JSX.Element => {
-    const { resourceId, resourceType } = context;
+export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps): JSX.Element => {
+    const { resourceId: termId, resourceType } = context;
 
-    const [text, setText] = useState('');
+    const [translation, setTranslation] = useState('');
 
     const defaultLanguageCode = LanguageCode.English;
 
@@ -50,27 +45,23 @@ export const CreateNoteAboutResourceForm = ({
         return <div>Command Error: {commandError.message}</div>;
     }
 
-    const isDisabled = text.length === 0 || !Object.values(LanguageCode).includes(languageCode);
+    const isDisabled =
+        translation.length === 0 || !Object.values(LanguageCode).includes(languageCode);
 
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent browser refresh
 
-        console.log('Form sent to server:', text, languageCode, `${resourceType}/${resourceId}`);
+        console.log('Form sent to server:', translation, languageCode, `${resourceType}/${termId}`);
 
         executeCommand({
-            type: 'CREATE_NOTE_ABOUT_RESOURCE',
+            type: 'TRANSLATE_TERM',
             payload: {
                 aggregateCompositeIdentifier: {
-                    type: AggregateType.note,
-                    id: generatedId,
+                    type: AggregateType.term,
+                    id: termId,
                 },
-                resourceCompositeIdentifier: {
-                    type: resourceType,
-                    id: resourceId,
-                },
-                text: text,
+                translation: translation,
                 languageCode: languageCode,
-                resourceContext: { type: 'general' },
             },
         });
 
@@ -79,13 +70,13 @@ export const CreateNoteAboutResourceForm = ({
 
     return (
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '450px' }}>
-            <div data-testid="create-note-for-resource-form" />
+            <div data-testid="translate-term-form" />
             <Stack>
                 <TextField
                     sx={{ width: '80%' }}
-                    data-testid={`text:note`}
+                    data-testid={`translation`}
                     onChange={(e) => {
-                        setText(e.target.value);
+                        setTranslation(e.target.value);
                     }}
                 ></TextField>
                 <LanguageSelect
@@ -94,12 +85,12 @@ export const CreateNoteAboutResourceForm = ({
                     }}
                 />
                 <Button
-                    data-testid={`submit-note`}
+                    data-testid={`submit-translation`}
                     variant="contained"
                     disabled={isDisabled}
                     type="submit"
                 >
-                    ADD NOTE
+                    TRANSLATE TERM
                 </Button>
             </Stack>
         </Box>

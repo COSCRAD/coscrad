@@ -1,19 +1,27 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { useLazyFetchIdQuery } from '../id-generation/store';
-import { CreateNoteAboutResourceForm } from './create-note-about-resource-form';
+
+type Form = ({
+    onClose,
+    context,
+    generatedId,
+}: {
+    onClose: () => void;
+    context;
+    generatedId?: string;
+}) => JSX.Element;
 
 interface FormProps {
-    resourceId: string;
-    resourceType: string;
+    context: {
+        resourceType: string;
+        resourceId: string;
+        buttonLabel: string;
+    };
+    form: Form;
 }
 
-export const CreateNoteAboutResourceContainer = ({
-    resourceId,
-    resourceType,
-}: FormProps): JSX.Element => {
-    console.log(`${CreateNoteAboutResourceContainer.name} rendered.`);
-
+export const CommandExecutor = ({ context, form: ProvidedForm }: FormProps): JSX.Element => {
     const [isActiveForm, setIsActiveForm] = useState(false);
 
     const [trigger, { data: generatedId, error: idError, isFetching }] = useLazyFetchIdQuery();
@@ -26,14 +34,14 @@ export const CreateNoteAboutResourceContainer = ({
         console.log('loading id');
     }
 
+    const { buttonLabel } = context;
+
     return (
-        <>
-            <div></div>
+        <Box>
             {isActiveForm ? (
-                <CreateNoteAboutResourceForm
+                <ProvidedForm
                     generatedId={generatedId}
-                    resourceId={resourceId}
-                    resourceType={resourceType}
+                    context={context}
                     onClose={() => {
                         setIsActiveForm(false);
                     }}
@@ -46,9 +54,18 @@ export const CreateNoteAboutResourceContainer = ({
                         trigger();
                     }}
                 >
-                    Add Note
+                    {buttonLabel}
                 </Button>
             )}
-        </>
+        </Box>
     );
 };
+
+// <CreateNoteAboutResourceForm
+//     generatedId={generatedId}
+//     resourceId={resourceId}
+//     resourceType={resourceType}
+//     onClose={() => {
+//         setIsActiveForm(false);
+//     }}
+// />
