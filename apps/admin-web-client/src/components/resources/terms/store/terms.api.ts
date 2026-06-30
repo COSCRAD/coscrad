@@ -1,12 +1,13 @@
 import { IIndexQueryResult, ITermViewModel } from '@coscrad/api-interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { getConfig } from '../../../../config';
 
 export const termApi = createApi({
     reducerPath: 'terms',
     tagTypes: ['term'],
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:4600/api/resources/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: `${getConfig().apiUrl}/resources/` }),
     endpoints: (builder) => ({
-        fetchTermById: builder.query<ITermViewModel, string>({
+        fetchTermById: builder.query<Omit<ITermViewModel, 'notes'>, string>({
             query: (id: string) => `terms/${id}`,
             providesTags: (result, error, id) => {
                 const tag = { type: 'term', id } as const;
