@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authReducer } from '../components/auth/store/auth-slice';
 import { AUTH } from '../components/auth/store/constants';
-import { commandsApi } from '../components/command-status/store';
+import { commandsApi } from '../components/commands/store';
 import { acquireIdApi } from '../components/id-generation/store/aquire-id.api';
 import { noteApi } from '../components/notes/store/notes.api';
 import { termApi } from '../components/resources/terms/store/terms.api';
