@@ -10,29 +10,19 @@ type TermDetailPageProps = {
 export const TermDetail = ({ id }: TermDetailPageProps): JSX.Element => {
     console.log(`${TermDetail.name} rendered.`);
 
-    const { data, isLoading, error } = useFetchTermByIdQuery(id);
+    const { name, isLoading, isError } = useFetchTermByIdQuery(id, {
+        selectFromResult: (result) => ({
+            name: result.data?.name,
+            isLoading: result.isLoading,
+            isError: result.isError,
+        }),
+    });
 
-    if (error) {
-        if ('status' in error) {
-            // you can access all properties of `FetchBaseQueryError` here
-            const errMsg = 'error' in error ? error.error : JSON.stringify(error.data);
-
-            return (
-                <div>
-                    <div>An error has occurred:</div>
-                    <div>{errMsg}</div>
-                </div>
-            );
-        }
-        // you can access all properties of `SerializedError` here
-        return <div>{error.message}</div>;
-    }
-
-    if (isLoading || !data) {
+    if (isLoading || !name) {
         return <div>Loading...</div>;
     }
 
-    const { name } = data;
+    if (isError) return <div>Error retrieving name.</div>;
 
     const originalTermItem = findOriginalMultilingualTextItem(name);
 
@@ -49,7 +39,10 @@ export const TermDetail = ({ id }: TermDetailPageProps): JSX.Element => {
                         {name.items
                             .filter((item) => item.role !== MultilingualTextItemRole.original)
                             .map((item) => (
-                                <Typography variant="body1">
+                                <Typography
+                                    key={`${item.role}-${item.languageCode}`}
+                                    variant="body1"
+                                >
                                     {item.text} ({item.languageCode}, {item.role})
                                 </Typography>
                             ))}
