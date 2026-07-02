@@ -10,6 +10,8 @@ type NotesAboutTermProps = {
 };
 
 export const NotesAboutTerm = ({ termId }: NotesAboutTermProps): JSX.Element => {
+    console.log(`${NotesAboutTerm.name} rendered.`);
+
     const { isAuthenticated } = useAuth0();
 
     const { data, isLoading, error } = useFetchNotesAboutTermQuery(termId);
