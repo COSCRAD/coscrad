@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../config';
 import { RootState } from '../../../store';
-import { noteApi } from '../../notes/store';
-import { termApi } from '../../resources/terms/store';
 
 interface CommandResponse {
     type: string;
@@ -38,15 +36,6 @@ export const commandsApi = createApi({
                 responseHandler: 'text',
                 body: commandFsa,
             }),
-            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-                try {
-                    await queryFulfilled;
-                    // Explicitly invalidate tags
-                    dispatch(noteApi.util.invalidateTags(['note']));
-                    dispatch(termApi.util.invalidateTags(['term']));
-                    // eslint-disable-next-line no-empty
-                } catch {}
-            },
         }),
     }),
 });
