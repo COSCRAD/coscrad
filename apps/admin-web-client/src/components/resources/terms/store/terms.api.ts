@@ -7,7 +7,7 @@ export const termApi = createApi({
     tagTypes: ['term'],
     baseQuery: fetchBaseQuery({ baseUrl: `${getConfig().apiUrl}/resources/` }),
     endpoints: (builder) => ({
-        fetchTermById: builder.query<Omit<ITermViewModel, 'notes'>, string>({
+        fetchTermById: builder.query<ITermViewModel, string>({
             query: (id: string) => `terms/${id}`,
             providesTags: (result, error, id) => {
                 const tag = { type: 'term', id } as const;
