@@ -1,8 +1,8 @@
 import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useExecuteCommandMutation } from '../../commands/store';
 import { LanguageSelect } from '../../shared/language-select';
+import { useTranslateTermMutation } from './store';
 
 interface TranslateTermFormProps {
     context: {
@@ -22,7 +22,7 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
     const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
 
     const [executeCommand, { isLoading: isRequestInProgress, error: commandError }] =
-        useExecuteCommandMutation();
+        useTranslateTermMutation();
 
     if (isRequestInProgress) {
         return <div>Processing Command Request...</div>;

@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { ResourceType } from '@coscrad/api-interfaces';
 import { useParams } from 'react-router-dom';
-import { CommandExecutor } from '../../commands/command-executor';
+import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { NotesAboutTerm } from './notes-about-term';
 import { TermDetail } from './term-detail';
 import { TranslateTermForm } from './translate-term-form';
@@ -14,7 +14,7 @@ export const TermDetailContainer = (): JSX.Element => {
         <>
             <TermDetail id={id} />
             {isAuthenticated ? (
-                <CommandExecutor
+                <PresentFormWithOptionalGeneratedId
                     form={TranslateTermForm}
                     context={{
                         resourceId: id,
