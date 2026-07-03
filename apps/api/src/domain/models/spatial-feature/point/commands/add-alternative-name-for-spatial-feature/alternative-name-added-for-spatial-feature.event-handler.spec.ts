@@ -2,7 +2,6 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { buildTestInstance } from 'apps/api/src/test-data/utilities';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
@@ -14,6 +13,7 @@ import { ArangoDatabaseProvider } from '../../../../../../persistence/database/d
 import { PersistenceModule } from '../../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../../test-data/events';
+import { buildTestInstance } from '../../../../../../test-data/utilities';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeatureQueryRepository } from '../../../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../../../queries/spatial-feature.view-model.event-sourced';

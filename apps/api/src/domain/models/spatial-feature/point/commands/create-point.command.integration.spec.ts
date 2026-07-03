@@ -56,6 +56,9 @@ describe(commandType, () => {
 
     beforeAll(async () => {
         ({ testRepositoryProvider, commandHandlerService, idManager, app } =
+            /***
+             * TODO remove this!
+             */
             await setUpIntegrationTest({
                 ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
             }));
