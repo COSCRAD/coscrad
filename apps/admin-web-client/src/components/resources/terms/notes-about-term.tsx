@@ -1,9 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
 import { Stack, Typography } from '@mui/material';
-import { CommandExecutor } from '../../commands/command-executor';
-import { CreateNoteAboutResourceForm } from '../../notes/create-note-about-resource-form';
 import { useFetchNotesAboutTermQuery } from '../../notes/store/notes.api';
+import { CreateNoteAboutResourceWithGeneralContextForm } from '../../shared/create-note-about-resource-with-general-context-form';
+import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 
 type NotesAboutTermProps = {
     termId: string;
@@ -59,8 +59,8 @@ export const NotesAboutTerm = ({ termId }: NotesAboutTermProps): JSX.Element => 
                 ) : null}
             </Stack>
             {isAuthenticated ? (
-                <CommandExecutor
-                    form={CreateNoteAboutResourceForm}
+                <PresentFormWithOptionalGeneratedId
+                    form={CreateNoteAboutResourceWithGeneralContextForm}
                     context={{ resourceId: termId, resourceType: 'term', buttonLabel: 'ADD NOTE' }}
                 />
             ) : null}
