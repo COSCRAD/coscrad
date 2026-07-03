@@ -24,7 +24,6 @@ import mapArangoEdgeDocumentToEdgeConnectionDTO from '../database/utilities/mapA
 import mapDatabaseDTOToEntityDTO from '../database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEdgeConnectionDTOToArangoEdgeDocument from '../database/utilities/mapEdgeConnectionDTOToArangoEdgeDocument';
 import mapEntityDTOToDatabaseDTO from '../database/utilities/mapEntityDTOToDatabaseDocument';
-import ArangoCategoryRepository from './ArangoCategoryRepository';
 import {
     ArangoCommandRepositoryForAggregateRoot,
     IEventRepository,
@@ -32,6 +31,7 @@ import {
 import { ArangoCoscradUserRepository } from './arango-coscrad-user-repository';
 import { ArangoEventRepository } from './arango-event-repository';
 import { ArangoRepositoryForAggregate } from './arango-repository-for-aggregate';
+import ArangoCategoryRepository from './ArangoCategoryRepository';
 
 @Injectable()
 export class ArangoRepositoryProvider implements IRepositoryProvider {
@@ -128,6 +128,7 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
             AggregateType.playlist,
             AggregateType.audioItem,
             AggregateType.video,
+            AggregateType.spatialFeature,
             // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-281] add photograph here
         ];
 

@@ -9,7 +9,7 @@ import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { Term } from '../../entities/term.entity';
 import { ElicitTermFromPrompt } from './elicit-term-from-prompt.command';
-import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
+import { TermElicitedFromPrompt } from './term-elicited.from.prompt.event';
 
 @CommandHandler(ElicitTermFromPrompt)
 export class ElicitTermFromPromptCommandHandler extends BaseUpdateCommandHandler<Term> {

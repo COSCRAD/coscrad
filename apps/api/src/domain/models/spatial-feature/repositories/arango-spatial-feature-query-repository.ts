@@ -45,16 +45,26 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async create(view: EventSourcedSpatialFeatureViewModel): Promise<void> {
-        const document = mapEntityDTOToDatabaseDocument(view);
+        const document = mapEntityDTOToDatabaseDocument({
+            ...view,
+            properties: {
+                ...view.properties,
+                alternativeNamesByLabel: Object.entries(view.properties.alternativeNamesByLabel),
+            },
+            name: view.properties.name,
+        });
 
+        // @ts-expect-error fix this error related to serializing alternative names map to a record
         await this.database.create(document).catch((error) => {
             throw new InternalError(error);
         });
     }
 
     async createMany(views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
+        // @ts-expect-error TODO fix this as abov e
         const documents = views.map(mapEntityDTOToDatabaseDocument);
 
+        // @ts-expect-error TODO fix this
         await this.database.createMany(documents);
     }
 

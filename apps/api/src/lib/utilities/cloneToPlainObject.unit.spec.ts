@@ -44,6 +44,18 @@ const dummyClassInstance = new DummyClass(
     dummyClassDto.myHelper.helperProp
 );
 
+class MapHaver {
+    valuesOfStrings: Map<string, number> = new Map().set('a', 1);
+}
+
+const dummyClassInstanceWithMapValuedProp = new MapHaver();
+
+const dummyClassDtoWithRecordInPlaceOfMap = {
+    valuesOfStrings: {
+        a: 1,
+    },
+};
+
 const testCases: TestCase[] = [
     {
         description: 'when the input is an empty object {}',
@@ -84,6 +96,11 @@ const testCases: TestCase[] = [
         description: 'a class instance with a nested property that is an instance',
         input: dummyClassInstance,
         expectedOutput: dummyClassDto,
+    },
+    {
+        description: 'when a class instance has a map',
+        input: dummyClassInstanceWithMapValuedProp,
+        expectedOutput: dummyClassDtoWithRecordInPlaceOfMap,
     },
 ];
 

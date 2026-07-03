@@ -46,6 +46,7 @@ type GeometryViewModel = {
         },
         properties: {
             name: buildMultilingualTextWithSingleItem('the point'),
+            alternativeNamesByLabel: {},
             description: buildMultilingualTextWithSingleItem('is pointing'),
         },
     },
@@ -160,13 +161,14 @@ export class EventSourcedSpatialFeatureViewModel {
                 type: GeometricFeatureType.point,
                 coordinates: [location.coordinates.longitude, location.coordinates.lattitude],
             },
-            properties: new SpatialFeatureProperties({
+            properties: {
                 name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+                alternativeNamesByLabel: {},
                 description: buildMultilingualTextWithSingleItem(
                     description.text,
                     description.languageCode
                 ),
-            }),
+            },
             isPublished: false,
             contributions: [],
             connections: {},
