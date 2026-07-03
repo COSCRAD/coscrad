@@ -172,6 +172,48 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         await cursor.all();
     }
 
+    async addAlternativeName(
+        id: string,
+        label: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        for doc in @@collectionName
+        filter doc._key == @id
+        let newMlText = {
+            items: [{
+                text: @text,
+                languageCode: @languageCode,
+                role: @role
+            }]
+        }
+        let delta = {
+            [@label]: newMlText
+        }
+        update doc with {
+            properties: {
+                alternativeNamesByLabel: delta
+            }
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'spatialFeature__VIEWS',
+            id,
+            label,
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.original,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
+        });
+        await cursor.all();
+    }
+
     async count(): Promise<number> {
         return this.database.getCount();
     }

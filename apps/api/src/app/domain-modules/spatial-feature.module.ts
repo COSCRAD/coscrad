@@ -9,6 +9,7 @@ import {
 import { AddAlternativeNameForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command';
 import { AddAlternativeNameForSpatialFeatureCommandHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command-handler';
 import { AlternativeNameAddedForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
+import { AlternativeNameAddedForSpatialFeatureEventHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event-handler';
 import { PointCreatedEventHandler } from '../../domain/models/spatial-feature/point/commands/point-created.event-handler';
 import { SpatialFeatureNameTranslated } from '../../domain/models/spatial-feature/point/commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { SpatialFeatureNameTranslatedEventHandler } from '../../domain/models/spatial-feature/point/commands/translate-spatial-feature-name/spatial-feature-name-translated.event-handler';
@@ -50,6 +51,7 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
         CreatePointCommandHandler,
         TranslateSpatialFeatureNameCommandHandler,
         AddAlternativeNameForSpatialFeatureCommandHandler,
+
         // Data Classes
         ...[
             Point,
@@ -68,7 +70,7 @@ import { SpatialFeatureController } from '../controllers/resources/spatial-featu
         // Event Handlers
         PointCreatedEventHandler,
         SpatialFeatureNameTranslatedEventHandler,
-        // AlternativeNameAddedForSpatialFeatureEventHandler
+        AlternativeNameAddedForSpatialFeatureEventHandler,
     ],
 })
 export class SpatialFeatureModule {}

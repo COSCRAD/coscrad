@@ -40,4 +40,11 @@ export interface ISpatialFeatureQueryRepository
         translation: string,
         languageCode: LanguageCode
     ): Promise<void>;
+
+    addAlternativeName(
+        id: string,
+        label: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }
