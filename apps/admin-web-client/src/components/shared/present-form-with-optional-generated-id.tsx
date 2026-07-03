@@ -21,7 +21,10 @@ interface FormProps {
     form: Form;
 }
 
-export const CommandExecutor = ({ context, form: ProvidedForm }: FormProps): JSX.Element => {
+export const PresentFormWithOptionalGeneratedId = ({
+    context,
+    form: ProvidedForm,
+}: FormProps): JSX.Element => {
     const [isActiveForm, setIsActiveForm] = useState(false);
 
     const [trigger, { data: generatedId, error: idError, isFetching }] = useLazyFetchIdQuery();
