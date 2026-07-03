@@ -2,6 +2,7 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import { buildTestInstance } from 'apps/api/src/test-data/utilities';
 import buildConfigFilePath from '../../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../../../app/config/__tests__/utilities/buildMockConfigService';
@@ -57,6 +58,7 @@ const [pointCreatedEvent, alternativeNameAddedEvent] = pointCreated
         {
             type: 'ALTERNATIVE_NAME_ADDED_FOR_SPATIAL_FEATURE',
             payload: {
+                label,
                 textItem: {
                     text: spatialFeatureAlternativeName,
                     languageCode: spatialFeatureAlternativeLanguageCode,
@@ -151,6 +153,36 @@ describe(`AlternativeNameAddedForSpatialFeatureEventHandler`, () => {
     });
 
     describe(`when adding a second alternative name`, () => {
-        it.todo(`should add the name`);
+        it(`should add the name`, async () => {
+            const secondLabel = 'label 2';
+            const secondAltName = 'alt name 2';
+            const secondAltNameLanguageCode = LanguageCode.Chinook;
+
+            await alternativeNameAddedEventHandler.handle(
+                alternativeNameAddedEvent as AlternativeNameAddedForSpatialFeature
+            );
+
+            await alternativeNameAddedEventHandler.handle(
+                buildTestInstance(AlternativeNameAddedForSpatialFeature, {
+                    payload: {
+                        aggregateCompositeIdentifier: spatialFeatureCompositeId,
+                        textItem: {
+                            text: secondAltName,
+                            languageCode: secondAltNameLanguageCode,
+                        },
+                        label: secondLabel,
+                    },
+                })
+            );
+
+            const updatedView = (await testQueryRepository.fetchById(
+                spatialFeatureId
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            /**
+             * We test this in more detail in the query repository test.
+             */
+            expect(updatedView.properties.alternativeNamesByLabel.size).toBe(2);
+        });
     });
 });

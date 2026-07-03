@@ -10,6 +10,7 @@ import {
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -45,12 +46,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async create(view: EventSourcedSpatialFeatureViewModel): Promise<void> {
+        const viewDto = cloneToPlainObject(view);
+
         const document = mapEntityDTOToDatabaseDocument({
-            ...view,
-            properties: {
-                ...view.properties,
-                alternativeNamesByLabel: Object.entries(view.properties.alternativeNamesByLabel),
-            },
+            ...viewDto,
             name: view.properties.name,
         });
 
@@ -196,6 +195,7 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
                 alternativeNamesByLabel: delta
             }
         } in @@collectionName
+         return NEW
         `;
 
         const bindVars = {
@@ -211,7 +211,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
             query,
             bindVars,
         });
-        await cursor.all();
+
+        const result = await cursor.all();
+
+        console.log({ result });
     }
 
     async count(): Promise<number> {
