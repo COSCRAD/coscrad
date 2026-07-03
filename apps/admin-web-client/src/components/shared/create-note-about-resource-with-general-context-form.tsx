@@ -1,8 +1,8 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { LanguageSelect } from '../shared/language-select';
-import { useCreateNoteAboutResourceMutation } from './store';
+import { useCreateNoteAboutResourceMutation } from '../notes/store';
+import { LanguageSelect } from './language-select';
 
 interface CreateNoteAboutResourceFormProps {
     context: {
@@ -13,7 +13,7 @@ interface CreateNoteAboutResourceFormProps {
     onClose: () => void;
 }
 
-export const CreateNoteAboutResourceForm = ({
+export const CreateNoteAboutResourceWithGeneralContextForm = ({
     generatedId,
     context,
     onClose,
