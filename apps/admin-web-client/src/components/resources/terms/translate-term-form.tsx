@@ -2,18 +2,19 @@ import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfac
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
 import { LanguageSelect } from '../../shared/language-select';
-import { useTranslateTermMutation } from './store';
+import { useExecuteTermCommandMutation } from './store';
 
 interface TranslateTermFormProps {
     context: {
         resourceType: ResourceType;
         resourceId: string;
+        languageCodesInUse?: LanguageCode[];
     };
     onClose: () => void;
 }
 
 export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps): JSX.Element => {
-    const { resourceId: termId, resourceType } = context;
+    const { resourceId: termId, resourceType, languageCodesInUse } = context;
 
     const [translation, setTranslation] = useState('');
 
@@ -21,8 +22,8 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
 
-    const [executeCommand, { isLoading: isRequestInProgress, error: commandError }] =
-        useTranslateTermMutation();
+    const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
+        useExecuteTermCommandMutation();
 
     if (isRequestInProgress) {
         return <div>Processing Command Request...</div>;
@@ -53,7 +54,7 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
 
         console.log('Form sent to server:', translation, languageCode, `${resourceType}/${termId}`);
 
-        executeCommand({
+        executeTermCommand({
             type: 'TRANSLATE_TERM',
             payload: {
                 aggregateCompositeIdentifier: {
@@ -80,6 +81,7 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
                     }}
                 ></TextField>
                 <LanguageSelect
+                    languageCodesInUse={languageCodesInUse}
                     onSelectLanguage={(newLanguageCode: LanguageCode) => {
                         setLanguageCode(newLanguageCode);
                     }}
