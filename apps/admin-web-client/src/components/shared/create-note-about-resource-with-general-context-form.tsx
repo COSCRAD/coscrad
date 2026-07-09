@@ -1,7 +1,7 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import { useCreateNoteAboutResourceMutation } from '../notes/store';
+import { useExecuteTermCommandMutation } from '../resources/terms/store';
 import { LanguageSelect } from './language-select';
 
 interface CreateNoteAboutResourceFormProps {
@@ -26,8 +26,8 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
 
-    const [createNoteAboutResource, { isLoading: isRequestInProgress, error: commandError }] =
-        useCreateNoteAboutResourceMutation();
+    const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
+        useExecuteTermCommandMutation();
 
     if (isRequestInProgress) {
         return <div>Processing Command Request...</div>;
@@ -57,7 +57,7 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
 
         console.log('Form sent to server:', text, languageCode, `${resourceType}/${resourceId}`);
 
-        createNoteAboutResource({
+        executeTermCommand({
             type: 'CREATE_NOTE_ABOUT_RESOURCE',
             payload: {
                 aggregateCompositeIdentifier: {
