@@ -1,3 +1,4 @@
+import { LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { useLazyFetchIdQuery } from '../id-generation/store';
@@ -16,6 +17,8 @@ interface FormProps {
     context: {
         resourceType: string;
         resourceId: string;
+        // Hacky workaround
+        languageCodesInUse?: LanguageCode[];
         buttonLabel: string;
     };
     form: Form;
