@@ -1,14 +1,30 @@
-import { MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { useAuth0 } from '@auth0/auth0-react';
+import {
+    IMultilingualText,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { Box, Stack, Typography } from '@mui/material';
+import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { useFetchTermByIdQuery } from './store';
 import { findOriginalMultilingualTextItem } from './term-index.page';
+import { TranslateTermForm } from './translate-term-form';
 
-type TermDetailPageProps = {
-    id: string;
+const getTranslationsForLanguageSelection = (name: IMultilingualText): LanguageCode[] => {
+    const languageCodesInUse = name.items.map((item) => item.languageCode);
+
+    return languageCodesInUse;
 };
 
-export const TermDetail = ({ id }: TermDetailPageProps): JSX.Element => {
+interface TermDetailProps {
+    id: string;
+}
+
+export const TermDetail = ({ id }: TermDetailProps): JSX.Element => {
     console.log(`${TermDetail.name} rendered.`);
+
+    const { isAuthenticated } = useAuth0();
 
     const { name, isLoading, isError } = useFetchTermByIdQuery(id, {
         selectFromResult: (result) => ({
@@ -25,6 +41,8 @@ export const TermDetail = ({ id }: TermDetailPageProps): JSX.Element => {
     if (isError) return <div>Error retrieving name.</div>;
 
     const originalTermItem = findOriginalMultilingualTextItem(name);
+
+    const languageCodesInUse = getTranslationsForLanguageSelection(name);
 
     return (
         <>
@@ -48,6 +66,17 @@ export const TermDetail = ({ id }: TermDetailPageProps): JSX.Element => {
                             ))}
                     </Stack>
                 </Box>
+            ) : null}
+            {isAuthenticated ? (
+                <PresentFormWithOptionalGeneratedId
+                    form={TranslateTermForm}
+                    context={{
+                        resourceId: id,
+                        resourceType: ResourceType.term,
+                        languageCodesInUse: languageCodesInUse,
+                        buttonLabel: 'TRANSLATE TERM',
+                    }}
+                />
             ) : null}
         </>
     );
