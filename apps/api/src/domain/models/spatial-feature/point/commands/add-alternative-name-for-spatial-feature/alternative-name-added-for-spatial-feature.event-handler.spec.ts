@@ -18,7 +18,7 @@ import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeatureQueryRepository } from '../../../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../../../queries/spatial-feature.view-model.event-sourced';
 import { ArangoSpatialFeatureQueryRepository } from '../../../repositories/arango-spatial-feature-query-repository';
-import { PointCreated } from '../create-point/point-created.event';
+import { PointCreated } from '../point-created.event';
 import { AlternativeNameAddedForSpatialFeature } from './alternative-name-added-for-spatial-feature.event';
 import { AlternativeNameAddedForSpatialFeatureEventHandler } from './alternative-name-added-for-spatial-feature.event-handler';
 

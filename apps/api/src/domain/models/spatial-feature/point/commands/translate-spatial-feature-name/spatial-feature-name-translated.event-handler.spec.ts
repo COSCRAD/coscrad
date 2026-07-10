@@ -23,7 +23,7 @@ import { ISpatialFeatureQueryRepository } from '../../../queries/spatial-feature
 import { EventSourcedSpatialFeatureViewModel } from '../../../queries/spatial-feature.view-model.event-sourced';
 import { ArangoSpatialFeatureQueryRepository } from '../../../repositories/arango-spatial-feature-query-repository';
 import { PointCoordinates } from '../../entities/point-coordinates.entity';
-import { PointCreated } from '../create-point/point-created.event';
+import { PointCreated } from '../point-created.event';
 import { SpatialFeatureNameTranslated } from './spatial-feature-name-translated.event';
 import { SpatialFeatureNameTranslatedEventHandler } from './spatial-feature-name-translated.event-handler';
 

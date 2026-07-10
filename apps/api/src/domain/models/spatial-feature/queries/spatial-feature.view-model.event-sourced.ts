@@ -20,7 +20,7 @@ import { Aggregate } from '../../aggregate.entity';
 import { ContributionSummary } from '../../user-management';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
-import { PointCreated } from '../point/commands/create-point';
+import { PointCreated } from '../point/commands';
 import { SpatialFeatureProperties } from '../point/entities/spatial-feature-properties.entity';
 
 type PointTuple = [number, number];

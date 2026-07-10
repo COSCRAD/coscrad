@@ -1,16 +1,16 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
 import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
-import { AddAlternativeNameForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command';
-import { AddAlternativeNameForSpatialFeatureCommandHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command-handler';
-import { AlternativeNameAddedForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
-import { AlternativeNameAddedForSpatialFeatureEventHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event-handler';
 import {
     CreatePoint,
     CreatePointCommandHandler,
     PointCreated,
-} from '../../domain/models/spatial-feature/point/commands/create-point';
-import { PointCreatedEventHandler } from '../../domain/models/spatial-feature/point/commands/create-point/point-created.event-handler';
+} from '../../domain/models/spatial-feature/point/commands';
+import { AddAlternativeNameForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command';
+import { AddAlternativeNameForSpatialFeatureCommandHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/add-alternative-name-for-spatial-feature.command-handler';
+import { AlternativeNameAddedForSpatialFeature } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
+import { AlternativeNameAddedForSpatialFeatureEventHandler } from '../../domain/models/spatial-feature/point/commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event-handler';
+import { PointCreatedEventHandler } from '../../domain/models/spatial-feature/point/commands/point-created.event-handler';
 import { SpatialFeatureNameTranslated } from '../../domain/models/spatial-feature/point/commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { SpatialFeatureNameTranslatedEventHandler } from '../../domain/models/spatial-feature/point/commands/translate-spatial-feature-name/spatial-feature-name-translated.event-handler';
 import { TranslateSpatialFeatureName } from '../../domain/models/spatial-feature/point/commands/translate-spatial-feature-name/translate-spatial-feature-name.command';

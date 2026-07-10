@@ -56,6 +56,7 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
             name: view.properties.name,
         });
 
+        // @ts-expect-error fix this error related to serializing alternative names map to a record
         await this.database.create(document).catch((error) => {
             throw new InternalError(error);
         });

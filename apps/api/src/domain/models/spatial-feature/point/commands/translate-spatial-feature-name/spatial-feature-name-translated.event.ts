@@ -6,7 +6,7 @@ import { CoscradDataExample } from '../../../../../../test-data/utilities';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
-import { SpatialFeatureCompositeIdentifier } from '../create-point/create-point.command';
+import { SpatialFeatureCompositeIdentifier } from '../create-point.command';
 
 export class SpatialFeatureNameTranslatedPayload {
     @NestedDataType(SpatialFeatureCompositeIdentifier, {

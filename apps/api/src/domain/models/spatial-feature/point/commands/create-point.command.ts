@@ -1,11 +1,11 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { FiniteNumber, NestedDataType, NonEmptyString, UUID } from '@coscrad/data-types';
-import { CoscradDataExample } from '../../../../../../test-data/utilities';
-import { LanguageCodeEnum } from '../../../../../common/entities/multilingual-text';
-import { AggregateId } from '../../../../../types/AggregateId';
-import { AggregateTypeProperty } from '../../../../shared/common-commands';
-import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { LanguageCodeEnum } from '../../../../../domain/common/entities/multilingual-text';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { AggregateId } from '../../../../types/AggregateId';
+import { AggregateTypeProperty } from '../../../shared/common-commands';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CREATE_POINT } from './constants';
 
 export class SpatialFeatureCompositeIdentifier {

@@ -215,7 +215,7 @@ import { Song } from '../../../domain/models/song/song.entity';
 import {
     CreatePoint,
     CreatePointCommandHandler,
-} from '../../../domain/models/spatial-feature/point/commands/create-point';
+} from '../../../domain/models/spatial-feature/point/commands';
 import {
     CreateTag,
     CreateTagCommandHandler,

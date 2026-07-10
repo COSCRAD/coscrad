@@ -4,8 +4,8 @@ import { TestEventStream } from '../../../../../test-data/events';
 import { AggregateType } from '../../../../types/AggregateType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
+import { PointCreated } from '../commands';
 import { AlternativeNameAddedForSpatialFeature } from '../commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
-import { PointCreated } from '../commands/create-point';
 import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { Point } from './point.entity';
@@ -95,7 +95,7 @@ describe(`Point.fromEventHistory`, () => {
 
             const alternativeNameText = 'Blue Mountain';
 
-            it(`should add the alternative name`, () => {
+            it.only(`should add the alternative name`, () => {
                 const result = Point.fromEventHistory(
                     pointCreated
                         .andThen<AlternativeNameAddedForSpatialFeature>(

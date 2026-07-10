@@ -3,7 +3,7 @@ import { buildMultilingualTextWithSingleItem } from '../../../../../../domain/co
 import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { EventMetadataBuilder } from '../../../../../../test-data/events';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
-import { PointCreated, PointCreatedPayload } from '../../../point/commands/create-point';
+import { PointCreated, PointCreatedPayload } from '../../../point/commands';
 import { PointCoordinates } from '../../../point/entities/point-coordinates.entity';
 
 // TODO do we need this anymore?

@@ -28,7 +28,7 @@ import { CommandAssertionDependencies } from '../../../../__tests__/command-help
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUserId';
 import { Point } from '../../entities/point.entity';
-import { PointCreated } from '../create-point/point-created.event';
+import { PointCreated } from '../point-created.event';
 import { SpatialFeatureNameTranslated } from './spatial-feature-name-translated.event';
 import { TranslateSpatialFeatureName } from './translate-spatial-feature-name.command';
 
