@@ -4,6 +4,7 @@ import {
     EdgeConnectionMemberRole,
     IEdgeConnectionContext,
     LanguageCode,
+    MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
@@ -13,7 +14,8 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { SpatialFeatureModule } from '../../../../app/domain-modules/spatial-feature.module';
-import { NotFound } from '../../../../lib/types/not-found';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -26,7 +28,7 @@ import { TagViewModel } from '../../../../queries/buildViewModelForResource/view
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { EdgeConnection } from '../../context/edge-connection.entity';
@@ -109,6 +111,10 @@ describe(`ArangoSpatialFeatureRepository`, () => {
 
     const originalLanguageCode = LanguageCode.English;
 
+    const translationLanguageCode = LanguageCode.Chinook;
+
+    const translationTextForName = 'translation of name';
+
     const dummyContributor = buildTestInstance(CoscradContributor);
 
     const contributorIds = [102, 103, 104].map(buildDummyUuid);
@@ -126,16 +132,22 @@ describe(`ArangoSpatialFeatureRepository`, () => {
     );
 
     // TODO add examples of point, line and polygon
-    const spatialFeatureViews: EventSourcedSpatialFeatureViewModel[] = spatialFeatureIds.map((id) =>
-        buildTestInstance(EventSourcedSpatialFeatureViewModel, {
-            id,
-            properties: {
-                name: buildMultilingualTextWithSingleItem(
-                    buildTextForSpatialFeatureName(id),
-                    originalLanguageCode
-                ),
-            },
-        })
+    const spatialFeatureViews: EventSourcedSpatialFeatureViewModel[] = spatialFeatureIds.map(
+        (id) => {
+            const name = buildMultilingualTextWithSingleItem(
+                buildTextForSpatialFeatureName(id),
+                originalLanguageCode
+            );
+
+            return buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+                id,
+                // TODO remove the duplication between these 2 props. top-level name should be a getter \ calculated field.
+                name,
+                properties: {
+                    name,
+                },
+            });
+        }
     );
 
     describe(`fetchById`, () => {
@@ -362,6 +374,47 @@ describe(`ArangoSpatialFeatureRepository`, () => {
                 },
                 translations: {},
             });
+        });
+    });
+
+    describe(`translateSpatialFeatureName`, () => {
+        const targetSpatialFeature = spatialFeatureViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        it(`should append the expected multilingual text item`, async () => {
+            await testQueryRepository.translateSpatialFeatureName(
+                targetSpatialFeature.id,
+                translationTextForName,
+                translationLanguageCode
+            );
+
+            const updatedSpatialFeature = await testQueryRepository.fetchById(
+                targetSpatialFeature.id,
+                testAdminUser
+            );
+
+            if (isNotFound(updatedSpatialFeature)) {
+                expect(updatedSpatialFeature).not.toBe(NotFound);
+
+                throw new InternalError('test failed');
+            }
+
+            const updatedName = new MultilingualText(updatedSpatialFeature.name);
+
+            const searchResultForTranslation = updatedName.getTranslation(translationLanguageCode);
+
+            expect(searchResultForTranslation).not.toBe(NotFound);
+
+            const foundTranslation = searchResultForTranslation as MultilingualTextItem;
+
+            expect(foundTranslation.text).toBe(translationTextForName);
+
+            expect(foundTranslation.role).toBe(MultilingualTextItemRole.freeTranslation);
         });
     });
 

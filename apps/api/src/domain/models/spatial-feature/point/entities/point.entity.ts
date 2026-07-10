@@ -1,6 +1,7 @@
-import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType, LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
+import { UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
@@ -26,6 +27,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { CREATE_POINT, PointCreated } from '../commands';
+import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
 
@@ -50,7 +52,7 @@ export class Point extends Resource implements ISpatialFeature {
 
     readonly geometry: GeometricFeature;
 
-    readonly properties: SpatialFeatureProperties;
+    properties: SpatialFeatureProperties;
 
     constructor(dto: DTO<Point>) {
         super({ ...dto, type: ResourceType.spatialFeature });
@@ -113,6 +115,27 @@ export class Point extends Resource implements ISpatialFeature {
 
     protected getResourceSpecificAvailableCommands(): string[] {
         return [];
+    }
+
+    @UpdateMethod()
+    translateName(translation: string, languageCode: LanguageCode) {
+        const updatedProperties = this.properties.translateName(translation, languageCode);
+
+        if (isInternalError(updatedProperties)) {
+            return updatedProperties;
+        }
+
+        this.properties = updatedProperties;
+
+        return this;
+    }
+
+    handleSpatialFeatureNameTranslated({
+        payload: {
+            translationItem: { text, languageCode },
+        },
+    }: SpatialFeatureNameTranslated) {
+        return this.translateName(text, languageCode);
     }
 
     static fromEventHistory(

@@ -1,4 +1,4 @@
-import { PaginatedResponse } from '@coscrad/api-interfaces';
+import { LanguageCode, PaginatedResponse } from '@coscrad/api-interfaces';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
 import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
@@ -34,4 +34,10 @@ export interface ISpatialFeatureQueryRepository
     ): Promise<PaginatedResponse<EventSourcedSpatialFeatureViewModel>>;
 
     count(options?: FetchManyQueryOptions): Promise<number>;
+
+    translateSpatialFeatureName(
+        id: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void>;
 }

@@ -1,4 +1,4 @@
-import { PaginatedResponse } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole, PaginatedResponse } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
@@ -116,6 +116,50 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
             page: options?.pagination?.page || 1,
             count,
         };
+    }
+
+    async translateSpatialFeatureName(
+        id: string,
+        translation: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        let newItem = {
+                    text: @translation,
+                    languageCode: @languageCode,
+                    role: @role
+        }
+        UPDATE doc WITH {
+            properties: {
+                name: {
+                    items: APPEND(doc.properties.name.items,newItem)
+                } 
+            }
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'spatialFeature__VIEWS',
+            id,
+            translation,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(
+                    `Failed to translate spatial feature via SpatialFeatureRepository: ${reason}`
+                );
+            });
+
+        await cursor.all();
     }
 
     async count(): Promise<number> {

@@ -1,21 +1,21 @@
+import { AggregateType } from '@coscrad/api-interfaces';
 import { plainToInstance } from 'class-transformer';
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
-import { buildTestInstance } from '../../../../../test-data/utilities';
-import { AggregateType } from '../../../../types/AggregateType';
-import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
-import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
-import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import { AddPhotograhForTerm } from './add-photograph-for-term.command';
+import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { clonePlainObjectWithOverrides } from '../../../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { buildTestInstance } from '../../../../../../test-data/utilities';
+import validateCommandPayloadType from '../../../../shared/command-handlers/utilities/validateCommandPayloadType';
+import { DummyCommandFsaFactory } from '../../../../__tests__/command-helpers/dummy-command-fsa-factory';
+import { generateCommandFuzzTestCases } from '../../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
+import { TranslateSpatialFeatureName } from './translate-spatial-feature-name.command';
 
-const commandType = 'ADD_PHOTOGRAPH_FOR_TERM';
+const commandType = 'TRANSLATE_SPATIAL_FEATURE_NAME';
 
 const dummyFsa = {
     type: commandType,
-    payload: buildTestInstance(AddPhotograhForTerm, {}),
+    payload: buildTestInstance(TranslateSpatialFeatureName, {}),
 };
 
-const commandFsaFactory = new DummyCommandFsaFactory<AddPhotograhForTerm>((id) =>
+const commandFsaFactory = new DummyCommandFsaFactory<TranslateSpatialFeatureName>((id) =>
     clonePlainObjectWithOverrides(dummyFsa, {
         payload: {
             aggregateCompositeIdentifier: { id },
@@ -23,21 +23,12 @@ const commandFsaFactory = new DummyCommandFsaFactory<AddPhotograhForTerm>((id) =
     })
 );
 
-/**
- * We have moved these comprehensive payload type validation tests here to
- * a (closer to) unit test and out of the integration (almost e2e) command
- * test that uses the API and live database over the network.
- *
- * This is because the cost of driving the network doesn't justify the marginal
- * gain in confidence.
- */
 describe(`${commandType} (payload type validation)`, () => {
     describe(`when the command payload type is invalid`, () => {
-        describe(`when the aggregate type is not photograph`, () => {
+        describe(`when the aggregate type is not spatial feature`, () => {
             Object.values(AggregateType)
-                .filter((aggregateType) => aggregateType !== AggregateType.term)
+                .filter((aggregateType) => aggregateType !== AggregateType.spatialFeature)
                 .forEach((invalidAggregateType) => {
-                    // TODO add a test helper for this
                     const invalidFsa = commandFsaFactory.build(undefined, {
                         aggregateCompositeIdentifier: {
                             type: invalidAggregateType,
@@ -45,7 +36,7 @@ describe(`${commandType} (payload type validation)`, () => {
                     });
 
                     const commandInstance = plainToInstance(
-                        AddPhotograhForTerm,
+                        TranslateSpatialFeatureName,
                         invalidFsa.payload
                     );
 
@@ -55,7 +46,6 @@ describe(`${commandType} (payload type validation)`, () => {
 
                     const error = result as InternalError;
 
-                    // This pattern logs the failing message on failure
                     const messagesToCheck = [error.toString()];
 
                     const errorMessagesThatDoNotReferencePropertyName = messagesToCheck.filter(
@@ -67,11 +57,10 @@ describe(`${commandType} (payload type validation)`, () => {
         });
 
         describe(`fuzz test`, () => {
-            generateCommandFuzzTestCases(AddPhotograhForTerm).forEach(
+            generateCommandFuzzTestCases(TranslateSpatialFeatureName).forEach(
                 ({ description, propertyName, invalidValue }) => {
                     describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
                         it('should fail with the appropriate error', () => {
-                            // TODO add a test helper for this
                             const invalidFsa = commandFsaFactory.build(undefined, {
                                 aggregateCompositeIdentifier: {
                                     [propertyName]: invalidValue,
@@ -79,7 +68,7 @@ describe(`${commandType} (payload type validation)`, () => {
                             });
 
                             const commandInstance = plainToInstance(
-                                AddPhotograhForTerm,
+                                TranslateSpatialFeatureName,
                                 invalidFsa.payload
                             );
 
@@ -89,7 +78,6 @@ describe(`${commandType} (payload type validation)`, () => {
 
                             const error = result as InternalError;
 
-                            // This pattern logs the failing message on failure
                             const messagesToCheck = [error.toString()];
 
                             const errorMessagesThatDoNotReferencePropertyName =
