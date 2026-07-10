@@ -66,7 +66,7 @@ describe(`Point.fromEventHistory`, () => {
         });
 
         describe(`when a point's name has been translated`, () => {
-            it(`should translate the points name`, () => {
+            it(`should translate the point's name`, () => {
                 const eventHistory = pointNameTranslated.as(aggregateCompositeIdentifier);
 
                 const result = Point.fromEventHistory(eventHistory, spatialFeatureId);

@@ -30,13 +30,13 @@ export class TranslateSpatialFeatureName implements ICommandBase {
 
     @NonEmptyString({
         label: 'translation',
-        description: 'translation for the spatial feature',
+        description: `translation for the spatial feature's name`,
     })
     translation: string;
 
     @LanguageCodeEnum({
         label: 'language',
-        description: 'the language in which you are translating the spatial feature',
+        description: `the language in which you are translating the spatial feature's name`,
     })
     languageCode: LanguageCode;
 }

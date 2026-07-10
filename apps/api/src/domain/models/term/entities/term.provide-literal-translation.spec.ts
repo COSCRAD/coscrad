@@ -39,7 +39,7 @@ describe(`Term.provideLiteralTranslation`, () => {
         });
     });
 
-    describe(`when there is already a literal translation in the given language`, () => {
+    describe(`when there is already a translation in the given language`, () => {
         const existingText = buildMultilingualTextWithSingleItem(
             'original',
             originalLanguageCode

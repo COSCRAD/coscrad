@@ -25,7 +25,7 @@ const commandFsaFactory = new DummyCommandFsaFactory<TranslateSpatialFeatureName
 
 describe(`${commandType} (payload type validation)`, () => {
     describe(`when the command payload type is invalid`, () => {
-        describe(`when the aggregate type is not term`, () => {
+        describe(`when the aggregate type is not spatial feature`, () => {
             Object.values(AggregateType)
                 .filter((aggregateType) => aggregateType !== AggregateType.spatialFeature)
                 .forEach((invalidAggregateType) => {

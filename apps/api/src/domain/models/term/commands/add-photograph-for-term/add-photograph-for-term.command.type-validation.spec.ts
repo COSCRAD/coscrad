@@ -3,9 +3,9 @@ import { InternalError } from '../../../../../lib/errors/InternalError';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { AggregateType } from '../../../../types/AggregateType';
+import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
-import validateCommandPayloadType from '../../../shared/command-handlers/utilities/validateCommandPayloadType';
 import { AddPhotograhForTerm } from './add-photograph-for-term.command';
 
 const commandType = 'ADD_PHOTOGRAPH_FOR_TERM';
@@ -33,7 +33,7 @@ const commandFsaFactory = new DummyCommandFsaFactory<AddPhotograhForTerm>((id) =
  */
 describe(`${commandType} (payload type validation)`, () => {
     describe(`when the command payload type is invalid`, () => {
-        describe(`when the aggregate type is not term`, () => {
+        describe(`when the aggregate type is not photograph`, () => {
             Object.values(AggregateType)
                 .filter((aggregateType) => aggregateType !== AggregateType.term)
                 .forEach((invalidAggregateType) => {
