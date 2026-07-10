@@ -6,20 +6,20 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
-import { InternalError } from '../../../../../lib/errors/InternalError';
-import { ResultOrError } from '../../../../../types/ResultOrError';
-import { Valid } from '../../../../domainModelValidators/Valid';
-import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot } from '../../../../types/ResourceType';
-import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
-import { BaseEvent } from '../../../shared/events/base-event.entity';
-import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
-import { validAggregateOrThrow } from '../../../shared/functional';
-import { GeometricFeature } from '../../Geometric-Feature';
-import { PointCoordinates } from '../entities/point-coordinates.entity';
-import { Point } from '../entities/point.entity';
+import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { ResultOrError } from '../../../../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../../../common/entities/multilingual-text';
+import { Valid } from '../../../../../domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
+import { InMemorySnapshot } from '../../../../../types/ResourceType';
+import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
+import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
+import { validAggregateOrThrow } from '../../../../shared/functional';
+import { GeometricFeature } from '../../../Geometric-Feature';
+import { PointCoordinates } from '../../entities/point-coordinates.entity';
+import { Point } from '../../entities/point.entity';
 import { CreatePoint } from './create-point.command';
 import { PointCreated, PointCreatedPayload } from './point-created.event';
 
@@ -51,9 +51,15 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
     }
 
     protected async fetchRequiredExternalState(_?: CreatePoint): Promise<InMemorySnapshot> {
-        const allSpatialFeatures = (
-            await this.repositoryProvider.forResource(ResourceType.spatialFeature).fetchMany()
-        ).filter(validAggregateOrThrow);
+        const allSpatialFeatures =
+            /**
+         * We need to fetch only the spatial features with the same name. This is a bit
+        awkward given that we use event sourcing, but it's an important optimization. If we
+        don't do this, it will get slower and slower to add spatial features as their count in the DB grows.
+         */
+            (
+                await this.repositoryProvider.forResource(ResourceType.spatialFeature).fetchMany()
+            ).filter(validAggregateOrThrow);
 
         return new DeluxeInMemoryStore({
             [AggregateType.spatialFeature]: allSpatialFeatures,

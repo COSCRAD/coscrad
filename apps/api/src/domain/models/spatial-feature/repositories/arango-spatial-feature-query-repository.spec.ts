@@ -39,7 +39,7 @@ import { CoscradUser } from '../../user-management/user/entities/user/coscrad-us
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
-import { PointCreated } from '../point/commands';
+import { PointCreated } from '../point/commands/create-point';
 import {
     ISpatialFeatureQueryRepository,
     SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,

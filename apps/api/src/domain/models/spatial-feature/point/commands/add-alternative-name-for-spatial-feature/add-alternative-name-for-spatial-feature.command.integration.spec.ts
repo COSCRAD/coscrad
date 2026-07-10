@@ -19,6 +19,7 @@ import TestRepositoryProvider from '../../../../../../persistence/repositories/_
 import { TestEventStream } from '../../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../../validation';
+import AggregateNotFoundError from '../../../../shared/common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../../__tests__/command-helpers/assert-command-success';
@@ -28,7 +29,7 @@ import { dummySystemUserId } from '../../../../__tests__/utilities/dummySystemUs
 import { AlternativeNameMatchesOriginalError } from '../../../errors/alternative-name-matches-original.error';
 import { CannotOverwriteAlternativeNameWithLabelError } from '../../../errors/cannot-overwrite-alternative-name-with-label.error';
 import { Point } from '../../entities/point.entity';
-import { PointCreated } from '../point-created.event';
+import { PointCreated } from '../create-point/point-created.event';
 import { AddAlternativeNameForSpatialFeature } from './add-alternative-name-for-spatial-feature.command';
 
 const commandType = 'ADD_ALTERNATIVE_NAME_FOR_SPATIAL_FEATURE';
@@ -144,6 +145,10 @@ describe(commandType, () => {
 
                     // TODO check language code too
                     expect(alternativeName.getOriginalTextItem().text).toBe(validPayload.text);
+
+                    expect(alternativeName.getOriginalTextItem().languageCode).toBe(
+                        validPayload.languageCode
+                    );
                 },
             });
         });
@@ -151,7 +156,25 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when the target point does not exist`, () => {
-            it.todo(`should return the expected error`);
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        validPayload;
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (e) => {
+                        assertErrorAsExpected(
+                            e,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    validPayload.aggregateCompositeIdentifier
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
         });
 
         describe(`when there is already an alternative name with the given label`, () => {
@@ -232,7 +255,5 @@ describe(commandType, () => {
                 });
             });
         });
-
-        // TODO Fuzz test ina  separate file
     });
 });

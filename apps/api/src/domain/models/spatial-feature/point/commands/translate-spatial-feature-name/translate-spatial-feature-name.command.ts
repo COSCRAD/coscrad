@@ -4,7 +4,7 @@ import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../../../../domain/common/entities/multilingual-text';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
 import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
-import { SpatialFeatureCompositeIdentifier } from '../create-point.command';
+import { SpatialFeatureCompositeIdentifier } from '../create-point/create-point.command';
 
 @CoscradDataExample<TranslateSpatialFeatureName>({
     example: {

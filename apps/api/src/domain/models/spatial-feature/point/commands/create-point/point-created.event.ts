@@ -1,14 +1,14 @@
 import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
-import { CoscradEvent } from '../../../../../domain/common';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
-import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
-import { BaseEvent } from '../../../shared/events/base-event.entity';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
-import { GeometricFeature } from '../../Geometric-Feature';
-import { PointCoordinates } from '../entities/point-coordinates.entity';
+import { buildTestInstance, CoscradDataExample } from '../../../../../../test-data/utilities';
+import { CoscradEvent } from '../../../../../common';
+import { buildMultilingualTextWithSingleItem } from '../../../../../common/build-multilingual-text-with-single-item';
+import { MultilingualTextItem } from '../../../../../common/entities/multilingual-text';
+import { BaseEvent } from '../../../../shared/events/base-event.entity';
+import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
+import { GeometricFeature } from '../../../Geometric-Feature';
+import { PointCoordinates } from '../../entities/point-coordinates.entity';
 import { SpatialFeatureCompositeIdentifier } from './create-point.command';
 
 export class PointCreatedPayload {
