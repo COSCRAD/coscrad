@@ -1,5 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole, PaginatedResponse } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { DTO } from '../../../../../src/types/DTO';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import {
@@ -26,7 +27,9 @@ import { ISpatialFeatureQueryRepository } from '../queries/spatial-feature-query
 import { EventSourcedSpatialFeatureViewModel } from '../queries/spatial-feature.view-model.event-sourced';
 
 export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<EventSourcedSpatialFeatureViewModel>;
+    private readonly database: ArangoDatabaseForCollection<
+        DTO<EventSourcedSpatialFeatureViewModel>
+    >;
 
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
@@ -46,7 +49,7 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async create(view: EventSourcedSpatialFeatureViewModel): Promise<void> {
-        const viewDto = cloneToPlainObject(view);
+        const viewDto = cloneToPlainObject(view) as DTO<EventSourcedSpatialFeatureViewModel>;
 
         const document = mapEntityDTOToDatabaseDocument({
             ...viewDto,
