@@ -34,27 +34,27 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                 h2: {
                     fontSize: 35,
                     fontWeight: 'bold',
-                    marginBottom: '33px',
+                    marginBottom: '8px',
                 },
                 h3: {
                     fontSize: 26,
                     fontWeight: 'bold',
-                    marginBottom: '8px',
+                    marginBottom: '6px',
                 },
                 h4: {
                     fontSize: 20,
                     fontWeight: 'bold',
-                    marginBottom: '12px',
+                    marginBottom: '4px',
                 },
                 h5: {
                     fontSize: 16,
                     fontWeight: 'bold',
-                    marginBottom: '7px',
+                    marginBottom: '3px',
                 },
                 h6: {
                     fontSize: 13,
                     fontWeight: 'bold',
-                    marginBottom: '4px',
+                    marginBottom: '2px',
                 },
                 body1: {
                     lineHeight: '1.6',
