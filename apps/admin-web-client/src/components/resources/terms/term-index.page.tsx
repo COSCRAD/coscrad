@@ -30,27 +30,13 @@ export const TermListing = ({ id, name, isPublished }: TermListingProps): JSX.El
 };
 
 export const TermIndex = (): JSX.Element => {
-    const { data, isLoading, error } = useFetchTermsQuery();
+    const { data, isLoading, isError } = useFetchTermsQuery();
 
-    if (error) {
-        if ('status' in error) {
-            // you can access all properties of `FetchBaseQueryError` here
-            const errMsg = 'error' in error ? error.error : JSON.stringify(error.data);
-
-            return (
-                <div>
-                    <div>An error has occurred:</div>
-                    <div>{errMsg}</div>
-                </div>
-            );
-        }
-        // you can access all properties of `SerializedError` here
-        return <div>{error.message}</div>;
-    }
-
-    if (isLoading || !data) {
+    if (isLoading) {
         return <div>Loading...</div>;
     }
+
+    if (isError) return <div>Error retrieving name.</div>;
 
     const { entities } = data;
 
