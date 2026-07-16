@@ -59,6 +59,10 @@ export const Header = (): JSX.Element => {
                         <Link to="/terms" style={{ textDecoration: 'none' }}>
                             Terms
                         </Link>
+                        &nbsp;|&nbsp;
+                        <Link to="/vocabularyLists" style={{ textDecoration: 'none' }}>
+                            Vocabulary Lists
+                        </Link>
                     </Typography>
                 </nav>
                 <NavMenuPresenter />

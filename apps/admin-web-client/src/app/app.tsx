@@ -7,6 +7,8 @@ import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
 import { TermContainer } from '../components/resources/terms/term-container';
 import { TermIndex } from '../components/resources/terms/term-index.page';
+import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
+import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
 import { useAppDispatch } from './hooks';
 
 export function App() {
@@ -36,6 +38,8 @@ export function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/terms" element={<TermIndex />} />
                     <Route path="/terms/:id" element={<TermContainer />} />
+                    <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
+                    <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
                 </Routes>
             </Box>
         </Box>
