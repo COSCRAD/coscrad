@@ -28,6 +28,7 @@ const spatialFeatureDtoOverrides: Partial<DTO<ISpatialFeature>> = {
         description: buildMultilingualTextWithSingleItem(
             `I have my own name and promise not to take yours!`
         ),
+        alternativeNamesByLabel: {},
     },
 };
 

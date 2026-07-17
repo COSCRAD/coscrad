@@ -42,6 +42,7 @@ export class CreatePointCommandHandler extends BaseCreateCommandHandler<Point> {
             },
             properties: {
                 name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+                alternativeNamesByLabel: {},
                 description: buildMultilingualTextWithSingleItem(description),
             },
             // You must run a `PUBLISH_RESOURCE` command to publish this point

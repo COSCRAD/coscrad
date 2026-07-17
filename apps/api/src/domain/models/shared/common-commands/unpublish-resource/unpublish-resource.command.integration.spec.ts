@@ -2,12 +2,12 @@ import { ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
+import getValidAggregateInstanceForTest from '../../../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../../../types/DTO';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
@@ -29,6 +29,8 @@ const eventSourcedResourceTypes = [
     ResourceType.playlist,
     ResourceType.audioItem,
     ResourceType.video,
+    // We should have a scenario test for each resource type that uses the generic commands
+    ResourceType.spatialFeature,
 ];
 
 describe(commandType, () => {

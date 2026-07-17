@@ -2,25 +2,25 @@ import { FluxStandardAction } from '@coscrad/commands';
 import setUpIntegrationTest, {
     TestModuleInstances,
 } from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import { DTO } from '../../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AggregateType, isAggregateType } from '../../../../types/AggregateType';
 import { CategorizableType } from '../../../../types/CategorizableType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers/generate-command-fuzz-test-cases';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
-import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { DuplicateTagError } from '../errors';
 import { TagResourceOrNote } from './tag-resource-or-note.command';
 
@@ -66,6 +66,7 @@ describe(commandType, () => {
         ResourceType.playlist,
         ResourceType.audioItem,
         ResourceType.video,
+        ResourceType.spatialFeature,
         CategorizableType.note,
     ];
 

@@ -7,9 +7,9 @@ import {
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -24,14 +24,14 @@ import { TermViewModel } from '../../../../../queries/buildViewModelForResource/
 import { formatLanguageCode } from '../../../../../queries/presentation/formatLanguageCode';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../user-management/user/entities/user/coscrad-user.entity';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { ITermQueryRepository } from '../../queries';
 import { ArangoTermQueryRepository } from '../../repositories/arango-term-query-repository';
 import { PromptTermCreated } from '../create-prompt-term';
 import { TermElicitedFromPromptEventHandler } from './term-elicited-from-prompt.event-handler';
-import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
+import { TermElicitedFromPrompt } from './term-elicited.from.prompt.event';
 
 const termId = buildDummyUuid(1);
 

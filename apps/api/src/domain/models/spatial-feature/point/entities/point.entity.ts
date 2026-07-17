@@ -1,7 +1,7 @@
 import { AggregateType, GeometricFeatureType, LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { UpdateMethod } from '../../../../../domain/decorators';
+import { AggregateRoot, UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
@@ -27,6 +27,7 @@ import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeature } from '../../Geometric-Feature';
 import { ISpatialFeature } from '../../interfaces/spatial-feature.interface';
 import { CREATE_POINT, PointCreated } from '../commands';
+import { AlternativeNameAddedForSpatialFeature } from '../commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
 import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
@@ -43,10 +44,12 @@ import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
         properties: {
             description: buildMultilingualTextWithSingleItem('The place to be!'),
             name: buildMultilingualTextWithSingleItem('My Point'),
+            alternativeNamesByLabel: {},
         },
     },
 })
 @RegisterIndexScopedCommands([CREATE_POINT])
+@AggregateRoot(AggregateType.spatialFeature)
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 
@@ -130,12 +133,35 @@ export class Point extends Resource implements ISpatialFeature {
         return this;
     }
 
+    addAlternativeName(label: string, text: string, languageCode: LanguageCode) {
+        const updatedProperties = this.properties.addAlternativeName(label, text, languageCode);
+
+        if (isInternalError(updatedProperties)) {
+            return updatedProperties;
+        }
+
+        this.properties = updatedProperties;
+
+        return this;
+    }
+
     handleSpatialFeatureNameTranslated({
         payload: {
             translationItem: { text, languageCode },
         },
     }: SpatialFeatureNameTranslated) {
         return this.translateName(text, languageCode);
+    }
+
+    handleAlternativeNameAddedForSpatialFeature({
+        payload: {
+            label,
+            textItem: { text, languageCode },
+        },
+    }: AlternativeNameAddedForSpatialFeature) {
+        const result = this.addAlternativeName(label, text, languageCode);
+
+        return result;
     }
 
     static fromEventHistory(
@@ -171,6 +197,7 @@ export class Point extends Resource implements ISpatialFeature {
             geometry: new GeometricFeature(coordinates),
             properties: {
                 name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+                alternativeNamesByLabel: {},
                 description: buildMultilingualTextWithSingleItem(
                     description.text,
                     description.languageCode

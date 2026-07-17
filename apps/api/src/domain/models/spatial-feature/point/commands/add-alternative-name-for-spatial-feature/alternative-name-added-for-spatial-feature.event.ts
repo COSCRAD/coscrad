@@ -1,5 +1,5 @@
 import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { NestedDataType } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { CoscradEvent } from '../../../../../../domain/common';
 import { MultilingualTextItem } from '../../../../../../domain/common/entities/multilingual-text';
 import { CoscradDataExample } from '../../../../../../test-data/utilities';
@@ -8,46 +8,53 @@ import buildDummyUuid from '../../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../__tests__/utilities/dummyDateNow';
 import { SpatialFeatureCompositeIdentifier } from '../create-point.command';
 
-export class SpatialFeatureNameTranslatedPayload {
+export class AlternativeNameAddedForSpatialFeaturePayload {
     @NestedDataType(SpatialFeatureCompositeIdentifier, {
         label: 'composite identifier',
         description: 'system-wide unique identifier',
     })
     readonly aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
 
-    @NestedDataType(MultilingualTextItem, {
-        label: 'translation item',
-        description: 'the translation text and associated information',
+    @NonEmptyString({
+        label: 'label',
+        description: 'distinguishes this alternative name from others',
     })
-    readonly translationItem: MultilingualTextItem;
+    readonly label: string;
+
+    @NestedDataType(MultilingualTextItem, {
+        label: 'text item',
+        description: 'text for the alternative name and associated information',
+    })
+    readonly textItem: MultilingualTextItem;
 }
 
-const testEventId = buildDummyUuid(6);
+const testEventId = buildDummyUuid(1);
 
-@CoscradDataExample<SpatialFeatureNameTranslated>({
+@CoscradDataExample<AlternativeNameAddedForSpatialFeature>({
     example: {
         id: testEventId,
-        type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
+        type: 'ALTERNATIVE_NAME_ADDED_FOR_SPATIAL_FEATURE',
         payload: {
             aggregateCompositeIdentifier: {
-                id: buildDummyUuid(34),
+                id: buildDummyUuid(4),
                 type: AggregateType.spatialFeature,
             },
-            translationItem: {
-                text: 'spatial feature text',
-                languageCode: LanguageCode.Chinook,
-                role: MultilingualTextItemRole.freeTranslation,
+            label: 'label for alternative name',
+            textItem: {
+                text: 'alternative name text',
+                languageCode: LanguageCode.Chilcotin,
+                role: MultilingualTextItemRole.original,
             },
         },
         meta: {
             id: testEventId,
-            userId: buildDummyUuid(3),
+            userId: buildDummyUuid(8),
             contributorIds: [],
             dateCreated: dummyDateNow,
         },
     },
 })
-@CoscradEvent('SPATIAL_FEATURE_NAME_TRANSLATED')
-export class SpatialFeatureNameTranslated extends BaseEvent<SpatialFeatureNameTranslatedPayload> {
-    readonly type = 'SPATIAL_FEATURE_NAME_TRANSLATED';
+@CoscradEvent('ALTERNATIVE_NAME_ADDED_FOR_SPATIAL_FEATURE')
+export class AlternativeNameAddedForSpatialFeature extends BaseEvent<AlternativeNameAddedForSpatialFeaturePayload> {
+    readonly type = 'ALTERNATIVE_NAME_ADDED_FOR_SPATIAL_FEATURE';
 }

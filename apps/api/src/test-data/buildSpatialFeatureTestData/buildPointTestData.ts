@@ -37,6 +37,7 @@ export default (): Point[] =>
                     name: buildMultilingualTextWithSingleItem(
                         `Name of Point with ID: ${partialDto.id}`
                     ),
+                    alternativeNamesByLabel: {},
                     description: buildMultilingualTextWithSingleItem(
                         `Description for point ${partialDto.id}`
                     ),

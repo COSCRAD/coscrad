@@ -3,22 +3,27 @@ import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import buildTestDataInFlatFormat from '../../../../../test-data/buildTestDataInFlatFormat';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
-import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import ContextTypeIsNotAllowedForGivenResourceTypeError from '../../../../domainModelValidators/errors/context/edgeConnections/ContextTypeIsNotAllowedForGivenResourceTypeError';
+import InvariantValidationError from '../../../../domainModelValidators/errors/InvariantValidationError';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
-import { ResourceType, isResourceType } from '../../../../types/ResourceType';
+import { isResourceType, ResourceType } from '../../../../types/ResourceType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
+import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
+import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -28,12 +33,6 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
-import InvalidExternalStateError from '../../../shared/common-command-errors/InvalidExternalStateError';
-import UuidNotGeneratedInternallyError from '../../../shared/common-command-errors/UuidNotGeneratedInternallyError';
-import { buildContextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMember,
@@ -42,6 +41,7 @@ import {
 } from '../../edge-connection.entity';
 import { GeneralContext } from '../../general-context/general-context.entity';
 import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
+import { buildContextModelMap } from '../../__tests__';
 import { ConnectResourcesWithNote } from './connect-resources-with-note.command';
 
 const commandType = `CONNECT_RESOURCES_WITH_NOTE`;
@@ -65,6 +65,7 @@ const eventSourcedResourceTypes = [
     AggregateType.playlist,
     AggregateType.audioItem,
     AggregateType.video,
+    AggregateType.spatialFeature,
 ];
 
 const allDualEdgeConnections = (testDualConnections as EdgeConnection[])

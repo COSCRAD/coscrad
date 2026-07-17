@@ -6,7 +6,7 @@ import {
     TOKENIZER_PROVIDER_INJECTION_TOKEN,
 } from '../../../../../lib/nlp/tokenization';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
-import { TermElicitedFromPrompt } from './term-elicited.from.prompt';
+import { TermElicitedFromPrompt } from './term-elicited.from.prompt.event';
 
 // TODO share this with other handlers
 interface ITokenizerProvider {

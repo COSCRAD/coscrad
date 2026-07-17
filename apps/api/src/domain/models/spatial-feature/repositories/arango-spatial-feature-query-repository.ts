@@ -1,5 +1,6 @@
 import { LanguageCode, MultilingualTextItemRole, PaginatedResponse } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
+import { DTO } from '../../../../../src/types/DTO';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from '../../../../coscrad-cli/logging';
 import {
@@ -10,6 +11,7 @@ import {
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabase } from '../../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../../persistence/database/arango-database-for-collection';
@@ -25,7 +27,9 @@ import { ISpatialFeatureQueryRepository } from '../queries/spatial-feature-query
 import { EventSourcedSpatialFeatureViewModel } from '../queries/spatial-feature.view-model.event-sourced';
 
 export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQueryRepository {
-    private readonly database: ArangoDatabaseForCollection<EventSourcedSpatialFeatureViewModel>;
+    private readonly database: ArangoDatabaseForCollection<
+        DTO<EventSourcedSpatialFeatureViewModel>
+    >;
 
     private readonly baseResourceQueryBuilder: BaseArangoResourceViewQueryBuilder;
 
@@ -45,7 +49,12 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async create(view: EventSourcedSpatialFeatureViewModel): Promise<void> {
-        const document = mapEntityDTOToDatabaseDocument(view);
+        const viewDto = cloneToPlainObject(view) as DTO<EventSourcedSpatialFeatureViewModel>;
+
+        const document = mapEntityDTOToDatabaseDocument({
+            ...viewDto,
+            name: view.properties.name,
+        });
 
         await this.database.create(document).catch((error) => {
             throw new InternalError(error);
@@ -53,8 +62,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async createMany(views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
+        // @ts-expect-error TODO fix this as abov e
         const documents = views.map(mapEntityDTOToDatabaseDocument);
 
+        // @ts-expect-error TODO fix this
         await this.database.createMany(documents);
     }
 
@@ -160,6 +171,52 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
             });
 
         await cursor.all();
+    }
+
+    async addAlternativeName(
+        id: string,
+        label: string,
+        text: string,
+        languageCode: LanguageCode
+    ): Promise<void> {
+        const query = `
+        for doc in @@collectionName
+        filter doc._key == @id
+        let newMlText = {
+            items: [{
+                text: @text,
+                languageCode: @languageCode,
+                role: @role
+            }]
+        }
+        let delta = {
+            [@label]: newMlText
+        }
+        update doc with {
+            properties: {
+                alternativeNamesByLabel: delta
+            }
+        } in @@collectionName
+         return NEW
+        `;
+
+        const bindVars = {
+            '@collectionName': 'spatialFeature__VIEWS',
+            id,
+            label,
+            text,
+            languageCode,
+            role: MultilingualTextItemRole.original,
+        };
+
+        const cursor = await this.database.query({
+            query,
+            bindVars,
+        });
+
+        const result = await cursor.all();
+
+        console.log({ result });
     }
 
     async count(): Promise<number> {

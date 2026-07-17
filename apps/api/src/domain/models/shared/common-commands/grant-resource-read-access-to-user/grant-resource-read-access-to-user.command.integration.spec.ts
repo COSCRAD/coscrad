@@ -3,23 +3,23 @@ import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { NotFound } from '../../../../../lib/types/not-found';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import buildTestData from '../../../../../test-data/buildTestData';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { ResourceType } from '../../../../types/ResourceType';
 import buildInMemorySnapshot from '../../../../utilities/buildInMemorySnapshot';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { Photograph } from '../../../photograph/entities/photograph.entity';
+import { Resource } from '../../../resource.entity';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { assertEventRecordPersisted } from '../../../__tests__/command-helpers/assert-event-record-persisted';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
-import { Photograph } from '../../../photograph/entities/photograph.entity';
-import { Resource } from '../../../resource.entity';
 import AggregateNotFoundError from '../../common-command-errors/AggregateNotFoundError';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import UserAlreadyHasReadAccessError from '../../common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
@@ -54,6 +54,14 @@ const fsaFactory = new DummyCommandFsaFactory(buildValidCommandFSA);
 
 const dummyAdminUserId = buildDummyUuid();
 
+/**
+ * TODO We should remove this generic test in favor of
+ * 1. A test that uses a generic "Widget" resource type (local to the grant-resource command)
+ * 2. At least one scenario test per resource (local to the resource directory)
+ *
+ * This is much easier to maintain in the long run. The core generic commands
+ * should really be part of an external library.
+ */
 describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
     let app: INestApplication;
 
@@ -101,6 +109,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         ResourceType.playlist,
         ResourceType.audioItem,
         ResourceType.video,
+        ResourceType.spatialFeature,
     ];
 
     describe('when the command is valid', () => {

@@ -1,13 +1,21 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
+import { LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
-import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Test } from '@nestjs/testing';
+import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
+import { Environment } from '../../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
+import { SpatialFeatureModule } from '../../../../../app/domain-modules/spatial-feature.module';
+import { CoscradEventFactory } from '../../../../../domain/common';
+import { NotFound } from '../../../../../lib/types/not-found';
 import { clonePlainObjectWithOverrides } from '../../../../../lib/utilities/clonePlainObjectWithOverrides';
+import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
+import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { buildTestInstance } from '../../../../../test-data/utilities';
-import { IIdManager } from '../../../../interfaces/id-manager.interface';
+import { DynamicDataTypeFinderService } from '../../../../../validation';
+import { ID_MANAGER_TOKEN } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
@@ -20,7 +28,6 @@ import { generateCommandFuzzTestCases } from '../../../__tests__/command-helpers
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import { Point } from '../entities/point.entity';
 import { CreatePoint } from './create-point.command';
 
@@ -28,11 +35,18 @@ const commandType = `CREATE_POINT`;
 
 const pointName = 'Sunny Park Point';
 
+const lattitude = 40.1;
+
+const longitude = -123.5;
+
 const originalLanguageCode = LanguageCode.English;
 
 const dummyFsa = getCommandFsaForTest<CreatePoint>(commandType, {
     aggregateCompositeIdentifier: { id: buildDummyUuid(55) },
     name: pointName,
+    languageCodeForName: originalLanguageCode,
+    lattitude,
+    longitude,
 });
 
 const commandFsaFactory = new DummyCommandFsaFactory((id) => {
@@ -46,24 +60,44 @@ const commandFsaFactory = new DummyCommandFsaFactory((id) => {
 describe(commandType, () => {
     let testRepositoryProvider: TestRepositoryProvider;
 
-    let commandHandlerService: CommandHandlerService;
-
     let app: INestApplication;
-
-    let idManager: IIdManager;
 
     let assertionHelperDependencies: CommandAssertionDependencies;
 
     beforeAll(async () => {
-        ({ testRepositoryProvider, commandHandlerService, idManager, app } =
-            await setUpIntegrationTest({
-                ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
-            }));
+        const testModule = await Test.createTestingModule({
+            imports: [
+                ConfigModule.forRoot({
+                    isGlobal: true,
+                    envFilePath: buildConfigFilePath(Environment.test),
+                    cache: false,
+                }),
+                PersistenceModule.forRootAsync(),
+                SpatialFeatureModule,
+            ],
+        })
+            .overrideProvider(ConfigService)
+            .useValue(
+                buildMockConfigService({
+                    ARANGO_DB_NAME: generateDatabaseNameForTestSuite(),
+                })
+            )
+            .compile();
+
+        app = testModule.createNestApplication();
+
+        await app.init();
+
+        testRepositoryProvider = new TestRepositoryProvider(
+            app.get(ArangoDatabaseProvider),
+            app.get(CoscradEventFactory),
+            app.get(DynamicDataTypeFinderService)
+        );
 
         assertionHelperDependencies = {
             testRepositoryProvider,
-            commandHandlerService,
-            idManager,
+            commandHandlerService: app.get(CommandHandlerService),
+            idManager: app.get(ID_MANAGER_TOKEN),
         };
     });
 
@@ -87,38 +121,36 @@ describe(commandType, () => {
                     await Promise.resolve();
                 },
                 buildValidCommandFSA: (id: AggregateType) => commandFsaFactory.build(id),
+                checkStateOnSuccess: async ({ aggregateCompositeIdentifier: { id } }) => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(ResourceType.spatialFeature)
+                        .fetchById(id);
+
+                    expect(searchResult).not.toBe(NotFound);
+
+                    const newSpatialFeature = searchResult as Point;
+
+                    expect(newSpatialFeature.geometry.coordinates.toTuple()).toEqual([
+                        lattitude,
+                        longitude,
+                    ]);
+
+                    expect(newSpatialFeature.eventHistory).toHaveLength(1);
+
+                    expect(newSpatialFeature.eventHistory[0].type).toBe('POINT_CREATED');
+
+                    const nameMlTextItem = newSpatialFeature.properties.name.getOriginalTextItem();
+
+                    expect(nameMlTextItem.text).toBe(pointName);
+
+                    expect(nameMlTextItem.languageCode).toBe(originalLanguageCode);
+                },
             });
         });
     });
 
     describe(`when the command is invalid`, () => {
-        describe(`when there is already another spatial feature with the given name`, () => {
-            Object.values(GeometricFeatureType).forEach((featureType) => {
-                describe(`with geometry type: ${featureType}`, () => {
-                    it(`should fail with the expected errors`, async () => {
-                        await assertCreateCommandError(assertionHelperDependencies, {
-                            systemUserId: dummySystemUserId,
-                            initialState: new DeluxeInMemoryStore({
-                                [AggregateType.spatialFeature]: [
-                                    buildTestInstance(Point, {
-                                        properties: {
-                                            name: buildMultilingualTextWithSingleItem(
-                                                pointName,
-                                                originalLanguageCode
-                                            ),
-                                            description: buildMultilingualTextWithSingleItem(
-                                                'My name is already taken!'
-                                            ),
-                                        },
-                                    }),
-                                ],
-                            }).fetchFullSnapshotInLegacyFormat(),
-                            buildCommandFSA: (id: AggregateId) => commandFsaFactory.build(id),
-                        });
-                    });
-                });
-            });
-        });
+        // note that 2 spatial features may have the same name
 
         describe('when the id has not been generated via our system', () => {
             it('should return the expected error', async () => {

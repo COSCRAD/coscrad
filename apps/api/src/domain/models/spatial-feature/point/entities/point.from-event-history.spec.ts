@@ -5,6 +5,7 @@ import { AggregateType } from '../../../../types/AggregateType';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { GeometricFeatureType } from '../../types/GeometricFeatureType';
 import { PointCreated } from '../commands';
+import { AlternativeNameAddedForSpatialFeature } from '../commands/add-alternative-name-for-spatial-feature/alternative-name-added-for-spatial-feature.event';
 import { SpatialFeatureNameTranslated } from '../commands/translate-spatial-feature-name/spatial-feature-name-translated.event';
 import { PointCoordinates } from './point-coordinates.entity';
 import { Point } from './point.entity';
@@ -84,6 +85,49 @@ describe(`Point.fromEventHistory`, () => {
                 expect(translationItem.role).toBe(MultilingualTextItemRole.freeTranslation);
 
                 expect(translationItem.text).toBe(translationOfName);
+            });
+        });
+
+        describe(`when an alternative name has been added for a point`, () => {
+            const alternativeNameLabel = 'contemporary';
+
+            const languageCodeForAlternativeName = LanguageCode.English;
+
+            const alternativeNameText = 'Blue Mountain';
+
+            it.only(`should add the alternative name`, () => {
+                const result = Point.fromEventHistory(
+                    pointCreated
+                        .andThen<AlternativeNameAddedForSpatialFeature>(
+                            {
+                                type: 'ALTERNATIVE_NAME_ADDED_FOR_SPATIAL_FEATURE',
+                                payload: {
+                                    label: alternativeNameLabel,
+                                    textItem: {
+                                        languageCode: languageCodeForAlternativeName,
+                                        text: alternativeNameText,
+                                    },
+                                },
+                            },
+                            // TODO can this be the first arg?
+                            AlternativeNameAddedForSpatialFeature
+                        )
+                        .as(aggregateCompositeIdentifier),
+                    spatialFeatureId
+                );
+
+                expect(result).toBeInstanceOf(Point);
+
+                const { properties } = result as Point;
+
+                const foundAlternativeName =
+                    properties.alternativeNamesByLabel.get(alternativeNameLabel);
+
+                const foundAlternativeNameText = foundAlternativeName?.getOriginalTextItem();
+
+                expect(foundAlternativeNameText.text).toBe(alternativeNameText);
+
+                expect(foundAlternativeNameText.languageCode).toBe(languageCodeForAlternativeName);
             });
         });
     });

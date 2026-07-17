@@ -418,6 +418,93 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         });
     });
 
+    describe(`addAlternativeName`, () => {
+        const alternativeName = 'alter name';
+
+        const alternativeNameLanguageCode = LanguageCode.Chilcotin;
+
+        const label = 'tradish';
+
+        const targetSpatialFeature = spatialFeatureViews[0];
+
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+
+            await testQueryRepository.create(targetSpatialFeature);
+        });
+
+        describe(`when adding a first alternative name`, () => {
+            it(`should add the alternative name`, async () => {
+                await testQueryRepository.addAlternativeName(
+                    targetSpatialFeature.id,
+                    label,
+                    alternativeName,
+                    alternativeNameLanguageCode
+                );
+
+                const updatedSpatialFeature = await testQueryRepository.fetchById(
+                    targetSpatialFeature.id,
+                    testAdminUser
+                );
+
+                if (isNotFound(updatedSpatialFeature)) {
+                    expect(updatedSpatialFeature).not.toBe(NotFound);
+
+                    throw new InternalError('test failed');
+                }
+
+                const foundAlternativeName =
+                    updatedSpatialFeature.properties.alternativeNamesByLabel.get(label);
+
+                expect(foundAlternativeName).toBeTruthy();
+
+                const foundText = foundAlternativeName.getOriginalTextItem();
+
+                expect(foundText.text).toBe(alternativeName);
+
+                expect(foundText.languageCode).toBe(alternativeNameLanguageCode);
+            });
+        });
+
+        describe(`when adding a second alternative name`, () => {
+            const secondAlternativeName = 'alt name 2';
+            const secondAlternativeLanguageCode = LanguageCode.French;
+
+            const secondLabel = 'contemproary';
+
+            it(`should add the next alternative without removing the first`, async () => {
+                await testQueryRepository.addAlternativeName(
+                    targetSpatialFeature.id,
+                    label,
+                    alternativeName,
+                    alternativeNameLanguageCode
+                );
+
+                await testQueryRepository.addAlternativeName(
+                    targetSpatialFeature.id,
+                    secondLabel,
+                    secondAlternativeName,
+                    secondAlternativeLanguageCode
+                );
+
+                const updatedSpatialFeature = await testQueryRepository.fetchById(
+                    targetSpatialFeature.id,
+                    testAdminUser
+                );
+
+                if (isNotFound(updatedSpatialFeature)) {
+                    expect(updatedSpatialFeature).not.toBe(NotFound);
+
+                    throw new InternalError('test failed');
+                }
+
+                expect(updatedSpatialFeature.properties.alternativeNamesByLabel.size).toBe(2);
+
+                // TODO more detailed assertions
+            });
+        });
+    });
+
     describe(`createConnection`, () => {
         const targetSpatialFeature = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
             connections: {},

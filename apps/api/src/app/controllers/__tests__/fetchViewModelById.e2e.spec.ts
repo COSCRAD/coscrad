@@ -5,8 +5,8 @@ import idEquals from '../../../domain/models/shared/functional/idEquals';
 import { InMemorySnapshotOfResources, ResourceType } from '../../../domain/types/ResourceType';
 import { isInternalError } from '../../../lib/errors/InternalError';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestData from '../../../test-data/buildTestData';
 import httpStatusCodes from '../../constants/httpStatusCodes';
 import buildViewModelPathForResourceType from '../utilities/buildIndexPathForResourceType';
@@ -54,6 +54,7 @@ describe('GET  (fetch view models)', () => {
         ResourceType.song,
         ResourceType.audioItem,
         ResourceType.video,
+        ResourceType.spatialFeature,
     ];
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(

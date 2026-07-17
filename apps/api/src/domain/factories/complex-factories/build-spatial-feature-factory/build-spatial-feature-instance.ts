@@ -1,6 +1,6 @@
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/InvalidGeometryTypeForSpatialFeatureError';
+import InvalidGeometryTypeForSpatialFeatureError from '../../../models/spatial-feature/errors/invalid-geometry-type-for-spatial-feature.error';
 import { ISpatialFeature } from '../../../models/spatial-feature/interfaces/spatial-feature.interface';
 import { Point } from '../../../models/spatial-feature/point/entities/point.entity';
 import { GeometricFeatureType } from '../../../models/spatial-feature/types/GeometricFeatureType';

@@ -216,6 +216,7 @@ import {
     CreatePoint,
     CreatePointCommandHandler,
 } from '../../../domain/models/spatial-feature/point/commands';
+import { Point } from '../../../domain/models/spatial-feature/point/entities/point.entity';
 import {
     CreateTag,
     CreateTagCommandHandler,
@@ -321,19 +322,19 @@ import { Ctor } from '../../../lib/types/Ctor';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { ArangoEventRepository } from '../../../persistence/repositories/arango-event-repository';
 import { ArangoIdRepository } from '../../../persistence/repositories/arango-id-repository';
 import { ArangoRepositoryProvider } from '../../../persistence/repositories/arango-repository.provider';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { BibliographicCitationViewModel } from '../../../queries/buildViewModelForResource/viewModels/bibliographic-citation/bibliographic-citation.view-model';
 import { DigitalTextQueryService } from '../../../queries/digital-text';
 import { NoteViewModel } from '../../../queries/edgeConnectionViewModels/note.view-model';
 import { DTO } from '../../../types/DTO';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../../../validation';
-import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../config/buildConfigFilePath';
 import { Environment } from '../../config/constants/environment';
 import { EnvironmentVariables } from '../../config/env.validation';
+import buildMockConfigServiceSpec from '../../config/__tests__/utilities/buildMockConfigService';
 import { AdminController } from '../admin.controller';
 import { CategoryController } from '../category.controller';
 import { ArangoBulkJobRepository } from '../command/bulk-imports/arango-bulk-job-repository';
@@ -452,6 +453,7 @@ export const buildAllDataClassProviders = () =>
         Playlist,
         AudioItem,
         Video,
+        Point,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,

@@ -3,16 +3,17 @@ import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { isDeepStrictEqual } from 'util';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
 import buildTestData from '../../../../../test-data/buildTestData';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { ResourceType } from '../../../../types/ResourceType';
+import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
 import { assertCommandFailsDueToTypeError } from '../../../__tests__/command-helpers/assert-command-payload-type-error';
 import { assertCreateCommandError } from '../../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../../__tests__/command-helpers/assert-create-command-success';
@@ -22,8 +23,6 @@ import { CommandAssertionDependencies } from '../../../__tests__/command-helpers
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { dummyUuid } from '../../../__tests__/utilities/dummyUuid';
-import isContextAllowedForGivenResourceType from '../../../allowedContexts/isContextAllowedForGivenResourceType';
-import { buildContextModelMap } from '../../__tests__';
 import {
     EdgeConnection,
     EdgeConnectionMemberRole,
@@ -34,6 +33,7 @@ import { PageRangeContext } from '../../page-range-context/page-range.context.en
 import { TextFieldContext } from '../../text-field-context/text-field-context.entity';
 import { TimeRangeContext } from '../../time-range-context/time-range-context.entity';
 import { EdgeConnectionContextType } from '../../types/EdgeConnectionContextType';
+import { buildContextModelMap } from '../../__tests__';
 import { CreateNoteAboutResource } from './create-note-about-resource.command';
 
 const commandType = 'CREATE_NOTE_ABOUT_RESOURCE';
@@ -157,6 +157,7 @@ const eventSourcedResourceTypes = [
     ResourceType.playlist,
     ResourceType.audioItem,
     ResourceType.video,
+    ResourceType.spatialFeature,
 ];
 
 const comprehensiveValidFSAs = notesToCreate
