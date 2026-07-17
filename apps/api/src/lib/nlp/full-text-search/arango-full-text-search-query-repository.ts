@@ -1,4 +1,5 @@
 import { LanguageCode, PaginatedResponse } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { forwardRef, Inject } from '@nestjs/common';
 import { PaginationOptions } from '../../../app/controllers/resources/term.controller';
 import { CoscradUserWithGroups } from '../../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
@@ -6,6 +7,7 @@ import { ArangoConnectionProvider } from '../../../persistence/database/arango-c
 import { ArangoDatabase } from '../../../persistence/database/arango-database';
 import { ArangoDatabaseForCollection } from '../../../persistence/database/arango-database-for-collection';
 import { ResultOrError } from '../../../types/ResultOrError';
+import { InternalError } from '../../errors/InternalError';
 import { Token } from '../tokenization';
 import { ArangoFullTextSearchDocument } from './arango-full-text-search-document';
 import { FullTextSearchRecord } from './full-text-result-record.dto';
@@ -60,12 +62,22 @@ export class ArangoFullTextSearchQueryRepository implements IFullTextSearchQuery
 
     async findByLetter(
         letter: string,
-        languageCode: LanguageCode,
+        languageCode?: LanguageCode,
         options: {
             user?: CoscradUserWithGroups;
             pagination?: PaginationOptions;
         } = {}
     ): Promise<ResultOrError<PaginatedResponse<FullTextSearchRecord>>> {
+        if (!isNonEmptyString(languageCode)) {
+            return new InternalError(
+                `Currently, you must specify the language when performing a full-text search.`
+            );
+        }
+
+        if (languageCode !== LanguageCode.Chilcotin) {
+            return new InternalError(`Unsupported language for full-text search: ${languageCode}`);
+        }
+
         // TODO reuse logic from `fetchForUser`
         const { size, page } = options?.pagination || {
             size: 100,
