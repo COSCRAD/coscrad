@@ -75,6 +75,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                 },
             },
             palette: {
+                mode: 'dark',
                 primary: {
                     light: '#FF7B6E',
                     main: '#6ab9ae',
