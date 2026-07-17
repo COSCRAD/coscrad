@@ -1,7 +1,6 @@
 import { CoscradUserRole } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { Resource } from '../../../domain/models/resource.entity';
 import { AccessControlList } from '../../../domain/models/shared/access-control/access-control-list.entity';
 import getId from '../../../domain/models/shared/functional/getId';
@@ -9,9 +8,10 @@ import { CoscradUserWithGroups } from '../../../domain/models/user-management/us
 import { AggregateId } from '../../../domain/types/AggregateId';
 import { ResourceType } from '../../../domain/types/ResourceType';
 import buildInMemorySnapshot from '../../../domain/utilities/buildInMemorySnapshot';
+import getValidAggregateInstanceForTest from '../../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { BaseViewModel } from '../../../queries/buildViewModelForResource/viewModels/base.view-model';
 import formatAggregateType from '../../../queries/presentation/formatAggregateType';
 import buildTestData from '../../../test-data/buildTestData';
@@ -90,6 +90,7 @@ const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.song,
     ResourceType.audioItem,
     ResourceType.video,
+    ResourceType.spatialFeature,
 ];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {
