@@ -13,9 +13,9 @@ import {
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { ConsoleCoscradCliLogger } from '../../../../coscrad-cli/logging';
 import { NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
@@ -24,8 +24,8 @@ import { ArangoDatabaseProvider } from '../../../../persistence/database/databas
 import mapDatabaseDocumentToAggregateDTO from '../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../persistence/persistence.module';
-import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoRepositoryForAggregate } from '../../../../persistence/repositories/arango-repository-for-aggregate';
+import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { TermViewModel } from '../../../../queries/buildViewModelForResource/viewModels/term.view-model';
@@ -37,13 +37,12 @@ import {
 import { TestEventStream } from '../../../../test-data/events';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { AggregateId } from '../../../types/AggregateId';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { EdgeConnection } from '../../context/edge-connection.entity';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import idEquals from '../../shared/functional/idEquals';
@@ -53,6 +52,7 @@ import { ITermQueryRepository } from '../../term/queries';
 import { ArangoTermQueryRepository } from '../../term/repositories';
 import { CoscradContributor } from '../../user-management/contributor';
 import { FullName } from '../../user-management/user/entities/user/full-name.entity';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { FilterPropertyType, VocabularyListCreated } from '../commands';
 import { IVocabularyListQueryRepository } from '../queries';
 import { ArangoVocabularyListQueryRepository } from './arango-vocabulary-list-query-repository';

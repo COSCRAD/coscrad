@@ -2,9 +2,9 @@ import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { ConsoleCoscradCliLogger } from '../../../../../coscrad-cli/logging';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
@@ -13,10 +13,10 @@ import generateDatabaseNameForTestSuite from '../../../../../persistence/reposit
 import { TermViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/term.view-model';
 import { VocabularyListViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { TestEventStream } from '../../../../../test-data/events';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { TermCreated } from '../../../term/commands';
 import { ITermQueryRepository } from '../../../term/queries';
 import { ArangoTermQueryRepository } from '../../../term/repositories';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { IVocabularyListQueryRepository } from '../../queries';
 import { ArangoVocabularyListQueryRepository } from '../../repositories';
 import { VocabularyListCreated } from '../create-vocabulary-list';
@@ -166,18 +166,38 @@ describe(`TermAddedToVocabularyListEventHandler.handle`, () => {
     });
 
     describe(`when there is an existing vocabulary list`, () => {
-        it(`should add the given term`, async () => {
-            await eventHandler.handle(termAddedEvent);
+        describe(`when the event is handled once`, () => {
+            it(`should add the given term`, async () => {
+                await eventHandler.handle(termAddedEvent);
 
-            const updatedView = (await testQueryRepository.fetchById(
-                existingView.id
-            )) as VocabularyListViewModel;
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as VocabularyListViewModel;
 
-            const entrySearchResult = updatedView.entries.find(
-                ({ term }) => term.id === existingTermView.id
-            );
+                const entrySearchResult = updatedView.entries.find(
+                    ({ term }) => term.id === existingTermView.id
+                );
 
-            expect(entrySearchResult).toBeTruthy();
+                expect(entrySearchResult).toBeTruthy();
+            });
+        });
+
+        describe(`when the event is handled a second time`, () => {
+            it(`should not add an additional entry for the same term`, async () => {
+                await eventHandler.handle(termAddedEvent);
+
+                await eventHandler.handle(termAddedEvent);
+
+                const updatedView = (await testQueryRepository.fetchById(
+                    existingView.id
+                )) as VocabularyListViewModel;
+
+                const entriesForTargetTerm = updatedView.entries.filter(
+                    ({ term }) => term.id === existingTermView.id
+                );
+
+                expect(entriesForTargetTerm).toHaveLength(1);
+            });
         });
     });
 });

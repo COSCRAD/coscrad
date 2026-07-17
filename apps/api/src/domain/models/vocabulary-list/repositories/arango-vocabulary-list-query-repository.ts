@@ -226,12 +226,19 @@ export class ArangoVocabularyListQueryRepository implements IVocabularyListQuery
         await cursor.all();
     }
 
+    /**
+     * Note that this is idempotent to support an idempotent event consumer.
+     * In the long run, we should store `entriesByTermId`, which introduces
+     * idempotence by design and is more consistent with fine-grained data
+     * invalidation \ reactivity for the client.
+     */
     async addTerm(vocabularyListId: AggregateId, termId: AggregateId): Promise<void> {
         const query = `
             for v in @@collectionName
             filter v._key == @id
             for t in term__VIEWS
             filter t._key == @termId
+            filter @termId not in v.entries[*].term.id
             let newEntry = {
                 term: { 
                     id: t._key, 
