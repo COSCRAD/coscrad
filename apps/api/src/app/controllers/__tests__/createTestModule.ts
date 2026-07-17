@@ -216,6 +216,7 @@ import {
     CreatePoint,
     CreatePointCommandHandler,
 } from '../../../domain/models/spatial-feature/point/commands';
+import { Point } from '../../../domain/models/spatial-feature/point/entities/point.entity';
 import {
     CreateTag,
     CreateTagCommandHandler,
