@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { MultilingualTextPresenter } from '../../shared/multilingual-text-presenter';
 import { getTranslationsForLanguageSelection } from '../terms/term-detail.page';
 import { findOriginalMultilingualTextItem } from '../terms/term-index.page';
 import { useFetchVocabularyListByIdQuery } from './store';
@@ -12,17 +13,14 @@ export const VocabularyListDetail = (): JSX.Element => {
 
     const { isAuthenticated } = useAuth0();
 
-    const { name, entries, isPublished, contributions, isLoading, isError } =
-        useFetchVocabularyListByIdQuery(id, {
-            selectFromResult: (result) => ({
-                name: result.data?.name,
-                entries: result.data?.entries,
-                contributions: result.data?.contributions,
-                isPublished: result.data?.isPublished,
-                isLoading: result.isLoading,
-                isError: result.isError,
-            }),
-        });
+    const { name, entries, isLoading, isError } = useFetchVocabularyListByIdQuery(id, {
+        selectFromResult: (result) => ({
+            name: result.data?.name,
+            entries: result.data?.entries,
+            isLoading: result.isLoading,
+            isError: result.isError,
+        }),
+    });
 
     if (isLoading || !name) {
         return <div>Loading...</div>;
@@ -51,25 +49,26 @@ export const VocabularyListDetail = (): JSX.Element => {
                                 );
 
                                 return (
-                                    <Box sx={{ mb: '3px' }}>
-                                        <Typography variant="h5">
-                                            {originalTermName.text} ({entry.term.id})
-                                        </Typography>
-                                        <Box sx={{ ml: 0.5 }}>
-                                            {entry.term.name.items.length > 0
-                                                ? entry.term.name.items.map((translation) => {
-                                                      const { languageCode, text, role } =
-                                                          translation;
+                                    <MultilingualTextPresenter text={entry.term.name} />
+                                    // <Box sx={{ mb: '3px' }}>
+                                    //     <Typography variant="h5">
+                                    //         {originalTermName.text} ({entry.term.id})
+                                    //     </Typography>
+                                    //     <Box sx={{ ml: 0.5 }}>
+                                    //         {entry.term.name.items.length > 0
+                                    //             ? entry.term.name.items.map((translation) => {
+                                    //                   const { languageCode, text, role } =
+                                    //                       translation;
 
-                                                      return (
-                                                          <Typography variant="body1">
-                                                              {text} ({languageCode}, {role})
-                                                          </Typography>
-                                                      );
-                                                  })
-                                                : null}
-                                        </Box>
-                                    </Box>
+                                    //                   return (
+                                    //                       <Typography variant="body1">
+                                    //                           {text} ({languageCode}, {role})
+                                    //                       </Typography>
+                                    //                   );
+                                    //               })
+                                    //             : null}
+                                    //     </Box>
+                                    // </Box>
                                 );
                             })}
                         </Stack>
