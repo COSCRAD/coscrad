@@ -48,6 +48,7 @@ type GeometryViewModel = {
         },
     },
 })
+// do we need the interface here?
 export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
     readonly type = ResourceType.spatialFeature;
 

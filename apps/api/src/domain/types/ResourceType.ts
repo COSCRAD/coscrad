@@ -16,6 +16,7 @@ import { VocabularyList } from '../models/vocabulary-list/entities/vocabulary-li
 import { ResourceType } from '@coscrad/api-interfaces';
 import { Video } from '../models/audio-visual/video/entities/video.entity';
 import { DigitalText } from '../models/digital-text/entities/digital-text.entity';
+import { GeospatialMap } from '../models/geospatial-map/geospatial-map.entity';
 import { Playlist } from '../models/playlist';
 import { CoscradContributor } from '../models/user-management/contributor/entities/coscrad-contributor.entity';
 
@@ -38,6 +39,7 @@ export type ResourceTypeToResourceModel = {
     video: Video;
     photograph: Photograph;
     spatialFeature: ISpatialFeature;
+    map: GeospatialMap;
     bibliographicCitation: IBibliographicCitation;
     digitalText: DigitalText;
     song: Song;
