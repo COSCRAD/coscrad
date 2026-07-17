@@ -1,4 +1,4 @@
-import { AggregateType, ICommandBase } from '@coscrad/api-interfaces';
+import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
 import { UUID } from '@coscrad/data-types';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
@@ -26,7 +26,11 @@ export class CreateMap implements ICommandBase {
 
     name: MultilingualText;
 
+    languageCodeForName: LanguageCode;
+
     description: MultilingualText;
+
+    languageCodeForDescription: LanguageCode;
 
     points: AggregateId[];
 }
