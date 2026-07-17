@@ -4,6 +4,7 @@ export enum ResourceType {
     audioItem = 'audioItem',
     photograph = 'photograph',
     spatialFeature = 'spatialFeature',
+    map = 'map',
     bibliographicCitation = 'bibliographicCitation',
     digitalText = 'digitalText',
     song = 'song',

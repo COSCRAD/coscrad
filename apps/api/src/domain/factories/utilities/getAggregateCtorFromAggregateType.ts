@@ -6,6 +6,7 @@ import { Video } from '../../models/audio-visual/video/entities/video.entity';
 import { Category } from '../../models/categories/entities/category.entity';
 import { EdgeConnection } from '../../models/context/edge-connection.entity';
 import { DigitalText } from '../../models/digital-text/entities/digital-text.entity';
+import { GeospatialMap } from '../../models/geospatial-map/geospatial-map.entity';
 import { MediaItem } from '../../models/media-item/entities/media-item.entity';
 import { Photograph } from '../../models/photograph/entities/photograph.entity';
 import { Playlist } from '../../models/playlist';
@@ -43,6 +44,7 @@ export const aggregateTypeToAggregateCtor: {
     [AggregateType.vocabularyList]: VocabularyList,
     [AggregateType.playlist]: Playlist,
     [AggregateType.category]: Category,
+    [AggregateType.map]: GeospatialMap,
 };
 
 /**
