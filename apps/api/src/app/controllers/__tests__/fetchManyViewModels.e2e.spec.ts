@@ -83,8 +83,8 @@ describe('When fetching multiple resources', () => {
         AggregateType.song,
         AggregateType.audioItem,
         AggregateType.video,
-        // TODO include this
-        // AggregateType.spatialFeature
+        AggregateType.spatialFeature,
+        // TODO add standalone tests for media item, song, and bibliographic citation
     ];
 
     Object.values(ResourceType)
