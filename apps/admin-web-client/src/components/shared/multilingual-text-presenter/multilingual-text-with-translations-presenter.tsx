@@ -16,11 +16,12 @@ export const ExpandableMultilingualTextWithTranslationsPresenter = ({
         <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             data-testid="multilingual-text-main-text-item-with-translations"
+            sx={{ height: '10px', p: 0 }}
         >
             <MultilingualTextItemPresenter
                 key={primaryMultilingualTextItem.languageCode}
                 text={primaryMultilingualTextItem.text}
-                variant="h4"
+                variant="body1"
                 languageCode={primaryMultilingualTextItem.languageCode}
                 role={primaryMultilingualTextItem.role}
             />

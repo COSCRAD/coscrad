@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { MultilingualTextPresenter } from '../../shared/multilingual-text-presenter';
+import { getLabelForLanguage } from '../../shared/multilingual-text-presenter/get-label-for-language';
 import { getTranslationsForLanguageSelection } from '../terms/term-detail.page';
 import { findOriginalMultilingualTextItem } from '../terms/term-index.page';
 import { useFetchVocabularyListByIdQuery } from './store';
@@ -34,9 +35,10 @@ export const VocabularyListDetail = (): JSX.Element => {
 
     return (
         <>
-            <Typography variant="h6">Vocabulary List:</Typography>
+            <Typography variant="h4">Vocabulary List:</Typography>
             <Typography variant="h3">
-                {originalNameItem.text} ({originalNameItem.languageCode}, {originalNameItem.role})
+                {originalNameItem.text} ({getLabelForLanguage(originalNameItem.languageCode)},{' '}
+                {originalNameItem.role})
             </Typography>
             <Stack>
                 {entries.length > 0 ? (
