@@ -2,7 +2,7 @@ import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
 import { Box } from '@mui/material';
 import { FlatMultilingualTextPresenter } from './flat-multilingual-text-presenter';
 import { groupMultilingualTextItems } from './group-multilingual-text-items';
-import { ExpandableMultilingualTextWithTranslationsPresenter } from './multilingual-text-with-translations-presenter';
+import { MultilingualTextTooltipPresenter } from './multilingual-text-tooltip-presenter';
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
@@ -19,9 +19,9 @@ export const MultilingualTextPresenter = ({
     );
 
     return (
-        <Box width={'fit-content'} data-testid="multilingual-text-display">
+        <Box data-testid="multilingual-text-display">
             {isTranslated ? (
-                <ExpandableMultilingualTextWithTranslationsPresenter
+                <MultilingualTextTooltipPresenter
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
                     translations={translations}
                 />
