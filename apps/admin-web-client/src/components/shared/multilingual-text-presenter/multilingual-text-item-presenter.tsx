@@ -1,6 +1,5 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
-import { Language as LanguageIcon } from '@mui/icons-material';
-import { IconButton, Tooltip, Typography, TypographyProps } from '@mui/material';
+import { Typography, TypographyProps } from '@mui/material';
 import { getLabelForLanguage } from './get-label-for-language';
 
 interface MultilingualTextItemPresenterProps {
@@ -18,12 +17,7 @@ export const MultilingualTextItemPresenter = ({
 }: MultilingualTextItemPresenterProps): JSX.Element => {
     return (
         <Typography component="span" variant={variant} margin={'auto 0'}>
-            {text}
-            <Tooltip title={`${getLabelForLanguage(languageCode)}, '${role}'`}>
-                <IconButton>
-                    <LanguageIcon />
-                </IconButton>
-            </Tooltip>
+            {text} ({`${getLabelForLanguage(languageCode)}, '${role}'`})
         </Typography>
     );
 };
