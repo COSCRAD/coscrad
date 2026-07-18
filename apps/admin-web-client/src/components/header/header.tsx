@@ -36,13 +36,10 @@ export const Header = (): JSX.Element => {
         <StyledAppBar data-testid={'header'}>
             <StyledToolbar>
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', color: 'Background' }}>
-                        <StyledSiteTitle
-                            sx={{ marginRight: '20px', display: 'flex', alignItems: 'center' }}
-                        ></StyledSiteTitle>
+                    <Box sx={{ display: 'flex', alignItems: 'center', color: 'Background', pl: 2 }}>
                         <StyledSiteTitle>
                             <Typography
-                                sx={{ fontSize: 'calc(16px + 0.7vw) !important' }}
+                                sx={{ fontSize: 'calc(16px + 0.7vw) !important', color: '#000' }}
                                 variant="h1"
                             >
                                 {siteTitle}
@@ -51,16 +48,19 @@ export const Header = (): JSX.Element => {
                     </Box>
                 </Link>
                 <nav>
-                    <Typography variant="body1" sx={{ textDecoration: 'none' }}>
-                        <Link to="/" style={{ textDecoration: 'none' }}>
+                    <Typography variant="body1">
+                        <Link to="/" style={{ textDecoration: 'none', color: '#000' }}>
                             Home
                         </Link>
                         &nbsp;|&nbsp;
-                        <Link to="/terms" style={{ textDecoration: 'none' }}>
+                        <Link to="/terms" style={{ textDecoration: 'none', color: '#000' }}>
                             Terms
                         </Link>
                         &nbsp;|&nbsp;
-                        <Link to="/vocabularyLists" style={{ textDecoration: 'none' }}>
+                        <Link
+                            to="/vocabularyLists"
+                            style={{ textDecoration: 'none', color: '#000' }}
+                        >
                             Vocabulary Lists
                         </Link>
                     </Typography>

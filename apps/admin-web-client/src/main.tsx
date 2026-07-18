@@ -1,3 +1,4 @@
+import { CssBaseline } from '@mui/material';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -12,6 +13,7 @@ root.render(
     <StrictMode>
         <Provider store={store}>
             <CoscradThemeProvider>
+                <CssBaseline />
                 <BrowserRouter>
                     <Auth0ProviderWithHistory>
                         <App />
