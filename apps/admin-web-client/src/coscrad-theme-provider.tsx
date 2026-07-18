@@ -72,13 +72,17 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     defaultProps: {
                         underline: 'none',
                     },
+                    styleOverrides: {
+                        root: {
+                            color: '#000',
+                        },
+                    },
                 },
             },
             palette: {
-                mode: 'dark',
                 primary: {
                     light: '#FF7B6E',
-                    main: '#6ab9ae',
+                    main: '#15695eff',
                     dark: '#A40011',
                     contrastText: '#FFFFFF',
                 },
@@ -94,6 +98,7 @@ export const CoscradThemeProvider = ({ children }: CoscradThemeProviderProps): J
                     disabled: '#BDBDBD',
                 },
                 background: {
+                    default: '#e4e4e4ff',
                     paper: '#F5F5F5',
                 },
                 action: {
