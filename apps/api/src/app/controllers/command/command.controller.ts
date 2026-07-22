@@ -78,10 +78,11 @@ export class CommandController {
     async executeCommand(@Request() req, @Res() res, @Body() commandFSA: CommandFSA) {
         // const { user } = req;
 
+        // Testerkk user
         const dummyAdminUser = buildTestData().user[0].clone({
             id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b110003',
             authProviderUserId: 'auth0|6494fe42ca274491fc92f73e',
-            roles: [CoscradUserRole.projectAdmin],
+            roles: [CoscradUserRole.superAdmin],
         });
 
         // Only the role matters here
