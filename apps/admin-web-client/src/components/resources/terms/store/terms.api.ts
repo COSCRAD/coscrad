@@ -16,6 +16,12 @@ type TermCommandFsa = {
     payload: { aggregateCompositeIdentifier: AggregateCompositeIdentifier } & UnknownPart;
 };
 
+type TermPayload = {
+    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    text: string;
+    languageCode: LanguageCode;
+};
+
 type TranslationPayload = {
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
     translation: string;
@@ -67,62 +73,75 @@ export const termApi = createApi({
 
                 let commandPayload;
 
-                if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
-                    commandPayload = payload as NotePayload;
+                switch (commandType) {
+                    case 'CREATE_TERM':
+                        commandPayload = payload as TermPayload;
 
-                    id = payload.resourceCompositeIdentifier.id;
-                } else {
-                    commandPayload = payload as TranslationPayload;
+                        break;
+                    case 'CREATE_NOTE_ABOUT_RESOURCE':
+                        commandPayload = payload as NotePayload;
 
-                    id = commandPayload.aggregateCompositeIdentifier.id;
+                        id = payload.resourceCompositeIdentifier.id;
+
+                        break;
+                    case 'TRANSLATE_TERM':
+                        commandPayload = payload as TranslationPayload;
+
+                        id = commandPayload.aggregateCompositeIdentifier.id;
+
+                        break;
                 }
 
                 if (commandAcknowledgement === 'Ack') {
                     console.log('command successful', commandType);
 
-                    dispatch(
-                        termApi.util.updateQueryData('fetchTermById', id, (draft) => {
-                            const term = draft as ITermViewModel;
+                    if (commandType === 'PUBLISH_RESOURCE') {
+                        dispatch(termApi.util.invalidateTags(['term']));
+                    } else {
+                        dispatch(
+                            termApi.util.updateQueryData('fetchTermById', id, (draft) => {
+                                const term = draft as ITermViewModel;
 
-                            if (commandType === 'TRANSLATE_TERM') {
-                                const {
-                                    name: { items },
-                                } = term;
+                                if (commandType === 'TRANSLATE_TERM') {
+                                    const {
+                                        name: { items },
+                                    } = term;
 
-                                term.name.items = [
-                                    ...items,
-                                    {
-                                        languageCode: commandPayload.languageCode,
-                                        text: commandPayload.translation,
-                                        role: MultilingualTextItemRole.freeTranslation,
-                                    },
-                                ];
-                            }
+                                    term.name.items = [
+                                        ...items,
+                                        {
+                                            languageCode: commandPayload.languageCode,
+                                            text: commandPayload.translation,
+                                            role: MultilingualTextItemRole.freeTranslation,
+                                        },
+                                    ];
+                                }
 
-                            if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
-                                const { notes } = term;
+                                if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
+                                    const { notes } = term;
 
-                                const noteId = commandPayload.aggregateCompositeIdentifier.id;
+                                    const noteId = commandPayload.aggregateCompositeIdentifier.id;
 
-                                const newNote: IMultilingualTextRecord = {
-                                    original: {
-                                        text: commandPayload.text,
-                                        languageCode: commandPayload.languageCode,
-                                    },
-                                    translations: {},
-                                };
+                                    const newNote: IMultilingualTextRecord = {
+                                        original: {
+                                            text: commandPayload.text,
+                                            languageCode: commandPayload.languageCode,
+                                        },
+                                        translations: {},
+                                    };
 
-                                term.notes = {
-                                    ...notes,
-                                    [noteId]: {
-                                        id: noteId,
-                                        context: commandPayload.resourceContext,
-                                        note: newNote,
-                                    },
-                                };
-                            }
-                        })
-                    );
+                                    term.notes = {
+                                        ...notes,
+                                        [noteId]: {
+                                            id: noteId,
+                                            context: commandPayload.resourceContext,
+                                            note: newNote,
+                                        },
+                                    };
+                                }
+                            })
+                        );
+                    }
                 }
             },
         }),

@@ -7,6 +7,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { Box, Stack, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { useFetchTermByIdQuery } from './store';
@@ -57,13 +58,19 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
     return (
         <>
             <Typography variant="h3">Term</Typography>
-            <Typography variant="h4">
-                {originalTermItem.text} ({originalTermItem.languageCode}, {originalTermItem.role})
-            </Typography>
+            <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                <Typography variant="h4" sx={{ mr: 1 }}>
+                    {originalTermItem.text} ({originalTermItem.languageCode},{' '}
+                    {originalTermItem.role})
+                </Typography>
+                {contributions.length > 0 ? (
+                    <ContributionsPresenter contributions={contributions} />
+                ) : null}
+            </Box>
             {name.items.length > 0 ? (
-                <Box sx={{ marginTop: '5px' }}>
+                <Box sx={{ mt: '5px' }}>
                     <Typography variant="h5">Translations:</Typography>
-                    <Stack sx={{ marginLeft: '7px' }}>
+                    <Stack sx={{ ml: 1, mb: 1 }}>
                         {name.items
                             .filter((item) => item.role !== MultilingualTextItemRole.original)
                             .map((item) => (
@@ -77,18 +84,25 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     </Stack>
                     {vocabularyLists.length > 0 ? (
                         <>
-                            <Typography variant="h5">Vocabulary Lists:</Typography>
-                            <Stack>
+                            <Typography variant="h5">
+                                Vocabulary Lists that include this Term:
+                            </Typography>
+                            <Stack sx={{ ml: '7px' }}>
                                 {vocabularyLists.map((vocabularyList) => {
                                     const { id, name } = vocabularyList;
+
+                                    const href = `/vocabularyLists/${id}`;
 
                                     const originalVocabularyListItem = getOriginalTextItem(name);
 
                                     return (
                                         <Box key={id}>
-                                            <Typography variant="h4">
+                                            <Link
+                                                to={href}
+                                                style={{ textDecoration: 'none', color: '#000' }}
+                                            >
                                                 {originalVocabularyListItem.text}
-                                            </Typography>
+                                            </Link>
                                         </Box>
                                     );
                                 })}
@@ -107,9 +121,6 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                         buttonLabel: 'TRANSLATE TERM',
                     }}
                 />
-            ) : null}
-            {contributions.length > 0 ? (
-                <ContributionsPresenter contributions={contributions} />
             ) : null}
         </>
     );

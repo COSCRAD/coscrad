@@ -9,14 +9,14 @@ type Form = ({
     generatedId,
 }: {
     onClose: () => void;
-    context;
+    context?;
     generatedId?: string;
 }) => JSX.Element;
 
 interface FormProps {
     context: {
-        resourceType: string;
-        resourceId: string;
+        resourceType?: string;
+        resourceId?: string;
         // Hacky workaround
         languageCodesInUse?: LanguageCode[];
         buttonLabel: string;
