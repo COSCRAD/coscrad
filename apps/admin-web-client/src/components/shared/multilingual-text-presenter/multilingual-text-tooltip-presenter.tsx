@@ -3,9 +3,11 @@ import { Box, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 import { MultilingualTextItemPresenter } from './multilingual-text-item-presenter';
 
 interface MultilingualTextTooltipPresenterProps {
+    termId?: string;
     primaryMultilingualTextItem: IMultilingualTextItem;
     translations: IMultilingualTextItem[];
 }
@@ -30,9 +32,14 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 export const MultilingualTextTooltipPresenter = ({
+    termId,
     primaryMultilingualTextItem,
     translations,
 }: MultilingualTextTooltipPresenterProps): JSX.Element => {
+    const navigate = useNavigate();
+
+    const href = `/terms/${termId}`;
+
     return (
         <div>
             <HtmlTooltip
@@ -52,7 +59,7 @@ export const MultilingualTextTooltipPresenter = ({
                     </>
                 }
             >
-                <Button>
+                <Button onClick={() => navigate(href)}>
                     <MultilingualTextItemPresenter
                         key={primaryMultilingualTextItem.languageCode}
                         text={primaryMultilingualTextItem.text}

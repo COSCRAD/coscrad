@@ -1,66 +1,80 @@
 import { IContributionSummary } from '@coscrad/api-interfaces';
-import { ListRounded as ListRoundedIcon } from '@mui/icons-material';
-import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material/';
+import { ListRounded, ListRounded as ListRoundedIcon } from '@mui/icons-material';
 import PersonIcon from '@mui/icons-material/Person';
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
     Avatar,
     Divider,
+    IconButton,
     List,
     ListItem,
     ListItemAvatar,
     ListItemIcon,
-    Paper,
+    styled,
+    Tooltip,
+    tooltipClasses,
+    TooltipProps,
     Typography,
 } from '@mui/material';
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip
+        describeChild
+        {...props}
+        classes={{ popper: className }}
+        placement="bottom-start"
+        arrow
+    />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#487172ff',
+        color: '#69e0e0ff',
+        paddingTop: '10px',
+        maxWidth: 520,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
 
 export const ContributionsPresenter = ({
     contributions,
 }: {
     contributions: IContributionSummary[];
 }): JSX.Element => (
-    <Accordion elevation={0} disableGutters data-testid="resource-contributions">
-        <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            sx={{
-                minHeight: '25px', // Adjust to a smaller value (e.g., 40px)
-                '&.Mui-expanded': {
-                    minHeight: '25px', // Ensure it stays compact when expanded
-                },
-                maxHeight: '40px',
-                mt: 1,
-            }}
+    <div>
+        <HtmlTooltip
+            title={
+                <>
+                    <List dense>
+                        <ListItem disableGutters sx={{ pt: 0, pb: 0, pl: 1 }}>
+                            <ListItemAvatar>
+                                <Avatar sx={{ bgcolor: '#ccc', width: 30, height: 30 }}>
+                                    <ListRoundedIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <Typography variant="body1">System Contributions Record</Typography>
+                        </ListItem>
+                    </List>
+                    <List sx={{ ml: 1 }} dense>
+                        {contributions.map((contribution, index) => (
+                            <ListItem
+                                disableGutters
+                                style={{ borderBottom: '1px solid #ccc' }}
+                                key={`${contribution.type}-${index}`}
+                                data-testid={`${contribution.type}-${index}`}
+                            >
+                                <ContributionPresenter contribution={contribution} />
+                                <Divider />
+                            </ListItem>
+                        ))}
+                    </List>
+                </>
+            }
         >
-            <List component={Paper} elevation={0} dense>
-                <ListItem disableGutters sx={{ pt: 0, pb: 0, pl: 1 }}>
-                    <ListItemAvatar>
-                        <Avatar sx={{ bgcolor: '#ccc', width: 30, height: 30 }}>
-                            <ListRoundedIcon />
-                        </Avatar>
-                    </ListItemAvatar>
-                    <Typography variant="body1">Contributions</Typography>
-                </ListItem>
-            </List>
-        </AccordionSummary>
-
-        <AccordionDetails>
-            <List component={Paper} elevation={0} sx={{ ml: 1 }} dense>
-                {contributions.map((contribution, index) => (
-                    <ListItem
-                        disableGutters
-                        style={{ borderBottom: '1px solid #ccc' }}
-                        key={`${contribution.type}-${index}`}
-                        data-testid={`${contribution.type}-${index}`}
-                    >
-                        <ContributionPresenter contribution={contribution} />
-                        <Divider />
-                    </ListItem>
-                ))}
-            </List>
-        </AccordionDetails>
-    </Accordion>
+            <IconButton>
+                <ListRounded />
+            </IconButton>
+        </HtmlTooltip>
+    </div>
 );
 interface ContributionPresenterProps {
     contribution: IContributionSummary;
