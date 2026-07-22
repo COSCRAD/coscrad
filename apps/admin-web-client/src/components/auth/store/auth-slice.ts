@@ -16,8 +16,6 @@ export const authSlice = createSlice({
             { payload: { userId, token } }: PayloadAction<AuthenticatedUserInfo>
         ) => {
             // Note that Immer will handle this uptate immutably
-            console.log({ token });
-
             return {
                 hasAuthenticatedUser: true,
                 userAuthInfo: { userId, token },

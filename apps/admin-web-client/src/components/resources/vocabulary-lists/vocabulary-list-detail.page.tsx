@@ -1,6 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { MultilingualTextPresenter } from '../../shared/multilingual-text-presenter';
 import { getLabelForLanguage } from '../../shared/multilingual-text-presenter/get-label-for-language';
 import { getTranslationsForLanguageSelection } from '../terms/term-detail.page';
@@ -14,14 +15,18 @@ export const VocabularyListDetail = (): JSX.Element => {
 
     const { isAuthenticated } = useAuth0();
 
-    const { name, entries, isLoading, isError } = useFetchVocabularyListByIdQuery(id, {
-        selectFromResult: (result) => ({
-            name: result.data?.name,
-            entries: result.data?.entries,
-            isLoading: result.isLoading,
-            isError: result.isError,
-        }),
-    });
+    const { name, entries, contributions, isLoading, isError } = useFetchVocabularyListByIdQuery(
+        id,
+        {
+            selectFromResult: (result) => ({
+                name: result.data?.name,
+                entries: result.data?.entries,
+                contributions: result.data?.contributions,
+                isLoading: result.isLoading,
+                isError: result.isError,
+            }),
+        }
+    );
 
     if (isLoading || !name) {
         return <div>Loading...</div>;
@@ -36,41 +41,29 @@ export const VocabularyListDetail = (): JSX.Element => {
     return (
         <>
             <Typography variant="h4">Vocabulary List:</Typography>
-            <Typography variant="h3">
-                {originalNameItem.text} ({getLabelForLanguage(originalNameItem.languageCode)},{' '}
-                {originalNameItem.role})
-            </Typography>
+            <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                <Typography variant="h3" sx={{ mr: 1 }}>
+                    {originalNameItem.text} ({getLabelForLanguage(originalNameItem.languageCode)},{' '}
+                    {originalNameItem.role})
+                </Typography>
+                {contributions.length > 0 ? (
+                    <ContributionsPresenter contributions={contributions} />
+                ) : null}
+            </Box>
             <Stack>
                 {entries.length > 0 ? (
                     <>
-                        <Typography variant="h4">Terms:</Typography>
+                        <Typography variant="h4" sx={{ mb: 2 }}>
+                            Terms:
+                        </Typography>
                         <Stack>
                             {entries.map((entry) => {
-                                const originalTermName = findOriginalMultilingualTextItem(
-                                    entry.term.name
-                                );
+                                const {
+                                    term: { id },
+                                } = entry;
 
                                 return (
-                                    <MultilingualTextPresenter text={entry.term.name} />
-                                    // <Box sx={{ mb: '3px' }}>
-                                    //     <Typography variant="h5">
-                                    //         {originalTermName.text} ({entry.term.id})
-                                    //     </Typography>
-                                    //     <Box sx={{ ml: 0.5 }}>
-                                    //         {entry.term.name.items.length > 0
-                                    //             ? entry.term.name.items.map((translation) => {
-                                    //                   const { languageCode, text, role } =
-                                    //                       translation;
-
-                                    //                   return (
-                                    //                       <Typography variant="body1">
-                                    //                           {text} ({languageCode}, {role})
-                                    //                       </Typography>
-                                    //                   );
-                                    //               })
-                                    //             : null}
-                                    //     </Box>
-                                    // </Box>
+                                    <MultilingualTextPresenter text={entry.term.name} termId={id} />
                                 );
                             })}
                         </Stack>
