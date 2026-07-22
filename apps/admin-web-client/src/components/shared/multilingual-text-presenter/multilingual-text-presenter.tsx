@@ -6,10 +6,12 @@ import { MultilingualTextTooltipPresenter } from './multilingual-text-tooltip-pr
 
 export interface MultilingualTextPresenterProps {
     text: IMultilingualText;
+    termId?: string;
 }
 
 export const MultilingualTextPresenter = ({
     text,
+    termId,
 }: MultilingualTextPresenterProps): JSX.Element => {
     const defaultLanguageCode = LanguageCode.Haida;
 
@@ -22,6 +24,7 @@ export const MultilingualTextPresenter = ({
         <Box data-testid="multilingual-text-display">
             {isTranslated ? (
                 <MultilingualTextTooltipPresenter
+                    termId={termId}
                     primaryMultilingualTextItem={primaryMultilingualTextItem}
                     translations={translations}
                 />
