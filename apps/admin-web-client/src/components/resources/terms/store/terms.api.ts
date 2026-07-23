@@ -55,6 +55,13 @@ export const termApi = createApi({
                 url: `resources/terms`,
                 method: 'POST',
             }),
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.entities.map(({ id }) => ({ type: 'term' as const, id })),
+                          { type: 'term', id: 'LIST' },
+                      ]
+                    : [{ type: 'term', id: 'LIST' }],
         }),
         executeTermCommand: builder.mutation<string, TermCommandFsa>({
             query: (commandFsa) => ({
@@ -96,6 +103,8 @@ export const termApi = createApi({
                     console.log('command successful', commandType);
 
                     if (commandType === 'PUBLISH_RESOURCE') {
+                        console.log('publishing term');
+
                         dispatch(termApi.util.invalidateTags(['term']));
                     } else {
                         dispatch(
