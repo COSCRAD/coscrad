@@ -26,7 +26,7 @@ const buildTermDocument = (
         isPublished: true,
         vocabularyLists: [],
         tokens: [],
-        notes: [],
+        notes: {},
         connections: [],
         contributions: [],
         actions: [],
