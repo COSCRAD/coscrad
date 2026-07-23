@@ -59,17 +59,17 @@ export const CreateTermForm = ({ generatedId, onClose }: CreateTermFormProps): J
             },
         });
 
-        // setTimeout(() => {
-        //     executeTermCommand({
-        //         type: 'PUBLISH_RESOURCE',
-        //         payload: {
-        //             aggregateCompositeIdentifier: {
-        //                 type: AggregateType.term,
-        //                 id: generatedId,
-        //             },
-        //         },
-        //     });
-        // }, 2000);
+        setTimeout(() => {
+            executeTermCommand({
+                type: 'PUBLISH_RESOURCE',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.term,
+                        id: generatedId,
+                    },
+                },
+            });
+        }, 600);
 
         onClose();
     };
