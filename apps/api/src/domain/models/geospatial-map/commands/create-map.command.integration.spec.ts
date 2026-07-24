@@ -1,4 +1,4 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -27,13 +27,13 @@ const commandType = 'CREATE_MAP';
 
 const geospatialId = buildDummyUuid(3);
 
-const name = 'nowhere lane';
+// const name = 'nowhere lane';
 
-const languageCodeForName = LanguageCode.English;
+// const languageCodeForName = LanguageCode.English;
 
-const description = 'description of the location';
+// const description = 'description of the location';
 
-const languageCodeForDescription = LanguageCode.Chilcotin;
+// const languageCodeForDescription = LanguageCode.Chilcotin;
 
 const validFsa = {
     type: commandType,
@@ -119,7 +119,13 @@ describe(commandType, () => {
 
                     const updatedGeospatialMap = searchResult as unknown as GeospatialMap;
 
-                    expect(updatedGeospatialMap.name);
+                    expect(updatedGeospatialMap.name.getOriginalTextItem().text).toBe(
+                        validFsa.payload.name
+                    );
+
+                    expect(updatedGeospatialMap.description.getOriginalTextItem()).toBe(
+                        validFsa.payload.description
+                    );
                 },
             });
         });

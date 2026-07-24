@@ -1,9 +1,11 @@
 import { AggregateType, ICommandBase, LanguageCode } from '@coscrad/api-interfaces';
 import { Command } from '@coscrad/commands';
-import { UUID } from '@coscrad/data-types';
+import { NestedDataType, UUID } from '@coscrad/data-types';
+import { CoscradDataExample } from '../../../../test-data/utilities';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateTypeProperty } from '../../shared/common-commands';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 
 export class GeospatialMapCompositeIdentifier {
     @AggregateTypeProperty([AggregateType.map])
@@ -16,6 +18,19 @@ export class GeospatialMapCompositeIdentifier {
     id: AggregateId;
 }
 
+@CoscradDataExample<CreateMap>({
+    example: {
+        aggregateCompositeIdentifier: {
+            id: buildDummyUuid(8),
+            type: AggregateType.map,
+        },
+        name: { items: [] },
+        languageCodeForName: LanguageCode.English,
+        description: { items: [] },
+        languageCodeForDescription: LanguageCode.Chilcotin,
+        spatialFeatures: [],
+    },
+})
 @Command({
     type: 'CREATE_MAP',
     label: 'Create Map',
@@ -24,13 +39,21 @@ export class GeospatialMapCompositeIdentifier {
 export class CreateMap implements ICommandBase {
     readonly aggregateCompositeIdentifier: GeospatialMapCompositeIdentifier;
 
+    @NestedDataType(GeospatialMapCompositeIdentifier, {
+        label: 'name',
+        description: 'name for the map',
+    })
     name: MultilingualText;
 
     languageCodeForName: LanguageCode;
 
+    @NestedDataType(GeospatialMapCompositeIdentifier, {
+        label: 'description',
+        description: 'description of map',
+    })
     description: MultilingualText;
 
     languageCodeForDescription: LanguageCode;
 
-    points: AggregateId[];
+    spatialFeatures: AggregateId[];
 }
