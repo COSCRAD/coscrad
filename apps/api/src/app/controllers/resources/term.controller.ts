@@ -115,6 +115,8 @@ export class TermController {
             }
         }
 
+        console.log({ user: req.user });
+
         const result = await this.termQueryService.fetchMany(
             // TODO combine these parameters
             req.user || undefined,

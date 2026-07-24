@@ -10,12 +10,18 @@ import { InternalError } from '../lib/errors/InternalError';
  */
 export class OptionalJwtAuthGuard extends AuthGuard('jwt') {
     // Override handleRequest so no error is thrown for un-authenticated users
-    override handleRequest(err, user, __, ___) {
+    override handleRequest(err, user, info, ___) {
+        console.log('I am hahndling it bro!');
+
         if (err) {
             throw new InternalError(
                 `Optional Auth Guard encountered an unexpected error: ${err?.message || ''}`,
                 [err]
             );
+        }
+
+        if (info) {
+            console.log({ info });
         }
 
         return user;

@@ -5,6 +5,8 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 
+// TODO call this file `term-index.rbac.e2e.cy` or `term-index.access-control.cy`
+
 const buildTextByAccess = (index: number, publishedState: string) =>
     `This term is ${publishedState} #${index}.`;
 
@@ -68,6 +70,10 @@ describe(`Term admin role access`, () => {
             it(`should display the text for the published term`, () => {
                 cy.contains(publishedTermText);
             });
+
+            it(`should not display the text for the unpublished term`, () => {
+                cy.contains(unpublishedTermText).should('not.exist');
+            });
         });
     });
 
@@ -85,7 +91,9 @@ describe(`Term admin role access`, () => {
 
             it(`should display the text for the published term`, () => {
                 cy.contains(publishedTermText);
+            });
 
+            it(`should display the text for the unpublished term (admin have RBAC permissions to view all terms)`, () => {
                 cy.contains(unpublishedTermText);
             });
         });
