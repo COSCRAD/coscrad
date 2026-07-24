@@ -38,7 +38,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                 jwksRequestsPerMinute: 5,
                 jwksUri,
             }),
-
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             audience,
             issuer: issuerURL,
@@ -50,6 +49,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const auth0UserId = (payload as HasSub)?.sub;
 
         if (!auth0UserId) {
+            console.log('no user ID received from auth0');
+
             throw new UnauthorizedException();
         }
 
