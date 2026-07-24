@@ -1,5 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { ICoscradEvent, ICoscradEventHandler } from '../../../domain/common';
+import { MultilingualTextItem } from '../../../domain/common/entities/multilingual-text';
+import { getMultilingualTextFields } from '../multilingual-text';
 import { ITokenizerProvider, TOKENIZER_PROVIDER_INJECTION_TOKEN } from '../tokenization';
 import {
     FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN,
@@ -14,17 +16,31 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
         private readonly tokinzerProvider: ITokenizerProvider // // TODO How do we inject this? // private readonly schemaManager: ISchemaManager
     ) {}
 
-    handle(event: ICoscradEvent): Promise<void> {
-        const _constructor = Object.getPrototypeOf(event).constructor;
+    async handle(
+        event: ICoscradEvent & {
+            payload: { aggregateCompositeIdentifier: { type: string; id: string } };
+        }
+    ): Promise<void> {
+        const constructor = Object.getPrototypeOf(event.payload).constructor;
 
-        console.log('foo');
+        const fieldsToIndex = getMultilingualTextFields(constructor);
 
-        // TODO why isn't this working? Use DynamicDatatypeFinderService?
-        // const _schema = getCoscradDataSchemaFromPrototype(_constructor);
+        fieldsToIndex.forEach(async (fieldPath) => {
+            const value = event.payload[fieldPath] as MultilingualTextItem;
 
-        // TODO Find all ML text valued props
-        // TODO then tokenize and index the aggregateCompositeIdentifier against the given text \ letters
+            if (!this.tokinzerProvider.has(value.languageCode)) {
+                // we don't have a tokenizer for the language of this text
+                return;
+            }
 
-        return Promise.resolve();
+            const tokens = this.tokinzerProvider
+                .forLanguage(value.languageCode)
+                .tokenize(value.text);
+
+            await this.fullTextSearchQueryRepository.index(
+                tokens,
+                event.payload.aggregateCompositeIdentifier
+            );
+        });
     }
 }

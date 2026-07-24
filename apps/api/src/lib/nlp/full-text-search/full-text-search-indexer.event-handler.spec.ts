@@ -1,5 +1,10 @@
 import { LanguageCode, MultilingualTextItemRole, PaginatedResponse } from '@coscrad/api-interfaces';
-import { NestedDataType, NonNegativeFiniteNumber } from '@coscrad/data-types';
+import {
+    bootstrapDynamicTypes,
+    NestedDataType,
+    NonEmptyString,
+    NonNegativeFiniteNumber,
+} from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
@@ -9,9 +14,9 @@ import { MultilingualTextItem } from '../../../domain/common/entities/multilingu
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../domain/models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
+import { MultilingualTextField } from '../../../lib/nlp/multilingual-text';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
-import { BaseEvent } from '../../../queries/event-sourcing';
 import { CoscradNLPModule } from '../coscrad-natural-language-processing.module';
 import { ArangoFullTextSearchQueryRepository } from './arango-full-text-search-query-repository';
 import { FullTextSearchRecord } from './full-text-result-record.dto';
@@ -20,11 +25,26 @@ import { FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN } from './full-text-s
 
 const WIDGET = 'widget';
 
+class WidgetCompositeIdentifier {
+    @NonEmptyString({
+        label: 'type',
+        description: `always "${WIDGET}"`,
+    })
+    type = WIDGET;
+
+    @NonEmptyString({
+        label: 'ID',
+        description: 'system identifier',
+    })
+    id: string;
+}
+
 class EventWithMlTextPayload {
-    aggregateCompositeIdentifier: {
-        type: typeof WIDGET;
-        id: string;
-    };
+    @NestedDataType(WidgetCompositeIdentifier, {
+        label: 'composite ID',
+        description: 'system wide unique identifier for this widget',
+    })
+    aggregateCompositeIdentifier: WidgetCompositeIdentifier;
 
     @NonNegativeFiniteNumber({
         label: 'count',
@@ -32,16 +52,70 @@ class EventWithMlTextPayload {
     })
     count: number;
 
+    @MultilingualTextField()
     @NestedDataType(MultilingualTextItem, {
         label: 'description',
         description: 'test prop: description',
     })
     description: MultilingualTextItem;
+
+    @MultilingualTextField()
+    @NestedDataType(MultilingualTextItem, {
+        label: 'nickname',
+        description: 'test prop: nickname',
+    })
+    nickname: MultilingualTextItem;
+
+    constructor({
+        aggregateCompositeIdentifier,
+        count,
+        description,
+        nickname,
+    }: {
+        aggregateCompositeIdentifier: WidgetCompositeIdentifier;
+        count: number;
+        description: MultilingualTextItem;
+        nickname: MultilingualTextItem;
+    }) {
+        this.aggregateCompositeIdentifier = aggregateCompositeIdentifier;
+
+        this.count = count;
+
+        this.description = description;
+
+        this.nickname = nickname;
+    }
 }
 
-class EventWithMlText extends BaseEvent<EventWithMlTextPayload> {
+class EventWithMlText {
+    @NonEmptyString({
+        label: 'type',
+        description: 'distinguishes all events of the same type',
+    })
     readonly type = 'EVENT_WITH_ML_TEXT_HAPPENED';
+
+    @NestedDataType(EventWithMlTextPayload, {
+        label: 'payload',
+        description: 'data for this event',
+    })
     payload: EventWithMlTextPayload;
+
+    meta: Record<string, unknown>;
+
+    constructor(payload: EventWithMlTextPayload, meta: Record<string, unknown>) {
+        this.payload = new EventWithMlTextPayload(payload);
+
+        this.meta = meta;
+    }
+
+    isOfType(t: string) {
+        return t === 'EVENT_WITH_ML_TEXT_HAPPENED';
+    }
+
+    // TODO put some real logic here
+    isFor(): boolean {
+        return true;
+    }
 }
 
 /**
@@ -75,6 +149,8 @@ describe('FullTextSearchIndexer', () => {
         handler = app.get(FullTextSearchIndexer);
 
         testRepository = app.get(FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN);
+
+        bootstrapDynamicTypes([WidgetCompositeIdentifier, EventWithMlTextPayload, EventWithMlText]);
     });
 
     describe(`when the event has multilingual text`, () => {
@@ -95,6 +171,11 @@ describe('FullTextSearchIndexer', () => {
                 count: 5,
                 description: new MultilingualTextItem({
                     text: textToIndex,
+                    languageCode: targetLangaugeCode,
+                    role: MultilingualTextItemRole.original,
+                }),
+                nickname: new MultilingualTextItem({
+                    text: 'nickname text',
                     languageCode: targetLangaugeCode,
                     role: MultilingualTextItemRole.original,
                 }),
