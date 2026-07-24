@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common';
+import { ConsoleCoscradCliLogger, ICoscradLogger } from '../../../coscrad-cli/logging';
 import { ICoscradEvent, ICoscradEventHandler } from '../../../domain/common';
 import { MultilingualTextItem } from '../../../domain/common/entities/multilingual-text';
 import { getMultilingualTextFields } from '../multilingual-text';
@@ -9,6 +10,8 @@ import {
 } from './full-text-search-query.interface';
 
 export class FullTextSearchIndexer implements ICoscradEventHandler {
+    private readonly logger: ICoscradLogger = new ConsoleCoscradCliLogger();
+
     constructor(
         @Inject(FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN)
         private readonly fullTextSearchQueryRepository: IFullTextSearchQueryRepository,
@@ -37,10 +40,17 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
                 .forLanguage(value.languageCode)
                 .tokenize(value.text);
 
-            await this.fullTextSearchQueryRepository.index(
-                tokens,
-                event.payload.aggregateCompositeIdentifier
-            );
+            await this.fullTextSearchQueryRepository
+                .index(tokens, event.payload.aggregateCompositeIdentifier)
+                .catch((e) => {
+                    console.log(':(');
+
+                    this.logger.log(
+                        `Failed to tokenize text for event of type [${event.type}].\n ${e}`
+                    );
+                });
         });
+
+        console.log('hi');
     }
 }

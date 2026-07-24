@@ -15,6 +15,7 @@ import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDumm
 import { dummyDateNow } from '../../../domain/models/__tests__/utilities/dummyDateNow';
 import { dummySystemUserId } from '../../../domain/models/__tests__/utilities/dummySystemUserId';
 import { MultilingualTextField } from '../../../lib/nlp/multilingual-text';
+import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { CoscradNLPModule } from '../coscrad-natural-language-processing.module';
@@ -127,6 +128,8 @@ describe('FullTextSearchIndexer', () => {
 
     let testRepository: ArangoFullTextSearchQueryRepository;
 
+    let databaseProvider: ArangoDatabaseProvider;
+
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
             imports: [PersistenceModule.forRootAsync(), CoscradNLPModule],
@@ -150,10 +153,16 @@ describe('FullTextSearchIndexer', () => {
 
         testRepository = app.get(FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN);
 
+        databaseProvider = app.get(ArangoDatabaseProvider);
+
         bootstrapDynamicTypes([WidgetCompositeIdentifier, EventWithMlTextPayload, EventWithMlText]);
     });
 
     describe(`when the event has multilingual text`, () => {
+        beforeEach(async () => {
+            await databaseProvider.clearViews();
+        });
+
         const aggregateCompositeIdentifier = {
             type: WIDGET,
             id: buildDummyUuid(2),
@@ -191,7 +200,8 @@ describe('FullTextSearchIndexer', () => {
             await handler.handle(eventWithMlText);
 
             const searchResult = (await testRepository.findByLetter(
-                targetLetter
+                targetLetter,
+                targetLangaugeCode
             )) as PaginatedResponse<FullTextSearchRecord>;
 
             expect(searchResult.entities).toHaveLength(1);
