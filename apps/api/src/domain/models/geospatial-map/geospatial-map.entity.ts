@@ -1,18 +1,33 @@
 import { AggregateType } from '@coscrad/api-interfaces';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { Aggregate } from '../aggregate.entity';
+import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
 
 @AggregateRoot(AggregateType.map)
 export class GeospatialMap extends Aggregate {
+    @NestedDataType(GeospatialMapCompositeIdentifier, {
+        label: 'name',
+        description: 'name for the map',
+    })
     name: MultilingualText;
 
+    @NestedDataType(GeospatialMapCompositeIdentifier, {
+        label: 'description',
+        description: 'description for map',
+    })
     description: MultilingualText;
 
-    points: AggregateId[];
+    @NonEmptyString({
+        label: 'points',
+        description: 'description for the points',
+        isArray: true,
+    })
+    spatialFeatures: AggregateId[];
 
     protected validateComplexInvariants(): InternalError[] {
         throw new Error('Method not implemented.');
@@ -23,14 +38,14 @@ export class GeospatialMap extends Aggregate {
     }
 
     getName(): MultilingualText {
-        throw new Error('Method not implemented.');
+        return this.name;
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
         throw new Error('Method not implemented.');
     }
 
-    fromMapCreated() {
+    fromMapCreated(): GeospatialMap | InternalError {
         throw new Error('not implemented');
     }
 }

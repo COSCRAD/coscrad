@@ -1,5 +1,5 @@
 import { ICommandBase } from '@coscrad/api-interfaces';
-import { ICommand } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { Valid } from '../../../domainModelValidators/Valid';
@@ -8,7 +8,9 @@ import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-cre
 import { BaseEvent, IEventPayload } from '../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
 import { GeospatialMap } from '../geospatial-map.entity';
+import { CreateMap } from './create-map.command';
 
+@CommandHandler(CreateMap)
 export class CreateMapCommandHandler extends BaseCreateCommandHandler<GeospatialMap> {
     protected createNewInstance(_command: ICommandBase): ResultOrError<GeospatialMap> {
         throw new Error('Method not implemented.');
