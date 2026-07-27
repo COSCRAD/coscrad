@@ -6,7 +6,7 @@ import { userLoginSucceeded } from '../components/auth/store/auth-slice';
 import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
 import { TermContainer } from '../components/resources/terms/term-container';
-import { TermIndex } from '../components/resources/terms/term-index.page';
+import { TermIndex } from '../components/resources/terms/term-list.containter';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
 import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
 import { useAppDispatch } from './hooks';
@@ -33,7 +33,7 @@ export function App() {
         <Box>
             <Header />
 
-            <Box sx={{ paddingTop: '120px', marginLeft: '60px', width: '70%' }}>
+            <Box sx={{ paddingTop: '120px', marginLeft: '60px', width: '90%' }}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/terms" element={<TermIndex />} />
