@@ -1,7 +1,7 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import { Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { findOriginalMultilingualTextItem } from '../terms/term-index.page';
+import { findOriginalMultilingualTextItem } from '../terms/term-list.containter';
 import { useFetchVocabularyListsQuery } from './store';
 
 type VocabularyListListingProps = {
