@@ -11,8 +11,16 @@ import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { useFetchTermByIdQuery } from './store';
-import { findOriginalMultilingualTextItem } from './term-index.page';
+import { findOriginalMultilingualTextItem } from './term-list.containter';
 import { TranslateTermForm } from './translate-term-form';
+
+export const getTermTranslations = (name: IMultilingualText): IMultilingualTextItem[] => {
+    const translations = name.items.filter(
+        (item) => item.role !== MultilingualTextItemRole.original
+    );
+
+    return translations;
+};
 
 export const getTranslationsForLanguageSelection = (name: IMultilingualText): LanguageCode[] => {
     const languageCodesInUse = name.items.map((item) => item.languageCode);
@@ -20,7 +28,7 @@ export const getTranslationsForLanguageSelection = (name: IMultilingualText): La
     return languageCodesInUse;
 };
 
-const getOriginalTextItem = (name: IMultilingualText): IMultilingualTextItem => {
+export const getOriginalTextItem = (name: IMultilingualText): IMultilingualTextItem => {
     return name.items.find(({ role }) => role === MultilingualTextItemRole.original);
 };
 
@@ -53,6 +61,8 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     const originalTermItem = findOriginalMultilingualTextItem(name);
 
+    const translations = getTermTranslations(name);
+
     const languageCodesInUse = getTranslationsForLanguageSelection(name);
 
     return (
@@ -67,7 +77,7 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     <ContributionsPresenter contributions={contributions} />
                 ) : null}
             </Box>
-            {name.items.length > 0 ? (
+            {translations.length > 0 ? (
                 <Box sx={{ mt: '5px' }}>
                     <Typography variant="h5">Translations:</Typography>
                     <Stack sx={{ ml: 1, mb: 1 }}>
