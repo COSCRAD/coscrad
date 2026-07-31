@@ -27,14 +27,6 @@ const commandType = 'CREATE_MAP';
 
 const geospatialId = buildDummyUuid(3);
 
-// const name = 'nowhere lane';
-
-// const languageCodeForName = LanguageCode.English;
-
-// const description = 'description of the location';
-
-// const languageCodeForDescription = LanguageCode.Chilcotin;
-
 const validFsa = {
     type: commandType,
     payload: buildTestInstance(CreateMap, {

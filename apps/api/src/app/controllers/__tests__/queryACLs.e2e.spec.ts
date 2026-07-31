@@ -92,7 +92,7 @@ const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.audioItem,
     ResourceType.video,
     ResourceType.spatialFeature,
-    // ResourceType.map
+    ResourceType.map,
 ];
 
 describe('Access Control List and Role Based filtering in resource queries', () => {
