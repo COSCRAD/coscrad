@@ -1,5 +1,9 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 export const Home = (): JSX.Element => (
-    <Box>This is the Home Page. Use the nav above to view language terms.</Box>
+    <Box>
+        <Typography variant="h4">
+            Hello, this is the Home Page. Use the nav above to view language terms.
+        </Typography>
+    </Box>
 );
