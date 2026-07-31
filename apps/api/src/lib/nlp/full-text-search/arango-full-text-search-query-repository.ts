@@ -55,6 +55,7 @@ export class ArangoFullTextSearchQueryRepository implements IFullTextSearchQuery
             id: entityCompositeIdentifier.id,
             tokens,
         };
+
         const cursor = await this.database.query({ query: aql, bindVars });
 
         await cursor.all();

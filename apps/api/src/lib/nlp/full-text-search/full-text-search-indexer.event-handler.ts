@@ -28,7 +28,7 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
 
         const fieldsToIndex = getMultilingualTextFields(constructor);
 
-        fieldsToIndex.forEach(async (fieldPath) => {
+        for (const fieldPath of fieldsToIndex) {
             const value = event.payload[fieldPath] as MultilingualTextItem;
 
             if (!this.tokinzerProvider.has(value.languageCode)) {
@@ -49,8 +49,6 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
                         `Failed to tokenize text for event of type [${event.type}].\n ${e}`
                     );
                 });
-        });
-
-        console.log('hi');
+        }
     }
 }
