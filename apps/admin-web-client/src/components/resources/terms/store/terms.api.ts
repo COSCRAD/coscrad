@@ -36,6 +36,13 @@ type NotePayload = {
     resourceContext: { type: string };
 };
 
+export interface IUserQueryOptions {
+    pagination: {
+        size: number;
+        page: number;
+    };
+}
+
 export const termApi = createApi({
     reducerPath: 'terms',
     tagTypes: ['term'],
@@ -49,11 +56,15 @@ export const termApi = createApi({
                 return [tag];
             },
         }),
-        fetchTerms: builder.query<IIndexQueryResult<ITermViewModel>, void>({
+        fetchTerms: builder.query<IIndexQueryResult<ITermViewModel>, IUserQueryOptions>({
             // TODO inject user pagination and filter options
-            query: () => ({
+            query: (options) => ({
                 url: `resources/terms`,
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(options),
             }),
             providesTags: (result) =>
                 result
@@ -62,6 +73,7 @@ export const termApi = createApi({
                           { type: 'term', id: 'LIST' },
                       ]
                     : [{ type: 'term', id: 'LIST' }],
+            keepUnusedDataFor: 300,
         }),
         executeTermCommand: builder.mutation<string, TermCommandFsa>({
             query: (commandFsa) => ({

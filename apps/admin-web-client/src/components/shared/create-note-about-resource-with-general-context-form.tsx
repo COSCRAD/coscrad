@@ -22,9 +22,7 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
 
     const [text, setText] = useState('');
 
-    const defaultLanguageCode = LanguageCode.English;
-
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
+    const [languageCode, setLanguageCode] = useState<LanguageCode>();
 
     const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
         useExecuteTermCommandMutation();
@@ -55,7 +53,13 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
     const handleSubmit = async (event) => {
         event.preventDefault(); // Prevent browser refresh
 
-        console.log('Form sent to server:', text, languageCode, `${resourceType}/${resourceId}`);
+        console.log(
+            'Form sent to server:',
+            text,
+            languageCode,
+            `${resourceType}/${resourceId}`,
+            `generatedId: ${generatedId}`
+        );
 
         executeTermCommand({
             type: 'CREATE_NOTE_ABOUT_RESOURCE',
@@ -78,12 +82,13 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
     };
 
     return (
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '450px' }}>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '95%' }}>
             <div data-testid="create-note-for-resource-form" />
             <Stack>
                 <TextField
-                    sx={{ width: '80%' }}
                     data-testid={`text:note`}
+                    multiline
+                    rows={4}
                     onChange={(e) => {
                         setText(e.target.value);
                     }}
