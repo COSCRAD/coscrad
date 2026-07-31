@@ -94,6 +94,8 @@ export const TermIndexTable = ({
         ][]
     );
 
+    const randomNumber = Math.floor(Math.random() * 100);
+
     /**
      * TODO Break the presentation part of this table out so that we can inject
      * instead a mobile list view, for example, without rewriting the filtering
@@ -130,7 +132,9 @@ export const TermIndexTable = ({
                                         {headingLabels.map(({ propertyKey }) => (
                                             // A little inversion of control here
                                             // We may want to use some currying here
-                                            <TableCell key={String(propertyKey)}>
+                                            <TableCell
+                                                key={`${String(propertyKey)}-${randomNumber}`}
+                                            >
                                                 {renderCell(row, cellRenderers, propertyKey)}
                                             </TableCell>
                                         ))}

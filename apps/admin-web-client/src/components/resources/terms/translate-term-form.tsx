@@ -20,7 +20,7 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
 
     const defaultLanguageCode = LanguageCode.English;
 
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
+    const [languageCode, setLanguageCode] = useState<LanguageCode>();
 
     const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
         useExecuteTermCommandMutation();
@@ -46,6 +46,8 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
         return <div>Command Error: {commandError.message}</div>;
     }
 
+    console.log({ languageCode });
+
     const isDisabled =
         translation.length === 0 || !Object.values(LanguageCode).includes(languageCode);
 
@@ -70,7 +72,7 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
     };
 
     return (
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '450px' }}>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '250px' }}>
             <div data-testid="translate-term-form" />
             <Stack>
                 <TextField
