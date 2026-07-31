@@ -1,6 +1,7 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { DTO } from '../../../types/DTO';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
@@ -29,6 +30,18 @@ export class GeospatialMap extends Aggregate {
     })
     spatialFeatures: AggregateId[];
 
+    constructor(dto: DTO<GeospatialMap>) {
+        super({ ...dto, type: ResourceType.map });
+
+        if (!dto) return;
+
+        const { name, description } = dto;
+
+        this.name = new MultilingualText(name);
+
+        this.description = new MultilingualText(description);
+    }
+
     protected validateComplexInvariants(): InternalError[] {
         throw new Error('Method not implemented.');
     }
@@ -42,7 +55,7 @@ export class GeospatialMap extends Aggregate {
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
-        throw new Error('Method not implemented.');
+        return [];
     }
 
     fromMapCreated(): GeospatialMap | InternalError {
