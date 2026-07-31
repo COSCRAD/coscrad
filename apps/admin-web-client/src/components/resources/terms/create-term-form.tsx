@@ -12,9 +12,7 @@ interface CreateTermFormProps {
 export const CreateTermForm = ({ generatedId, onClose }: CreateTermFormProps): JSX.Element => {
     const [text, setText] = useState('');
 
-    const defaultLanguageCode = LanguageCode.English;
-
-    const [languageCode, setLanguageCode] = useState<LanguageCode>(defaultLanguageCode);
+    const [languageCode, setLanguageCode] = useState<LanguageCode>();
 
     const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
         useExecuteTermCommandMutation();

@@ -87,7 +87,7 @@ export const IndexTable = <T,>({
         throw new EmptyIndexTableException();
     }
 
-    // TODO [] Encapsulte this as part of the `SearchBar`.
+    // TODO [] Encapsulate this as part of the `SearchBar`.
     const simulatedKeyboard = {
         name: 'Haida',
         specialCharacterReplacements: {
