@@ -6,12 +6,14 @@ import {
     MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
 import { Box, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
+import { getSpeakersForTerm } from '../../shared/getSpeakersForTerm';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { useFetchTermByIdQuery } from './store';
-import { findOriginalMultilingualTextItem } from './term-list.containter';
+import { findOriginalMultilingualTextItem } from './term-list.container';
 import { TranslateTermForm } from './translate-term-form';
 
 export const getTermTranslations = (name: IMultilingualText): IMultilingualTextItem[] => {
@@ -65,6 +67,8 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     const languageCodesInUse = getTranslationsForLanguageSelection(name);
 
+    const speakersForTerm = getSpeakersForTerm(contributions);
+
     return (
         <>
             <Typography variant="h3">Term</Typography>
@@ -77,6 +81,11 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     <ContributionsPresenter contributions={contributions} />
                 ) : null}
             </Box>
+            {isNonEmptyString(speakersForTerm) ? (
+                <Box sx={{ mb: 1.5 }}>
+                    <Typography variant="h6">{getSpeakersForTerm(contributions)}</Typography>
+                </Box>
+            ) : null}
             {translations.length > 0 ? (
                 <Box sx={{ mt: '5px' }}>
                     <Typography variant="h5">Translations:</Typography>

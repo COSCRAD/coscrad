@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { isNonEmptyObject } from '@coscrad/validation-constraints';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { CreateNoteAboutResourceWithGeneralContextForm } from '../../shared/create-note-about-resource-with-general-context-form';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { useFetchTermByIdQuery } from './store';
@@ -37,16 +37,21 @@ export const NotesAboutTerm = ({ termId }: NotesAboutTermProps): JSX.Element => 
                             const {
                                 id,
                                 note: { original },
+                                context: { type },
                             } = note;
 
                             return (
-                                <Typography
-                                    sx={{ marginLeft: '10px' }}
+                                <Box
+                                    sx={{
+                                        backgroundColor: 'rgb(21, 105, 94, .1)',
+                                        mb: 1,
+                                        p: 1,
+                                    }}
                                     key={`noteid-${id}`}
-                                    variant="body1"
                                 >
-                                    {original.text}
-                                </Typography>
+                                    <Typography variant="body1">{original.text}</Typography>
+                                    <Box sx={{ fontSize: '.5em' }}>Context Type: {type}</Box>
+                                </Box>
                             );
                         })}
                     </>

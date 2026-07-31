@@ -5,7 +5,7 @@ import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { MultilingualTextPresenter } from '../../shared/multilingual-text-presenter';
 import { getLabelForLanguage } from '../../shared/multilingual-text-presenter/get-label-for-language';
 import { getTranslationsForLanguageSelection } from '../terms/term-detail.page';
-import { findOriginalMultilingualTextItem } from '../terms/term-list.containter';
+import { findOriginalMultilingualTextItem } from '../terms/term-list.container';
 import { useFetchVocabularyListByIdQuery } from './store';
 
 export const VocabularyListDetail = (): JSX.Element => {
