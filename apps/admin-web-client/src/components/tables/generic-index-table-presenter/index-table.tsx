@@ -22,6 +22,8 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { NotFoundPresenter } from '../../not-found';
+import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
+import { insertNumberInSequence } from '../../shared/insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import { Matchers, filterTableData } from './filter-table-data';
@@ -34,9 +36,11 @@ interface HasId {
     id: string;
 }
 
-export const DEFAULT_PAGE_SIZE = 5;
+const pageSizes: number[] = [5, 10, 50, 100];
 
-const pageSizeOptions: number[] = [DEFAULT_PAGE_SIZE, 10, 50, 100];
+const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
+    ? insertNumberInSequence(pageSizes, DEFAULT_PAGE_SIZE)
+    : pageSizes;
 
 const labelForSearchAllPropertiesOption = 'ALL';
 

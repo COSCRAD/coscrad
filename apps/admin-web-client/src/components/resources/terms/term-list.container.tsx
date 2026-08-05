@@ -9,12 +9,14 @@ import { AudioClipPlayer } from '@coscrad/media-player';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { LinkOff } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { HeadingLabel } from '../../tables';
 import { CellRenderersDefinition } from '../../tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../../tables/render-aggregate-id-cell';
 import { renderContributionsTextCell } from '../../tables/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../../tables/render-multilingual-text-cell';
-import { IUserQueryOptions, termApi } from './store';
+import { termApi } from './store';
 import { TermIndexTable } from './term-index-table';
 
 export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
@@ -23,11 +25,9 @@ export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
     return item;
 };
 
-type TermListContainerProps = {
-    paginationOptions: IUserQueryOptions;
-};
+export const TermListContainer = (): JSX.Element => {
+    const paginationOptions = useSelector((state: RootState) => state.paginationOptions);
 
-export const TermListContainer = ({ paginationOptions }: TermListContainerProps): JSX.Element => {
     // Note: `useQueryState()` here allows access to `isFetching` for no flicker
     // on fetching the next result set.  `keepUnusedDataFor: 300` in terms.api.ts
     // allows the existing data to remain in place while fetching the new terms set.

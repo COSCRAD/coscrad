@@ -36,6 +36,30 @@ type NotePayload = {
     resourceContext: { type: string };
 };
 
+interface ISimpleCondition<_T> {
+    type: string;
+
+    /**
+     * Type safety is difficult here. It's not just `keyof T` that are supported
+     * but also things like `contributions[*].statement`.
+     */
+    field: string;
+
+    operator: string;
+
+    params: unknown[];
+}
+interface IComplexUserDefinedFilter<T> {
+    type: string;
+    conditions: ISimpleCondition<T>[];
+}
+
+export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+
+export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
+
+export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
+
 export interface IUserQueryOptions {
     pagination: {
         size: number;
