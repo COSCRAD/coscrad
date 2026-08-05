@@ -18,8 +18,6 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
 
     const [translation, setTranslation] = useState('');
 
-    const defaultLanguageCode = LanguageCode.English;
-
     const [languageCode, setLanguageCode] = useState<LanguageCode>();
 
     const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
@@ -45,8 +43,6 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
         // you can access all properties of `SerializedError` here
         return <div>Command Error: {commandError.message}</div>;
     }
-
-    console.log({ languageCode });
 
     const isDisabled =
         translation.length === 0 || !Object.values(LanguageCode).includes(languageCode);

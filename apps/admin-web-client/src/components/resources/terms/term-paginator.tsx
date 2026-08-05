@@ -1,24 +1,26 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
-import { Dispatch, SetStateAction } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
+import { insertNumberInSequence } from '../../shared/insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
-import { IUserQueryOptions, useFetchTermsQuery } from './store';
+import { useFetchTermsQuery } from './store';
+import { setPage, setPageSize } from './store/pagination.slice';
 
 // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-344] make this configurable
-export const DEFAULT_PAGE_SIZE = 10;
+const pageSizes: number[] = [5, 10, 50, 100];
 
-const pageSizeOptions: number[] = [5, 10, 50, 100];
+const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
+    ? insertNumberInSequence(pageSizes, DEFAULT_PAGE_SIZE)
+    : pageSizes;
 
-type TermPaginatorProps = {
-    paginationOptions: IUserQueryOptions;
-    setPaginationOptions: Dispatch<SetStateAction<IUserQueryOptions>>;
-};
+export const TermPaginator = (): JSX.Element => {
+    const dispatch = useDispatch();
 
-export const TermPaginator = ({
-    paginationOptions,
-    setPaginationOptions,
-}: TermPaginatorProps): JSX.Element => {
+    const paginationOptions = useSelector((state: RootState) => state.paginationOptions);
+
     const { data, isLoading, isError } = useFetchTermsQuery(paginationOptions);
 
     if (isLoading) {
@@ -43,27 +45,23 @@ export const TermPaginator = ({
     const totalNumberOfPages = Math.ceil(count / pageSize);
 
     const updatePageSize = (newPageSize: number) => {
+        console.log({ newPageSize });
+
         if (newPageSize > paginationOptions.pagination.size) {
-            setPaginationOptions({
-                pagination: {
-                    page: 1,
-                    size: newPageSize,
-                },
-            });
+            dispatch(setPageSize(newPageSize));
+            dispatch(setPage(1));
         }
 
-        setPaginationOptions((prevOptions) => ({
-            ...prevOptions,
-            pagination: {
-                ...prevOptions.pagination,
-                size: newPageSize,
-            },
-        }));
+        dispatch(setPageSize(newPageSize));
     };
 
     return (
         <Grid container justifyContent="flex-end" spacing={3}>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography component="span" sx={{ mr: 2, mt: 1 }}>
+                    paginationOptions: {JSON.stringify(paginationOptions)}-
+                    {/* {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count} */}
+                </Typography>
                 <Typography component="span" sx={{ mr: 2, mt: 1 }}>
                     Showing Records: {startingRecordNumberHumanReadable}-
                     {/* {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count} */}
@@ -102,12 +100,7 @@ export const TermPaginator = ({
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        setPaginationOptions({
-                            pagination: {
-                                size: pageSize,
-                                page: cyclicDecrement(page - 1, totalNumberOfPages) + 1,
-                            },
-                        });
+                        dispatch(setPage(cyclicDecrement(page - 1, totalNumberOfPages) + 1));
                     }}
                 >
                     <ArrowBackIosNewIcon />
@@ -116,12 +109,7 @@ export const TermPaginator = ({
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        setPaginationOptions({
-                            pagination: {
-                                size: pageSize,
-                                page: cyclicIncrement(page - 1, totalNumberOfPages) + 1,
-                            },
-                        });
+                        dispatch(setPage(cyclicIncrement(page - 1, totalNumberOfPages) + 1));
                     }}
                 >
                     <ArrowForwardIosIcon />

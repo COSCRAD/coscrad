@@ -1,11 +1,10 @@
 import { Box, Stack, Typography } from '@mui/material';
 
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import { useState } from 'react';
 import { HeadingLabel } from '../../tables';
-import { IUserQueryOptions } from './store';
+import { TermSearchBar } from '../../tables/term-search-bar';
 import { TermListContainer } from './term-list.container';
-import { DEFAULT_PAGE_SIZE, TermPaginator } from './term-paginator';
+import { TermPaginator } from './term-paginator';
 
 // TODO share this with the `HeadingLabels`
 const searchableProps: HeadingLabel<ITermViewModel>[] = [
@@ -16,28 +15,18 @@ const searchableProps: HeadingLabel<ITermViewModel>[] = [
 ];
 
 export const TermIndexPage = (): JSX.Element => {
-    const [paginationOptions, setPaginationOptions] = useState<IUserQueryOptions>({
-        pagination: {
-            size: DEFAULT_PAGE_SIZE,
-            page: 1,
-        },
-    });
-
     return (
         <div>
             <Stack>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                     <Typography variant="h4">Search Bar Goes Here</Typography>
-                    {/* <TermSearchBar scopes={searchableProps} /> */}
+                    <TermSearchBar scopes={searchableProps} />
                 </Box>
                 <Box>
-                    <TermListContainer paginationOptions={paginationOptions} />
+                    <TermListContainer />
                 </Box>
                 <Box>
-                    <TermPaginator
-                        paginationOptions={paginationOptions}
-                        setPaginationOptions={setPaginationOptions}
-                    />
+                    <TermPaginator />
                 </Box>
             </Stack>
         </div>
