@@ -1,5 +1,5 @@
 import { IContributionSummary } from '@coscrad/api-interfaces';
-import { getSpeakersForTerm } from '../shared/getSpeakersForTerm';
+import { getSpeakersForTerm } from '../getSpeakersForTerm';
 
 export const renderContributionsTextCell = (contributions: IContributionSummary[]): JSX.Element => {
     const contributors = getSpeakersForTerm(contributions);

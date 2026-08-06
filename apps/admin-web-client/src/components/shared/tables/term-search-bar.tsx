@@ -12,13 +12,14 @@ import {
     TextField,
 } from '@mui/material';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import {
     ALL_PROPERTIES_SEARCH_KEY,
     IndexSearchScope,
     IUserDefinedFilter,
-} from '../resources/terms/store';
+} from '../../resources/terms/store';
+import { setTermFilters } from '../../resources/terms/store/term-query-options.slice';
 import { HeadingLabel } from './generic-index-table-presenter';
 
 /**
@@ -62,15 +63,16 @@ const interpretCoscradQueryFromUserSearchText = (
     queryString: string,
     defaultLanguageCode: LanguageCode = LanguageCode.English
 ): IUserDefinedFilter<ITermViewModel> => {
-    // if (scope === ALL_PROPERTIES_SEARCH_KEY) {
-    //     return {
-    //         type: 'OR',
-    //         conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
-    //             (field) =>
-    //                 interpretCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
-    //         ),
-    //     };
-    // }
+    if (scope === ALL_PROPERTIES_SEARCH_KEY) {
+        return {
+            type: 'OR',
+            // @ts-expect-error TODO let's sort out the full types in api-interfaces
+            conditions: (['name', 'contributions', 'vocabularyLists', 'tokens'] as const).map(
+                (field) =>
+                    interpretCoscradQueryFromUserSearchText(field, queryString, defaultLanguageCode)
+            ),
+        };
+    }
 
     if (scope === 'name') {
         if (queryString.charAt(0) === '{' && queryString.includes('}')) {
@@ -188,16 +190,19 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
 
     const defaultLanguageCode = LanguageCode.Haida;
 
-    const paginationOptions = useSelector((state: RootState) => state.paginationOptions);
+    const dispatch = useDispatch();
+
+    const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
 
     const {
         pagination: { size: pageSize },
     } = paginationOptions;
 
-    const searchInDb = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
-        if (!isNonEmptyString(queryFromForm)) {
-            // return dispatch(fetchTerms(null));
-        }
+    const setFilterForDBSearch = (
+        scope: IndexSearchScope<ITermViewModel>,
+        queryFromForm: string
+    ) => {
+        if (!isNonEmptyString(queryFromForm)) return;
 
         /**
          * TODO We haven't settled on how we will handle this in the long run.
@@ -210,6 +215,9 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
          * string to the back-end for compilation. Note that at some point we
          * may want to use the same query language for in-memory filtering,
          * in which case we could move that logic to a lib.
+         *
+         * PROTOTYPE NOTE: this function updates the filter used in the dispatch
+         * of a new DB query in the TermPaginator component
          */
 
         const filter = interpretCoscradQueryFromUserSearchText(
@@ -218,22 +226,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
             defaultLanguageCode
         );
 
-        // dispatch(setTermFilters({ filter }));
-
-        // dispatch(
-        //     fetchTerms({
-        //         pagination: {
-        //             page: 1,
-        //             size: pageSize,
-        //         },
-        //     })
-        // );
-    };
-
-    const _searchInMemory = (scope: IndexSearchScope<ITermViewModel>, queryFromForm: string) => {
-        // TODO type safety
-        // const action = filterTermsInMemory({ scope, query: queryFromForm });
-        // dispatch(action);
+        dispatch(setTermFilters({ filter }));
     };
 
     // SEARCH LOGIC
@@ -302,7 +295,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
 
                         setSearchString(transformedValue);
 
-                        searchInDb(selectedFilterProperty, transformedValue);
+                        setFilterForDBSearch(selectedFilterProperty, transformedValue);
                     }}
                     InputProps={{
                         endAdornment: <SearchRounded />,

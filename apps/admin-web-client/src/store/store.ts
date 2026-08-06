@@ -3,7 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { authReducer } from '../components/auth/store/auth-slice';
 import { AUTH } from '../components/auth/store/constants';
 import { acquireIdApi } from '../components/id-generation/store/aquire-id.api';
-import { paginationSlice } from '../components/resources/terms/store/pagination.slice';
+import { termQueryOptionsSlice } from '../components/resources/terms/store/term-query-options.slice';
 import { termApi } from '../components/resources/terms/store/terms.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
 
@@ -12,7 +12,7 @@ export const store = configureStore({
         [termApi.reducerPath]: termApi.reducer,
         [vocabularyListApi.reducerPath]: vocabularyListApi.reducer,
         [acquireIdApi.reducerPath]: acquireIdApi.reducer,
-        [paginationSlice.reducerPath]: paginationSlice.reducer,
+        [termQueryOptionsSlice.reducerPath]: termQueryOptionsSlice.reducer,
         [AUTH]: authReducer,
     },
     middleware: (getDefaultMiddleware) => {
