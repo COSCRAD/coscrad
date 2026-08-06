@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { TruncateTextForDisplay } from '../shared/multilingual-text-presenter/truncate-text-for-display';
+import { TruncateTextForDisplay } from '../multilingual-text-presenter/truncate-text-for-display';
 
 const WORD_LENGTH_LIMIT = 10;
 

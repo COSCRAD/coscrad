@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from '@mui/material';
 
 import { ITermViewModel } from '@coscrad/api-interfaces';
-import { HeadingLabel } from '../../tables';
-import { TermSearchBar } from '../../tables/term-search-bar';
+import { HeadingLabel } from '../../shared/tables';
+import { TermSearchBar } from '../../shared/tables/term-search-bar';
 import { TermListContainer } from './term-list.container';
 import { TermPaginator } from './term-paginator';
 

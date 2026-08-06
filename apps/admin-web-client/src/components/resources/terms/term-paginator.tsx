@@ -7,7 +7,7 @@ import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
 import { insertNumberInSequence } from '../../shared/insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
 import { useFetchTermsQuery } from './store';
-import { setPage, setPageSize } from './store/pagination.slice';
+import { setPage, setPageSize } from './store/term-query-options.slice';
 
 // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-344] make this configurable
 const pageSizes: number[] = [5, 10, 50, 100];
@@ -19,9 +19,9 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
 export const TermPaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const paginationOptions = useSelector((state: RootState) => state.paginationOptions);
+    const termQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
 
-    const { data, isLoading, isError } = useFetchTermsQuery(paginationOptions);
+    const { data, isLoading, isError } = useFetchTermsQuery(termQueryOptions);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -29,25 +29,25 @@ export const TermPaginator = (): JSX.Element => {
 
     if (isError) return <div>Error retrieving name.</div>;
 
-    const { count, page } = data;
+    const { entities: terms, count, page } = data;
 
     const {
         pagination: { size: pageSize },
-    } = paginationOptions;
+    } = termQueryOptions;
 
     const pageCount = Math.ceil(count / pageSize);
 
     const startingRecordNumberHumanReadable = pageSize * (page - 1) + 1;
 
-    // const endingRecordNumberHumanReadable =
-    //     startingRecordNumberHumanReadable + (selected?.length || 0) - 1;
+    const endingRecordNumberHumanReadable =
+        startingRecordNumberHumanReadable + (terms?.length || 0) - 1;
 
     const totalNumberOfPages = Math.ceil(count / pageSize);
 
     const updatePageSize = (newPageSize: number) => {
         console.log({ newPageSize });
 
-        if (newPageSize > paginationOptions.pagination.size) {
+        if (newPageSize > termQueryOptions.pagination.size) {
             dispatch(setPageSize(newPageSize));
             dispatch(setPage(1));
         }
@@ -59,12 +59,8 @@ export const TermPaginator = (): JSX.Element => {
         <Grid container justifyContent="flex-end" spacing={3}>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography component="span" sx={{ mr: 2, mt: 1 }}>
-                    paginationOptions: {JSON.stringify(paginationOptions)}-
-                    {/* {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count} */}
-                </Typography>
-                <Typography component="span" sx={{ mr: 2, mt: 1 }}>
                     Showing Records: {startingRecordNumberHumanReadable}-
-                    {/* {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count} */}
+                    {endingRecordNumberHumanReadable}/{count} &nbsp; Filtered Records: {count}
                 </Typography>
             </Grid>
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
