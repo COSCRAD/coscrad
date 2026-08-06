@@ -14,13 +14,13 @@ import {
 } from '@mui/material';
 import { NotFoundPresenter } from '../../not-found';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
-import { CellRenderer, CellRenderersMap, HeadingLabel } from '../../tables';
+import { CellRenderer, CellRenderersMap, HeadingLabel } from '../../shared/tables';
 import {
     EmptyIndexTableException,
     UnnecessaryCellRendererDefinitionException,
-} from '../../tables/generic-index-table-presenter/exceptions';
-import { renderCell } from '../../tables/generic-index-table-presenter/render-cell';
-import { CellRenderersDefinition } from '../../tables/generic-index-table-presenter/types/cell-renderers-definition';
+} from '../../shared/tables/generic-index-table-presenter/exceptions';
+import { renderCell } from '../../shared/tables/generic-index-table-presenter/render-cell';
+import { CellRenderersDefinition } from '../../shared/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { CreateTermForm } from './create-term-form';
 
 interface HasId {

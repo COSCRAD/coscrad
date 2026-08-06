@@ -21,10 +21,10 @@ import {
     Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { NotFoundPresenter } from '../../not-found';
-import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
-import { insertNumberInSequence } from '../../shared/insert-in-sequence';
-import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
+import { NotFoundPresenter } from '../../../not-found';
+import { DEFAULT_PAGE_SIZE } from '../../constants';
+import { insertNumberInSequence } from '../../insert-in-sequence';
+import { cyclicDecrement, cyclicIncrement } from '../../math';
 import { EmptyIndexTableException, UnnecessaryCellRendererDefinitionException } from './exceptions';
 import { Matchers, filterTableData } from './filter-table-data';
 import { renderCell } from './render-cell';

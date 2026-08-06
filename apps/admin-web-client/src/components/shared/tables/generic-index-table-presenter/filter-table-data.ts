@@ -1,5 +1,5 @@
 import { isNonEmptyString, isNull, isUndefined } from '@coscrad/validation-constraints';
-import { NOT_FOUND } from '../../shared/types';
+import { NOT_FOUND } from '../../types';
 
 export type Matchers<T> = {
     [K in keyof T]?: (value: T[K], searchTerm: string) => boolean;

@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import AudioPanel from '../shared/audio-panel/audio-panel';
+import AudioPanel from '../audio-panel/audio-panel';
 
 export const renderAudioPreview = (url: string, handleClick: (url: string) => void) => {
     return (
