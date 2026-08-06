@@ -1,7 +1,7 @@
 import { IMultilingualText, LanguageCode } from '@coscrad/api-interfaces';
 import { Typography } from '@mui/material';
-import { groupMultilingualTextItems } from '../shared/group-multilingual-text-items';
-import { BilingualTextPresenter } from '../shared/multilingual-text-presenter/bilingual-text-presenter';
+import { groupMultilingualTextItems } from '../group-multilingual-text-items';
+import { BilingualTextPresenter } from '../multilingual-text-presenter/bilingual-text-presenter';
 
 export const renderMultilingualTextCell = (
     text: IMultilingualText,

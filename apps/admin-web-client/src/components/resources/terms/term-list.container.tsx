@@ -11,11 +11,11 @@ import { LinkOff } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { HeadingLabel } from '../../tables';
-import { CellRenderersDefinition } from '../../tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { renderAggregateIdCell } from '../../tables/render-aggregate-id-cell';
-import { renderContributionsTextCell } from '../../tables/render-contributions-text-cell';
-import { renderMultilingualTextCell } from '../../tables/render-multilingual-text-cell';
+import { HeadingLabel } from '../../shared/tables';
+import { CellRenderersDefinition } from '../../shared/tables/generic-index-table-presenter/types/cell-renderers-definition';
+import { renderAggregateIdCell } from '../../shared/tables/render-aggregate-id-cell';
+import { renderContributionsTextCell } from '../../shared/tables/render-contributions-text-cell';
+import { renderMultilingualTextCell } from '../../shared/tables/render-multilingual-text-cell';
 import { termApi } from './store';
 import { TermIndexTable } from './term-index-table';
 
@@ -26,7 +26,7 @@ export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
 };
 
 export const TermListContainer = (): JSX.Element => {
-    const paginationOptions = useSelector((state: RootState) => state.paginationOptions);
+    const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
 
     // Note: `useQueryState()` here allows access to `isFetching` for no flicker
     // on fetching the next result set.  `keepUnusedDataFor: 300` in terms.api.ts
