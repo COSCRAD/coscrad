@@ -20,6 +20,7 @@ import { DomainRestoreCliCommand } from './data-restore.cli-command';
 import { DiscoverAudioItemsCliCommand } from './discover-audio-items.cli-command';
 import { ExecuteCommandStreamCliCommand } from './execute-command-stream.cli-command';
 import { ExportAudioItemLineagesCliCommand } from './export-audio-item-lineages.cli-command';
+import { ExportContributorsCliCommand } from './export-contributors.cli-command';
 import { ExportMediaAnnotationsCliCommand } from './export-media-annotations.cli-command';
 import { ExportSchemasCliCommand } from './export-schemas.cli-command';
 import { IngestMediaItemsCliCommand } from './ingest-media-items.cli-command';
@@ -53,6 +54,7 @@ import { ValidateInvariantsCliCommand } from './validate-invariants.cli-command'
         ExportAudioItemLineagesCliCommand,
         ExportSchemasCliCommand,
         RehydrateViewsCliCommand,
+        ExportContributorsCliCommand,
         DiscoverAudioItemsCliCommand,
         {
             provide: BULK_JOB_REPOSITORY_INJECTION_TOKEN,
