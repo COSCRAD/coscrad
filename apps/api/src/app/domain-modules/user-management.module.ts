@@ -17,18 +17,25 @@ import { GrantUserRole } from '../../domain/models/user-management/user/commands
 import { GrantUserRoleCommandHandler } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command-handler';
 import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user/register-user.command';
 import { RegisterUserCommandHandler } from '../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
+import { CoscradContributorQueryService } from '../../domain/services/query-services/coscrad-contributor-query.service';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { AdminController } from '../controllers/admin.controller';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
+import { CoscradContributorController } from '../controllers/coscrad-contributor.controller';
 import { CoscradUserGroupController } from '../controllers/coscrad-user-group.controller';
 import { CoscradUserController } from '../controllers/coscrad-user.controller';
 
 @Module({
     imports: [PersistenceModule, CommandModule, IdGenerationModule],
-    controllers: [CoscradUserController, CoscradUserGroupController, AdminController],
+    controllers: [
+        CoscradUserController,
+        CoscradUserGroupController,
+        AdminController,
+        CoscradContributorController,
+    ],
     providers: [
         CoscradUserQueryService,
         CoscradUserGroupQueryService,
@@ -43,6 +50,7 @@ import { CoscradUserController } from '../controllers/coscrad-user.controller';
         GrantUserRoleCommandHandler,
         CreateContributor,
         CreateContributorCommandHandler,
+        CoscradContributorQueryService,
         // Events
         ...[ResourcePublished, ResourceReadAccessGrantedToUser, ContributorCreated].map((ctor) => ({
             provide: ctor,
