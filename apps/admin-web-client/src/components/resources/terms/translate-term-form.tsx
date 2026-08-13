@@ -53,14 +53,16 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
         console.log('Form sent to server:', translation, languageCode, `${resourceType}/${termId}`);
 
         executeTermCommand({
-            type: 'TRANSLATE_TERM',
-            payload: {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.term,
-                    id: termId,
+            commandFsa: {
+                type: 'TRANSLATE_TERM',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.term,
+                        id: termId,
+                    },
+                    translation: translation,
+                    languageCode: languageCode,
                 },
-                translation: translation,
-                languageCode: languageCode,
             },
         });
 
