@@ -46,24 +46,28 @@ export const CreateTermForm = ({ generatedId, onClose }: CreateTermFormProps): J
         console.log('Form sent to server:', text, languageCode);
 
         executeTermCommand({
-            type: 'CREATE_TERM',
-            payload: {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.term,
-                    id: generatedId,
+            commandFsa: {
+                type: 'CREATE_TERM',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.term,
+                        id: generatedId,
+                    },
+                    text: text,
+                    languageCode: languageCode,
                 },
-                text: text,
-                languageCode: languageCode,
             },
         });
 
         setTimeout(() => {
             executeTermCommand({
-                type: 'PUBLISH_RESOURCE',
-                payload: {
-                    aggregateCompositeIdentifier: {
-                        type: AggregateType.term,
-                        id: generatedId,
+                commandFsa: {
+                    type: 'PUBLISH_RESOURCE',
+                    payload: {
+                        aggregateCompositeIdentifier: {
+                            type: AggregateType.term,
+                            id: generatedId,
+                        },
                     },
                 },
             });

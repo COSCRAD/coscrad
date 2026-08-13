@@ -20,12 +20,6 @@ const StyledToolbar = styled(Toolbar)({
     height: '64px',
 });
 
-const StyledSiteTitle = styled(Box)`
-    a {
-        color: #fff;
-    }
-`;
-
 export const Header = (): JSX.Element => {
     /**
      * TODO: Move data (ConfigurableContentContext) out of presenter
@@ -37,29 +31,27 @@ export const Header = (): JSX.Element => {
             <StyledToolbar>
                 <Link to="/" style={{ textDecoration: 'none' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', color: 'Background', pl: 2 }}>
-                        <StyledSiteTitle>
-                            <Typography
-                                sx={{ fontSize: 'calc(16px + 0.7vw) !important', color: '#000' }}
-                                variant="h1"
-                            >
-                                {siteTitle}
-                            </Typography>
-                        </StyledSiteTitle>
+                        <Typography
+                            sx={{ fontSize: 'calc(16px + 0.7vw) !important', color: '#aefff4ff' }}
+                            variant="h1"
+                        >
+                            {siteTitle}
+                        </Typography>
                     </Box>
                 </Link>
                 <nav>
                     <Typography variant="body1">
-                        <Link to="/" style={{ textDecoration: 'none', color: '#000' }}>
+                        <Link to="/" style={{ textDecoration: 'none', color: '#aefff4ff' }}>
                             Home
                         </Link>
                         &nbsp;|&nbsp;
-                        <Link to="/terms" style={{ textDecoration: 'none', color: '#000' }}>
+                        <Link to="/terms" style={{ textDecoration: 'none', color: '#aefff4ff' }}>
                             Terms
                         </Link>
                         &nbsp;|&nbsp;
                         <Link
                             to="/vocabularyLists"
-                            style={{ textDecoration: 'none', color: '#000' }}
+                            style={{ textDecoration: 'none', color: '#aefff4ff' }}
                         >
                             Vocabulary Lists
                         </Link>

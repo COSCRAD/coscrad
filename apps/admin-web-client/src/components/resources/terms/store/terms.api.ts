@@ -1,5 +1,6 @@
 import {
     AggregateCompositeIdentifier,
+    IContributionSummary,
     IIndexQueryResult,
     IMultilingualTextRecord,
     ITermViewModel,
@@ -9,12 +10,28 @@ import {
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
 
+export type AggregateId = string;
+
+export type IContributionSummaryAbridged = Omit<IContributionSummary, 'date'>;
+
+export type ITermViewModelAbridged = Omit<ITermViewModel, 'contributions'> & {
+    contributions: Omit<ITermViewModel['contributions'][number], 'date'>[];
+};
+
 type UnknownPart = Record<string, any>;
+
+type ContributionCacheUpdate = {
+    speakerNames: string;
+};
 
 type TermCommandFsa = {
     type: string;
     payload: { aggregateCompositeIdentifier: AggregateCompositeIdentifier } & UnknownPart;
 };
+
+type TermCommandFsaWithOptions = {
+    commandFsa: TermCommandFsa;
+} & { options?: UnknownPart };
 
 type TermPayload = {
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
@@ -26,6 +43,29 @@ type TranslationPayload = {
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
     translation: string;
     languageCode: LanguageCode;
+};
+
+type AdditionalCreditsPayload = {
+    aggregateCompositeIdentifier: AggregateCompositeIdentifier;
+    contributionType: string;
+    contributorIds: AggregateId[];
+};
+
+const buildTempContributionSummaryForCache = (
+    speakersNames: string,
+    commandPayload: AdditionalCreditsPayload
+): IContributionSummary => {
+    return {
+        type: commandPayload.contributionType,
+        statement: `${commandPayload.contributionType} by: ${speakersNames}`,
+        contributorIds: commandPayload.contributorIds,
+        timestamp: Date.now(),
+        date: {
+            year: 1000,
+            month: 'November',
+            day: 4,
+        },
+    };
 };
 
 type NotePayload = {
@@ -99,15 +139,15 @@ export const termApi = createApi({
                     : [{ type: 'term', id: 'LIST' }],
             keepUnusedDataFor: 300,
         }),
-        executeTermCommand: builder.mutation<string, TermCommandFsa>({
-            query: (commandFsa) => ({
+        executeTermCommand: builder.mutation<string, TermCommandFsaWithOptions>({
+            query: ({ commandFsa }: TermCommandFsaWithOptions) => ({
                 url: `commands`,
                 method: 'POST',
                 body: commandFsa,
                 responseHandler: 'text',
             }),
             onQueryStarted: async (
-                { type: commandType, payload }: TermCommandFsa,
+                { commandFsa: { type: commandType, payload }, options }: TermCommandFsaWithOptions,
                 { dispatch, queryFulfilled }
             ) => {
                 const { data: commandAcknowledgement } = await queryFulfilled;
@@ -121,18 +161,25 @@ export const termApi = createApi({
                         commandPayload = payload as TermPayload;
 
                         break;
+
                     case 'CREATE_NOTE_ABOUT_RESOURCE':
                         commandPayload = payload as NotePayload;
 
                         id = payload.resourceCompositeIdentifier.id;
 
                         break;
+
                     case 'TRANSLATE_TERM':
                         commandPayload = payload as TranslationPayload;
 
                         id = commandPayload.aggregateCompositeIdentifier.id;
 
                         break;
+
+                    case 'PROVIDE_ADDITIONAL_CREDITS_FOR_RESOURCE':
+                        commandPayload = payload as AdditionalCreditsPayload;
+
+                        id = commandPayload.aggregateCompositeIdentifier.id;
                 }
 
                 if (commandAcknowledgement === 'Ack') {
@@ -160,6 +207,22 @@ export const termApi = createApi({
                                             role: MultilingualTextItemRole.freeTranslation,
                                         },
                                     ];
+                                }
+
+                                if (commandType === 'PROVIDE_ADDITIONAL_CREDITS_FOR_RESOURCE') {
+                                    const { contributions } = term;
+
+                                    const { speakerNames } = options;
+
+                                    const newContribution: IContributionSummary =
+                                        buildTempContributionSummaryForCache(
+                                            speakerNames,
+                                            commandPayload
+                                        );
+
+                                    console.log({ newContribution });
+
+                                    term.contributions = [...contributions, newContribution];
                                 }
 
                                 if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
