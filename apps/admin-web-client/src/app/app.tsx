@@ -34,7 +34,7 @@ export function App() {
         <Box>
             <Header />
 
-            <Box sx={{ paddingTop: '120px', ml: 10, mb: 5, width: '90%' }}>
+            <Box sx={{ paddingTop: '120px', ml: 10, mr: 10, mb: 5, width: '87%' }}>
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/terms" element={<TermIndexPage />} />
