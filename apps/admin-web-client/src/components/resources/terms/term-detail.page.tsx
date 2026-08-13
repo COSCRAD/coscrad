@@ -6,12 +6,13 @@ import {
     MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { getSpeakersForTerm } from '../../shared/getSpeakersForTerm';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
+import { AttributeTermToSpeaker } from './add-speaker-to-term-form';
 import { useFetchTermByIdQuery } from './store';
 import { findOriginalMultilingualTextItem } from './term-list.container';
 import { TranslateTermForm } from './translate-term-form';
@@ -73,7 +74,7 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
         <>
             <Typography variant="h3">Term</Typography>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                <Typography variant="h4" sx={{ mr: 1 }}>
+                <Typography variant="h4" sx={{ mr: 1 }} aria-label={id}>
                     {originalTermItem.text} ({originalTermItem.languageCode},{' '}
                     {originalTermItem.role})
                 </Typography>
@@ -81,9 +82,18 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     <ContributionsPresenter contributions={contributions} />
                 ) : null}
             </Box>
+            {isAuthenticated && isNullOrUndefined(speakersForTerm) ? (
+                <PresentFormWithOptionalGeneratedId
+                    form={AttributeTermToSpeaker}
+                    context={{
+                        resourceId: id,
+                        buttonLabel: 'ADD SPEAKER(S) FOR TERM',
+                    }}
+                />
+            ) : null}
             {isNonEmptyString(speakersForTerm) ? (
                 <Box sx={{ mb: 1.5 }}>
-                    <Typography variant="h6">{getSpeakersForTerm(contributions)}</Typography>
+                    <Typography variant="h6">{speakersForTerm}</Typography>
                 </Box>
             ) : null}
             {translations.length > 0 ? (

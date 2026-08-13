@@ -8,6 +8,7 @@ export const Footer = (): JSX.Element => {
                 backgroundColor: '#ededed',
                 position: 'relative',
                 marginTop: 'auto',
+                pl: 3,
                 bottom: 0,
                 left: 0,
                 width: '100%',
@@ -24,29 +25,29 @@ export const Footer = (): JSX.Element => {
                     mt: 'auto',
                 }}
             >
-                <Grid item xs={12} sm={3} color="text.secondary" sx={{ pl: '10px' }}>
+                <Grid item xs={12} sm={3} color="text.secondary">
                     <Typography color="primary.main" variant="h3">
                         Web Admin UX
                     </Typography>
                     <Typography variant="subtitle1">A cool site!</Typography>
                 </Grid>
-                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary"></Grid>
-                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary">
+                <Grid item xs={12} sm={3} color="text.secondary"></Grid>
+                <Grid item xs={12} sm={3} color="text.secondary">
                     <Typography color="primary.main" variant="h3">
                         Contact
                     </Typography>
                     webadminUX@gmail.com
                 </Grid>
-                <Grid item xs={12} sm={3} sx={{ pl: '10px' }} color="text.secondary">
+                <Grid item xs={12} sm={3} color="text.secondary">
                     <Typography color="primary.main" variant="h3">
                         Links
                     </Typography>
                     <Typography variant="body1">Links here...</Typography>
                 </Grid>
-                <Grid item xs={12} sx={{ pt: 2 }}>
+                <Grid item xs={12} sx={{ pt: 2 }} color="text.secondary">
                     <Typography variant="body1">Tenant here...</Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} color="text.secondary">
                     <Typography variant="body1">Great!!</Typography>
                 </Grid>
             </Grid>

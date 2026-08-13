@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { HeadingLabel } from '../../shared/tables';
@@ -19,7 +19,6 @@ export const TermIndexPage = (): JSX.Element => {
         <div>
             <Stack>
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Typography variant="h4">Search Bar Goes Here</Typography>
                     <TermSearchBar scopes={searchableProps} />
                 </Box>
                 <Box>

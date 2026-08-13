@@ -8,6 +8,7 @@ interface CreateNoteAboutResourceFormProps {
     context: {
         resourceType: string;
         resourceId: string;
+        buttonLabel: string;
     };
     generatedId: string;
     onClose: () => void;
@@ -18,7 +19,7 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
     context,
     onClose,
 }: CreateNoteAboutResourceFormProps): JSX.Element => {
-    const { resourceId, resourceType } = context;
+    const { resourceId, resourceType, buttonLabel } = context;
 
     const [text, setText] = useState('');
 
@@ -62,19 +63,21 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
         );
 
         executeTermCommand({
-            type: 'CREATE_NOTE_ABOUT_RESOURCE',
-            payload: {
-                aggregateCompositeIdentifier: {
-                    type: AggregateType.note,
-                    id: generatedId,
+            commandFsa: {
+                type: 'CREATE_NOTE_ABOUT_RESOURCE',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.note,
+                        id: generatedId,
+                    },
+                    resourceCompositeIdentifier: {
+                        type: resourceType,
+                        id: resourceId,
+                    },
+                    text: text,
+                    languageCode: languageCode,
+                    resourceContext: { type: 'general' },
                 },
-                resourceCompositeIdentifier: {
-                    type: resourceType,
-                    id: resourceId,
-                },
-                text: text,
-                languageCode: languageCode,
-                resourceContext: { type: 'general' },
             },
         });
 
@@ -104,7 +107,7 @@ export const CreateNoteAboutResourceWithGeneralContextForm = ({
                     disabled={isDisabled}
                     type="submit"
                 >
-                    ADD NOTE
+                    {buttonLabel}
                 </Button>
             </Stack>
         </Box>
