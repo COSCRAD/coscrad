@@ -1,9 +1,7 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
     Box,
-    Checkbox,
     FormControl,
     Grid,
     IconButton,
@@ -108,7 +106,7 @@ export const IndexTable = <T,>({
         typeof allProperties | keyof T
     >(allProperties);
 
-    const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
+    // const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
 
     const propertiesToFilterBy =
         selectedFilterProperty === 'allProperties'
@@ -358,17 +356,10 @@ export const IndexTable = <T,>({
                 <SearchBar
                     value={searchValue}
                     onValueChange={setSearchValue}
-                    specialCharacterReplacements={
-                        shouldUseVirtualKeyboard
-                            ? Object.assign(
-                                  simulatedKeyboard?.specialCharacterReplacements || {},
-                                  defaultCharacterReplacements
-                              )
-                            : defaultCharacterReplacements
-                    }
+                    specialCharacterReplacements={defaultCharacterReplacements}
                 />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Checkbox
                     checked={shouldUseVirtualKeyboard}
                     onChange={() => setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
@@ -379,7 +370,7 @@ export const IndexTable = <T,>({
                 ) : (
                     <p>Click to enable input method: {simulatedKeyboard.name}</p>
                 )}
-            </Box>
+            </Box> */}
 
             <Box>{table}</Box>
         </Stack>

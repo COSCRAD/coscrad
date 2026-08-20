@@ -1,10 +1,11 @@
 import { ITermViewModel, LanguageCode } from '@coscrad/api-interfaces';
-import { isNonEmptyString, isNullOrUndefined } from '@coscrad/validation-constraints';
-import { SearchRounded } from '@mui/icons-material';
+import { isNonEmptyString } from '@coscrad/validation-constraints';
+import { Clear as ClearIcon, SearchRounded as SearchRoundedIcon } from '@mui/icons-material';
 import {
     Box,
-    Checkbox,
     FormControl,
+    IconButton,
+    InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -19,7 +20,10 @@ import {
     IndexSearchScope,
     IUserDefinedFilter,
 } from '../../resources/terms/store';
-import { setTermFilters } from '../../resources/terms/store/term-query-options.slice';
+import {
+    setTermFilters,
+    setTermSearchString,
+} from '../../resources/terms/store/term-query-options.slice';
 import { HeadingLabel } from './generic-index-table-presenter';
 
 /**
@@ -175,35 +179,27 @@ interface SearchBarProps {
  * all to server side filtering \ pagination.
  */
 export const TermSearchBar = ({ scopes }: SearchBarProps) => {
-    const [searchString, setSearchString] = useState('');
+    const { searchString } = useSelector((state: RootState) => state.termQueryOptions);
 
-    const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
+    // const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
 
-    const simulatedKeyboard = {
-        name: 'Haida',
-        specialCharacterReplacements: {
-            'k[': 'k̲',
-            'g[': 'ɢ̲',
-            'x[': 'x̲',
-        },
-    };
+    // const simulatedKeyboard = {
+    //     name: 'Haida',
+    //     specialCharacterReplacements: {
+    //         'k[': 'k̲',
+    //         'g[': 'ɢ̲',
+    //         'x[': 'x̲',
+    //     },
+    // };
 
     const defaultLanguageCode = LanguageCode.Haida;
 
     const dispatch = useDispatch();
 
-    const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
-
-    const {
-        pagination: { size: pageSize },
-    } = paginationOptions;
-
     const setFilterForDBSearch = (
         scope: IndexSearchScope<ITermViewModel>,
         queryFromForm: string
     ) => {
-        if (!isNonEmptyString(queryFromForm)) return;
-
         /**
          * TODO We haven't settled on how we will handle this in the long run.
          * We have started by compiling a query string on the client because
@@ -220,11 +216,9 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
          * of a new DB query in the TermPaginator component
          */
 
-        const filter = interpretCoscradQueryFromUserSearchText(
-            scope,
-            queryFromForm,
-            defaultLanguageCode
-        );
+        const filter = isNonEmptyString(queryFromForm)
+            ? interpretCoscradQueryFromUserSearchText(scope, queryFromForm, defaultLanguageCode)
+            : null;
 
         dispatch(setTermFilters({ filter }));
     };
@@ -234,12 +228,14 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
         typeof ALL_PROPERTIES_SEARCH_KEY | keyof ITermViewModel
     >(ALL_PROPERTIES_SEARCH_KEY);
 
-    const specialCharacterReplacements = shouldUseVirtualKeyboard
-        ? Object.assign(
-              simulatedKeyboard?.specialCharacterReplacements || {},
-              defaultCharacterReplacements
-          )
-        : defaultCharacterReplacements;
+    // const specialCharacterReplacements = shouldUseVirtualKeyboard
+    //     ? Object.assign(
+    //           simulatedKeyboard?.specialCharacterReplacements || {},
+    //           defaultCharacterReplacements
+    //       )
+    //     : defaultCharacterReplacements;
+
+    const specialCharacterReplacements = defaultCharacterReplacements;
 
     const propertiesToSearchSelectField = (
         <FormControl sx={{ minWidth: 120 }} size={'small'}>
@@ -273,6 +269,12 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
         </FormControl>
     );
 
+    const handleClear = () => {
+        dispatch(setTermSearchString({ searchString: '' }));
+
+        setFilterForDBSearch(selectedFilterProperty, '');
+    };
+
     return (
         <Stack>
             <Box>
@@ -285,6 +287,8 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
                     onChange={(changeEvent) => {
                         const searchValue = changeEvent.target.value;
 
+                        dispatch(setTermSearchString({ searchString: searchValue }));
+
                         const transformedValue = Object.entries(
                             specialCharacterReplacements
                         ).reduce(
@@ -293,16 +297,26 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
                             searchValue
                         );
 
-                        setSearchString(transformedValue);
-
                         setFilterForDBSearch(selectedFilterProperty, transformedValue);
                     }}
                     InputProps={{
-                        endAdornment: <SearchRounded />,
+                        endAdornment: (searchString && (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handleClear}>
+                                    <ClearIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        )) || (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handleClear}>
+                                    <SearchRoundedIcon />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
                     }}
                 />
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            {/* <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Checkbox
                     checked={shouldUseVirtualKeyboard}
                     onChange={() => setShouldUseVirtualKeyboard(!shouldUseVirtualKeyboard)}
@@ -313,7 +327,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
                 ) : (
                     <p>Click to enable input method: {simulatedKeyboard.name}</p>
                 )}
-            </Box>
+            </Box> */}
         </Stack>
     );
 };
