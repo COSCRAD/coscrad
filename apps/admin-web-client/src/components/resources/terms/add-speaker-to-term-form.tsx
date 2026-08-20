@@ -7,7 +7,7 @@ import {
 } from '../../shared/contributions/contributors.api';
 import { useExecuteTermCommandMutation } from './store';
 
-const CONTRIBUTION_TYPE = 'Term spoken';
+export const CONTRIBUTION_TYPE = 'Term spoken';
 
 interface AttributeTermToSpeakerProps {
     generatedId?: string;
@@ -19,7 +19,6 @@ interface AttributeTermToSpeakerProps {
 }
 
 export const AttributeTermToSpeaker = ({
-    generatedId,
     context,
     onClose,
 }: AttributeTermToSpeakerProps): JSX.Element => {
@@ -73,12 +72,12 @@ export const AttributeTermToSpeaker = ({
                         type: AggregateType.term,
                         id: termId,
                     },
-                    contributionType: CONTRIBUTION_TYPE,
+                    contributionType: `${CONTRIBUTION_TYPE}-${Date.now()}`,
                     contributorIds: contributorIds,
                 },
             },
             options: {
-                speakerNames: speakers.map(({ label }) => label).join(' | '),
+                speakerNames: speakers.map(({ label }) => label).join(', '),
             },
         });
 
