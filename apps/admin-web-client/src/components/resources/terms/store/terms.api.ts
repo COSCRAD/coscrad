@@ -9,14 +9,10 @@ import {
 } from '@coscrad/api-interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
+import { RootState } from '../../../../store';
+import { TermQueryOptionsState } from './term-query-options.slice';
 
 export type AggregateId = string;
-
-export type IContributionSummaryAbridged = Omit<IContributionSummary, 'date'>;
-
-export type ITermViewModelAbridged = Omit<ITermViewModel, 'contributions'> & {
-    contributions: Omit<ITermViewModel['contributions'][number], 'date'>[];
-};
 
 type UnknownPart = Record<string, any>;
 
@@ -31,7 +27,7 @@ type TermCommandFsa = {
 
 type TermCommandFsaWithOptions = {
     commandFsa: TermCommandFsa;
-} & { options?: UnknownPart };
+} & { options?: ContributionCacheUpdate };
 
 type TermPayload = {
     aggregateCompositeIdentifier: AggregateCompositeIdentifier;
@@ -51,6 +47,9 @@ type AdditionalCreditsPayload = {
     contributorIds: AggregateId[];
 };
 
+// This is just a hack to satisfy the type when the client can't get the
+// properties set on the server.  Date and timestamp are not displayed in
+// the term presenters so these hack properties are not visible and not persisted
 const buildTempContributionSummaryForCache = (
     speakersNames: string,
     commandPayload: AdditionalCreditsPayload
@@ -76,37 +75,6 @@ type NotePayload = {
     resourceContext: { type: string };
 };
 
-interface ISimpleCondition<_T> {
-    type: string;
-
-    /**
-     * Type safety is difficult here. It's not just `keyof T` that are supported
-     * but also things like `contributions[*].statement`.
-     */
-    field: string;
-
-    operator: string;
-
-    params: unknown[];
-}
-interface IComplexUserDefinedFilter<T> {
-    type: string;
-    conditions: ISimpleCondition<T>[];
-}
-
-export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
-
-export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
-
-export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
-
-export interface IUserQueryOptions {
-    pagination: {
-        size: number;
-        page: number;
-    };
-}
-
 export const termApi = createApi({
     reducerPath: 'terms',
     tagTypes: ['term'],
@@ -120,7 +88,7 @@ export const termApi = createApi({
                 return [tag];
             },
         }),
-        fetchTerms: builder.query<IIndexQueryResult<ITermViewModel>, IUserQueryOptions>({
+        fetchTerms: builder.query<IIndexQueryResult<ITermViewModel>, TermQueryOptionsState>({
             // TODO inject user pagination and filter options
             query: (options) => ({
                 url: `resources/terms`,
@@ -138,6 +106,14 @@ export const termApi = createApi({
                       ]
                     : [{ type: 'term', id: 'LIST' }],
             keepUnusedDataFor: 300,
+            onQueryStarted: async (arg, { getState }) => {
+                console.log(`fetchTerms initiated`);
+                const rootState = getState() as RootState;
+
+                const termQueryOptions = rootState.termQueryOptions;
+
+                console.log({ termQueryOptions });
+            },
         }),
         executeTermCommand: builder.mutation<string, TermCommandFsaWithOptions>({
             query: ({ commandFsa }: TermCommandFsaWithOptions) => ({

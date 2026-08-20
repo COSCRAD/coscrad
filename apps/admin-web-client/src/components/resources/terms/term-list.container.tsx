@@ -28,6 +28,8 @@ export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
 export const TermListContainer = (): JSX.Element => {
     const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
 
+    console.log({ termListContainerPag: paginationOptions });
+
     // Note: `useQueryState()` here allows access to `isFetching` for no flicker
     // on fetching the next result set.  `keepUnusedDataFor: 300` in terms.api.ts
     // allows the existing data to remain in place while fetching the new terms set.
