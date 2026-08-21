@@ -127,6 +127,10 @@ export class ArangoConnectionProvider {
             });
         }
 
+        if (!(await this.#doesCollectionExist('full_text_search__VIEWS'))) {
+            await this.connection.createCollection('full_text_search__VIEWS');
+        }
+
         if (!(await this.#doesCollectionExist('note__VIEWS'))) {
             await this.connection.createEdgeCollection('note__VIEWS', {});
         }
