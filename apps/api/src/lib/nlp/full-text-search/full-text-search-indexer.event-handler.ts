@@ -16,7 +16,7 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
         @Inject(FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN)
         private readonly fullTextSearchQueryRepository: IFullTextSearchQueryRepository,
         @Inject(TOKENIZER_PROVIDER_INJECTION_TOKEN)
-        private readonly tokinzerProvider: ITokenizerProvider // // TODO How do we inject this? // private readonly schemaManager: ISchemaManager
+        private readonly tokenizerProvider: ITokenizerProvider // // TODO How do we inject this? // private readonly schemaManager: ISchemaManager
     ) {}
 
     async handle(
@@ -31,20 +31,18 @@ export class FullTextSearchIndexer implements ICoscradEventHandler {
         for (const fieldPath of fieldsToIndex) {
             const value = event.payload[fieldPath] as MultilingualTextItem;
 
-            if (!this.tokinzerProvider.has(value.languageCode)) {
+            if (!this.tokenizerProvider.has(value.languageCode)) {
                 // we don't have a tokenizer for the language of this text
                 return;
             }
 
-            const tokens = this.tokinzerProvider
+            const tokens = this.tokenizerProvider
                 .forLanguage(value.languageCode)
                 .tokenize(value.text);
 
             await this.fullTextSearchQueryRepository
                 .index(tokens, event.payload.aggregateCompositeIdentifier)
                 .catch((e) => {
-                    console.log(':(');
-
                     this.logger.log(
                         `Failed to tokenize text for event of type [${event.type}].\n ${e}`
                     );

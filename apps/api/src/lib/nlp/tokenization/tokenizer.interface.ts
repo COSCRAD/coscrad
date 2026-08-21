@@ -1,4 +1,4 @@
-import { Token } from '../types/tokenizer.dto';
+import { Token } from '../types/token.dto';
 
 export interface ITokenizer {
     /**

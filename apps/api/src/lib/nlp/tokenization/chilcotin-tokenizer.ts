@@ -1,5 +1,5 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
-import { Token } from '../types/tokenizer.dto';
+import { Token } from '../types/token.dto';
 import { ChilcotinAlphabetParser } from './chilcotin-alphabet-parser';
 import { ITokenizer } from './tokenizer.interface';
 

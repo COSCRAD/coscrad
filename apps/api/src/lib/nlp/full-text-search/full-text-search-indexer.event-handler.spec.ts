@@ -7,9 +7,9 @@ import {
 } from '@coscrad/data-types';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
-import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import { MultilingualTextItem } from '../../../domain/common/entities/multilingual-text';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../domain/models/__tests__/utilities/dummyDateNow';
@@ -168,7 +168,7 @@ describe('FullTextSearchIndexer', () => {
             id: buildDummyUuid(2),
         } as const;
 
-        const targetLangaugeCode = LanguageCode.Chilcotin;
+        const targetLanguageCode = LanguageCode.Chilcotin;
 
         const targetLetter = 'l';
 
@@ -180,12 +180,12 @@ describe('FullTextSearchIndexer', () => {
                 count: 5,
                 description: new MultilingualTextItem({
                     text: textToIndex,
-                    languageCode: targetLangaugeCode,
+                    languageCode: targetLanguageCode,
                     role: MultilingualTextItemRole.original,
                 }),
                 nickname: new MultilingualTextItem({
                     text: 'nickname text',
-                    languageCode: targetLangaugeCode,
+                    languageCode: targetLanguageCode,
                     role: MultilingualTextItemRole.original,
                 }),
             },
@@ -201,7 +201,7 @@ describe('FullTextSearchIndexer', () => {
 
             const searchResult = (await testRepository.findByLetter(
                 targetLetter,
-                targetLangaugeCode
+                targetLanguageCode
             )) as PaginatedResponse<FullTextSearchRecord>;
 
             expect(searchResult.entities).toHaveLength(1);

@@ -1,9 +1,9 @@
 import { LanguageCode, PaginatedResponse, ResourceType } from '@coscrad/api-interfaces';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
+import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
-import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildDummyUuid from '../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { ArangoDatabaseProvider } from '../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../persistence/persistence.module';
@@ -201,14 +201,14 @@ describe(`ArangoFullTextSearchQueryRepository`, () => {
 
                         const message = (result as InternalError).toString().toLowerCase();
 
-                        expect(message).toContain('nsupported language');
+                        expect(message).toContain('unsupported language');
 
                         expect(message).toContain(LanguageCode.English);
                     });
                 });
 
                 // TODO We need a tokenizer for Haida in order to support full-text search
-                describe(`when the langauge is Haida`, () => {
+                describe(`when the language is Haida`, () => {
                     it(`should return an unsupported language error`, async () => {
                         const result = await testRepository.findByLetter(
                             targetLetter,
