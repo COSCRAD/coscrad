@@ -14,7 +14,7 @@ import { RootState } from '../../../store';
 import { HeadingLabel } from '../../shared/tables';
 import { CellRenderersDefinition } from '../../shared/tables/generic-index-table-presenter/types/cell-renderers-definition';
 import { renderAggregateIdCell } from '../../shared/tables/render-aggregate-id-cell';
-import { renderContributionsTextCell } from '../../shared/tables/render-contributions-text-cell';
+import { renderSpeakersForTermTextCell } from '../../shared/tables/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../../shared/tables/render-multilingual-text-cell';
 import { termApi } from './store';
 import { TermIndexTable } from './term-index-table';
@@ -76,7 +76,7 @@ export const TermListContainer = (): JSX.Element => {
                 <AudioClipPlayer audioUrl={audioURL} />
             ),
         contributions: ({ contributions }: ITermViewModel) =>
-            renderContributionsTextCell(contributions),
+            renderSpeakersForTermTextCell(contributions),
     };
 
     return (

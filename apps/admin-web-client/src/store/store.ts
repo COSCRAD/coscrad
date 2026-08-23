@@ -4,7 +4,7 @@ import { authReducer } from '../components/auth/store/auth-slice';
 import { AUTH } from '../components/auth/store/constants';
 import { acquireIdApi } from '../components/id-generation/store/aquire-id.api';
 import { termQueryOptionsSlice } from '../components/resources/terms/store/term-query-options.slice';
-import { termApi } from '../components/resources/terms/store/terms.api';
+import { termApi } from '../components/resources/terms/store/term.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
 import { contributorsApi } from '../components/shared/contributions/contributors.api';
 
