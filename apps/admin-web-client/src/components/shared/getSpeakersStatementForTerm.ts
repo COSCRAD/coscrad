@@ -2,16 +2,20 @@ import { IContributionSummary } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { CONTRIBUTION_TYPE } from '../resources/terms/add-speaker-to-term-form';
 
-export const getSpeakersStatementForTerm = (contributions: IContributionSummary[]): string => {
+export const getSpeakersStatementForTerm = (
+    contributions: IContributionSummary[]
+): string | undefined => {
     const statementSearchTerm = 'spoken';
 
-    // console.log({ contributions });
+    console.log({ contributions });
 
     const contributors = contributions
         .filter(({ statement }) => {
             if (isNullOrUndefined(statement)) return false;
 
-            return statement.toLowerCase().includes(statementSearchTerm);
+            const result = statement.toLowerCase().includes(statementSearchTerm);
+
+            return result;
         })
         .map(({ statement }) => {
             const splitStatement = statement.split(': ');
@@ -23,7 +27,11 @@ export const getSpeakersStatementForTerm = (contributions: IContributionSummary[
             return speakerNames;
         });
 
-    const [speakerNames] = contributors;
+    if (contributors.length === 0) return undefined;
+
+    console.log({ contributorsSpeakers: contributors });
+
+    const speakerNames = contributors.join(', ');
 
     return `${CONTRIBUTION_TYPE} by: ${speakerNames}`;
 };

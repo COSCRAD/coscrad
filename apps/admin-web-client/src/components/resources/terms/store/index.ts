@@ -1,2 +1,2 @@
 export * from './term-query-options.slice';
-export * from './terms.api';
+export * from './term.api';
