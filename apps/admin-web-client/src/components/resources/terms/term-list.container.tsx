@@ -17,7 +17,7 @@ import { renderAggregateIdCell } from '../../shared/tables/render-aggregate-id-c
 import { renderSpeakersForTermTextCell } from '../../shared/tables/render-contributions-text-cell';
 import { renderMultilingualTextCell } from '../../shared/tables/render-multilingual-text-cell';
 import { termApi } from './store';
-import { TermIndexTable } from './term-index-table';
+import { NewIndexTable } from './term-index-table';
 
 export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
     const item = name.items.find((item) => item.role === MultilingualTextItemRole.original);
@@ -27,8 +27,6 @@ export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
 
 export const TermListContainer = (): JSX.Element => {
     const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
-
-    console.log({ termListContainerPag: paginationOptions });
 
     // Note: `useQueryState()` here allows access to `isFetching` for no flicker
     // on fetching the next result set.  `keepUnusedDataFor: 300` in terms.api.ts
@@ -80,12 +78,11 @@ export const TermListContainer = (): JSX.Element => {
     };
 
     return (
-        <TermIndexTable
+        <NewIndexTable
             type={AggregateType.term}
             headingLabels={headingLabels}
             tableData={(terms as ITermViewModel[]) || []}
             cellRenderersDefinition={cellRenderersDefinition}
-            heading={'Terms'}
         />
     );
 };

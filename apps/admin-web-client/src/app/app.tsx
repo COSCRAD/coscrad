@@ -10,6 +10,7 @@ import { TermContainer } from '../components/resources/terms/term-container';
 import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
 import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
+import { ContributorIndexPage } from '../components/shared/contributors/contributor-index.page';
 import { useAppDispatch } from './hooks';
 
 export function App() {
@@ -41,6 +42,7 @@ export function App() {
                     <Route path="/terms/:id" element={<TermContainer />} />
                     <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
                     <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
+                    <Route path="/contributors/" element={<ContributorIndexPage />} />
                 </Routes>
             </Box>
 
