@@ -1,8 +1,8 @@
-import { Box, Stack } from '@mui/material';
-
 import { ITermViewModel } from '@coscrad/api-interfaces';
+import { Box, Stack } from '@mui/material';
 import { HeadingLabel } from '../../shared/tables';
 import { TermSearchBar } from '../../shared/tables/term-search-bar';
+import { CreateTermPage } from './create-term-page';
 import { TermListContainer } from './term-list.container';
 import { TermPaginator } from './term-paginator';
 
@@ -18,7 +18,10 @@ export const TermIndexPage = (): JSX.Element => {
     return (
         <div>
             <Stack>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Box>
+                    <CreateTermPage />
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
                     <TermSearchBar scopes={searchableProps} />
                 </Box>
                 <Box>

@@ -55,6 +55,13 @@ export const Header = (): JSX.Element => {
                         >
                             Vocabulary Lists
                         </Link>
+                        &nbsp;|&nbsp;
+                        <Link
+                            to="/contributors"
+                            style={{ textDecoration: 'none', color: '#aefff4ff' }}
+                        >
+                            Contributors
+                        </Link>
                     </Typography>
                 </nav>
                 <NavMenuPresenter />
