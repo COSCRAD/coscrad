@@ -6,13 +6,13 @@ import { acquireIdApi } from '../components/id-generation/store/aquire-id.api';
 import { termQueryOptionsSlice } from '../components/resources/terms/store/term-query-options.slice';
 import { termApi } from '../components/resources/terms/store/term.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
-import { contributorsApi } from '../components/shared/contributions/contributors.api';
+import { contributorApi } from '../components/shared/contributors/store/contributor.api';
 
 export const store = configureStore({
     reducer: {
         [termApi.reducerPath]: termApi.reducer,
         [vocabularyListApi.reducerPath]: vocabularyListApi.reducer,
-        [contributorsApi.reducerPath]: contributorsApi.reducer,
+        [contributorApi.reducerPath]: contributorApi.reducer,
         [acquireIdApi.reducerPath]: acquireIdApi.reducer,
         [termQueryOptionsSlice.reducerPath]: termQueryOptionsSlice.reducer,
         [AUTH]: authReducer,
@@ -21,7 +21,7 @@ export const store = configureStore({
         return getDefaultMiddleware().concat(
             termApi.middleware,
             vocabularyListApi.middleware,
-            contributorsApi.middleware,
+            contributorApi.middleware,
             acquireIdApi.middleware
         );
     },
