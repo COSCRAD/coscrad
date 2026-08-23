@@ -50,16 +50,19 @@ export class ProvideAdditionalCreditsForResourceCommandHandler extends BaseUpdat
 
         const { manualCredits } = instance;
 
-        const missingCredits = manualCredits.flatMap(({ contributorIds }) => {
-            return contributorIds.filter((id) => !allContributors.some(idEquals(id)));
-        });
+        const { contributorIds } =
+            manualCredits.length > 0 ? manualCredits.pop() : manualCredits[0];
 
-        if (missingCredits.length === 0) {
+        const contributorsMissingInDB = contributorIds.filter(
+            (id) => !allContributors.some(idEquals(id))
+        );
+
+        if (contributorsMissingInDB.length === 0) {
             return Valid;
         }
 
         return new InvalidExternalStateError(
-            missingCredits.map(
+            contributorsMissingInDB.map(
                 (contributorId) =>
                     new InternalError(
                         `Encountered a manually registered contributor (${contributorId}) for ${formatAggregateCompositeIdentifier(

@@ -6,8 +6,9 @@ import {
     MultilingualTextItemRole,
     ResourceType,
 } from '@coscrad/api-interfaces';
-import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { Box, Stack, Typography } from '@mui/material';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { getSpeakersStatementForTerm } from '../../shared/getSpeakersStatementForTerm';
@@ -76,10 +77,15 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
         <>
             <Typography variant="h3">Term</Typography>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
-                <Typography variant="h4" sx={{ mr: 1 }} aria-label={id}>
+                <Typography variant="h3" sx={{ mr: 1, color: '#017e73ff' }} aria-label={id}>
                     {originalTermItem.text} ({originalTermItem.languageCode},{' '}
                     {originalTermItem.role})
                 </Typography>
+                <IconButton>
+                    <Tooltip title={`ID: ${id}`}>
+                        <InfoIcon />
+                    </Tooltip>
+                </IconButton>
                 {contributions.length > 0 ? (
                     <ContributionsPresenter contributions={contributions} />
                 ) : null}
@@ -93,7 +99,7 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     }}
                 />
             ) : null}
-            {isNonEmptyString(speakersStatementForTerm) ? (
+            {!isNullOrUndefined(speakersStatementForTerm) ? (
                 <Box sx={{ mb: 1.5 }}>
                     <Typography variant="h6">{speakersStatementForTerm}</Typography>
                 </Box>
