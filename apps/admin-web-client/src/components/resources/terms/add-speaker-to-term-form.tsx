@@ -1,11 +1,13 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { Autocomplete, Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
-import {
-    ContributorsForTerm,
-    useFetchContributorsQuery,
-} from '../../shared/contributions/contributors.api';
+import { useFetchContributorsQuery } from '../../shared/contributors/store/contributor.api';
 import { useExecuteTermCommandMutation } from './store';
+
+export interface ContributorsForTerm {
+    id: string;
+    label: string;
+}
 
 export const CONTRIBUTION_TYPE = 'Term spoken';
 
@@ -26,11 +28,7 @@ export const AttributeTermToSpeaker = ({
 
     const { resourceId: termId, buttonLabel } = context;
 
-    const {
-        data: contributors,
-        isLoading,
-        isError: isErrorContributors,
-    } = useFetchContributorsQuery();
+    const { data, isLoading, isError: isErrorContributors } = useFetchContributorsQuery();
 
     const [executeTermCommand, { isLoading: isRequestInProgress, isError }] =
         useExecuteTermCommandMutation();
@@ -47,7 +45,14 @@ export const AttributeTermToSpeaker = ({
 
     if (isError) return <div>Error Processing Command Request.</div>;
 
-    const debugContributors = contributors.map(({ id, label }) => `${id}: ${label}`).join(', ');
+    const { entities: contributors } = data;
+
+    const contributorsForAutoComplete: ContributorsForTerm[] = contributors.map(
+        ({ id, fullName }) => ({
+            id: id,
+            label: fullName,
+        })
+    );
 
     const isDisabled = speakers === null;
 
@@ -99,7 +104,7 @@ export const AttributeTermToSpeaker = ({
                     onChange={(event: any, newValue: ContributorsForTerm[] | null) => {
                         setSpeakers(newValue);
                     }}
-                    options={contributors}
+                    options={contributorsForAutoComplete}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Speaker" />}
                 />

@@ -1,5 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { ITermViewModel, ResourceType } from '@coscrad/api-interfaces';
 import {
     Box,
     TableContainer as MUITableContainer,
@@ -10,10 +8,8 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Typography,
 } from '@mui/material';
 import { NotFoundPresenter } from '../../not-found';
-import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { CellRenderer, CellRenderersMap, HeadingLabel } from '../../shared/tables';
 import {
     EmptyIndexTableException,
@@ -21,7 +17,6 @@ import {
 } from '../../shared/tables/generic-index-table-presenter/exceptions';
 import { renderCell } from '../../shared/tables/generic-index-table-presenter/render-cell';
 import { CellRenderersDefinition } from '../../shared/tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { CreateTermForm } from './create-term-form';
 
 interface HasId {
     id: string;
@@ -46,7 +41,6 @@ export interface GenericIndexTablePresenterProps<T> {
     headingLabels: HeadingLabel<T>[];
     tableData: T[];
     cellRenderersDefinition: CellRenderersDefinition<T>;
-    heading: string;
 }
 
 /**
@@ -55,15 +49,12 @@ export interface GenericIndexTablePresenterProps<T> {
  * its logic so we can achieve active search for terms without breaking
  * the other resource views, which currently use the legacy experience.
  */
-export const TermIndexTable = ({
+export const NewIndexTable = <T,>({
     type,
     headingLabels,
     tableData,
     cellRenderersDefinition,
-    heading,
-}: GenericIndexTablePresenterProps<ITermViewModel>) => {
-    const { isAuthenticated } = useAuth0();
-
+}: GenericIndexTablePresenterProps<T>) => {
     if (headingLabels.length === 0) {
         throw new EmptyIndexTableException();
     }
@@ -77,7 +68,7 @@ export const TermIndexTable = ({
 
     const cellRendererKeysNotInHeadings = Object.keys(cellRenderersDefinition).reduce(
         (acc: string[], rendererPropertyKey) =>
-            propertiesInTable.includes(rendererPropertyKey as unknown as keyof ITermViewModel)
+            propertiesInTable.includes(rendererPropertyKey as unknown as keyof T)
                 ? acc
                 : acc.concat(rendererPropertyKey),
         []
@@ -87,11 +78,8 @@ export const TermIndexTable = ({
         throw new UnnecessaryCellRendererDefinitionException(cellRendererKeysNotInHeadings);
     }
 
-    const cellRenderers: CellRenderersMap<ITermViewModel> = new Map(
-        Object.entries(cellRenderersDefinition) as [
-            keyof ITermViewModel,
-            CellRenderer<ITermViewModel>
-        ][]
+    const cellRenderers: CellRenderersMap<T> = new Map(
+        Object.entries(cellRenderersDefinition) as [keyof T, CellRenderer<T>][]
     );
 
     const randomNumber = Math.floor(Math.random() * 100);
@@ -158,20 +146,6 @@ export const TermIndexTable = ({
 
     return (
         <Stack>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h2">{heading}</Typography>
-                <Box>
-                    {isAuthenticated ? (
-                        <PresentFormWithOptionalGeneratedId
-                            form={CreateTermForm}
-                            context={{
-                                resourceType: ResourceType.term,
-                                buttonLabel: 'CREATE TERM',
-                            }}
-                        />
-                    ) : null}
-                </Box>
-            </Box>
             <Box>{table}</Box>
         </Stack>
     );
