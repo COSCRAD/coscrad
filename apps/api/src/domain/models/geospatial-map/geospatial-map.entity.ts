@@ -27,6 +27,7 @@ export class GeospatialMap extends Aggregate {
         label: 'points',
         description: 'description for the points',
         isArray: true,
+        isOptional: true,
     })
     spatialFeatures: AggregateId[];
 
@@ -35,15 +36,17 @@ export class GeospatialMap extends Aggregate {
 
         if (!dto) return;
 
-        const { name, description } = dto;
+        const { name, description, spatialFeatures } = dto;
 
         this.name = new MultilingualText(name);
 
         this.description = new MultilingualText(description);
+
+        this.spatialFeatures = spatialFeatures;
     }
 
     protected validateComplexInvariants(): InternalError[] {
-        throw new Error('Method not implemented.');
+        return [];
     }
 
     getAvailableCommands(): string[] {
