@@ -1,9 +1,5 @@
-import { AggregateType, ICoscradContributorViewModel } from '@coscrad/api-interfaces';
 import { useEffect, useState } from 'react';
-import { NewIndexTable } from '../../resources/terms/term-index-table';
-import { HeadingLabel } from '../tables';
-import { CellRenderersDefinition } from '../tables/generic-index-table-presenter/types/cell-renderers-definition';
-import { renderAggregateIdCell } from '../tables/render-aggregate-id-cell';
+import { ContributorIndexTable } from './contributor-index-table';
 import { contributorApi } from './store';
 
 export const ContributorIndexPage = (): JSX.Element => {
@@ -32,24 +28,5 @@ export const ContributorIndexPage = (): JSX.Element => {
 
     const contributors = renderedData?.entities;
 
-    console.log({ contributors });
-
-    const headingLabels: HeadingLabel<ICoscradContributorViewModel>[] = [
-        { propertyKey: 'id', headingLabel: 'Link' },
-        { propertyKey: 'fullName', headingLabel: 'Full Name' },
-        { propertyKey: 'shortBio', headingLabel: 'Short Bio' },
-    ];
-
-    const cellRenderersDefinition: CellRenderersDefinition<ICoscradContributorViewModel> = {
-        id: renderAggregateIdCell,
-    };
-
-    return (
-        <NewIndexTable
-            type={AggregateType.contributor}
-            headingLabels={headingLabels}
-            tableData={(contributors as ICoscradContributorViewModel[]) || []}
-            cellRenderersDefinition={cellRenderersDefinition}
-        />
-    );
+    return <ContributorIndexTable contributors={contributors} />;
 };
