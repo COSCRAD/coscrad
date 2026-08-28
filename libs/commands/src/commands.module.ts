@@ -1,5 +1,5 @@
-import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 import { EmptyCommandTypeException } from './exceptions/empty-command-type-exception';
 import { CommandFinderService, CommandHandlerService } from './services';
 import getCommandTypeFromMetadata from './services/utilities/getCommandTypeFromMetadata';

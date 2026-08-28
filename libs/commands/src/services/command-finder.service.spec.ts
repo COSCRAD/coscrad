@@ -1,5 +1,5 @@
-import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Ack } from '../constants';
 import { Command, CommandHandler } from '../decorators';

@@ -1,6 +1,5 @@
-import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
-import { InternalError } from '../../lib/errors/InternalError';
+import { ModulesContainer, Reflector } from '@nestjs/core';
 import { Ctor } from '../../lib/types/Ctor';
 import { ICoscradMigration } from './coscrad-migration.interface';
 import { CoscradMigrationMetadata, MIGRATION_METADATA } from './decorators/migration.decorator';
@@ -12,34 +11,37 @@ export type MigrationCtorAndMeta = {
 
 @Injectable()
 export class MigrationFinderService {
-    constructor(private readonly discoveryService: DiscoveryService) {}
+    constructor(
+        private readonly modulesContainer: ModulesContainer,
+        private readonly reflector: Reflector
+    ) {}
 
     async find(): Promise<MigrationCtorAndMeta[]> {
-        const migrationProviders = await this.discoveryService.providers(
-            (provider) =>
-                !!provider.injectType &&
-                Reflect.hasMetadata(MIGRATION_METADATA, provider.injectType)
-        );
+        const migrationCtorsWithMeta: MigrationCtorAndMeta[] = [];
 
-        const migrationCtorsWithMeta = migrationProviders
-            .map((provider) => provider.injectType as Ctor<ICoscradMigration>)
-            .map((ctor) => {
-                const metadata = Reflect.getMetadata(
-                    MIGRATION_METADATA,
-                    ctor
-                ) as CoscradMigrationMetadata;
+        // Iterate through all modules registered in the application
+        for (const moduleInstance of this.modulesContainer.values()) {
+            // Iterate through all providers within each module
+            for (const wrapper of moduleInstance.providers.values()) {
+                const ctor = wrapper.metatype;
 
-                if (!metadata) {
-                    throw new InternalError(
-                        `Failed to find metadata for migration ctor: ${ctor.name}`
-                    );
+                if (!ctor) {
+                    continue;
                 }
 
-                return {
-                    metadata,
-                    migrationCtor: ctor,
-                };
-            });
+                const metadata = this.reflector.get<
+                    CoscradMigrationMetadata,
+                    typeof MIGRATION_METADATA
+                >(MIGRATION_METADATA, ctor);
+
+                if (metadata) {
+                    migrationCtorsWithMeta.push({
+                        metadata,
+                        migrationCtor: ctor as Ctor<ICoscradMigration>,
+                    });
+                }
+            }
+        }
 
         return migrationCtorsWithMeta;
     }
