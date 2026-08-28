@@ -41,7 +41,7 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
     ): InternalError | Valid {
         return instance.validateExternalState(state);
     }
-
+    // TODO- fetch all spatial features with the same coordinates within a small threshold
     protected async fetchRequiredExternalState(_command?: CreateMap): Promise<InMemorySnapshot> {
         return new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
     }
