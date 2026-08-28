@@ -1,4 +1,5 @@
 import { EventSourcedAudioItemViewModel } from '../../../../../domain/models/audio-visual/audio-item/queries';
+import { GeospatialMap } from '../../../../../domain/models/geospatial-map/geospatial-map.entity';
 import { MediaItemViewModel } from '../../../../../domain/models/media-item/queries/media-item.view-model';
 import { PhotographViewModel } from '../../../../../domain/models/photograph/queries/photograph.view-model';
 import { EventSourcedSongViewModel } from '../../../../../domain/models/song/queries/song.view-model.event.sourced';
@@ -37,6 +38,7 @@ export const aggregateTypeToViewModelCtor: {
     [ResourceType.photograph]: PhotographViewModel,
     [ResourceType.song]: EventSourcedSongViewModel,
     [ResourceType.spatialFeature]: SpatialFeatureViewModel,
+    [ResourceType.map]: GeospatialMap,
     [ResourceType.term]: TermViewModel,
     [ResourceType.audioItem]: EventSourcedAudioItemViewModel,
     [ResourceType.video]: VideoViewModel,
