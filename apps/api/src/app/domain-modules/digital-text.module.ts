@@ -37,17 +37,16 @@ import { IdGenerationModule } from '../../lib/id-generation/id-generation.module
 import { CoscradNLPModule } from '../../lib/nlp';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
 import { DigitalTextQueryService } from '../../queries/digital-text';
-import { DynamicDataTypeFinderService } from '../../validation';
+import { DynamicDataTypeModule } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { DigitalTextQueryController } from '../controllers/resources/digital-text.controller';
 
 @Module({
-    imports: [CommandModule, IdGenerationModule, CoscradNLPModule],
+    imports: [CommandModule, IdGenerationModule, CoscradNLPModule, DynamicDataTypeModule],
     controllers: [DigitalTextQueryController],
     providers: [
         CommandInfoService,
         ArangoEventRepository,
-        DynamicDataTypeFinderService,
         CoscradEventFactory,
         CreateDigitalTextCommandHandler,
         AddPageToDigitalTextCommandHandler,

@@ -18,12 +18,12 @@ import { TagAddedForResourceOrNoteEventHandler } from '../../domain/models/tag/c
 import { TagQueryService } from '../../domain/services/query-services/tag-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { ArangoEventRepository } from '../../persistence/repositories/arango-event-repository';
-import { DynamicDataTypeFinderService } from '../../validation';
+import { DynamicDataTypeModule } from '../../validation';
 import { CommandInfoService } from '../controllers/command/services/command-info-service';
 import { TagController } from '../controllers/tag.controller';
 
 @Module({
-    imports: [CommandModule, IdGenerationModule],
+    imports: [CommandModule, IdGenerationModule, DynamicDataTypeModule],
     controllers: [TagController],
     providers: [
         CommandInfoService,
@@ -41,7 +41,6 @@ import { TagController } from '../controllers/tag.controller';
         // Does this belong here?
         ArangoEventRepository,
         CoscradEventFactory,
-        DynamicDataTypeFinderService,
         // Data Classes
         ...[
             //Events

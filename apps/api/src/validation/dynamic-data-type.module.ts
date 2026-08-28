@@ -1,10 +1,10 @@
-import { DiscoveryModule } from '@golevelup/nestjs-discovery';
 import { Module } from '@nestjs/common';
+import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service';
 
 @Module({
     imports: [DiscoveryModule],
-    providers: [DynamicDataTypeFinderService],
-    exports: [DynamicDataTypeFinderService],
+    providers: [DiscoveryService, DynamicDataTypeFinderService],
+    exports: [DynamicDataTypeFinderService, DiscoveryService],
 })
 export class DynamicDataTypeModule {}
