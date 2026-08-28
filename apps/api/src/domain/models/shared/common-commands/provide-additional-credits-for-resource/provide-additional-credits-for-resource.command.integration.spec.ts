@@ -3,15 +3,15 @@ import { CommandHandlerService, CommandModule } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
 import { AggregateCompositeIdentifier } from '../../../../../domain/types/AggregateCompositeIdentifier';
-import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { IdGenerationModule } from '../../../../../lib/id-generation/id-generation.module';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
@@ -19,19 +19,19 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
+import { ArangoRepositoryForAggregate } from '../../../../../persistence/repositories/arango-repository-for-aggregate';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import { ArangoRepositoryForAggregate } from '../../../../../persistence/repositories/arango-repository-for-aggregate';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
+import { Resource } from '../../../resource.entity';
+import { ArangoContributorRepository, CoscradContributor } from '../../../user-management';
+import { FullName } from '../../../user-management/user/entities/user/full-name.entity';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import { Resource } from '../../../resource.entity';
-import { ArangoContributorRepository, CoscradContributor } from '../../../user-management';
-import { FullName } from '../../../user-management/user/entities/user/full-name.entity';
 import CommandExecutionError from '../../common-command-errors/CommandExecutionError';
 import InvalidExternalStateError from '../../common-command-errors/InvalidExternalStateError';
 import { ProvideAdditionalCreditsForResource } from './provide-additional-credits-for-resource.command';
@@ -330,7 +330,7 @@ describe(commandType, () => {
         });
 
         describe(`when no contributor IDs have been specified`, () => {
-            it.only(`should return the expected type error`, async () => {
+            it(`should return the expected type error`, async () => {
                 await assertCommandError(
                     { testRepositoryProvider, commandHandlerService },
                     {
