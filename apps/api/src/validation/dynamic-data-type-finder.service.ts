@@ -2,8 +2,8 @@ import {
     bootstrapDynamicTypes as bootstrapDynamicTypesUtil,
     UnionFactory,
 } from '@coscrad/data-types';
-import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { Injectable } from '@nestjs/common';
+import { DiscoveryService } from '@nestjs/core';
 import { Ctor } from '../lib/types/Ctor';
 
 const isClass = (input): input is Ctor<unknown> => {
@@ -42,10 +42,14 @@ export class DynamicDataTypeFinderService {
     }
 
     public async getAllDataClassCtors() {
-        const dataTypeProviders = await this.discoverService.providers(
-            (provider) => !provider.injectType && isClass(provider.instance)
+        const providers = this.discoverService.getProviders();
+
+        const dataTypeProviders = providers.filter((instanceWrapper) =>
+            isClass(instanceWrapper?.instance)
         );
 
-        return dataTypeProviders.map((provider) => provider.instance);
+        const allCtors = dataTypeProviders.map((provider) => provider.instance);
+
+        return allCtors;
     }
 }

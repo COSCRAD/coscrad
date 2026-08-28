@@ -111,6 +111,7 @@ export class PersistenceModule implements OnApplicationShutdown {
 
                 return repositoryProvider;
             },
+            // Should the persistence module be aware of these?
             inject: [ArangoConnectionProvider, CoscradEventFactory, DynamicDataTypeFinderService],
         };
 

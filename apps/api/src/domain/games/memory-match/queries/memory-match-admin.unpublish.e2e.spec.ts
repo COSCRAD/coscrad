@@ -1,13 +1,13 @@
 import { CoscradUserRole, HttpStatusCode } from '@coscrad/api-interfaces';
 import { UnionFactory } from '@coscrad/data-types';
-import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DiscoveryService } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
-import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
+import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { AdminJwtGuard } from '../../../../app/controllers/command/command.controller';
 import { MockJwtAdminAuthGuard } from '../../../../authorization/mock-jwt-admin-auth-guard';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -15,9 +15,9 @@ import { PersistenceModule } from '../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../validation';
-import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../../../models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../../models/user-management/user/entities/user/coscrad-user.entity';
+import buildDummyUuid from '../../../models/__tests__/utilities/buildDummyUuid';
 import { MemoryMatchModule } from '../memory-match.module';
 import {
     IMemoryMatchRepository,
