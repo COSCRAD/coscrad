@@ -21,6 +21,7 @@ import CommandExecutionError from '../../shared/common-command-errors/CommandExe
 import UuidNotGeneratedInternallyError from '../../shared/common-command-errors/UuidNotGeneratedInternallyError';
 import { assertCreateCommandError } from '../../__tests__/command-helpers/assert-create-command-error';
 import { assertCreateCommandSuccess } from '../../__tests__/command-helpers/assert-create-command-success';
+import { assertEventRecordPersisted } from '../../__tests__/command-helpers/assert-event-record-persisted';
 import { CommandAssertionDependencies } from '../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../__tests__/utilities/dummySystemUserId';
@@ -132,6 +133,12 @@ describe(commandType, () => {
 
                     expect(updatedGeospatialMap.name.getOriginalTextItem().text).toBe(
                         validFsa.payload.name
+                    );
+
+                    assertEventRecordPersisted(
+                        updatedGeospatialMap,
+                        'MAP_CREATED',
+                        dummySystemUserId
                     );
                 },
             });

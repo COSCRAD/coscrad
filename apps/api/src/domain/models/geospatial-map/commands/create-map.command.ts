@@ -42,7 +42,6 @@ export class CreateMap implements ICommandBase {
     })
     readonly aggregateCompositeIdentifier: GeospatialMapCompositeIdentifier;
 
-    // TODO should this be just a neme: string, languageCodeForName: LanguageCode
     @NonEmptyString({
         label: 'name',
         description: 'name for the map',
