@@ -40,7 +40,7 @@ describe(`when using the REST API to unpublish a memory match round`, () => {
     let memoryMatchRepository: IMemoryMatchRepository;
 
     const mockDiscoveryService = {
-        providers: (_: any) => {
+        getProviders: (_: any) => {
             return [];
         },
     };

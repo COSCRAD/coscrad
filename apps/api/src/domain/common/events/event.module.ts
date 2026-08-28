@@ -1,5 +1,5 @@
 import { Inject, Module } from '@nestjs/common';
-import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
+import { DiscoveryService } from '@nestjs/core';
 import { ConsoleCoscradCliLogger } from '../../../coscrad-cli/logging';
 import { isNotFound } from '../../../lib/types/not-found';
 import { DynamicDataTypeModule } from '../../../validation';
@@ -16,7 +16,7 @@ import { SyncInMemoryEventPublisher } from './sync-in-memory-event-publisher';
 
 // TODO Should this be it's own lib or maybe part of the commands (CQRS now?) lib?
 @Module({
-    imports: [DynamicDataTypeModule, DiscoveryModule],
+    imports: [DynamicDataTypeModule],
     providers: [
         CoscradEventFactory,
         {

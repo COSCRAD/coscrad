@@ -5,6 +5,6 @@ import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service
 @Module({
     imports: [DiscoveryModule],
     providers: [DiscoveryService, DynamicDataTypeFinderService],
-    exports: [DynamicDataTypeFinderService],
+    exports: [DynamicDataTypeFinderService, DiscoveryService],
 })
 export class DynamicDataTypeModule {}
