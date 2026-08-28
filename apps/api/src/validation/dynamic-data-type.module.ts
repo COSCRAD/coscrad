@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { DiscoveryModule } from '@nestjs/core';
+import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import { DynamicDataTypeFinderService } from './dynamic-data-type-finder.service';
 
 @Module({
     imports: [DiscoveryModule],
-    providers: [DynamicDataTypeFinderService],
+    providers: [DiscoveryService, DynamicDataTypeFinderService],
     exports: [DynamicDataTypeFinderService],
 })
 export class DynamicDataTypeModule {}
