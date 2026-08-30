@@ -20,6 +20,8 @@ export enum CoscradDataType {
     // TODO How does this fit within the constraint-based validation scheme?
     FixedValue = 'FIXED_VALUE',
     PageNumber = 'PAGE_NUMBER',
+    // this might need a u, eh?
+    HexColorCode = 'HEX_COLOR_CODE',
 }
 
 export const isCoscradDataType = (input: unknown): input is CoscradDataType =>

@@ -21,6 +21,7 @@ const lookupTable: { [K in CoscradDataType]: CoscradConstraint[] } = {
     [CoscradDataType.String]: [CoscradConstraint.isString],
     // TODO How does this fit in here? How could we possibly validate this without injecting a value?
     [CoscradDataType.FixedValue]: [],
+    [CoscradDataType.HexColorCode]: [CoscradConstraint.isHexColorCode],
 };
 
 type Options = { isArray: boolean; isOptional: boolean };

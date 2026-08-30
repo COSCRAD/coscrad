@@ -33,12 +33,14 @@ describe('NonEmptyString', () => {
                 coscradDataType: CoscradDataType.NonEmptyString,
                 isOptional: false,
                 isArray: false,
+                isPrivate: false,
                 ...widgetNameLabelAndDescription,
             },
             locationName: {
                 coscradDataType: CoscradDataType.NonEmptyString,
                 isOptional: true,
                 isArray: false,
+                isPrivate: false,
                 ...locationNameLabelAndDescription,
             },
         });

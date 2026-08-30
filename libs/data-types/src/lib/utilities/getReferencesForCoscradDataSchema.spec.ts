@@ -3,11 +3,12 @@ import {
     NestedDataType,
     NonEmptyString,
     ReferenceTo,
-    UUID,
     Union,
     UnionMember,
     UnionType,
+    UUID,
 } from '../decorators';
+import { bootstrapDynamicTypes } from './bootstrapDynamicTypes';
 import getCoscradDataSchema from './getCoscradDataSchema';
 import { getReferencesForCoscradDataSchema } from './getReferencesForCoscradDataSchema';
 
@@ -75,6 +76,7 @@ describe(`getReferencesForCoscradDataSchema`, () => {
             })
             items: Item[];
         }
+
         it(`should return the reference specification`, () => {
             const specifications = getReferencesForCoscradDataSchema(
                 getCoscradDataSchema(Whatchamacallit)
@@ -120,6 +122,10 @@ describe(`getReferencesForCoscradDataSchema`, () => {
             })
             item: ItemType1 | ItemType2;
         }
+
+        beforeEach(() => {
+            bootstrapDynamicTypes([ItemUnion, ItemType1, ItemType2, Whatchamacallit]);
+        });
 
         it(`should throw`, () => {
             const act = getReferencesForCoscradDataSchema(getCoscradDataSchema(Whatchamacallit));

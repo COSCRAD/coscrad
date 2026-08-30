@@ -48,8 +48,9 @@ export const getReferencesForCoscradDataSchema = (
 
             if (complexDataType == 'UNION_TYPE') {
                 // @ts-expect-error Fix data types for this lib
-                if (doesUnionTypeDefinitionDeepContainReferences(typeDefinition))
+                if (doesUnionTypeDefinitionDeepContainReferences(typeDefinition)) {
                     throw new Error(`Gathering Nested References from a Union is not supported`);
+                }
             }
 
             return acc;

@@ -39,6 +39,8 @@ const fuzzData = {
     isbn13: `978-3-16-148410-0`,
     true: true,
     false: false,
+    threeDigitHexCode: '#fff',
+    sixDigitHexCode: '#fff123',
 } as const;
 
 type FuzzDataType = keyof typeof fuzzData;
@@ -91,6 +93,7 @@ const dataTypeToValidFuzz: DataTypeToFuzz = {
     [CoscradDataType.String]: ['emptyString', 'arbitraryString', 'uuid', 'isbn10', 'isbn13'],
     // TODO Add valid example here
     [CoscradDataType.FixedValue]: [],
+    [CoscradDataType.HexColorCode]: ['threeDigitHexCode', 'sixDigitHexCode'],
 };
 
 export const generateValidValuesOfType = (

@@ -120,6 +120,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
     "discriminantPath": "type",
     "isArray": false,
     "isOptional": false,
+    "isPrivate": false,
     "label": "machine",
     "schemaDefinitions": [
       {
@@ -130,13 +131,16 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
             "description": "description-of-properties",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label-for-properties",
+            "name": "WhatsitProperty",
             "schema": {
               "class": {
                 "coscradDataType": "NON_EMPTY_STRING",
                 "description": "description-of-whatsit",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "label-for-whatsit",
               },
               "power": {
@@ -144,6 +148,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
                 "description": "description-of-power",
                 "isArray": false,
                 "isOptional": false,
+                "isPrivate": false,
                 "label": "label-for-power",
               },
             },
@@ -158,6 +163,7 @@ exports[`bootstrapDynamicTypes when several union members have been registered w
             "description": "description-of-widget",
             "isArray": false,
             "isOptional": false,
+            "isPrivate": false,
             "label": "label-for-widget",
           },
         },
