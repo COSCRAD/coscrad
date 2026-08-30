@@ -44,6 +44,8 @@ export class CreateMediaItemCommandHandler extends BaseCreateCommandHandler<Medi
              * core part of its identity within our system.
              */
             lengthMilliseconds,
+            // Run one of the add raw transcript commands to update this
+            transcripts: [],
             dimensions:
                 isNullOrUndefined(heightPx) && isNullOrUndefined(widthPx)
                     ? undefined

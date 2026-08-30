@@ -143,6 +143,8 @@ import {
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { ArangoDigitalTextQueryRepository } from '../../../domain/models/digital-text/queries/arango-digital-text-query-repository';
 import { DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../domain/models/digital-text/queries/digital-text-query-repository.interface';
+import { AddGeneratedTranscriptForMediaItem } from '../../../domain/models/media-item/commands/add-generated-transcript-for-media-item/add-generated-transcript-for-media-item.command';
+import { AddGeneratedTranscriptForMediaItemCommandHandler } from '../../../domain/models/media-item/commands/add-generated-transcript-for-media-item/add-generated-transcript-for-media-item.command-handler';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../domain/models/media-item/media-manager.interface';
@@ -940,6 +942,8 @@ export default async (
              */
             CreateMediaItem,
             CreateMediaItemCommandHandler,
+            AddGeneratedTranscriptForMediaItem,
+            AddGeneratedTranscriptForMediaItemCommandHandler,
             CreateSong,
             CreateSongCommandHandler,
             AddLyricsForSong,

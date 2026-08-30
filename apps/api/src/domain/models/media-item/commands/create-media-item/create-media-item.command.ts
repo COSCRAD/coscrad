@@ -13,7 +13,7 @@ import { AggregateCompositeIdentifier } from '../../../../types/AggregateComposi
 import { AggregateType } from '../../../../types/AggregateType';
 import { AggregateTypeProperty } from '../../../shared/common-commands';
 
-class MediaItemCompositeId {
+export class MediaItemCompositeId {
     @AggregateTypeProperty([AggregateType.mediaItem])
     type = AggregateType.mediaItem;
 

@@ -10,6 +10,9 @@ import { ArangoDatabaseProvider } from '../../../persistence/database/database.p
 import { PersistenceModule } from '../../../persistence/persistence.module';
 import { IRepositoryProvider } from '../../repositories/interfaces/repository-provider.interface';
 import { CreateMediaItem, MediaItemCreated } from './commands';
+import { AddGeneratedTranscriptForMediaItem } from './commands/add-generated-transcript-for-media-item/add-generated-transcript-for-media-item.command';
+import { AddGeneratedTranscriptForMediaItemCommandHandler } from './commands/add-generated-transcript-for-media-item/add-generated-transcript-for-media-item.command-handler';
+import { GeneratedTranscriptAddedForMediaItem } from './commands/add-generated-transcript-for-media-item/generated-transcript-added-for-media-item';
 import { CreateMediaItemCommandHandler } from './commands/create-media-item/create-media-item.command-handler';
 import { MediaItem } from './entities/media-item.entity';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from './media-manager.interface';
@@ -49,12 +52,15 @@ import { MediaItemController, MediaItemQueryService } from './queries';
         CommandInfoService,
         CreateMediaItem,
         CreateMediaItemCommandHandler,
+        AddGeneratedTranscriptForMediaItem,
+        AddGeneratedTranscriptForMediaItemCommandHandler,
         // Data Type Ctors
         ...[
             // Domain Models
             MediaItem,
             // Events
             MediaItemCreated,
+            GeneratedTranscriptAddedForMediaItem,
         ].map((Ctor) => ({
             provide: Ctor,
             useValue: Ctor,

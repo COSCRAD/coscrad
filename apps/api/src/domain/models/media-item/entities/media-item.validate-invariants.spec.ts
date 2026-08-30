@@ -1,10 +1,13 @@
 import { MIMEType } from '@coscrad/api-interfaces';
 import assertErrorAsExpected from '../../../../lib/__tests__/assertErrorAsExpected';
+import { buildTestInstance } from '../../../../test-data/utilities';
 import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import InvariantValidationError from '../../../domainModelValidators/errors/InvariantValidationError';
 import { AggregateType } from '../../../types/AggregateType';
-import { InconsistentMediaItemPropertyError } from '../errors';
+import { EmptyTranscriptForMediaItemError, InconsistentMediaItemPropertyError } from '../errors';
 import { MediaItemDimensions } from './media-item-dimensions';
+import { MediaItem } from './media-item.entity';
+import { RawMediaItemTranscript } from './raw-media-item-transcript.entity';
 
 describe(`MediaItem.validateInvariants`, () => {
     describe(`when a length is provided for a media item not of type audio or video`, () => {
@@ -76,5 +79,64 @@ describe(`MediaItem.validateInvariants`, () => {
                     });
                 });
             });
+    });
+
+    describe(`when a transcript is provided for a media item that is not an audio or video item`, () => {
+        it(`should fail with the expected errors`, () => {
+            Object.values(MIMEType)
+                .filter(
+                    (mimeType) =>
+                        ![
+                            MIMEType.wav,
+                            MIMEType.mp3,
+                            MIMEType.audioOgg,
+                            MIMEType.videoOgg,
+                            MIMEType.videoWebm,
+                            MIMEType.mp4,
+                            MIMEType.mov,
+                        ].includes(mimeType)
+                )
+                .forEach((inconsistentMimeType) => {
+                    const mediaItem = buildTestInstance(MediaItem, {
+                        mimeType: inconsistentMimeType,
+                        transcripts: [buildTestInstance(RawMediaItemTranscript)],
+                    });
+
+                    const result = mediaItem.validateInvariants();
+
+                    assertErrorAsExpected(
+                        result,
+                        new InvariantValidationError(mediaItem.getCompositeIdentifier(), [
+                            new InconsistentMediaItemPropertyError(
+                                'transcripts',
+                                mediaItem.mimeType
+                            ),
+                        ])
+                    );
+                });
+        });
+    });
+
+    describe(`when one of the raw transcripts is an empty object`, () => {
+        it(`should fail with the expected error`, () => {
+            const mediaItem = buildTestInstance(MediaItem, {
+                // must be audio or video in order to have a transcript
+                mimeType: MIMEType.wav,
+                transcripts: [
+                    buildTestInstance(RawMediaItemTranscript, {
+                        data: {},
+                    }),
+                ],
+            });
+
+            const result = mediaItem.validateInvariants();
+
+            assertErrorAsExpected(
+                result,
+                new InvariantValidationError(mediaItem.getCompositeIdentifier(), [
+                    new EmptyTranscriptForMediaItemError(mediaItem.id),
+                ])
+            );
+        });
     });
 });
