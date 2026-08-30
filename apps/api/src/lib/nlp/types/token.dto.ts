@@ -2,8 +2,6 @@ import { LanguageCode } from '@coscrad/api-interfaces';
 import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { LanguageCodeEnum } from '../../../domain/common/entities/multilingual-text';
 
-export const TOKENIZER_PROVIDER_INJECTION_TOKEN = 'TOKENIZER_PROVIDER_INJECTION_TOKEN';
-
 /**
  * TODO[naming] This is tough to name. It's meant to be
  * either a (possibly length > 1) string of roman characters
@@ -86,19 +84,4 @@ export class Token {
         description: 'flags this token as a stop word in the given language',
     })
     isStop: boolean;
-}
-
-export interface ITokenizer {
-    /**
-     * Do we want this to be async in case we reach out to Spacy out of
-     * process in the future? Or will this be handled in a python
-     * event handler that receives publications from a messaging queue?
-     */
-    tokenize(document: string): Token[];
-}
-
-export interface ITokenizerProvider {
-    has(langaugeCode: LanguageCode): boolean;
-
-    forLanguage(languageCode: LanguageCode): ITokenizer;
 }
