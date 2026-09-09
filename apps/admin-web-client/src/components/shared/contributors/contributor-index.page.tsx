@@ -1,32 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { ContributorIndexTable } from './contributor-index-table';
-import { contributorApi } from './store';
+import { ResourcePaginator } from './contributor-paginator';
+import { useFetchContributorsQuery } from './store';
 
 export const ContributorIndexPage = (): JSX.Element => {
-    const {
-        data: serverData,
-        isLoading,
-        isFetching,
-        isError,
-    } = contributorApi.endpoints.fetchContributors.useQuery();
+    const contributorQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
 
-    // This is the flicker free term set held in place.  `setRenderedData()` is only
-    // triggered when the new data is fully fetched (i.e., `!isFetching`)
-    const [renderedData, setRenderedData] = useState(serverData);
+    const { data, isLoading, isError } = useFetchContributorsQuery(contributorQueryOptions);
 
-    useEffect(() => {
-        if (serverData && !isFetching) {
-            setRenderedData(serverData);
-        }
-    }, [serverData, isFetching]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) return <div>Error retrieving data.</div>;
-
-    const contributors = renderedData?.entities;
-
-    return <ContributorIndexTable contributors={contributors} />;
+    return (
+        <>
+            <ContributorIndexTable />
+            <ResourcePaginator />
+        </>
+    );
 };
