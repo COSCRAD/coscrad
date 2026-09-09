@@ -8,7 +8,7 @@ import { RootState } from '../../../store';
 import { setPage, setPageSize, useFetchTermsQuery } from '../../resources/terms/store';
 import { DEFAULT_PAGE_SIZE } from '../constants';
 import { insertNumberInSequence } from '../insert-in-sequence';
-import { cyclicDecrement } from '../math';
+import { cyclicDecrement, cyclicIncrement } from '../math';
 
 const pageSizes: number[] = [5, 10, 50, 100];
 
@@ -16,12 +16,12 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
     ? insertNumberInSequence(pageSizes, DEFAULT_PAGE_SIZE)
     : pageSizes;
 
-export const ContributorPaginator = (): JSX.Element => {
+export const ResourcePaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const termQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
+    const contributorQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
 
-    const { data, isLoading, isError } = useFetchTermsQuery(termQueryOptions);
+    const { data, isLoading, isError } = useFetchTermsQuery(contributorQueryOptions);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -33,7 +33,7 @@ export const ContributorPaginator = (): JSX.Element => {
 
     const {
         pagination: { size: pageSize },
-    } = termQueryOptions;
+    } = contributorQueryOptions;
 
     const pageCount = Math.ceil(count / pageSize);
 
@@ -47,7 +47,7 @@ export const ContributorPaginator = (): JSX.Element => {
     const updatePageSize = (newPageSize: number) => {
         console.log({ newPageSize });
 
-        if (newPageSize > termQueryOptions.pagination.size) {
+        if (newPageSize > contributorQueryOptions.pagination.size) {
             dispatch(setPageSize(newPageSize));
             dispatch(setPage(1));
         }

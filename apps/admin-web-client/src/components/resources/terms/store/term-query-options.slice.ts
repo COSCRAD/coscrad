@@ -35,16 +35,16 @@ export interface IUserPaginationOptions {
 
 export type UserSearchString = string;
 
-export type TermQueryOptionsState = {
+export type UserQueryOptionsState<T> = {
     pagination: {
         page: number;
         size: number;
     };
     searchString?: UserSearchString;
-    filter?: IUserDefinedFilter<ITermViewModel>;
+    filter?: IUserDefinedFilter<T>;
 };
 
-const initialState: TermQueryOptionsState = {
+const initialUserQueryOptionsState: UserQueryOptionsState<ITermViewModel> = {
     searchString: '',
     pagination: {
         page: 1,
@@ -54,7 +54,7 @@ const initialState: TermQueryOptionsState = {
 
 export const termQueryOptionsSlice = createSlice({
     name: 'termQueryOptions',
-    initialState,
+    initialState: initialUserQueryOptionsState,
     reducers: {
         setPaginationOptions: (state, action: PayloadAction<IUserPaginationOptions>) => {
             state = action.payload;
