@@ -1,1 +1,1 @@
-export * from './tokenizer.dto';
+export * from './token.dto';

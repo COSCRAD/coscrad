@@ -1,6 +1,6 @@
 import assert = require('node:assert');
 import { InternalError } from '../../errors/InternalError';
-import { AlphabetCharacters } from '../types/tokenizer.dto';
+import { AlphabetCharacters } from '../types/token.dto';
 
 class Node {
     text: string;
