@@ -1,7 +1,7 @@
 import { ICoscradContributorViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
-import { TermQueryOptionsState } from '../../../resources/terms/store';
+import { UserQueryOptionsState } from '../../../resources/terms/store';
 
 export interface ContributorsForTerm {
     id: string;
@@ -15,7 +15,7 @@ export const contributorApi = createApi({
     endpoints: (builder) => ({
         fetchContributors: builder.query<
             IIndexQueryResult<ICoscradContributorViewModel>,
-            TermQueryOptionsState
+            UserQueryOptionsState<ICoscradContributorViewModel>
         >({
             query: (options) => ({
                 url: `contributors`,

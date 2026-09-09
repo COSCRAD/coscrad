@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CoscradContributorQueryService } from '../../domain/services/query-services/coscrad-contributor-query.service';
 
@@ -11,7 +11,7 @@ export class CoscradContributorController {
 
     // @ApiBearerAuth('JWT')
     // @UseGuards(AdminJwtGuard)
-    @Get('')
+    @Post('')
     async fetchMany() {
         return this.coscradContributorService.fetchMany();
     }

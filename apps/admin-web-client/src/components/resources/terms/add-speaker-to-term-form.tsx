@@ -28,7 +28,16 @@ export const AttributeTermToSpeaker = ({
 
     const { resourceId: termId, buttonLabel } = context;
 
-    const { data, isLoading, isError: isErrorContributors } = useFetchContributorsQuery();
+    const {
+        data,
+        isLoading,
+        isError: isErrorContributors,
+    } = useFetchContributorsQuery({
+        pagination: {
+            size: 100,
+            page: 1,
+        },
+    });
 
     const [executeTermCommand, { isLoading: isRequestInProgress, isError }] =
         useExecuteTermCommandMutation();

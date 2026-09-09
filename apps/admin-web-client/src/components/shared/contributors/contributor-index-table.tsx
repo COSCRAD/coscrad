@@ -1,5 +1,7 @@
 import { AggregateType, ICoscradContributorViewModel } from '@coscrad/api-interfaces';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { NewIndexTable } from '../../resources/terms/term-index-table';
 import { HeadingLabel } from '../tables';
 import { CellRenderersDefinition } from '../tables/generic-index-table-presenter/types/cell-renderers-definition';
@@ -7,12 +9,14 @@ import { renderAggregateIdCell } from '../tables/render-aggregate-id-cell';
 import { contributorApi } from './store';
 
 export const ContributorIndexTable = (): JSX.Element => {
+    const paginationOptions = useSelector((state: RootState) => state.termQueryOptions);
+
     const {
         data: serverData,
         isLoading,
         isFetching,
         isError,
-    } = contributorApi.endpoints.fetchContributors.useQueryState();
+    } = contributorApi.endpoints.fetchContributors.useQueryState(paginationOptions);
 
     // This is the flicker free term set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)
