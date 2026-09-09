@@ -10,7 +10,7 @@ import {
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
 import { RootState } from '../../../../store';
-import { TermQueryOptionsState } from './term-query-options.slice';
+import { UserQueryOptionsState } from './term-query-options.slice';
 
 export type AggregateId = string;
 
@@ -88,7 +88,10 @@ export const termApi = createApi({
                 return [tag];
             },
         }),
-        fetchTerms: builder.query<IIndexQueryResult<ITermViewModel>, TermQueryOptionsState>({
+        fetchTerms: builder.query<
+            IIndexQueryResult<ITermViewModel>,
+            UserQueryOptionsState<ITermViewModel>
+        >({
             // TODO inject user pagination and filter options
             query: (options) => ({
                 url: `resources/terms`,
