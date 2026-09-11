@@ -1,5 +1,10 @@
-import { ICommand } from '@coscrad/commands';
+import { CommandHandler, ICommand } from '@coscrad/commands';
+import {
+    MultilingualTextItem,
+    MultilingualTextItemRole,
+} from '../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../../../domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../../domain/types/ResourceType';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -7,17 +12,20 @@ import { BaseUpdateCommandHandler } from '../../../shared/command-handlers/base-
 import { BaseEvent, IEventPayload } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { GeospatialMap } from '../../geospatial-map.entity';
+import { MapNameTranslated } from './map-name-translated.event';
+import { TranslateMapName } from './translate-map-name.command';
 
+@CommandHandler(TranslateMapName)
 export class TranslateMapNameCommandHandler extends BaseUpdateCommandHandler<GeospatialMap> {
     protected actOnInstance(
-        _instance: GeospatialMap,
-        _command: ICommand
+        instance: GeospatialMap,
+        { translationOfName, languageCode }: TranslateMapName
     ): ResultOrError<GeospatialMap> {
-        throw new Error('Method not implemented.');
+        return instance.translateName(translationOfName, languageCode);
     }
 
     protected fetchRequiredExternalState(_command?: ICommand): Promise<InMemorySnapshot> {
-        throw new Error('Method not implemented.');
+        return Promise.resolve(new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat());
     }
 
     protected validateExternalState(
@@ -29,9 +37,21 @@ export class TranslateMapNameCommandHandler extends BaseUpdateCommandHandler<Geo
     }
 
     protected buildEvent(
-        _payload: ICommand,
-        _eventMeta: EventRecordMetadata
+        payload: TranslateMapName,
+        eventMeta: EventRecordMetadata
     ): BaseEvent<IEventPayload> {
-        throw new Error('Method not implemented.');
+        const { aggregateCompositeIdentifier, languageCode, translationOfName } = payload;
+
+        return new MapNameTranslated(
+            {
+                aggregateCompositeIdentifier,
+                name: new MultilingualTextItem({
+                    languageCode,
+                    text: translationOfName,
+                    role: MultilingualTextItemRole.original,
+                }),
+            },
+            eventMeta
+        );
     }
 }

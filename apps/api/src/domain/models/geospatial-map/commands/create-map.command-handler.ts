@@ -32,6 +32,7 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
                 languageCodeForDescription
             ),
             spatialFeatures: [],
+            published: false,
         });
     }
 
