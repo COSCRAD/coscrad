@@ -5,7 +5,7 @@ import { ResourcePaginator } from './contributor-paginator';
 import { useFetchContributorsQuery } from './store';
 
 export const ContributorIndexPage = (): JSX.Element => {
-    const contributorQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
+    const contributorQueryOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
 
     const { data, isLoading, isError } = useFetchContributorsQuery(contributorQueryOptions);
 
