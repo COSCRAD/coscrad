@@ -16,11 +16,10 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
-    ALL_PROPERTIES_SEARCH_KEY,
-    IndexSearchScope,
-    IUserDefinedFilter,
-} from '../../resources/terms/store';
-import { setFilters, setSearchString } from '../store/user-index-query-options.slice';
+    setTermFilters,
+    setTermSearchString,
+} from '../../resources/terms/store/term-index-query-options.slice';
+import { ALL_PROPERTIES_SEARCH_KEY, IndexSearchScope, IUserDefinedFilter } from '../store';
 import { HeadingLabel } from './generic-index-table-presenter';
 
 /**
@@ -170,7 +169,11 @@ interface SearchBarProps {
 }
 
 export const SearchBar = ({ scopes }: SearchBarProps) => {
-    const { searchString } = useSelector((state: RootState) => state.userIndexQueryOptions);
+    const termIndexQueryOptions = useSelector(
+        (state: RootState) => state.termIndexQueryOptionsSlice
+    );
+
+    const searchString = termIndexQueryOptions?.searchString;
 
     // const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
 
@@ -211,7 +214,7 @@ export const SearchBar = ({ scopes }: SearchBarProps) => {
             ? interpretCoscradQueryFromUserSearchText(scope, queryFromForm, defaultLanguageCode)
             : null;
 
-        dispatch(setFilters({ filter }));
+        dispatch(setTermFilters({ filter }));
     };
 
     // SEARCH LOGIC
@@ -261,7 +264,7 @@ export const SearchBar = ({ scopes }: SearchBarProps) => {
     );
 
     const handleClear = () => {
-        dispatch(setSearchString({ searchString: '' }));
+        dispatch(setTermSearchString({ searchString: '' }));
 
         setFilterForDBSearch(selectedFilterProperty, '');
     };
@@ -278,7 +281,7 @@ export const SearchBar = ({ scopes }: SearchBarProps) => {
                     onChange={(changeEvent) => {
                         const searchValue = changeEvent.target.value;
 
-                        dispatch(setSearchString({ searchString: searchValue }));
+                        dispatch(setTermSearchString({ searchString: searchValue }));
 
                         const transformedValue = Object.entries(
                             specialCharacterReplacements
