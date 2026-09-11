@@ -5,10 +5,14 @@ import {
 import { FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { setPage, setPageSize, useFetchTermsQuery } from '../../resources/terms/store';
+import { useFetchTermsQuery } from '../../resources/terms/store';
 import { DEFAULT_PAGE_SIZE } from '../constants';
 import { insertNumberInSequence } from '../insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../math';
+import {
+    setContributorPage,
+    setContributorPageSize,
+} from './store/contributor-index-query-options.slice';
 
 const pageSizes: number[] = [5, 10, 50, 100];
 
@@ -19,9 +23,11 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
 export const ResourcePaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const contributorQueryOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
+    const contributorIndexQueryOptions = useSelector(
+        (state: RootState) => state.contributorIndexQueryOptionsSlice
+    );
 
-    const { data, isLoading, isError } = useFetchTermsQuery(contributorQueryOptions);
+    const { data, isLoading, isError } = useFetchTermsQuery(contributorIndexQueryOptions);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -33,7 +39,7 @@ export const ResourcePaginator = (): JSX.Element => {
 
     const {
         pagination: { size: pageSize },
-    } = contributorQueryOptions;
+    } = contributorIndexQueryOptions;
 
     const pageCount = Math.ceil(count / pageSize);
 
@@ -47,12 +53,12 @@ export const ResourcePaginator = (): JSX.Element => {
     const updatePageSize = (newPageSize: number) => {
         console.log({ newPageSize });
 
-        if (newPageSize > contributorQueryOptions.pagination.size) {
-            dispatch(setPageSize(newPageSize));
-            dispatch(setPage(1));
+        if (newPageSize > contributorIndexQueryOptions.pagination.size) {
+            dispatch(setContributorPageSize(newPageSize));
+            dispatch(setContributorPage(1));
         }
 
-        dispatch(setPageSize(newPageSize));
+        dispatch(setContributorPageSize(newPageSize));
     };
 
     return (
@@ -96,7 +102,9 @@ export const ResourcePaginator = (): JSX.Element => {
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        dispatch(setPage(cyclicDecrement(page - 1, totalNumberOfPages) + 1));
+                        dispatch(
+                            setContributorPage(cyclicDecrement(page - 1, totalNumberOfPages) + 1)
+                        );
                     }}
                 >
                     <ArrowBackIosNewIcon />
@@ -105,7 +113,9 @@ export const ResourcePaginator = (): JSX.Element => {
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        dispatch(setPage(cyclicIncrement(page - 1, totalNumberOfPages) + 1));
+                        dispatch(
+                            setContributorPage(cyclicIncrement(page - 1, totalNumberOfPages) + 1)
+                        );
                     }}
                 >
                     <ArrowForwardIosIcon />

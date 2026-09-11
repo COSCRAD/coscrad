@@ -1,1 +1,1 @@
-export * from './user-index-query-options.slice';
+export * from './user-index-query-options-factory.slice';
