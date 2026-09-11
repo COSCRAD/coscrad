@@ -5,23 +5,24 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../lib/types/maybe';
-import { NotFound, isNotFound } from '../../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../../decorators';
-import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { RegisterResource, UpdateMethod } from '../../../decorators';
 import { EmptyPageRangeContextError } from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext';
 import PageRangeContextHasSuperfluousPageIdentifiersError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pageRangeContext/page-range-context-has-superfluous-page-identifiers.error';
+import { isValid, Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { Snapshot } from '../../../types/Snapshot';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../build-aggregate-root-from-event-history';
 import { PageRangeContext } from '../../context/page-range-context/page-range.context.entity';
 import { Resource } from '../../resource.entity';
@@ -84,7 +85,7 @@ export type DigitalTextPageImport = {
     photographId?: AggregateId;
 };
 
-@AggregateRoot(AggregateType.digitalText)
+@RegisterResource({ type: 'digitalText', collectionName: ArangoCollectionId.digital_texts })
 @RegisterIndexScopedCommands([CREATE_DIGITAL_TEXT])
 export class DigitalText extends Resource {
     readonly type = ResourceType.digitalText;

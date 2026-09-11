@@ -11,12 +11,12 @@ import { InternalError, isInternalError } from '../../../lib/errors/InternalErro
 import { ValidationResult } from '../../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../../lib/utilities/cloneToPlainObject';
 import { DTO } from '../../../types/DTO';
-import { Valid, isValid } from '../../domainModelValidators/Valid';
 import validateEdgeConnection from '../../domainModelValidators/contextValidators/validateEdgeConnection';
+import { isValid, Valid } from '../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateType } from '../../types/AggregateType';
 import { ResourceCompositeIdentifier } from '../../types/ResourceCompositeIdentifier';
-import { InMemorySnapshot, ResourceType, isResourceType } from '../../types/ResourceType';
+import { InMemorySnapshot, isResourceType, ResourceType } from '../../types/ResourceType';
 import { Aggregate } from '../aggregate.entity';
 import BaseDomainModel from '../base-domain-model.entity';
 import { Resource } from '../resource.entity';
@@ -44,18 +44,18 @@ import { CoscradDataExample } from '../../../test-data/utilities/coscrad-data-ex
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../decorators';
+import { UpdateMethod } from '../../decorators';
 import { AggregateId } from '../../types/AggregateId';
-import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../build-aggregate-root-from-event-history';
 import { AccessControlList } from '../shared/access-control/access-control-list.entity';
 import AggregateNotFoundError from '../shared/common-command-errors/AggregateNotFoundError';
 import UserAlreadyHasReadAccessError from '../shared/common-command-errors/invalid-state-transition-errors/UserAlreadyHasReadAccessError';
 import { BaseEvent } from '../shared/events/base-event.entity';
 import { MultilingualAudio } from '../shared/multilingual-audio/multilingual-audio.entity';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { AudioAddedForNote, NoteTranslated } from './commands';
 import { ResourcesConnectedWithNote } from './commands/connect-resources-with-note/resources-connected-with-note.event';
 import { NoteAboutResourceCreated } from './commands/create-note-about-resource/note-about-resource-created.event';
@@ -132,7 +132,6 @@ export class EdgeConnectionMember<T extends EdgeConnectionContext = EdgeConnecti
 })
 @Injectable()
 @RegisterIndexScopedCommands([])
-@AggregateRoot(AggregateType.note)
 export class EdgeConnection extends Aggregate {
     type = AggregateType.note;
 

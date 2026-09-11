@@ -4,13 +4,12 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../../../domain/common/entities/multilingual-text';
-import { AggregateRoot } from '../../../../../domain/decorators';
 import { AggregateCompositeIdentifier } from '../../../../../domain/types/AggregateCompositeIdentifier';
 import { InternalError } from '../../../../../lib/errors/InternalError';
 import { CoscradDataExample } from '../../../../../test-data/utilities/coscrad-data-example';
 import { DTO } from '../../../../../types/DTO';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { Aggregate } from '../../../aggregate.entity';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { FullName } from '../../user/entities/user/full-name.entity';
 import { CoscradDate } from '../../utilities/coscrad-date.entity';
 import { ContributorNotUniquelyIdentifiableUserError } from './errors';
@@ -25,7 +24,6 @@ import { ContributorNotUniquelyIdentifiableUserError } from './errors';
         }),
     },
 })
-@AggregateRoot(AggregateType.contributor)
 @RegisterIndexScopedCommands([])
 export class CoscradContributor extends Aggregate {
     readonly type = AggregateType.contributor;

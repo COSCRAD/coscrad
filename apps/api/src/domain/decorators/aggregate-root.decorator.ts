@@ -6,6 +6,7 @@ const AGGREGATE_TYPE_METADATA = '__AGGREGATE_ROOT_METADATA__';
 
 export type AggregateTypeMetadata = {
     aggregateType: string;
+    collectionName: string;
 };
 
 export const getAggregateTypeForTarget = (target: Object): Maybe<AggregateTypeMetadata> => {
@@ -61,11 +62,21 @@ export const getAggregateTypeForTarget = (target: Object): Maybe<AggregateTypeMe
  * conflicts that made it tougher to work on adding new aggregate roots in parallel.
  * In some cases, we even hit circular build dependencies because of all the
  * shared references to aggregate class constructors throughout the system.
+ *
+ * NOTE We are only registering resources dynamically right now. System aggregates
+ * are safe to hard-wire for now.
  */
-export function AggregateRoot(aggregateType: string): ClassDecorator {
+export function RegisterResource({
+    type: resourceType,
+    collectionName,
+}: {
+    type: string;
+    collectionName: string;
+}): ClassDecorator {
     // TODO Support "Aggregate Description" meta data declaration via this decorator.
     const metadata: AggregateTypeMetadata = {
-        aggregateType,
+        aggregateType: resourceType,
+        collectionName,
     };
 
     return (target: Object) => {

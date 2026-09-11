@@ -8,10 +8,11 @@ import {
 } from '@coscrad/data-types';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
-import { AggregateRoot, UpdateMethod } from '../../../../../domain/decorators';
+import { RegisterResource, UpdateMethod } from '../../../../../domain/decorators';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -22,16 +23,16 @@ import { AggregateId } from '../../../../types/AggregateId';
 import { AggregateType } from '../../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../../utilities/validation/is-null-or-undefined';
-import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { TimeRangeContext } from '../../../context/time-range-context/time-range-context.entity';
 import { Resource } from '../../../resource.entity';
 import validateTimeRangeContextForModel from '../../../shared/contextValidators/validateTimeRangeContextForModel';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { TranscriptItem } from '../../shared/entities/transcript-item.entity';
 import { TranscriptParticipant } from '../../shared/entities/transcript-participant';
 import { Transcript } from '../../shared/entities/transcript.entity';
@@ -41,8 +42,8 @@ import { addParticipantToTranscriptImplementation } from '../../shared/methods/a
 import { createTranscriptImplementation } from '../../shared/methods/create-transcript';
 import { importLineItemsToTranscriptImplementation } from '../../shared/methods/import-line-items-to-transcript';
 import {
-    LineItemTranslation,
     importTranslationsForTranscriptImplementation,
+    LineItemTranslation,
 } from '../../shared/methods/import-translations-for-transcript';
 import { translateLineItemImplementation } from '../../shared/methods/translate-line-item';
 import { AudioItemCreated } from '../commands/create-audio-item/audio-item-created.event';
@@ -67,7 +68,7 @@ export const isAudioMimeType = (mimeType: MIMEType): boolean =>
 @RegisterIndexScopedCommands([`CREATE_AUDIO_ITEM`])
 // mixin the magic method event handlers for transcripts
 @EventSourcedTranscribable()
-@AggregateRoot('audioItem')
+@RegisterResource({ type: 'audioItem', collectionName: ArangoCollectionId.audio_items })
 export class AudioItem extends Resource {
     readonly type = ResourceType.audioItem;
 

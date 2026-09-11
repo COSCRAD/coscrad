@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
 import { EventModule } from '../../domain/common';
 import { AUDIO_QUERY_REPOSITORY_TOKEN } from '../../domain/models/audio-visual/audio-item/queries/audio-item-query-repository.interface';
@@ -27,9 +28,11 @@ import { TermTranslatedEventHandler } from '../../domain/models/term/commands/tr
 import { Term } from '../../domain/models/term/entities/term.entity';
 import { TERM_QUERY_REPOSITORY_TOKEN } from '../../domain/models/term/queries';
 import { ArangoTermQueryRepository } from '../../domain/models/term/repositories';
+import { IRepositoryProvider } from '../../domain/repositories/interfaces/repository-provider.interface';
 import { TermQueryService } from '../../domain/services/query-services/term-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../../lib/nlp';
+import { REPOSITORY_PROVIDER_TOKEN } from '../../persistence/constants/persistenceConstants';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../validation';
@@ -97,4 +100,13 @@ import { TermCommandsModule } from './term.commands.module';
     ],
     exports: [TermQueryService],
 })
-export class TermModule {}
+export class TermModule implements OnModuleInit {
+    constructor(private readonly moduleRef: ModuleRef) {}
+
+    onModuleInit() {
+        const repositoryProvider =
+            this.moduleRef.get<IRepositoryProvider>(REPOSITORY_PROVIDER_TOKEN);
+
+        repositoryProvider.register(Term);
+    }
+}

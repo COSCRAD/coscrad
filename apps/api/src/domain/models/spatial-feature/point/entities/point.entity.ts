@@ -1,11 +1,12 @@
 import { AggregateType, GeometricFeatureType, LanguageCode } from '@coscrad/api-interfaces';
 import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
-import { AggregateRoot, UpdateMethod } from '../../../../../domain/decorators';
+import { RegisterResource, UpdateMethod } from '../../../../../domain/decorators';
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
+import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
@@ -49,7 +50,10 @@ import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
     },
 })
 @RegisterIndexScopedCommands([CREATE_POINT])
-@AggregateRoot(AggregateType.spatialFeature)
+@RegisterResource({
+    type: 'spatialFeature',
+    collectionName: ArangoCollectionId.spatial_features,
+})
 export class Point extends Resource implements ISpatialFeature {
     readonly type = ResourceType.spatialFeature;
 

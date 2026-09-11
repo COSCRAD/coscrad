@@ -5,22 +5,24 @@ import { ValidationResult } from '../../../../lib/errors/types/ValidationResult'
 import { Maybe } from '../../../../lib/types/maybe';
 import findAllPointsInLineNotWithinBounds from '../../../../lib/validation/geometry/findAllPointsInLineNotWithinBounds';
 import isPointWithinBounds from '../../../../lib/validation/geometry/isPointWithinBounds';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import formatPosition2D from '../../../../queries/presentation/formatPosition2D';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
-import { Valid } from '../../../domainModelValidators/Valid';
+import { RegisterResource } from '../../../decorators';
 import FreeMultilineContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/freeMultilineContext/FreeMultilineContextOutOfBoundsError';
 import PointContextOutOfBoundsError from '../../../domainModelValidators/errors/context/invalidContextStateErrors/pointContext/PointContextOutOfBoundsError';
+import { Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../build-aggregate-root-from-event-history';
 import InvalidExternalReferenceByAggregateError from '../../categories/errors/InvalidExternalReferenceByAggregateError';
 import { FreeMultilineContext } from '../../context/free-multiline-context/free-multiline-context.entity';
@@ -38,6 +40,10 @@ export const isPhotographMimeType = (mimeType: MIMEType): boolean =>
     [MIMEType.png, MIMEType.jpg, MIMEType.bmp].includes(mimeType);
 
 @RegisterIndexScopedCommands([])
+@RegisterResource({
+    type: 'photograph',
+    collectionName: ArangoCollectionId.photographs,
+})
 export class Photograph extends Resource implements Boundable2D {
     readonly type = ResourceType.photograph;
 

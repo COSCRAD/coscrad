@@ -11,6 +11,7 @@ import { RegisterIndexScopedCommands } from '../../../../app/controllers/command
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -21,17 +22,16 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../../decorators';
-import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { RegisterResource, UpdateMethod } from '../../../decorators';
 import InvalidPublicationStatusError from '../../../domainModelValidators/errors/InvalidPublicationStatusError';
+import { isValid, Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../build-aggregate-root-from-event-history';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
@@ -39,6 +39,7 @@ import validateTextFieldContextForModel from '../../shared/contextValidators/val
 import { BaseEvent } from '../../shared/events/base-event.entity';
 import { CannotReuseAudioItemError } from '../../shared/multilingual-audio/errors';
 import { MultilingualAudio } from '../../shared/multilingual-audio/multilingual-audio.entity';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
     AudioAddedForTerm,
     PromptTermCreated,
@@ -74,7 +75,10 @@ const isOptional = true;
         published: false,
     },
 })
-@AggregateRoot(AggregateType.term)
+@RegisterResource({
+    type: 'term',
+    collectionName: ArangoCollectionId.terms,
+})
 @RegisterIndexScopedCommands([CREATE_TERM, CREATE_PROMPT_TERM])
 export class Term extends Resource {
     readonly type: ResourceType = ResourceType.term;

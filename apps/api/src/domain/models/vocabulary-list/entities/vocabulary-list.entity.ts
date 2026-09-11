@@ -5,6 +5,7 @@ import { InternalError, isInternalError } from '../../../../lib/errors/InternalE
 import { ValidationResult } from '../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../lib/types/maybe';
 import { NotFound } from '../../../../lib/types/not-found';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -13,9 +14,9 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../../decorators';
-import { Valid, isValid } from '../../../domainModelValidators/Valid';
+import { RegisterResource, UpdateMethod } from '../../../decorators';
 import VocabularyListWithNoEntriesCannotBePublishedError from '../../../domainModelValidators/errors/vocabularyList/vocabulary-list-with-no-entries-cannot-be-published.error';
+import { isValid, Valid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
@@ -23,8 +24,8 @@ import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { isNullOrUndefined } from '../../../utilities/validation/is-null-or-undefined';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../build-aggregate-root-from-event-history';
 import { TextFieldContext } from '../../context/text-field-context/text-field-context.entity';
 import { Resource } from '../../resource.entity';
@@ -73,7 +74,10 @@ type LabelAndValue<T = string> = {
     value: T;
 };
 
-@AggregateRoot(AggregateType.vocabularyList)
+@RegisterResource({
+    type: 'vocabularyList',
+    collectionName: ArangoCollectionId.vocabulary_lists,
+})
 @RegisterIndexScopedCommands([`CREATE_VOCABULARY_LIST`])
 export class VocabularyList extends Resource {
     readonly type = ResourceType.vocabularyList;

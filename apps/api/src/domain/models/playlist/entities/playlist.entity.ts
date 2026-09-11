@@ -3,6 +3,7 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { Maybe } from '../../../../lib/types/maybe';
+import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
@@ -11,7 +12,7 @@ import {
     MultilingualTextItem,
     MultilingualTextItemRole,
 } from '../../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../../decorators';
+import { RegisterResource, UpdateMethod } from '../../../decorators';
 import { isValid } from '../../../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../../types/AggregateId';
@@ -19,8 +20,8 @@ import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { DuplicateLanguageInMultilingualTextError } from '../../audio-visual/audio-item/errors/duplicate-language-in-multilingual-text.error';
 import {
-    CreationEventHandlerMap,
     buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
 } from '../../build-aggregate-root-from-event-history';
 import { Resource } from '../../resource.entity';
 import { BaseEvent } from '../../shared/events/base-event.entity';
@@ -32,7 +33,7 @@ import { CannotAddDuplicateItemToPlaylist } from '../errors';
 import { FailedToImportAudioItemsError } from '../errors/failed-to-import-audio-items.error';
 import { PlaylistItem } from './playlist-item.entity';
 
-@AggregateRoot('playlist')
+@RegisterResource({ type: 'playlist', collectionName: ArangoCollectionId.playlists })
 @RegisterIndexScopedCommands(['CREATE_PLAYLIST'])
 export class Playlist extends Resource {
     readonly type = ResourceType.playlist;

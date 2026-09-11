@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Type } from '@nestjs/common';
 import { CoscradEventFactory } from '../../domain/common';
-import getInstanceFactoryForResource from '../../domain/factories/get-instance-factory-for-resource';
+import { getAggregateTypeForTarget } from '../../domain/decorators';
+import buildAggregateFactory from '../../domain/factories/build-aggregate-factory';
+import { InstanceFactory } from '../../domain/factories/get-instance-factory-for-resource';
 import buildInstanceFactory from '../../domain/factories/utilities/buildInstanceFactory';
 import { EdgeConnection } from '../../domain/models/context/edge-connection.entity';
 import { Resource } from '../../domain/models/resource.entity';
@@ -16,6 +18,8 @@ import { IRepositoryProvider } from '../../domain/repositories/interfaces/reposi
 import { IUserRepository } from '../../domain/repositories/interfaces/user-repository.interface';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { ResourceType } from '../../domain/types/ResourceType';
+import { InternalError } from '../../lib/errors/InternalError';
+import { isNotFound } from '../../lib/types/not-found';
 import { DynamicDataTypeFinderService } from '../../validation';
 import { ArangoCollectionId } from '../database/collection-references/ArangoCollectionId';
 import { getArangoCollectionIDFromResourceType } from '../database/collection-references/getArangoCollectionIDFromResourceType';
@@ -36,6 +40,10 @@ import ArangoCategoryRepository from './ArangoCategoryRepository';
 @Injectable()
 export class ArangoRepositoryProvider implements IRepositoryProvider {
     private readonly eventRepository: ArangoEventRepository;
+
+    private readonly resourceTypeToCtor = new Map<string, Type<Resource>>();
+
+    private readonly resourceTypeToDatabaseCollectionName = new Map<string, string>();
 
     constructor(
         protected databaseProvider: ArangoDatabaseProvider,
@@ -110,10 +118,51 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
     }
 
     forResource<TResource extends Resource>(resourceType: ResourceType) {
+        // avoid "assignable to the constraint but..." error
+        const Ctor = this.resourceTypeToCtor.get(resourceType) as Type<TResource>;
+
+        if (!Ctor) {
+            console.warn(
+                `Failed to find a repository for resource type: ${resourceType}. Did you register one with the Repository Provider?`
+            );
+            // throw new InternalError(
+            //     `Failed to find a repository for resource type: ${resourceType}. Did you register one with the Repository Provider?`
+            // );
+        }
+
+        const collectionNameFromDynamicMetadata = this.resourceTypeToDatabaseCollectionName.get(
+            resourceType
+        ) as ArangoCollectionId;
+
+        if (!collectionNameFromDynamicMetadata) {
+            console.warn(`Failed to find a collection name for resource of type: ${resourceType}`);
+            // throw new InternalError(
+            //     `Failed to find a collection name for resource of type: ${resourceType}`
+            // );
+        }
+
+        /**
+         * TODO We need to phase out the lookup tables in favor of dynamic registration.
+         *
+         * To do this for a new resource type, inject the `RepositoryProvider` into
+         * your feature module and call `RepositoryProvider.register(Ctor)` in `onModuleInit`.
+         */
+        const factory = Ctor ? buildInstanceFactory(Ctor) : buildAggregateFactory(resourceType);
+
+        const collectionName = collectionNameFromDynamicMetadata
+            ? collectionNameFromDynamicMetadata
+            : getArangoCollectionIDFromResourceType(resourceType);
+
+        if (!collectionName) {
+            throw new InternalError(
+                `Failed to resolve a collection name for resource type: ${resourceType}`
+            );
+        }
+
         const snapshotRepository = new ArangoRepositoryForAggregate<TResource>(
             this.databaseProvider,
-            getArangoCollectionIDFromResourceType(resourceType),
-            getInstanceFactoryForResource(resourceType),
+            collectionName,
+            factory as InstanceFactory<TResource>,
             // TODO: rename following functions to be arango specific
             mapDatabaseDTOToEntityDTO,
             mapEntityDTOToDatabaseDTO
@@ -146,5 +195,40 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         }
 
         return snapshotRepository;
+    }
+
+    /**
+     * TODO Can this pattern be used for **any** aggregate root?
+     */
+    register(Ctor: Type<Resource>): IRepositoryProvider {
+        /**
+         * TODO We need an `@RegisterWebOfKnoweldgeResource` that also
+         * wraps `@AggregateRoot()`.
+         */
+        const meta = getAggregateTypeForTarget(Ctor);
+
+        if (isNotFound(meta)) {
+            throw new InternalError(
+                `Failed to find resource for domain class: ${Ctor.name}. Did you forget to annotate the resource class as follows? \n@ResourceType({...})${Ctor.name}`
+            );
+        }
+
+        const { aggregateType: resourceType, collectionName } = meta;
+
+        if (this.resourceTypeToCtor.has(resourceType)) {
+            console.warn(
+                `Ignoring duplicate registration of resource: ${resourceType} in Arango command repository provider`
+            );
+
+            return;
+        }
+
+        this.resourceTypeToCtor.set(resourceType, Ctor);
+
+        this.resourceTypeToDatabaseCollectionName.set(resourceType, collectionName);
+
+        // TODO When do we create the collections?
+
+        return this;
     }
 }

@@ -1,6 +1,6 @@
 import {
-    AGGREGATE_COMPOSITE_IDENTIFIER,
     AggregateType,
+    AGGREGATE_COMPOSITE_IDENTIFIER,
     ICommandBase,
     LanguageCode,
     MultilingualTextItemRole,
@@ -11,19 +11,19 @@ import { isDeepStrictEqual } from 'util';
 import { RegisterIndexScopedCommands } from '../../../app/controllers/command/command-info/decorators/register-index-scoped-commands.decorator';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
-import { NotFound, isNotFound } from '../../../lib/types/not-found';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { ArangoCollectionId } from '../../../persistence/database/collection-references/ArangoCollectionId';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText, MultilingualTextItem } from '../../common/entities/multilingual-text';
-import { AggregateRoot, UpdateMethod } from '../../decorators';
+import { RegisterResource, UpdateMethod } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
 import { Resource } from '../resource.entity';
 import { BaseEvent } from '../shared/events/base-event.entity';
-import { ContributorAndRole } from './ContributorAndRole';
 import { AddLyricsForSong, TranslateSongLyrics, TranslateSongTitle } from './commands';
 import { CreateSong } from './commands/create-song.command';
 import {
@@ -36,12 +36,13 @@ import {
     SONG_TITLE_TRANSLATED,
     TRANSLATE_SONG_TITLE,
 } from './commands/translate-song-title/constants';
+import { ContributorAndRole } from './ContributorAndRole';
 import { CannotAddDuplicateSetOfLyricsForSongError, NoLyricsToTranslateError } from './errors';
 import { SongLyricsHaveAlreadyBeenTranslatedToGivenLanguageError } from './errors/SongLyricsAlreadyHaveBeenTranslatedToGivenLanguageError';
 
 const isOptional = true;
 
-@AggregateRoot(AggregateType.song)
+@RegisterResource({ type: 'song', collectionName: ArangoCollectionId.songs })
 @RegisterIndexScopedCommands(['CREATE_SONG'])
 export class Song extends Resource {
     readonly type = ResourceType.song;
