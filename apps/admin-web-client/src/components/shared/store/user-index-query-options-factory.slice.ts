@@ -1,10 +1,36 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { DEFAULT_PAGE_SIZE } from '../constants';
-import {
-    IUserDefinedFilter,
-    IUserPaginationOptions,
-    UserSearchString,
-} from './user-index-query-options.slice';
+
+interface ISimpleCondition<_T> {
+    type: string;
+
+    /**
+     * Type safety is difficult here. It's not just `keyof T` that are supported
+     * but also things like `contributions[*].statement`.
+     */
+    field: string;
+
+    operator: string;
+
+    params: unknown[];
+}
+interface IComplexUserDefinedFilter<T> {
+    type: string;
+    conditions: ISimpleCondition<T>[];
+}
+
+export const ALL_PROPERTIES_SEARCH_KEY = '__ALL-PROPERTIES-SEARCH-KEY__';
+
+export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
+
+export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
+
+export interface IUserPaginationOptions {
+    size: number;
+    page: number;
+}
+
+export type UserSearchString = string;
 
 export interface UserIndexQueryOptionsStateTBA<T> {
     pagination: IUserPaginationOptions;
@@ -29,7 +55,7 @@ export const createUserIndexQueryOptionsSlice = <T>(name: string) => {
                 state,
                 action: PayloadAction<{ pagination: IUserPaginationOptions }>
             ) => {
-                state = action.payload;
+                state.pagination = action.payload.pagination;
             },
             setPageSize: (state, action: PayloadAction<number>) => {
                 state.pagination.size = action.payload;
@@ -48,6 +74,8 @@ export const createUserIndexQueryOptionsSlice = <T>(name: string) => {
                 state,
                 action: PayloadAction<{ filter: IUserDefinedFilter<T> | null }>
             ) => {
+                console.log({ setFilter: action.payload.filter });
+
                 state.filter = action.payload.filter;
                 state.pagination.page = 1;
             },

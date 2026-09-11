@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { FormControl, Grid, IconButton, MenuItem, Select, Typography } from '@mui/material';
@@ -6,8 +7,8 @@ import { RootState } from '../../../store';
 import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
 import { insertNumberInSequence } from '../../shared/insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
-import { setPage, setPageSize } from '../../shared/store/user-index-query-options.slice';
 import { useFetchTermsQuery } from './store';
+import { setTermPage, setTermPageSize } from './store/term-index-query-options.slice';
 
 // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-344] make this configurable
 const pageSizes: number[] = [5, 10, 50, 100];
@@ -19,9 +20,13 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
 export const TermPaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const userIndexQueryOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
+    const termIndexQueryOptions = useSelector(
+        (state: RootState) => state.termIndexQueryOptionsSlice
+    );
 
-    const { data, isLoading, isError } = useFetchTermsQuery(userIndexQueryOptions);
+    console.log({ termIndexQueryOptions });
+
+    const { data, isLoading, isError } = useFetchTermsQuery(termIndexQueryOptions);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -31,9 +36,11 @@ export const TermPaginator = (): JSX.Element => {
 
     const { entities: terms, count, page } = data;
 
-    const {
-        pagination: { size: pageSize },
-    } = userIndexQueryOptions;
+    console.log({ terms });
+
+    const pageSize = isNullOrUndefined(termIndexQueryOptions.pagination.size)
+        ? DEFAULT_PAGE_SIZE
+        : termIndexQueryOptions?.pagination?.size;
 
     const pageCount = Math.ceil(count / pageSize);
 
@@ -45,14 +52,14 @@ export const TermPaginator = (): JSX.Element => {
     const totalNumberOfPages = Math.ceil(count / pageSize);
 
     const updatePageSize = (newPageSize: number) => {
-        console.log({ newPageSize });
+        // console.log({ newPageSize });
 
-        if (newPageSize > userIndexQueryOptions.pagination.size) {
-            dispatch(setPageSize(newPageSize));
-            dispatch(setPage(1));
+        if (newPageSize > termIndexQueryOptions.pagination.size) {
+            dispatch(setTermPageSize(newPageSize));
+            dispatch(setTermPage(1));
         }
 
-        dispatch(setPageSize(newPageSize));
+        dispatch(setTermPageSize(newPageSize));
     };
 
     return (
@@ -96,7 +103,7 @@ export const TermPaginator = (): JSX.Element => {
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        dispatch(setPage(cyclicDecrement(page - 1, totalNumberOfPages) + 1));
+                        dispatch(setTermPage(cyclicDecrement(page - 1, totalNumberOfPages) + 1));
                     }}
                 >
                     <ArrowBackIosNewIcon />
@@ -105,7 +112,7 @@ export const TermPaginator = (): JSX.Element => {
             <Grid item sx={{ display: 'flex', alignItems: 'center' }}>
                 <IconButton
                     onClick={() => {
-                        dispatch(setPage(cyclicIncrement(page - 1, totalNumberOfPages) + 1));
+                        dispatch(setTermPage(cyclicIncrement(page - 1, totalNumberOfPages) + 1));
                     }}
                 >
                     <ArrowForwardIosIcon />

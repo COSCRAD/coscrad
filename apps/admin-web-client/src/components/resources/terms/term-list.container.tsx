@@ -26,7 +26,9 @@ export const findOriginalMultilingualTextItem = (name: IMultilingualText) => {
 };
 
 export const TermListContainer = (): JSX.Element => {
-    const paginationOptions = useSelector((state: RootState) => state.termIndexQueryOptions);
+    const termIndexQueryOptions = useSelector(
+        (state: RootState) => state.termIndexQueryOptionsSlice
+    );
 
     // Note: `useQueryState()` here allows access to `isFetching` for no flicker
     // on fetching the next result set.  `keepUnusedDataFor: 300` in terms.api.ts
@@ -36,7 +38,7 @@ export const TermListContainer = (): JSX.Element => {
         isLoading,
         isFetching,
         isError,
-    } = termApi.endpoints.fetchTerms.useQueryState(paginationOptions);
+    } = termApi.endpoints.fetchTerms.useQueryState(termIndexQueryOptions);
 
     // This is the flicker free term set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)
