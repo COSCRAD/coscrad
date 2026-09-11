@@ -20,10 +20,7 @@ import {
     IndexSearchScope,
     IUserDefinedFilter,
 } from '../../resources/terms/store';
-import {
-    setTermFilters,
-    setTermSearchString,
-} from '../../resources/terms/store/term-query-options.slice';
+import { setFilters, setSearchString } from '../store/user-index-query-options.slice';
 import { HeadingLabel } from './generic-index-table-presenter';
 
 /**
@@ -172,14 +169,8 @@ interface SearchBarProps {
     scopes: HeadingLabel<ITermViewModel>[];
 }
 
-/**
- * Note that this is a duplication of the generic `SearchBar`. We have encapsulated
- * the virtual keyboard in this version. Eventually, we want to generalize
- * the `TermSearchBar` for use with other resource index views as we move them
- * all to server side filtering \ pagination.
- */
-export const TermSearchBar = ({ scopes }: SearchBarProps) => {
-    const { searchString } = useSelector((state: RootState) => state.termQueryOptions);
+export const SearchBar = ({ scopes }: SearchBarProps) => {
+    const { searchString } = useSelector((state: RootState) => state.userIndexQueryOptions);
 
     // const [shouldUseVirtualKeyboard, setShouldUseVirtualKeyboard] = useState<boolean>(true);
 
@@ -220,7 +211,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
             ? interpretCoscradQueryFromUserSearchText(scope, queryFromForm, defaultLanguageCode)
             : null;
 
-        dispatch(setTermFilters({ filter }));
+        dispatch(setFilters({ filter }));
     };
 
     // SEARCH LOGIC
@@ -270,7 +261,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
     );
 
     const handleClear = () => {
-        dispatch(setTermSearchString({ searchString: '' }));
+        dispatch(setSearchString({ searchString: '' }));
 
         setFilterForDBSearch(selectedFilterProperty, '');
     };
@@ -287,7 +278,7 @@ export const TermSearchBar = ({ scopes }: SearchBarProps) => {
                     onChange={(changeEvent) => {
                         const searchValue = changeEvent.target.value;
 
-                        dispatch(setTermSearchString({ searchString: searchValue }));
+                        dispatch(setSearchString({ searchString: searchValue }));
 
                         const transformedValue = Object.entries(
                             specialCharacterReplacements
