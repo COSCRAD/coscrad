@@ -113,9 +113,9 @@ export const termApi = createApi({
                 console.log(`fetchTerms initiated`);
                 const rootState = getState() as RootState;
 
-                const userIndexQueryOptions = rootState.userIndexQueryOptions;
+                const termIndexQueryOptions = rootState.termIndexQueryOptionsSlice;
 
-                console.log({ userIndexQueryOptions });
+                console.log({ termIndexQueryOptions });
             },
         }),
         executeTermCommand: builder.mutation<string, TermCommandFsaWithOptions>({

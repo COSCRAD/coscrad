@@ -1,7 +1,7 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { Box, Stack } from '@mui/material';
 import { HeadingLabel } from '../../shared/tables';
-import { SearchBar } from '../../shared/tables/term-search-bar';
+import { SearchBar } from '../../shared/tables/search-bar';
 import { CreateTermPage } from './create-term-page';
 import { TermListContainer } from './term-list.container';
 import { TermPaginator } from './term-paginator';

@@ -9,7 +9,9 @@ import { renderAggregateIdCell } from '../tables/render-aggregate-id-cell';
 import { contributorApi } from './store';
 
 export const ContributorIndexTable = (): JSX.Element => {
-    const paginationOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
+    const paginationOptions = useSelector(
+        (state: RootState) => state.contributorIndexQueryOptionsSlice
+    );
 
     const {
         data: serverData,

@@ -7,7 +7,7 @@ export const getSpeakersStatementForTerm = (
 ): string | undefined => {
     const statementSearchTerm = 'spoken';
 
-    console.log({ contributions });
+    // console.log({ contributions });
 
     const contributors = contributions
         .filter(({ statement }) => {
@@ -29,7 +29,7 @@ export const getSpeakersStatementForTerm = (
 
     if (contributors.length === 0) return undefined;
 
-    console.log({ contributorsSpeakers: contributors });
+    // console.log({ contributorsSpeakers: contributors });
 
     const speakerNames = contributors.join(', ');
 

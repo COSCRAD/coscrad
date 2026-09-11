@@ -1,23 +1,29 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { combineReducers } from 'redux';
 import { authReducer } from '../components/auth/store/auth-slice';
 import { AUTH } from '../components/auth/store/constants';
 import { acquireIdApi } from '../components/id-generation/store/aquire-id.api';
 import { termIndexQueryOptionsSlice } from '../components/resources/terms/store/term-index-query-options.slice';
 import { termApi } from '../components/resources/terms/store/term.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
+import { contributorIndexQueryOptionsSlice } from '../components/shared/contributors/store/contributor-index-query-options.slice';
 import { contributorApi } from '../components/shared/contributors/store/contributor.api';
 
+const rootReducer = combineReducers({
+    [termApi.reducerPath]: termApi.reducer,
+    [vocabularyListApi.reducerPath]: vocabularyListApi.reducer,
+    [contributorApi.reducerPath]: contributorApi.reducer,
+    [acquireIdApi.reducerPath]: acquireIdApi.reducer,
+    termIndexQueryOptionsSlice: termIndexQueryOptionsSlice.reducer,
+    contributorIndexQueryOptionsSlice: contributorIndexQueryOptionsSlice.reducer,
+    [AUTH]: authReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
+
 export const store = configureStore({
-    reducer: {
-        [termApi.reducerPath]: termApi.reducer,
-        [vocabularyListApi.reducerPath]: vocabularyListApi.reducer,
-        [contributorApi.reducerPath]: contributorApi.reducer,
-        [acquireIdApi.reducerPath]: acquireIdApi.reducer,
-        [termIndexQueryOptionsSlice.reducerPath]: termIndexQueryOptionsSlice.reducer,
-        // [userQueryOptionsSlice.reducerPath]: userQueryOptionsSlice.reducer,
-        [AUTH]: authReducer,
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware().concat(
             termApi.middleware,
@@ -29,7 +35,5 @@ export const store = configureStore({
 });
 
 setupListeners(store.dispatch);
-
-export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
