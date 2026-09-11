@@ -19,7 +19,7 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
 export const ResourcePaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const contributorQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
+    const contributorQueryOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
 
     const { data, isLoading, isError } = useFetchTermsQuery(contributorQueryOptions);
 

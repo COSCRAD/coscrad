@@ -6,8 +6,8 @@ import { RootState } from '../../../store';
 import { DEFAULT_PAGE_SIZE } from '../../shared/constants';
 import { insertNumberInSequence } from '../../shared/insert-in-sequence';
 import { cyclicDecrement, cyclicIncrement } from '../../shared/math';
+import { setPage, setPageSize } from '../../shared/store/user-index-query-options.slice';
 import { useFetchTermsQuery } from './store';
-import { setPage, setPageSize } from './store/term-query-options.slice';
 
 // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-344] make this configurable
 const pageSizes: number[] = [5, 10, 50, 100];
@@ -19,9 +19,9 @@ const pageSizeOptions: number[] = pageSizes.includes(DEFAULT_PAGE_SIZE)
 export const TermPaginator = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const termQueryOptions = useSelector((state: RootState) => state.termQueryOptions);
+    const userIndexQueryOptions = useSelector((state: RootState) => state.userIndexQueryOptions);
 
-    const { data, isLoading, isError } = useFetchTermsQuery(termQueryOptions);
+    const { data, isLoading, isError } = useFetchTermsQuery(userIndexQueryOptions);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -33,7 +33,7 @@ export const TermPaginator = (): JSX.Element => {
 
     const {
         pagination: { size: pageSize },
-    } = termQueryOptions;
+    } = userIndexQueryOptions;
 
     const pageCount = Math.ceil(count / pageSize);
 
@@ -47,7 +47,7 @@ export const TermPaginator = (): JSX.Element => {
     const updatePageSize = (newPageSize: number) => {
         console.log({ newPageSize });
 
-        if (newPageSize > termQueryOptions.pagination.size) {
+        if (newPageSize > userIndexQueryOptions.pagination.size) {
             dispatch(setPageSize(newPageSize));
             dispatch(setPage(1));
         }

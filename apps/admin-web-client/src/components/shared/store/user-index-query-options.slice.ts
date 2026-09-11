@@ -1,6 +1,6 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DEFAULT_PAGE_SIZE } from '../../../shared/constants';
+import { DEFAULT_PAGE_SIZE } from '../constants';
 
 interface ISimpleCondition<_T> {
     type: string;
@@ -27,24 +27,19 @@ export type IndexSearchScope<T> = keyof T | typeof ALL_PROPERTIES_SEARCH_KEY;
 export type IUserDefinedFilter<T> = IComplexUserDefinedFilter<T> | ISimpleCondition<T>;
 
 export interface IUserPaginationOptions {
-    pagination: {
-        size: number;
-        page: number;
-    };
+    size: number;
+    page: number;
 }
 
 export type UserSearchString = string;
 
-export type UserQueryOptionsState<T> = {
-    pagination: {
-        page: number;
-        size: number;
-    };
+export type UserIndexQueryOptionsState<T> = {
+    pagination: IUserPaginationOptions;
     searchString?: UserSearchString;
     filter?: IUserDefinedFilter<T>;
 };
 
-const initialUserQueryOptionsState: UserQueryOptionsState<ITermViewModel> = {
+const initialUserIndexQueryOptionsState: UserIndexQueryOptionsState<ITermViewModel> = {
     searchString: '',
     pagination: {
         page: 1,
@@ -52,11 +47,14 @@ const initialUserQueryOptionsState: UserQueryOptionsState<ITermViewModel> = {
     },
 };
 
-export const termQueryOptionsSlice = createSlice({
-    name: 'termQueryOptions',
-    initialState: initialUserQueryOptionsState,
+export const userQueryOptionsSlice = createSlice({
+    name: 'userIndexQueryOptions',
+    initialState: initialUserIndexQueryOptionsState,
     reducers: {
-        setPaginationOptions: (state, action: PayloadAction<IUserPaginationOptions>) => {
+        setPaginationOptions: (
+            state,
+            action: PayloadAction<{ pagination: IUserPaginationOptions }>
+        ) => {
             state = action.payload;
         },
         setPageSize: (state, action: PayloadAction<number>) => {
@@ -77,15 +75,11 @@ export const termQueryOptionsSlice = createSlice({
             action: PayloadAction<{ filter: IUserDefinedFilter<ITermViewModel> | null }>
         ) => {
             state.filter = action.payload.filter;
+            state.pagination.page = 1;
         },
     },
 });
 
-export const {
-    setPage,
-    setPageSize,
-    setFilters: setTermFilters,
-    setSearchString: setTermSearchString,
-} = termQueryOptionsSlice.actions;
+export const { setPage, setPageSize, setFilters, setSearchString } = userQueryOptionsSlice.actions;
 
-export default termQueryOptionsSlice.reducer;
+export default userQueryOptionsSlice.reducer;
