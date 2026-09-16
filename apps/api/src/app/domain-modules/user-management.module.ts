@@ -7,6 +7,7 @@ import {
     CreateContributor,
     CreateContributorCommandHandler,
 } from '../../domain/models/user-management/contributor';
+import { CoscradContributorQueryService } from '../../domain/models/user-management/contributor/queries/coscrad-contributor-query.service';
 import {
     AddUserToGroup,
     AddUserToGroupCommandHandler,
@@ -17,7 +18,6 @@ import { GrantUserRole } from '../../domain/models/user-management/user/commands
 import { GrantUserRoleCommandHandler } from '../../domain/models/user-management/user/commands/grant-user-role/grant-user-role.command-handler';
 import { RegisterUser } from '../../domain/models/user-management/user/commands/register-user/register-user.command';
 import { RegisterUserCommandHandler } from '../../domain/models/user-management/user/commands/register-user/register-user.command-handler';
-import { CoscradContributorQueryService } from '../../domain/services/query-services/coscrad-contributor-query.service';
 import { CoscradUserGroupQueryService } from '../../domain/services/query-services/coscrad-user-group-query.service';
 import { CoscradUserQueryService } from '../../domain/services/query-services/coscrad-user-query.service';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';

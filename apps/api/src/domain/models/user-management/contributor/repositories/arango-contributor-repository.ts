@@ -1,3 +1,4 @@
+import { UserQueryOptions } from '../../../../../app/controllers/resources/term.controller';
 import buildInstanceFactory from '../../../../../domain/factories/utilities/buildInstanceFactory';
 import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { ArangoCollectionId } from '../../../../../persistence/database/collection-references/ArangoCollectionId';
@@ -5,12 +6,13 @@ import { ArangoDatabaseProvider } from '../../../../../persistence/database/data
 import mapDatabaseDocumentToAggregateDTO from '../../../../../persistence/database/utilities/mapDatabaseDocumentToAggregateDTO';
 import mapEntityDTOToDatabaseDocument from '../../../../../persistence/database/utilities/mapEntityDTOToDatabaseDocument';
 import { ArangoRepositoryForAggregate } from '../../../../../persistence/repositories/arango-repository-for-aggregate';
+import { CoscradContributorViewModel } from '../../../../../queries/buildViewModelForResource/viewModels/coscrad-contributor.view-model';
 import { CoscradContributor } from '../entities';
-import { ICoscradContributorRepository } from '../interfaces';
+import { ICoscradContributorQueryRepository } from '../interfaces';
 
 export class ArangoContributorRepository
     extends ArangoRepositoryForAggregate<CoscradContributor>
-    implements ICoscradContributorRepository
+    implements ICoscradContributorQueryRepository
 {
     constructor(databaseProvider: ArangoDatabaseProvider) {
         super(
@@ -55,5 +57,43 @@ export class ArangoContributorRepository
             });
 
         return instances;
+    }
+
+    async fetchMany(queryOptions?: UserQueryOptions) {
+        const result = await this.arangoDatabaseForEntitysCollection.fetchForUser(queryOptions);
+
+        if (isInternalError(result)) {
+            throw new InternalError(
+                `Encountered an unexpected database error when fetching all contributors`,
+                [result]
+            );
+        }
+
+        const { selected, count } = result;
+
+        const buildResult = selected.map((doc) => {
+            const dto = mapDatabaseDocumentToAggregateDTO(doc);
+
+            const newDto = new CoscradContributor(dto);
+
+            const contributorName = newDto.getName();
+
+            const contributorFullNameString = newDto.fullName.toString();
+
+            const allNewDto = {
+                ...newDto,
+                name: contributorName,
+                fullName: contributorFullNameString,
+            };
+
+            return CoscradContributorViewModel.fromDto(allNewDto);
+        });
+
+        return {
+            entities: buildResult,
+            // TODO return this from the AQL query as well as it resolves the actual pagination params to use by applying defaults
+            page: queryOptions?.pagination?.page || 1,
+            count,
+        };
     }
 }

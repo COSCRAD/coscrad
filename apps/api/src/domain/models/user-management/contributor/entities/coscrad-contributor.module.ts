@@ -3,9 +3,9 @@ import { Module } from '@nestjs/common';
 import { CoscradContributorController } from '../../../../../app/controllers/coscrad-contributor.controller';
 import { IdGenerationModule } from '../../../../../lib/id-generation/id-generation.module';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
-import { CoscradContributorQueryService } from '../../../../services/query-services/coscrad-contributor-query.service';
 import { CreateContributor, CreateContributorCommandHandler } from '../commands/create-contributor';
 import { ContributorCreated } from '../commands/create-contributor/contributor-created.event';
+import { CoscradContributorQueryService } from '../queries/coscrad-contributor-query.service';
 import { CoscradContributor } from './coscrad-contributor.entity';
 
 /**

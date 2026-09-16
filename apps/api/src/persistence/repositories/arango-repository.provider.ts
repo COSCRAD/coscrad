@@ -7,7 +7,7 @@ import { Resource } from '../../domain/models/resource.entity';
 import { Tag } from '../../domain/models/tag/tag.entity';
 import {
     ArangoContributorRepository,
-    ICoscradContributorRepository,
+    ICoscradContributorQueryRepository,
 } from '../../domain/models/user-management';
 import { CoscradUserGroup } from '../../domain/models/user-management/group/entities/coscrad-user-group.entity';
 import { ICategoryRepository } from '../../domain/repositories/interfaces/category-repository.interface';
@@ -97,7 +97,7 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
         );
     }
 
-    getContributorRepository(): ICoscradContributorRepository {
+    getContributorRepository(): ICoscradContributorQueryRepository {
         // Should this be called `ArangoCoscradContributorRepository`?
         return new ArangoContributorRepository(this.databaseProvider);
     }

@@ -1,5 +1,5 @@
-import { ICoscradContributorRepository } from '../../models/user-management';
+import { ICoscradContributorQueryRepository } from '../../models/user-management';
 
 export interface IContributorRepositoryProvider {
-    getContributorRepository: () => ICoscradContributorRepository;
+    getContributorRepository: () => ICoscradContributorQueryRepository;
 }
