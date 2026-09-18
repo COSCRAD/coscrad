@@ -2,36 +2,36 @@ import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolki
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
-import { COMMAND_STATUS, commandStatusReducer } from './slices/command-status';
+import { commandStatusReducer, COMMAND_STATUS } from './slices/command-status';
 import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
 import { noteReducer, NOTES } from './slices/notes';
 
 import {
-    AUDIO_ITEMS,
     audioItemReducer,
-    BIBLIOGRAPHIC_CITATIONS,
+    AUDIO_ITEMS,
     bibliographicCitationReducer,
-    DIGITAL_TEXTS,
+    BIBLIOGRAPHIC_CITATIONS,
     DigitalTextReducer,
-    MEDIA_ITEMS,
+    DIGITAL_TEXTS,
     mediaItemReducer,
+    MEDIA_ITEMS,
     photographReducer,
     PHOTOGRAPHS,
     PlaylistReducer,
     PLAYLISTS,
-    RESOURCE_INFO,
     resourceInfoReducer,
+    RESOURCE_INFO,
     songReducer,
     SONGS,
-    SPATIAL_FEATURES,
     spatialFeatureReducer,
+    SPATIAL_FEATURES,
     termReducer,
     TERMS,
     videoReducer,
     VIDEOS,
-    VOCABULARY_LISTS,
     vocabularyListReducer,
+    VOCABULARY_LISTS,
 } from './slices/resources';
 import { tagReducer, TAGS } from './slices/tagSlice';
 
@@ -55,6 +55,9 @@ export const rootReducer = combineReducers({
     [SONGS]: songReducer,
     [MEDIA_ITEMS]: mediaItemReducer,
     [PLAYLISTS]: PlaylistReducer,
+    maps: () => {
+        throw new Error('state management for geospatial maps is not yet implemented');
+    },
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>

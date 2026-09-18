@@ -1,6 +1,6 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 
-const lookupTable: { [K in ResourceType]: string } = {
+const lookupTable = {
     [ResourceType.bibliographicCitation]: 'BibliographicCitations',
     [ResourceType.digitalText]: 'DigitalTexts',
     [ResourceType.mediaItem]: 'MediaItems',
@@ -12,7 +12,7 @@ const lookupTable: { [K in ResourceType]: string } = {
     [ResourceType.video]: 'Videos',
     [ResourceType.vocabularyList]: 'VocabularyLists',
     [ResourceType.playlist]: 'Playlists',
-};
+} as const;
 
 export const getResourceTypeLabelForRoutes = (resourceType: ResourceType) => {
     const lookupResult = lookupTable[resourceType];

@@ -1,6 +1,4 @@
-import {
-    CategorizableType
-} from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailThumbnailPresenter } from '../../notes/note-detail.thumbnail.presenter';
 import { AudioItemDetailThumbnailPresenter } from '../audio-item/audio-item-detail.thumbnail.presenter';
@@ -28,6 +26,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.video]: VideoDetailThumbnailPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailThumbnailPresenter,
     [CategorizableType.playlist]: PlaylistDetailThumbnailPresenter,
+    [CategorizableType.map]: () => {
+        throw new Error('not implemented');
+    },
     /**
      * TODO Investigate why importing this from the component file leads to a
      * circular dependency.
