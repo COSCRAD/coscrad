@@ -1,23 +1,38 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { Maybe } from '../../../lib/types/maybe';
+import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
-import { Aggregate } from '../aggregate.entity';
-import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
+import {
+    buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
+} from '../build-aggregate-root-from-event-history';
+import { Resource } from '../resource.entity';
+import { BaseEvent } from '../shared/events/base-event.entity';
+import { MapCreated } from './commands/map-created.event';
+import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 
 @AggregateRoot(AggregateType.map)
-export class GeospatialMap extends Aggregate {
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+export class GeospatialMap extends Resource {
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name for the map',
     })
     name: MultilingualText;
 
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+    @NestedDataType(MultilingualText, {
         label: 'description',
         description: 'description for map',
     })
@@ -49,6 +64,7 @@ export class GeospatialMap extends Aggregate {
         return [];
     }
 
+    // TODO do we still need this?
     getAvailableCommands(): string[] {
         throw new Error('Method not implemented.');
     }
@@ -61,7 +77,90 @@ export class GeospatialMap extends Aggregate {
         return [];
     }
 
+    // TODO do we still need this?
+    protected getResourceSpecificAvailableCommands(): string[] {
+        throw new Error('Method not implemented.');
+    }
+
+    @UpdateMethod()
+    translateName(translation: string, languageCode: LanguageCode) {
+        const updatedName = this.name.translate({
+            text: translation,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+
+        if (isInternalError(updatedName)) {
+            return updatedName;
+        }
+
+        this.name = updatedName;
+
+        return this;
+    }
+
     fromMapCreated(): GeospatialMap | InternalError {
         throw new Error('not implemented');
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        id: AggregateId
+    ): Maybe<ResultOrError<GeospatialMap>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<GeospatialMap> = new Map().set(
+            'MAP_CREATED',
+            GeospatialMap.buildGeospatialMapFromMapCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.map,
+                id,
+            },
+            eventHistory
+        );
+    }
+
+    handleMapNameTranslated({
+        payload: {
+            translationOfName: { text, languageCode },
+        },
+    }: MapNameTranslated) {
+        return this.translateName(text, languageCode);
+    }
+
+    static buildGeospatialMapFromMapCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            name,
+            description,
+        },
+    }: MapCreated): ResultOrError<GeospatialMap> {
+        const buildResult = new GeospatialMap({
+            type: AggregateType.map,
+            id,
+            spatialFeatures: [],
+            name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+            description: buildMultilingualTextWithSingleItem(
+                description.text,
+                description.languageCode
+            ),
+            published: false,
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                `Failed to build geospatialMap: ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.map,
+                    id,
+                })}from event history`,
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
     }
 }

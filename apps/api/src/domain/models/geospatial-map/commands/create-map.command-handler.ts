@@ -32,6 +32,7 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
                 languageCodeForDescription
             ),
             spatialFeatures: [],
+            published: false,
         });
     }
 
@@ -57,7 +58,6 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
                 languageCode: LanguageCode.Chilcotin,
                 role: MultilingualTextItemRole.original,
             }),
-            languageCodeForName: LanguageCode.Chilcotin,
             description: new MultilingualTextItem({
                 text: 'description of the map',
                 languageCode: LanguageCode.English,
