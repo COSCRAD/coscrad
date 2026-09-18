@@ -1,10 +1,12 @@
-import { combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { ICategorizableIndexQueryResult, IGeospatialMapViewModel } from '@coscrad/api-interfaces';
+import { AnyAction, combineReducers, configureStore, PreloadedState } from '@reduxjs/toolkit';
 import { AUTH, authReducer } from './slices/auth';
 import { categoryTreeReducer } from './slices/categories';
 import { CATEGORY_TREE } from './slices/categories/constants';
 import { commandStatusReducer, COMMAND_STATUS } from './slices/command-status';
 import { idGenerationReducer } from './slices/id-generation';
 import { ID_GENERATION } from './slices/id-generation/constants';
+import { ILoadable } from './slices/interfaces/loadable.interface';
 import { noteReducer, NOTES } from './slices/notes';
 
 import {
@@ -18,7 +20,7 @@ import {
     MEDIA_ITEMS,
     photographReducer,
     PHOTOGRAPHS,
-    PlaylistReducer,
+    playlistReducer,
     PLAYLISTS,
     resourceInfoReducer,
     RESOURCE_INFO,
@@ -54,9 +56,19 @@ export const rootReducer = combineReducers({
     [SPATIAL_FEATURES]: spatialFeatureReducer,
     [SONGS]: songReducer,
     [MEDIA_ITEMS]: mediaItemReducer,
-    [PLAYLISTS]: PlaylistReducer,
-    maps: () => {
-        throw new Error('state management for geospatial maps is not yet implemented');
+    [PLAYLISTS]: playlistReducer,
+    maps: (
+        _state: ILoadable<ICategorizableIndexQueryResult<IGeospatialMapViewModel>>,
+        _action: AnyAction
+    ): ILoadable<ICategorizableIndexQueryResult<IGeospatialMapViewModel>> => {
+        return {
+            isLoading: false,
+            errorInfo: {
+                code: 500,
+                message: 'Geospatial Maps are not yet available',
+            },
+            data: null,
+        };
     },
 });
 
