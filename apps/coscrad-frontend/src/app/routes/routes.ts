@@ -13,9 +13,9 @@ export const routes = {
     treeOfKnowledge: 'TreeOfKnowledge',
     resources: {
         info: resourcesBaseRoute,
-        ofType: (resourceType: ResourceType) =>
+        ofType: (resourceType: Omit<ResourceType, 'map'>) =>
             IndexAndDetailSubrouteBuilder(
-                `${resourcesBaseRoute}/${getResourceTypeLabelForRoutes(resourceType)}`
+                `${resourcesBaseRoute}/${getResourceTypeLabelForRoutes(resourceType as any)}`
             ),
     },
     siteCredits: 'Credits',

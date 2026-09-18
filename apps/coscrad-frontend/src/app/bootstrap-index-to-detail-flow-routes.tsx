@@ -1,4 +1,4 @@
-import { CategorizableType, ResourceType } from '@coscrad/api-interfaces';
+import { CategorizableType, ResourceType as ApiResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FilteredCategorizableIndexContainer } from '../components/higher-order-components';
 import { AggregatePage } from '../components/higher-order-components/aggregate-page';
@@ -11,6 +11,8 @@ import {
 } from '../configurable-front-matter/data/configurable-content-schema';
 import { CoscradRoute } from './build-routes';
 import { routes } from './routes/routes';
+
+type ResourceType = Omit<ApiResourceType, 'map'>;
 
 export const bootstrapIndexToDetailFlowRoutes = ({
     indexToDetailFlows,
