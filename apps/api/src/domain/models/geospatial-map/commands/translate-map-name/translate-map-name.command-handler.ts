@@ -45,7 +45,7 @@ export class TranslateMapNameCommandHandler extends BaseUpdateCommandHandler<Geo
         return new MapNameTranslated(
             {
                 aggregateCompositeIdentifier,
-                name: new MultilingualTextItem({
+                translationOfName: new MultilingualTextItem({
                     languageCode,
                     text: translationOfName,
                     role: MultilingualTextItemRole.original,

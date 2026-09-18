@@ -25,6 +25,7 @@ import { BaseEvent } from '../shared/events/base-event.entity';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CreateMap } from './commands/create-map.command';
 import { MapCreated } from './commands/map-created.event';
+import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 
 @CoscradDataExample<GeospatialMap>({
     example: {
@@ -117,6 +118,7 @@ export class GeospatialMap extends Resource {
         return instance;
     }
 
+    // TODO remove this
     protected getResourceSpecificAvailableCommands(): string[] {
         throw new Error('Method not implemented.');
     }
@@ -159,6 +161,14 @@ export class GeospatialMap extends Resource {
             },
             eventHistory
         );
+    }
+
+    handleMapNameTranslated({
+        payload: {
+            translationOfName: { text, languageCode },
+        },
+    }: MapNameTranslated) {
+        return this.translateName(text, languageCode);
     }
 
     static buildGeospatialMapFromMapCreated({

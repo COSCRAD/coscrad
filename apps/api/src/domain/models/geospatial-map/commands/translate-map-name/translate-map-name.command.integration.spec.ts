@@ -1,9 +1,13 @@
-import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { CommandHandlerService } from '@coscrad/commands';
 import { INestApplication } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
-import { error } from 'console';
 import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
@@ -18,6 +22,7 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
+import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
@@ -53,11 +58,14 @@ const mapCreated = new TestEventStream().andThen<MapCreated>(
     MapCreated
 );
 
-const _mapNameTranslated = mapCreated.andThen<MapNameTranslated>(
+const mapNameTranslated = mapCreated.andThen<MapNameTranslated>(
     {
         type: 'MAP_NAME_TRANSLATED',
         payload: {
-            name: translationGeoSpatialText,
+            translationOfName: {
+                text: translationGeoSpatialText,
+                languageCode: translationLanguageCode,
+            },
         },
     },
     MapNameTranslated
@@ -171,8 +179,76 @@ describe(commandType, () => {
 
     describe(`when the command is invalid`, () => {
         describe(`when the geospatial map does not exist`, () => {
-            it(`should fail with the expected errors`, async () => {
-                throw new error('not implemented');
+            it(`should return with the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        return Promise.resolve();
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        const message = error.toString();
+
+                        expect(message).toContain('Failed to update');
+                    },
+                });
+            });
+        });
+
+        describe(`when there is already a translation in the given language`, () => {
+            it(`should return the expected error`, async () => {
+                const eventHistory = mapNameTranslated.as(geospatialCompositeIdentifier);
+                const existingGeospatialMap = GeospatialMap.fromEventHistory(
+                    eventHistory,
+                    geospatialId
+                ) as GeospatialMap;
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(ResourceType.map)
+                            .create(existingGeospatialMap);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        const message = error.toString();
+
+                        expect(message).toContain(translationLanguageCode);
+                    },
+                });
+            });
+        });
+
+        describe(`when the translation language is the same as the original `, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider.forResource(ResourceType.map).create(
+                            GeospatialMap.fromEventHistory(
+                                mapCreated
+                                    .andThen<MapNameTranslated>({
+                                        type: 'MAP_NAME_TRANSLATED',
+                                        payload: {
+                                            translationOfName: {
+                                                languageCode: translationLanguageCode,
+                                            },
+                                        },
+                                    })
+                                    .as(geospatialCompositeIdentifier),
+                                geospatialId
+                            ) as GeospatialMap
+                        );
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (error) => {
+                        const message = error.toString();
+
+                        expect(message).toContain(originalLanguageCode);
+
+                        expect(message).toContain('cannot add');
+                    },
+                });
             });
         });
     });
