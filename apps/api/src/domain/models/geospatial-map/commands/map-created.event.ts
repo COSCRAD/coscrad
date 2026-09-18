@@ -7,10 +7,10 @@ import { SpatialFeatureCompositeIdentifier } from '../../spatial-feature/point/c
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 
+// TODO Add decorators
 export class MapCreatedPayload {
     aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
     name: MultilingualTextItem;
-    languageCodeForName: LanguageCode;
     description: MultilingualTextItem;
 }
 
@@ -30,7 +30,6 @@ const testEventId = buildDummyUuid(3);
                 text: '5K trail',
                 role: MultilingualTextItemRole.original,
             },
-            languageCodeForName: LanguageCode.English,
             description: {
                 languageCode: LanguageCode.Chinook,
                 text: 'Description of my test map',

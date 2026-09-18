@@ -21,18 +21,18 @@ import {
 } from '../build-aggregate-root-from-event-history';
 import { Resource } from '../resource.entity';
 import { BaseEvent } from '../shared/events/base-event.entity';
-import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
 import { MapCreated } from './commands/map-created.event';
+import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 
 @AggregateRoot(AggregateType.map)
 export class GeospatialMap extends Resource {
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name for the map',
     })
     name: MultilingualText;
 
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+    @NestedDataType(MultilingualText, {
         label: 'description',
         description: 'description for map',
     })
@@ -64,6 +64,7 @@ export class GeospatialMap extends Resource {
         return [];
     }
 
+    // TODO do we still need this?
     getAvailableCommands(): string[] {
         throw new Error('Method not implemented.');
     }
@@ -76,6 +77,7 @@ export class GeospatialMap extends Resource {
         return [];
     }
 
+    // TODO do we still need this?
     protected getResourceSpecificAvailableCommands(): string[] {
         throw new Error('Method not implemented.');
     }
@@ -118,6 +120,14 @@ export class GeospatialMap extends Resource {
             },
             eventHistory
         );
+    }
+
+    handleMapNameTranslated({
+        payload: {
+            translationOfName: { text, languageCode },
+        },
+    }: MapNameTranslated) {
+        return this.translateName(text, languageCode);
     }
 
     static buildGeospatialMapFromMapCreated({

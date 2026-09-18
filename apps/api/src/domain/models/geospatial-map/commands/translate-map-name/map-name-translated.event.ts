@@ -20,7 +20,7 @@ export class MapNameTranslatedPayload {
         label: 'translation for map name',
         description: 'the translation text and associated information',
     })
-    readonly name: MultilingualTextItem;
+    readonly translationOfName: MultilingualTextItem;
 }
 
 const testEventId = buildDummyUuid(5);
@@ -35,7 +35,7 @@ const testEventId = buildDummyUuid(5);
                 type: AggregateType.map,
             },
             // TODO find something better to do this
-            name: buildMultilingualTextWithSingleItem(
+            translationOfName: buildMultilingualTextWithSingleItem(
                 'geospatial map name text'
             ).getOriginalTextItem(),
         },

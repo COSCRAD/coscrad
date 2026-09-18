@@ -18,8 +18,8 @@ import { GeospatialMapCompositeIdentifier } from '../create-map.command';
 })
 @Command({
     type: 'TRANSLATE_MAP_NAME',
-    label: 'Translates a Map Name',
-    description: 'translates a map name',
+    label: 'Translate Name',
+    description: "translate a map's name into an additional language",
 })
 export class TranslateMapName implements ICommandBase {
     @NestedDataType(GeospatialMapCompositeIdentifier, {

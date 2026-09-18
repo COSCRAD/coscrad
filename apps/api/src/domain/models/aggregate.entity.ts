@@ -2,13 +2,13 @@ import { NonEmptyString } from '@coscrad/data-types';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { ValidationResult } from '../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
-import { DTO } from '../../types/DTO';
 import { DeepPartial } from '../../types/DeepPartial';
+import { DTO } from '../../types/DTO';
 import { ResultOrError } from '../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../common/entities/multilingual-text';
-import { Valid, isValid } from '../domainModelValidators/Valid';
 import InvariantValidationError from '../domainModelValidators/errors/InvariantValidationError';
 import validateSimpleInvariants from '../domainModelValidators/utilities/validateSimpleInvariants';
+import { isValid, Valid } from '../domainModelValidators/Valid';
 import { AggregateCompositeIdentifier } from '../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../types/AggregateId';
 import { AggregateType } from '../types/AggregateType';
@@ -38,6 +38,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
     readonly type: AggregateType;
 
     // TODO Make this a UUID
+    // can we do this now?
     @NonEmptyString({
         label: 'ID',
         description: 'unique identifier',
