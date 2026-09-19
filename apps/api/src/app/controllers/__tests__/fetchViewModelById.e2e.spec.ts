@@ -50,6 +50,7 @@ describe('GET  (fetch view models)', () => {
         ResourceType.vocabularyList,
         ResourceType.photograph,
         ResourceType.playlist,
+        ResourceType.map,
         //TODO write standalone query test for these
         ResourceType.song,
         ResourceType.audioItem,

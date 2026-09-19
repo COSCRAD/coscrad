@@ -31,6 +31,7 @@ const eventSourcedResourceTypes = [
     ResourceType.video,
     // We should have a scenario test for each resource type that uses the generic commands
     ResourceType.spatialFeature,
+    ResourceType.map,
 ];
 
 describe(commandType, () => {

@@ -87,6 +87,7 @@ const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.term,
     ResourceType.vocabularyList,
     ResourceType.playlist,
+    ResourceType.map,
     // TODO write standalone query test for these
     ResourceType.song,
     ResourceType.audioItem,

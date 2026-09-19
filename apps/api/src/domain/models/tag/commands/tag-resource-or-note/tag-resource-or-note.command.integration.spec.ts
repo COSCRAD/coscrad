@@ -67,6 +67,7 @@ describe(commandType, () => {
         ResourceType.audioItem,
         ResourceType.video,
         ResourceType.spatialFeature,
+        ResourceType.map,
         CategorizableType.note,
     ];
 

@@ -66,6 +66,7 @@ const eventSourcedResourceTypes = [
     AggregateType.audioItem,
     AggregateType.video,
     AggregateType.spatialFeature,
+    AggregateType.map,
 ];
 
 const allDualEdgeConnections = (testDualConnections as EdgeConnection[])

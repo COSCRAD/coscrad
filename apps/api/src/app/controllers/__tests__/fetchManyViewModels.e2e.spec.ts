@@ -79,6 +79,7 @@ describe('When fetching multiple resources', () => {
         AggregateType.vocabularyList,
         AggregateType.photograph,
         AggregateType.playlist,
+        AggregateType.map,
         // TODO add standalone query test for song
         AggregateType.song,
         AggregateType.audioItem,

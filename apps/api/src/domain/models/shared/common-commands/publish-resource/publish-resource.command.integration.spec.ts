@@ -6,12 +6,13 @@ import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExp
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import formatAggregateType from '../../../../../queries/presentation/formatAggregateType';
+import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { IIdManager } from '../../../../interfaces/id-manager.interface';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { isResourceType, ResourceType } from '../../../../types/ResourceType';
-import getValidAggregateInstanceForTest from '../../../../__tests__/utilities/getValidAggregateInstanceForTest';
+import { BookBibliographicCitation } from '../../../bibliographic-citation/book-bibliographic-citation/entities/book-bibliographic-citation.entity';
 import ResourceAlreadyPublishedError from '../../../resource-already-published.error';
 import { Resource } from '../../../resource.entity';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
@@ -67,167 +68,145 @@ describe(commandType, () => {
      * TODO We should make this test work on a generic model and rely on higher level
      * e2e tests to ensure that it works for all resource types.
      */
-    Object.values(ResourceType)
-        .filter(
-            (t) =>
-                // event sourced resources require a different test setup
-                ![
-                    ResourceType.audioItem,
-                    ResourceType.photograph,
-                    ResourceType.playlist,
-                    ResourceType.vocabularyList,
-                    ResourceType.term,
-                    ResourceType.song,
-                    ResourceType.digitalText,
-                    ResourceType.audioItem,
-                    ResourceType.video,
-                    ResourceType.spatialFeature,
-                ].includes(t)
-        )
-        .forEach((resourceType) => {
-            const unpublishedResource = getValidAggregateInstanceForTest(resourceType).clone({
-                // This must be a UUID or the command payload will fail type validation
-                id: dummyUuid,
-                published: false,
+    [ResourceType.bibliographicCitation].forEach((resourceType) => {
+        const unpublishedResource = buildTestInstance(BookBibliographicCitation, {
+            id: dummyUuid,
+            published: false,
+        });
+
+        const buildCommandFSA = (): FluxStandardAction<DTO<PublishResource>> => ({
+            type: commandType,
+            payload: {
+                aggregateCompositeIdentifier: unpublishedResource.getCompositeIdentifier(),
+            },
+        });
+
+        const initialState = new DeluxeInMemoryStore({
+            [resourceType]: [unpublishedResource],
+        }).fetchFullSnapshotInLegacyFormat();
+
+        describe(`when publishing a resource of type: ${formatAggregateType(resourceType)}`, () => {
+            describe('when the command is valid', () => {
+                it('should succeed', async () => {
+                    // TODO update this to use the new API
+                    await assertCommandSuccess(commandAssertionDependencies, {
+                        systemUserId: dummySystemUserId,
+                        buildValidCommandFSA: buildCommandFSA,
+                        seedInitialState: async () => {
+                            await testRepositoryProvider.addFullSnapshot(initialState);
+                        },
+                        checkStateOnSuccess: async () => {
+                            const searchResult = await testRepositoryProvider
+                                .forResource(unpublishedResource.type)
+                                .fetchById(unpublishedResource.id);
+
+                            expect(searchResult).not.toBeInstanceOf(Error);
+
+                            const updatedResource = searchResult as Resource;
+
+                            expect(updatedResource.published).toBe(true);
+                        },
+                    });
+                });
             });
 
-            const buildCommandFSA = (): FluxStandardAction<DTO<PublishResource>> => ({
-                type: commandType,
-                payload: {
-                    aggregateCompositeIdentifier: unpublishedResource.getCompositeIdentifier(),
-                },
-            });
+            describe('when the command is invalid', () => {
+                describe('when the payload has an invalid type', () => {
+                    Object.values(AggregateType)
+                        .filter((type) => !isResourceType(type))
+                        .forEach((nonResourceAggregateType) => {
+                            describe(`when the aggregate type (${formatAggregateType(
+                                nonResourceAggregateType
+                            )}) is not for a resource`, () => {
+                                it('should fail with the appropriate error', async () => {
+                                    await assertCommandFailsDueToTypeError(
+                                        commandAssertionDependencies,
+                                        {
+                                            propertyName: 'aggregateCompositeIdentifier',
+                                            invalidValue: {
+                                                type: nonResourceAggregateType,
+                                                id: unpublishedResource.id,
+                                            },
+                                        },
+                                        buildCommandFSA()
+                                    );
+                                });
+                            });
+                        });
 
-            const initialState = new DeluxeInMemoryStore({
-                [resourceType]: [unpublishedResource],
-            }).fetchFullSnapshotInLegacyFormat();
+                    generateCommandFuzzTestCases(PublishResource).forEach(
+                        ({ description, propertyName, invalidValue }) => {
+                            describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
+                                it('should fail with the appropriate error', async () => {
+                                    await assertCommandFailsDueToTypeError(
+                                        commandAssertionDependencies,
+                                        { propertyName, invalidValue },
+                                        buildCommandFSA()
+                                    );
+                                });
+                            });
+                        }
+                    );
 
-            describe(`when publishing a resource of type: ${formatAggregateType(
-                resourceType
-            )}`, () => {
-                describe('when the command is valid', () => {
-                    it('should succeed', async () => {
-                        // TODO update this to use the new API
-                        await assertCommandSuccess(commandAssertionDependencies, {
+                    describe('when there is a bogusProperty', () => {
+                        it('should fail with the expected error', async () => {
+                            await assertCommandFailsDueToTypeError(
+                                commandAssertionDependencies,
+                                { propertyName: 'bogusProperty', invalidValue: 99 },
+                                buildCommandFSA()
+                            );
+                        });
+                    });
+                });
+
+                describe(`when the ${formatAggregateType(
+                    resourceType
+                )} is already published`, () => {
+                    it('should fail with the expected error', async () => {
+                        await assertCommandError(commandAssertionDependencies, {
+                            buildCommandFSA,
+                            initialState: new DeluxeInMemoryStore({
+                                [resourceType]: [unpublishedResource.clone({ published: true })],
+                            }).fetchFullSnapshotInLegacyFormat(),
                             systemUserId: dummySystemUserId,
-                            buildValidCommandFSA: buildCommandFSA,
-                            seedInitialState: async () => {
-                                await testRepositoryProvider.addFullSnapshot(initialState);
-                            },
-                            checkStateOnSuccess: async () => {
-                                const searchResult = await testRepositoryProvider
-                                    .forResource(unpublishedResource.type)
-                                    .fetchById(unpublishedResource.id);
-
-                                expect(searchResult).not.toBeInstanceOf(Error);
-
-                                const updatedResource = searchResult as Resource;
-
-                                expect(updatedResource.published).toBe(true);
+                            checkError: (error: InternalError) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new ResourceAlreadyPublishedError(
+                                            unpublishedResource.getCompositeIdentifier()
+                                        ),
+                                    ])
+                                );
                             },
                         });
                     });
                 });
 
-                describe('when the command is invalid', () => {
-                    describe('when the payload has an invalid type', () => {
-                        Object.values(AggregateType)
-                            .filter((type) => !isResourceType(type))
-                            .forEach((nonResourceAggregateType) => {
-                                describe(`when the aggregate type (${formatAggregateType(
-                                    nonResourceAggregateType
-                                )}) is not for a resource`, () => {
-                                    it('should fail with the appropriate error', async () => {
-                                        await assertCommandFailsDueToTypeError(
-                                            commandAssertionDependencies,
-                                            {
-                                                propertyName: 'aggregateCompositeIdentifier',
-                                                invalidValue: {
-                                                    type: nonResourceAggregateType,
-                                                    id: unpublishedResource.id,
-                                                },
-                                            },
-                                            buildCommandFSA()
-                                        );
-                                    });
-                                });
-                            });
-
-                        generateCommandFuzzTestCases(PublishResource).forEach(
-                            ({ description, propertyName, invalidValue }) => {
-                                describe(`when the property: ${propertyName} has the invalid value:${invalidValue} (${description}`, () => {
-                                    it('should fail with the appropriate error', async () => {
-                                        await assertCommandFailsDueToTypeError(
-                                            commandAssertionDependencies,
-                                            { propertyName, invalidValue },
-                                            buildCommandFSA()
-                                        );
-                                    });
-                                });
-                            }
-                        );
-
-                        describe('when there is a bogusProperty', () => {
-                            it('should fail with the expected error', async () => {
-                                await assertCommandFailsDueToTypeError(
-                                    commandAssertionDependencies,
-                                    { propertyName: 'bogusProperty', invalidValue: 99 },
-                                    buildCommandFSA()
+                describe(`when there is no ${formatAggregateType(
+                    resourceType
+                )} with the given composite identifier`, () => {
+                    it('should fail with the expected error', async () => {
+                        await assertCommandError(commandAssertionDependencies, {
+                            systemUserId: dummySystemUserId,
+                            buildCommandFSA,
+                            initialState: new DeluxeInMemoryStore(
+                                {}
+                            ).fetchFullSnapshotInLegacyFormat(),
+                            checkError: (error: InternalError) => {
+                                assertErrorAsExpected(
+                                    error,
+                                    new CommandExecutionError([
+                                        new AggregateNotFoundError(
+                                            unpublishedResource.getCompositeIdentifier()
+                                        ),
+                                    ])
                                 );
-                            });
-                        });
-                    });
-
-                    describe(`when the ${formatAggregateType(
-                        resourceType
-                    )} is already published`, () => {
-                        it('should fail with the expected error', async () => {
-                            await assertCommandError(commandAssertionDependencies, {
-                                buildCommandFSA,
-                                initialState: new DeluxeInMemoryStore({
-                                    [resourceType]: [
-                                        unpublishedResource.clone({ published: true }),
-                                    ],
-                                }).fetchFullSnapshotInLegacyFormat(),
-                                systemUserId: dummySystemUserId,
-                                checkError: (error: InternalError) => {
-                                    assertErrorAsExpected(
-                                        error,
-                                        new CommandExecutionError([
-                                            new ResourceAlreadyPublishedError(
-                                                unpublishedResource.getCompositeIdentifier()
-                                            ),
-                                        ])
-                                    );
-                                },
-                            });
-                        });
-                    });
-
-                    describe(`when there is no ${formatAggregateType(
-                        resourceType
-                    )} with the given composite identifier`, () => {
-                        it('should fail with the expected error', async () => {
-                            await assertCommandError(commandAssertionDependencies, {
-                                systemUserId: dummySystemUserId,
-                                buildCommandFSA,
-                                initialState: new DeluxeInMemoryStore(
-                                    {}
-                                ).fetchFullSnapshotInLegacyFormat(),
-                                checkError: (error: InternalError) => {
-                                    assertErrorAsExpected(
-                                        error,
-                                        new CommandExecutionError([
-                                            new AggregateNotFoundError(
-                                                unpublishedResource.getCompositeIdentifier()
-                                            ),
-                                        ])
-                                    );
-                                },
-                            });
+                            },
                         });
                     });
                 });
             });
         });
+    });
 });
