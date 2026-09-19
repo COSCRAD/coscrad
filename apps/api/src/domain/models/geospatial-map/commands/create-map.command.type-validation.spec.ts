@@ -9,7 +9,6 @@ import { CreateMap } from './create-map.command';
 
 const commandType = 'CREATE_MAP';
 
-// TODO use buildTestInstance
 const dummyPayload = buildTestInstance(CreateMap, {});
 
 const dummyFsa = { type: commandType, payload: dummyPayload };

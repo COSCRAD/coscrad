@@ -12,6 +12,7 @@ const lookupTable = {
     [ResourceType.video]: 'Videos',
     [ResourceType.vocabularyList]: 'VocabularyLists',
     [ResourceType.playlist]: 'Playlists',
+    [ResourceType.map]: 'Maps',
 } as const;
 
 export const getResourceTypeLabelForRoutes = (resourceType: ResourceType) => {

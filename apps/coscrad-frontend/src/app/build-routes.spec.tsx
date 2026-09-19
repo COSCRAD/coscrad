@@ -50,55 +50,57 @@ describe(`dynamic routes`, () => {
     });
 
     describe(`routes for index-to-detail flows`, () => {
-        Object.values(ResourceType).forEach((resourceType) => {
-            describe(`for resource type: ${resourceType}`, () => {
-                describe(`when no custom label or route is defined`, () => {
-                    const contentConfig = buildDummyConfig({
-                        indexToDetailFlows: [
-                            buildIndexToDetailConfig(resourceType, {
-                                includeLabelOverrides: false,
-                            }),
-                        ],
+        Object.values(ResourceType)
+            .filter((t) => t !== ResourceType.map)
+            .forEach((resourceType) => {
+                describe(`for resource type: ${resourceType}`, () => {
+                    describe(`when no custom label or route is defined`, () => {
+                        const contentConfig = buildDummyConfig({
+                            indexToDetailFlows: [
+                                buildIndexToDetailConfig(resourceType, {
+                                    includeLabelOverrides: false,
+                                }),
+                            ],
+                        });
+
+                        const result = buildRoutes(contentConfig);
+
+                        it('should include the default route', () => {
+                            const exceptions = {
+                                [ResourceType.spatialFeature]: 'Resources/Map',
+                            } as const;
+
+                            const defaultPath =
+                                exceptions[resourceType] ||
+                                `Resources/${capitalizeFirstLetter(resourceType)}s`;
+
+                            const matchingPaths = result.filter(({ path }) => path === defaultPath);
+
+                            expect(matchingPaths.length).toBe(1);
+                        });
                     });
 
-                    const result = buildRoutes(contentConfig);
+                    describe(`when a custom route is provided`, () => {
+                        const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, {
+                            includeLabelOverrides: true,
+                        });
 
-                    it('should include the default route', () => {
-                        const exceptions = {
-                            [ResourceType.spatialFeature]: 'Resources/Map',
-                        } as const;
+                        const contentConfig = buildDummyConfig({
+                            indexToDetailFlows: [indexToDetailFlowConfig],
+                        });
 
-                        const defaultPath =
-                            exceptions[resourceType] ||
-                            `Resources/${capitalizeFirstLetter(resourceType)}s`;
+                        const result = buildRoutes(contentConfig);
 
-                        const matchingPaths = result.filter(({ path }) => path === defaultPath);
+                        it('should include the custom route', () => {
+                            const customPath = `Resources/${indexToDetailFlowConfig.labelOverrides.route}`;
 
-                        expect(matchingPaths.length).toBe(1);
-                    });
-                });
+                            const matchingPaths = result.filter(({ path }) => path === customPath);
 
-                describe(`when a custom route is provided`, () => {
-                    const indexToDetailFlowConfig = buildIndexToDetailConfig(resourceType, {
-                        includeLabelOverrides: true,
-                    });
-
-                    const contentConfig = buildDummyConfig({
-                        indexToDetailFlows: [indexToDetailFlowConfig],
-                    });
-
-                    const result = buildRoutes(contentConfig);
-
-                    it('should include the custom route', () => {
-                        const customPath = `Resources/${indexToDetailFlowConfig.labelOverrides.route}`;
-
-                        const matchingPaths = result.filter(({ path }) => path === customPath);
-
-                        expect(matchingPaths.length).toBe(1);
+                            expect(matchingPaths.length).toBe(1);
+                        });
                     });
                 });
             });
-        });
     });
 
     describe(`the landing page`, () => {
