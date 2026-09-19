@@ -1005,6 +1005,97 @@ exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data 
 }
 `;
 
+exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Geospatial Map  should match the snapshot 1`] = `
+{
+  "description": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "description for map",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "description",
+    "name": "GeospatialMapCompositeIdentifier",
+    "schema": {
+      "id": {
+        "coscradDataType": "UUID",
+        "description": "unique ID for this geospatial map",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "id",
+      },
+      "type": {
+        "complexDataType": "ENUM",
+        "description": "must be: map",
+        "enumLabel": "type",
+        "enumName": "type",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "type",
+        "labelsAndValues": [
+          {
+            "label": "map",
+            "value": "map",
+          },
+        ],
+      },
+    },
+  },
+  "id": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "unique identifier",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "ID",
+  },
+  "name": {
+    "complexDataType": "NESTED_TYPE",
+    "description": "name for the map",
+    "isArray": false,
+    "isOptional": false,
+    "isPrivate": false,
+    "label": "name",
+    "name": "GeospatialMapCompositeIdentifier",
+    "schema": {
+      "id": {
+        "coscradDataType": "UUID",
+        "description": "unique ID for this geospatial map",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "id",
+      },
+      "type": {
+        "complexDataType": "ENUM",
+        "description": "must be: map",
+        "enumLabel": "type",
+        "enumName": "type",
+        "isArray": false,
+        "isOptional": false,
+        "isPrivate": false,
+        "label": "type",
+        "labelsAndValues": [
+          {
+            "label": "map",
+            "value": "map",
+          },
+        ],
+      },
+    },
+  },
+  "spatialFeatures": {
+    "coscradDataType": "NON_EMPTY_STRING",
+    "description": "description for the points",
+    "isArray": true,
+    "isOptional": true,
+    "isPrivate": false,
+    "label": "points",
+  },
+}
+`;
+
 exports[`Coscrad Data Schemas for aggregate root domain models the COSCRAD data schema for a Media Item  should match the snapshot 1`] = `
 {
   "dimensions": {

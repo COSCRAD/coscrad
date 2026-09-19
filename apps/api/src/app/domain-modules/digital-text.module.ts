@@ -11,10 +11,13 @@ import {
     AudioAddedForDigitalTextTitle,
     DigitalTextPageContentTranslated,
     DigitalTextTitleTranslated,
+    ImportPagesToDigitalTextCommandHandler,
     PageAddedToDigitalText,
     PagesImportedToDigitalText,
     TranslateDigitalTextPageContent,
+    TranslateDigitalTextPageContentCommandHandler,
     TranslateDigitalTextTitle,
+    TranslateDigitalTextTitleCommandHandler,
 } from '../../domain/models/digital-text/commands';
 import { AudioAddedForDigitalTextPageEventHandler } from '../../domain/models/digital-text/commands/add-audio-for-digital-text-page/audio-added-for-digital-text-page.event-handler';
 import { AudioAddedForDigitalTextTitleEventHandler } from '../../domain/models/digital-text/commands/add-audio-for-digital-text-title/audio-added-for-digital-text-title.event-handler';
@@ -52,6 +55,9 @@ import { DigitalTextQueryController } from '../controllers/resources/digital-tex
         AddPageToDigitalTextCommandHandler,
         AddContentToDigitalTextPageCommandHandler,
         AddAudioForDigitalTextPageCommandHandler,
+        TranslateDigitalTextTitleCommandHandler,
+        ImportPagesToDigitalTextCommandHandler,
+        TranslateDigitalTextPageContentCommandHandler,
         DigitalTextQueryService,
         DigitalTextCreatedEventHandler,
         DigitalTextTitleTranslatedEventHandler,
