@@ -6,11 +6,11 @@ import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
-import { Aggregate } from '../aggregate.entity';
+import { Resource } from '../resource.entity';
 import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
 
 @AggregateRoot(AggregateType.map)
-export class GeospatialMap extends Aggregate {
+export class GeospatialMap extends Resource {
     @NestedDataType(GeospatialMapCompositeIdentifier, {
         label: 'name',
         description: 'name for the map',
@@ -58,6 +58,11 @@ export class GeospatialMap extends Aggregate {
     }
 
     protected getExternalReferences(): AggregateCompositeIdentifier<AggregateType>[] {
+        return [];
+    }
+
+    // TODO put this on the view
+    protected getResourceSpecificAvailableCommands(): string[] {
         return [];
     }
 
