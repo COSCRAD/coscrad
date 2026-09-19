@@ -8,6 +8,7 @@ import { IVideoViewModel } from '../audio-item';
 import { IAudioItemViewModel } from '../audio-item/audio-item.view-model.interface';
 import { IBibliographicCitationViewModel } from '../bibliographic-citation';
 import { IDigitalTextViewModel } from '../digital-text/digital-text.view-model.interface';
+import { IGeospatialMapViewModel } from '../geospatial-maps/geospatial-map.view-model.interface';
 import { IMediaItemViewModel } from '../media-items';
 import { IPhotographViewModel } from '../photograph.view-model.interface';
 import { IPlayListViewModel } from '../playlist';
@@ -24,6 +25,7 @@ export type AggregateTypeToViewModel = {
     [AggregateType.photograph]: IPhotographViewModel;
     [AggregateType.song]: ISongViewModel;
     [AggregateType.spatialFeature]: ISpatialFeatureViewModel;
+    [AggregateType.map]: IGeospatialMapViewModel;
     [AggregateType.term]: ITermViewModel;
     [AggregateType.audioItem]: IAudioItemViewModel;
     [AggregateType.video]: IVideoViewModel;

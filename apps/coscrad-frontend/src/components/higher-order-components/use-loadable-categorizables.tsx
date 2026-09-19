@@ -13,6 +13,7 @@ import { ILoadable } from '../../store/slices/interfaces/loadable.interface';
 import { fetchFreshState } from '../../store/slices/utils/fetch-fresh-state';
 
 // Hack alert- we need a mapping layer to give us the plurals for our redux slice names
+// Better yet, we should avoid these lookup tables altogether
 type PluralCategorizableType = `${CategorizableType}s`;
 
 export type ViewModelIndexSnapshot = Pick<RootState, PluralCategorizableType>;

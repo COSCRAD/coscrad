@@ -40,6 +40,7 @@ const resourceTypeToAllowedContextTypes: Record<ResourceType, string[]> = {
         // EdgeConnectionContextType.point2D,
         // EdgeConnectionContextType.freeMultiline,
     ],
+    [ResourceType.map]: [EdgeConnectionContextType.general],
     [ResourceType.term]: [EdgeConnectionContextType.general, EdgeConnectionContextType.textField],
     [ResourceType.audioItem]: [
         EdgeConnectionContextType.general,

@@ -10,7 +10,7 @@ import {
     PlaylistPlay as PlaylistPlayIcon,
     Subscriptions as SubscriptionsIcon,
     Videocam as VideocamIcon,
-    VolumeUp as VolumeUpIcon
+    VolumeUp as VolumeUpIcon,
 } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
 import { displayLoadableWithErrorsAndLoading } from '../../../../components/higher-order-components';
@@ -47,6 +47,7 @@ const lookupTable: { [K in ResourceType]: JSX.Element } = {
     [ResourceType.video]: <VideocamIcon fontSize="inherit" />,
     [ResourceType.vocabularyList]: <ListIcon fontSize="inherit" />,
     [ResourceType.playlist]: <PlaylistPlayIcon fontSize="inherit" />,
+    [ResourceType.map]: <PlaceIcon fontSize="inherit" />,
 };
 
 const sizes = {

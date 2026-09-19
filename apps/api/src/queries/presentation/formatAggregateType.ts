@@ -20,10 +20,11 @@ const resourceTypeAndLabel: AggregateTypeAndLabel = {
     [ResourceType.photograph]: 'Photograph',
     [ResourceType.song]: 'Song',
     [ResourceType.spatialFeature]: 'Spatial Feature',
+    [ResourceType.map]: 'Geospatial Map',
     [ResourceType.term]: 'Term',
+    [ResourceType.vocabularyList]: 'Vocabulary List',
     [ResourceType.audioItem]: 'Transcribed Audio Item',
     [ResourceType.video]: 'Video',
-    [ResourceType.vocabularyList]: 'Vocabulary List',
     [ResourceType.playlist]: 'Playlist',
 };
 

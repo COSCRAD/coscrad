@@ -46,6 +46,9 @@ const lookupTable: {
     [CategorizableType.vocabularyList]: useLoadableVocabularyLists,
     [CategorizableType.note]: useLoadableNotes,
     [CategorizableType.playlist]: useLoadablePlaylists,
+    [CategorizableType.map]: () => {
+        throw new Error(`no hooks have been registered for maps`);
+    },
 };
 
 /**
