@@ -189,6 +189,7 @@ export default (uniqueIdOffset: number): EdgeConnection[] => {
         ResourceType.mediaItem,
         ResourceType.bibliographicCitation,
         ResourceType.vocabularyList,
+        ResourceType.map,
     ]);
 
     return [
