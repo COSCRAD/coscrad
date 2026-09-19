@@ -1,14 +1,27 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError } from '../../../lib/errors/InternalError';
+import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
 import { AggregateRoot } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
 import { Resource } from '../resource.entity';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
 
+@CoscradDataExample<GeospatialMap>({
+    example: {
+        type: ResourceType.map,
+        id: buildDummyUuid(1),
+        published: false,
+        name: buildMultilingualTextWithSingleItem('My map'),
+        description: buildMultilingualTextWithSingleItem('This is a description of my test map'),
+        spatialFeatures: [],
+    },
+})
 @AggregateRoot(AggregateType.map)
 export class GeospatialMap extends Resource {
     @NestedDataType(GeospatialMapCompositeIdentifier, {
