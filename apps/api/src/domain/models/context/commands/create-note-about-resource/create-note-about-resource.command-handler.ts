@@ -1,5 +1,5 @@
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
@@ -9,7 +9,6 @@ import {
     MultilingualTextItemRole,
 } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import buildAggregateFactory from '../../../../factories/build-aggregate-factory';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
@@ -34,7 +33,7 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
         text,
         languageCode,
     }: CreateNoteAboutResource): ResultOrError<EdgeConnection> {
-        const createDto: DTO<EdgeConnection> = {
+        const dto: DTO<EdgeConnection> = {
             type: AggregateType.note,
             id,
             // An EDGE_PUBLISHED event is required before this becomes `true`
@@ -60,8 +59,15 @@ export class CreateNoteAboutResourceCommandHandler extends BaseCreateCommandHand
             ],
         };
 
-        // TODO wrap this in the base handler and only build create DTO in this method
-        return buildAggregateFactory<EdgeConnection>(AggregateType.note)(createDto);
+        const instance = new EdgeConnection(dto);
+
+        const invariantValidationErrors = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationErrors)) {
+            return invariantValidationErrors;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState({

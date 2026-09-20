@@ -96,6 +96,11 @@ const resourceTypesThatHaveStandaloneQueryTests = [
     ResourceType.map,
 ];
 
+resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+    // avoid upstream issues due to unnecessary data
+    fullSnapshotOfResources[resourceType] = [];
+});
+
 describe('Access Control List and Role Based filtering in resource queries', () => {
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] Support event-sourced resources in this test

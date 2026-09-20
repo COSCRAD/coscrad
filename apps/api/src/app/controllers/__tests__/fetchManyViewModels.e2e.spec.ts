@@ -88,6 +88,11 @@ describe('When fetching multiple resources', () => {
         // TODO add standalone tests for media item, song, and bibliographic citation
     ];
 
+    resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+        // avoid upstream errors from unused data
+        resourceTestData[resourceType] = [];
+    });
+
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] opt-in to tests for event-sourced aggregates as well
         .filter((resourceType) => !resourceTypesThatHaveStandaloneQueryTests.includes(resourceType))

@@ -1,10 +1,9 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError } from '../../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../../lib/errors/InternalError';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
@@ -53,9 +52,15 @@ export class CreateBookBibliographicCitationCommandHandler extends BaseCreateCom
             },
         };
 
-        return getInstanceFactoryForResource<BookBibliographicCitation>(
-            ResourceType.bibliographicCitation
-        )(bookBibliographicCitationDto);
+        const instance = new BookBibliographicCitation(bookBibliographicCitationDto);
+
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

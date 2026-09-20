@@ -2,10 +2,10 @@ import { CommandHandler } from '@coscrad/commands';
 import { Inject } from '@nestjs/common';
 import { EVENT_PUBLISHER_TOKEN } from '../../../../../../domain/common';
 import { ICoscradEventPublisher } from '../../../../../../domain/common/events/interfaces';
+import { isInternalError } from '../../../../../../lib/errors/InternalError';
 import { REPOSITORY_PROVIDER_TOKEN } from '../../../../../../persistence/constants/persistenceConstants';
 import { DTO } from '../../../../../../types/DTO';
 import { ResultOrError } from '../../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
 import { IIdManager } from '../../../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../../../repositories/interfaces/repository-provider.interface';
@@ -44,7 +44,7 @@ export class CreateCourtCaseBibliographicCitationCommandHandler extends BaseCrea
         url,
         pages,
     }: CreateCourtCaseBibliographicCitation): ResultOrError<CourtCaseBibliographicCitation> {
-        const createDto: DTO<CourtCaseBibliographicCitation> = {
+        const dto: DTO<CourtCaseBibliographicCitation> = {
             type: ResourceType.bibliographicCitation,
             id,
             // a separate publication command is required
@@ -60,9 +60,15 @@ export class CreateCourtCaseBibliographicCitationCommandHandler extends BaseCrea
             },
         };
 
-        return getInstanceFactoryForResource<CourtCaseBibliographicCitation>(
-            ResourceType.bibliographicCitation
-        )(createDto);
+        const instance = new CourtCaseBibliographicCitation(dto);
+
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected buildEvent(

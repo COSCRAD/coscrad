@@ -91,11 +91,19 @@ export default class TestRepositoryProvider extends ArangoRepositoryProvider {
 
     // TODO fix types
     public async addResourcesOfManyTypes(snapshot: InMemorySnapshotOfResources): Promise<void> {
-        const writePromises = Object.entries(snapshot).map(([ResourceType, entityInstances]) =>
-            this.addResourcesOfSingleType(
-                ResourceType as ResourceType,
-                entityInstances as Resource[]
-            )
+        const writePromises = Object.entries(snapshot).flatMap(
+            ([ResourceType, entityInstances]) => {
+                if (entityInstances.length === 0) {
+                    return [];
+                }
+
+                return [
+                    this.addResourcesOfSingleType(
+                        ResourceType as ResourceType,
+                        entityInstances as Resource[]
+                    ),
+                ];
+            }
         );
 
         await Promise.all(writePromises);

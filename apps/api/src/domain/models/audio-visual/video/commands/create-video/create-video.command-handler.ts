@@ -10,10 +10,9 @@ import {
     MultilingualTextItemRole,
 } from '../../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../../../factories/get-instance-factory-for-resource';
 import { AggregateType } from '../../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../../types/DeluxeInMemoryStore';
-import { InMemorySnapshot, ResourceType } from '../../../../../types/ResourceType';
+import { InMemorySnapshot } from '../../../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../../shared/events/types/EventRecordMetadata';
@@ -48,8 +47,15 @@ export class CreateVideoCommandHandler extends BaseCreateCommandHandler<Video> {
             published: false,
         };
 
-        // the cast is necessary due to loss of type-safety from using a mixin
-        return getInstanceFactoryForResource<Video>(ResourceType.video)(videoItemDto);
+        const instance = new Video(videoItemDto);
+
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState({

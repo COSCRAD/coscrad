@@ -58,6 +58,11 @@ describe('GET  (fetch view models)', () => {
         ResourceType.spatialFeature,
     ];
 
+    resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+        // having data here could cause thrown errors upstream
+        resourceTestData[resourceType] = [];
+    });
+
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
         (accumulatedData: InMemorySnapshotOfResources, [resourceType, instances]) =>
             // We seed state differently for event-sourced aggregates
