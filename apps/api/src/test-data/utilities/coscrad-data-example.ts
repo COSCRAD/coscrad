@@ -1,11 +1,12 @@
+import 'reflect-metadata';
+// //////////////////////////////////// The above is a polyfill for the `Reflect` api and must come first
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { plainToClass } from 'class-transformer';
-import 'reflect-metadata';
 import { InternalError } from '../../lib/errors/InternalError';
 import { Ctor } from '../../lib/types/Ctor';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
-import { DTO } from '../../types/DTO';
 import { DeepPartial } from '../../types/DeepPartial';
+import { DTO } from '../../types/DTO';
 
 interface FromDto<T = unknown> {
     fromDto(dto: DTO<T>): T;
@@ -15,6 +16,12 @@ const isFromDto = <T = unknown>(input: unknown): input is FromDto<T> =>
     !isNullOrUndefined(input) && typeof (input as FromDto).fromDto === 'function';
 
 export const getCoscradDataExamples = <T = unknown>(target: Ctor<T>): DTO<T>[] => {
+    if (typeof target === 'undefined') {
+        throw new Error(
+            `Failed to manage data examples due to missing class reference. Expected a class constructor, received undefined. Do you have a circular build dependency?`
+        );
+    }
+
     const testMetadata = Reflect.getMetadata('SAMPLE', target);
 
     if (isNullOrUndefined(testMetadata)) return [];

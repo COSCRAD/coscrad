@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+// //////////////////////////////////// The above is a polyfill for the `Reflect` api and must come first
 import { bootstrapDynamicTypes, NonEmptyString, URL, UUID } from '../index';
 import {
     BindToViewState,

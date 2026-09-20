@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+// //////////////////////////////////// The above is a polyfill for the `Reflect` api and must come first
 import { CoscradDataType, SimpleCoscradPropertyTypeDefinition } from '../types';
 import { getCoscradDataSchema } from '../utilities';
 import { FromDomainModel } from './FromDomainModel';
