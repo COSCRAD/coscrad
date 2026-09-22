@@ -38,6 +38,11 @@ export interface UserIndexQueryOptionsStateTBA<T> {
     filter?: IUserDefinedFilter<T>;
 }
 
+/**
+ *
+ * A generic slice factory to enable pagination and filtering for other resources or
+ * aggregates when it becomes available in the api
+ */
 export const createUserIndexQueryOptionsSlice = <T>(name: string) => {
     const initialState: UserIndexQueryOptionsStateTBA<T> = {
         searchString: '',
