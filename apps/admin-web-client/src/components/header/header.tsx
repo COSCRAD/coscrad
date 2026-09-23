@@ -57,6 +57,13 @@ export const Header = (): JSX.Element => {
                         </Link>
                         &nbsp;|&nbsp;
                         <Link
+                            to="/spatialFeatures"
+                            style={{ textDecoration: 'none', color: '#aefff4ff' }}
+                        >
+                            Spatial Features
+                        </Link>
+                        &nbsp;|&nbsp;
+                        <Link
                             to="/contributors"
                             style={{ textDecoration: 'none', color: '#aefff4ff' }}
                         >
