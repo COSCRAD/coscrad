@@ -6,6 +6,7 @@ import { userLoginSucceeded } from '../components/auth/store/auth-slice';
 import { Footer } from '../components/footer/footer';
 import { Header } from '../components/header/header';
 import { Home } from '../components/home/home';
+import { SpatialFeatureIndexContainer } from '../components/resources/spatial-features/spatial-feature-index.container';
 import { TermContainer } from '../components/resources/terms/term-container';
 import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
@@ -42,6 +43,7 @@ export function App() {
                     <Route path="/terms/:id" element={<TermContainer />} />
                     <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
                     <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
+                    <Route path="/spatialFeatures/" element={<SpatialFeatureIndexContainer />} />
                     <Route path="/contributors/" element={<ContributorIndexPage />} />
                 </Routes>
             </Box>
