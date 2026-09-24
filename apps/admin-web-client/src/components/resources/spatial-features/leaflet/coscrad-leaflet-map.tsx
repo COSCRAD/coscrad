@@ -1,3 +1,4 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -5,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
-import { buildSpatialFeatureMarker } from './spatial-feature-marker';
+import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
 
 const CoscradMapContainer = styled(MapContainer)({
     left: '50%',
@@ -61,7 +62,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 // Should this be part of the config?
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
             />
-            {spatialFeatures.length > 0
+            {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
                 ? spatialFeatures.map((spatialFeature) => (
                       <SpatialFeatureMarker
                           key={spatialFeature.id}

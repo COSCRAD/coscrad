@@ -3,7 +3,7 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
 import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
-import { Marker as PointMarker, Popup as LeafletPopup } from 'react-leaflet';
+import { Popup as LeafletPopup, Marker as PointMarker } from 'react-leaflet';
 import { SpatialFeatureDetailPresenter } from '../map';
 import { Position2D } from '../types';
 
@@ -27,25 +27,26 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<Position2D>) => (
-        <PointMarker
-            key={spatialFeature.id}
-            position={spatialFeature.geometry.coordinates}
-            eventHandlers={{
-                click: () => handleClick(spatialFeature.id),
-            }}
-            ref={elRef}
-        >
-            {children}
-        </PointMarker>
-    ),
+    }: MarkerPresenterProps<Position2D>) => {
+        console.log({ children });
+        return (
+            <PointMarker
+                key={spatialFeature.id}
+                position={spatialFeature.geometry.coordinates}
+                eventHandlers={{
+                    click: () => handleClick(spatialFeature.id),
+                }}
+                ref={elRef}
+            >
+                {children}
+            </PointMarker>
+        );
+    },
 };
 
-const iconUrl =
-    'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=tng_icon_semi-rev'; //'https://www.digiteched.com/content/images/2022/12/marker-icon.png';
+const iconUrl = 'https://kaaltsidakah.net/raven/Map/XK-Xuuya.png';
 
-const shadowUrl =
-    'https://coscradapi.tsilhqotinlanguage.ca/api/resources/mediaItems/download?name=tng_icon_semi-rev'; //'https://www.digiteched.com/content/images/2022/12/marker-shadow.png';
+const shadowUrl = 'https://kaaltsidakah.net/raven/Map/marker-shadow.png';
 
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
@@ -111,7 +112,8 @@ export const buildSpatialFeatureMarker =
                 elRef={markerRef}
             >
                 <CoscradLeafletPopup>
-                    <div className="spatialMarker" data-testid={spatialFeature.id} />
+                    {'Hello World'}
+                    {/* <div className="spatialMarker" data-testid={spatialFeature.id} /> */}
                     <DetailPresenter {...spatialFeature} />
                 </CoscradLeafletPopup>
             </Presenter>
