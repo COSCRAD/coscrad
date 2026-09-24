@@ -1,9 +1,11 @@
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { CoscradLeafletMap } from './leaflet';
 import { spatialFeatureApi } from './store/spatial-feature.api';
+import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
 export const SpatialFeatureIndexContainer = (): JSX.Element => {
+    const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
+
     // May need to force a refetch under certain circumstances.  A
     // mutation may force a refetch
     const {
@@ -34,14 +36,11 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
     const spatialFeatures = renderedData?.entities;
 
     return (
-        <Stack>
-            {!isNullOrUndefined(spatialFeatures)
-                ? spatialFeatures.map(({ id, name: { items }, geometry, properties }) => (
-                      <Typography key={id} variant="h2">
-                          {items[0].text}
-                      </Typography>
-                  ))
-                : null}
-        </Stack>
+        <CoscradLeafletMap
+            spatialFeatures={spatialFeatures}
+            onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+            DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+            selectedSpatialFeatureId={selectedSpatialFeatureId}
+        />
     );
 };
