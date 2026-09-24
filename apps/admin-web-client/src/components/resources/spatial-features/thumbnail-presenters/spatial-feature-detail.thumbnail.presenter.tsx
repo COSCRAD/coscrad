@@ -34,7 +34,11 @@ export const SpatialFeatureDetailThumbnailPresenter = (
         throw new Error(`Spatial Feature: ${id} is missing its properties`);
     }
 
-    const { name, description, imageUrl } = properties;
+    const { name, description } = properties;
+
+    const imageUrl = 'https://kaaltsidakah.net/raven/Map/Previews/XK-Xuuya-Preview.png';
+
+    console.log({ imageUrl });
 
     const { type: geometryType } = geometry;
 
@@ -52,7 +56,7 @@ export const SpatialFeatureDetailThumbnailPresenter = (
             </Grid>
             <Grid item xs={9}>
                 <ResourceNamePresenter name={name} variant="h5" />
-                <SinglePropertyPresenter display="Description" value={description} />
+                <SinglePropertyPresenter display="Description" value={description.items[0].text} />
                 <SinglePropertyPresenter display="Feature Type" value={geometryType} />
             </Grid>
             <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
