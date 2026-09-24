@@ -15,8 +15,6 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
         isError,
     } = spatialFeatureApi.endpoints.fetchSpatialFeatures.useQuery();
 
-    console.log({ serverData });
-
     // This is the flicker free term set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)
     const [renderedData, setRenderedData] = useState(serverData);
@@ -34,6 +32,8 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
     if (isError) return <div>Error retrieving data.</div>;
 
     const spatialFeatures = renderedData?.entities;
+
+    console.log({ spatialFeatures });
 
     return (
         <CoscradLeafletMap
