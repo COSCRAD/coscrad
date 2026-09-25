@@ -61,7 +61,7 @@ export const SpatialFeatureDetailThumbnailPresenter = (
             </Grid>
             <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
                 <Box sx={{ pl: 8 }}>
-                    <Link to={`/resources/spatialFeatures/${id}`}>
+                    <Link to={`/spatialFeatures/${id}`}>
                         <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
                             <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
                         </IconButton>

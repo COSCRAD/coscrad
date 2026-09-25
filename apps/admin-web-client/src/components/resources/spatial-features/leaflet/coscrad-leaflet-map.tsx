@@ -3,8 +3,8 @@ import { styled } from '@mui/material';
 import { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
-import { INITIAL_CENTRE, INITIAL_ZOOM } from '../constants';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
 
@@ -18,10 +18,22 @@ const CoscradMapContainer = styled(MapContainer)({
     width: '100vw',
 });
 
+const ControlMapView = ({ center, zoom }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (center) {
+            map.setView(center, zoom);
+        }
+    }, [center, zoom, map]);
+    return null;
+};
+
 export const CoscradLeafletMap: ICoscradMap = ({
     spatialFeatures,
     initialCentre,
     initialZoom,
+    mapHeightPx,
     /**
      * We inject the detail presenter to decouple the map from the presentation
      * of the spatial feature in the popup. In the future, we could inject
@@ -48,7 +60,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
         <CoscradMapContainer
             sx={{
                 mt: { xs: '-3%', md: '-3.5%', qhd: '-5.5%', uhd: '-8%' },
-                height: { xs: '80vh' },
+                height: { xs: `${mapHeightPx || MAP_HEIGHT_PX}vh` },
             }}
             center={initialMapCentreCoordinates || INITIAL_CENTRE}
             zoom={initialZoom || INITIAL_ZOOM}
@@ -61,6 +73,10 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 attribution="&copy; ESRI and Contributors"
                 // Should this be part of the config?
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            />
+            <ControlMapView
+                center={initialMapCentreCoordinates || INITIAL_CENTRE}
+                zoom={initialZoom || INITIAL_ZOOM}
             />
             {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
                 ? spatialFeatures.map((spatialFeature) => (

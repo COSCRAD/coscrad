@@ -27,21 +27,18 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<Position2D>) => {
-        console.log({ children });
-        return (
-            <PointMarker
-                key={spatialFeature.id}
-                position={spatialFeature.geometry.coordinates}
-                eventHandlers={{
-                    click: () => handleClick(spatialFeature.id),
-                }}
-                ref={elRef}
-            >
-                {children}
-            </PointMarker>
-        );
-    },
+    }: MarkerPresenterProps<Position2D>) => (
+        <PointMarker
+            key={spatialFeature.id}
+            position={spatialFeature.geometry.coordinates}
+            eventHandlers={{
+                click: () => handleClick(spatialFeature.id),
+            }}
+            ref={elRef}
+        >
+            {children}
+        </PointMarker>
+    ),
 };
 
 const iconUrl = 'https://kaaltsidakah.net/raven/Map/XK-Xuuya.png';

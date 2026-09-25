@@ -33,8 +33,6 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
 
     const spatialFeatures = renderedData?.entities;
 
-    console.log({ spatialFeatures });
-
     return (
         <CoscradLeafletMap
             spatialFeatures={spatialFeatures}
