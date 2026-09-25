@@ -5,6 +5,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { NotImplementedException } from '@nestjs/common';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
@@ -107,6 +108,13 @@ export class GeospatialMap extends Resource {
         }
 
         this.name = updatedName;
+
+        return this;
+    }
+
+    add(spatialFeatureId: AggregateId) {
+        throw new NotImplementedException();
+        this.spatialFeatures.push(spatialFeatureId);
 
         return this;
     }
