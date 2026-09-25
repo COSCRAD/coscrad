@@ -7,7 +7,6 @@ export const ArangoResourceCollectionId = {
     photographs: 'photographs',
     spatial_features: 'spatial_features',
     maps: 'maps',
-    geospatial_map: 'geospatial_map',
     bibliographic_references: 'bibliographic_references',
     digital_texts: 'digital_texts',
     songs: 'songs',
