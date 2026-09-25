@@ -3,7 +3,6 @@ import {
     GeometricFeatureType,
     IMultilingualText,
     ISpatialFeatureProperties,
-    ISpatialFeatureViewModel,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { FromDomainModel, NestedDataType } from '@coscrad/data-types';
@@ -48,8 +47,7 @@ type GeometryViewModel = {
         },
     },
 })
-// do we need the interface here?
-export class SpatialFeatureViewModel implements ISpatialFeatureViewModel {
+export class SpatialFeatureViewModel {
     readonly type = ResourceType.spatialFeature;
 
     @ApiProperty({

@@ -1,4 +1,5 @@
 import { CommandHandlerService, FluxStandardAction } from '@coscrad/commands';
+import { BibliographicSubjectCreatorType } from '@coscrad/data-types';
 import { INestApplication } from '@nestjs/common';
 import setUpIntegrationTest from '../../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { InternalError } from '../../../../../lib/errors/InternalError';
@@ -72,6 +73,14 @@ describe(commandType, () => {
         const unpublishedResource = buildTestInstance(BookBibliographicCitation, {
             id: dummyUuid,
             published: false,
+            data: {
+                creators: [
+                    {
+                        name: 'Mytest Creator',
+                        type: BibliographicSubjectCreatorType.author,
+                    },
+                ],
+            },
         });
 
         const buildCommandFSA = (): FluxStandardAction<DTO<PublishResource>> => ({

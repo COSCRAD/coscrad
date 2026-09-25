@@ -113,6 +113,8 @@ export class ArangoConnectionProvider {
 
             'spatialFeature__VIEWS',
 
+            'map__VIEWS',
+
             'tag__VIEWS',
 
             'widget__VIEWS',

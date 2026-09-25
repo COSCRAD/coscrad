@@ -1,6 +1,6 @@
 import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
-import { InternalError } from '../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
@@ -10,6 +10,7 @@ import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIden
 import { AggregateId } from '../../types/AggregateId';
 import { Resource } from '../resource.entity';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { CreateMap } from './commands/create-map.command';
 
 @CoscradDataExample<GeospatialMap>({
     example: {
@@ -61,8 +62,9 @@ export class GeospatialMap extends Resource {
         return [];
     }
 
+    // TODO it's time to move this to the views
     getAvailableCommands(): string[] {
-        throw new Error('Method not implemented.');
+        return [];
     }
 
     getName(): MultilingualText {
@@ -78,7 +80,31 @@ export class GeospatialMap extends Resource {
         return [];
     }
 
-    fromMapCreated(): GeospatialMap | InternalError {
-        throw new Error('not implemented');
+    static fromUserRequest({
+        aggregateCompositeIdentifier: { id },
+        name,
+        languageCodeForDescription,
+        languageCodeForName,
+        description,
+    }: CreateMap): GeospatialMap | InternalError {
+        const instance = new GeospatialMap({
+            type: AggregateType.map,
+            id,
+            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
+            description: buildMultilingualTextWithSingleItem(
+                description,
+                languageCodeForDescription
+            ),
+            spatialFeatures: [],
+            published: false,
+        });
+
+        const validationResult = instance.validateInvariants();
+
+        if (isInternalError(validationResult)) {
+            return validationResult;
+        }
+
+        return instance;
     }
 }

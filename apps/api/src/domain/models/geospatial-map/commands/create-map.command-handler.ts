@@ -1,8 +1,7 @@
-import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
+import { InternalError } from '../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../types/ResultOrError';
-import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
@@ -16,32 +15,8 @@ import { MapCreated, MapCreatedPayload } from './map-created.event';
 
 @CommandHandler(CreateMap)
 export class CreateMapCommandHandler extends BaseCreateCommandHandler<GeospatialMap> {
-    protected createNewInstance({
-        aggregateCompositeIdentifier: { id },
-        name,
-        languageCodeForName,
-        description,
-        languageCodeForDescription,
-    }: CreateMap): ResultOrError<GeospatialMap> {
-        const instance = new GeospatialMap({
-            type: AggregateType.map,
-            id,
-            name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
-            description: buildMultilingualTextWithSingleItem(
-                description,
-                languageCodeForDescription
-            ),
-            spatialFeatures: [],
-            published: false,
-        });
-
-        const validationResult = instance.validateInvariants();
-
-        if (isInternalError(validationResult)) {
-            return validationResult;
-        }
-
-        return instance;
+    protected createNewInstance(command: CreateMap): ResultOrError<GeospatialMap> {
+        return GeospatialMap.fromUserRequest(command);
     }
 
     protected validateExternalState(
