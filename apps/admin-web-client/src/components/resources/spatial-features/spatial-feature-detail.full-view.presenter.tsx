@@ -1,0 +1,97 @@
+import {
+    AggregateType,
+    GeometricFeatureType,
+    ICategorizableDetailQueryResult,
+    ISpatialFeatureViewModel,
+} from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { Box, Grid, styled, Typography } from '@mui/material';
+import { useState } from 'react';
+import { buildDataAttributeForAggregateDetailComponent } from '../../shared/build-data-attribute-for-aggregate-detail-component';
+import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
+import { FunctionalComponent } from '../../shared/types';
+import { getOriginalTextItem } from '../terms/term-detail.page';
+import { CoscradLeafletMap } from './leaflet';
+import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
+import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
+
+const StyledCoscradMap = styled(Box)({
+    marginBottom: '20px',
+});
+
+interface HasCoordinates<T = unknown> {
+    coordinates: T;
+}
+
+const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordinates> } = {
+    [GeometricFeatureType.point]: PointTextPresenter,
+};
+
+const StyledPlaceIcon = styled('img')({
+    width: '66px',
+});
+
+export const SpatialFeatureDetailFullViewPresenter = (
+    // TODO[https://www.pivotaltracker.com/story/show/187668991] Flow through the contributions
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
+): JSX.Element => {
+    // useQuery to retrieve spatialFeatureById
+
+    const { id, geometry, properties } = spatialFeature;
+
+    const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(id);
+
+    if (!geometry) {
+        throw new Error(`Spatial Feature: ${id} is missing geometry definition`);
+    }
+
+    if (!properties) {
+        throw new Error(`Spatial Feature: ${id} is missing its properties`);
+    }
+
+    const { name, description, imageUrl } = properties;
+
+    const originalName = getOriginalTextItem(name);
+
+    const { type: geometryType, coordinates } = geometry;
+
+    const CoordinatesTextPresenter = lookupTable[geometryType];
+
+    if (isNullOrUndefined(CoordinatesTextPresenter)) {
+        throw new Error(
+            `There is no coordinates text presenter registered for coordinates of geometry type: ${geometryType}`
+        );
+    }
+
+    return (
+        <>
+            <StyledCoscradMap>
+                <CoscradLeafletMap
+                    spatialFeatures={[spatialFeature]}
+                    onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+                    DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
+                    selectedSpatialFeatureId={selectedSpatialFeatureId}
+                />
+            </StyledCoscradMap>
+            <Grid container spacing={0}>
+                <Grid item xs={3}>
+                    <div
+                        data-testid={buildDataAttributeForAggregateDetailComponent(
+                            AggregateType.spatialFeature,
+                            id
+                        )}
+                    />
+                    {/* Preview will eventually include images taken from video or photos, etc. */}
+                    <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
+                </Grid>
+                <Grid item xs={9}>
+                    <Typography variant="h5">{originalName.text}</Typography>
+                    <SinglePropertyPresenter display="ID" value={id} />
+                    <SinglePropertyPresenter display="Description" value={description} />
+                    <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                    <CoordinatesTextPresenter coordinates={coordinates} />
+                </Grid>
+            </Grid>
+        </>
+    );
+};

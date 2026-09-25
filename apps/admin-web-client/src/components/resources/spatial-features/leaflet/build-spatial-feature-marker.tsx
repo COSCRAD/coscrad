@@ -1,7 +1,7 @@
 import { GeometricFeatureType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { styled } from '@mui/material';
-import { Icon as LeafletIcon, Marker as LeafletMarker } from 'leaflet';
+import { Icon as LeafletIcon, Marker as LeafletMarker, PointTuple } from 'leaflet';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import { Popup as LeafletPopup, Marker as PointMarker } from 'react-leaflet';
 import { SpatialFeatureDetailPresenter } from '../map';
@@ -78,8 +78,10 @@ export const buildSpatialFeatureMarker =
         }, [markerRef, spatialFeature.id, customEffects]);
 
         const {
-            geometry: { type: geometryType },
+            geometry: { type: geometryType, coordinates },
         } = spatialFeature;
+
+        const popupPosition = coordinates as unknown as PointTuple;
 
         /**
          * This is a workaround to get the default icon shadows (marker-shadow.png) to
@@ -89,7 +91,7 @@ export const buildSpatialFeatureMarker =
         const DefaultIcon = new LeafletIcon({
             iconUrl,
             shadowUrl,
-            iconAnchor: [12, 41],
+            iconAnchor: [15, 41],
             shadowAnchor: [10, 42],
         });
 
@@ -112,8 +114,7 @@ export const buildSpatialFeatureMarker =
                 elRef={markerRef}
             >
                 <CoscradLeafletPopup>
-                    {'Hello World'}
-                    {/* <div className="spatialMarker" data-testid={spatialFeature.id} /> */}
+                    <div className="spatialMarker" data-testid={spatialFeature.id} />
                     <DetailPresenter {...spatialFeature} />
                 </CoscradLeafletPopup>
             </Presenter>
