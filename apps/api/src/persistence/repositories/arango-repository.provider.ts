@@ -121,14 +121,15 @@ export class ArangoRepositoryProvider implements IRepositoryProvider {
 
         // TODO "strangle out the old snapshot approach and remove this check"
         const eventSourcedAggregateTypes = [
-            AggregateType.song,
-            AggregateType.digitalText,
-            AggregateType.term,
-            AggregateType.vocabularyList,
-            AggregateType.playlist,
             AggregateType.audioItem,
-            AggregateType.video,
+            AggregateType.digitalText,
+            AggregateType.map,
+            AggregateType.playlist,
+            AggregateType.song,
             AggregateType.spatialFeature,
+            AggregateType.term,
+            AggregateType.video,
+            AggregateType.vocabularyList,
             // TODO [https://coscrad.atlassian.net/browse/CWEBJIRA-281] add photograph here
         ];
 
