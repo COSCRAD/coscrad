@@ -1,6 +1,7 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../../test-data/utilities';
+import { CoscradEvent } from '../../../common';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateType } from '../../../types/AggregateType';
 import { BaseEvent } from '../../shared/events/base-event.entity';
@@ -55,6 +56,7 @@ const testEventId = buildDummyUuid(3);
         },
     },
 })
+@CoscradEvent('MAP_CREATED')
 export class MapCreated extends BaseEvent<MapCreatedPayload> {
     readonly type = 'MAP_CREATED';
 }
