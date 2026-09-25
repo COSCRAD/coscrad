@@ -158,6 +158,7 @@ const eventSourcedResourceTypes = [
     ResourceType.audioItem,
     ResourceType.video,
     ResourceType.spatialFeature,
+    ResourceType.map,
 ];
 
 const comprehensiveValidFSAs = notesToCreate

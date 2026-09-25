@@ -9,7 +9,6 @@ import { EVENT_PUBLISHER_TOKEN } from '../../../common';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { ICoscradEventPublisher } from '../../../common/events/interfaces';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { IIdManager } from '../../../interfaces/id-manager.interface';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { IRepositoryProvider } from '../../../repositories/interfaces/repository-provider.interface';
@@ -53,7 +52,7 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
         name,
         languageCodeForName,
     }: CreatePlayList): ResultOrError<Playlist> {
-        const createDto: DTO<Playlist> = {
+        const dto: DTO<Playlist> = {
             id,
             type: AggregateType.playlist,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
@@ -61,11 +60,15 @@ export class CreatePlayListCommandHandler extends BaseCreateCommandHandler<Playl
             published: false,
         };
 
-        const newInstanceOrError = getInstanceFactoryForResource<Playlist>(ResourceType.playlist)(
-            createDto
-        );
+        const instance = new Playlist(dto);
 
-        return newInstanceOrError;
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState(

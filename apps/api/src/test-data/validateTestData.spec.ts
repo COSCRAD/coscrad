@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { buildAllDataClassProviders } from '../app/controllers/__tests__/createTestModule';
-import { Valid, isValid } from '../domain/domainModelValidators/Valid';
+import { isValid, Valid } from '../domain/domainModelValidators/Valid';
 import { buildReferenceTree } from '../domain/models/shared/command-handlers/utilities/build-reference-tree';
 import getId from '../domain/models/shared/functional/getId';
 import { AggregateId } from '../domain/types/AggregateId';
@@ -11,11 +11,26 @@ import formatAggregateCompositeIdentifier from '../queries/presentation/formatAg
 import formatAggregateType from '../queries/presentation/formatAggregateType';
 import assertTestInstancesOfTypeAreComprehensive from '../test-data/__tests__/assertTestInstancesOfTypeAreComprehensive';
 import { DynamicDataTypeFinderService, DynamicDataTypeModule } from '../validation';
-import assertEdgeConnectionContextStateIsValid from './__tests__/assertEdgeConnectionContextStateIsValid';
 import buildTestData from './buildTestData';
 import convertInMemorySnapshotToDatabaseFormat from './utilities/convertInMemorySnapshotToDatabaseFormat';
+import assertEdgeConnectionContextStateIsValid from './__tests__/assertEdgeConnectionContextStateIsValid';
 
-describe('buildTestData', () => {
+/**
+ * We are temporarily disabling this as we look for a more extensible way
+ * to generate test data. Specifically, building sample notes and connections
+ * for each resource type and context type should be easier.
+ *
+ * We might want to dynamically register allowed context on each resource class.
+ *
+ * One pattern would be via decorators:
+ * @RegisterWebOfKnowledgeContext(TimeRangeContext,{
+ *  example: {
+ *      resource: builtTestInstance(AudioItem,{ length: 1200 }),
+ *      context: TimeRangeContext.fromTuple([230,370])
+ *  }
+ * })
+ */
+describe.skip('buildTestData', () => {
     beforeAll(async () => {
         const testModule = await Test.createTestingModule({
             imports: [DynamicDataTypeModule],

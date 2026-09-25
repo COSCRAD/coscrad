@@ -81,17 +81,25 @@ const checkThatDetailQueryDoesNotFind = async (
 const fullSnapshotOfResources = buildTestData().resources;
 
 const resourceTypesThatHaveStandaloneQueryTests = [
+    // TODO Caqn we get rid of this?
     ResourceType.digitalText,
     ResourceType.photograph,
     ResourceType.term,
     ResourceType.vocabularyList,
     ResourceType.playlist,
+    ResourceType.map,
     // TODO write standalone query test for these
     ResourceType.song,
     ResourceType.audioItem,
     ResourceType.video,
     ResourceType.spatialFeature,
+    ResourceType.map,
 ];
+
+resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+    // avoid upstream issues due to unnecessary data
+    fullSnapshotOfResources[resourceType] = [];
+});
 
 describe('Access Control List and Role Based filtering in resource queries', () => {
     Object.values(ResourceType)

@@ -22,6 +22,7 @@ const categorizableTypeAndPluralLabel: CategorizableTypeAndPluralLabel = {
     [CategorizableType.playlist]: 'Playlists',
     // Notes
     [CategorizableType.note]: 'Notes',
+    [CategorizableType.map]: 'Maps',
 };
 
 export const buildPluralLabelsMapForCategorizableTypes = () =>

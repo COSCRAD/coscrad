@@ -4,13 +4,12 @@ import {
     MultilingualTextItemRole,
 } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { MultilingualText } from '../../../../common/entities/multilingual-text';
 import { Valid } from '../../../../domainModelValidators/Valid';
-import buildAggregateFactory from '../../../../factories/build-aggregate-factory';
 import { AggregateType } from '../../../../types/AggregateType';
 import { DeluxeInMemoryStore } from '../../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../types/ResourceType';
@@ -70,7 +69,15 @@ export class ConnectResourcesWithNoteCommandHandler extends BaseCreateCommandHan
             ],
         };
 
-        return buildAggregateFactory<EdgeConnection>(AggregateType.note)(createDto);
+        const instance = new EdgeConnection(createDto);
+
+        const invariantValidationErrors = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationErrors)) {
+            return invariantValidationErrors;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState({

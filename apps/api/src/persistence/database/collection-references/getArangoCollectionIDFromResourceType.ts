@@ -13,6 +13,7 @@ const resourceTypeToArangoCollectionID: {
     [ResourceType.audioItem]: ArangoResourceCollectionId.audio_items,
     [ResourceType.photograph]: ArangoResourceCollectionId.photographs,
     [ResourceType.spatialFeature]: ArangoResourceCollectionId.spatial_features,
+    [ResourceType.map]: ArangoResourceCollectionId.maps,
     [ResourceType.bibliographicCitation]: ArangoResourceCollectionId.bibliographic_references,
     [ResourceType.digitalText]: ArangoResourceCollectionId.digital_texts,
     [ResourceType.song]: ArangoResourceCollectionId.songs,

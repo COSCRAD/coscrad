@@ -16,4 +16,4 @@ const PlaylistSlice = createSlice({
     },
 });
 
-export const PlaylistReducer = PlaylistSlice.reducer;
+export const playlistReducer = PlaylistSlice.reducer;

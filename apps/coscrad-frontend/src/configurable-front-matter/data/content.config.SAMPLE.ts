@@ -1,4 +1,4 @@
-import { CategorizableType, LanguageCode, MIMEType } from '@coscrad/api-interfaces';
+import { CategorizableType, LanguageCode, MIMEType, ResourceType } from '@coscrad/api-interfaces';
 import { ConfigurableContent, DetailViewType } from './configurable-content-schema';
 
 export const contentConfig: ConfigurableContent = {
@@ -14,7 +14,8 @@ export const contentConfig: ConfigurableContent = {
     organizationLogoUrl:
         'https://coscrad.org/wp-content/uploads/2023/05/Coscrad-alt-logo-prototype.png',
     indexToDetailFlows: Object.values(CategorizableType)
-        .filter((t) => t !== CategorizableType.playlist)
+        // this can server as a keystone for new work-in-progress resources
+        .filter((t) => ![ResourceType.map].includes(t as ResourceType))
         .map((categorizableType) => ({
             categorizableType,
             detailViewType: DetailViewType.fullView,

@@ -50,12 +50,18 @@ describe('GET  (fetch view models)', () => {
         ResourceType.vocabularyList,
         ResourceType.photograph,
         ResourceType.playlist,
+        ResourceType.map,
         //TODO write standalone query test for these
         ResourceType.song,
         ResourceType.audioItem,
         ResourceType.video,
         ResourceType.spatialFeature,
     ];
+
+    resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+        // having data here could cause thrown errors upstream
+        resourceTestData[resourceType] = [];
+    });
 
     const testDataWithAllResourcesPublished = Object.entries(resourceTestData).reduce(
         (accumulatedData: InMemorySnapshotOfResources, [resourceType, instances]) =>

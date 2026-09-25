@@ -1,3 +1,4 @@
+import { GeospatialMap } from '../domain/models/geospatial-map/geospatial-map.entity';
 import { MediaItem } from '../domain/models/media-item/entities/media-item.entity';
 import { AggregateType } from '../domain/types/AggregateType';
 import { PartialSnapshot } from '../domain/types/PartialSnapshot';
@@ -31,6 +32,7 @@ export default (): PartialSnapshot => ({
     [ResourceType.bibliographicCitation]: buildBibliographicCitationTestData(),
     [ResourceType.digitalText]: buildDigitalTextTestData(),
     [ResourceType.song]: buildSongTestData(),
+    [ResourceType.map]: getCoscradDataExamples(GeospatialMap).map((dto) => new GeospatialMap(dto)),
     /**
      * TODO Eventually we can do this completely dynamically using reflection
      * on the classes annotated with `@AggregateRoot`

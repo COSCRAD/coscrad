@@ -79,6 +79,7 @@ describe('When fetching multiple resources', () => {
         AggregateType.vocabularyList,
         AggregateType.photograph,
         AggregateType.playlist,
+        AggregateType.map,
         // TODO add standalone query test for song
         AggregateType.song,
         AggregateType.audioItem,
@@ -86,6 +87,11 @@ describe('When fetching multiple resources', () => {
         AggregateType.spatialFeature,
         // TODO add standalone tests for media item, song, and bibliographic citation
     ];
+
+    resourceTypesThatHaveStandaloneQueryTests.forEach((resourceType) => {
+        // avoid upstream errors from unused data
+        resourceTestData[resourceType] = [];
+    });
 
     Object.values(ResourceType)
         // TODO [https://www.pivotaltracker.com/story/show/185903292] opt-in to tests for event-sourced aggregates as well

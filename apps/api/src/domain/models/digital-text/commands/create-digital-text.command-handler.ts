@@ -5,7 +5,6 @@ import { DTO } from '../../../../types/DTO';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { Valid } from '../../../domainModelValidators/Valid';
-import getInstanceFactoryForResource from '../../../factories/get-instance-factory-for-resource';
 import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
 import { InMemorySnapshot, ResourceType } from '../../../types/ResourceType';
 import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
@@ -23,7 +22,7 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
         languageCodeForTitle,
         aggregateCompositeIdentifier: { id },
     }: CreateDigitalText): ResultOrError<DigitalText> {
-        const createDto: DTO<DigitalText> = {
+        const dto: DTO<DigitalText> = {
             type: AggregateType.digitalText,
             id,
             published: false,
@@ -41,12 +40,15 @@ export class CreateDigitalTextCommandHandler extends BaseCreateCommandHandler<Di
             pages: [],
         };
 
-        // TODO: consider using our new aggregate root decorator to build this
-        const newInstanceOrError = getInstanceFactoryForResource<DigitalText>(
-            ResourceType.digitalText
-        )(createDto);
+        const instance = new DigitalText(dto);
 
-        return newInstanceOrError;
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState(): Promise<InMemorySnapshot> {

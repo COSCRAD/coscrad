@@ -1,6 +1,4 @@
-import {
-    CategorizableType
-} from '@coscrad/api-interfaces';
+import { CategorizableType } from '@coscrad/api-interfaces';
 import { FunctionalComponent } from '../../../utils/types/functional-component';
 import { NoteDetailFullViewPresenter } from '../../notes/note-detail.full-view.presenter';
 import { AudioItemDetailFullViewPresenter } from '../audio-item/audio-item-detail.full-view.presenter';
@@ -30,6 +28,9 @@ const lookupTable: { [K in CategorizableType]: FunctionalComponent } = {
     [CategorizableType.video]: VideoDetailFullViewPresenter,
     [CategorizableType.vocabularyList]: VocabularyListDetailFullViewPresenter,
     [CategorizableType.playlist]: PlaylistDetailFullViewPresenter,
+    [CategorizableType.map]: () => {
+        throw new Error(`not implemented`);
+    },
     [CategorizableType.note]: NoteDetailFullViewPresenter,
 };
 

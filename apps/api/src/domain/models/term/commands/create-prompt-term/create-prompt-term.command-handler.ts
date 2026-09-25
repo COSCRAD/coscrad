@@ -1,9 +1,4 @@
-import {
-    AggregateType,
-    LanguageCode,
-    MultilingualTextItemRole,
-    ResourceType,
-} from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { DeluxeInMemoryStore } from '../../../../..//domain/types/DeluxeInMemoryStore';
 import { InMemorySnapshot } from '../../../../..//domain/types/ResourceType';
@@ -12,10 +7,9 @@ import {
     MultilingualTextItem,
 } from '../../../../../domain/common/entities/multilingual-text';
 import { Valid } from '../../../../../domain/domainModelValidators/Valid';
-import { InternalError } from '../../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../../lib/errors/InternalError';
 import { isNotFound } from '../../../../../lib/types/not-found';
 import { ResultOrError } from '../../../../../types/ResultOrError';
-import getInstanceFactoryForResource from '../../../../factories/get-instance-factory-for-resource';
 import { BaseCreateCommandHandler } from '../../../shared/command-handlers/base-create-command-handler';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
@@ -46,9 +40,7 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
             ],
         });
 
-        const factory = getInstanceFactoryForResource(ResourceType.term);
-
-        const createDto = {
+        const dto = {
             type: AggregateType.term,
             id,
             text,
@@ -59,8 +51,15 @@ export class CreatePromptTermCommandHandler extends BaseCreateCommandHandler<Ter
             }),
         };
 
-        // TODO Rewrite the base create handler to take in a createDto only
-        return factory(createDto) as ResultOrError<Term>;
+        const instance = new Term(dto);
+
+        const invariantValidationResult = instance.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            return invariantValidationResult;
+        }
+
+        return instance;
     }
 
     protected async fetchRequiredExternalState({

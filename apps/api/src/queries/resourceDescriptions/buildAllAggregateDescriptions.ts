@@ -60,6 +60,10 @@ const resourceDescriptions: Pick<AggregateInfo, 'type' | 'description'>[] = [
         description: 'A media item is a digital representation of an audio or video recording.',
     },
     {
+        type: ResourceType.map,
+        description: 'A map is a curated collection of related places',
+    },
+    {
         type: CategorizableType.note,
         description:
             'A note contextualizes a resource in itself or in relation to another resource',

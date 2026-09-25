@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+// //////////////////////////////////// The above is a polyfill for the `Reflect` api and must come first
 import getCoscradDataSchema from '../lib/utilities/getCoscradDataSchema';
 import buildSimpleValidationFunction from '../lib/validation/buildSimpleValidationFunction';
 

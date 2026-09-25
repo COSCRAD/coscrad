@@ -4,10 +4,6 @@ import { isNotFound } from '../../lib/types/not-found';
 import { InMemoryDatabaseSnapshot } from '../../test-data/utilities/convertInMemorySnapshotToDatabaseFormat';
 import { ArangoQueryRunner } from '../database/arango-query-runner';
 
-/**
- * TODO [test-coverage] [https://github.com/COSCRAD/coscrad/pull/381#discussion_r1198018120]
- * We need a test of this class.
- */
 export class ArangoDataExporter {
     constructor(private readonly arangoQueryRunner: ArangoQueryRunner) {}
 

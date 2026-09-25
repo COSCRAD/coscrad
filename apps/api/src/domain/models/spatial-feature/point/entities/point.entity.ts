@@ -7,7 +7,7 @@ import { InternalError, isInternalError } from '../../../../../lib/errors/Intern
 import { ValidationResult } from '../../../../../lib/errors/types/ValidationResult';
 import { Maybe } from '../../../../../lib/types/maybe';
 import formatAggregateCompositeIdentifier from '../../../../../queries/presentation/formatAggregateCompositeIdentifier';
-import { buildTestInstance, CoscradDataExample } from '../../../../../test-data/utilities';
+import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { DTO } from '../../../../../types/DTO';
 import { ResultOrError } from '../../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../../common/build-multilingual-text-with-single-item';
@@ -37,10 +37,10 @@ import { SpatialFeatureProperties } from './spatial-feature-properties.entity';
         type: ResourceType.spatialFeature,
         published: false,
         id: buildDummyUuid(123),
-        geometry: buildTestInstance(GeometricFeature, {
+        geometry: {
             type: GeometricFeatureType.point,
             coordinates: PointCoordinates.fromTuple([22, -55]),
-        }),
+        },
         properties: {
             description: buildMultilingualTextWithSingleItem('The place to be!'),
             name: buildMultilingualTextWithSingleItem('My Point'),

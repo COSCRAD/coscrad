@@ -1,0 +1,52 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { CommandHandler } from '@coscrad/commands';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { ResultOrError } from '../../../../types/ResultOrError';
+import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
+import { Valid } from '../../../domainModelValidators/Valid';
+import { DeluxeInMemoryStore } from '../../../types/DeluxeInMemoryStore';
+import { InMemorySnapshot } from '../../../types/ResourceType';
+import { BaseCreateCommandHandler } from '../../shared/command-handlers/base-create-command-handler';
+import { BaseEvent, IEventPayload } from '../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../shared/events/types/EventRecordMetadata';
+import { GeospatialMap } from '../geospatial-map.entity';
+import { CreateMap } from './create-map.command';
+import { MapCreated, MapCreatedPayload } from './map-created.event';
+
+@CommandHandler(CreateMap)
+export class CreateMapCommandHandler extends BaseCreateCommandHandler<GeospatialMap> {
+    protected createNewInstance(command: CreateMap): ResultOrError<GeospatialMap> {
+        return GeospatialMap.fromUserRequest(command);
+    }
+
+    protected validateExternalState(
+        state: InMemorySnapshot,
+        instance: GeospatialMap
+    ): InternalError | Valid {
+        return instance.validateExternalState(state);
+    }
+    // TODO- fetch all spatial features with the same coordinates within a small threshold
+    protected async fetchRequiredExternalState(_command?: CreateMap): Promise<InMemorySnapshot> {
+        return new DeluxeInMemoryStore({}).fetchFullSnapshotInLegacyFormat();
+    }
+
+    protected buildEvent(
+        payload: CreateMap,
+        eventMeta: EventRecordMetadata
+    ): BaseEvent<IEventPayload> {
+        const eventPayload: MapCreatedPayload = {
+            aggregateCompositeIdentifier: payload.aggregateCompositeIdentifier,
+            name: new MultilingualTextItem({
+                text: 'name of the map',
+                languageCode: LanguageCode.Chilcotin,
+                role: MultilingualTextItemRole.original,
+            }),
+            description: new MultilingualTextItem({
+                text: 'description of the map',
+                languageCode: LanguageCode.English,
+                role: MultilingualTextItemRole.original,
+            }),
+        };
+        return new MapCreated(eventPayload, eventMeta);
+    }
+}

@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+// //////////////////////////////////// The above is a polyfill for the `Reflect` api and must come first
 import {
     AggregateType,
     CoscradUserRole,
@@ -7,28 +9,27 @@ import {
     LanguageCode,
 } from '@coscrad/api-interfaces';
 import { INestApplication } from '@nestjs/common';
-import 'reflect-metadata';
 import * as request from 'supertest';
 import httpStatusCodes, { HttpStatusCode } from '../../../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../../../app/controllers/__tests__/setUpIntegrationTest';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import {
     TermViewForVocabularyListEntry,
     VocabularyListViewModel,
 } from '../../../../queries/buildViewModelForResource/viewModels/vocabulary-list.view-model';
 import { buildTestInstance } from '../../../../test-data/utilities';
-import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { buildMultilingualTextFromBilingualText } from '../../../common/build-multilingual-text-from-bilingual-text';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
-import { assertQueryResult } from '../../__tests__';
-import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
+import getValidAggregateInstanceForTest from '../../../__tests__/utilities/getValidAggregateInstanceForTest';
 import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { ContributionSummary } from '../../user-management';
 import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../user-management/user/entities/user/coscrad-user.entity';
+import { assertQueryResult } from '../../__tests__';
+import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import {
     IVocabularyListQueryRepository,
     VOCABULARY_LIST_QUERY_REPOSITORY_TOKEN,

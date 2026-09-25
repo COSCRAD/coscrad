@@ -46,6 +46,9 @@ const lookupTable: {
     // System Aggregates
     [AggregateType.category]: useLoadableCategoryTree,
     [AggregateType.tag]: useLoadableTagById,
+    [AggregateType.map]: () => {
+        throw new Error(`no search hook exists for geospatial maps`);
+    },
 };
 
 /**
