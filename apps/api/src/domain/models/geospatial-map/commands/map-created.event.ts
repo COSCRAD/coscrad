@@ -1,16 +1,26 @@
 import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { NestedDataType } from '@coscrad/data-types';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import { AggregateType } from '../../../types/AggregateType';
 import { BaseEvent } from '../../shared/events/base-event.entity';
-import { SpatialFeatureCompositeIdentifier } from '../../spatial-feature/point/commands';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
+import { GeospatialMapCompositeIdentifier } from './create-map.command';
 
 export class MapCreatedPayload {
-    aggregateCompositeIdentifier: SpatialFeatureCompositeIdentifier;
+    @NestedDataType(GeospatialMapCompositeIdentifier, {
+        label: 'composite ID',
+        description: 'system wide unique identifier to this map',
+    })
+    aggregateCompositeIdentifier: GeospatialMapCompositeIdentifier;
+
+    @NestedDataType(MultilingualTextItem, {
+        label: 'name',
+        description: `the map's name (and language used for naming)`,
+    })
     name: MultilingualTextItem;
-    languageCodeForName: LanguageCode;
+
     description: MultilingualTextItem;
 }
 
@@ -30,7 +40,6 @@ const testEventId = buildDummyUuid(3);
                 text: '5K trail',
                 role: MultilingualTextItemRole.original,
             },
-            languageCodeForName: LanguageCode.English,
             description: {
                 languageCode: LanguageCode.Chinook,
                 text: 'Description of my test map',

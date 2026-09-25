@@ -10,12 +10,11 @@ import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIden
 import { AggregateId } from '../../types/AggregateId';
 import { Resource } from '../resource.entity';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
-import { GeospatialMapCompositeIdentifier } from './commands/create-map.command';
 
 @CoscradDataExample<GeospatialMap>({
     example: {
         type: ResourceType.map,
-        id: buildDummyUuid(1),
+        id: buildDummyUuid(961),
         published: false,
         name: buildMultilingualTextWithSingleItem('My map'),
         description: buildMultilingualTextWithSingleItem('This is a description of my test map'),
@@ -24,13 +23,13 @@ import { GeospatialMapCompositeIdentifier } from './commands/create-map.command'
 })
 @AggregateRoot(AggregateType.map)
 export class GeospatialMap extends Resource {
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+    @NestedDataType(MultilingualText, {
         label: 'name',
         description: 'name for the map',
     })
     name: MultilingualText;
 
-    @NestedDataType(GeospatialMapCompositeIdentifier, {
+    @NestedDataType(MultilingualText, {
         label: 'description',
         description: 'description for map',
     })

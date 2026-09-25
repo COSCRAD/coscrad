@@ -1,6 +1,6 @@
 import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
-import { InternalError } from '../../../../lib/errors/InternalError';
+import { InternalError, isInternalError } from '../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../common/entities/multilingual-text';
@@ -23,7 +23,7 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
         description,
         languageCodeForDescription,
     }: CreateMap): ResultOrError<GeospatialMap> {
-        return new GeospatialMap({
+        const instance = new GeospatialMap({
             type: AggregateType.map,
             id,
             name: buildMultilingualTextWithSingleItem(name, languageCodeForName),
@@ -34,6 +34,14 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
             spatialFeatures: [],
             published: false,
         });
+
+        const validationResult = instance.validateInvariants();
+
+        if (isInternalError(validationResult)) {
+            return validationResult;
+        }
+
+        return instance;
     }
 
     protected validateExternalState(
@@ -58,7 +66,6 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
                 languageCode: LanguageCode.Chilcotin,
                 role: MultilingualTextItemRole.original,
             }),
-            languageCodeForName: LanguageCode.Chilcotin,
             description: new MultilingualTextItem({
                 text: 'description of the map',
                 languageCode: LanguageCode.English,
