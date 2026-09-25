@@ -16,8 +16,10 @@ import TestRepositoryProvider from '../../../../../persistence/repositories/__te
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
 import { DynamicDataTypeFinderService } from '../../../../../validation';
+import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
+import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
 import { GeospatialMap } from '../../geospatial-map.entity';
 import { MapCreated } from '../map-created.event';
 import { AddSpatialFeatureToMap } from './add-spatial-feature-to-map.command';
@@ -105,7 +107,29 @@ describe(commandType, () => {
 
     describe(`when the command is valid`, () => {
         it(`should add the spatial feature to map`, async () => {
-            const existingEmptyMapCreated = GeospatialMap.fromEventHistory;
+            const existingEmptyMapCreated = GeospatialMap.fromEventHistory(
+                eventHistoryForExistingEmptyMapCreated,
+                geospatialId
+            ) as GeospatialMap;
+
+            await assertCommandSuccess(assertionHelperDependencies, {
+                systemUserId: dummySystemUserId,
+                seedInitialState: async () => {
+                    await testRepositoryProvider
+                        .forResource(AggregateType.map)
+                        .create(existingEmptyMapCreated);
+                },
+                buildValidCommandFSA: () => validFsa,
+                checkStateOnSuccess: async ({
+                    aggregateCompositeIdentifier: { id },
+                }: AddSpatialFeatureToMap) => {
+                    const searchResult = await testRepositoryProvider
+                        .forResource(AggregateType.map)
+                        .fetchById(id);
+
+                    expect(searchResult).toBeInstanceOf(GeospatialMap);
+                },
+            });
         });
     });
 });
