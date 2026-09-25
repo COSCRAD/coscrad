@@ -8,6 +8,7 @@ import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
+import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
 import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
@@ -21,9 +22,20 @@ import {
 } from '../build-aggregate-root-from-event-history';
 import { Resource } from '../resource.entity';
 import { BaseEvent } from '../shared/events/base-event.entity';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { MapCreated } from './commands/map-created.event';
 import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 
+@CoscradDataExample<GeospatialMap>({
+    example: {
+        type: ResourceType.map,
+        id: buildDummyUuid(6),
+        name: buildMultilingualTextWithSingleItem('test geospatial map translation name'),
+        description: buildMultilingualTextWithSingleItem('description of translation'),
+        spatialFeatures: [],
+        published: false,
+    },
+})
 @AggregateRoot(AggregateType.map)
 export class GeospatialMap extends Resource {
     @NestedDataType(MultilingualText, {
