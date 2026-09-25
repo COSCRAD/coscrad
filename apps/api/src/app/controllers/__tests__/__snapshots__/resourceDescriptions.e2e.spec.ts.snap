@@ -3943,7 +3943,7 @@ exports[`GET /resources should return the expected result 1`] = `
       },
       "spatialFeatures": {
         "coscradDataType": "NON_EMPTY_STRING",
-        "description": "description for the points",
+        "description": "the spatial features that have been collected into this map",
         "isArray": true,
         "isOptional": true,
         "isPrivate": false,

@@ -35,10 +35,6 @@ describe('getArangoCollectionIDFromResourceType', () => {
                         (referencedCollectionID) => collectionId === referencedCollectionID
                     ).length;
 
-                if (numberOfTimesThisCollectionIDIsReferenced !== 1) {
-                    console.log('ooopsie!');
-                }
-
                 expect(numberOfTimesThisCollectionIDIsReferenced).toBe(1);
             });
         });

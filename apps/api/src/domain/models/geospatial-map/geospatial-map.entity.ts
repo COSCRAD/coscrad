@@ -38,7 +38,7 @@ export class GeospatialMap extends Resource {
 
     @NonEmptyString({
         label: 'points',
-        description: 'description for the points',
+        description: 'the spatial features that have been collected into this map',
         isArray: true,
         isOptional: true,
     })
