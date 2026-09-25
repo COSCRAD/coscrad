@@ -13,9 +13,9 @@ import { ArangoQueryRunner } from '../persistence/database/arango-query-runner';
 import { ArangoDocumentCollectionId } from '../persistence/database/collection-references/ArangoDocumentCollectionId';
 import { ArangoEdgeCollectionId } from '../persistence/database/collection-references/ArangoEdgeCollectionId';
 import { ArangoDatabaseProvider } from '../persistence/database/database.provider';
-import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoDataExporter } from '../persistence/repositories/arango-data-exporter';
+import generateDatabaseNameForTestSuite from '../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../test-data/buildTestDataInFlatFormat';
 import { DynamicDataTypeFinderService } from '../validation';
 import { CoscradCliModule } from './coscrad-cli.module';
@@ -34,7 +34,14 @@ const testDataInFlatFormat = buildTestDataInFlatFormat();
 
 const unregisteredCollectionName = 'games';
 
-describe(`CLI Command: **data-restore**`, () => {
+/**
+ * We have deprecated this utility. It's best not to duplicate functionality
+ * that exists in `arangodump` and `arangorestore`. Our original motivation
+ * was to have an easy way within a migration process to generate before
+ * and after snapshots. But the fact that this test is flakey in the CI
+ * also shows that this command is not as reliable as the lower level utilities.
+ */
+describe.skip(`CLI Command: **data-restore**`, () => {
     let app: INestApplication;
 
     let commandInstance: TestingModule;

@@ -12,6 +12,11 @@ import { COSCRAD_LOGGER_TOKEN, ICoscradLogger } from './logging';
     name: 'data-restore',
     description: 'restores the database state from a snapshot file',
 })
+/**
+ * This is meant only for diagnostics or experimentation. Use
+ * `arangodump` and `arangorestore` at the database level for
+ * production backups.
+ */
 export class DomainRestoreCliCommand extends CliCommandRunner {
     private readonly dataExporter: ArangoDataExporter;
 
