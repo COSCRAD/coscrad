@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { AggregateType } from '@coscrad/api-interfaces';
 import { Autocomplete, Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
@@ -41,6 +42,10 @@ export const AttributeTermToSpeaker = ({
 
     const [executeTermCommand, { isLoading: isRequestInProgress, isError }] =
         useExecuteTermCommandMutation();
+
+    const { isAuthenticated } = useAuth0();
+
+    if (!isAuthenticated) return <div>Form Unavailable</div>;
 
     if (isLoading) {
         return <div>Loading...</div>;
