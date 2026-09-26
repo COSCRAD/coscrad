@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { AggregateType, LanguageCode, ResourceType } from '@coscrad/api-interfaces';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
@@ -22,6 +23,10 @@ export const TranslateTermForm = ({ context, onClose }: TranslateTermFormProps):
 
     const [executeTermCommand, { isLoading: isRequestInProgress, error: commandError }] =
         useExecuteTermCommandMutation();
+
+    const { isAuthenticated } = useAuth0();
+
+    if (!isAuthenticated) return <div>Form Unavailable</div>;
 
     if (isRequestInProgress) {
         return <div>Processing Command Request...</div>;

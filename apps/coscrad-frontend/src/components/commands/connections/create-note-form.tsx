@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
+import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@mui/material';
 
 export interface CreateNoteFormProps {
@@ -23,6 +24,10 @@ export const CreateNoteForm = ({ onSubmitForm, bindProps }: CreateNoteFormProps)
     const [text, setText] = useState<string>('');
 
     const [languageCode, setLanguageCode] = useState<LanguageCode>(null);
+
+    const { isAuthenticated } = useAuth0();
+
+    if (!isAuthenticated) return <div>Form Unavailable</div>;
 
     const isFormComplete =
         isNonEmptyString(text) && Object.values(LanguageCode).includes(languageCode);

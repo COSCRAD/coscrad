@@ -1,7 +1,7 @@
-import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
+import { useAuth0 } from '@auth0/auth0-react';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, styled } from '@mui/material';
-import L, { LatLng, LatLngExpression, Map } from 'leaflet';
+import { styled } from '@mui/material';
+import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -12,10 +12,9 @@ import {
     useMap,
     useMapEvents,
 } from 'react-leaflet';
-import { useFetchIdQuery } from '../../../id-generation/store';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
+import { CreatePointForm } from '../create-point-form';
 import { CoscradMapProps, ICoscradMap } from '../map';
-import { useExecuteSpatialFeatureCommandMutation } from '../store/spatial-feature.api';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
 
 const CoscradMapContainer = styled(MapContainer)({
@@ -28,6 +27,10 @@ const CoscradMapContainer = styled(MapContainer)({
     width: '100vw',
 });
 
+const CoscradMapFormPopup = styled(LeafletPopup)({
+    width: '500px',
+});
+
 const ControlMapView = ({ center, zoom }) => {
     const map = useMap();
 
@@ -37,63 +40,6 @@ const ControlMapView = ({ center, zoom }) => {
         }
     }, [center, zoom, map]);
     return null;
-};
-
-interface CreatePointFormProps {
-    coordinates: LatLng;
-}
-
-interface SpatialFeaturePropertiesForCommand {
-    name: string;
-    languageCodeForName: LanguageCode;
-    description: string;
-}
-
-const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Element => {
-    const { data: generatedId, isLoading, isError } = useFetchIdQuery();
-
-    const [executeSpatialFeatureCommand, { isLoading: isRequestInProgress, error: commandError }] =
-        useExecuteSpatialFeatureCommandMutation();
-
-    const [properties, setProperties] = useState<SpatialFeaturePropertiesForCommand>(null);
-
-    const { lat, lng } = coordinates;
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        console.log(
-            'Form sent to server:',
-            properties.name,
-            properties.languageCodeForName,
-            properties.description
-        );
-
-        executeSpatialFeatureCommand({
-            commandFsa: {
-                type: 'CREATE_POINT',
-                payload: {
-                    aggregateCompositeIdentifier: {
-                        type: AggregateType.spatialFeature,
-                        id: generatedId,
-                    },
-                    lattitude: lat,
-                    longitude: lng,
-                    name: properties.name,
-                    languageCodeForName: properties.languageCodeForName,
-                    description: properties.description,
-                },
-            },
-        });
-    };
-
-    return (
-        <>
-            <Box>Hello World</Box>
-            <Box>Lat: {lat}</Box>
-            <Box>Lat: {lng}</Box>
-        </>
-    );
 };
 
 const MapClickToAddSpatialFeatureHandler = ({ onMapClick, isSetPlaceMarkerMode }) => {
@@ -114,8 +60,6 @@ const MapClickToAddSpatialFeatureHandler = ({ onMapClick, isSetPlaceMarkerMode }
 
 const MapToggleSelectPointer = ({ isSetPlaceMarkerMode }) => {
     const map = useMap();
-
-    console.log({ isSetPlaceMarkerMode });
 
     useEffect(() => {
         // Get the HTML container of the Leaflet map
@@ -216,6 +160,8 @@ export const CoscradLeafletMap: ICoscradMap = ({
     onSpatialFeatureSelected,
     selectedSpatialFeatureId,
 }: CoscradMapProps) => {
+    const { isAuthenticated } = useAuth0();
+
     const [isSetPlaceMarkerMode, setIsSetPlaceMarkerMode] = useState<boolean>(false);
 
     const [newPointMarkers, setNewPointMarkers] = useState([]);
@@ -228,10 +174,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
         // Add the new click location to the existing markers array
         setNewPointMarkers((prevMarkers) => [...prevMarkers, latlng]);
     };
-
-    useEffect(() => {
-        return;
-    }, [mapRef]);
 
     /**
      * Not sure where to get this from, can it can be derived from the spatial feature coordinates to be displayed?
@@ -262,23 +204,48 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 center={initialMapCentreCoordinates || INITIAL_CENTRE}
                 zoom={initialZoom || INITIAL_ZOOM}
             />
-            <MapClickToAddSpatialFeatureHandler
-                onMapClick={handleAddMarker}
-                isSetPlaceMarkerMode={isSetPlaceMarkerMode}
-            />
-            <MapToggleSelectPointer isSetPlaceMarkerMode={isSetPlaceMarkerMode} />
-            <MapAddToggleSelectPointerButton
-                position="topleft"
-                label="Add Place <br /> Mode"
-                onClick={() => setIsSetPlaceMarkerMode(!isSetPlaceMarkerMode)}
-            />
-            {newPointMarkers.map((position, idx) => (
-                <NewPointMarker key={idx} position={position}>
-                    <LeafletPopup>
-                        <CreatePointForm coordinates={position} />
-                    </LeafletPopup>
-                </NewPointMarker>
-            ))}
+            {isAuthenticated ? (
+                <>
+                    <MapAddToggleSelectPointerButton
+                        position="topleft"
+                        label="Add Place <br /> Mode"
+                        onClick={() => setIsSetPlaceMarkerMode(!isSetPlaceMarkerMode)}
+                    />
+                    <MapToggleSelectPointer isSetPlaceMarkerMode={isSetPlaceMarkerMode} />
+                    <MapClickToAddSpatialFeatureHandler
+                        onMapClick={handleAddMarker}
+                        isSetPlaceMarkerMode={isSetPlaceMarkerMode}
+                    />
+                    {newPointMarkers.map((position, idx) => (
+                        <NewPointMarker
+                            key={idx}
+                            position={position}
+                            eventHandlers={{
+                                add: (e) => {
+                                    const newPointMarker = e.target;
+
+                                    const leafletMapInstance = newPointMarker._map;
+
+                                    newPointMarker.openPopup();
+
+                                    leafletMapInstance.flyTo(
+                                        newPointMarker.getLatLng(),
+                                        leafletMapInstance.getZoom(),
+                                        {
+                                            animate: true,
+                                            duration: 0.8, // Duration of the animation in seconds
+                                        }
+                                    );
+                                },
+                            }}
+                        >
+                            <CoscradMapFormPopup>
+                                <CreatePointForm coordinates={position} />
+                            </CoscradMapFormPopup>
+                        </NewPointMarker>
+                    ))}
+                </>
+            ) : null}
             {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
                 ? spatialFeatures.map((spatialFeature) => (
                       <SpatialFeatureMarker
