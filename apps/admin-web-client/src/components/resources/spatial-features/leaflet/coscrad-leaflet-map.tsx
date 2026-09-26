@@ -1,3 +1,4 @@
+import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import L, { LatLng, LatLngExpression, Map } from 'leaflet';
@@ -11,8 +12,10 @@ import {
     useMap,
     useMapEvents,
 } from 'react-leaflet';
+import { useFetchIdQuery } from '../../../id-generation/store';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
+import { useExecuteSpatialFeatureCommandMutation } from '../store/spatial-feature.api';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
 
 const CoscradMapContainer = styled(MapContainer)({
@@ -40,10 +43,49 @@ interface CreatePointFormProps {
     coordinates: LatLng;
 }
 
+interface SpatialFeaturePropertiesForCommand {
+    name: string;
+    languageCodeForName: LanguageCode;
+    description: string;
+}
+
 const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Element => {
-    console.log({ coordinates });
+    const { data: generatedId, isLoading, isError } = useFetchIdQuery();
+
+    const [executeSpatialFeatureCommand, { isLoading: isRequestInProgress, error: commandError }] =
+        useExecuteSpatialFeatureCommandMutation();
+
+    const [properties, setProperties] = useState<SpatialFeaturePropertiesForCommand>(null);
 
     const { lat, lng } = coordinates;
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        console.log(
+            'Form sent to server:',
+            properties.name,
+            properties.languageCodeForName,
+            properties.description
+        );
+
+        executeSpatialFeatureCommand({
+            commandFsa: {
+                type: 'CREATE_POINT',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.spatialFeature,
+                        id: generatedId,
+                    },
+                    lattitude: lat,
+                    longitude: lng,
+                    name: properties.name,
+                    languageCodeForName: properties.languageCodeForName,
+                    description: properties.description,
+                },
+            },
+        });
+    };
 
     return (
         <>

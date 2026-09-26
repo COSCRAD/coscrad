@@ -54,4 +54,8 @@ export const spatialFeatureApi = createApi({
     }),
 });
 
-export const { useFetchSpatialFeatureByIdQuery, useFetchSpatialFeaturesQuery } = spatialFeatureApi;
+export const {
+    useFetchSpatialFeatureByIdQuery,
+    useFetchSpatialFeaturesQuery,
+    useExecuteSpatialFeatureCommandMutation,
+} = spatialFeatureApi;
