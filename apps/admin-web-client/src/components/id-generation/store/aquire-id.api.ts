@@ -29,4 +29,4 @@ export const acquireIdApi = createApi({
     }),
 });
 
-export const { useLazyFetchIdQuery } = acquireIdApi;
+export const { useFetchIdQuery, useLazyFetchIdQuery } = acquireIdApi;
