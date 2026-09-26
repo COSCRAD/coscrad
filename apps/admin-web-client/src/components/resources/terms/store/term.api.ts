@@ -11,22 +11,16 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
 import { RootState } from '../../../../store';
 import { UserIndexQueryOptionsStateTBA } from '../../../shared/store/user-index-query-options-factory.slice';
+import { ApiCommandFsa } from '../../../shared/types';
 
 export type AggregateId = string;
-
-type UnknownPart = Record<string, any>;
 
 type ContributionCacheUpdate = {
     speakerNames: string;
 };
 
-type TermCommandFsa = {
-    type: string;
-    payload: { aggregateCompositeIdentifier: AggregateCompositeIdentifier } & UnknownPart;
-};
-
 type TermCommandFsaWithOptions = {
-    commandFsa: TermCommandFsa;
+    commandFsa: ApiCommandFsa;
 } & { options?: ContributionCacheUpdate };
 
 type TermPayload = {

@@ -1,6 +1,11 @@
 import { ICategorizableIndexQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
+import { ApiCommandFsa } from '../../../shared/types';
+
+type SpatialFeatureCommandFsa = {
+    commandFsa: ApiCommandFsa;
+};
 
 export const spatialFeatureApi = createApi({
     reducerPath: 'spatial-feature',
@@ -37,6 +42,14 @@ export const spatialFeatureApi = createApi({
                       ]
                     : [{ type: 'spatial-feature', id: 'LIST' }],
             keepUnusedDataFor: 300,
+        }),
+        executeSpatialFeatureCommand: builder.mutation<string, SpatialFeatureCommandFsa>({
+            query: ({ commandFsa }: SpatialFeatureCommandFsa) => ({
+                url: 'commands',
+                method: 'POST',
+                body: commandFsa,
+                responseHandler: 'text',
+            }),
         }),
     }),
 });

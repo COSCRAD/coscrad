@@ -14,3 +14,5 @@ export const NOT_FOUND: unique symbol = Symbol('searched, but no result was foun
 export type NOT_FOUND = typeof NOT_FOUND;
 
 export * from './functional-component';
+
+export * from './api-types';

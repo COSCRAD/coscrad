@@ -1,9 +1,16 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { styled } from '@mui/material';
-import { LatLngExpression, Map } from 'leaflet';
+import { Box, styled } from '@mui/material';
+import L, { LatLng, LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { useEffect, useRef, useState } from 'react';
+import {
+    Popup as LeafletPopup,
+    MapContainer,
+    Marker as NewPointMarker,
+    TileLayer,
+    useMap,
+    useMapEvents,
+} from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
@@ -29,6 +36,130 @@ const ControlMapView = ({ center, zoom }) => {
     return null;
 };
 
+interface CreatePointFormProps {
+    coordinates: LatLng;
+}
+
+const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Element => {
+    console.log({ coordinates });
+
+    const { lat, lng } = coordinates;
+
+    return (
+        <>
+            <Box>Hello World</Box>
+            <Box>Lat: {lat}</Box>
+            <Box>Lat: {lng}</Box>
+        </>
+    );
+};
+
+const MapClickToAddSpatialFeatureHandler = ({ onMapClick, isSetPlaceMarkerMode }) => {
+    useMapEvents({
+        click(e) {
+            if (isSetPlaceMarkerMode) {
+                const { lat, lng } = e.latlng;
+
+                onMapClick(e.latlng);
+
+                console.log(`Map clicked at coordinates: ${lat}, ${lng}`);
+            }
+        },
+    });
+
+    return null;
+};
+
+const MapToggleSelectPointer = ({ isSetPlaceMarkerMode }) => {
+    const map = useMap();
+
+    console.log({ isSetPlaceMarkerMode });
+
+    useEffect(() => {
+        // Get the HTML container of the Leaflet map
+        const mapContainer = map.getContainer();
+
+        if (isSetPlaceMarkerMode) {
+            // Force a pointer style
+            mapContainer.style.cursor = 'pointer';
+            // Temporarily remove leaflet's grab class to prevent cursor conflicts
+            mapContainer.classList.remove('leaflet-grab');
+        } else {
+            // Reset back to default Leaflet behavior
+            mapContainer.style.cursor = '';
+            mapContainer.classList.add('leaflet-grab');
+        }
+    }, [isSetPlaceMarkerMode, map]);
+
+    return null; // This component doesn't render any UI elements
+};
+
+interface MapAddToggleSelectPointerButtonProps {
+    position?: L.ControlPosition;
+    label: string;
+    onClick: (map: L.Map) => void;
+}
+
+const MapAddToggleSelectPointerButton = ({
+    position = 'topright',
+    onClick,
+    label,
+}: MapAddToggleSelectPointerButtonProps) => {
+    const map = useMap();
+
+    useEffect(() => {
+        // 1. Create a custom Leaflet Control subclass
+        const CustomControl = L.Control.extend({
+            options: {
+                position: position,
+            },
+            onAdd: function () {
+                // 2. Create the outer wrapper using standard Leaflet DOM utilities
+                const container = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
+
+                // 3. Create the actual button
+                const button = L.DomUtil.create('button', 'custom-map-button', container);
+                button.innerHTML = label;
+                button.type = 'button';
+
+                // Basic styles to match Leaflet controls
+                button.style.padding = '6px 10px';
+                button.style.backgroundColor = '#fff';
+                button.style.border = 'none';
+                button.style.cursor = 'pointer';
+                button.style.fontWeight = 'bold';
+                button.title = 'Add Placemarker to Map';
+
+                // 4. CRITICAL: Stop map clicks/scrolls from breaking through the button
+                L.DomEvent.disableClickPropagation(container);
+                L.DomEvent.disableScrollPropagation(container);
+
+                // 5. Setup event listener
+                L.DomEvent.on(button, 'click', (e) => {
+                    L.DomEvent.stopPropagation(e);
+                    onClick(map);
+                });
+
+                return container;
+            },
+            onRemove: function () {
+                // Leaflet handles DOM removal automatically when control.remove() is called
+            },
+        });
+
+        // 6. Instantiate and add the control to the map
+        const controlInstance = new CustomControl();
+        controlInstance.addTo(map);
+
+        // 7. Clean up the control instance when the component unmounts
+        return () => {
+            controlInstance.remove();
+        };
+    }, [map, position, onClick, label]);
+
+    return null;
+};
+
 export const CoscradLeafletMap: ICoscradMap = ({
     spatialFeatures,
     initialCentre,
@@ -43,7 +174,18 @@ export const CoscradLeafletMap: ICoscradMap = ({
     onSpatialFeatureSelected,
     selectedSpatialFeatureId,
 }: CoscradMapProps) => {
+    const [isSetPlaceMarkerMode, setIsSetPlaceMarkerMode] = useState<boolean>(false);
+
+    const [newPointMarkers, setNewPointMarkers] = useState([]);
+
     const mapRef = useRef<Map>();
+
+    const handleAddMarker = (latlng) => {
+        console.log({ latlng });
+
+        // Add the new click location to the existing markers array
+        setNewPointMarkers((prevMarkers) => [...prevMarkers, latlng]);
+    };
 
     useEffect(() => {
         return;
@@ -78,6 +220,23 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 center={initialMapCentreCoordinates || INITIAL_CENTRE}
                 zoom={initialZoom || INITIAL_ZOOM}
             />
+            <MapClickToAddSpatialFeatureHandler
+                onMapClick={handleAddMarker}
+                isSetPlaceMarkerMode={isSetPlaceMarkerMode}
+            />
+            <MapToggleSelectPointer isSetPlaceMarkerMode={isSetPlaceMarkerMode} />
+            <MapAddToggleSelectPointerButton
+                position="topleft"
+                label="Add Place <br /> Mode"
+                onClick={() => setIsSetPlaceMarkerMode(!isSetPlaceMarkerMode)}
+            />
+            {newPointMarkers.map((position, idx) => (
+                <NewPointMarker key={idx} position={position}>
+                    <LeafletPopup>
+                        <CreatePointForm coordinates={position} />
+                    </LeafletPopup>
+                </NewPointMarker>
+            ))}
             {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
                 ? spatialFeatures.map((spatialFeature) => (
                       <SpatialFeatureMarker
