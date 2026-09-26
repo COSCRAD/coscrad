@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { Box, Button, Dialog, DialogContent, DialogTitle, styled } from '@mui/material';
 import { useState } from 'react';
@@ -45,6 +46,10 @@ export const PresentFormWithOptionalGeneratedId = ({
     const handleClose = () => {
         setOpen(false);
     };
+
+    const { isAuthenticated } = useAuth0();
+
+    if (!isAuthenticated) return <div>Form Unavailable</div>;
 
     if (idError) {
         console.log({ idError });

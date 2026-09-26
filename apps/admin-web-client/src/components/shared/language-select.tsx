@@ -12,6 +12,7 @@ export const LanguageSelect = ({ languageCodesInUse, onSelectLanguage }: Languag
 
     return (
         <Select
+            sx={{ mb: 1 }}
             data-testid={`select:language`}
             defaultValue={defaultOption}
             label="Language"
