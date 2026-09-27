@@ -1,13 +1,18 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { Module } from '@nestjs/common';
+import { PersistenceModule } from '../../persistence/persistence.module';
 import { formatLanguageCode } from '../../queries/presentation/formatLanguageCode';
 import { InternalError } from '../errors/InternalError';
+import { ArangoFullTextSearchQueryRepository } from './full-text-search/arango-full-text-search-query-repository';
+import { FullTextSearchIndexer } from './full-text-search/full-text-search-indexer.event-handler';
+import { FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN } from './full-text-search/full-text-search-query.interface';
 import { ChilcotinTokenizer, TOKENIZER_PROVIDER_INJECTION_TOKEN } from './tokenization';
 
 /**
  * TODO Make this a separate lib in the monorepo.
  */
 @Module({
+    imports: [PersistenceModule],
     providers: [
         {
             provide: TOKENIZER_PROVIDER_INJECTION_TOKEN,
@@ -26,6 +31,11 @@ import { ChilcotinTokenizer, TOKENIZER_PROVIDER_INJECTION_TOKEN } from './tokeni
                 },
             },
         },
+        {
+            provide: FULL_TEXT_SEARCH_QUERY_REPOSITORY_INJECTION_TOKEN,
+            useClass: ArangoFullTextSearchQueryRepository,
+        },
+        FullTextSearchIndexer,
     ],
     exports: [TOKENIZER_PROVIDER_INJECTION_TOKEN],
 })

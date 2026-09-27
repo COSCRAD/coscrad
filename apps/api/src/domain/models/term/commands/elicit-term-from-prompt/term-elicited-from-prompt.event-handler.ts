@@ -1,19 +1,8 @@
-import { LanguageCode } from '@coscrad/api-interfaces';
 import { Inject } from '@nestjs/common';
 import { CoscradEventConsumer, ICoscradEventHandler } from '../../../../../domain/common';
-import {
-    ITokenizer,
-    TOKENIZER_PROVIDER_INJECTION_TOKEN,
-} from '../../../../../lib/nlp/tokenization';
+import { ITokenizerProvider, TOKENIZER_PROVIDER_INJECTION_TOKEN } from '../../../../../lib/nlp';
 import { ITermQueryRepository, TERM_QUERY_REPOSITORY_TOKEN } from '../../queries';
 import { TermElicitedFromPrompt } from './term-elicited.from.prompt.event';
-
-// TODO share this with other handlers
-interface ITokenizerProvider {
-    has(langaugeCode: LanguageCode): boolean;
-
-    forLanguage(languageCode: LanguageCode): ITokenizer;
-}
 
 @CoscradEventConsumer('TERM_ELICITED_FROM_PROMPT')
 export class TermElicitedFromPromptEventHandler implements ICoscradEventHandler {
