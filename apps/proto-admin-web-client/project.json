@@ -1,0 +1,97 @@
+{
+    "name": "proto-admin-web-client",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "apps/proto-admin-web-client/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nrwl/webpack:webpack",
+            "outputs": ["{options.outputPath}"],
+            "defaultConfiguration": "production",
+            "options": {
+                "compiler": "babel",
+                "outputPath": "dist/apps/proto-admin-web-client",
+                "index": "apps/proto-admin-web-client/src/index.html",
+                "baseHref": "/",
+                "main": "apps/proto-admin-web-client/src/main.tsx",
+                "tsConfig": "apps/proto-admin-web-client/tsconfig.app.json",
+                "assets": [
+                    "apps/proto-admin-web-client/src/favicon.ico",
+                    "apps/proto-admin-web-client/src/assets"
+                ],
+                "styles": ["apps/proto-admin-web-client/src/styles.css"],
+                "scripts": [],
+                "webpackConfig": "@nrwl/react/plugins/webpack"
+            },
+            "configurations": {
+                "development": {
+                    "extractLicenses": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "vendorChunk": true
+                },
+                "production": {
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/proto-admin-web-client/src/environments/environment.ts",
+                            "with": "apps/proto-admin-web-client/src/environments/environment.prod.ts"
+                        }
+                    ],
+                    "optimization": true,
+                    "outputHashing": "all",
+                    "sourceMap": false,
+                    "namedChunks": false,
+                    "extractLicenses": true,
+                    "vendorChunk": false
+                }
+            }
+        },
+        "serve": {
+            "executor": "@nrwl/webpack:dev-server",
+            "defaultConfiguration": "development",
+            "options": {
+                "buildTarget": "proto-admin-web-client:build",
+                "hmr": true
+            },
+            "configurations": {
+                "development": {
+                    "buildTarget": "proto-admin-web-client:build:development"
+                },
+                "production": {
+                    "buildTarget": "proto-admin-web-client:build:production",
+                    "hmr": false
+                }
+            }
+        },
+        "lint": {
+            "executor": "@nrwl/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": ["apps/proto-admin-web-client/**/*.{ts,tsx,js,jsx}"]
+            }
+        },
+        "test": {
+            "executor": "@nrwl/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/apps/proto-admin-web-client:build"],
+            "options": {
+                "jestConfig": "apps/proto-admin-web-client/jest.config.ts",
+                "passWithNoTests": false
+            }
+        },
+        "component-test": {
+            "executor": "@nrwl/cypress:cypress",
+            "options": {
+                "cypressConfig": "apps/coscrad-frontend/cypress.config.ts",
+                "testingType": "component",
+                "devServerTarget": "coscrad-frontend:build",
+                "skipServe": true
+            }
+        }
+    },
+    "tags": [],
+    "jest": {
+        "transform": {
+            "^.+\\.(ts|tsx|js|jsx)$": "ts-jest"
+        }
+    }
+}
