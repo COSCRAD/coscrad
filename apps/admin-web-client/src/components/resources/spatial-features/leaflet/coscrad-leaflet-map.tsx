@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, styled } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
@@ -10,12 +10,14 @@ import {
     Marker as NewPointMarker,
     TileLayer,
     useMap,
-    useMapEvents,
 } from 'react-leaflet';
+import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
-import { CreatePointForm } from '../create-point-form';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
+import { MapAddToggleSelectPointerButton } from './map-add-toggle-select-pointer-button';
+import { MapClickToAddSpatialFeatureHandler } from './map-click-to-add-spatial-feature-handler';
+import { MapToggleSelectPointer } from './map-toggle-select-pointer';
 
 const ControlMapView = ({ center, zoom }) => {
     const map = useMap();
@@ -28,118 +30,15 @@ const ControlMapView = ({ center, zoom }) => {
     return null;
 };
 
-const MapClickToAddSpatialFeatureHandler = ({ onMapClick, isSetPlaceMarkerMode }) => {
-    useMapEvents({
-        click(e) {
-            if (isSetPlaceMarkerMode) {
-                const { lat, lng } = e.latlng;
-
-                onMapClick(e.latlng);
-
-                console.log(`Map clicked at coordinates: ${lat}, ${lng}`);
-            }
-        },
-    });
-
-    return null;
-};
-
-const MapToggleSelectPointer = ({ isSetPlaceMarkerMode }) => {
-    const map = useMap();
-
-    useEffect(() => {
-        // Get the HTML container of the Leaflet map
-        const mapContainer = map.getContainer();
-
-        if (isSetPlaceMarkerMode) {
-            // Force a pointer style
-            mapContainer.style.cursor = 'pointer';
-            // Temporarily remove leaflet's grab class to prevent cursor conflicts
-            mapContainer.classList.remove('leaflet-grab');
-        } else {
-            // Reset back to default Leaflet behavior
-            mapContainer.style.cursor = '';
-            mapContainer.classList.add('leaflet-grab');
-        }
-    }, [isSetPlaceMarkerMode, map]);
-
-    return null; // This component doesn't render any UI elements
-};
-
-interface MapAddToggleSelectPointerButtonProps {
-    position?: L.ControlPosition;
-    label: string;
-    onClick: (map: L.Map) => void;
-}
-
-const MapAddToggleSelectPointerButton = ({
-    position = 'topright',
-    onClick,
-    label,
-}: MapAddToggleSelectPointerButtonProps) => {
-    const map = useMap();
-
-    useEffect(() => {
-        // 1. Create a custom Leaflet Control subclass
-        const CustomControl = L.Control.extend({
-            options: {
-                position: position,
-            },
-            onAdd: function () {
-                // 2. Create the outer wrapper using standard Leaflet DOM utilities
-                const container = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
-
-                // 3. Create the actual button
-                const button = L.DomUtil.create('button', 'custom-map-button', container);
-                button.innerHTML = label;
-                button.type = 'button';
-
-                // Basic styles to match Leaflet controls
-                button.style.padding = '6px 10px';
-                button.style.backgroundColor = '#fff';
-                button.style.border = 'none';
-                button.style.cursor = 'pointer';
-                button.style.fontWeight = 'bold';
-                button.title = 'Add Placemarker to Map';
-
-                // 4. CRITICAL: Stop map clicks/scrolls from breaking through the button
-                L.DomEvent.disableClickPropagation(container);
-                L.DomEvent.disableScrollPropagation(container);
-
-                // 5. Setup event listener
-                L.DomEvent.on(button, 'click', (e) => {
-                    L.DomEvent.stopPropagation(e);
-                    onClick(map);
-                });
-
-                return container;
-            },
-            onRemove: function () {
-                // Leaflet handles DOM removal automatically when control.remove() is called
-            },
-        });
-
-        // 6. Instantiate and add the control to the map
-        const controlInstance = new CustomControl();
-        controlInstance.addTo(map);
-
-        // 7. Clean up the control instance when the component unmounts
-        return () => {
-            controlInstance.remove();
-        };
-    }, [map, position, onClick, label]);
-
-    return null;
+type NewPointMarker = {
+    id: string;
+    coordinates: L.LatLng;
 };
 
 const CoscradMapContainer = styled(MapContainer)({
     // left: '50%',
     maxWidth: '100vw',
     width: '100vw',
-});
-
-const CoscradMapFormPopup = styled(LeafletPopup)({
-    width: '500px',
 });
 
 export const CoscradLeafletMap: ICoscradMap = ({
@@ -160,15 +59,30 @@ export const CoscradLeafletMap: ICoscradMap = ({
 
     const [isSetPlaceMarkerMode, setIsSetPlaceMarkerMode] = useState<boolean>(false);
 
-    const [newPointMarkers, setNewPointMarkers] = useState([]);
+    const [newPointMarkers, setNewPointMarkers] = useState<NewPointMarker[]>([]);
 
     const mapRef = useRef<Map>();
 
-    const handleAddMarker = (latlng) => {
+    const handleAddMarker = (latlng: L.LatLng) => {
+        console.log('adding marker');
         console.log({ latlng });
 
-        // Add the new click location to the existing markers array
-        setNewPointMarkers((prevMarkers) => [...prevMarkers, latlng]);
+        // Note: we could call the backend id generation, but there will be
+        // too many cancelled placemarkers making for a bloated
+        const tempId = crypto.randomUUID();
+
+        const newPointMarker: NewPointMarker = {
+            id: tempId,
+            coordinates: latlng,
+        };
+
+        setNewPointMarkers((prevMarkers) => [...prevMarkers, newPointMarker]);
+    };
+
+    const handleCancelNewPointMarker = (markerIdToRemove) => {
+        setNewPointMarkers((prevMarkers) =>
+            prevMarkers.filter(({ id }) => id !== markerIdToRemove)
+        );
     };
 
     /**
@@ -222,10 +136,10 @@ export const CoscradLeafletMap: ICoscradMap = ({
                             onMapClick={handleAddMarker}
                             isSetPlaceMarkerMode={isSetPlaceMarkerMode}
                         />
-                        {newPointMarkers.map((position, idx) => (
+                        {newPointMarkers.map(({ coordinates, id }) => (
                             <NewPointMarker
-                                key={idx}
-                                position={position}
+                                key={id}
+                                position={coordinates}
                                 eventHandlers={{
                                     add: (e) => {
                                         const newPointMarker = e.target;
@@ -245,9 +159,20 @@ export const CoscradLeafletMap: ICoscradMap = ({
                                     },
                                 }}
                             >
-                                <CoscradMapFormPopup>
-                                    <CreatePointForm coordinates={position} />
-                                </CoscradMapFormPopup>
+                                <LeafletPopup
+                                    eventHandlers={{
+                                        remove: () => handleCancelNewPointMarker(id),
+                                    }}
+                                >
+                                    <Box>
+                                        <Typography variant="h5">Create New Place</Typography>
+                                        <SinglePropertyPresenter
+                                            display="Coordinates"
+                                            value={`${coordinates.lat}, ${coordinates.lng}`}
+                                        />
+                                    </Box>
+                                    {/* <CreatePointForm coordinates={position} /> */}
+                                </LeafletPopup>
                             </NewPointMarker>
                         ))}
                     </>
