@@ -11,6 +11,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
+import { DetailViewFormatter } from '../../shared/detail-view-formatter';
 import { getSpeakersStatementForTerm } from '../../shared/getSpeakersStatementForTerm';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import { AttributeTermToSpeaker } from './add-speaker-to-term-form';
@@ -74,7 +75,7 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
     console.log({ speakersStatementForTerm });
 
     return (
-        <>
+        <DetailViewFormatter>
             <Typography variant="h3">Term</Typography>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                 <Typography variant="h3" sx={{ mr: 1, color: '#017e73ff' }} aria-label={id}>
@@ -159,6 +160,6 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     }}
                 />
             ) : null}
-        </>
+        </DetailViewFormatter>
     );
 };

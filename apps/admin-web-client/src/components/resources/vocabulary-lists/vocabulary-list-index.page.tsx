@@ -1,6 +1,7 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import { Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { DetailViewFormatter } from '../../shared/detail-view-formatter';
 import { findOriginalMultilingualTextItem } from '../terms/term-list.container';
 import { useFetchVocabularyListsQuery } from './store';
 
@@ -40,25 +41,27 @@ export const VocabularyListsIndex = (): JSX.Element => {
     const { entities } = data;
 
     return (
-        <Stack>
-            {entities.length > 0 ? (
-                <>
-                    {entities.map((vocabularyList) => {
-                        const { id, name, isPublished } = vocabularyList;
+        <DetailViewFormatter>
+            <Stack>
+                {entities.length > 0 ? (
+                    <>
+                        {entities.map((vocabularyList) => {
+                            const { id, name, isPublished } = vocabularyList;
 
-                        return (
-                            <VocabularyListListing
-                                key={`vocabulary-list-${id}`}
-                                id={id}
-                                name={name}
-                                isPublished={isPublished}
-                            />
-                        );
-                    })}
-                </>
-            ) : (
-                <Typography variant="h4">No Vocabulary Lists Have Been Added</Typography>
-            )}
-        </Stack>
+                            return (
+                                <VocabularyListListing
+                                    key={`vocabulary-list-${id}`}
+                                    id={id}
+                                    name={name}
+                                    isPublished={isPublished}
+                                />
+                            );
+                        })}
+                    </>
+                ) : (
+                    <Typography variant="h4">No Vocabulary Lists Have Been Added</Typography>
+                )}
+            </Stack>
+        </DetailViewFormatter>
     );
 };

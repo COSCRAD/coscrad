@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import L, { LatLngExpression, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
@@ -16,20 +16,6 @@ import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CreatePointForm } from '../create-point-form';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
-
-const CoscradMapContainer = styled(MapContainer)({
-    left: '50%',
-    marginLeft: '-50vw',
-    marginRight: '-50vw',
-    maxWidth: '100vw',
-    position: 'relative',
-    right: '50%',
-    width: '100vw',
-});
-
-const CoscradMapFormPopup = styled(LeafletPopup)({
-    width: '500px',
-});
 
 const ControlMapView = ({ center, zoom }) => {
     const map = useMap();
@@ -146,6 +132,16 @@ const MapAddToggleSelectPointerButton = ({
     return null;
 };
 
+const CoscradMapContainer = styled(MapContainer)({
+    // left: '50%',
+    maxWidth: '100vw',
+    width: '100vw',
+});
+
+const CoscradMapFormPopup = styled(LeafletPopup)({
+    width: '500px',
+});
+
 export const CoscradLeafletMap: ICoscradMap = ({
     spatialFeatures,
     initialCentre,
@@ -183,83 +179,94 @@ export const CoscradLeafletMap: ICoscradMap = ({
     const SpatialFeatureMarker = buildSpatialFeatureMarker(spatialFeatureDetailPresenter);
 
     return (
-        <CoscradMapContainer
+        <Box
             sx={{
-                mt: { xs: '-3%', md: '-3.5%', qhd: '-5.5%', uhd: '-8%' },
+                border: '1px solid #000',
+                mt: '64px',
+                width: '100vw',
+                // mt: { xs: '-3%', md: '-3.5%', qhd: '-2.5%', uhd: '-8%' },
+                // // mr: { xs: '-3%', md: '-3.5%', qhd: '-2.5%', uhd: '-8%' },
+                // ml: { xs: '-3%', md: '-3.5%', qhd: '-55%', uhd: '-8%' },
                 height: { xs: `${mapHeightPx || MAP_HEIGHT_PX}vh` },
             }}
-            center={initialMapCentreCoordinates || INITIAL_CENTRE}
-            zoom={initialZoom || INITIAL_ZOOM}
-            // Inject through API?
-            scrollWheelZoom={true}
-            ref={mapRef}
         >
-            <div data-cy="Map Container" />
-            <TileLayer
-                attribution="&copy; ESRI and Contributors"
-                // Should this be part of the config?
-                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-            />
-            <ControlMapView
+            <CoscradMapContainer
+                sx={{
+                    height: { xs: `${mapHeightPx || MAP_HEIGHT_PX}vh` },
+                }}
                 center={initialMapCentreCoordinates || INITIAL_CENTRE}
                 zoom={initialZoom || INITIAL_ZOOM}
-            />
-            {isAuthenticated ? (
-                <>
-                    <MapAddToggleSelectPointerButton
-                        position="topleft"
-                        label="Add Place <br /> Mode"
-                        onClick={() => setIsSetPlaceMarkerMode(!isSetPlaceMarkerMode)}
-                    />
-                    <MapToggleSelectPointer isSetPlaceMarkerMode={isSetPlaceMarkerMode} />
-                    <MapClickToAddSpatialFeatureHandler
-                        onMapClick={handleAddMarker}
-                        isSetPlaceMarkerMode={isSetPlaceMarkerMode}
-                    />
-                    {newPointMarkers.map((position, idx) => (
-                        <NewPointMarker
-                            key={idx}
-                            position={position}
-                            eventHandlers={{
-                                add: (e) => {
-                                    const newPointMarker = e.target;
+                // Inject through API?
+                scrollWheelZoom={true}
+                ref={mapRef}
+            >
+                <div data-cy="Map Container" />
+                <TileLayer
+                    attribution="&copy; ESRI and Contributors"
+                    // Should this be part of the config?
+                    url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                />
+                <ControlMapView
+                    center={initialMapCentreCoordinates || INITIAL_CENTRE}
+                    zoom={initialZoom || INITIAL_ZOOM}
+                />
+                {isAuthenticated ? (
+                    <>
+                        <MapAddToggleSelectPointerButton
+                            position="topleft"
+                            label="Add Place <br /> Mode"
+                            onClick={() => setIsSetPlaceMarkerMode(!isSetPlaceMarkerMode)}
+                        />
+                        <MapToggleSelectPointer isSetPlaceMarkerMode={isSetPlaceMarkerMode} />
+                        <MapClickToAddSpatialFeatureHandler
+                            onMapClick={handleAddMarker}
+                            isSetPlaceMarkerMode={isSetPlaceMarkerMode}
+                        />
+                        {newPointMarkers.map((position, idx) => (
+                            <NewPointMarker
+                                key={idx}
+                                position={position}
+                                eventHandlers={{
+                                    add: (e) => {
+                                        const newPointMarker = e.target;
 
-                                    const leafletMapInstance = newPointMarker._map;
+                                        const leafletMapInstance = newPointMarker._map;
 
-                                    newPointMarker.openPopup();
+                                        newPointMarker.openPopup();
 
-                                    leafletMapInstance.flyTo(
-                                        newPointMarker.getLatLng(),
-                                        leafletMapInstance.getZoom(),
-                                        {
-                                            animate: true,
-                                            duration: 0.8, // Duration of the animation in seconds
-                                        }
-                                    );
-                                },
-                            }}
-                        >
-                            <CoscradMapFormPopup>
-                                <CreatePointForm coordinates={position} />
-                            </CoscradMapFormPopup>
-                        </NewPointMarker>
-                    ))}
-                </>
-            ) : null}
-            {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
-                ? spatialFeatures.map((spatialFeature) => (
-                      <SpatialFeatureMarker
-                          key={spatialFeature.id}
-                          spatialFeature={spatialFeature}
-                          handleClick={onSpatialFeatureSelected}
-                          customEffects={(id, marker) => {
-                              if (id === selectedSpatialFeatureId) {
-                                  marker.openPopup();
-                              }
-                          }}
-                      />
-                  ))
-                : null}
-        </CoscradMapContainer>
+                                        leafletMapInstance.flyTo(
+                                            newPointMarker.getLatLng(),
+                                            leafletMapInstance.getZoom(),
+                                            {
+                                                animate: true,
+                                                duration: 0.8, // Duration of the animation in seconds
+                                            }
+                                        );
+                                    },
+                                }}
+                            >
+                                <CoscradMapFormPopup>
+                                    <CreatePointForm coordinates={position} />
+                                </CoscradMapFormPopup>
+                            </NewPointMarker>
+                        ))}
+                    </>
+                ) : null}
+                {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
+                    ? spatialFeatures.map((spatialFeature) => (
+                          <SpatialFeatureMarker
+                              key={spatialFeature.id}
+                              spatialFeature={spatialFeature}
+                              handleClick={onSpatialFeatureSelected}
+                              customEffects={(id, marker) => {
+                                  if (id === selectedSpatialFeatureId) {
+                                      marker.openPopup();
+                                  }
+                              }}
+                          />
+                      ))
+                    : null}
+            </CoscradMapContainer>
+        </Box>
     );
 };
