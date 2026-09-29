@@ -1,5 +1,6 @@
 import { ITermViewModel } from '@coscrad/api-interfaces';
 import { Box, Stack } from '@mui/material';
+import { DetailViewFormatter } from '../../shared/detail-view-formatter';
 import { HeadingLabel } from '../../shared/tables';
 import { SearchBar } from '../../shared/tables/search-bar';
 import { CreateTermPage } from './create-term-page';
@@ -16,7 +17,7 @@ const searchableProps: HeadingLabel<ITermViewModel>[] = [
 
 export const TermIndexPage = (): JSX.Element => {
     return (
-        <div>
+        <DetailViewFormatter>
             <Stack>
                 <Box>
                     <CreateTermPage />
@@ -31,6 +32,6 @@ export const TermIndexPage = (): JSX.Element => {
                     <TermPaginator />
                 </Box>
             </Stack>
-        </div>
+        </DetailViewFormatter>
     );
 };

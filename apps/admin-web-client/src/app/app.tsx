@@ -34,24 +34,22 @@ export function App() {
     });
 
     return (
-        <Box>
+        <Box sx={{ width: '100vw', minHeight: '100vh' }}>
             <Header />
 
-            <Box sx={{ paddingTop: '120px', ml: 10, mr: 10, mb: 5, width: '87%' }}>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/terms" element={<TermIndexPage />} />
-                    <Route path="/terms/:id" element={<TermContainer />} />
-                    <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
-                    <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
-                    <Route path="/spatialFeatures/" element={<SpatialFeatureIndexContainer />} />
-                    <Route
-                        path="/spatialFeatures/:id"
-                        element={<SpatialFeatureDetailFullViewPresenter />}
-                    />
-                    <Route path="/contributors/" element={<ContributorIndexPage />} />
-                </Routes>
-            </Box>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/terms" element={<TermIndexPage />} />
+                <Route path="/terms/:id" element={<TermContainer />} />
+                <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
+                <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
+                <Route path="/spatialFeatures/" element={<SpatialFeatureIndexContainer />} />
+                <Route
+                    path="/spatialFeatures/:id"
+                    element={<SpatialFeatureDetailFullViewPresenter />}
+                />
+                <Route path="/contributors/" element={<ContributorIndexPage />} />
+            </Routes>
 
             <Footer />
         </Box>
