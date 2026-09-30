@@ -1885,7 +1885,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, map, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: audioItem, bibliographicCitation, digitalText, map, mediaItem, photograph, playlist, song, spatialFeature, term, video, vocabularyList",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -1894,28 +1894,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "term",
-                "value": "term",
-              },
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "spatialFeature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "map",
-                "value": "map",
               },
               {
                 "label": "bibliographicCitation",
@@ -1926,20 +1906,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "song",
-                "value": "song",
+                "label": "map",
+                "value": "map",
               },
               {
                 "label": "mediaItem",
                 "value": "mediaItem",
               },
               {
-                "label": "video",
-                "value": "video",
+                "label": "photograph",
+                "value": "photograph",
               },
               {
                 "label": "playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
               },
             ],
           },
@@ -1989,28 +1989,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "resource type",
             "labelsAndValues": [
               {
-                "label": "Term",
-                "value": "term",
-              },
-              {
-                "label": "Vocabulary List",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "Transcribed Audio Item",
                 "value": "audioItem",
-              },
-              {
-                "label": "Photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "Spatial Feature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "Geospatial Map",
-                "value": "map",
               },
               {
                 "label": "Bibliographic Citation",
@@ -2021,20 +2001,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "Song",
-                "value": "song",
+                "label": "Geospatial Map",
+                "value": "map",
               },
               {
                 "label": "Media Item",
                 "value": "mediaItem",
               },
               {
-                "label": "Video",
-                "value": "video",
+                "label": "Photograph",
+                "value": "photograph",
               },
               {
                 "label": "Playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "Song",
+                "value": "song",
+              },
+              {
+                "label": "Spatial Feature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "Term",
+                "value": "term",
+              },
+              {
+                "label": "Video",
+                "value": "video",
+              },
+              {
+                "label": "Vocabulary List",
+                "value": "vocabularyList",
               },
             ],
           },
@@ -2066,7 +2066,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, map, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: audioItem, bibliographicCitation, digitalText, map, mediaItem, photograph, playlist, song, spatialFeature, term, video, vocabularyList",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -2075,28 +2075,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "term",
-                "value": "term",
-              },
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "spatialFeature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "map",
-                "value": "map",
               },
               {
                 "label": "bibliographicCitation",
@@ -2107,20 +2087,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "song",
-                "value": "song",
+                "label": "map",
+                "value": "map",
               },
               {
                 "label": "mediaItem",
                 "value": "mediaItem",
               },
               {
-                "label": "video",
-                "value": "video",
+                "label": "photograph",
+                "value": "photograph",
               },
               {
                 "label": "playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
               },
             ],
           },
@@ -2297,28 +2297,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "Term",
-                "value": "term",
-              },
-              {
-                "label": "Vocabulary List",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "Transcribed Audio Item",
                 "value": "audioItem",
-              },
-              {
-                "label": "Photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "Spatial Feature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "Geospatial Map",
-                "value": "map",
               },
               {
                 "label": "Bibliographic Citation",
@@ -2329,20 +2309,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "Song",
-                "value": "song",
+                "label": "Geospatial Map",
+                "value": "map",
               },
               {
                 "label": "Media Item",
                 "value": "mediaItem",
               },
               {
-                "label": "Video",
-                "value": "video",
+                "label": "Photograph",
+                "value": "photograph",
               },
               {
                 "label": "Playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "Song",
+                "value": "song",
+              },
+              {
+                "label": "Spatial Feature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "Term",
+                "value": "term",
+              },
+              {
+                "label": "Video",
+                "value": "video",
+              },
+              {
+                "label": "Vocabulary List",
+                "value": "vocabularyList",
               },
               {
                 "label": "Note",
@@ -3500,7 +3500,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, map, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: audioItem, bibliographicCitation, digitalText, map, mediaItem, photograph, playlist, song, spatialFeature, term, video, vocabularyList",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -3509,28 +3509,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "term",
-                "value": "term",
-              },
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "spatialFeature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "map",
-                "value": "map",
               },
               {
                 "label": "bibliographicCitation",
@@ -3541,20 +3521,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "song",
-                "value": "song",
+                "label": "map",
+                "value": "map",
               },
               {
                 "label": "mediaItem",
                 "value": "mediaItem",
               },
               {
-                "label": "video",
-                "value": "video",
+                "label": "photograph",
+                "value": "photograph",
               },
               {
                 "label": "playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
               },
             ],
           },
@@ -3965,7 +3965,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, map, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: audioItem, bibliographicCitation, digitalText, map, mediaItem, photograph, playlist, song, spatialFeature, term, video, vocabularyList",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -3974,28 +3974,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "term",
-                "value": "term",
-              },
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "spatialFeature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "map",
-                "value": "map",
               },
               {
                 "label": "bibliographicCitation",
@@ -4006,20 +3986,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "song",
-                "value": "song",
+                "label": "map",
+                "value": "map",
               },
               {
                 "label": "mediaItem",
                 "value": "mediaItem",
               },
               {
-                "label": "video",
-                "value": "video",
+                "label": "photograph",
+                "value": "photograph",
               },
               {
                 "label": "playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
               },
             ],
           },
@@ -4247,7 +4247,7 @@ exports[`command payload schemas Command payload schema should match the snapsho
           },
           "type": {
             "complexDataType": "ENUM",
-            "description": "One of: term, vocabularyList, audioItem, photograph, spatialFeature, map, bibliographicCitation, digitalText, song, mediaItem, video, playlist",
+            "description": "One of: audioItem, bibliographicCitation, digitalText, map, mediaItem, photograph, playlist, song, spatialFeature, term, video, vocabularyList",
             "enumLabel": "type",
             "enumName": "type",
             "isArray": false,
@@ -4256,28 +4256,8 @@ exports[`command payload schemas Command payload schema should match the snapsho
             "label": "type",
             "labelsAndValues": [
               {
-                "label": "term",
-                "value": "term",
-              },
-              {
-                "label": "vocabularyList",
-                "value": "vocabularyList",
-              },
-              {
                 "label": "audioItem",
                 "value": "audioItem",
-              },
-              {
-                "label": "photograph",
-                "value": "photograph",
-              },
-              {
-                "label": "spatialFeature",
-                "value": "spatialFeature",
-              },
-              {
-                "label": "map",
-                "value": "map",
               },
               {
                 "label": "bibliographicCitation",
@@ -4288,20 +4268,40 @@ exports[`command payload schemas Command payload schema should match the snapsho
                 "value": "digitalText",
               },
               {
-                "label": "song",
-                "value": "song",
+                "label": "map",
+                "value": "map",
               },
               {
                 "label": "mediaItem",
                 "value": "mediaItem",
               },
               {
-                "label": "video",
-                "value": "video",
+                "label": "photograph",
+                "value": "photograph",
               },
               {
                 "label": "playlist",
                 "value": "playlist",
+              },
+              {
+                "label": "song",
+                "value": "song",
+              },
+              {
+                "label": "spatialFeature",
+                "value": "spatialFeature",
+              },
+              {
+                "label": "term",
+                "value": "term",
+              },
+              {
+                "label": "video",
+                "value": "video",
+              },
+              {
+                "label": "vocabularyList",
+                "value": "vocabularyList",
               },
             ],
           },

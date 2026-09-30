@@ -397,7 +397,7 @@ describe(commandType, () => {
 
         describe(`when the resource does not exist`, () => {
             Object.values(ResourceType).forEach((resourceType) => {
-                describe(`when the reosuce of type: ${formatAggregateType(
+                describe(`when the resource of type: ${formatAggregateType(
                     resourceType
                 )} does not exist`, () => {
                     it(`should fail with the expected errors`, async () => {

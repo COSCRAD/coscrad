@@ -1,4 +1,4 @@
-import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { CommandHandler } from '@coscrad/commands';
 import { InternalError } from '../../../../lib/errors/InternalError';
 import { ResultOrError } from '../../../../types/ResultOrError';
@@ -31,19 +31,25 @@ export class CreateMapCommandHandler extends BaseCreateCommandHandler<Geospatial
     }
 
     protected buildEvent(
-        payload: CreateMap,
+        {
+            aggregateCompositeIdentifier,
+            name,
+            languageCodeForName,
+            description,
+            languageCodeForDescription,
+        }: CreateMap,
         eventMeta: EventRecordMetadata
     ): BaseEvent<IEventPayload> {
         const eventPayload: MapCreatedPayload = {
-            aggregateCompositeIdentifier: payload.aggregateCompositeIdentifier,
+            aggregateCompositeIdentifier,
             name: new MultilingualTextItem({
-                text: 'name of the map',
-                languageCode: LanguageCode.Chilcotin,
+                text: name,
+                languageCode: languageCodeForName,
                 role: MultilingualTextItemRole.original,
             }),
             description: new MultilingualTextItem({
-                text: 'description of the map',
-                languageCode: LanguageCode.English,
+                text: description,
+                languageCode: languageCodeForDescription,
                 role: MultilingualTextItemRole.original,
             }),
         };

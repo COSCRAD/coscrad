@@ -12,6 +12,7 @@ circling back to this.
 #### Relevant Commits
 
 -   fix: register event consumers for SPATIAL_FEATURES (#835)
+-   feat: introduce TRANSLATE_MAP_NAME
 -   feat: introduce CREATE_MAP (#828)
 -   feat: introduce TRANSLATE_SPATIAL_FEATURE_NAME (#820)
 -   feat: update points to have multilingual names (#818)
