@@ -61,9 +61,11 @@ describe(`Geospatial-map.fromEventHistory`, () => {
 
                     expect(result).toBeInstanceOf(GeospatialMap);
 
-                    const { eventHistory } = result as GeospatialMap;
+                    const { eventHistory, published } = result as GeospatialMap;
 
                     expect(eventHistory).toHaveLength(1);
+
+                    expect(published).toBe(false);
                 });
             });
 

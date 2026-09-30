@@ -1,10 +1,11 @@
-import { AggregateType } from '@coscrad/api-interfaces';
+import { AggregateType, LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
 import { NestedDataType } from '@coscrad/data-types';
+import { plainToInstance } from 'class-transformer';
 import { CoscradEvent } from '../../../../../domain/common';
-import { buildMultilingualTextWithSingleItem } from '../../../../../domain/common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../../../../domain/common/entities/multilingual-text';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
 import { GeospatialMapCompositeIdentifier } from '../create-map.command';
@@ -35,9 +36,11 @@ const testEventId = buildDummyUuid(5);
                 type: AggregateType.map,
             },
             // TODO find something better to do this
-            translationOfName: buildMultilingualTextWithSingleItem(
-                'geospatial map name text'
-            ).getOriginalTextItem(),
+            translationOfName: new MultilingualTextItem({
+                text: 'geospatial map name',
+                languageCode: LanguageCode.English,
+                role: MultilingualTextItemRole.original,
+            }),
         },
         meta: {
             id: testEventId,
@@ -50,4 +53,10 @@ const testEventId = buildDummyUuid(5);
 @CoscradEvent('MAP_NAME_TRANSLATED')
 export class MapNameTranslated extends BaseEvent<MapNameTranslatedPayload> {
     readonly type = `MAP_NAME_TRANSLATED`;
+
+    constructor(payload: MapNameTranslatedPayload, metadata: EventRecordMetadata) {
+        super(payload, metadata);
+
+        this.payload = plainToInstance(MapNameTranslatedPayload, payload);
+    }
 }

@@ -51,6 +51,16 @@ export class GeospatialMap extends Resource {
     })
     description: MultilingualText;
 
+    /**
+     * TODO We want to add support for custom base layers in the future.
+     * We also want to support a bounding geospatial rectangle (perhaps general polygon),
+     * in which case all spatial features added must fall in the bounds.
+     *
+     * Currently, we want to ship simple maps that leverage multilingual placenames
+     * with alternatives. Once we've solidified the complexity of this language \ culture
+     * data, we can enhance our geospatial model.
+     */
+
     @NonEmptyString({
         label: 'points',
         description: 'the spatial features that have been collected into this map',
