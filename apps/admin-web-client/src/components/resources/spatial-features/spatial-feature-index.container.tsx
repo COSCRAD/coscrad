@@ -36,7 +36,11 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
     return (
         <CoscradLeafletMap
             spatialFeatures={spatialFeatures}
-            onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
+            onSpatialFeatureSelected={(id: string) => {
+                console.log({ selectedId: id });
+
+                setSelectedSpatialFeatureId(id);
+            }}
             DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
             selectedSpatialFeatureId={selectedSpatialFeatureId}
         />

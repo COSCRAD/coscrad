@@ -27,23 +27,31 @@ const lookupTable: {
         handleClick,
         children,
         elRef,
-    }: MarkerPresenterProps<Position2D>) => (
-        <PointMarker
-            key={spatialFeature.id}
-            position={spatialFeature.geometry.coordinates}
-            eventHandlers={{
-                click: () => handleClick(spatialFeature.id),
-            }}
-            ref={elRef}
-        >
-            {children}
-        </PointMarker>
-    ),
+    }: MarkerPresenterProps<Position2D>) => {
+        // const markerId = `point-from-db-${spatialFeature.id}`;
+
+        return (
+            <PointMarker
+                key={spatialFeature.id}
+                position={spatialFeature.geometry.coordinates}
+                eventHandlers={{
+                    click: () => handleClick(spatialFeature.id),
+                }}
+                ref={elRef}
+            >
+                {children}
+            </PointMarker>
+        );
+    },
 };
 
 const iconUrl = 'https://kaaltsidakah.net/raven/Map/XK-Xuuya.png';
 
 const shadowUrl = 'https://kaaltsidakah.net/raven/Map/marker-shadow.png';
+
+const CoscradLeafletPopup = styled(LeafletPopup)({
+    minWidth: '300px',
+});
 
 interface Props {
     spatialFeature: ISpatialFeatureViewModel;
@@ -55,11 +63,8 @@ interface Props {
      */
     // eslint-disable-next-line
     customEffects: (id: string, marker: any) => void;
+    selectedSpatialFeatureId: string;
 }
-
-const CoscradLeafletPopup = styled(LeafletPopup)({
-    minWidth: '300px',
-});
 
 /**
  * Note that we refer to any element that renders a spatial feature on a map
@@ -67,12 +72,28 @@ const CoscradLeafletPopup = styled(LeafletPopup)({
  */
 export const buildSpatialFeatureMarker =
     (DetailPresenter: SpatialFeatureDetailPresenter) =>
-    ({ spatialFeature, handleClick, customEffects }: Props): JSX.Element => {
-        const markerRef = useRef();
+    ({
+        spatialFeature,
+        handleClick,
+        customEffects,
+        selectedSpatialFeatureId,
+    }: Props): JSX.Element => {
+        const markerRef = useRef(null);
 
         useEffect(() => {
-            customEffects(spatialFeature.id, markerRef.current);
-        }, [markerRef, spatialFeature.id, customEffects]);
+            const markerInstance = markerRef.current;
+
+            if (markerInstance && selectedSpatialFeatureId === spatialFeature.id) {
+                // Open the popup if this marker matches the active ID
+                if (!markerInstance.isPopupOpen()) {
+                    markerInstance.openPopup();
+                }
+            }
+        }, [selectedSpatialFeatureId, spatialFeature.id]); // const markerId = `point-from-db-${spatialFeature.id}`;
+
+        // useEffect(() => {
+        //     customEffects(markerId, markerRef.current);
+        // }, [markerRef, spatialFeature.id, customEffects]);
 
         const {
             geometry: { type: geometryType, coordinates },
