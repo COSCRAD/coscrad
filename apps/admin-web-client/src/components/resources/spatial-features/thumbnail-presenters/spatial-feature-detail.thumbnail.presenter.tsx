@@ -5,6 +5,7 @@ import {
 } from '@coscrad/api-interfaces';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
+import { PointTuple } from 'leaflet';
 import { Link } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
@@ -40,7 +41,9 @@ export const SpatialFeatureDetailThumbnailPresenter = (
 
     const imageUrl = 'https://kaaltsidakah.net/raven/Map/Previews/XK-Xuuya-Preview.png';
 
-    const { type: geometryType } = geometry;
+    const { type: geometryType, coordinates } = geometry;
+
+    const [lat, lng] = coordinates as unknown as PointTuple;
 
     return (
         <Grid container spacing={0}>
@@ -58,6 +61,8 @@ export const SpatialFeatureDetailThumbnailPresenter = (
                 <Typography variant="h5">{originalName.text}</Typography>
                 <SinglePropertyPresenter display="Description" value={description.items[0].text} />
                 <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                <SinglePropertyPresenter display="Lat" value={lat} />
+                <SinglePropertyPresenter display="Long" value={lng} />
             </Grid>
             <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
                 <Box sx={{ pl: 8 }}>
