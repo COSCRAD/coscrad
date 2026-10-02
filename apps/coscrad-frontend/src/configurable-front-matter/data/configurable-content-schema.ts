@@ -100,7 +100,13 @@ export type ConfigurableContent<T extends CategorizableType = CategorizableType>
     memoryMatch: MemoryMatchConfig;
 };
 
-// is this still necessary?
+/**
+ * We have reverted to using a `json` file in order to support hot-swapping the config without rebuilding.
+ * As such, the following dynamic validation is crucial.
+ *
+ * Ideally, we'd do this with a data class \ schema decoration, but our front-end
+ * build doesn't support decorators.
+ */
 export const configurableContentPropertiesAndConstraints: {
     [K in keyof ConfigurableContent]: CoscradConstraint[];
 } = {
@@ -134,7 +140,6 @@ export const configurableContentPropertiesAndConstraints: {
     alphabetConfig: [CoscradConstraint.isObject],
     shouldEnableMemoryMatch: [CoscradConstraint.isBoolean],
     additionalMaterials: [],
-    // TODO Are we still using this now that we have a typescript type?
     memoryMatch: [],
 };
 
