@@ -11,6 +11,7 @@ circling back to this.
 
 #### Relevant Commits
 
+-   feat: introduce ADD_SPATIAL_FEATURE_TO_MAP (#836)
 -   fix: register event consumers for SPATIAL_FEATURES (#835)
 -   feat: introduce TRANSLATE_MAP_NAME (#833)
 -   feat: introduce CREATE_MAP (#828)

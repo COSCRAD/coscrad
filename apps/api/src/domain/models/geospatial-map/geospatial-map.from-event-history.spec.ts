@@ -4,11 +4,12 @@ import { TestEventStream } from '../../../test-data/events';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualTextItem } from '../../common/entities/multilingual-text';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
+import { SpatialFeatureAddedToMap } from './commands/add-spatial-feature-to-map';
 import { MapCreated } from './commands/map-created.event';
 import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 import { GeospatialMap } from './geospatial-map.entity';
 
-const geospatialId = buildDummyUuid(8);
+const mapId = buildDummyUuid(8);
 
 const originalName = 'Text in language';
 
@@ -33,7 +34,7 @@ const mapCreated = new TestEventStream().andThen<MapCreated>(
     MapCreated
 );
 
-const translationText = `Translation of geospatial map: ${geospatialId}`;
+const translationText = `Translation of geospatial map: ${mapId}`;
 
 const translationLanguageCode = LanguageCode.English;
 
@@ -54,9 +55,9 @@ describe(`Geospatial-map.fromEventHistory`, () => {
                 it(`should return the expected result`, () => {
                     const result = GeospatialMap.fromEventHistory(
                         mapCreated.as({
-                            id: geospatialId,
+                            id: mapId,
                         }),
-                        geospatialId
+                        mapId
                     );
 
                     expect(result).toBeInstanceOf(GeospatialMap);
@@ -69,11 +70,11 @@ describe(`Geospatial-map.fromEventHistory`, () => {
                 });
             });
 
-            describe(`when a geospatial map is created than translated`, () => {
+            describe(`when a geospatial map is created then translated`, () => {
                 it(`should return the appropriate geospatial map`, () => {
                     const result = GeospatialMap.fromEventHistory(
-                        mapNameTranslated.as({ id: geospatialId }),
-                        geospatialId
+                        mapNameTranslated.as({ id: mapId }),
+                        mapId
                     );
 
                     expect(result).toBeInstanceOf(GeospatialMap);
@@ -89,6 +90,57 @@ describe(`Geospatial-map.fromEventHistory`, () => {
                         translationItemSearchResult as MultilingualTextItem;
 
                     expect(foundTranslationText).toBe(translationText);
+                });
+            });
+
+            describe(`when several points have been added to a geospatial map`, () => {
+                const spatialFeatureIds = [101, 102, 103].map(buildDummyUuid);
+
+                it(`should include these points in the map`, () => {
+                    const result = GeospatialMap.fromEventHistory(
+                        mapNameTranslated
+                            .andThen<SpatialFeatureAddedToMap>(
+                                {
+                                    type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
+                                    payload: {
+                                        spatialFeatureId: spatialFeatureIds[0],
+                                    },
+                                },
+                                SpatialFeatureAddedToMap
+                            )
+                            .andThen<SpatialFeatureAddedToMap>(
+                                {
+                                    type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
+                                    payload: {
+                                        spatialFeatureId: spatialFeatureIds[1],
+                                    },
+                                },
+                                SpatialFeatureAddedToMap
+                            )
+                            .andThen<SpatialFeatureAddedToMap>(
+                                {
+                                    type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
+                                    payload: {
+                                        spatialFeatureId: spatialFeatureIds[2],
+                                    },
+                                },
+                                SpatialFeatureAddedToMap
+                            )
+                            .as({
+                                id: mapId,
+                            }),
+                        mapId
+                    );
+
+                    expect(result).toBeInstanceOf(GeospatialMap);
+
+                    const { spatialFeatures } = result as GeospatialMap;
+
+                    expect(spatialFeatures).toHaveLength(spatialFeatureIds.length);
+
+                    spatialFeatureIds.forEach((spatialFeatureId) =>
+                        spatialFeatureId.includes(spatialFeatureId)
+                    );
                 });
             });
         });

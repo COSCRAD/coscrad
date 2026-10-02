@@ -5,6 +5,7 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
+import { SpatialFeatureAddedToMap } from '../../../domain/models/geospatial-map/commands/add-spatial-feature-to-map';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
 import { Maybe } from '../../../lib/types/maybe';
 import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
@@ -152,6 +153,29 @@ export class GeospatialMap extends Resource {
         this.name = updatedName;
 
         return this;
+    }
+
+    @UpdateMethod()
+    add(spatialFeatureId: AggregateId): ResultOrError<GeospatialMap> {
+        if (this.spatialFeatures.some((sf) => sf === spatialFeatureId)) {
+            return new InternalError(
+                `You cannot add a duplicate spatial feature [${spatialFeatureId}] to the map ${
+                    this.getName().getOriginalTextItem().text
+                }`
+            );
+        }
+
+        this.spatialFeatures.push(spatialFeatureId);
+
+        return this;
+    }
+
+    handleSpatialFeatureAddedToMap({ payload: { spatialFeatureId } }: SpatialFeatureAddedToMap) {
+        return this.add(spatialFeatureId);
+    }
+
+    fromMapCreated(): GeospatialMap | InternalError {
+        throw new Error('not implemented');
     }
 
     static fromEventHistory(

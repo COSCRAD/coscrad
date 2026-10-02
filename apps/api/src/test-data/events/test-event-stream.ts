@@ -1,8 +1,6 @@
 import { LanguageCode } from '@coscrad/api-interfaces';
 import { isNonEmptyObject, isNonEmptyString } from '@coscrad/validation-constraints';
 import { plainToInstance } from 'class-transformer';
-import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
-import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import { getAudioItemTestEventBuilderMap } from '../../domain/models/audio-visual';
 import { getVideoTestEventBuilder } from '../../domain/models/audio-visual/video/test-data';
 import { getBibliographicCitationTestEventBuilderMap } from '../../domain/models/bibliographic-citation/test-data';
@@ -101,6 +99,8 @@ import {
     VocabularyListNameTranslated,
     VocabularyListNameTranslatedPayload,
 } from '../../domain/models/vocabulary-list/commands/translate-vocabulary-list-name/vocabulary-list-name-translated.event';
+import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
+import { dummyDateNow } from '../../domain/models/__tests__/utilities/dummyDateNow';
 import { AggregateId } from '../../domain/types/AggregateId';
 import { AggregateType } from '../../domain/types/AggregateType';
 import { InternalError } from '../../lib/errors/InternalError';
@@ -949,6 +949,19 @@ export class TestEventStream {
         return eventBuilder(payloadOverrides, () => this.buildEventMeta(metaOverrides));
     }
 
+    /**
+     *
+     * @deprecated Provide the second argument (your event class Ctor) so that
+     * you don't have to manually add test data to the legacy test event
+     * registry.
+     */
+    andThen<T extends BaseEvent>(
+        eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>
+    ): TestEventStream;
+    andThen<T extends BaseEvent>(
+        eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>,
+        eventCtor: Ctor<BaseEvent>
+    ): TestEventStream;
     andThen<T extends BaseEvent>(
         eventTypeAndPayloadOverrides: EventTypeAndPayloadOverrides<T>,
         eventCtor?: Ctor<BaseEvent>
