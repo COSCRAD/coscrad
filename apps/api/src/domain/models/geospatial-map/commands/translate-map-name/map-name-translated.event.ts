@@ -18,7 +18,7 @@ export class MapNameTranslatedPayload {
     readonly aggregateCompositeIdentifier: GeospatialMapCompositeIdentifier;
 
     @NestedDataType(MultilingualTextItem, {
-        label: 'translation for map name',
+        label: `translation of the map's name`,
         description: 'the translation text and associated information',
     })
     readonly translationOfName: MultilingualTextItem;
@@ -35,7 +35,6 @@ const testEventId = buildDummyUuid(5);
                 id: buildDummyUuid(43),
                 type: AggregateType.map,
             },
-            // TODO find something better to do this
             translationOfName: new MultilingualTextItem({
                 text: 'geospatial map name',
                 languageCode: LanguageCode.English,

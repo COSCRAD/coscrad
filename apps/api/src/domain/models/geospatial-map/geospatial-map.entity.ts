@@ -128,9 +128,13 @@ export class GeospatialMap extends Resource {
         return instance;
     }
 
-    // TODO remove this
+    /**
+     * TODO We should remove this as it is a view concern.
+     *
+     * We are not currently using dynamic command forms for maps on the UX.
+     */
     protected getResourceSpecificAvailableCommands(): string[] {
-        throw new Error('Method not implemented.');
+        return [];
     }
 
     @UpdateMethod()
@@ -150,17 +154,13 @@ export class GeospatialMap extends Resource {
         return this;
     }
 
-    fromMapCreated(): GeospatialMap | InternalError {
-        throw new Error('not implemented');
-    }
-
     static fromEventHistory(
         eventHistory: BaseEvent[],
         id: AggregateId
     ): Maybe<ResultOrError<GeospatialMap>> {
         const creationEventHandlerMap: CreationEventHandlerMap<GeospatialMap> = new Map().set(
             'MAP_CREATED',
-            GeospatialMap.buildGeospatialMapFromMapCreated
+            GeospatialMap.fromMapCreated
         );
 
         return buildAggregateRootFromEventHistory(
@@ -181,7 +181,7 @@ export class GeospatialMap extends Resource {
         return this.translateName(text, languageCode);
     }
 
-    static buildGeospatialMapFromMapCreated({
+    static fromMapCreated({
         payload: {
             aggregateCompositeIdentifier: { id },
             name,

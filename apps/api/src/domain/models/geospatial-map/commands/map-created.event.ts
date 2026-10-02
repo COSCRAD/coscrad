@@ -9,7 +9,6 @@ import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../__tests__/utilities/dummyDateNow';
 import { GeospatialMapCompositeIdentifier } from './create-map.command';
 
-// TODO Add decorators
 export class MapCreatedPayload {
     @NestedDataType(GeospatialMapCompositeIdentifier, {
         label: 'composite ID',
@@ -23,6 +22,10 @@ export class MapCreatedPayload {
     })
     name: MultilingualTextItem;
 
+    @NestedDataType(MultilingualTextItem, {
+        label: 'description',
+        description: 'description of this map (and associated langugae info)',
+    })
     description: MultilingualTextItem;
 }
 

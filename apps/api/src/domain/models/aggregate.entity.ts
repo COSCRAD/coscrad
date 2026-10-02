@@ -1,4 +1,4 @@
-import { NonEmptyString } from '@coscrad/data-types';
+import { UUID } from '@coscrad/data-types';
 import { InternalError, isInternalError } from '../../lib/errors/InternalError';
 import { ValidationResult } from '../../lib/errors/types/ValidationResult';
 import cloneToPlainObject from '../../lib/utilities/cloneToPlainObject';
@@ -37,9 +37,7 @@ export abstract class Aggregate extends BaseDomainModel implements HasAggregateI
 
     readonly type: AggregateType;
 
-    // TODO Make this a UUID
-    // can we do this now?
-    @NonEmptyString({
+    @UUID({
         label: 'ID',
         description: 'unique identifier',
     })
