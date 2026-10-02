@@ -1,3 +1,5 @@
+import { LanguageCode, MultilingualTextItemRole } from '@coscrad/api-interfaces';
+import { InternalError } from '../../../lib/errors/InternalError';
 import { TestEventStream } from '../../../test-data/events';
 import { ResourceType } from '../../types/ResourceType';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
@@ -5,6 +7,8 @@ import { MapCreated } from './commands/map-created.event';
 import { GeospatialMap } from './geospatial-map.entity';
 
 const mapId = buildDummyUuid(1);
+
+const mapName = "Aaron's Stompin' Grounds";
 
 const spatialFeatureId = buildDummyUuid(2);
 
@@ -15,6 +19,11 @@ const emptyMap = GeospatialMap.fromEventHistory(
                 type: 'MAP_CREATED',
                 payload: {
                     aggregateCompositeIdentifier: { id: mapId },
+                    name: {
+                        text: mapName,
+                        languageCode: LanguageCode.English,
+                        role: MultilingualTextItemRole.original,
+                    },
                 },
             },
             MapCreated
@@ -23,17 +32,6 @@ const emptyMap = GeospatialMap.fromEventHistory(
             type: ResourceType.map,
             id: mapId,
         }),
-    // [
-    //     new TestEventStream().buildSingle<MapCreated>(
-    //         {
-    //             type: 'MAP_CREATED',
-    //             payload: {
-    //                 aggregateCompositeIdentifier: { id: mapId },
-    //             },
-    //         },
-    //         MapCreated
-    //     ),
-    // ],
     mapId
 ) as GeospatialMap;
 
@@ -44,12 +42,29 @@ describe(`GeospatialMap.add`, () => {
 
             expect(result).toBeInstanceOf(GeospatialMap);
 
-            expect(result.spatialFeatures).toContain(spatialFeatureId);
+            expect((result as GeospatialMap).spatialFeatures).toContain(spatialFeatureId);
         });
     });
 
     describe(`when the update is invalid `, () => {
         describe(`when the map already has the given spatial feature`, () => {
+            it(`should return the expected error`, () => {
+                const mapWithSpatialFeatureAlready = emptyMap.add(
+                    spatialFeatureId
+                ) as GeospatialMap;
+
+                const result = mapWithSpatialFeatureAlready.add(spatialFeatureId);
+
+                const message = (result as InternalError).toString();
+
+                expect(message).toContain('duplicate');
+                expect(message).toContain(spatialFeatureId);
+                expect(message).toContain(mapName);
+            });
+        });
+
+        // future scoped
+        describe(`when the point falls outside of the bounds of the map`, () => {
             it.todo(`should return the expected error`);
         });
     });

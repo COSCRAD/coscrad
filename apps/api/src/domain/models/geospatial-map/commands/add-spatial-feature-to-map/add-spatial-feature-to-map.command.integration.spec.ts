@@ -7,8 +7,18 @@ import buildConfigFilePath from '../../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { GeospatialMapModule } from '../../../../../app/domain-modules/geospatial-map.module';
+import { SpatialFeatureModule } from '../../../../../app/domain-modules/spatial-feature.module';
 import { CoscradEventFactory } from '../../../../../domain/common';
 import { ID_MANAGER_TOKEN } from '../../../../../domain/interfaces/id-manager.interface';
+import InvalidExternalReferenceByAggregateError from '../../../../../domain/models/categories/errors/InvalidExternalReferenceByAggregateError';
+import { SpatialFeatureAddedToMap } from '../../../../../domain/models/geospatial-map/commands/add-spatial-feature-to-map/spatial-feature-added-to-map.event';
+import AggregateNotFoundError from '../../../../../domain/models/shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../../../domain/models/shared/common-command-errors/CommandExecutionError';
+import { PointCreated } from '../../../../../domain/models/spatial-feature/point/commands';
+import { Point } from '../../../../../domain/models/spatial-feature/point/entities/point.entity';
+import { assertCommandError } from '../../../../../domain/models/__tests__/command-helpers/assert-command-error';
+import { InternalError } from '../../../../../lib/errors/InternalError';
+import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
 import { PersistenceModule } from '../../../../../persistence/persistence.module';
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
@@ -26,30 +36,55 @@ import { AddSpatialFeatureToMap } from './add-spatial-feature-to-map.command';
 
 const commandType = 'ADD_SPATIAL_FEATURE_TO_MAP';
 
-const geospatialId = buildDummyUuid(9);
+const mapId = buildDummyUuid(9);
 
-const geospatialCompositeIdentifier = {
+const mapCompositeIdentifier = {
     type: AggregateType.map,
-    id: geospatialId,
+    id: mapId,
 };
 
-const mapCreated = new TestEventStream().andThen<MapCreated>({
-    type: 'MAP_CREATED',
-    payload: {
-        aggregateCompositeIdentifier: geospatialCompositeIdentifier,
-        name: { text: 'spatial feature text', languageCode: LanguageCode.English },
-    },
-});
+const pointCompositeIdentifier = {
+    type: AggregateType.spatialFeature,
+    id: buildDummyUuid(55),
+};
 
-const eventHistoryForExistingEmptyMapCreated = mapCreated.as(geospatialCompositeIdentifier);
+const mapName = 'name of the test map';
+
+const mapCreated = new TestEventStream().andThen<MapCreated>(
+    {
+        type: 'MAP_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: mapCompositeIdentifier,
+            name: { text: mapName, languageCode: LanguageCode.English },
+        },
+    },
+    MapCreated
+);
+
+const eventHistoryForExistingEmptyMap = mapCreated.as(mapCompositeIdentifier);
 
 const validFsa = {
     type: commandType,
     payload: buildTestInstance(AddSpatialFeatureToMap, {
-        aggregateCompositeIdentifier: geospatialCompositeIdentifier,
-        spatialFeatureId: geospatialId,
+        aggregateCompositeIdentifier: mapCompositeIdentifier,
+        spatialFeatureId: pointCompositeIdentifier.id,
     }),
 };
+
+const existingPoint = Point.fromEventHistory(
+    new TestEventStream()
+        .andThen<PointCreated>({
+            type: 'POINT_CREATED',
+            payload: {},
+        })
+        .as(pointCompositeIdentifier),
+    pointCompositeIdentifier.id
+) as Point;
+
+const existinEmptyMap = GeospatialMap.fromEventHistory(
+    eventHistoryForExistingEmptyMap,
+    mapId
+) as GeospatialMap;
 
 describe(commandType, () => {
     let app: INestApplication;
@@ -67,6 +102,7 @@ describe(commandType, () => {
                     cache: false,
                 }),
                 PersistenceModule.forRootAsync(),
+                SpatialFeatureModule,
                 GeospatialMapModule,
             ],
         })
@@ -106,18 +142,17 @@ describe(commandType, () => {
     });
 
     describe(`when the command is valid`, () => {
-        it(`should add the spatial feature to map`, async () => {
-            const existingEmptyMapCreated = GeospatialMap.fromEventHistory(
-                eventHistoryForExistingEmptyMapCreated,
-                geospatialId
-            ) as GeospatialMap;
-
+        it(`should add the spatial the map`, async () => {
             await assertCommandSuccess(assertionHelperDependencies, {
                 systemUserId: dummySystemUserId,
                 seedInitialState: async () => {
                     await testRepositoryProvider
+                        .forResource(AggregateType.spatialFeature)
+                        .create(existingPoint);
+
+                    await testRepositoryProvider
                         .forResource(AggregateType.map)
-                        .create(existingEmptyMapCreated);
+                        .create(existinEmptyMap);
                 },
                 buildValidCommandFSA: () => validFsa,
                 checkStateOnSuccess: async ({
@@ -129,6 +164,95 @@ describe(commandType, () => {
 
                     expect(searchResult).toBeInstanceOf(GeospatialMap);
                 },
+            });
+        });
+    });
+
+    describe(`when the command is invalid`, () => {
+        describe(`when the spatialFeature does not exist`, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(AggregateType.map)
+                            .create(existinEmptyMap);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new InvalidExternalReferenceByAggregateError(
+                                    existinEmptyMap.getCompositeIdentifier(),
+                                    [existingPoint.getCompositeIdentifier()]
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the map does not exist`, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(AggregateType.spatialFeature)
+                            .create(existingPoint);
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (result) => {
+                        assertErrorAsExpected(
+                            result,
+                            new CommandExecutionError([
+                                new AggregateNotFoundError(
+                                    existinEmptyMap.getCompositeIdentifier()
+                                ),
+                            ])
+                        );
+                    },
+                });
+            });
+        });
+
+        describe(`when the spatial feature is already in the map`, () => {
+            it(`should return the expected error`, async () => {
+                await assertCommandError(assertionHelperDependencies, {
+                    systemUserId: dummySystemUserId,
+                    seedInitialState: async () => {
+                        await testRepositoryProvider
+                            .forResource(AggregateType.spatialFeature)
+                            .create(existingPoint);
+
+                        await testRepositoryProvider.forResource(AggregateType.map).create(
+                            GeospatialMap.fromEventHistory(
+                                mapCreated
+                                    .andThen<SpatialFeatureAddedToMap>(
+                                        {
+                                            type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
+                                            payload: {
+                                                spatialFeatureId: existingPoint.id,
+                                            },
+                                        },
+                                        SpatialFeatureAddedToMap
+                                    )
+                                    .as(mapCompositeIdentifier),
+                                mapId
+                            ) as GeospatialMap
+                        );
+                    },
+                    buildCommandFSA: () => validFsa,
+                    checkError: (result) => {
+                        const message = (result as InternalError).toString();
+
+                        expect(message).toContain('duplicate spatial feature');
+                        expect(message).toContain(existingPoint.id);
+                        expect(message).toContain(mapName);
+                    },
+                });
             });
         });
     });

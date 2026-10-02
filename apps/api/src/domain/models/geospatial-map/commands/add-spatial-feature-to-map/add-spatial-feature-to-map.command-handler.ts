@@ -52,16 +52,13 @@ export class AddSpatialFeatureToMapCommandHandler extends BaseUpdateCommandHandl
         );
     }
 
+    // TODO remove this method in favor of an external `SpatialFeatureValidationService`?
     protected validateExternalState(
         { resources: { spatialFeature: allSpatialFeatures } }: InMemorySnapshot,
         instance: GeospatialMap,
         { spatialFeatureId }: AddSpatialFeatureToMap
     ): InternalError | Valid {
-        if (
-            !allSpatialFeatures.some(({ id }) => {
-                id === spatialFeatureId;
-            })
-        ) {
+        if (allSpatialFeatures[0]?.id !== spatialFeatureId) {
             return new InvalidExternalReferenceByAggregateError(instance.getCompositeIdentifier(), [
                 {
                     type: ResourceType.spatialFeature,
