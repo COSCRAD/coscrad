@@ -11,7 +11,6 @@ export interface CoscradMapProps {
     initialZoom?: number;
     mapHeightPx?: number;
     onSpatialFeatureSelected?: (id: string) => void;
-    DetailPresenter: SpatialFeatureDetailPresenter;
     selectedSpatialFeatureId: string;
 }
 

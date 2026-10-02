@@ -9,7 +9,6 @@ import { FunctionalComponent } from '../../shared/types';
 import { getOriginalTextItem } from '../terms/term-detail.page';
 import { CoscradLeafletMap } from './leaflet';
 import { useFetchSpatialFeaturesQuery } from './store/spatial-feature.api';
-import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
 import { Position2D } from './types';
 
@@ -89,7 +88,6 @@ export const SpatialFeatureDetailFullViewPresenter = (): JSX.Element => {
                     initialCentre={initialCentre}
                     mapHeightPx={mapHeightPx}
                     onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
-                    DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
                     selectedSpatialFeatureId={selectedSpatialFeatureId}
                 />
             </CoscradMapDetailContainer>

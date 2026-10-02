@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CoscradLeafletMap } from './leaflet';
 import { spatialFeatureApi } from './store/spatial-feature.api';
-import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
 export const SpatialFeatureIndexContainer = (): JSX.Element => {
     const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
@@ -41,7 +40,6 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
 
                 setSelectedSpatialFeatureId(id);
             }}
-            DetailPresenter={SpatialFeatureDetailThumbnailPresenter}
             selectedSpatialFeatureId={selectedSpatialFeatureId}
         />
     );
