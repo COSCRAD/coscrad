@@ -1,9 +1,8 @@
 import {
-    AGGREGATE_COMPOSITE_IDENTIFIER,
     AggregateCompositeIdentifier,
+    AGGREGATE_COMPOSITE_IDENTIFIER,
 } from '@coscrad/api-interfaces';
 import { isNonEmptyString } from '@coscrad/validation-constraints';
-import { isDeepStrictEqual } from 'util';
 import { isInternalError } from '../../../../lib/errors/InternalError';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import capitalizeFirstLetter from '../../../../lib/utilities/strings/capitalizeFirstLetter';
@@ -52,7 +51,20 @@ export abstract class BaseEvent<
     }
 
     public isFor(compositeIdentifier: { type: string; id: string }): boolean {
-        return isDeepStrictEqual(this.payload[AGGREGATE_COMPOSITE_IDENTIFIER], compositeIdentifier);
+        const myCompositeId = this.payload[AGGREGATE_COMPOSITE_IDENTIFIER];
+
+        /**
+         * Warning: Do not use `isDeepStrictEqual` here. It will fail if you
+         * compare a plain old JS object to an instance of a `FooCompositeIdentifier`
+         * class. Given that we slowly moving towards instantiating `Payload` data
+         * classes in event constructors (to reduce our dependence on magic union factories),
+         * we don't want to require the composite ID to be an instance of a
+         * particular class. I suppose this is nominal vs. structural typing clashing.
+         */
+        return (
+            myCompositeId.id === compositeIdentifier.id &&
+            myCompositeId.type === compositeIdentifier.type
+        );
     }
 
     public toDTO<T extends BaseEvent>(this: T): DTO<this> {

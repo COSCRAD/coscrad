@@ -1,16 +1,16 @@
 export enum ResourceType {
-    term = 'term',
-    vocabularyList = 'vocabularyList',
     audioItem = 'audioItem',
-    photograph = 'photograph',
-    spatialFeature = 'spatialFeature',
-    map = 'map',
     bibliographicCitation = 'bibliographicCitation',
     digitalText = 'digitalText',
-    song = 'song',
+    map = 'map',
     mediaItem = 'mediaItem',
-    video = 'video',
+    photograph = 'photograph',
     playlist = 'playlist',
+    song = 'song',
+    spatialFeature = 'spatialFeature',
+    term = 'term',
+    video = 'video',
+    vocabularyList = 'vocabularyList',
 }
 
 export const isResourceType = (input: unknown): input is ResourceType =>

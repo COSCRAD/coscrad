@@ -143,6 +143,7 @@ import {
 import { DigitalText } from '../../../domain/models/digital-text/entities/digital-text.entity';
 import { ArangoDigitalTextQueryRepository } from '../../../domain/models/digital-text/queries/arango-digital-text-query-repository';
 import { DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN } from '../../../domain/models/digital-text/queries/digital-text-query-repository.interface';
+import { GeospatialMap } from '../../../domain/models/geospatial-map/geospatial-map.entity';
 import { CreateMediaItem } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command';
 import { CreateMediaItemCommandHandler } from '../../../domain/models/media-item/commands/create-media-item/create-media-item.command-handler';
 import { MEDIA_MANGAER_INJECTION_TOKEN } from '../../../domain/models/media-item/media-manager.interface';
@@ -454,6 +455,7 @@ export const buildAllDataClassProviders = () =>
         AudioItem,
         Video,
         Point,
+        GeospatialMap,
     ].map((ctor: Ctor<unknown>) => ({
         provide: ctor,
         useValue: ctor,

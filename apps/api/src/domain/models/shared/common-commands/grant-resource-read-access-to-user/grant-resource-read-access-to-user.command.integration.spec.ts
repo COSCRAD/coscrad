@@ -110,6 +110,7 @@ describe('GRANT_RESOURCE_READ_ACCESS_TO_USER', () => {
         ResourceType.audioItem,
         ResourceType.video,
         ResourceType.spatialFeature,
+        ResourceType.map,
     ];
 
     describe('when the command is valid', () => {

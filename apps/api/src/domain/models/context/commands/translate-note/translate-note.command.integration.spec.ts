@@ -6,18 +6,18 @@ import { MultilingualTextItem } from '../../../../../domain/common/entities/mult
 import { IIdManager } from '../../../../../domain/interfaces/id-manager.interface';
 import assertErrorAsExpected from '../../../../../lib/__tests__/assertErrorAsExpected';
 import { ArangoDatabaseProvider } from '../../../../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
-import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { ArangoEventRepository } from '../../../../../persistence/repositories/arango-event-repository';
+import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../../../../persistence/repositories/__tests__/TestRepositoryProvider';
 import { TestEventStream } from '../../../../../test-data/events';
+import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
+import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { assertCommandError } from '../../../__tests__/command-helpers/assert-command-error';
 import { assertCommandSuccess } from '../../../__tests__/command-helpers/assert-command-success';
 import { DummyCommandFsaFactory } from '../../../__tests__/command-helpers/dummy-command-fsa-factory';
 import { CommandAssertionDependencies } from '../../../__tests__/command-helpers/types/CommandAssertionDependencies';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummySystemUserId } from '../../../__tests__/utilities/dummySystemUserId';
-import AggregateNotFoundError from '../../../shared/common-command-errors/AggregateNotFoundError';
-import CommandExecutionError from '../../../shared/common-command-errors/CommandExecutionError';
 import { EdgeConnection } from '../../edge-connection.entity';
 import { NoteAboutResourceCreated } from '../create-note-about-resource/note-about-resource-created.event';
 import { NoteTranslated } from './note-translated.event';
@@ -38,14 +38,14 @@ const translationLanguageCode = LanguageCode.English;
 
 const translationNoteText = 'translation of the note';
 
-const noteAboutReourceCreated = new TestEventStream().andThen<NoteAboutResourceCreated>({
+const noteAboutResourceCreated = new TestEventStream().andThen<NoteAboutResourceCreated>({
     type: 'NOTE_ABOUT_RESOURCE_CREATED',
     payload: {
         languageCode: originalLanguageCode,
     },
 });
 
-const noteTranslated = noteAboutReourceCreated.andThen<NoteTranslated>({
+const noteTranslated = noteAboutResourceCreated.andThen<NoteTranslated>({
     type: 'NOTE_TRANSLATED',
     payload: {
         aggregateCompositeIdentifier: edgeConnectionCompositeIdentifier,
@@ -111,7 +111,7 @@ describe(commandType, () => {
                 systemUserId: dummySystemUserId,
                 buildValidCommandFSA: () => validCommandFSA,
                 seedInitialState: async () => {
-                    const eventHistory = noteAboutReourceCreated.as(
+                    const eventHistory = noteAboutResourceCreated.as(
                         edgeConnectionCompositeIdentifier
                     );
 
@@ -167,7 +167,7 @@ describe(commandType, () => {
                 await assertCommandError(commandAssertionDependencies, {
                     systemUserId: dummySystemUserId,
                     seedInitialState: async () => {
-                        const eventHistory = noteAboutReourceCreated.as(
+                        const eventHistory = noteAboutResourceCreated.as(
                             edgeConnectionCompositeIdentifier
                         );
 

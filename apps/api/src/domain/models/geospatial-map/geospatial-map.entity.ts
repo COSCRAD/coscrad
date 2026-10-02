@@ -1,16 +1,31 @@
-import { AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    LanguageCode,
+    MultilingualTextItemRole,
+    ResourceType,
+} from '@coscrad/api-interfaces';
 import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { InternalError, isInternalError } from '../../../lib/errors/InternalError';
+import { Maybe } from '../../../lib/types/maybe';
+import formatAggregateCompositeIdentifier from '../../../queries/presentation/formatAggregateCompositeIdentifier';
 import { CoscradDataExample } from '../../../test-data/utilities';
 import { DTO } from '../../../types/DTO';
+import { ResultOrError } from '../../../types/ResultOrError';
 import { buildMultilingualTextWithSingleItem } from '../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../common/entities/multilingual-text';
-import { AggregateRoot } from '../../decorators';
+import { AggregateRoot, UpdateMethod } from '../../decorators';
 import { AggregateCompositeIdentifier } from '../../types/AggregateCompositeIdentifier';
 import { AggregateId } from '../../types/AggregateId';
+import {
+    buildAggregateRootFromEventHistory,
+    CreationEventHandlerMap,
+} from '../build-aggregate-root-from-event-history';
 import { Resource } from '../resource.entity';
+import { BaseEvent } from '../shared/events/base-event.entity';
 import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CreateMap } from './commands/create-map.command';
+import { MapCreated } from './commands/map-created.event';
+import { MapNameTranslated } from './commands/translate-map-name/map-name-translated.event';
 
 @CoscradDataExample<GeospatialMap>({
     example: {
@@ -35,6 +50,16 @@ export class GeospatialMap extends Resource {
         description: 'description for map',
     })
     description: MultilingualText;
+
+    /**
+     * TODO We want to add support for custom base layers in the future.
+     * We also want to support a bounding geospatial rectangle (perhaps general polygon),
+     * in which case all spatial features added must fall in the bounds.
+     *
+     * Currently, we want to ship simple maps that leverage multilingual placenames
+     * with alternatives. Once we've solidified the complexity of this language \ culture
+     * data, we can enhance our geospatial model.
+     */
 
     @NonEmptyString({
         label: 'points',
@@ -75,11 +100,6 @@ export class GeospatialMap extends Resource {
         return [];
     }
 
-    // TODO put this on the view
-    protected getResourceSpecificAvailableCommands(): string[] {
-        return [];
-    }
-
     static fromUserRequest({
         aggregateCompositeIdentifier: { id },
         name,
@@ -106,5 +126,92 @@ export class GeospatialMap extends Resource {
         }
 
         return instance;
+    }
+
+    /**
+     * TODO We should remove this as it is a view concern.
+     *
+     * We are not currently using dynamic command forms for maps on the UX.
+     */
+    protected getResourceSpecificAvailableCommands(): string[] {
+        return [];
+    }
+
+    @UpdateMethod()
+    translateName(translation: string, languageCode: LanguageCode) {
+        const updatedName = this.name.translate({
+            text: translation,
+            languageCode,
+            role: MultilingualTextItemRole.freeTranslation,
+        });
+
+        if (isInternalError(updatedName)) {
+            return updatedName;
+        }
+
+        this.name = updatedName;
+
+        return this;
+    }
+
+    static fromEventHistory(
+        eventHistory: BaseEvent[],
+        id: AggregateId
+    ): Maybe<ResultOrError<GeospatialMap>> {
+        const creationEventHandlerMap: CreationEventHandlerMap<GeospatialMap> = new Map().set(
+            'MAP_CREATED',
+            GeospatialMap.fromMapCreated
+        );
+
+        return buildAggregateRootFromEventHistory(
+            creationEventHandlerMap,
+            {
+                type: AggregateType.map,
+                id,
+            },
+            eventHistory
+        );
+    }
+
+    handleMapNameTranslated({
+        payload: {
+            translationOfName: { text, languageCode },
+        },
+    }: MapNameTranslated) {
+        return this.translateName(text, languageCode);
+    }
+
+    static fromMapCreated({
+        payload: {
+            aggregateCompositeIdentifier: { id },
+            name,
+            description,
+        },
+    }: MapCreated): ResultOrError<GeospatialMap> {
+        const buildResult = new GeospatialMap({
+            type: AggregateType.map,
+            id,
+            spatialFeatures: [],
+            name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+            description: buildMultilingualTextWithSingleItem(
+                description.text,
+                description.languageCode
+            ),
+            published: false,
+        });
+
+        const invariantValidationResult = buildResult.validateInvariants();
+
+        if (isInternalError(invariantValidationResult)) {
+            throw new InternalError(
+                `Failed to build geospatialMap: ${formatAggregateCompositeIdentifier({
+                    type: AggregateType.map,
+                    id,
+                })}from event history`,
+                [invariantValidationResult]
+            );
+        }
+
+        return buildResult;
     }
 }
