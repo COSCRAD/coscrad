@@ -1,1 +1,1 @@
-export * from './getConfigurableContent';
+export * from './get-configurable-content';
