@@ -1,24 +1,42 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
-import { Box, styled, Typography } from '@mui/material';
-import L, { LatLngExpression, Map } from 'leaflet';
+import { AggregateType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
+import L, {
+    LatLngExpression,
+    Icon as LeafletIcon,
+    Marker as LeafletMarker,
+    Map,
+    PointTuple,
+} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import {
-    Marker as LeafletMarker,
     Popup as LeafletPopup,
     MapContainer,
+    Marker as ReactLeafletMarker,
     TileLayer,
     useMap,
 } from 'react-leaflet';
+import { Link } from 'react-router-dom';
+import { buildDataAttributeForAggregateDetailComponent } from '../../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
+import { getOriginalTextItem } from '../../terms/term-detail.page';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
-import { buildSpatialFeatureMarker } from './build-spatial-feature-marker';
 import { CoscradMapMarkerPresenter } from './coscrad-map-marker';
 import { MapAddToggleSelectPointerButton } from './map-add-toggle-select-pointer-button';
 import { MapClickToAddSpatialFeatureHandler } from './map-click-to-add-spatial-feature-handler';
 import { MapToggleSelectPointer } from './map-toggle-select-pointer';
+
+const iconUrl = 'https://kaaltsidakah.net/raven/Map/XK-Xuuya.png';
+
+const shadowUrl = 'https://kaaltsidakah.net/raven/Map/marker-shadow.png';
+
+const CoscradLeafletPopup = styled(LeafletPopup)({
+    minWidth: '300px',
+});
 
 const ControlMapView = ({ center, zoom }) => {
     const map = useMap();
@@ -50,8 +68,10 @@ const NewPointLeafletMarker = ({
         }
     }, []);
 
+    if (isNullOrUndefined(position)) return null;
+
     return (
-        <LeafletMarker
+        <ReactLeafletMarker
             ref={elRef}
             key={markerId}
             position={position}
@@ -62,8 +82,6 @@ const NewPointLeafletMarker = ({
                     const leafletMapInstance = newPointMarkerToAdd._map;
 
                     console.log({ markerId });
-
-                    // setActiveNewPointPopupKey(newPointMarker.id);
 
                     leafletMapInstance.flyTo(
                         newPointMarkerToAdd.getLatLng(),
@@ -76,7 +94,7 @@ const NewPointLeafletMarker = ({
                 },
             }}
         >
-            <LeafletPopup
+            <CoscradLeafletPopup
                 eventHandlers={{
                     remove: (e) => {
                         const mouseEvent = e as any;
@@ -93,30 +111,88 @@ const NewPointLeafletMarker = ({
                     <Typography variant="h5">Create New Place</Typography>
                     <SinglePropertyPresenter
                         display="Coordinates"
-                        value={`${position.lat}, ${position.lng}`}
+                        value={JSON.stringify(position)}
                     />
                 </Box>
                 {/* <CreatePointForm coordinates={position} /> */}
-            </LeafletPopup>
-        </LeafletMarker>
+            </CoscradLeafletPopup>
+        </ReactLeafletMarker>
     );
 };
 
-const MapAutoOpenPopup = ({ children, ...props }: any) => {
-    const popupRef = useRef<L.Popup | null>(null);
-    const map = useMap();
+const StyledPlaceIcon = styled('img')({
+    width: '60px',
+});
 
-    useEffect(() => {
-        // As soon as this popup mounts, force the map instance to open it immediately
-        if (popupRef.current && typeof popupRef.current.getLatLng() !== undefined) {
-            popupRef.current.openOn(map);
-        }
-    }, [map]);
+type SpatialFeatureMarkerProps = {
+    markerId: string;
+    spatialFeature?: ISpatialFeatureViewModel;
+    handleClick?: (id: string) => void;
+};
+
+const SpatialFeatureMarker = ({
+    markerId,
+    spatialFeature,
+    handleClick,
+}: SpatialFeatureMarkerProps): JSX.Element => {
+    const elRef = useRef(null);
+
+    const { geometry, properties } = spatialFeature;
+
+    if (!geometry) {
+        throw new Error(`Spatial Feature: ${markerId} is missing geometry definition`);
+    }
+
+    if (!properties) {
+        throw new Error(`Spatial Feature: ${markerId} is missing its properties`);
+    }
+
+    const { name, description } = properties;
+
+    const originalName = getOriginalTextItem(name);
+
+    const imageUrl = 'https://kaaltsidakah.net/raven/Map/Previews/XK-Xuuya-Preview.png';
+
+    const { type: geometryType, coordinates } = geometry;
+
+    const [lat, lng] = coordinates as unknown as PointTuple;
 
     return (
-        <LeafletPopup ref={popupRef} {...props}>
-            {children}
-        </LeafletPopup>
+        <ReactLeafletMarker key={markerId} position={[lat, lng]} ref={elRef}>
+            <CoscradLeafletPopup>
+                <Grid container spacing={0}>
+                    <Grid item xs={3}>
+                        <div
+                            data-testid={buildDataAttributeForAggregateDetailComponent(
+                                AggregateType.spatialFeature,
+                                markerId
+                            )}
+                        />
+                        {/* Preview will eventually include images taken from video or photos, etc. */}
+                        <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${markerId}`} />
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Typography variant="h5">{originalName.text}</Typography>
+                        <SinglePropertyPresenter
+                            display="Description"
+                            value={description.items[0].text}
+                        />
+                        <SinglePropertyPresenter display="Feature Type" value={geometryType} />
+                        <SinglePropertyPresenter display="Lat" value={lat} />
+                        <SinglePropertyPresenter display="Long" value={lng} />
+                    </Grid>
+                    <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
+                        <Box sx={{ pl: 8 }}>
+                            <Link to={`/spatialFeatures/${markerId}`}>
+                                <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                                    <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                                </IconButton>
+                            </Link>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </CoscradLeafletPopup>
+        </ReactLeafletMarker>
     );
 };
 
@@ -126,17 +202,17 @@ enum CoscradMapMarkerEnum {
 }
 
 type CoscradMapMarker = {
+    markerId: string;
     type: CoscradMapMarkerEnum;
     data: NewPointMarker | ISpatialFeatureViewModel;
 };
 
 type NewPointMarker = {
     id: string;
-    coordinates: L.LatLng;
+    position: L.LatLng;
 };
 
 const CoscradMapContainer = styled(MapContainer)({
-    // left: '50%',
     maxWidth: '100vw',
     width: '100vw',
 });
@@ -151,7 +227,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
      * of the spatial feature in the popup. In the future, we could inject
      * either the full-view or thumbnail view based on a config property.
      */
-    DetailPresenter: spatialFeatureDetailPresenter,
     onSpatialFeatureSelected,
     selectedSpatialFeatureId,
 }: CoscradMapProps) => {
@@ -161,75 +236,63 @@ export const CoscradLeafletMap: ICoscradMap = ({
 
     const [mapMarkers, setMapMarkers] = useState<CoscradMapMarker[]>([]);
 
-    // const [activeNewPointPopupKey, setActiveNewPointPopupKey] = useState<string | null>(null);
-
-    const [newPointMarker, setNewPointMarker] = useState<NewPointMarker>(null);
-
     const mapRef = useRef<Map>();
 
-    // const markerRefs = useRef({});
+    const spatialFeatureMapMarkers: CoscradMapMarker[] = spatialFeatures?.map((spatialFeature) => ({
+        markerId: spatialFeature.id,
+        type: CoscradMapMarkerEnum.fromDB,
+        data: spatialFeature,
+    }));
 
-    // const setMarkerRef = useCallback(
-    //     (id) => (el) => {
-    //         const markerEl = el as L.Marker;
+    if (
+        !isNullOrUndefined(spatialFeatures) &&
+        spatialFeatures.length > 0 &&
+        mapMarkers.length === 0
+    )
+        setMapMarkers((prevMarkers) => [...prevMarkers, ...spatialFeatureMapMarkers]);
 
-    //         if (el) {
-    //             console.log('el defined:', markerEl.getLatLng(), id);
+    const DefaultIcon = new LeafletIcon({
+        iconUrl,
+        shadowUrl,
+        iconAnchor: [15, 41],
+        shadowAnchor: [10, 42],
+    });
 
-    //             markerRefs.current[id] = el;
-    //         } else {
-    //             console.log('el undefined:', el, id);
-
-    //             delete markerRefs.current[id];
-    //         }
-    //     },
-    //     []
-    // );
-
-    // useEffect(() => {
-    //     if (activeNewPointPopupKey) {
-    //         const currentMarker = markerRefs.current[activeNewPointPopupKey];
-    //         if (currentMarker && !currentMarker.isPopupOpen()) {
-    //             currentMarker.openPopup();
-    //         }
-    //     }
-    // }, [activeNewPointPopupKey]);
+    // TODO Fix this hack
+    LeafletMarker.prototype.options.icon = DefaultIcon;
 
     const handleAddMarker = (latlng: L.LatLng) => {
         console.log('adding marker');
         console.log({ latlng });
 
+        // Note: we could call the backend id generation, but there will be
+        // too many cancelled placemarkers making for a bloated uuid collection
         const newPointMarker: NewPointMarker = {
             id: `new-point-${crypto.randomUUID()}`,
-            coordinates: latlng,
+            position: latlng,
         };
 
-        // Note: we could call the backend id generation, but there will be
-        // too many cancelled placemarkers making for a bloated
-        setNewPointMarker(newPointMarker);
-        // const tempId = `new-point-${crypto.randomUUID()}`;
+        const newCoscradMapMarker: CoscradMapMarker = {
+            markerId: newPointMarker.id,
+            type: CoscradMapMarkerEnum.new,
+            data: newPointMarker,
+        };
 
-        // setNewPointMarkers((prevMarkers) => [...prevMarkers, newPointMarker]);
+        setMapMarkers((prevMarker) => [...prevMarker, newCoscradMapMarker]);
     };
 
     const handleCancelNewPointMarker = (markerIdToRemove) => {
         console.log('removing:', markerIdToRemove);
 
-        // setActiveNewPointPopupKey(null);
-
-        setNewPointMarker(null);
-
-        // setNewPointMarkers((prevMarkers) =>
-        //     prevMarkers.filter(({ id }) => id !== markerIdToRemove)
-        // );
+        setMapMarkers((prevMarkers) =>
+            prevMarkers.filter(({ markerId }) => markerId !== markerIdToRemove)
+        );
     };
 
     /**
      * Not sure where to get this from, can it can be derived from the spatial feature coordinates to be displayed?
      */
     const initialMapCentreCoordinates: LatLngExpression = initialCentre || INITIAL_CENTRE;
-
-    const SpatialFeatureMarker = buildSpatialFeatureMarker(spatialFeatureDetailPresenter);
 
     return (
         <Box
@@ -275,47 +338,37 @@ export const CoscradLeafletMap: ICoscradMap = ({
                             onMapClick={handleAddMarker}
                             isSetPlaceMarkerMode={isSetPlaceMarkerMode}
                         />
-                        {/* {!isNullOrUndefined(newPointMarker) ? (
-                            <NewPointLeafletMarker
-                                markerId={newPointMarker.id}
-                                position={newPointMarker.coordinates}
-                                handleCancelNewPointMarker={handleCancelNewPointMarker}
-                            />
-                        ) : null} */}
                     </>
                 ) : null}
 
                 {mapMarkers.map((marker) => {
                     if (marker.type === CoscradMapMarkerEnum.new) {
-                        const { id, coordinates } = marker.data as NewPointMarker;
+                        const { id, position } = marker.data as NewPointMarker;
+
+                        if (!position || !position.lat || !position.lng) return null;
 
                         return (
                             <CoscradMapMarkerPresenter
+                                key={`new-marker-presenter-${id}`}
                                 markerId={id}
-                                position={coordinates}
+                                position={position}
                                 handleCancelNewPointMarker={handleCancelNewPointMarker}
                                 markerPresenter={NewPointLeafletMarker}
                             />
                         );
+                    } else {
+                        const spatialFeature = marker.data as ISpatialFeatureViewModel;
+
+                        return (
+                            <CoscradMapMarkerPresenter
+                                key={`marker-presenter-${spatialFeature.id}`}
+                                markerId={spatialFeature.id}
+                                markerPresenter={SpatialFeatureMarker}
+                                spatialFeature={spatialFeature}
+                            />
+                        );
                     }
                 })}
-                {/* {!isNullOrUndefined(spatialFeatures) && spatialFeatures.length > 0
-                    ? spatialFeatures.map((spatialFeature) => (
-                          <SpatialFeatureMarker
-                              key={spatialFeature.id}
-                              spatialFeature={spatialFeature}
-                              handleClick={onSpatialFeatureSelected}
-                              customEffects={(id, marker) => {
-                                  console.log('customEffects:', id);
-
-                                  //   if (id === selectedSpatialFeatureId) {
-                                  //       marker.openPopup();
-                                  //   }
-                              }}
-                              selectedSpatialFeatureId={selectedSpatialFeatureId}
-                          />
-                      ))
-                    : null} */}
             </CoscradMapContainer>
         </Box>
     );

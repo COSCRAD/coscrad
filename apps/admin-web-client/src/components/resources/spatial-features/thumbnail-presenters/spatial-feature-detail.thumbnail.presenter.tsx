@@ -15,6 +15,10 @@ const StyledPlaceIcon = styled('img')({
     width: '60px',
 });
 
+interface SpatialFeatureDetailThumbnailPresenterProps {
+    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>;
+}
+
 /**
  * Our current approach is to present a text summary of the coordinates for a
  * spatial feature in its thumbnail view.
@@ -22,9 +26,9 @@ const StyledPlaceIcon = styled('img')({
  * TODO [https://www.pivotaltracker.com/story/show/184932759] create a separate
  * presenter for the marker pop-up instead of re-using the thumbnail presenter
  */
-export const SpatialFeatureDetailThumbnailPresenter = (
-    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>
-): JSX.Element => {
+export const SpatialFeatureDetailThumbnailPresenter = ({
+    spatialFeature,
+}: SpatialFeatureDetailThumbnailPresenterProps): JSX.Element => {
     const { id, geometry, properties } = spatialFeature;
 
     if (!geometry) {
