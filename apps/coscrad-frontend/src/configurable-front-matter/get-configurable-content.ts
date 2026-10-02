@@ -242,22 +242,26 @@ export const getConfigurableContent = (): ConfigurableContent => {
     } else {
         const { facebook, twitter, github, youtube, instagram } = dynamicConfig.socialMediaLinks;
 
-        const socialMediaLinkErrors = [facebook, twitter, github, youtube, instagram].flatMap(
-            (socialMediaLink) => {
-                if (isNullOrUndefined(socialMediaLink)) {
-                    // these are all optional properties
-                    return [];
-                }
-
-                if (!isURL(socialMediaLink)) {
-                    return [
-                        new Error(
-                            `Invalid config: **socialMediaLinks.${socialMediaLink}** must be a valid URL.`
-                        ),
-                    ];
-                }
+        const socialMediaLinkErrors = [
+            [facebook, 'facebook'],
+            [twitter, 'twitter'],
+            [github, 'github'],
+            [youtube, 'youtube'],
+            [instagram, 'instagram'],
+        ].flatMap(([socialMediaLink, label]) => {
+            if (isNullOrUndefined(socialMediaLink)) {
+                // these are all optional properties
+                return [];
             }
-        );
+
+            if (!isURL(socialMediaLink)) {
+                return [
+                    new Error(`Invalid config: **socialMediaLinks.${label}** must be a valid URL.`),
+                ];
+            }
+
+            return [];
+        });
 
         if (socialMediaLinkErrors.length > 0) {
             errors.push(...socialMediaLinkErrors);
@@ -308,7 +312,7 @@ export const getConfigurableContent = (): ConfigurableContent => {
                         );
                     }
 
-                    if (!isNonEmptyObject(name)) {
+                    if (!isNonEmptyString(name)) {
                         nestedMaterialErrors.push(
                             new Error(
                                 `Invalid config: **additionalMaterials[${index}].pdf.name** must contain non-empty text.`
@@ -387,7 +391,13 @@ export const getConfigurableContent = (): ConfigurableContent => {
     }
 
     if (errors.length > 0) {
-        throw new Error(`Invalid config [content.config.js].\n${errors.join('\n')}`);
+        console.warn({ configErros: errors });
+
+        throw new Error(
+            `Invalid config [content.config.js]. \n${
+                errors?.length || Infinity
+            } errors found:\n${errors.map((e) => e.toString()).join('\n')}`
+        );
     }
 
     // TODO use a better pattern such as `clonePlainObjectWithOverrides`
