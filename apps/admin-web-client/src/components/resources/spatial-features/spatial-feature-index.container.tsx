@@ -1,3 +1,4 @@
+import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { useEffect, useState } from 'react';
 import { CoscradLeafletMap } from './leaflet';
 import { spatialFeatureApi } from './store/spatial-feature.api';
@@ -16,11 +17,11 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
 
     // This is the flicker free term set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)
-    const [renderedData, setRenderedData] = useState(serverData);
+    const [spatialFeatures, setSpatialFeatures] = useState<ISpatialFeatureViewModel[]>([]);
 
     useEffect(() => {
         if (serverData && !isFetching) {
-            setRenderedData(serverData);
+            setSpatialFeatures(serverData.entities);
         }
     }, [serverData, isFetching]);
 
@@ -29,8 +30,6 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
     }
 
     if (isError) return <div>Error retrieving data.</div>;
-
-    const spatialFeatures = renderedData?.entities;
 
     return (
         <CoscradLeafletMap

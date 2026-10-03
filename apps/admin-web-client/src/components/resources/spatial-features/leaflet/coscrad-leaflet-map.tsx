@@ -10,6 +10,7 @@ import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { NewPointLeafletMarker } from '../new-point-leaflet-marker';
 import { SpatialFeatureMarker } from '../spatial-feature-marker';
+import { useFetchSpatialFeaturesQuery } from '../store/spatial-feature.api';
 import { CoscradMapMarkerPresenter } from './coscrad-map-marker';
 import { MapAddToggleSelectPointerButton } from './map-add-toggle-select-pointer-button';
 import { MapClickToAddSpatialFeatureHandler } from './map-click-to-add-spatial-feature-handler';
@@ -75,6 +76,22 @@ export const CoscradLeafletMap: ICoscradMap = ({
     const [mapMarkers, setMapMarkers] = useState<CoscradMapMarker[]>([]);
 
     const mapRef = useRef<Map>();
+
+    const { data, isFetching } = useFetchSpatialFeaturesQuery();
+
+    const prevDataRef = useRef(data);
+
+    useEffect(() => {
+        console.log({ spatialFeatures });
+
+        // Log only when data is successfully updated/mutated and changed
+        if (data && data !== prevDataRef.current && !isFetching) {
+            console.log('Child component detected mutated/updated data:', data);
+
+            console.log({ mapMarkers });
+        }
+        prevDataRef.current = data;
+    }, [data, isFetching, mapMarkers]);
 
     const spatialFeatureMapMarkers: CoscradMapMarker[] = spatialFeatures?.map((spatialFeature) => ({
         markerId: spatialFeature.id,
