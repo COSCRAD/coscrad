@@ -61,8 +61,6 @@ export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Elem
             properties.description
         );
 
-        return;
-
         executeSpatialFeatureCommand({
             commandFsa: {
                 type: 'CREATE_POINT',
@@ -96,7 +94,7 @@ export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Elem
     };
 
     return (
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '450px' }}>
+        <Box component="form" noValidate onSubmit={handleSubmit}>
             <div data-testid="create-term-form" />
             <Stack>
                 <TextField

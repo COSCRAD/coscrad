@@ -50,6 +50,21 @@ export const spatialFeatureApi = createApi({
                 body: commandFsa,
                 responseHandler: 'text',
             }),
+            onQueryStarted: async (
+                { commandFsa: { type: commandType, payload } }: SpatialFeatureCommandFsa,
+                { dispatch, queryFulfilled }
+            ) => {
+                const { data: commandAcknowledgement } = await queryFulfilled;
+
+                if (commandAcknowledgement === 'Ack') {
+                    console.log('command successful', commandType);
+                    if (commandType === 'PUBLISH_RESOURCE') {
+                        console.log('publishing spatial feature');
+
+                        dispatch(spatialFeatureApi.util.invalidateTags(['spatial-feature']));
+                    }
+                }
+            },
         }),
     }),
 });
