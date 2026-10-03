@@ -1,30 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { AggregateType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
+import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
-import L, {
-    LatLngExpression,
-    Icon as LeafletIcon,
-    Marker as LeafletMarker,
-    Map,
-    PointTuple,
-} from 'leaflet';
+import { Box, styled } from '@mui/material';
+import L, { LatLngExpression, Icon as LeafletIcon, Marker as LeafletMarker, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
-import {
-    Popup as LeafletPopup,
-    MapContainer,
-    Marker as ReactLeafletMarker,
-    TileLayer,
-    useMap,
-} from 'react-leaflet';
-import { Link } from 'react-router-dom';
-import { buildDataAttributeForAggregateDetailComponent } from '../../../shared/build-data-attribute-for-aggregate-detail-component';
-import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
-import { getOriginalTextItem } from '../../terms/term-detail.page';
+import { Popup as LeafletPopup, MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
+import { NewPointLeafletMarker } from '../new-point-leaflet-marker';
+import { SpatialFeatureMarker } from '../spatial-feature-marker';
 import { CoscradMapMarkerPresenter } from './coscrad-map-marker';
 import { MapAddToggleSelectPointerButton } from './map-add-toggle-select-pointer-button';
 import { MapClickToAddSpatialFeatureHandler } from './map-click-to-add-spatial-feature-handler';
@@ -34,7 +19,7 @@ const iconUrl = 'https://kaaltsidakah.net/raven/Map/XK-Xuuya.png';
 
 const shadowUrl = 'https://kaaltsidakah.net/raven/Map/marker-shadow.png';
 
-const CoscradLeafletPopup = styled(LeafletPopup)({
+export const CoscradLeafletPopup = styled(LeafletPopup)({
     minWidth: '300px',
 });
 
@@ -47,153 +32,6 @@ const ControlMapView = ({ center, zoom }) => {
         }
     }, [center, zoom, map]);
     return null;
-};
-
-type NewPointLeafletMarkerProps = {
-    markerId: string;
-    position?: L.LatLng;
-    handleCancelNewPointMarker?: (id) => void;
-};
-
-const NewPointLeafletMarker = ({
-    markerId,
-    position,
-    handleCancelNewPointMarker,
-}: NewPointLeafletMarkerProps): JSX.Element => {
-    const elRef = useRef(null);
-
-    useEffect(() => {
-        if (elRef.current) {
-            elRef.current.openPopup();
-        }
-    }, []);
-
-    if (isNullOrUndefined(position)) return null;
-
-    return (
-        <ReactLeafletMarker
-            ref={elRef}
-            key={markerId}
-            position={position}
-            eventHandlers={{
-                add: (e) => {
-                    const newPointMarkerToAdd = e.target;
-
-                    const leafletMapInstance = newPointMarkerToAdd._map;
-
-                    console.log({ markerId });
-
-                    leafletMapInstance.flyTo(
-                        newPointMarkerToAdd.getLatLng(),
-                        leafletMapInstance.getZoom(),
-                        {
-                            animate: true,
-                            duration: 0.8, // Duration of the animation in seconds
-                        }
-                    );
-                },
-            }}
-        >
-            <CoscradLeafletPopup
-                eventHandlers={{
-                    remove: (e) => {
-                        const mouseEvent = e as any;
-
-                        if (mouseEvent.originalEvent) {
-                            L.DomEvent.stopPropagation(mouseEvent.originalEvent);
-                        }
-
-                        handleCancelNewPointMarker(markerId);
-                    },
-                }}
-            >
-                <Box>
-                    <Typography variant="h5">Create New Place</Typography>
-                    <SinglePropertyPresenter
-                        display="Coordinates"
-                        value={JSON.stringify(position)}
-                    />
-                </Box>
-                {/* <CreatePointForm coordinates={position} /> */}
-            </CoscradLeafletPopup>
-        </ReactLeafletMarker>
-    );
-};
-
-const StyledPlaceIcon = styled('img')({
-    width: '60px',
-});
-
-type SpatialFeatureMarkerProps = {
-    markerId: string;
-    spatialFeature?: ISpatialFeatureViewModel;
-    handleClick?: (id: string) => void;
-};
-
-const SpatialFeatureMarker = ({
-    markerId,
-    spatialFeature,
-    handleClick,
-}: SpatialFeatureMarkerProps): JSX.Element => {
-    const elRef = useRef(null);
-
-    const { geometry, properties } = spatialFeature;
-
-    if (!geometry) {
-        throw new Error(`Spatial Feature: ${markerId} is missing geometry definition`);
-    }
-
-    if (!properties) {
-        throw new Error(`Spatial Feature: ${markerId} is missing its properties`);
-    }
-
-    const { name, description } = properties;
-
-    const originalName = getOriginalTextItem(name);
-
-    const imageUrl = 'https://kaaltsidakah.net/raven/Map/Previews/XK-Xuuya-Preview.png';
-
-    const { type: geometryType, coordinates } = geometry;
-
-    const [lat, lng] = coordinates as unknown as PointTuple;
-
-    return (
-        <ReactLeafletMarker key={markerId} position={[lat, lng]} ref={elRef}>
-            <CoscradLeafletPopup>
-                <Grid container spacing={0}>
-                    <Grid item xs={3}>
-                        <div
-                            data-testid={buildDataAttributeForAggregateDetailComponent(
-                                AggregateType.spatialFeature,
-                                markerId
-                            )}
-                        />
-                        {/* Preview will eventually include images taken from video or photos, etc. */}
-                        <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${markerId}`} />
-                    </Grid>
-                    <Grid item xs={9}>
-                        <Typography variant="h5">{originalName.text}</Typography>
-                        <SinglePropertyPresenter
-                            display="Description"
-                            value={description.items[0].text}
-                        />
-                        <SinglePropertyPresenter display="Feature Type" value={geometryType} />
-                        <SinglePropertyPresenter display="Lat" value={lat} />
-                        <SinglePropertyPresenter display="Long" value={lng} />
-                    </Grid>
-                    <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
-                        <Box sx={{ pl: 8 }}>
-                            <Link to={`/spatialFeatures/${markerId}`}>
-                                <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
-                                    <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
-                                </IconButton>
-                            </Link>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </CoscradLeafletPopup>
-        </ReactLeafletMarker>
-    );
 };
 
 enum CoscradMapMarkerEnum {

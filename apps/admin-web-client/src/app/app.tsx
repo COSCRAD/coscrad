@@ -13,6 +13,7 @@ import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
 import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
 import { ContributorIndexPage } from '../components/shared/contributors/contributor-index.page';
+import { RightSidePanelProvider } from '../components/shared/side-panel/right-side-panel-provider';
 import { useAppDispatch } from './hooks';
 
 export function App() {
@@ -34,25 +35,27 @@ export function App() {
     });
 
     return (
-        <Box sx={{ width: '100vw', minHeight: '100vh' }}>
-            <Header />
+        <RightSidePanelProvider>
+            <Box sx={{ width: '100vw', minHeight: '100vh' }}>
+                <Header />
 
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/terms" element={<TermIndexPage />} />
-                <Route path="/terms/:id" element={<TermContainer />} />
-                <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
-                <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
-                <Route path="/spatialFeatures/" element={<SpatialFeatureIndexContainer />} />
-                <Route
-                    path="/spatialFeatures/:id"
-                    element={<SpatialFeatureDetailFullViewPresenter />}
-                />
-                <Route path="/contributors/" element={<ContributorIndexPage />} />
-            </Routes>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/terms" element={<TermIndexPage />} />
+                    <Route path="/terms/:id" element={<TermContainer />} />
+                    <Route path="/vocabularyLists" element={<VocabularyListsIndex />} />
+                    <Route path="/vocabularyLists/:id" element={<VocabularyListDetail />} />
+                    <Route path="/spatialFeatures/" element={<SpatialFeatureIndexContainer />} />
+                    <Route
+                        path="/spatialFeatures/:id"
+                        element={<SpatialFeatureDetailFullViewPresenter />}
+                    />
+                    <Route path="/contributors/" element={<ContributorIndexPage />} />
+                </Routes>
 
-            <Footer />
-        </Box>
+                <Footer />
+            </Box>
+        </RightSidePanelProvider>
     );
 }
 
