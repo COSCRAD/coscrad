@@ -1,8 +1,9 @@
 import { AggregateType, GeometricFeatureType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Grid, styled, Typography } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
 import { FunctionalComponent } from '../../shared/types';
@@ -11,6 +12,9 @@ import { CoscradLeafletMap } from './leaflet';
 import { useFetchSpatialFeaturesQuery } from './store/spatial-feature.api';
 import { PointTextPresenter } from './thumbnail-presenters/point-text-presenter';
 import { Position2D } from './types';
+
+const defaultSpatialFeatureIconUrl =
+    'https://kaaltsidakah.net/raven/Map/Previews/XK-Xuuya-Preview.png';
 
 const CoscradMapDetailContainer = styled(Box)({
     marginBottom: '20px',
@@ -25,10 +29,15 @@ const lookupTable: { [K in GeometricFeatureType]: FunctionalComponent<HasCoordin
 };
 
 const StyledPlaceIcon = styled('img')({
-    width: '66px',
+    width: '80%',
+    marginLeft: '10%',
 });
 
 export const SpatialFeatureDetailFullViewPresenter = (): JSX.Element => {
+    const navigate = useNavigate();
+
+    const href = `/spatialFeatures`;
+
     const { id } = useParams();
 
     const [selectedSpatialFeatureId, setSelectedSpatialFeatureId] = useState<string>(null);
@@ -67,11 +76,15 @@ export const SpatialFeatureDetailFullViewPresenter = (): JSX.Element => {
 
     const CoordinatesTextPresenter = lookupTable[geometryType];
 
-    const initialZoom = 13;
+    const imageUrlForPresenter = isNullOrUndefined(imageUrl)
+        ? defaultSpatialFeatureIconUrl
+        : imageUrl;
+
+    const initialZoom = 9;
 
     const initialCentre = coordinates as unknown as Position2D;
 
-    const mapHeightPx = 40;
+    const mapHeightVH = 40;
 
     if (isNullOrUndefined(CoordinatesTextPresenter)) {
         throw new Error(
@@ -86,21 +99,23 @@ export const SpatialFeatureDetailFullViewPresenter = (): JSX.Element => {
                     spatialFeatures={[spatialFeature]}
                     initialZoom={initialZoom}
                     initialCentre={initialCentre}
-                    mapHeightPx={mapHeightPx}
+                    mapHeightVH={mapHeightVH}
                     onSpatialFeatureSelected={(id: string) => setSelectedSpatialFeatureId(id)}
                     selectedSpatialFeatureId={selectedSpatialFeatureId}
+                    setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
+                    isFetchingSpatialFeatures={isLoading}
                 />
             </CoscradMapDetailContainer>
+            <div
+                data-testid={buildDataAttributeForAggregateDetailComponent(
+                    AggregateType.spatialFeature,
+                    id
+                )}
+            />
             <Grid container spacing={0}>
-                <Grid item xs={3}>
-                    <div
-                        data-testid={buildDataAttributeForAggregateDetailComponent(
-                            AggregateType.spatialFeature,
-                            id
-                        )}
-                    />
+                <Grid item xs={3} sx={{ display: 'flex', alignItems: 'flex-start' }}>
                     {/* Preview will eventually include images taken from video or photos, etc. */}
-                    <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
+                    <StyledPlaceIcon src={imageUrlForPresenter} alt={`Spatial Feature ${id}`} />
                 </Grid>
                 <Grid item xs={9}>
                     <Typography variant="h5">{originalName.text}</Typography>
@@ -111,6 +126,9 @@ export const SpatialFeatureDetailFullViewPresenter = (): JSX.Element => {
                     />
                     <SinglePropertyPresenter display="Feature Type" value={geometryType} />
                     <CoordinatesTextPresenter coordinates={coordinates} />
+                    <IconButton onClick={() => navigate(href)} aria-label="back">
+                        <ArrowBackIosIcon />
+                    </IconButton>
                 </Grid>
             </Grid>
         </>

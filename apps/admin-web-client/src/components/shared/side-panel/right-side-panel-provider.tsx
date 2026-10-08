@@ -1,12 +1,23 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Drawer, IconButton, Typography } from '@mui/material';
-import { createContext, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
+
+interface RightSidePanelContextType {
+    isRightSidePanelOpen: boolean;
+    openRightSidePanel: (title: string, content: string | ReactNode) => void;
+    closeRightSidePanel: () => void;
+    panelTitle: string;
+    panelContent: string;
+}
 
 // 1. Create Context
-const RightSidePanelContext = createContext(undefined);
+const RightSidePanelContext = createContext<RightSidePanelContextType | undefined>(undefined);
 
-// 2. Provider Component
-export const RightSidePanelProvider = ({ children }) => {
+interface RightSidePanelProviderProps {
+    children: ReactNode;
+}
+
+export const RightSidePanelProvider = ({ children }: RightSidePanelProviderProps) => {
     const [isRightSidePanelOpen, setIsRightSidePanelOpen] = useState(false);
     const [panelTitle, setPanelTitle] = useState('');
     const [panelContent, setPanelContent] = useState(null);

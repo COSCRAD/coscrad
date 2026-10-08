@@ -1,16 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, styled } from '@mui/material';
 import L, { LatLngExpression, Icon as LeafletIcon, Marker as LeafletMarker, Map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import { Popup as LeafletPopup, MapContainer, TileLayer, useMap } from 'react-leaflet';
-import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_PX } from '../constants';
+import { useRightSidePanel } from '../../../shared/side-panel/right-side-panel-provider';
+import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_VH } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { NewPointLeafletMarker } from '../new-point-leaflet-marker';
 import { SpatialFeatureMarker } from '../spatial-feature-marker';
-import { useFetchSpatialFeaturesQuery } from '../store/spatial-feature.api';
 import { CoscradMapMarkerPresenter } from './coscrad-map-marker';
 import { MapAddToggleSelectPointerButton } from './map-add-toggle-select-pointer-button';
 import { MapClickToAddSpatialFeatureHandler } from './map-click-to-add-spatial-feature-handler';
@@ -60,7 +59,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
     spatialFeatures,
     initialCentre,
     initialZoom,
-    mapHeightPx,
+    mapHeightVH,
     /**
      * We inject the detail presenter to decouple the map from the presentation
      * of the spatial feature in the popup. In the future, we could inject
@@ -68,8 +67,12 @@ export const CoscradLeafletMap: ICoscradMap = ({
      */
     onSpatialFeatureSelected,
     selectedSpatialFeatureId,
+    setSelectedSpatialFeatureId,
+    isFetchingSpatialFeatures,
 }: CoscradMapProps) => {
     const { isAuthenticated } = useAuth0();
+
+    const { isRightSidePanelOpen, closeRightSidePanel } = useRightSidePanel();
 
     const [isSetPlaceMarkerMode, setIsSetPlaceMarkerMode] = useState<boolean>(false);
 
@@ -77,34 +80,55 @@ export const CoscradLeafletMap: ICoscradMap = ({
 
     const mapRef = useRef<Map>();
 
-    const { data, isFetching } = useFetchSpatialFeaturesQuery();
+    const markerRefs = useRef([]);
 
-    const prevDataRef = useRef(data);
+    const prevMarkersRef = useRef([]);
 
     useEffect(() => {
-        console.log({ spatialFeatures });
+        console.log({ mapHeightVH });
 
-        // Log only when data is successfully updated/mutated and changed
-        if (data && data !== prevDataRef.current && !isFetching) {
-            console.log('Child component detected mutated/updated data:', data);
+        console.log('resetting map markers');
 
-            console.log({ mapMarkers });
+        const spatialFeatureMapMarkers: CoscradMapMarker[] = spatialFeatures?.map(
+            (spatialFeature) => ({
+                markerId: spatialFeature.id,
+                type: CoscradMapMarkerEnum.fromDB,
+                data: spatialFeature,
+            })
+        );
+
+        setMapMarkers(spatialFeatureMapMarkers);
+    }, [spatialFeatures, mapHeightVH]);
+
+    useEffect(() => {
+        // console.log('has a new marker been added');
+
+        // A new marker is added
+        if (
+            mapMarkers.length > prevMarkersRef.current.length &&
+            prevMarkersRef.current.length > 0
+        ) {
+            // console.log('checking if a new marker was added');
+
+            const newMarker = mapMarkers.find(
+                (marker) => !prevMarkersRef.current.some((prev) => prev.id === marker.markerId)
+            );
+
+            if (
+                newMarker &&
+                newMarker.type === CoscradMapMarkerEnum.fromDB &&
+                markerRefs.current[newMarker.markerId]
+            ) {
+                console.log('Close panel');
+
+                setSelectedSpatialFeatureId(newMarker.markerId);
+
+                if (isRightSidePanelOpen) closeRightSidePanel();
+            }
         }
-        prevDataRef.current = data;
-    }, [data, isFetching, mapMarkers]);
 
-    const spatialFeatureMapMarkers: CoscradMapMarker[] = spatialFeatures?.map((spatialFeature) => ({
-        markerId: spatialFeature.id,
-        type: CoscradMapMarkerEnum.fromDB,
-        data: spatialFeature,
-    }));
-
-    if (
-        !isNullOrUndefined(spatialFeatures) &&
-        spatialFeatures.length > 0 &&
-        mapMarkers.length === 0
-    )
-        setMapMarkers((prevMarkers) => [...prevMarkers, ...spatialFeatureMapMarkers]);
+        prevMarkersRef.current = mapMarkers;
+    }, [isRightSidePanelOpen, closeRightSidePanel, setSelectedSpatialFeatureId, mapMarkers]);
 
     const DefaultIcon = new LeafletIcon({
         iconUrl,
@@ -137,7 +161,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
     };
 
     const handleCancelNewPointMarker = (markerIdToRemove) => {
-        console.log('removing:', markerIdToRemove);
+        console.log('canceled popup, removing:', markerIdToRemove);
 
         setMapMarkers((prevMarkers) =>
             prevMarkers.filter(({ markerId }) => markerId !== markerIdToRemove)
@@ -158,12 +182,12 @@ export const CoscradLeafletMap: ICoscradMap = ({
                 // mt: { xs: '-3%', md: '-3.5%', qhd: '-2.5%', uhd: '-8%' },
                 // // mr: { xs: '-3%', md: '-3.5%', qhd: '-2.5%', uhd: '-8%' },
                 // ml: { xs: '-3%', md: '-3.5%', qhd: '-55%', uhd: '-8%' },
-                height: { xs: `${mapHeightPx || MAP_HEIGHT_PX}vh` },
+                height: { xs: `${mapHeightVH || MAP_HEIGHT_VH}vh` },
             }}
         >
             <CoscradMapContainer
                 sx={{
-                    height: { xs: `${mapHeightPx || MAP_HEIGHT_PX}vh` },
+                    height: { xs: `${mapHeightVH || MAP_HEIGHT_VH}vh` },
                 }}
                 center={initialMapCentreCoordinates || INITIAL_CENTRE}
                 zoom={initialZoom || INITIAL_ZOOM}
@@ -181,7 +205,9 @@ export const CoscradLeafletMap: ICoscradMap = ({
                     center={initialMapCentreCoordinates || INITIAL_CENTRE}
                     zoom={initialZoom || INITIAL_ZOOM}
                 />
-                {isAuthenticated ? (
+                {/* Temp hack - check that map height is larger for index map view
+                    we don't want the button for mode in the detail view */}
+                {isAuthenticated && mapHeightVH > 50 ? (
                     <>
                         <MapAddToggleSelectPointerButton
                             position="topleft"
@@ -209,6 +235,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
                                 position={position}
                                 handleCancelNewPointMarker={handleCancelNewPointMarker}
                                 markerPresenter={NewPointLeafletMarker}
+                                setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
                             />
                         );
                     } else {
@@ -220,6 +247,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
                                 markerId={spatialFeature.id}
                                 markerPresenter={SpatialFeatureMarker}
                                 spatialFeature={spatialFeature}
+                                selectedSpatialFeatureId={selectedSpatialFeatureId}
                             />
                         );
                     }

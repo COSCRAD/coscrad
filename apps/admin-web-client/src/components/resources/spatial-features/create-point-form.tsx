@@ -6,10 +6,13 @@ import { LatLng } from 'leaflet';
 import { useState } from 'react';
 import { useFetchIdQuery } from '../../id-generation/store';
 import { LanguageSelect } from '../../shared/language-select';
+import { useRightSidePanel } from '../../shared/side-panel/right-side-panel-provider';
+import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
 import { useExecuteSpatialFeatureCommandMutation } from './store/spatial-feature.api';
 
 interface CreatePointFormProps {
     coordinates: LatLng;
+    setSelectedSpatialFeatureId?: (id: string) => void;
 }
 
 interface SpatialFeaturePropertiesForCommand {
@@ -18,7 +21,10 @@ interface SpatialFeaturePropertiesForCommand {
     description: string;
 }
 
-export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Element => {
+export const CreatePointForm = ({
+    coordinates,
+    setSelectedSpatialFeatureId,
+}: CreatePointFormProps): JSX.Element => {
     const { data: generatedId, isLoading: isIdLoading, isError: isIdError } = useFetchIdQuery();
 
     const [
@@ -27,6 +33,8 @@ export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Elem
     ] = useExecuteSpatialFeatureCommandMutation();
 
     const [properties, setProperties] = useState<SpatialFeaturePropertiesForCommand>(null);
+
+    const { isRightSidePanelOpen, closeRightSidePanel } = useRightSidePanel();
 
     const { isAuthenticated } = useAuth0();
 
@@ -56,6 +64,7 @@ export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Elem
 
         console.log(
             'Form sent to server:',
+            generatedId,
             properties.name,
             properties.languageCodeForName,
             properties.description
@@ -91,12 +100,19 @@ export const CreatePointForm = ({ coordinates }: CreatePointFormProps): JSX.Elem
                 },
             });
         }, 600);
+
+        setTimeout(() => {
+            if (isRightSidePanelOpen) closeRightSidePanel();
+
+            setSelectedSpatialFeatureId(generatedId);
+        }, 1000);
     };
 
     return (
         <Box component="form" noValidate onSubmit={handleSubmit}>
             <div data-testid="create-term-form" />
             <Stack>
+                <SinglePropertyPresenter display="Generated Ids" value={generatedId} />
                 <TextField
                     sx={{ width: '80%', mb: 1 }}
                     data-testid={`place_name`}

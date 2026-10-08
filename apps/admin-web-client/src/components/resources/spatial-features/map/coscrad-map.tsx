@@ -9,9 +9,11 @@ export interface CoscradMapProps {
     spatialFeatures: ISpatialFeatureViewModel[];
     initialCentre?: Position2D;
     initialZoom?: number;
-    mapHeightPx?: number;
+    mapHeightVH?: number;
     onSpatialFeatureSelected?: (id: string) => void;
     selectedSpatialFeatureId: string;
+    setSelectedSpatialFeatureId: (id: string) => void;
+    isFetchingSpatialFeatures: boolean;
 }
 
 /**

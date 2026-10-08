@@ -15,7 +15,7 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
         isError,
     } = spatialFeatureApi.endpoints.fetchSpatialFeatures.useQuery();
 
-    // This is the flicker free term set held in place.  `setRenderedData()` is only
+    // This is the flicker free spatial feature set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)
     const [spatialFeatures, setSpatialFeatures] = useState<ISpatialFeatureViewModel[]>([]);
 
@@ -31,6 +31,8 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
 
     if (isError) return <div>Error retrieving data.</div>;
 
+    const mapHeightVH = 80;
+
     return (
         <CoscradLeafletMap
             spatialFeatures={spatialFeatures}
@@ -39,7 +41,10 @@ export const SpatialFeatureIndexContainer = (): JSX.Element => {
 
                 setSelectedSpatialFeatureId(id);
             }}
+            mapHeightVH={mapHeightVH}
             selectedSpatialFeatureId={selectedSpatialFeatureId}
+            setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
+            isFetchingSpatialFeatures={isFetching}
         />
     );
 };

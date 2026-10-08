@@ -4,4 +4,4 @@ export const INITIAL_CENTRE = [53.26466532329053, -132.281524669379] as Position
 
 export const INITIAL_ZOOM = 7;
 
-export const MAP_HEIGHT_PX = 80;
+export const MAP_HEIGHT_VH = 80;

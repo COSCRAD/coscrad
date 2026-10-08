@@ -3,7 +3,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
 import { PointTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Marker as ReactLeafletMarker } from 'react-leaflet';
 import { Link } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../shared/build-data-attribute-for-aggregate-detail-component';
@@ -19,12 +19,14 @@ type SpatialFeatureMarkerProps = {
     markerId: string;
     spatialFeature?: ISpatialFeatureViewModel;
     handleClick?: (id: string) => void;
+    selectedSpatialFeatureId: string;
 };
 
 export const SpatialFeatureMarker = ({
     markerId,
     spatialFeature,
     handleClick,
+    selectedSpatialFeatureId,
 }: SpatialFeatureMarkerProps): JSX.Element => {
     const elRef = useRef(null);
 
@@ -37,6 +39,14 @@ export const SpatialFeatureMarker = ({
     if (!properties) {
         throw new Error(`Spatial Feature: ${markerId} is missing its properties`);
     }
+
+    useEffect(() => {
+        console.log(`trying to open popup of new spatial feature ${selectedSpatialFeatureId}`);
+
+        if (elRef.current && spatialFeature.id === selectedSpatialFeatureId) {
+            elRef.current.openPopup();
+        }
+    }, [selectedSpatialFeatureId, spatialFeature.id]);
 
     const { name, description } = properties;
 
@@ -56,7 +66,7 @@ export const SpatialFeatureMarker = ({
                         <div
                             data-testid={buildDataAttributeForAggregateDetailComponent(
                                 AggregateType.spatialFeature,
-                                markerId
+                                spatialFeature.id
                             )}
                         />
                         {/* Preview will eventually include images taken from video or photos, etc. */}
@@ -64,6 +74,7 @@ export const SpatialFeatureMarker = ({
                     </Grid>
                     <Grid item xs={9}>
                         <Typography variant="h5">{originalName.text}</Typography>
+                        <SinglePropertyPresenter display="Feature Id" value={spatialFeature.id} />
                         <SinglePropertyPresenter
                             display="Description"
                             value={description.items[0].text}

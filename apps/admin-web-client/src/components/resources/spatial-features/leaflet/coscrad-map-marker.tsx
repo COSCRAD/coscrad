@@ -7,12 +7,16 @@ type MarkerPresenter = ({
     handleClick,
     handleCancelNewPointMarker,
     position,
+    selectedSpatialFeatureId,
+    setSelectedSpatialFeatureId,
 }: {
     markerId: string;
     spatialFeature?: ISpatialFeatureViewModel;
     handleClick?: (id: string) => void;
     handleCancelNewPointMarker?: (id: string) => void;
     position?: L.LatLng;
+    selectedSpatialFeatureId?: string;
+    setSelectedSpatialFeatureId?: (id: string) => void;
 }) => JSX.Element;
 
 type CoscradMapMarkerProps = {
@@ -22,6 +26,8 @@ type CoscradMapMarkerProps = {
     handleClick?: (id: string) => void;
     handleCancelNewPointMarker?: (id: string) => void;
     markerPresenter: MarkerPresenter;
+    selectedSpatialFeatureId?: string;
+    setSelectedSpatialFeatureId?: (id: string) => void;
 };
 
 export const CoscradMapMarkerPresenter = ({
@@ -31,6 +37,8 @@ export const CoscradMapMarkerPresenter = ({
     handleClick,
     handleCancelNewPointMarker,
     markerPresenter: MarkerPresenter,
+    selectedSpatialFeatureId,
+    setSelectedSpatialFeatureId,
 }: CoscradMapMarkerProps): JSX.Element => {
     return (
         <MarkerPresenter
@@ -39,6 +47,8 @@ export const CoscradMapMarkerPresenter = ({
             spatialFeature={spatialFeature}
             handleClick={handleClick}
             handleCancelNewPointMarker={handleCancelNewPointMarker}
+            selectedSpatialFeatureId={selectedSpatialFeatureId}
+            setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
         />
     );
 };

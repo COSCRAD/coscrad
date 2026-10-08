@@ -13,12 +13,14 @@ type NewPointLeafletMarkerProps = {
     markerId: string;
     position?: L.LatLng;
     handleCancelNewPointMarker?: (id) => void;
+    setSelectedSpatialFeatureId?: (id: string) => void;
 };
 
 export const NewPointLeafletMarker = ({
     markerId,
     position,
     handleCancelNewPointMarker,
+    setSelectedSpatialFeatureId,
 }: NewPointLeafletMarkerProps): JSX.Element => {
     const elRef = useRef(null);
 
@@ -29,7 +31,13 @@ export const NewPointLeafletMarker = ({
     const openSidePanel = () => {
         console.log('open the side panel');
 
-        openRightSidePanel(actionLabel, <CreatePointForm coordinates={position} />);
+        openRightSidePanel(
+            actionLabel,
+            <CreatePointForm
+                coordinates={position}
+                setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
+            />
+        );
     };
 
     useEffect(() => {
