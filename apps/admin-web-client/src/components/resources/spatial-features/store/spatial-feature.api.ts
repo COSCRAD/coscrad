@@ -1,7 +1,17 @@
 import { ICategorizableIndexQueryResult, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
+import { RootState } from '../../../../store';
+import { acquireIdApi } from '../../../id-generation/store';
+import {
+    FeedBack,
+    FeedbackCommand,
+    FeedbackTypeEnum,
+    setFeedbackCommand,
+    showFeedBackMessageInSnackbar,
+} from '../../../shared/store/feedback.slice';
 import { ApiCommandFsa } from '../../../shared/types';
+import { transformApiError } from '../../../utils/api-error-response';
 
 type SpatialFeatureCommandFsa = {
     commandFsa: ApiCommandFsa;
@@ -52,17 +62,59 @@ export const spatialFeatureApi = createApi({
             }),
             onQueryStarted: async (
                 { commandFsa: { type: commandType, payload } }: SpatialFeatureCommandFsa,
-                { dispatch, queryFulfilled }
+                { dispatch, getState, queryFulfilled }
             ) => {
-                const { data: commandAcknowledgement } = await queryFulfilled;
+                console.log({ commandType });
 
-                if (commandAcknowledgement === 'Ack') {
-                    console.log('command successful', commandType);
-                    if (commandType === 'PUBLISH_RESOURCE') {
-                        console.log('publishing spatial feature');
+                if (commandType === 'CREATE_POINT') {
+                    console.log({ payload });
 
-                        dispatch(spatialFeatureApi.util.invalidateTags(['spatial-feature']));
+                    const createCommand: FeedbackCommand = {
+                        command: {
+                            commandType: commandType,
+                            payload: payload,
+                        },
+                    };
+
+                    dispatch(setFeedbackCommand(createCommand));
+                }
+
+                try {
+                    const { data: commandAcknowledgement } = await queryFulfilled;
+
+                    if (commandAcknowledgement === 'Ack') {
+                        console.log('command successful', commandType);
+
+                        if (commandType === 'PUBLISH_RESOURCE') {
+                            console.log('publishing spatial feature');
+
+                            dispatch(spatialFeatureApi.util.invalidateTags(['spatial-feature']));
+                        }
                     }
+
+                    dispatch(acquireIdApi.util.invalidateTags(['ids']));
+                } catch (error) {
+                    const state = getState() as RootState;
+
+                    const createPayload = state?.feedbackSlice?.feedbackCommand?.command;
+
+                    console.log(
+                        `Error attempting to submit spatial feature: ${JSON.stringify(
+                            createPayload
+                        )}`
+                    );
+
+                    const apiErrorMessage: string = transformApiError(error);
+
+                    const feedback: FeedBack = {
+                        severity: FeedbackTypeEnum.error,
+                        title: 'Error - Adding Spatial Feature',
+                        feedbackMessage: `${apiErrorMessage} Command Payload: ${JSON.stringify(
+                            createPayload
+                        )}`,
+                    };
+
+                    dispatch(showFeedBackMessageInSnackbar(feedback));
                 }
             },
         }),

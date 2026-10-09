@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { LatLng } from 'leaflet';
 import { useState } from 'react';
 import { useFetchIdQuery } from '../../id-generation/store';
@@ -25,12 +25,21 @@ export const CreatePointForm = ({
     coordinates,
     setSelectedSpatialFeatureId,
 }: CreatePointFormProps): JSX.Element => {
-    const { data: generatedId, isLoading: isIdLoading, isError: isIdError } = useFetchIdQuery();
+    // Need to update generated id (may be an issue in all CREATE_ commands)
+    const {
+        data: generatedId,
+        isLoading: isIdLoading,
+        isError: isIdError,
+    } = useFetchIdQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
 
     const [
         executeSpatialFeatureCommand,
         { isLoading: isRequestInProgress, isError: isCommandError },
     ] = useExecuteSpatialFeatureCommandMutation();
+
+    const [showForm, setShowForm] = useState<boolean>(true);
 
     const [properties, setProperties] = useState<SpatialFeaturePropertiesForCommand>(null);
 
@@ -99,6 +108,8 @@ export const CreatePointForm = ({
                     },
                 },
             });
+
+            setShowForm(false);
         }, 600);
 
         setTimeout(() => {
@@ -108,42 +119,49 @@ export const CreatePointForm = ({
         }, 1000);
     };
 
+    if (showForm)
+        return (
+            <Box component="form" noValidate onSubmit={handleSubmit}>
+                <div data-testid="create-term-form" />
+                <Stack>
+                    <SinglePropertyPresenter display="Generated Ids" value={generatedId} />
+                    <TextField
+                        sx={{ width: '80%', mb: 1 }}
+                        data-testid={`place_name`}
+                        label={'Place Name'}
+                        onChange={(e) => {
+                            setProperties({ ...properties, name: e.target.value });
+                        }}
+                    ></TextField>
+                    <TextField
+                        sx={{ width: '80%', mb: 1 }}
+                        data-testid={`place_description`}
+                        label={'Place Description'}
+                        onChange={(e) => {
+                            setProperties({ ...properties, description: e.target.value });
+                        }}
+                    ></TextField>
+                    <LanguageSelect
+                        languageCodesInUse={[]}
+                        onSelectLanguage={(newLanguageCode: LanguageCode) => {
+                            setProperties({ ...properties, languageCodeForName: newLanguageCode });
+                        }}
+                    />
+                    <Button
+                        data-testid={`submit-term`}
+                        variant="contained"
+                        disabled={isDisabled}
+                        type="submit"
+                    >
+                        ADD PLACE
+                    </Button>
+                </Stack>
+            </Box>
+        );
+
     return (
-        <Box component="form" noValidate onSubmit={handleSubmit}>
-            <div data-testid="create-term-form" />
-            <Stack>
-                <SinglePropertyPresenter display="Generated Ids" value={generatedId} />
-                <TextField
-                    sx={{ width: '80%', mb: 1 }}
-                    data-testid={`place_name`}
-                    label={'Place Name'}
-                    onChange={(e) => {
-                        setProperties({ ...properties, name: e.target.value });
-                    }}
-                ></TextField>
-                <TextField
-                    sx={{ width: '80%', mb: 1 }}
-                    data-testid={`place_description`}
-                    label={'Place Description'}
-                    onChange={(e) => {
-                        setProperties({ ...properties, description: e.target.value });
-                    }}
-                ></TextField>
-                <LanguageSelect
-                    languageCodesInUse={[]}
-                    onSelectLanguage={(newLanguageCode: LanguageCode) => {
-                        setProperties({ ...properties, languageCodeForName: newLanguageCode });
-                    }}
-                />
-                <Button
-                    data-testid={`submit-term`}
-                    variant="contained"
-                    disabled={isDisabled}
-                    type="submit"
-                >
-                    ADD PLACE
-                </Button>
-            </Stack>
+        <Box>
+            <Typography variant="h3">Place Submitted</Typography>
         </Box>
     );
 };

@@ -13,6 +13,7 @@ import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
 import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
 import { ContributorIndexPage } from '../components/shared/contributors/contributor-index.page';
+import { FeedbackSnackbar } from '../components/shared/feedback-snackbar/feedback-snackbar';
 import { RightSidePanelProvider } from '../components/shared/side-panel/right-side-panel-provider';
 import { useAppDispatch } from './hooks';
 
@@ -55,6 +56,7 @@ export function App() {
 
                 <Footer />
             </Box>
+            <FeedbackSnackbar />
         </RightSidePanelProvider>
     );
 }
