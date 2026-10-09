@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
-import { DetailViewFormatter } from '../shared/detail-view-formatter';
+import { PageContentLayout } from '../shared/page-content-layout';
 
 export const Home = (): JSX.Element => (
-    <DetailViewFormatter>
+    <PageContentLayout>
         <Typography variant="h4">
             Hello, this is the Home Page. Use the nav above to view language terms.
         </Typography>
-    </DetailViewFormatter>
+    </PageContentLayout>
 );

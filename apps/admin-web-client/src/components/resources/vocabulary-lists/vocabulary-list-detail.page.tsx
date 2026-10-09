@@ -2,9 +2,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Box, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
-import { DetailViewFormatter } from '../../shared/detail-view-formatter';
 import { MultilingualTextPresenter } from '../../shared/multilingual-text-presenter';
 import { getLabelForLanguage } from '../../shared/multilingual-text-presenter/get-label-for-language';
+import { PageContentLayout } from '../../shared/page-content-layout';
 import { getTranslationsForLanguageSelection } from '../terms/term-detail.page';
 import { findOriginalMultilingualTextItem } from '../terms/term-list.container';
 import { useFetchVocabularyListByIdQuery } from './store';
@@ -40,7 +40,7 @@ export const VocabularyListDetail = (): JSX.Element => {
     const languageCodesInUse = getTranslationsForLanguageSelection(name);
 
     return (
-        <DetailViewFormatter>
+        <PageContentLayout>
             <Typography variant="h4">Vocabulary List:</Typography>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                 <Typography variant="h3" sx={{ mr: 1 }}>
@@ -71,6 +71,6 @@ export const VocabularyListDetail = (): JSX.Element => {
                     </>
                 ) : null}
             </Stack>
-        </DetailViewFormatter>
+        </PageContentLayout>
     );
 };

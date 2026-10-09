@@ -18,7 +18,7 @@ export const ContributorIndexTable = (): JSX.Element => {
         isLoading,
         isFetching,
         isError,
-    } = contributorApi.endpoints.fetchContributors.useQueryState(paginationOptions);
+    } = contributorApi.endpoints.fetchContributors.useQuery(paginationOptions);
 
     // This is the flicker free term set held in place.  `setRenderedData()` is only
     // triggered when the new data is fully fetched (i.e., `!isFetching`)

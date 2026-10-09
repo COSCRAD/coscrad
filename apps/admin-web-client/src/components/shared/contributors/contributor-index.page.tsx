@@ -1,14 +1,10 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import { PageContentLayout } from '../page-content-layout';
 import { ContributorIndexTable } from './contributor-index-table';
-import { useFetchContributorsQuery } from './store';
 
 export const ContributorIndexPage = (): JSX.Element => {
-    const contributorIndexQueryOptions = useSelector(
-        (state: RootState) => state.contributorIndexQueryOptionsSlice
+    return (
+        <PageContentLayout>
+            <ContributorIndexTable />
+        </PageContentLayout>
     );
-
-    const { data, isLoading, isError } = useFetchContributorsQuery(contributorIndexQueryOptions);
-
-    return <ContributorIndexTable />;
 };

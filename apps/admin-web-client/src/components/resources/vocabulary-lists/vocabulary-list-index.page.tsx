@@ -1,7 +1,7 @@
 import { IMultilingualText } from '@coscrad/api-interfaces';
 import { Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { DetailViewFormatter } from '../../shared/detail-view-formatter';
+import { PageContentLayout } from '../../shared/page-content-layout';
 import { findOriginalMultilingualTextItem } from '../terms/term-list.container';
 import { useFetchVocabularyListsQuery } from './store';
 
@@ -41,7 +41,7 @@ export const VocabularyListsIndex = (): JSX.Element => {
     const { entities } = data;
 
     return (
-        <DetailViewFormatter>
+        <PageContentLayout>
             <Stack>
                 {entities.length > 0 ? (
                     <>
@@ -62,6 +62,6 @@ export const VocabularyListsIndex = (): JSX.Element => {
                     <Typography variant="h4">No Vocabulary Lists Have Been Added</Typography>
                 )}
             </Stack>
-        </DetailViewFormatter>
+        </PageContentLayout>
     );
 };
