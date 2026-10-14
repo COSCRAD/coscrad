@@ -24,7 +24,7 @@ export const TermPaginator = (): JSX.Element => {
         (state: RootState) => state.termIndexQueryOptionsSlice
     );
 
-    console.log({ termIndexQueryOptions });
+    // console.log({ termIndexQueryOptions });
 
     const { data, isLoading, isError } = useFetchTermsQuery(termIndexQueryOptions);
 
@@ -36,7 +36,7 @@ export const TermPaginator = (): JSX.Element => {
 
     const { entities: terms, count, page } = data;
 
-    console.log({ terms });
+    // console.log({ terms });
 
     const pageSize = isNullOrUndefined(termIndexQueryOptions.pagination.size)
         ? DEFAULT_PAGE_SIZE

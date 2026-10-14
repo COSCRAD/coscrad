@@ -9,7 +9,7 @@ import {
     FeedbackTypeEnum,
     setFeedbackCommand,
     showFeedBackMessageInSnackbar,
-} from '../../../shared/store/feedback.slice';
+} from '../../../shared/store';
 import { ApiCommandFsa } from '../../../shared/types';
 import { transformApiError } from '../../../utils/api-error-response';
 

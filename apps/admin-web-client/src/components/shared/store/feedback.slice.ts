@@ -54,7 +54,5 @@ export const feedbackSlice = createSlice({
     },
 });
 
-// export const selectFeedbackCommand = (state) => state?.feedback?.feedbackCommand?.command;
-
 export const { showFeedBackMessageInSnackbar, hideSnackBar, setFeedbackCommand } =
     feedbackSlice.actions;

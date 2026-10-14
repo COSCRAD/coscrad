@@ -4,7 +4,7 @@ import { Alert, AlertTitle, IconButton, Snackbar, Tooltip } from '@mui/material'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { FeedbackTypeEnum, hideSnackBar } from '../store/feedback.slice';
+import { FeedbackTypeEnum, hideSnackBar } from '../store';
 
 export const FeedbackSnackbar = () => {
     const dispatch = useDispatch();

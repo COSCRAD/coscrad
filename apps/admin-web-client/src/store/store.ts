@@ -10,6 +10,7 @@ import { termApi } from '../components/resources/terms/store/term.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
 import { contributorIndexQueryOptionsSlice } from '../components/shared/contributors/store/contributor-index-query-options.slice';
 import { contributorApi } from '../components/shared/contributors/store/contributor.api';
+import { connectionSlice } from '../components/shared/store/connection.slice';
 import { feedbackSlice } from '../components/shared/store/feedback.slice';
 
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     termIndexQueryOptionsSlice: termIndexQueryOptionsSlice.reducer,
     contributorIndexQueryOptionsSlice: contributorIndexQueryOptionsSlice.reducer,
     feedbackSlice: feedbackSlice.reducer,
+    connectionSlice: connectionSlice.reducer,
     [AUTH]: authReducer,
 });
 

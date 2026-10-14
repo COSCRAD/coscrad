@@ -104,12 +104,12 @@ export const termApi = createApi({
                     : [{ type: 'term', id: 'LIST' }],
             keepUnusedDataFor: 300,
             onQueryStarted: async (arg, { getState }) => {
-                console.log(`fetchTerms initiated`);
+                // console.log(`fetchTerms initiated`);
                 const rootState = getState() as RootState;
 
                 const termIndexQueryOptions = rootState.termIndexQueryOptionsSlice;
 
-                console.log({ termIndexQueryOptions });
+                // console.log({ termIndexQueryOptions });
             },
         }),
         executeTermCommand: builder.mutation<string, TermCommandFsaWithOptions>({

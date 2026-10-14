@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { Marker as ReactLeafletMarker } from 'react-leaflet';
-import { useRightSidePanel } from '../../shared/side-panel/right-side-panel-provider';
+import { useRightSidePanel } from '../../shared/right-side-panel/right-side-panel-provider';
 import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
 import { CreatePointForm } from './create-point-form';
 import { CoscradLeafletPopup } from './leaflet/coscrad-leaflet-map';

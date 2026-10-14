@@ -79,7 +79,7 @@ export const createUserIndexQueryOptionsSlice = <T>(name: string) => {
                 state,
                 action: PayloadAction<{ filter: IUserDefinedFilter<T> | null }>
             ) => {
-                console.log({ setFilter: action.payload.filter });
+                // console.log({ setFilter: action.payload.filter });
 
                 state.filter = action.payload.filter;
                 state.pagination.page = 1;

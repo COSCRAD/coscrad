@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import {
+    AggregateCompositeIdentifier,
     IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
@@ -7,13 +8,20 @@ import {
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import HubIcon from '@mui/icons-material/Hub';
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { getSpeakersStatementForTerm } from '../../shared/getSpeakersStatementForTerm';
-import { PageContentLayout } from '../../shared/page-content-layout';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
+import {
+    selectConnectionState,
+    setFromResource,
+    setToResource,
+    toggleBottomConnectionDrawer,
+} from '../../shared/store/connection.slice';
 import { AttributeTermToSpeaker } from './add-speaker-to-term-form';
 import { useFetchTermByIdQuery } from './store';
 import { findOriginalMultilingualTextItem } from './term-list.container';
@@ -42,7 +50,23 @@ export interface ResourceDetailProps {
 }
 
 export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
-    console.log(`${TermDetail.name} rendered.`);
+    // console.log(`${TermDetail.name} rendered.`);
+
+    const dispatch = useDispatch();
+
+    const openConnectionResourceFrom: AggregateCompositeIdentifier =
+        useSelector(selectConnectionState);
+
+    if (!isNullOrUndefined(openConnectionResourceFrom)) {
+        if (openConnectionResourceFrom.id !== id) {
+            const toAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+                type: ResourceType.term,
+                id,
+            };
+
+            dispatch(setToResource(toAggregateCompositeIdentifier));
+        }
+    }
 
     const { isAuthenticated } = useAuth0();
 
@@ -72,10 +96,21 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     const speakersStatementForTerm = getSpeakersStatementForTerm(contributions);
 
-    console.log({ speakersStatementForTerm });
+    // console.log({ speakersStatementForTerm });
+
+    const handleFromConnection = () => {
+        const fromAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+            id,
+            type: ResourceType.term,
+        };
+
+        dispatch(setFromResource(fromAggregateCompositeIdentifier));
+
+        dispatch(toggleBottomConnectionDrawer(true));
+    };
 
     return (
-        <PageContentLayout>
+        <>
             <Typography variant="h3">Term</Typography>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                 <Typography variant="h3" sx={{ mr: 1, color: '#017e73ff' }} aria-label={id}>
@@ -160,6 +195,17 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     }}
                 />
             ) : null}
-        </PageContentLayout>
+            <Box sx={{ pl: 8 }}>
+                <Tooltip title="Create Connection">
+                    <IconButton
+                        onClick={() => handleFromConnection()}
+                        aria-label="Create Connection"
+                        sx={{ ml: 0.5 }}
+                    >
+                        <HubIcon sx={{ fontSize: '20px' }} />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        </>
     );
 };

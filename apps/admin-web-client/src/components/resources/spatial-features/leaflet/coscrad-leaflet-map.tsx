@@ -5,7 +5,7 @@ import L, { LatLngExpression, Icon as LeafletIcon, Marker as LeafletMarker, Map 
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 import { Popup as LeafletPopup, MapContainer, TileLayer, useMap } from 'react-leaflet';
-import { useRightSidePanel } from '../../../shared/side-panel/right-side-panel-provider';
+import { useRightSidePanel } from '../../../shared/right-side-panel/right-side-panel-provider';
 import { INITIAL_CENTRE, INITIAL_ZOOM, MAP_HEIGHT_VH } from '../constants';
 import { CoscradMapProps, ICoscradMap } from '../map';
 import { NewPointLeafletMarker } from '../new-point-leaflet-marker';

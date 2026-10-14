@@ -6,7 +6,7 @@ import { LatLng } from 'leaflet';
 import { useState } from 'react';
 import { useFetchIdQuery } from '../../id-generation/store';
 import { LanguageSelect } from '../../shared/language-select';
-import { useRightSidePanel } from '../../shared/side-panel/right-side-panel-provider';
+import { useRightSidePanel } from '../../shared/right-side-panel/right-side-panel-provider';
 import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
 import { useExecuteSpatialFeatureCommandMutation } from './store/spatial-feature.api';
 

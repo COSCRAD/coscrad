@@ -1,6 +1,7 @@
 import { AggregateType, ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
+import HubIcon from '@mui/icons-material/Hub';
+import { Box, Grid, IconButton, styled, Tooltip, Typography } from '@mui/material';
 import { PointTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
@@ -8,6 +9,7 @@ import { Marker as ReactLeafletMarker } from 'react-leaflet';
 import { Link } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../shared/single-property-presenter';
+import { toggleBottomConnectionDrawer } from '../../shared/store/connection.slice';
 import { getOriginalTextItem } from '../terms/term-detail.page';
 import { CoscradLeafletPopup } from './leaflet/coscrad-leaflet-map';
 
@@ -85,11 +87,33 @@ export const SpatialFeatureMarker = ({
                     </Grid>
                     <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
                         <Box sx={{ pl: 8 }}>
-                            <Link to={`/spatialFeatures/${markerId}`}>
-                                <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
-                                    <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                            <Tooltip title="Create Connection">
+                                <IconButton
+                                    onClick={() => toggleBottomConnectionDrawer(true)}
+                                    aria-label="Create Connection"
+                                    sx={{ ml: 0.5 }}
+                                >
+                                    <HubIcon sx={{ fontSize: '20px' }} />
                                 </IconButton>
-                            </Link>
+                            </Tooltip>
+                        </Box>
+                        {/* <Box sx={{ pl: 8 }}>
+                            <Tooltip title="View Connections">
+                                <Link to={`/spatialFeatures/${markerId}`}>
+                                    <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                                        <HubIcon sx={{ fontSize: '20px' }} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+                        </Box> */}
+                        <Box sx={{ pl: 1 }}>
+                            <Tooltip title="View Full Record">
+                                <Link to={`/spatialFeatures/${markerId}`}>
+                                    <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                                        <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
                         </Box>
                     </Grid>
                 </Grid>
