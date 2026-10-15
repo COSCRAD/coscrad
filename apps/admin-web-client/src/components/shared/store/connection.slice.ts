@@ -5,16 +5,16 @@ import { RootState } from '../../../store';
 interface ConnectionSliceState {
     open: boolean;
     connectionMembers: {
-        to: AggregateCompositeIdentifier;
         from: AggregateCompositeIdentifier;
+        to: AggregateCompositeIdentifier;
     };
 }
 
 const initialState: ConnectionSliceState = {
     open: false,
     connectionMembers: {
-        to: null,
         from: null,
+        to: null,
     },
 };
 
@@ -26,8 +26,10 @@ export const connectionSlice = createSlice({
             state.connectionMembers.from = action.payload;
         },
         setToResource: (state, action: PayloadAction<AggregateCompositeIdentifier>) => {
-            // if (action.payload !== state.connectionMembers.from)
-            state.connectionMembers.to = action.payload;
+            console.log(`${action.payload} !== ${state.connectionMembers.from}`);
+
+            if (action.payload !== state.connectionMembers.from)
+                state.connectionMembers.to = action.payload;
         },
         toggleBottomConnectionDrawer: (state, action: PayloadAction<boolean>) => {
             console.log('toggle drawer');

@@ -70,7 +70,7 @@ export const ContributionsPresenter = ({
                 </>
             }
         >
-            <IconButton>
+            <IconButton sx={{ mt: -1 }}>
                 <ListRounded />
             </IconButton>
         </HtmlTooltip>

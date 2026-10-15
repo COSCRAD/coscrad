@@ -85,10 +85,6 @@ export const CoscradLeafletMap: ICoscradMap = ({
     const prevMarkersRef = useRef([]);
 
     useEffect(() => {
-        console.log({ mapHeightVH });
-
-        console.log('resetting map markers');
-
         const spatialFeatureMapMarkers: CoscradMapMarker[] = spatialFeatures?.map(
             (spatialFeature) => ({
                 markerId: spatialFeature.id,
@@ -101,15 +97,11 @@ export const CoscradLeafletMap: ICoscradMap = ({
     }, [spatialFeatures, mapHeightVH]);
 
     useEffect(() => {
-        // console.log('has a new marker been added');
-
         // A new marker is added
         if (
             mapMarkers.length > prevMarkersRef.current.length &&
             prevMarkersRef.current.length > 0
         ) {
-            // console.log('checking if a new marker was added');
-
             const newMarker = mapMarkers.find(
                 (marker) => !prevMarkersRef.current.some((prev) => prev.id === marker.markerId)
             );

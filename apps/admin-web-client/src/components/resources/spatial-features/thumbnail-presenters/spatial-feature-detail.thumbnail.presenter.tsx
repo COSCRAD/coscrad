@@ -1,43 +1,57 @@
-import {
-    AggregateType,
-    ICategorizableDetailQueryResult,
-    ISpatialFeatureViewModel,
-} from '@coscrad/api-interfaces';
+import { AggregateCompositeIdentifier, AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Box, Grid, IconButton, styled, Typography } from '@mui/material';
+import HubIcon from '@mui/icons-material/Hub';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box, Grid, IconButton, styled, Tooltip, Typography } from '@mui/material';
 import { PointTuple } from 'leaflet';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
+import { setFromResource, toggleBottomConnectionDrawer } from '../../../shared/store';
 import { getOriginalTextItem } from '../../terms/term-detail.page';
+import { spatialFeatureApi } from '../store/spatial-feature.api';
 
 const StyledPlaceIcon = styled('img')({
     width: '60px',
 });
 
 interface SpatialFeatureDetailThumbnailPresenterProps {
-    spatialFeature: ICategorizableDetailQueryResult<ISpatialFeatureViewModel>;
+    id: string;
+    shouldDisplayActionButtons: boolean;
 }
 
-/**
- * Our current approach is to present a text summary of the coordinates for a
- * spatial feature in its thumbnail view.
- *
- * TODO [https://www.pivotaltracker.com/story/show/184932759] create a separate
- * presenter for the marker pop-up instead of re-using the thumbnail presenter
- */
 export const SpatialFeatureDetailThumbnailPresenter = ({
-    spatialFeature,
+    id,
+    shouldDisplayActionButtons,
 }: SpatialFeatureDetailThumbnailPresenterProps): JSX.Element => {
-    const { id, geometry, properties } = spatialFeature;
+    const dispatch = useDispatch();
 
-    if (!geometry) {
-        throw new Error(`Spatial Feature: ${id} is missing geometry definition`);
+    /**
+     * Using useQuery to re-fetch by id so that this presenter can be
+     * used flexibly in different contexts.  Should be fixed with a better
+     * pattern
+     */
+    const { geometry, properties, isLoading, isError } =
+        spatialFeatureApi.endpoints.fetchSpatialFeatureById.useQuery(id, {
+            skip: !id,
+            selectFromResult: (result) => ({
+                geometry: result.data?.geometry,
+                properties: result.data?.properties,
+                isLoading: result.isLoading,
+                isError: result.isError,
+            }),
+        });
+
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
-    if (!properties) {
-        throw new Error(`Spatial Feature: ${id} is missing its properties`);
-    }
+    if (isError) return <div>Error retrieving place geometry.</div>;
+
+    if (isNullOrUndefined(geometry) || isNullOrUndefined(properties))
+        return <div>Geometry or Properties not loaded</div>;
 
     const { name, description } = properties;
 
@@ -48,6 +62,17 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
     const { type: geometryType, coordinates } = geometry;
 
     const [lat, lng] = coordinates as unknown as PointTuple;
+
+    const handleFromConnection = () => {
+        const fromAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+            id,
+            type: ResourceType.spatialFeature,
+        };
+
+        dispatch(setFromResource(fromAggregateCompositeIdentifier));
+
+        dispatch(toggleBottomConnectionDrawer(true));
+    };
 
     return (
         <Grid container spacing={0}>
@@ -62,21 +87,55 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                 <StyledPlaceIcon src={imageUrl} alt={`Spatial Feature ${id}`} />
             </Grid>
             <Grid item xs={9}>
-                <Typography variant="h5">{originalName.text}</Typography>
+                <Typography variant="h4">Spatial Feature</Typography>
+                <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <Typography variant="h5" sx={{ mr: 1 }}>
+                        {originalName.text}
+                    </Typography>
+                    <IconButton sx={{ mt: -1 }}>
+                        <Tooltip title={`ID: ${id}`}>
+                            <InfoIcon />
+                        </Tooltip>
+                    </IconButton>
+                </Box>
                 <SinglePropertyPresenter display="Description" value={description.items[0].text} />
                 <SinglePropertyPresenter display="Feature Type" value={geometryType} />
                 <SinglePropertyPresenter display="Lat" value={lat} />
                 <SinglePropertyPresenter display="Long" value={lng} />
             </Grid>
-            <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
-                <Box sx={{ pl: 8 }}>
-                    <Link to={`/spatialFeatures/${id}`}>
-                        <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
-                            <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
-                        </IconButton>
-                    </Link>
-                </Box>
-            </Grid>
+            {shouldDisplayActionButtons ? (
+                <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
+                    <Box sx={{ pl: 8 }}>
+                        <Tooltip title="Create Connection">
+                            <IconButton
+                                onClick={() => handleFromConnection()}
+                                aria-label="Create Connection"
+                                sx={{ ml: 0.5 }}
+                            >
+                                <HubIcon sx={{ fontSize: '20px' }} />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    {/* <Box sx={{ pl: 8 }}>
+                            <Tooltip title="View Connections">
+                                <Link to={`/spatialFeatures/${id}`}>
+                                    <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                                        <HubIcon sx={{ fontSize: '20px' }} />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+                        </Box> */}
+                    <Box sx={{ pl: 1 }}>
+                        <Tooltip title="View Full Record">
+                            <Link to={`/spatialFeatures/${id}`}>
+                                <IconButton aria-label="navigate to resource" sx={{ ml: 0.5 }}>
+                                    <ArrowForwardIosIcon sx={{ fontSize: '20px' }} />
+                                </IconButton>
+                            </Link>
+                        </Tooltip>
+                    </Box>
+                </Grid>
+            ) : null}
         </Grid>
     );
 };

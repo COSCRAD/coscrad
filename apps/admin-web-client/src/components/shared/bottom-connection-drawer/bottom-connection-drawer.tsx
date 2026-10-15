@@ -1,3 +1,4 @@
+import { ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import {
@@ -7,13 +8,13 @@ import {
     Drawer,
     Grid,
     IconButton,
-    Stack,
     styled,
     Tooltip,
     Typography,
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { toggleBottomConnectionDrawer } from '../store/connection.slice';
 
 // interface BottomConnectionDrawerProps {
@@ -28,23 +29,6 @@ const DrawerHeader = styled(Box)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-const drawerContentStackMargin = {
-    top: 0,
-    right: 4,
-    bottom: 0,
-    left: 4,
-};
-
-const DrawerContentStack = styled(Stack)(({ theme }) => ({
-    margin: theme.spacing(
-        drawerContentStackMargin.top,
-        drawerContentStackMargin.right,
-        drawerContentStackMargin.bottom,
-        drawerContentStackMargin.left
-    ),
-    overflow: 'scroll',
-}));
-
 const BottomConnectionDrawer = (): JSX.Element => {
     const dispatch = useDispatch();
 
@@ -56,6 +40,14 @@ const BottomConnectionDrawer = (): JSX.Element => {
     const handleMakeConnection = () => {
         console.log('make a connection', from, to);
     };
+
+    const FromThumbnailDetailPresenter = !isNullOrUndefined(from)
+        ? thumbnailCategorizableDetailPresenterFactory(from.type as ResourceType)
+        : null;
+
+    const ToThumbnailDetailPresenter = !isNullOrUndefined(to)
+        ? thumbnailCategorizableDetailPresenterFactory(to.type as ResourceType)
+        : null;
 
     return (
         <Box>
@@ -73,7 +65,6 @@ const BottomConnectionDrawer = (): JSX.Element => {
                 }}
                 anchor="bottom"
                 open={open}
-                // onClose={() => dispatch(toggleBottomConnectionDrawer(false))}
                 variant="persistent"
             >
                 <DrawerHeader>
@@ -112,12 +103,20 @@ const BottomConnectionDrawer = (): JSX.Element => {
                 <Divider variant="fullWidth" sx={{ mb: 3 }} />
                 <Grid container spacing={2} sx={{ ml: 2, mr: 2 }}>
                     <Grid item xs={6}>
-                        <Typography variant="h4">From: {JSON.stringify(from)}</Typography>
+                        {!isNullOrUndefined(from) ? (
+                            <FromThumbnailDetailPresenter
+                                id={from.id}
+                                shouldDisplayActionButtons={false}
+                            />
+                        ) : null}
                     </Grid>
                     <Grid item xs={6}>
                         {!isNullOrUndefined(to) ? (
                             <>
-                                <Typography variant="h4">To: {JSON.stringify(to)}</Typography>
+                                <ToThumbnailDetailPresenter
+                                    id={to.id}
+                                    shouldDisplayActionButtons={false}
+                                />
                                 <Tooltip title="Connect Resources with Note">
                                     <Button
                                         startIcon={<AddIcon />}
