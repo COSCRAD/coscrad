@@ -240,6 +240,7 @@ export const CoscradLeafletMap: ICoscradMap = ({
                                 markerPresenter={SpatialFeatureMarker}
                                 spatialFeature={spatialFeature}
                                 selectedSpatialFeatureId={selectedSpatialFeatureId}
+                                setSelectedSpatialFeatureId={setSelectedSpatialFeatureId}
                             />
                         );
                     }

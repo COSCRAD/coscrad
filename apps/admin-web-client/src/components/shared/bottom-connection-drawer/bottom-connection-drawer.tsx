@@ -41,6 +41,19 @@ const BottomConnectionDrawer = (): JSX.Element => {
         console.log('make a connection', from, to);
     };
 
+    const handleDrawerCloseButtonClick = () => {
+        // eslint-disable-next-line no-restricted-globals
+        const confirmCancel = confirm('Are you sure you want to clear the connection creation?');
+
+        if (confirmCancel) {
+            console.log('Connection cancelled.');
+
+            dispatch(toggleBottomConnectionDrawer(false));
+        } else {
+            console.log("Don't cancel connection.");
+        }
+    };
+
     const FromThumbnailDetailPresenter = !isNullOrUndefined(from)
         ? thumbnailCategorizableDetailPresenterFactory(from.type as ResourceType)
         : null;
@@ -91,9 +104,7 @@ const BottomConnectionDrawer = (): JSX.Element => {
                         <Tooltip title="Close Notes Panel">
                             <IconButton
                                 data-testid="close-notes-panel-button"
-                                onClick={() => {
-                                    dispatch(toggleBottomConnectionDrawer(false));
-                                }}
+                                onClick={handleDrawerCloseButtonClick}
                             >
                                 <CloseIcon />
                             </IconButton>
