@@ -126,10 +126,6 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
         };
     }
 
-    async count(): Promise<number> {
-        return this.database.getCount();
-    }
-
     async translateName(_id: string, _translationItem: IMultilingualTextItem): Promise<void> {
         throw new Error('Method not implemented.');
     }
@@ -138,30 +134,57 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
         throw new Error('Method not implemented.');
     }
 
-    async createNoteAbout(_id: string, _dto: INoteCreationDto): Promise<void> {
-        throw new Error('Method not implemented.');
+    async count(): Promise<number> {
+        return this.database.getCount();
     }
 
-    async createConnection(_id: string, _dto: IResourceConnectionDto): Promise<void> {
-        throw new Error('Method not implemented.');
+    async createNoteAbout(id: string, dto: INoteCreationDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.createNoteAbout(id, dto));
+    }
+
+    async createConnection(id: string, dto: IResourceConnectionDto): Promise<void> {
+        await this.database.query(this.baseResourceQueryBuilder.connectResourcesWithNote(id, dto));
     }
 
     async tag(id: string, tagId: string): Promise<void> {
         await this.database.query(this.baseResourceQueryBuilder.tag(id, tagId));
     }
 
-    async attribute(_id: string, _contributionSummary: ContributionSummary): Promise<void> {
-        throw new Error('Method not implemented.');
+    async attribute(id: string, contributionSummary: ContributionSummary): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.attribute(id, contributionSummary);
+
+        await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to add attribution for geospatial map via: VideoRepository: ${reason}`
+            );
+        });
     }
 
-    async allowUser(_aggregateId: string, _userId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async allowUser(aggregateId: string, userId: string): Promise<void> {
+        const aqlQuery = this.baseResourceQueryBuilder.allowUser(aggregateId, userId);
+
+        const cursor = await this.database.query(aqlQuery).catch((reason) => {
+            throw new InternalError(
+                `Failed to allow user access to geospatial map via GeospatialMapRepository: ${reason}`
+            );
+        });
+
+        await cursor.all();
     }
 
-    async publish(_id: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async publish(id: string): Promise<void> {
+        const query = this.baseResourceQueryBuilder.publish(id);
+
+        const cursor = await this.database.query(query).catch((reason) => {
+            throw new InternalError(
+                `Failed to publish geospatial map via GeospatialMapRepository: ${reason}`
+            );
+        });
+
+        await cursor.all();
     }
 
+    // TODO what should we do with this?
     subscribleToUpdates(): Observable<{ data: { type: string } }> {
         throw new Error('Method not implemented.');
     }
