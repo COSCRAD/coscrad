@@ -122,7 +122,7 @@ export const CreatePointForm = ({
     if (showForm)
         return (
             <Box component="form" noValidate onSubmit={handleSubmit}>
-                <div data-testid="create-term-form" />
+                <div data-testid="create-point-form" />
                 <Stack>
                     <SinglePropertyPresenter display="Generated Ids" value={generatedId} />
                     <TextField

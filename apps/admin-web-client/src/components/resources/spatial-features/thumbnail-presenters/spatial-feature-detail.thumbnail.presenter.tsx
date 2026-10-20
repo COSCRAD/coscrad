@@ -1,4 +1,4 @@
-import { AggregateCompositeIdentifier, AggregateType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import HubIcon from '@mui/icons-material/Hub';
@@ -64,12 +64,12 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
     const [lat, lng] = coordinates as unknown as PointTuple;
 
     const handleFromConnection = () => {
-        const fromAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+        const fromResourceCompositeIdentifier: ResourceCompositeIdentifier = {
             id,
             type: ResourceType.spatialFeature,
         };
 
-        dispatch(setFromResource(fromAggregateCompositeIdentifier));
+        dispatch(setFromResource(fromResourceCompositeIdentifier));
 
         dispatch(toggleBottomConnectionDrawer(true));
     };

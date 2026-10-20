@@ -17,11 +17,6 @@ import { RootState } from '../../../store';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { toggleBottomConnectionDrawer } from '../store/connection.slice';
 
-// interface BottomConnectionDrawerProps {
-//     from: AggregateCompositeIdentifier;
-//     to?: AggregateCompositeIdentifier;
-// }
-
 const DrawerHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'flex-start',

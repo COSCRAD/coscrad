@@ -5,6 +5,7 @@ import {
     IMultilingualTextItem,
     LanguageCode,
     MultilingualTextItemRole,
+    ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
@@ -59,12 +60,12 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     if (!isNullOrUndefined(openConnectionResourceFrom)) {
         if (openConnectionResourceFrom.id !== id) {
-            const toAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+            const toResourceCompositeIdentifier: ResourceCompositeIdentifier = {
                 type: ResourceType.term,
                 id,
             };
 
-            dispatch(setToResource(toAggregateCompositeIdentifier));
+            dispatch(setToResource(toResourceCompositeIdentifier));
         }
     }
 
@@ -99,12 +100,12 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
     // console.log({ speakersStatementForTerm });
 
     const handleFromConnection = () => {
-        const fromAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+        const fromResourceCompositeIdentifier: ResourceCompositeIdentifier = {
             id,
             type: ResourceType.term,
         };
 
-        dispatch(setFromResource(fromAggregateCompositeIdentifier));
+        dispatch(setFromResource(fromResourceCompositeIdentifier));
 
         dispatch(toggleBottomConnectionDrawer(true));
     };

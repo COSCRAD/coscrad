@@ -1,4 +1,4 @@
-import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
+import { ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
@@ -6,8 +6,8 @@ import { RootState } from '../../../store';
 interface ConnectionSliceState {
     open: boolean;
     connectionMembers: {
-        from: AggregateCompositeIdentifier;
-        to: AggregateCompositeIdentifier;
+        from: ResourceCompositeIdentifier;
+        to: ResourceCompositeIdentifier;
     };
 }
 
@@ -20,14 +20,14 @@ const initialState: ConnectionSliceState = {
 };
 
 export const connectionSlice = createSlice({
-    name: 'connection-maker',
+    name: 'connection-drawer',
     initialState: initialState,
     reducers: {
-        setFromResource: (state, action: PayloadAction<AggregateCompositeIdentifier>) => {
+        setFromResource: (state, action: PayloadAction<ResourceCompositeIdentifier>) => {
             if (isNullOrUndefined(state.connectionMembers.to))
                 state.connectionMembers.from = action.payload;
         },
-        setToResource: (state, action: PayloadAction<AggregateCompositeIdentifier>) => {
+        setToResource: (state, action: PayloadAction<ResourceCompositeIdentifier>) => {
             console.log(`${action.payload} !== ${state.connectionMembers.from}`);
 
             if (action.payload.id !== state.connectionMembers.from.id)

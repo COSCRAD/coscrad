@@ -8,6 +8,7 @@ import { spatialFeatureApi } from '../components/resources/spatial-features/stor
 import { termIndexQueryOptionsSlice } from '../components/resources/terms/store/term-index-query-options.slice';
 import { termApi } from '../components/resources/terms/store/term.api';
 import { vocabularyListApi } from '../components/resources/vocabulary-lists/store/vocabulary-lists.api';
+import { connectionsApi } from '../components/shared/bottom-connection-drawer/connections.api';
 import { contributorIndexQueryOptionsSlice } from '../components/shared/contributors/store/contributor-index-query-options.slice';
 import { contributorApi } from '../components/shared/contributors/store/contributor.api';
 import { connectionSlice } from '../components/shared/store/connection.slice';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     [spatialFeatureApi.reducerPath]: spatialFeatureApi.reducer,
     [vocabularyListApi.reducerPath]: vocabularyListApi.reducer,
     [contributorApi.reducerPath]: contributorApi.reducer,
+    [connectionsApi.reducerPath]: connectionsApi.reducer,
     [acquireIdApi.reducerPath]: acquireIdApi.reducer,
     termIndexQueryOptionsSlice: termIndexQueryOptionsSlice.reducer,
     contributorIndexQueryOptionsSlice: contributorIndexQueryOptionsSlice.reducer,
@@ -36,6 +38,7 @@ export const store = configureStore({
             spatialFeatureApi.middleware,
             vocabularyListApi.middleware,
             contributorApi.middleware,
+            connectionsApi.middleware,
             acquireIdApi.middleware
         );
     },

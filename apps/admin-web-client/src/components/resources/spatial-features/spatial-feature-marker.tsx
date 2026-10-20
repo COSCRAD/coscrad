@@ -1,6 +1,7 @@
 import {
     AggregateCompositeIdentifier,
     ISpatialFeatureViewModel,
+    ResourceCompositeIdentifier,
     ResourceType,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
@@ -40,12 +41,12 @@ export const SpatialFeatureMarker = ({
         if (openConnectionResourceFrom.id !== selectedSpatialFeatureId) {
             console.log(openConnectionResourceFrom.id, selectedSpatialFeatureId);
 
-            const toAggregateCompositeIdentifier: AggregateCompositeIdentifier = {
+            const toResourceCompositeIdentifier: ResourceCompositeIdentifier = {
                 type: ResourceType.spatialFeature,
                 id: selectedSpatialFeatureId,
             };
 
-            dispatch(setToResource(toAggregateCompositeIdentifier));
+            dispatch(setToResource(toResourceCompositeIdentifier));
         }
     }
 
