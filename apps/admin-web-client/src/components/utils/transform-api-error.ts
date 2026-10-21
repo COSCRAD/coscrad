@@ -1,4 +1,5 @@
 import { HttpStatusCode } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 
 export interface ApiErrorResponse {
     error: {
@@ -18,11 +19,11 @@ export interface InnerCommandError {
 }
 
 export const transformApiError = (err: ApiErrorResponse) => {
-    try {
+    if (!isNullOrUndefined(err.error.data)) {
         const innerData: InnerCommandError = JSON.parse(err.error.data);
 
         return `${err.error.status} - ${innerData.error}`;
-    } catch (e) {
-        console.error('Failed to parse inner error data wrapper', e);
+    } else {
+        return `${JSON.stringify(err.error).substring(0, 160)}...`;
     }
 };

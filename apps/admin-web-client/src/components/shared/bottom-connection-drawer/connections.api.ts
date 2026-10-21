@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../config';
 import { RootState } from '../../../store';
 import { acquireIdApi } from '../../id-generation/store';
-import { transformApiError } from '../../utils/api-error-response';
+import { transformApiError } from '../../utils/transform-api-error';
 import {
     FeedBack,
     FeedbackCommand,
@@ -112,3 +112,9 @@ export const connectionsApi = createApi({
         }),
     }),
 });
+
+export const {
+    useFetchConnectionByIdQuery,
+    useFetchConnectionsQuery,
+    useExecuteCreateConnectionCommandMutation,
+} = connectionsApi;

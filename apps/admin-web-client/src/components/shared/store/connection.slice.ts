@@ -28,8 +28,6 @@ export const connectionSlice = createSlice({
                 state.connectionMembers.from = action.payload;
         },
         setToResource: (state, action: PayloadAction<ResourceCompositeIdentifier>) => {
-            console.log(`${action.payload} !== ${state.connectionMembers.from}`);
-
             if (action.payload.id !== state.connectionMembers.from.id)
                 state.connectionMembers.to = action.payload;
         },

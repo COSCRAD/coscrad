@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { AggregateType, ResourceCompositeIdentifier, ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -26,6 +27,8 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
     id,
     shouldDisplayActionButtons,
 }: SpatialFeatureDetailThumbnailPresenterProps): JSX.Element => {
+    const { isAuthenticated } = useAuth0();
+
     const dispatch = useDispatch();
 
     /**
@@ -105,17 +108,19 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
             </Grid>
             {shouldDisplayActionButtons ? (
                 <Grid item xs={12} container sx={{ justifyContent: 'flex-end' }}>
-                    <Box sx={{ pl: 8 }}>
-                        <Tooltip title="Create Connection">
-                            <IconButton
-                                onClick={() => handleFromConnection()}
-                                aria-label="Create Connection"
-                                sx={{ ml: 0.5 }}
-                            >
-                                <HubIcon sx={{ fontSize: '20px' }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
+                    {isAuthenticated ? (
+                        <Box sx={{ pl: 8 }}>
+                            <Tooltip title="Create Connection">
+                                <IconButton
+                                    onClick={() => handleFromConnection()}
+                                    aria-label="Create Connection"
+                                    sx={{ ml: 0.5 }}
+                                >
+                                    <HubIcon sx={{ fontSize: '20px' }} />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    ) : null}
                     {/* <Box sx={{ pl: 8 }}>
                             <Tooltip title="View Connections">
                                 <Link to={`/spatialFeatures/${id}`}>

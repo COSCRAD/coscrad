@@ -1,13 +1,16 @@
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Alert, AlertTitle, IconButton, Snackbar, Tooltip } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { RootState } from '../../../store';
 import { FeedbackTypeEnum, hideSnackBar } from '../store';
 
 export const FeedbackSnackbar = () => {
     const dispatch = useDispatch();
+
+    const location = useLocation();
 
     const {
         open,
@@ -16,11 +19,14 @@ export const FeedbackSnackbar = () => {
 
     const [copied, setCopied] = useState(false);
 
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') return; // Prevent closing if clicking elsewhere
-        dispatch(hideSnackBar());
-        setCopied(false);
-    };
+    const handleClose = useCallback(
+        (event?: React.SyntheticEvent | Event, reason?: string) => {
+            if (reason === 'clickaway') return; // Prevent closing if clicking elsewhere
+            dispatch(hideSnackBar());
+            setCopied(false);
+        },
+        [dispatch, setCopied]
+    );
 
     const handleCopy = async () => {
         try {
@@ -35,6 +41,13 @@ export const FeedbackSnackbar = () => {
             console.error('Failed to copy text: ', err);
         }
     };
+
+    useEffect(() => {
+        // Put your function or logic here
+        console.log('Page changed to:', location.pathname);
+
+        handleClose();
+    }, [location.pathname, handleClose]); // Triggers whenever pathname changes
 
     const autoHideDuration = severity === FeedbackTypeEnum.error ? null : 6000;
 

@@ -186,27 +186,29 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                 </Box>
             ) : null}
             {isAuthenticated ? (
-                <PresentFormWithOptionalGeneratedId
-                    form={TranslateTermForm}
-                    context={{
-                        resourceId: id,
-                        resourceType: ResourceType.term,
-                        languageCodesInUse: languageCodesInUse,
-                        buttonLabel: 'TRANSLATE TERM',
-                    }}
-                />
+                <>
+                    <PresentFormWithOptionalGeneratedId
+                        form={TranslateTermForm}
+                        context={{
+                            resourceId: id,
+                            resourceType: ResourceType.term,
+                            languageCodesInUse: languageCodesInUse,
+                            buttonLabel: 'TRANSLATE TERM',
+                        }}
+                    />
+                    <Box sx={{ pl: 8 }}>
+                        <Tooltip title="Create Connection">
+                            <IconButton
+                                onClick={() => handleFromConnection()}
+                                aria-label="Create Connection"
+                                sx={{ ml: 0.5 }}
+                            >
+                                <HubIcon sx={{ fontSize: '20px' }} />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </>
             ) : null}
-            <Box sx={{ pl: 8 }}>
-                <Tooltip title="Create Connection">
-                    <IconButton
-                        onClick={() => handleFromConnection()}
-                        aria-label="Create Connection"
-                        sx={{ ml: 0.5 }}
-                    >
-                        <HubIcon sx={{ fontSize: '20px' }} />
-                    </IconButton>
-                </Tooltip>
-            </Box>
         </>
     );
 };

@@ -11,7 +11,7 @@ import {
     showFeedBackMessageInSnackbar,
 } from '../../../shared/store';
 import { ApiCommandFsa } from '../../../shared/types';
-import { transformApiError } from '../../../utils/api-error-response';
+import { transformApiError } from '../../../utils/transform-api-error';
 
 type SpatialFeatureCommandFsa = {
     commandFsa: ApiCommandFsa;

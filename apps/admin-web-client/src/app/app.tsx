@@ -12,7 +12,7 @@ import { TermContainer } from '../components/resources/terms/term-container';
 import { TermIndexPage } from '../components/resources/terms/term-index.page';
 import { VocabularyListDetail } from '../components/resources/vocabulary-lists/vocabulary-list-detail.page';
 import { VocabularyListsIndex } from '../components/resources/vocabulary-lists/vocabulary-list-index.page';
-import BottomConnectionDrawer from '../components/shared/bottom-connection-drawer/bottom-connection-drawer';
+import { BottomConnectionDrawer } from '../components/shared/bottom-connection-drawer/bottom-connection-drawer';
 import { ContributorIndexPage } from '../components/shared/contributors/contributor-index.page';
 import { FeedbackSnackbar } from '../components/shared/feedback-snackbar/feedback-snackbar';
 import { RightSidePanelProvider } from '../components/shared/right-side-panel/right-side-panel-provider';
@@ -58,7 +58,7 @@ export function App() {
                 <Footer />
             </Box>
             <FeedbackSnackbar />
-            <BottomConnectionDrawer />
+            {isAuthenticated ? <BottomConnectionDrawer /> : null}
         </RightSidePanelProvider>
     );
 }

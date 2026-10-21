@@ -12,10 +12,13 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
+import { BlinkingStatusDot } from '../blinking-badge/blinking-status-dot';
 import { toggleBottomConnectionDrawer } from '../store/connection.slice';
+import { CreateConnectionWithNoteForm } from './create-connection-with-note-form';
 
 const DrawerHeader = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -24,8 +27,10 @@ const DrawerHeader = styled(Box)(({ theme }) => ({
     justifyContent: 'space-between',
 }));
 
-const BottomConnectionDrawer = (): JSX.Element => {
+export const BottomConnectionDrawer = (): JSX.Element => {
     const dispatch = useDispatch();
+
+    const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
 
     const {
         open,
@@ -34,6 +39,8 @@ const BottomConnectionDrawer = (): JSX.Element => {
 
     const handleMakeConnection = () => {
         console.log('make a connection', from, to);
+
+        setIsBottomDrawerExpanded(true);
     };
 
     const handleDrawerCloseButtonClick = () => {
@@ -62,7 +69,7 @@ const BottomConnectionDrawer = (): JSX.Element => {
             <Drawer
                 PaperProps={{
                     sx: {
-                        // height: isBottomDrawerExpanded ? '80vh' : '40vh',
+                        minHeight: isBottomDrawerExpanded ? '80vh' : '40vh',
                         width: '90vw',
                         margin: 'auto',
                         p: 2,
@@ -76,14 +83,17 @@ const BottomConnectionDrawer = (): JSX.Element => {
                 variant="persistent"
             >
                 <DrawerHeader>
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="h3" sx={{ mb: 0 }}>
-                            Connect Resources
-                        </Typography>
-                        <Typography variant="h5" sx={{ mb: 0 }}>
-                            Browse to a new resource and then click the ADD SECOND RESOURCE button
-                            to create a new connection with note.
-                        </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
+                        <BlinkingStatusDot />
+                        <Box sx={{ mb: 2, ml: 2 }}>
+                            <Typography variant="h3" sx={{ mb: 0 }}>
+                                Connect Resources
+                            </Typography>
+                            <Typography variant="h5" sx={{ mb: 0 }}>
+                                Browse to a new resource and then click the ADD SECOND RESOURCE
+                                button to create a new connection with note.
+                            </Typography>
+                        </Box>
                     </Box>
                     <Box>
                         {/* <Tooltip title="Expand/Contract Connection Maker Panel">
@@ -137,10 +147,13 @@ const BottomConnectionDrawer = (): JSX.Element => {
                             <Typography variant="h5">"To" resource not selected</Typography>
                         )}
                     </Grid>
+                    <Grid item xs={12}>
+                        {!isNullOrUndefined(to) ? (
+                            <CreateConnectionWithNoteForm from={from} to={to} />
+                        ) : null}
+                    </Grid>
                 </Grid>
             </Drawer>
         </Box>
     );
 };
-
-export default BottomConnectionDrawer;
