@@ -17,12 +17,13 @@ import {
     Tooltip,
     Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { thumbnailCategorizableDetailPresenterFactory } from '../../resources/factories/thumbnail-categorizable-detail-presenter-factory';
 import { BlinkingStatusDot } from '../blinking-badge/blinking-status-dot';
 import { toggleBottomConnectionDrawer } from '../store/connection.slice';
+import { DEFAULT_BOTTOM_DRAWER_HEIGHT, OPEN_BOTTOM_DRAWER_HEIGHT } from './constants';
 import { CreateConnectionWithNoteForm } from './create-connection-with-note-form';
 
 const DrawerHeader = styled(Box)(({ theme }) => ({
@@ -35,17 +36,29 @@ const DrawerHeader = styled(Box)(({ theme }) => ({
 export const BottomConnectionDrawer = (): JSX.Element => {
     const dispatch = useDispatch();
 
-    const [isBottomDrawerExpanded, setIsBottomDrawerExpanded] = useState(false);
+    const [drawerHeight, setDrawerHeight] = useState<number>(DEFAULT_BOTTOM_DRAWER_HEIGHT);
+
+    useEffect(() => {
+        console.log({ isBottomDrawerExpanded: drawerHeight });
+    });
 
     const {
         open,
         connectionMembers: { from, to },
     } = useSelector((state: RootState) => state.connectionSlice);
 
+    const toggleDrawerHeight = () => {
+        if (drawerHeight === DEFAULT_BOTTOM_DRAWER_HEIGHT) {
+            setDrawerHeight(OPEN_BOTTOM_DRAWER_HEIGHT);
+        } else {
+            setDrawerHeight(DEFAULT_BOTTOM_DRAWER_HEIGHT);
+        }
+    };
+
     const handleMakeConnection = () => {
         console.log('make a connection', from, to);
 
-        setIsBottomDrawerExpanded(true);
+        setDrawerHeight(OPEN_BOTTOM_DRAWER_HEIGHT);
     };
 
     const handleDrawerCloseButtonClick = () => {
@@ -74,7 +87,7 @@ export const BottomConnectionDrawer = (): JSX.Element => {
             <Drawer
                 PaperProps={{
                     sx: {
-                        maxHeight: isBottomDrawerExpanded ? '80vh' : '40vh',
+                        height: `${drawerHeight}vh`,
                         width: '90vw',
                         margin: 'auto',
                         p: 2,
@@ -95,24 +108,27 @@ export const BottomConnectionDrawer = (): JSX.Element => {
                                 Connect Resources
                             </Typography>
                             <Typography variant="h5" sx={{ mb: 0 }}>
-                                Browse to a new resource and then click the ADD SECOND RESOURCE
+                                Now browse to a new resource and then click the CREATE CONNECTION
                                 button to create a new connection with note.
                             </Typography>
                         </Box>
                     </Box>
-                    <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                         <Tooltip title="Expand/Contract Connection Maker Panel">
                             <IconButton
                                 data-testid="expand-notes-panel-button"
                                 onClick={() => {
-                                    setIsBottomDrawerExpanded(!isBottomDrawerExpanded);
+                                    toggleDrawerHeight();
                                 }}
                             >
-                                {isBottomDrawerExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                                {/* Expand Icons are reversed for bottom drawer use case */}
+                                {drawerHeight === OPEN_BOTTOM_DRAWER_HEIGHT ? (
+                                    <ExpandMoreIcon />
+                                ) : (
+                                    <ExpandLessIcon />
+                                )}
                             </IconButton>
                         </Tooltip>
-                    </Box>
-                    <Box>
                         <Tooltip title="Close Notes Panel">
                             <IconButton
                                 data-testid="close-notes-panel-button"

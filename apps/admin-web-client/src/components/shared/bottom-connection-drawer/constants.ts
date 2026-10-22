@@ -1,0 +1,2 @@
+export const DEFAULT_BOTTOM_DRAWER_HEIGHT = 15;
+export const OPEN_BOTTOM_DRAWER_HEIGHT = 80;

@@ -10,11 +10,12 @@ const blink = keyframes`
 
 // 2. Create the styled Dot component
 const BlinkingDot = styled(Box)(({ theme }) => ({
-    width: 30,
-    height: 30,
+    width: '30vw',
+    maxWidth: '40px',
+    aspectRatio: 1 / 1,
     borderRadius: '50%',
-    backgroundColor: '#44b700', // Success green (or use theme.palette.success.main)
-    display: 'inline-block',
+    backgroundColor: '#dd0457ff', // Success green (or use theme.palette.success.main)
+    // display: 'inline-block',
     animation: `${blink} 1.5s infinite ease-in-out`,
 }));
 
