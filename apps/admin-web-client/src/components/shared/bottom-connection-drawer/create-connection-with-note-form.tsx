@@ -1,5 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { LanguageCode, ResourceCompositeIdentifier } from '@coscrad/api-interfaces';
+import {
+    AggregateType,
+    EdgeConnectionContextType,
+    LanguageCode,
+    ResourceCompositeIdentifier,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box, Button, Stack, TextField } from '@mui/material';
 import { useState } from 'react';
@@ -39,13 +44,13 @@ export const CreateConnectionWithNoteForm = ({
 
     if (!isAuthenticated) return <div>Form Unavailable without login</div>;
 
-    // if (isIdLoading) {
-    //     console.log({ generatedId });
+    if (isIdLoading) {
+        console.log({ generatedId });
 
-    //     return <div>Loading Id...</div>;
-    // }
+        return <div>Loading Id...</div>;
+    }
 
-    // if (isIdError) return <div>Error retrieving id.</div>;
+    if (isIdError) return <div>Error retrieving id.</div>;
 
     if (isRequestInProgress) {
         return <div>Processing Command Request...</div>;
@@ -68,23 +73,23 @@ export const CreateConnectionWithNoteForm = ({
             `generatedId: ${generatedId}`
         );
 
-        // executeCreateConnectionCommand({
-        //     commandFsa: {
-        //         type: 'CONNECT_RESOURCES_WITH_NOTE',
-        //         payload: {
-        //             aggregateCompositeIdentifier: {
-        //                 type: AggregateType.note,
-        //                 id: generatedId,
-        //             },
-        //             toMemberCompositeIdentifier: to,
-        //             toMemberContext: EdgeConnectionContextType.general,
-        //             fromMemberCompositeIdentifier: from,
-        //             fromMemberContext: EdgeConnectionContextType.general,
-        //             text: connectionNote,
-        //             languageCode: languageCode,
-        //         },
-        //     },
-        // });
+        executeCreateConnectionCommand({
+            commandFsa: {
+                type: 'CONNECT_RESOURCES_WITH_NOTE',
+                payload: {
+                    aggregateCompositeIdentifier: {
+                        type: AggregateType.note,
+                        id: generatedId,
+                    },
+                    toMemberCompositeIdentifier: to,
+                    toMemberContext: { type: EdgeConnectionContextType.general },
+                    fromMemberCompositeIdentifier: from,
+                    fromMemberContext: { type: EdgeConnectionContextType.general },
+                    text: connectionNote,
+                    languageCode: languageCode,
+                },
+            },
+        });
 
         handleClose();
     };
@@ -96,7 +101,9 @@ export const CreateConnectionWithNoteForm = ({
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '80%', mb: 2 }}>
             <div data-testid="create-point-form" />
             <Stack>
-                <SinglePropertyPresenter display="Generated Id" value={generatedId} />
+                {!isNullOrUndefined(generatedId) ? (
+                    <SinglePropertyPresenter display="Generated Id" value={generatedId} />
+                ) : null}
                 <TextField
                     sx={{ width: '80%', mb: 1 }}
                     data-testid={`connection_note`}

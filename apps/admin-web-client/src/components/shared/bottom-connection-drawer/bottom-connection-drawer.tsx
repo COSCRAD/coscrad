@@ -1,6 +1,11 @@
 import { ResourceType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
+import {
+    Add as AddIcon,
+    Close as CloseIcon,
+    ExpandLess as ExpandLessIcon,
+    ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import {
     Box,
     Button,
@@ -69,7 +74,7 @@ export const BottomConnectionDrawer = (): JSX.Element => {
             <Drawer
                 PaperProps={{
                     sx: {
-                        minHeight: isBottomDrawerExpanded ? '80vh' : '40vh',
+                        maxHeight: isBottomDrawerExpanded ? '80vh' : '40vh',
                         width: '90vw',
                         margin: 'auto',
                         p: 2,
@@ -96,7 +101,7 @@ export const BottomConnectionDrawer = (): JSX.Element => {
                         </Box>
                     </Box>
                     <Box>
-                        {/* <Tooltip title="Expand/Contract Connection Maker Panel">
+                        <Tooltip title="Expand/Contract Connection Maker Panel">
                             <IconButton
                                 data-testid="expand-notes-panel-button"
                                 onClick={() => {
@@ -105,7 +110,9 @@ export const BottomConnectionDrawer = (): JSX.Element => {
                             >
                                 {isBottomDrawerExpanded ? <ExpandMoreIcon /> : <ExpandLessIcon />}
                             </IconButton>
-                        </Tooltip> */}
+                        </Tooltip>
+                    </Box>
+                    <Box>
                         <Tooltip title="Close Notes Panel">
                             <IconButton
                                 data-testid="close-notes-panel-button"
