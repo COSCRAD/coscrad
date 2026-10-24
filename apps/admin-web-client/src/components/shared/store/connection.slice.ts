@@ -3,8 +3,15 @@ import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../../store';
 
+export enum DrawerOpenStateEnum {
+    expandedSmall = 'expandedSmall',
+    expandedMid = 'expandedMid',
+    expandedLarge = 'expandedLarge',
+    closed = 'closed',
+}
+
 interface ConnectionSliceState {
-    open: boolean;
+    drawerOpenStateFromSlice: DrawerOpenStateEnum;
     connectionMembers: {
         from: ResourceCompositeIdentifier;
         to: ResourceCompositeIdentifier;
@@ -12,7 +19,7 @@ interface ConnectionSliceState {
 }
 
 const initialState: ConnectionSliceState = {
-    open: false,
+    drawerOpenStateFromSlice: DrawerOpenStateEnum.closed,
     connectionMembers: {
         from: null,
         to: null,
@@ -24,37 +31,41 @@ export const connectionSlice = createSlice({
     initialState: initialState,
     reducers: {
         setFromResource: (state, action: PayloadAction<ResourceCompositeIdentifier>) => {
-            if (isNullOrUndefined(state.connectionMembers.to))
+            if (isNullOrUndefined(state.connectionMembers?.to))
                 state.connectionMembers.from = action.payload;
         },
         setToResource: (state, action: PayloadAction<ResourceCompositeIdentifier>) => {
-            if (action.payload.id !== state.connectionMembers.from.id)
+            if (action.payload.id !== state.connectionMembers?.from?.id)
                 state.connectionMembers.to = action.payload;
         },
-        toggleBottomConnectionDrawer: (state, action: PayloadAction<boolean>) => {
-            console.log('toggle drawer');
+        toggleBottomConnectionDrawer: (state, action: PayloadAction<DrawerOpenStateEnum>) => {
+            console.log('toggleBottomConnectionDrawer');
 
             console.log({ drawerAction: action.payload });
 
-            state.open = action.payload;
+            state.drawerOpenStateFromSlice = action.payload;
 
-            if (!state.open) {
+            if (state.drawerOpenStateFromSlice === DrawerOpenStateEnum.closed) {
                 state.connectionMembers.from = null;
 
                 state.connectionMembers.to = null;
             }
         },
     },
-    selectors: {
-        selectConnectionState: (connectionSliceState) =>
-            connectionSliceState.connectionMembers.from,
-    },
 });
 
 // export const { selectConnectionState } = connectionSlice.selectors;
 
-export const selectConnectionState = (state: RootState) =>
-    state.connectionSlice.connectionMembers.from;
+export const selectIsConnectionOpen = (state: RootState): boolean => {
+    if (!isNullOrUndefined(state.connectionSlice?.connectionMembers?.from)) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+export const selectedUserSelectedFromMemberId = (state: RootState): string =>
+    state.connectionSlice?.connectionMembers?.from?.id;
 
 export const { setFromResource, setToResource, toggleBottomConnectionDrawer } =
     connectionSlice.actions;

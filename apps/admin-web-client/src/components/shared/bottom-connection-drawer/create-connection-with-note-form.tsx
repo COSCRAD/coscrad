@@ -6,11 +6,13 @@ import {
     ResourceCompositeIdentifier,
 } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useFetchIdQuery } from '../../id-generation/store';
 import { LanguageSelect } from '../language-select';
 import { SinglePropertyPresenter } from '../single-property-presenter';
+import { DrawerOpenStateEnum, toggleBottomConnectionDrawer } from '../store';
 import { useExecuteCreateConnectionCommandMutation } from './connections.api';
 
 interface CreateConnectionFormProps {
@@ -23,6 +25,8 @@ export const CreateConnectionWithNoteForm = ({
     to,
 }: CreateConnectionFormProps): JSX.Element => {
     const { isAuthenticated } = useAuth0();
+
+    const dispatch = useDispatch();
 
     const [connectionNote, setConnectionNote] = useState<string>('');
 
@@ -60,6 +64,8 @@ export const CreateConnectionWithNoteForm = ({
 
     const handleClose = () => {
         console.log('close form');
+
+        dispatch(toggleBottomConnectionDrawer(DrawerOpenStateEnum.closed));
     };
 
     const handleSubmit = (event) => {
@@ -101,6 +107,7 @@ export const CreateConnectionWithNoteForm = ({
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: '80%', mb: 2 }}>
             <div data-testid="create-point-form" />
             <Stack>
+                <Typography variant="h4">Enter note about connection between resources</Typography>
                 {!isNullOrUndefined(generatedId) ? (
                     <SinglePropertyPresenter display="Generated Id" value={generatedId} />
                 ) : null}

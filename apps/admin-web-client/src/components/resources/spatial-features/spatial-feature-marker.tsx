@@ -1,16 +1,8 @@
-import {
-    AggregateCompositeIdentifier,
-    ISpatialFeatureViewModel,
-    ResourceCompositeIdentifier,
-    ResourceType,
-} from '@coscrad/api-interfaces';
-import { isNullOrUndefined } from '@coscrad/validation-constraints';
+import { ISpatialFeatureViewModel } from '@coscrad/api-interfaces';
 import { PointTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import { Marker as ReactLeafletMarker } from 'react-leaflet';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectConnectionState, setToResource } from '../../shared/store';
 import { CoscradLeafletPopup } from './leaflet/coscrad-leaflet-map';
 import { SpatialFeatureDetailThumbnailPresenter } from './thumbnail-presenters';
 
@@ -28,27 +20,6 @@ export const SpatialFeatureMarker = ({
     setSelectedSpatialFeatureId,
 }: SpatialFeatureMarkerProps): JSX.Element => {
     const elRef = useRef(null);
-
-    const dispatch = useDispatch();
-
-    const openConnectionResourceFrom: AggregateCompositeIdentifier =
-        useSelector(selectConnectionState);
-
-    if (
-        !isNullOrUndefined(openConnectionResourceFrom) &&
-        !isNullOrUndefined(selectedSpatialFeatureId)
-    ) {
-        if (openConnectionResourceFrom.id !== selectedSpatialFeatureId) {
-            console.log(openConnectionResourceFrom.id, selectedSpatialFeatureId);
-
-            const toResourceCompositeIdentifier: ResourceCompositeIdentifier = {
-                type: ResourceType.spatialFeature,
-                id: selectedSpatialFeatureId,
-            };
-
-            dispatch(setToResource(toResourceCompositeIdentifier));
-        }
-    }
 
     const { geometry } = spatialFeature;
 

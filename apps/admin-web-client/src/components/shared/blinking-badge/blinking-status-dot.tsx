@@ -12,6 +12,7 @@ const blink = keyframes`
 const BlinkingDot = styled(Box)(({ theme }) => ({
     width: '30vw',
     maxWidth: '40px',
+    marginTop: '-7px',
     aspectRatio: 1 / 1,
     borderRadius: '50%',
     backgroundColor: '#dd0457ff', // Success green (or use theme.palette.success.main)

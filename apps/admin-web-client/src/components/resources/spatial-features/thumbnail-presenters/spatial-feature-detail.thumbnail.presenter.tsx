@@ -6,11 +6,18 @@ import HubIcon from '@mui/icons-material/Hub';
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, Grid, IconButton, styled, Tooltip, Typography } from '@mui/material';
 import { PointTuple } from 'leaflet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { buildDataAttributeForAggregateDetailComponent } from '../../../shared/build-data-attribute-for-aggregate-detail-component';
 import { SinglePropertyPresenter } from '../../../shared/single-property-presenter';
-import { setFromResource, toggleBottomConnectionDrawer } from '../../../shared/store';
+import {
+    DrawerOpenStateEnum,
+    selectedUserSelectedFromMemberId,
+    selectIsConnectionOpen,
+    setFromResource,
+    setToResource,
+    toggleBottomConnectionDrawer,
+} from '../../../shared/store';
 import { getOriginalTextItem } from '../../terms/term-detail.page';
 import { spatialFeatureApi } from '../store/spatial-feature.api';
 
@@ -30,6 +37,10 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
     const { isAuthenticated } = useAuth0();
 
     const dispatch = useDispatch();
+
+    const isConnectionOpen: boolean = useSelector(selectIsConnectionOpen);
+
+    const selectedFromMemberId: string = useSelector(selectedUserSelectedFromMemberId);
 
     /**
      * Using useQuery to re-fetch by id so that this presenter can be
@@ -66,15 +77,21 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
 
     const [lat, lng] = coordinates as unknown as PointTuple;
 
-    const handleFromConnection = () => {
-        const fromResourceCompositeIdentifier: ResourceCompositeIdentifier = {
+    const handleConnectionButtonClick = () => {
+        const resourceConnectionCompositeIdentifier: ResourceCompositeIdentifier = {
             id,
             type: ResourceType.spatialFeature,
         };
 
-        dispatch(setFromResource(fromResourceCompositeIdentifier));
+        if (!isConnectionOpen) {
+            dispatch(setFromResource(resourceConnectionCompositeIdentifier));
 
-        dispatch(toggleBottomConnectionDrawer(true));
+            dispatch(toggleBottomConnectionDrawer(DrawerOpenStateEnum.expandedMid));
+        } else if (!isNullOrUndefined(selectedFromMemberId) && id !== selectedFromMemberId) {
+            dispatch(setToResource(resourceConnectionCompositeIdentifier));
+
+            dispatch(toggleBottomConnectionDrawer(DrawerOpenStateEnum.expandedLarge));
+        }
     };
 
     return (
@@ -112,7 +129,7 @@ export const SpatialFeatureDetailThumbnailPresenter = ({
                         <Box sx={{ pl: 8 }}>
                             <Tooltip title="Create Connection">
                                 <IconButton
-                                    onClick={() => handleFromConnection()}
+                                    onClick={() => handleConnectionButtonClick()}
                                     aria-label="Create Connection"
                                     sx={{ ml: 0.5 }}
                                 >

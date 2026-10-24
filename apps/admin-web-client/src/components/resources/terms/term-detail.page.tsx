@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import {
-    AggregateCompositeIdentifier,
     IMultilingualText,
     IMultilingualTextItem,
     LanguageCode,
@@ -18,7 +17,8 @@ import { ContributionsPresenter } from '../../shared/contributions-presenter';
 import { getSpeakersStatementForTerm } from '../../shared/getSpeakersStatementForTerm';
 import { PresentFormWithOptionalGeneratedId } from '../../shared/present-form-with-optional-generated-id';
 import {
-    selectConnectionState,
+    DrawerOpenStateEnum,
+    selectIsConnectionOpen,
     setFromResource,
     setToResource,
     toggleBottomConnectionDrawer,
@@ -55,19 +55,9 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     const dispatch = useDispatch();
 
-    const openConnectionResourceFrom: AggregateCompositeIdentifier =
-        useSelector(selectConnectionState);
+    const openConnectionResource: boolean = useSelector(selectIsConnectionOpen);
 
-    if (!isNullOrUndefined(openConnectionResourceFrom)) {
-        if (openConnectionResourceFrom.id !== id) {
-            const toResourceCompositeIdentifier: ResourceCompositeIdentifier = {
-                type: ResourceType.term,
-                id,
-            };
-
-            dispatch(setToResource(toResourceCompositeIdentifier));
-        }
-    }
+    console.log({ openConnectionResource: openConnectionResource });
 
     const { isAuthenticated } = useAuth0();
 
@@ -99,15 +89,21 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
 
     // console.log({ speakersStatementForTerm });
 
-    const handleFromConnection = () => {
-        const fromResourceCompositeIdentifier: ResourceCompositeIdentifier = {
+    const handleConnectionButtonClick = () => {
+        const resourceConnectionCompositeIdentifier: ResourceCompositeIdentifier = {
             id,
             type: ResourceType.term,
         };
 
-        dispatch(setFromResource(fromResourceCompositeIdentifier));
+        if (!openConnectionResource) {
+            dispatch(setFromResource(resourceConnectionCompositeIdentifier));
 
-        dispatch(toggleBottomConnectionDrawer(true));
+            dispatch(toggleBottomConnectionDrawer(DrawerOpenStateEnum.expandedMid));
+        } else {
+            dispatch(setToResource(resourceConnectionCompositeIdentifier));
+
+            dispatch(toggleBottomConnectionDrawer(DrawerOpenStateEnum.expandedLarge));
+        }
     };
 
     return (
@@ -199,7 +195,7 @@ export const TermDetail = ({ id }: ResourceDetailProps): JSX.Element => {
                     <Box sx={{ pl: 8 }}>
                         <Tooltip title="Create Connection">
                             <IconButton
-                                onClick={() => handleFromConnection()}
+                                onClick={() => handleConnectionButtonClick()}
                                 aria-label="Create Connection"
                                 sx={{ ml: 0.5 }}
                             >
