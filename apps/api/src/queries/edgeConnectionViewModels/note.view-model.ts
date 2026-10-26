@@ -41,7 +41,7 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
         label: 'note text',
         description: 'an note about a resource or pair of connected resources',
     })
-    readonly note: MultilingualText;
+    readonly text: MultilingualText;
 
     @NestedDataType(EdgeConnectionMember, {
         isArray: true,
@@ -58,7 +58,7 @@ export class NoteViewModel extends BaseViewModel implements INoteViewModel {
 
         this.connectionType = connectionType;
 
-        this.note = new MultilingualText(note);
+        this.text = new MultilingualText(note);
 
         this.connectedResources = cloneToPlainObject(members);
     }

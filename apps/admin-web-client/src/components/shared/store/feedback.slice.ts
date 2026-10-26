@@ -1,4 +1,5 @@
 import { AggregateCompositeIdentifier } from '@coscrad/api-interfaces';
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UnknownPart } from '../types';
 
@@ -26,7 +27,7 @@ export type FeedBack = {
 
 export interface FeedbackSliceState {
     open: boolean;
-    feedbackCommand?: FeedbackCommand;
+    feedbackCommands?: FeedbackCommand[];
     feedback: FeedBack;
 }
 
@@ -48,11 +49,15 @@ export const feedbackSlice = createSlice({
         hideSnackBar: (state) => {
             state.open = false;
         },
-        setFeedbackCommand: (state, action: PayloadAction<FeedbackCommand>) => {
-            state.feedbackCommand = action.payload;
+        addFeedbackCommand: (state, action: PayloadAction<FeedbackCommand>) => {
+            if (isNullOrUndefined(state.feedbackCommands)) {
+                state.feedbackCommands = [action.payload];
+            } else {
+                state.feedbackCommands.push(action.payload);
+            }
         },
     },
 });
 
-export const { showFeedBackMessageInSnackbar, hideSnackBar, setFeedbackCommand } =
+export const { showFeedBackMessageInSnackbar, hideSnackBar, addFeedbackCommand } =
     feedbackSlice.actions;

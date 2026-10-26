@@ -17,12 +17,12 @@ import {
     selectIsConnectionOpen,
     toggleBottomConnectionDrawer,
 } from '../store/connection.slice';
+import { CreateConnectionWithNoteForm } from '../web-of-knowledge/create-connection-with-note-form';
 import {
     BOTTOM_DRAWER_HEIGHT_HIGH,
     BOTTOM_DRAWER_HEIGHT_LOW,
     BOTTOM_DRAWER_HEIGHT_MID,
 } from './constants';
-import { CreateConnectionWithNoteForm } from './create-connection-with-note-form';
 
 export const BottomConnectionDrawer = (): JSX.Element => {
     const dispatch = useDispatch();

@@ -16,6 +16,7 @@ import { BottomConnectionDrawer } from '../components/shared/bottom-connection-d
 import { ContributorIndexPage } from '../components/shared/contributors/contributor-index.page';
 import { FeedbackSnackbar } from '../components/shared/feedback-snackbar/feedback-snackbar';
 import { RightSidePanelProvider } from '../components/shared/right-side-panel/right-side-panel-provider';
+import { WebOfKnowledge } from '../components/shared/web-of-knowledge';
 import { useAppDispatch } from './hooks';
 
 export function App() {
@@ -52,6 +53,7 @@ export function App() {
                         path="/spatialFeatures/:id"
                         element={<SpatialFeatureDetailFullViewPresenter />}
                     />
+                    <Route path="/webOfKnowledge/" element={<WebOfKnowledge />} />
                     <Route path="/contributors/" element={<ContributorIndexPage />} />
                 </Routes>
 

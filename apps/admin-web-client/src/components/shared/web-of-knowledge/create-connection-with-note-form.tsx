@@ -13,7 +13,7 @@ import { useFetchIdQuery } from '../../id-generation/store';
 import { LanguageSelect } from '../language-select';
 import { SinglePropertyPresenter } from '../single-property-presenter';
 import { DrawerOpenStateEnum, toggleBottomConnectionDrawer } from '../store';
-import { useExecuteCreateConnectionCommandMutation } from './connections.api';
+import { useExecuteEdgeConnectionCommandMutation } from './web-of-knowledge.api';
 
 interface CreateConnectionFormProps {
     from: ResourceCompositeIdentifier;
@@ -44,7 +44,7 @@ export const CreateConnectionWithNoteForm = ({
     const [
         executeCreateConnectionCommand,
         { isLoading: isRequestInProgress, isError: isCommandError },
-    ] = useExecuteCreateConnectionCommandMutation();
+    ] = useExecuteEdgeConnectionCommandMutation();
 
     if (!isAuthenticated) return <div>Form Unavailable without login</div>;
 
@@ -96,6 +96,20 @@ export const CreateConnectionWithNoteForm = ({
                 },
             },
         });
+
+        setTimeout(() => {
+            executeCreateConnectionCommand({
+                commandFsa: {
+                    type: 'PUBLISH_EDGE',
+                    payload: {
+                        aggregateCompositeIdentifier: {
+                            type: AggregateType.note,
+                            id: generatedId,
+                        },
+                    },
+                },
+            });
+        }, 600);
 
         handleClose();
     };

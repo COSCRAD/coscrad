@@ -8,7 +8,7 @@ import {
     FeedBack,
     FeedbackCommand,
     FeedbackTypeEnum,
-    setFeedbackCommand,
+    addFeedbackCommand,
     showFeedBackMessageInSnackbar,
 } from '../store';
 import { ApiCommandFsa } from '../types/api-types';
@@ -17,7 +17,7 @@ type ConnectionCommandFsa = {
     commandFsa: ApiCommandFsa;
 };
 
-export const connectionsApi = createApi({
+export const webOfKnowledgeApi = createApi({
     reducerPath: 'connection',
     tagTypes: ['connection'],
     baseQuery: fetchBaseQuery({ baseUrl: `${getConfig().apiUrl}/` }),
@@ -31,7 +31,7 @@ export const connectionsApi = createApi({
             },
         }),
         fetchConnections: builder.query<ICategorizableIndexQueryResult<INoteViewModel>, void>({
-            query: () => `webOfKnowledge`,
+            query: () => ({ url: `webOfKnowledge`, method: 'POST' }),
             providesTags: (result) =>
                 result
                     ? [
@@ -44,7 +44,7 @@ export const connectionsApi = createApi({
                     : [{ type: 'connection', id: 'LIST' }],
             keepUnusedDataFor: 300,
         }),
-        executeCreateConnectionCommand: builder.mutation<string, ConnectionCommandFsa>({
+        executeEdgeConnectionCommand: builder.mutation<string, ConnectionCommandFsa>({
             query: ({ commandFsa }: ConnectionCommandFsa) => ({
                 url: 'commands',
                 method: 'POST',
@@ -68,7 +68,7 @@ export const connectionsApi = createApi({
                         },
                     };
 
-                    dispatch(setFeedbackCommand(createCommand));
+                    dispatch(addFeedbackCommand(createCommand));
                 }
 
                 try {
@@ -80,7 +80,7 @@ export const connectionsApi = createApi({
                         if (commandType === 'PUBLISH_RESOURCE') {
                             console.log('publishing spatial feature');
 
-                            dispatch(connectionsApi.util.invalidateTags(['connection']));
+                            dispatch(webOfKnowledgeApi.util.invalidateTags(['connection']));
                         }
                     }
 
@@ -88,11 +88,13 @@ export const connectionsApi = createApi({
                 } catch (error) {
                     const state = getState() as RootState;
 
-                    const createPayload = state?.feedbackSlice?.feedbackCommand?.command;
+                    const commandPayloads = state?.feedbackSlice?.feedbackCommands?.map(
+                        ({ command }) => command
+                    );
 
                     console.log(
                         `Error attempting to submit spatial feature: ${JSON.stringify(
-                            createPayload
+                            commandPayloads
                         )}`
                     );
 
@@ -101,9 +103,7 @@ export const connectionsApi = createApi({
                     const feedback: FeedBack = {
                         severity: FeedbackTypeEnum.error,
                         title: 'Error - Adding Spatial Feature',
-                        feedbackMessage: `${apiErrorMessage} Command Payload: ${JSON.stringify(
-                            createPayload
-                        )}`,
+                        feedbackMessage: apiErrorMessage,
                     };
 
                     dispatch(showFeedBackMessageInSnackbar(feedback));
@@ -116,5 +116,5 @@ export const connectionsApi = createApi({
 export const {
     useFetchConnectionByIdQuery,
     useFetchConnectionsQuery,
-    useExecuteCreateConnectionCommandMutation,
-} = connectionsApi;
+    useExecuteEdgeConnectionCommandMutation,
+} = webOfKnowledgeApi;

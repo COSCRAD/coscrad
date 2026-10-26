@@ -22,6 +22,6 @@ export interface IConnectionMembers {
 export interface INoteViewModel extends IBaseViewModel {
     connectionType: EdgeConnectionType;
     // TODO remove this in favor of `text`
-    note: IMultilingualText;
+    text: IMultilingualText;
     connectedResources: IConnectionMembers;
 }

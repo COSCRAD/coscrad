@@ -7,7 +7,7 @@ import {
     FeedBack,
     FeedbackCommand,
     FeedbackTypeEnum,
-    setFeedbackCommand,
+    addFeedbackCommand,
     showFeedBackMessageInSnackbar,
 } from '../../../shared/store';
 import { ApiCommandFsa } from '../../../shared/types';
@@ -76,7 +76,7 @@ export const spatialFeatureApi = createApi({
                         },
                     };
 
-                    dispatch(setFeedbackCommand(createCommand));
+                    dispatch(addFeedbackCommand(createCommand));
                 }
 
                 try {
@@ -96,11 +96,11 @@ export const spatialFeatureApi = createApi({
                 } catch (error) {
                     const state = getState() as RootState;
 
-                    const createPayload = state?.feedbackSlice?.feedbackCommand?.command;
+                    const commandPayloads = state?.feedbackSlice?.feedbackCommands;
 
                     console.log(
                         `Error attempting to submit spatial feature: ${JSON.stringify(
-                            createPayload
+                            commandPayloads
                         )}`
                     );
 
@@ -109,9 +109,7 @@ export const spatialFeatureApi = createApi({
                     const feedback: FeedBack = {
                         severity: FeedbackTypeEnum.error,
                         title: 'Error - Adding Spatial Feature',
-                        feedbackMessage: `${apiErrorMessage} Command Payload: ${JSON.stringify(
-                            createPayload
-                        )}`,
+                        feedbackMessage: apiErrorMessage,
                     };
 
                     dispatch(showFeedBackMessageInSnackbar(feedback));

@@ -64,6 +64,13 @@ export const Header = (): JSX.Element => {
                         </Link>
                         &nbsp;|&nbsp;
                         <Link
+                            to="/webOfKnowledge"
+                            style={{ textDecoration: 'none', color: '#aefff4ff' }}
+                        >
+                            Web of Knowledge
+                        </Link>
+                        &nbsp;|&nbsp;
+                        <Link
                             to="/contributors"
                             style={{ textDecoration: 'none', color: '#aefff4ff' }}
                         >

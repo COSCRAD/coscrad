@@ -1,6 +1,7 @@
+import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Alert, AlertTitle, IconButton, Snackbar, Tooltip } from '@mui/material';
+import { Alert, AlertTitle, IconButton, Snackbar, Stack, Tooltip, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -14,6 +15,7 @@ export const FeedbackSnackbar = () => {
 
     const {
         open,
+        feedbackCommands,
         feedback: { severity, title, feedbackMessage },
     } = useSelector((state: RootState) => state.feedbackSlice);
 
@@ -43,11 +45,12 @@ export const FeedbackSnackbar = () => {
     };
 
     useEffect(() => {
-        // Put your function or logic here
-        console.log('Page changed to:', location.pathname);
+        if (open) {
+            console.log('Page changed to:', location.pathname);
 
-        handleClose();
-    }, [location.pathname, handleClose]); // Triggers whenever pathname changes
+            handleClose();
+        }
+    }, [open, location.pathname, handleClose]); // Triggers whenever pathname changes
 
     const autoHideDuration = severity === FeedbackTypeEnum.error ? null : 6000;
 
@@ -90,6 +93,21 @@ export const FeedbackSnackbar = () => {
             >
                 <AlertTitle>{title}</AlertTitle>
                 {feedbackMessage}
+                <Typography variant="h5">Command Stream</Typography>
+                {!isNullOrUndefined(feedbackCommands)
+                    ? feedbackCommands.map(({ command }) => {
+                          const key = command.payload.aggregateCompositeIdentifier.id;
+
+                          return (
+                              <Stack key={key}>
+                                  <Typography variant="body1">{command.commandType}</Typography>
+                                  <Typography variant="body1">
+                                      {JSON.stringify(command.payload)}
+                                  </Typography>
+                              </Stack>
+                          );
+                      })
+                    : null}
             </Alert>
         </Snackbar>
     );
