@@ -201,8 +201,6 @@ export abstract class BaseCommandHandler<TAggregate extends Aggregate> implement
         commandType: string,
         { userId, contributorIds }: CoscradCommandMeta
     ): Promise<Ack | InternalError> {
-        console.log(command, commandType);
-
         const typeValidationResult = this.validateType(command, commandType);
 
         if (isInternalError(typeValidationResult)) {

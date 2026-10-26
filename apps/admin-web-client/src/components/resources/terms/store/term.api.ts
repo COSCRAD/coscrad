@@ -10,8 +10,10 @@ import {
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
 import { RootState } from '../../../../store';
+import { addFeedbackCommand, clearFeedbackState, FeedbackCommand } from '../../../shared/store';
 import { UserIndexQueryOptionsStateTBA } from '../../../shared/store/user-index-query-options-factory.slice';
 import { ApiCommandFsa } from '../../../shared/types';
+import { triggerAlertWithError } from '../../../utils/trigger-alert-with-error';
 
 export type AggregateId = string;
 
@@ -121,9 +123,16 @@ export const termApi = createApi({
             }),
             onQueryStarted: async (
                 { commandFsa: { type: commandType, payload }, options }: TermCommandFsaWithOptions,
-                { dispatch, queryFulfilled }
+                { dispatch, getState, queryFulfilled }
             ) => {
-                const { data: commandAcknowledgement } = await queryFulfilled;
+                const termCommand: FeedbackCommand = {
+                    command: {
+                        commandType: commandType,
+                        payload: payload,
+                    },
+                };
+
+                dispatch(addFeedbackCommand(termCommand));
 
                 let id = '';
 
@@ -155,74 +164,86 @@ export const termApi = createApi({
                         id = commandPayload.aggregateCompositeIdentifier.id;
                 }
 
-                if (commandAcknowledgement === 'Ack') {
-                    console.log('command successful', commandType);
+                try {
+                    const { data: commandAcknowledgement } = await queryFulfilled;
 
-                    if (commandType === 'PUBLISH_RESOURCE') {
-                        console.log('publishing term');
+                    if (commandAcknowledgement === 'Ack') {
+                        console.log('command successful', commandType);
 
-                        dispatch(termApi.util.invalidateTags(['term']));
-                    } else {
-                        dispatch(
-                            termApi.util.updateQueryData('fetchTermById', id, (draft) => {
-                                const term = draft as ITermViewModel;
+                        if (commandType === 'PUBLISH_RESOURCE') {
+                            console.log('publishing term');
 
-                                if (commandType === 'TRANSLATE_TERM') {
-                                    const {
-                                        name: { items },
-                                    } = term;
+                            dispatch(termApi.util.invalidateTags(['term']));
 
-                                    term.name.items = [
-                                        ...items,
-                                        {
-                                            languageCode: commandPayload.languageCode,
-                                            text: commandPayload.translation,
-                                            role: MultilingualTextItemRole.freeTranslation,
-                                        },
-                                    ];
-                                }
+                            // This is the last command for the stream so we can clear the feedback
+                            dispatch(clearFeedbackState());
+                        } else {
+                            dispatch(
+                                termApi.util.updateQueryData('fetchTermById', id, (draft) => {
+                                    const term = draft as ITermViewModel;
 
-                                if (commandType === 'PROVIDE_ADDITIONAL_CREDITS_FOR_RESOURCE') {
-                                    const { contributions } = term;
+                                    if (commandType === 'TRANSLATE_TERM') {
+                                        const {
+                                            name: { items },
+                                        } = term;
 
-                                    const { speakerNames } = options;
+                                        term.name.items = [
+                                            ...items,
+                                            {
+                                                languageCode: commandPayload.languageCode,
+                                                text: commandPayload.translation,
+                                                role: MultilingualTextItemRole.freeTranslation,
+                                            },
+                                        ];
+                                    }
 
-                                    const newContribution: IContributionSummary =
-                                        buildTempContributionSummaryForCache(
-                                            speakerNames,
-                                            commandPayload
-                                        );
+                                    if (commandType === 'PROVIDE_ADDITIONAL_CREDITS_FOR_RESOURCE') {
+                                        const { contributions } = term;
 
-                                    console.log({ newContribution });
+                                        const { speakerNames } = options;
 
-                                    term.contributions = [...contributions, newContribution];
-                                }
+                                        const newContribution: IContributionSummary =
+                                            buildTempContributionSummaryForCache(
+                                                speakerNames,
+                                                commandPayload
+                                            );
 
-                                if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
-                                    const { notes } = term;
+                                        console.log({ newContribution });
 
-                                    const noteId = commandPayload.aggregateCompositeIdentifier.id;
+                                        term.contributions = [...contributions, newContribution];
+                                    }
 
-                                    const newNote: IMultilingualTextRecord = {
-                                        original: {
-                                            text: commandPayload.text,
-                                            languageCode: commandPayload.languageCode,
-                                        },
-                                        translations: {},
-                                    };
+                                    if (commandType === 'CREATE_NOTE_ABOUT_RESOURCE') {
+                                        const { notes } = term;
 
-                                    term.notes = {
-                                        ...notes,
-                                        [noteId]: {
-                                            id: noteId,
-                                            context: commandPayload.resourceContext,
-                                            note: newNote,
-                                        },
-                                    };
-                                }
-                            })
-                        );
+                                        const noteId =
+                                            commandPayload.aggregateCompositeIdentifier.id;
+
+                                        const newNote: IMultilingualTextRecord = {
+                                            original: {
+                                                text: commandPayload.text,
+                                                languageCode: commandPayload.languageCode,
+                                            },
+                                            translations: {},
+                                        };
+
+                                        term.notes = {
+                                            ...notes,
+                                            [noteId]: {
+                                                id: noteId,
+                                                context: commandPayload.resourceContext,
+                                                note: newNote,
+                                            },
+                                        };
+                                    }
+                                })
+                            );
+                        }
                     }
+                } catch (error) {
+                    const state = getState() as RootState;
+
+                    triggerAlertWithError(dispatch, state, error);
                 }
             },
         }),

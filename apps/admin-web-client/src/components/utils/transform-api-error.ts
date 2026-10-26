@@ -24,6 +24,6 @@ export const transformApiError = (err: ApiErrorResponse) => {
 
         return `${err.error.status} - ${innerData.error}`;
     } else {
-        return `${JSON.stringify(err.error).substring(0, 160)}...`;
+        return `${JSON.stringify(err.error).substring(0, 255)}...`;
     }
 };

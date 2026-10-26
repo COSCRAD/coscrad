@@ -49,13 +49,13 @@ export const Header = (): JSX.Element => {
                             Terms
                         </Link>
                         &nbsp;|&nbsp;
-                        <Link
+                        {/* <Link
                             to="/vocabularyLists"
                             style={{ textDecoration: 'none', color: '#aefff4ff' }}
                         >
                             Vocabulary Lists
                         </Link>
-                        &nbsp;|&nbsp;
+                        &nbsp;|&nbsp; */}
                         <Link
                             to="/spatialFeatures"
                             style={{ textDecoration: 'none', color: '#aefff4ff' }}

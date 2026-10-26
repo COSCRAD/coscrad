@@ -3,15 +3,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { getConfig } from '../../../../config';
 import { RootState } from '../../../../store';
 import { acquireIdApi } from '../../../id-generation/store';
-import {
-    FeedBack,
-    FeedbackCommand,
-    FeedbackTypeEnum,
-    addFeedbackCommand,
-    showFeedBackMessageInSnackbar,
-} from '../../../shared/store';
+import { FeedbackCommand, addFeedbackCommand, clearFeedbackState } from '../../../shared/store';
 import { ApiCommandFsa } from '../../../shared/types';
-import { transformApiError } from '../../../utils/transform-api-error';
+import { triggerAlertWithError } from '../../../utils/trigger-alert-with-error';
 
 type SpatialFeatureCommandFsa = {
     commandFsa: ApiCommandFsa;
@@ -66,18 +60,16 @@ export const spatialFeatureApi = createApi({
             ) => {
                 console.log({ commandType });
 
-                if (commandType === 'CREATE_POINT') {
-                    console.log({ payload });
+                console.log({ payload });
 
-                    const createCommand: FeedbackCommand = {
-                        command: {
-                            commandType: commandType,
-                            payload: payload,
-                        },
-                    };
+                const spatialFeatureCommand: FeedbackCommand = {
+                    command: {
+                        commandType: commandType,
+                        payload: payload,
+                    },
+                };
 
-                    dispatch(addFeedbackCommand(createCommand));
-                }
+                dispatch(addFeedbackCommand(spatialFeatureCommand));
 
                 try {
                     const { data: commandAcknowledgement } = await queryFulfilled;
@@ -89,6 +81,9 @@ export const spatialFeatureApi = createApi({
                             console.log('publishing spatial feature');
 
                             dispatch(spatialFeatureApi.util.invalidateTags(['spatial-feature']));
+
+                            // This is the last command for the stream so we can clear the feedback
+                            dispatch(clearFeedbackState());
                         }
                     }
 
@@ -96,23 +91,7 @@ export const spatialFeatureApi = createApi({
                 } catch (error) {
                     const state = getState() as RootState;
 
-                    const commandPayloads = state?.feedbackSlice?.feedbackCommands;
-
-                    console.log(
-                        `Error attempting to submit spatial feature: ${JSON.stringify(
-                            commandPayloads
-                        )}`
-                    );
-
-                    const apiErrorMessage: string = transformApiError(error);
-
-                    const feedback: FeedBack = {
-                        severity: FeedbackTypeEnum.error,
-                        title: 'Error - Adding Spatial Feature',
-                        feedbackMessage: apiErrorMessage,
-                    };
-
-                    dispatch(showFeedBackMessageInSnackbar(feedback));
+                    triggerAlertWithError(dispatch, state, error);
                 }
             },
         }),

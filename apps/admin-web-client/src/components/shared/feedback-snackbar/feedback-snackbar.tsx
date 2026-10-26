@@ -1,12 +1,21 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Alert, AlertTitle, IconButton, Snackbar, Stack, Tooltip, Typography } from '@mui/material';
+import {
+    Alert,
+    AlertTitle,
+    Box,
+    IconButton,
+    Snackbar,
+    Stack,
+    Tooltip,
+    Typography,
+} from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { RootState } from '../../../store';
-import { FeedbackTypeEnum, hideSnackBar } from '../store';
+import { clearFeedbackState, FeedbackTypeEnum, hideSnackBar } from '../store';
 
 export const FeedbackSnackbar = () => {
     const dispatch = useDispatch();
@@ -25,6 +34,7 @@ export const FeedbackSnackbar = () => {
         (event?: React.SyntheticEvent | Event, reason?: string) => {
             if (reason === 'clickaway') return; // Prevent closing if clicking elsewhere
             dispatch(hideSnackBar());
+            dispatch(clearFeedbackState());
             setCopied(false);
         },
         [dispatch, setCopied]
@@ -33,7 +43,9 @@ export const FeedbackSnackbar = () => {
     const handleCopy = async () => {
         try {
             // Formats the text perfectly for an email layout
-            const textToCopy = `Error Title: ${title}\nDetails: ${feedbackMessage}`;
+            const textToCopy = `Error Title: ${title}\nDetails: ${feedbackMessage}\n\nCommands:\n${feedbackCommands
+                .map((command) => `${JSON.stringify(command)}`)
+                .join('\n')}`;
             await navigator.clipboard.writeText(textToCopy);
 
             // Flash a checkmark icon to provide immediate user feedback
@@ -45,12 +57,15 @@ export const FeedbackSnackbar = () => {
     };
 
     useEffect(() => {
-        if (open) {
-            console.log('Page changed to:', location.pathname);
+        // actions on unmount
+        return () => {
+            if (open) {
+                console.log('Page changed to:', location.pathname);
 
-            handleClose();
-        }
-    }, [open, location.pathname, handleClose]); // Triggers whenever pathname changes
+                handleClose();
+            }
+        };
+    }, [open, location.pathname, handleClose, dispatch]); // Triggers whenever pathname changes
 
     const autoHideDuration = severity === FeedbackTypeEnum.error ? null : 6000;
 
@@ -94,20 +109,23 @@ export const FeedbackSnackbar = () => {
                 <AlertTitle>{title}</AlertTitle>
                 {feedbackMessage}
                 <Typography variant="h5">Command Stream</Typography>
-                {!isNullOrUndefined(feedbackCommands)
-                    ? feedbackCommands.map(({ command }) => {
-                          const key = command.payload.aggregateCompositeIdentifier.id;
+                <Box sx={{ height: '150px', overflow: 'scroll' }}>
+                    {!isNullOrUndefined(feedbackCommands)
+                        ? feedbackCommands.map(({ command }) => {
+                              const key = command.payload.aggregateCompositeIdentifier.id;
 
-                          return (
-                              <Stack key={key}>
-                                  <Typography variant="body1">{command.commandType}</Typography>
-                                  <Typography variant="body1">
-                                      {JSON.stringify(command.payload)}
-                                  </Typography>
-                              </Stack>
-                          );
-                      })
-                    : null}
+                              return (
+                                  // eslint-disable-next-line react/jsx-no-undef
+                                  <Stack key={key}>
+                                      <Typography variant="body1">{command.commandType}</Typography>
+                                      <Typography variant="body1">
+                                          {JSON.stringify(command.payload)}
+                                      </Typography>
+                                  </Stack>
+                              );
+                          })
+                        : null}
+                </Box>
             </Alert>
         </Snackbar>
     );

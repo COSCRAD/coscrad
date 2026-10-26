@@ -56,8 +56,15 @@ export const feedbackSlice = createSlice({
                 state.feedbackCommands.push(action.payload);
             }
         },
+        clearFeedbackState: (state) => {
+            return initialState;
+        },
     },
 });
 
-export const { showFeedBackMessageInSnackbar, hideSnackBar, addFeedbackCommand } =
-    feedbackSlice.actions;
+export const {
+    showFeedBackMessageInSnackbar,
+    hideSnackBar,
+    addFeedbackCommand,
+    clearFeedbackState,
+} = feedbackSlice.actions;
