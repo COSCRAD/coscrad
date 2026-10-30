@@ -126,12 +126,68 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
         };
     }
 
-    async translateName(_id: string, _translationItem: IMultilingualTextItem): Promise<void> {
-        throw new Error('Method not implemented.');
+    async translateName(id: string, translationItem: IMultilingualTextItem): Promise<void> {
+        const query = `
+        FOR doc IN @@collectionName
+        FILTER doc._key == @id
+        UPDATE doc WITH {
+                name: {
+                    items: APPEND(doc.name.items,@translationItem)
+                }
+        } IN @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'map__VIEWS',
+            id,
+            translationItem,
+        };
+
+        const cursor = await this.database
+            .query({
+                query,
+                bindVars,
+            })
+            .catch((reason) => {
+                throw new InternalError(
+                    `Failed to translate geospatial feature via GeospatialFeatureRepository: ${reason}`
+                );
+            });
+
+        await cursor.all();
     }
 
-    async addSpatialFeature(_id: string, _spatialFeatureId: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async addSpatialFeature(id: string, spatialFeatureId: string): Promise<void> {
+        const query = `
+        FOR m IN @@collectionName
+        FILTER m._key == @id
+        FOR s IN spatialFeature__VIEWS
+        FILTER s._key == @spatialFeatureId
+        LET newEntry = {
+            id: @spatialFeatureId
+
+        }
+
+        UPDATE m WITH {
+            spatialFeaturesById: MERGE(m.spatialFeaturesById,{
+            [@spatialFeatureId]: newEntry
+            })
+        } in @@collectionName
+        `;
+
+        const bindVars = {
+            '@collectionName': 'map__VIEWS',
+            id,
+            spatialFeatureId,
+        };
+
+        const cursor = await await this.database.query({ query, bindVars }).catch((error) => {
+            throw new InternalError(
+                `failed to add spatial feature: via GeospatialFeatureRepository: ${error}`
+            );
+        });
+
+        await cursor.all();
     }
 
     async count(): Promise<number> {
@@ -185,7 +241,7 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
     }
 
     // TODO what should we do with this?
-    subscribleToUpdates(): Observable<{ data: { type: string } }> {
+    subscribeToUpdates(): Observable<{ data: { type: string } }> {
         throw new Error('Method not implemented.');
     }
 

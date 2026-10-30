@@ -14,7 +14,8 @@ import buildConfigFilePath from '../../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../../app/config/constants/environment';
 import buildMockConfigService from '../../../../app/config/__tests__/utilities/buildMockConfigService';
 import { GeospatialMapModule } from '../../../../app/domain-modules/geospatial-map.module';
-import { NotFound } from '../../../../lib/types/not-found';
+import { InternalError } from '../../../../lib/errors/InternalError';
+import { isNotFound, NotFound } from '../../../../lib/types/not-found';
 import { ArangoConnectionProvider } from '../../../../persistence/database/arango-connection.provider';
 import { ArangoCollectionId } from '../../../../persistence/database/collection-references/ArangoCollectionId';
 import { ArangoDatabaseProvider } from '../../../../persistence/database/database.provider';
@@ -27,7 +28,7 @@ import { TagViewModel } from '../../../../queries/buildViewModelForResource/view
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { buildTestInstance } from '../../../../test-data/utilities';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
-import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { MultilingualText, MultilingualTextItem } from '../../../common/entities/multilingual-text';
 import buildInstanceFactory from '../../../factories/utilities/buildInstanceFactory';
 import { IRepositoryForAggregate } from '../../../repositories/interfaces/repository-for-aggregate.interface';
 import { EdgeConnection } from '../../context/edge-connection.entity';
@@ -388,6 +389,34 @@ describe(`ArangoGeospatialMapQueryRepository`, () => {
                 targetGeospatialMap.id,
                 testAdminUser
             );
+
+            if (isNotFound(updatedGeospatialMap)) {
+                expect(updatedGeospatialMap).not.toBe(NotFound);
+
+                throw new InternalError('test failed');
+            }
+
+            const updatedName = new MultilingualText(updatedGeospatialMap.name);
+
+            const searchResultForTranslation = updatedName.getTranslation(translationLanguageCode);
+
+            expect(searchResultForTranslation).not.toBe(NotFound);
+
+            const foundTranslation = searchResultForTranslation as MultilingualTextItem;
+
+            expect(foundTranslation.text).toBe(translationTextForName);
+
+            expect(foundTranslation.role).toBe(MultilingualTextItemRole.freeTranslation);
+        });
+    });
+
+    describe(`addSpatialFeature`, () => {
+        describe(`when adding a first spatial feature`, () => {
+            it.todo('not implemented');
+        });
+
+        describe(`when adding additional spatial features`, () => {
+            it.todo('not implemented');
         });
     });
 

@@ -129,6 +129,7 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         };
     }
 
+    // TODO can we pass the translationItem here?
     async translateSpatialFeatureName(
         id: string,
         translation: string,

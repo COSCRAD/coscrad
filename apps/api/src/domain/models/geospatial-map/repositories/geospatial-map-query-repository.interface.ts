@@ -35,7 +35,7 @@ export interface IGeospatialMapQueryRepository
 
     addSpatialFeature(id: AggregateId, spatialFeatureId: AggregateId): Promise<void>;
 
-    subscribleToUpdates(): Observable<{ data: { type: string } }>;
+    subscribeToUpdates(): Observable<{ data: { type: string } }>;
 
     delete(id: string): Promise<void>;
 }
