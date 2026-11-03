@@ -1,0 +1,52 @@
+services:
+    api:
+        build:
+            context: .
+            dockerfile: apps/api/Dockerfile
+            # TODO Can't we pull this from the github environment now?
+            args:
+                - NODE_ENV=${NODE_ENV}
+        init: true # prevent zombie worker deadlocks
+        environment:
+            - NODE_PORT=${NODE_PORT}
+            - ARANGO_DB_HOST_SCHEME=${ARANGO_DB_HOST_SCHEME}
+            - ARANGO_DB_HOST_DOMAIN=${ARANGO_DB_HOST_DOMAIN}
+            - ARANGO_DB_HOST_PORT=${ARANGO_DB_HOST_PORT}
+            - ARANGO_DB_ROOT_PASSWORD=${ARANGO_DB_ROOT_PASSWORD}
+            - ARANGO_DB_USER=${ARANGO_DB_USER}
+            - ARANGO_DB_USER_PASSWORD=${ARANGO_DB_USER_PASSWORD}
+            - ARANGO_DB_NAME=${ARANGO_DB_NAME}
+            - AUTH0_ISSUER_URL=${AUTH0_ISSUER_URL}
+            - AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+            - BASE_URL=${BASE_URL}
+            - GLOBAL_PREFIX=${GLOBAL_PREFIX}
+            - GLOBAL_PREFIX=${GLOBAL_PREFIX}
+            - SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT=${SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT}
+            - SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT=${SHOULD_ENABLE_LEGACY_GAMES_ENDPOINT}
+            - ALLOWED_CLIENT_ORIGINS=${ALLOWED_CLIENT_ORIGINS}
+            - MAX_FILE_UPLOAD_SIZE_MB=${MAX_FILE_UPLOAD_SIZE_MB}
+            - MAX_FILE_UPLOAD_COUNT=${MAX_FILE_UPLOAD_COUNT}
+            - ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY=${ON_DISK_BINARY_ASSET_STORAGE_DIRECTORY}
+            # These are additional settings only required in the CI
+            # - WEB_CONCURRENCY=1
+            # - PM2_WORKERS=1
+        ports:
+            - ${NODE_PORT}:${NODE_PORT}
+        # depends_on:
+        #     db:
+        #         condition: service_healthy
+        networks:
+            - app_network
+        healthcheck:
+            test: ['CMD', 'curl', '-f', '$BASE_URL:$NODE_PORT']
+            interval: 10s
+            timeout: 5s
+            retries: 3
+            start_period: 30s
+
+networks:
+    app_network:
+        driver: bridge
+# volumes:
+# TODO also binary asset storage for the back-end
+#   arangodata:
