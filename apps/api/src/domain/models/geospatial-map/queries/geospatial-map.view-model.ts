@@ -9,12 +9,14 @@ import { DTO } from '../../../../types/DTO';
 import { buildMultilingualTextWithSingleItem } from '../../../common/build-multilingual-text-with-single-item';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
+import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { SpatialFeatureProperties } from '../../spatial-feature/point/entities/spatial-feature-properties.entity';
 import { GeometryViewModel } from '../../spatial-feature/queries/spatial-feature.view-model.event-sourced';
 import { ContributionSummary } from '../../user-management';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { GeospatialMapCompositeIdentifier } from '../commands/create-map.command';
+import { MapCreated } from '../commands/map-created.event';
 
 export class SpatialFeatureViewForMap {
     id: AggregateId;
@@ -110,5 +112,33 @@ export class GeospatialMapViewModel {
     // TODO can we have some kind of warning if we get the casing wrong on ~~fromDTO~~  -> `fromDto`?
     static fromDto(dto: DTO<GeospatialMapViewModel>): GeospatialMapViewModel {
         return new GeospatialMapViewModel(dto);
+    }
+
+    static fromMapCreated(event: MapCreated): GeospatialMapViewModel {
+        const {
+            payload: {
+                aggregateCompositeIdentifier: { id },
+                name,
+                description,
+            },
+        } = event;
+
+        const instance = new GeospatialMapViewModel({
+            id,
+            type: AggregateType.map,
+            name: buildMultilingualTextWithSingleItem(name.text, name.languageCode),
+            description: buildMultilingualTextWithSingleItem(
+                description.text,
+                description.languageCode
+            ),
+            isPublished: false,
+            spatialFeaturesById: {},
+            contributions: [],
+            connections: {},
+            tags: [],
+            notes: {},
+        });
+
+        return instance;
     }
 }
