@@ -11,6 +11,7 @@ import { CreateMapCommandHandler } from '../../domain/models/geospatial-map/comm
 import { MapCreated } from '../../domain/models/geospatial-map/commands/map-created.event';
 import { MapCreatedEventHandler } from '../../domain/models/geospatial-map/commands/map-created.event-handler';
 import { MapNameTranslated } from '../../domain/models/geospatial-map/commands/translate-map-name/map-name-translated.event';
+import { MapNameTranslatedEventHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/map-name-translated.event-handler';
 import { TranslateMapName } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command';
 import { TranslateMapNameCommandHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command-handler';
 import { GeospatialMap } from '../../domain/models/geospatial-map/geospatial-map.entity';
@@ -64,6 +65,7 @@ import { DynamicDataTypeModule } from '../../validation';
             useValue: ctor,
         })),
         MapCreatedEventHandler,
+        MapNameTranslatedEventHandler,
     ],
 })
 export class GeospatialMapModule {}

@@ -37,32 +37,38 @@ const translationLanguageCode = LanguageCode.Chilcotin;
 
 const originalLanguageCode = LanguageCode.English;
 
-const pointCreated = new TestEventStream().andThen<PointCreated>({
-    type: 'POINT_CREATED',
-    payload: {
-        aggregateCompositeIdentifier: { id: spatialFeatureId },
-        name: {
-            text: spatialFeatureName,
-            languageCode: originalLanguageCode,
-        },
-        description: 'description of point',
-        geometricFeature: {
-            coordinates: PointCoordinates.fromTuple([52.1322203, -122.145229]),
+const pointCreated = new TestEventStream().andThen<PointCreated>(
+    {
+        type: 'POINT_CREATED',
+        payload: {
+            aggregateCompositeIdentifier: { id: spatialFeatureId },
+            name: {
+                text: spatialFeatureName,
+                languageCode: originalLanguageCode,
+            },
+            description: 'description of point',
+            geometricFeature: {
+                coordinates: PointCoordinates.fromTuple([52.1322203, -122.145229]),
+            },
         },
     },
-});
+    PointCreated
+);
 
-const nameTranslated = pointCreated.andThen<SpatialFeatureNameTranslated>({
-    type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
-    payload: {
-        aggregateCompositeIdentifier: { id: spatialFeatureId },
-        translationItem: {
-            text: spatialFeatureNameTranslated,
-            languageCode: translationLanguageCode,
-            role: MultilingualTextItemRole.freeTranslation,
+const nameTranslated = pointCreated.andThen<SpatialFeatureNameTranslated>(
+    {
+        type: 'SPATIAL_FEATURE_NAME_TRANSLATED',
+        payload: {
+            aggregateCompositeIdentifier: { id: spatialFeatureId },
+            translationItem: {
+                text: spatialFeatureNameTranslated,
+                languageCode: translationLanguageCode,
+                role: MultilingualTextItemRole.freeTranslation,
+            },
         },
     },
-});
+    SpatialFeatureNameTranslated
+);
 
 const [creationEvent, translatedEvent] = nameTranslated.as({
     type: AggregateType.spatialFeature,
@@ -150,7 +156,7 @@ describe(`SpatialFeatureNameTranslatedEventHandler.handle`, () => {
             });
 
             const updatedName = new MultilingualText(updatedView.name);
-
+            // TODO do we need this extra check?
             const translationItem = updatedName.getTranslation(
                 translatedEvent.payload.translationItem.languageCode
             );
