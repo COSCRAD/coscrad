@@ -6,6 +6,7 @@ import {
     AddSpatialFeatureToMapCommandHandler,
     SpatialFeatureAddedToMap,
 } from '../../domain/models/geospatial-map/commands/add-spatial-feature-to-map';
+import { SpatialFeatureAddedToMapEventHandler } from '../../domain/models/geospatial-map/commands/add-spatial-feature-to-map/spatial-feature-added-to-map.event-handler';
 import { CreateMap } from '../../domain/models/geospatial-map/commands/create-map.command';
 import { CreateMapCommandHandler } from '../../domain/models/geospatial-map/commands/create-map.command-handler';
 import { MapCreated } from '../../domain/models/geospatial-map/commands/map-created.event';
@@ -66,6 +67,7 @@ import { DynamicDataTypeModule } from '../../validation';
         })),
         MapCreatedEventHandler,
         MapNameTranslatedEventHandler,
+        SpatialFeatureAddedToMapEventHandler,
     ],
 })
 export class GeospatialMapModule {}
