@@ -33,7 +33,7 @@ export interface IGeospatialMapQueryRepository
 
     translateName(id: AggregateId, translationItem: IMultilingualTextItem): Promise<void>;
 
-    addSpatialFeature(id: AggregateId, spatialFeatureId: AggregateId): Promise<void>;
+    addSpatialFeature(mapId: AggregateId, spatialFeatureId: AggregateId): Promise<void>;
 
     subscribeToUpdates(): Observable<{ data: { type: string } }>;
 

@@ -22,6 +22,15 @@ export class SpatialFeatureViewForMap {
     id: AggregateId;
     geometry: GeometryViewModel;
     properties: SpatialFeatureProperties;
+
+    constructor({ id, geometry, properties }: DTO<SpatialFeatureViewForMap>) {
+        this.id = id;
+
+        // @ts-expect-error TODO fix this
+        this.geometry = geometry;
+
+        this.properties = new SpatialFeatureProperties(properties);
+    }
 }
 
 @CoscradDataExample<GeospatialMapViewModel>({
@@ -87,8 +96,17 @@ export class GeospatialMapViewModel {
     spatialFeaturesById: Record<AggregateId, SpatialFeatureViewForMap> = {};
 
     constructor(viewModelDto: DTO<GeospatialMapViewModel>) {
-        const { id, name, description, tags, notes, connections, isPublished, contributions } =
-            viewModelDto;
+        const {
+            id,
+            name,
+            description,
+            tags,
+            notes,
+            connections,
+            isPublished,
+            contributions,
+            spatialFeaturesById,
+        } = viewModelDto;
 
         this.id = id;
 
@@ -107,6 +125,14 @@ export class GeospatialMapViewModel {
             : [];
 
         this.connections = isNonEmptyObject(connections) ? cloneToPlainObject(connections) : {};
+
+        Object.entries(spatialFeaturesById || {}).forEach(
+            ([spatialFeatureId, spatialFeatureDto]) => {
+                this.spatialFeaturesById[spatialFeatureId] = new SpatialFeatureViewForMap(
+                    spatialFeatureDto
+                );
+            }
+        );
     }
 
     // TODO can we have some kind of warning if we get the casing wrong on ~~fromDTO~~  -> `fromDto`?

@@ -1,5 +1,6 @@
 import { AggregateType } from '@coscrad/api-interfaces';
 import { NestedDataType, UUID } from '@coscrad/data-types';
+import { plainToInstance } from 'class-transformer';
 import { CoscradEvent } from '../../../../../domain/common';
 import buildDummyUuid from '../../../../../domain/models/__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../../../domain/models/__tests__/utilities/dummyDateNow';
@@ -7,6 +8,7 @@ import { dummySystemUserId } from '../../../../../domain/models/__tests__/utilit
 import { AggregateId } from '../../../../../domain/types/AggregateId';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
 import { BaseEvent } from '../../../shared/events/base-event.entity';
+import { EventRecordMetadata } from '../../../shared/events/types/EventRecordMetadata';
 import { GeospatialMapCompositeIdentifier } from '../create-map.command';
 
 export class SpatialFeatureAddedToMapPayload {
@@ -46,4 +48,10 @@ const dummyEventId = buildDummyUuid(105);
 @CoscradEvent('SPATIAL_FEATURE_ADDED_TO_MAP')
 export class SpatialFeatureAddedToMap extends BaseEvent<SpatialFeatureAddedToMapPayload> {
     readonly type = 'SPATIAL_FEATURE_ADDED_TO_MAP';
+
+    constructor(payload: SpatialFeatureAddedToMapPayload, metadata: EventRecordMetadata) {
+        super(payload, metadata);
+
+        this.payload = plainToInstance(SpatialFeatureAddedToMapPayload, payload);
+    }
 }

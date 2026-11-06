@@ -65,7 +65,9 @@ export class SpatialFeatureProperties extends BaseDomainModel implements ISpatia
 
         this.description = new MultilingualText(description);
 
-        this.imageUrl = imageUrl;
+        if (imageUrl) {
+            this.imageUrl = imageUrl;
+        }
     }
 
     // @UpdateMethod()
