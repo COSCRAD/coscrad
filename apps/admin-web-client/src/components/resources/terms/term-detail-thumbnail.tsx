@@ -19,8 +19,9 @@ export const TermDetailThumbnailPresenter = ({
     id,
     shouldDisplayActionButtons,
 }: TermDetailThumbnailPresenterProps): JSX.Element => {
-    const { name, contributions, isLoading, isError } =
-        termApi.endpoints.fetchTermById.useQueryState(id, {
+    const { name, contributions, isLoading, isError } = termApi.endpoints.fetchTermById.useQuery(
+        id,
+        {
             skip: !id,
             selectFromResult: (result) => ({
                 name: result.data?.name,
@@ -29,7 +30,10 @@ export const TermDetailThumbnailPresenter = ({
                 isLoading: result.isLoading,
                 isError: result.isError,
             }),
-        });
+        }
+    );
+
+    console.log('from note list:', name);
 
     if (isLoading || !name) {
         return <div>Loading...</div>;

@@ -30,17 +30,19 @@ export const WebOfKnowledgeListNotePresenter = ({
     return (
         <Stack>
             <Box sx={{ mb: 3 }}>
-                <Typography variant="h4">Note: "{originalNoteItem.text}"</Typography>
-                <Grid container>
-                    <Grid item>
+                <Typography variant="h4" sx={{ mb: 2 }}>
+                    Note: "{originalNoteItem.text}"
+                </Typography>
+                <Grid container sx={{ width: '100%' }}>
+                    <Grid item xs={6}>
                         <FromThumbnailDetailPresenter
                             id={fromResource.id}
                             shouldDisplayActionButtons={false}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={6}>
                         <ToThumbnailDetailPresenter
-                            id={fromResource.id}
+                            id={toResource.id}
                             shouldDisplayActionButtons={false}
                         />
                     </Grid>

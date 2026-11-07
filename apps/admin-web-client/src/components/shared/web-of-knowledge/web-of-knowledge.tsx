@@ -15,17 +15,19 @@ export const WebOfKnowledge = (): JSX.Element => {
 
     const webOfKnowledgeNotes = data?.entities;
 
-    console.log({ webOfKnowledgeNotes });
-
     return (
         <PageContentLayout>
             <Typography variant="h2">Web of Knowledge</Typography>
             <Stack>
                 {!isNullOrUndefined(webOfKnowledgeNotes) ? (
                     <Stack>
-                        {webOfKnowledgeNotes.map(({ text, connectedResources }) => 
-                            <WebOfKnowledgeListNotePresenter noteText={text} connectedResources={connectedResources} />
-                        )}
+                        {webOfKnowledgeNotes.map(({ text, connectedResources }, index) => (
+                            <WebOfKnowledgeListNotePresenter
+                                key={`${index}-${connectedResources.from.resource.id}`}
+                                noteText={text}
+                                connectedResources={connectedResources}
+                            />
+                        ))}
                     </Stack>
                 ) : null}
             </Stack>
