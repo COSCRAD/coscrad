@@ -1,7 +1,7 @@
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
-import { Box, Stack, Typography } from '@mui/material';
-import { findOriginalMultilingualTextItem } from '../../resources/terms/term-list.container';
+import { Stack, Typography } from '@mui/material';
 import { PageContentLayout } from '../page-content-layout';
+import { WebOfKnowledgeListNotePresenter } from './web-of-knowledge-list-note-presenter';
 import { useFetchConnectionsQuery } from './web-of-knowledge.api';
 
 export const WebOfKnowledge = (): JSX.Element => {
@@ -23,34 +23,9 @@ export const WebOfKnowledge = (): JSX.Element => {
             <Stack>
                 {!isNullOrUndefined(webOfKnowledgeNotes) ? (
                     <Stack>
-                        {webOfKnowledgeNotes.map(({ text, connectedResources }) => {
-                            const originalNoteItem = findOriginalMultilingualTextItem(text);
-
-                            const fromConnection = connectedResources.from;
-
-                            const toConnection = connectedResources.to;
-
-                            return (
-                                <Stack>
-                                    <Box sx={{ mb: 3 }}>
-                                        <Typography variant="h4">
-                                            {originalNoteItem.text}
-                                        </Typography>
-                                        <Typography variant="body1">
-                                            <Typography component="span" variant="h5">
-                                                {fromConnection.resource.type}/
-                                                {fromConnection.resource.id}
-                                            </Typography>{' '}
-                                            is connected to{' '}
-                                            <Typography component="span" variant="h5">
-                                                {toConnection.resource.type}/
-                                                {toConnection.resource.id}
-                                            </Typography>
-                                        </Typography>
-                                    </Box>
-                                </Stack>
-                            );
-                        })}
+                        {webOfKnowledgeNotes.map(({ text, connectedResources }) => 
+                            <WebOfKnowledgeListNotePresenter noteText={text} connectedResources={connectedResources} />
+                        )}
                     </Stack>
                 ) : null}
             </Stack>

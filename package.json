@@ -169,5 +169,8 @@
         "webpack-merge": "^5.8.0",
         "webpack-node-externals": "^3.0.0",
         "whatwg-fetch": "^3.6.2"
+    },
+    "resolutions": {
+        "@parcel/watcher": "^2.4.1"
     }
 }
