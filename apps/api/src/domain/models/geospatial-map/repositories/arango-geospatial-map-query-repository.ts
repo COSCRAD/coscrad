@@ -164,8 +164,9 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
         FOR s IN spatialFeature__VIEWS
         FILTER s._key == @spatialFeatureId
         LET newEntry = {
-            id: @spatialFeatureId
-
+            id: @spatialFeatureId,
+            properties: s.properties,
+            geometry: s.geometry
         }
 
         UPDATE m WITH {
@@ -181,7 +182,7 @@ export class ArangoGeospatialMapQueryRepository implements IGeospatialMapQueryRe
             spatialFeatureId,
         };
 
-        const cursor = await await this.database.query({ query, bindVars }).catch((error) => {
+        const cursor = await this.database.query({ query, bindVars }).catch((error) => {
             throw new InternalError(
                 `failed to add spatial feature: via GeospatialFeatureRepository: ${error}`
             );
