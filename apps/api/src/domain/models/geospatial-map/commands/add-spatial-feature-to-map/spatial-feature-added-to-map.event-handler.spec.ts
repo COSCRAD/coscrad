@@ -48,6 +48,8 @@ const mapCreated = new TestEventStream().andThen<MapCreated>(
 
 const spatialFeatureId = buildDummyUuid(12);
 
+const secondSpatialFeatureId = buildDummyUuid(13);
+
 const existingSpatialFeatureView = buildTestInstance(SpatialFeatureViewModel, {
     id: spatialFeatureId,
 });
@@ -57,6 +59,20 @@ const spatialFeatureAddedToMap = mapCreated.andThen<SpatialFeatureAddedToMap>(
         type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
         payload: {
             spatialFeatureId,
+        },
+    },
+    SpatialFeatureAddedToMap
+);
+
+const secondExistingSpatialFeatureView = buildTestInstance(SpatialFeatureViewModel, {
+    id: secondSpatialFeatureId,
+});
+
+const secondSpatialFeatureAddedToMap = mapCreated.andThen<SpatialFeatureAddedToMap>(
+    {
+        type: 'SPATIAL_FEATURE_ADDED_TO_MAP',
+        payload: {
+            spatialFeatureId: secondSpatialFeatureId,
         },
     },
     SpatialFeatureAddedToMap
@@ -130,6 +146,10 @@ describe(`SpatialFeatureAddedToMapEventHandler.handle`, () => {
         await app
             .get<ISpatialFeatureQueryRepository>(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN)
             .create(existingSpatialFeatureView);
+
+        await app
+            .get<ISpatialFeatureQueryRepository>(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN)
+            .create(secondExistingSpatialFeatureView);
     });
 
     describe(`when adding a first spatial feature`, () => {
@@ -169,6 +189,47 @@ describe(`SpatialFeatureAddedToMapEventHandler.handle`, () => {
     });
 
     describe(`when adding a second spatial feature`, () => {
-        it.todo(`should the spatial feature`);
+        it(`should the spatial feature`, async () => {
+            await spatialFeatureAddedToMapEventHandler.handle(
+                spatialFeatureAddedToMap.as(mapCompositeId)[1] as SpatialFeatureAddedToMap
+            );
+
+            // second one
+            await spatialFeatureAddedToMapEventHandler.handle(
+                secondSpatialFeatureAddedToMap.as(mapCompositeId)[1] as SpatialFeatureAddedToMap
+            );
+
+            const updatedMap = (await app
+                .get<IGeospatialMapQueryRepository>(GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN)
+                .fetchById(mapId)) as GeospatialMapViewModel;
+
+            const { spatialFeaturesById } = updatedMap;
+
+            expect(Object.entries(spatialFeaturesById)).toHaveLength(2);
+
+            expect(spatialFeatureId in spatialFeaturesById).toBe(true);
+
+            const {
+                id: foundId,
+                geometry,
+                properties,
+            } = spatialFeaturesById[secondSpatialFeatureId];
+
+            expect(foundId).toBe(secondSpatialFeatureId);
+
+            expect(geometry).toEqual(secondExistingSpatialFeatureView.geometry);
+
+            // TODO Deal with maps disappearing during serialization here
+            expect(
+                // @ts-expect-error Friday
+                clonePlainObjectWithoutProperties(properties, ['alternativeNamesByLabel'])
+            ).toEqual(
+                clonePlainObjectWithoutProperties(
+                    // @ts-expect-error Friday
+                    existingSpatialFeatureView.properties,
+                    ['alternativeNamesByLabel']
+                )
+            );
+        });
     });
 });
