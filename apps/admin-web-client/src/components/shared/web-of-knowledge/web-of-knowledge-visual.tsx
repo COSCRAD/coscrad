@@ -1,3 +1,9 @@
+import {
+    IDetailQueryResult,
+    INoteViewModel,
+    ResourceType,
+    WithTags,
+} from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { Box } from '@mui/material';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -8,10 +14,12 @@ import ForceGraph3D, {
     NodeObject,
 } from 'react-force-graph-3d';
 import * as THREE from 'three';
+import { getOriginalTextItem } from '../../resources/terms/term-detail.page';
 
 interface MyCustomNode {
     id: string;
-    name: string;
+    type: ResourceType;
+    // name: string;
     val: number;
     color: string;
 }
@@ -19,6 +27,7 @@ interface MyCustomNode {
 interface MyCustomLink {
     source: string;
     target: string;
+    note: string;
 }
 
 type StrictNode = NodeObject & MyCustomNode;
@@ -27,9 +36,11 @@ type StrictLink = LinkObject & MyCustomLink;
 
 type StrictGraphData = GraphData<StrictNode, StrictLink>;
 
-// interface WebOfKnowledgeVisualProps {}
+interface WebOfKnowledgeVisualProps {
+    connections: IDetailQueryResult<WithTags<INoteViewModel>>[];
+}
 
-export const WebOfKnowledgeVisual = (): JSX.Element => {
+export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps): JSX.Element => {
     const POPUP_WIDTH = 260;
     const POPUP_HEIGHT = 110;
 
@@ -47,22 +58,53 @@ export const WebOfKnowledgeVisual = (): JSX.Element => {
 
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-    const graphData: StrictGraphData = useMemo(() => {
-        return {
-            nodes: [
-                { id: 'A', name: 'Node Alpha', val: 5, color: '#3b82f6' }, // 'val' sets node sphere size
-                { id: 'B', name: 'Node Bravo', val: 3, color: '#d4f63b' },
-                { id: 'C', name: 'Node Charlie', val: 3, color: '#4bf63b' },
-                { id: 'D', name: 'Node Delta', val: 8, color: '#e63bf6' },
-            ],
-            links: [
-                { source: 'A', target: 'B' },
-                { source: 'A', target: 'C' },
-                { source: 'B', target: 'D' },
-                { source: 'C', target: 'D' },
-            ],
-        };
-    }, []);
+    const dataForGraph = useMemo(() => {
+        return connections
+            .map(({ text, connectedResources }) => {
+                const fromResource = connectedResources.from;
+
+                const toResource = connectedResources.to;
+
+                const connectionNodes: StrictNode[] = [
+                    {
+                        id: fromResource.resource.id,
+                        type: fromResource.resource.type as ResourceType,
+                        val: 5,
+                        color: '#3b82f6',
+                    },
+                    {
+                        id: toResource.resource.id,
+                        type: toResource.resource.type as ResourceType,
+                        val: 5,
+                        color: '#11a73e',
+                    },
+                ];
+
+                const connectionLinks: StrictLink[] = [
+                    {
+                        source: fromResource.resource.id,
+                        target: toResource.resource.id,
+                        note: getOriginalTextItem(text).text,
+                    },
+                ];
+
+                return {
+                    connectionNodes: connectionNodes,
+                    connectionLinks: connectionLinks,
+                };
+            })
+            .reduce<StrictGraphData>(
+                (connectionData, { connectionNodes, connectionLinks }) => {
+                    connectionData.nodes.push(...connectionNodes);
+                    connectionData.links.push(...connectionLinks);
+
+                    return connectionData;
+                },
+                { nodes: [], links: [] }
+            );
+    }, [connections]);
+
+    console.log({ dataForGraph });
 
     // 3. Calculator function to project 3D coordinates to Screen coordinates
     const updatePopupPosition = useCallback(() => {
@@ -120,7 +162,7 @@ export const WebOfKnowledgeVisual = (): JSX.Element => {
 
             setSelectedNode(activeNode);
 
-            console.log(`Focusing on: ${activeNode.name} with score: ${activeNode.val}`);
+            // console.log(`Focusing on: ${activeNode.name} with score: ${activeNode.val}`);
 
             // Aim at node from outside it
             const distance = 80;
@@ -181,9 +223,9 @@ export const WebOfKnowledgeVisual = (): JSX.Element => {
                 backgroundColor: '#fdac6a',
             }}
         >
-            <ForceGraph3D
+            <ForceGraph3D<StrictNode, StrictLink>
                 ref={fgRef}
-                graphData={graphData}
+                graphData={dataForGraph}
                 width={dimensions.width}
                 height={dimensions.height}
                 // --- Node Customization ---

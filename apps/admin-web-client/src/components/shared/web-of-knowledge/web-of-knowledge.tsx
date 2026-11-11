@@ -1,3 +1,4 @@
+import { EdgeConnectionType } from '@coscrad/api-interfaces';
 import { isNullOrUndefined } from '@coscrad/validation-constraints';
 import { FormControlLabel, FormGroup, Stack, Switch, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
@@ -17,7 +18,9 @@ export const WebOfKnowledge = (): JSX.Element => {
 
     if (isError) return <div>Error retrieving connections.</div>;
 
-    const webOfKnowledgeNotes = data?.entities;
+    const webOfKnowledgeNotes = data?.entities.filter(
+        ({ connectionType }) => connectionType === EdgeConnectionType.dual
+    );
 
     const toggleVisual = (event: React.ChangeEvent<HTMLInputElement>) => {
         setShowVisualWeb(event.target.checked);
@@ -35,7 +38,7 @@ export const WebOfKnowledge = (): JSX.Element => {
                 </FormGroup>
             </Tooltip>
             {showVisualWeb ? (
-                <WebOfKnowledgeVisual />
+                <WebOfKnowledgeVisual connections={webOfKnowledgeNotes} />
             ) : (
                 <Stack>
                     {!isNullOrUndefined(webOfKnowledgeNotes) ? (
