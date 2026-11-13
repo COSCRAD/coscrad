@@ -41,6 +41,10 @@ import {
     SONG_QUERY_REPOSITORY_TOKEN,
 } from '../domain/models/song/queries/song-query-repository.interface';
 import { ArangoSongQueryRepository } from '../domain/models/song/repositories/arango-song-query-repository';
+import {
+    ISpatialFeatureQueryRepository,
+    SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
+} from '../domain/models/spatial-feature/queries/spatial-feature-query-repository.interface';
 import { ArangoTagQueryRepository } from '../domain/models/tag/repositories/arango-tag-query-repository';
 import {
     ITagQueryRepository,
@@ -146,8 +150,21 @@ export class PersistenceModule implements OnApplicationShutdown {
         // TODO Remove this in favor of generic `QueryRepositoryProvider`
         const digitalTextQueryRepositoryProvider = {
             provide: DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
-            useFactory: (connecitonProvider: ArangoConnectionProvider) => {
-                return new ArangoDigitalTextQueryRepository(connecitonProvider);
+            useFactory: (connectionProvider: ArangoConnectionProvider) => {
+                return new ArangoDigitalTextQueryRepository(connectionProvider);
+            },
+            inject: [ArangoConnectionProvider],
+        };
+
+        const spatialFeatureQueryRepository = {
+            provide: SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
+            useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
+                const singleton = new ArangoTermQueryRepository(
+                    arangoConnectionProvider,
+                    new ConsoleCoscradCliLogger()
+                );
+
+                return singleton;
             },
             inject: [ArangoConnectionProvider],
         };
@@ -246,6 +263,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 playlistQueryRepository: IPlaylistQueryRepository,
                 songQueryRepository: ISongQueryRepository,
                 digitalTextRepository: IDigitalTextQueryRepository,
+                spatialFeatureQueryRepository: ISpatialFeatureQueryRepository,
                 tagQueryRepository: ITagQueryRepository,
                 noteQueryRepository: INoteQueryRepository
             ): IQueryRepositoryProvider =>
@@ -258,6 +276,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                     playlistQueryRepository,
                     songQueryRepository,
                     digitalTextRepository,
+                    spatialFeatureQueryRepository,
                     tagQueryRepository,
                     noteQueryRepository
                 ),
@@ -270,6 +289,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 PLAYLIST_QUERY_REPOSITORY_TOKEN,
                 SONG_QUERY_REPOSITORY_TOKEN,
                 DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN,
+                SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
                 TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
                 NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN,
             ],
@@ -300,6 +320,7 @@ export class PersistenceModule implements OnApplicationShutdown {
                 arangoDataExporterProvider,
                 domainDataExporterProvider,
                 digitalTextQueryRepositoryProvider,
+                spatialFeatureQueryRepository,
                 audioQueryRepositoryProvider,
                 videoQueryRepositoryProvider,
                 photographQueryRepository,
