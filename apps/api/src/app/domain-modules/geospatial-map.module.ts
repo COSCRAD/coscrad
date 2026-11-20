@@ -15,6 +15,8 @@ import { MapNameTranslated } from '../../domain/models/geospatial-map/commands/t
 import { MapNameTranslatedEventHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/map-name-translated.event-handler';
 import { TranslateMapName } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command';
 import { TranslateMapNameCommandHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command-handler';
+import { GeospatialMapQueryService } from '../../domain/models/geospatial-map/geospatial-map-query.service';
+import { GeospatialMapController } from '../../domain/models/geospatial-map/geospatial-map.controller';
 import { GeospatialMap } from '../../domain/models/geospatial-map/geospatial-map.entity';
 import { ArangoGeospatialMapQueryRepository } from '../../domain/models/geospatial-map/repositories/arango-geospatial-map-query-repository';
 import { GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN } from '../../domain/models/geospatial-map/repositories/geospatial-map-query-repository.interface';
@@ -24,6 +26,7 @@ import { CoscradNLPModule } from '../../lib/nlp';
 import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../validation';
+import { CommandInfoService } from '../controllers/command/services/command-info-service';
 
 // TODO move this to the correct vertical slice
 @Module({
@@ -34,8 +37,9 @@ import { DynamicDataTypeModule } from '../../validation';
         DynamicDataTypeModule,
         CoscradNLPModule,
     ],
-    controllers: [],
+    controllers: [GeospatialMapController],
     providers: [
+        CommandInfoService,
         {
             provide: GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN,
             useFactory: (ArangoConnectionProvider: ArangoConnectionProvider) =>
@@ -45,6 +49,7 @@ import { DynamicDataTypeModule } from '../../validation';
                 ),
             inject: [ArangoConnectionProvider],
         },
+        GeospatialMapQueryService,
         // Command Handlers
         CreateMapCommandHandler,
         TranslateMapNameCommandHandler,

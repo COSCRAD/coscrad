@@ -10,9 +10,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { buildTestInstance, CoscradDataExample } from '../.../../../../test-data/utilities';
-import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import buildConfigFilePath from '../../../app/config/buildConfigFilePath';
 import { Environment } from '../../../app/config/constants/environment';
+import buildMockConfigService from '../../../app/config/__tests__/utilities/buildMockConfigService';
 import { EdgeConnectionModule } from '../../../app/domain-modules/edge-connection.module';
 import { MockJwtAuthGuard } from '../../../authorization/mock-jwt-auth-guard';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
@@ -31,9 +31,9 @@ import { NoteRecordForResourceViewModel } from '../../../queries/buildViewModelF
 import { DeepPartial } from '../../../types/DeepPartial';
 import { DTO } from '../../../types/DTO';
 import { AggregateId } from '../../types/AggregateId';
-import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../user-management/user/entities/user/coscrad-user.entity';
+import buildDummyUuid from '../__tests__/utilities/buildDummyUuid';
 import { IResourceConnectionDto } from './commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { EventSourcedNoteViewModel } from './note.view-model.event-sourced';
 import {

@@ -10,9 +10,6 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import httpStatusCodes from '../../app/constants/httpStatusCodes';
 import setUpIntegrationTest from '../../app/controllers/__tests__/setUpIntegrationTest';
-import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
-import { assertResourceHasContributionFor } from '../../domain/models/__tests__';
-import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AccessControlList } from '../../domain/models/shared/access-control/access-control-list.entity';
 import { TermCreated } from '../../domain/models/term/commands';
 import {
@@ -24,11 +21,14 @@ import { CoscradUserGroup } from '../../domain/models/user-management/group/enti
 import { CoscradUserWithGroups } from '../../domain/models/user-management/user/entities/user/coscrad-user-with-groups';
 import { CoscradUser } from '../../domain/models/user-management/user/entities/user/coscrad-user.entity';
 import { FullName } from '../../domain/models/user-management/user/entities/user/full-name.entity';
+import { assertResourceHasContributionFor } from '../../domain/models/__tests__';
+import buildDummyUuid from '../../domain/models/__tests__/utilities/buildDummyUuid';
 import { AggregateId } from '../../domain/types/AggregateId';
+import getValidAggregateInstanceForTest from '../../domain/__tests__/utilities/getValidAggregateInstanceForTest';
 import { clonePlainObjectWithOverrides } from '../../lib/utilities/clonePlainObjectWithOverrides';
 import { ArangoDatabaseProvider } from '../../persistence/database/database.provider';
-import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import generateDatabaseNameForTestSuite from '../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
+import TestRepositoryProvider from '../../persistence/repositories/__tests__/TestRepositoryProvider';
 import buildTestDataInFlatFormat from '../../test-data/buildTestDataInFlatFormat';
 import { TestEventStream } from '../../test-data/events';
 import { buildTestInstance } from '../../test-data/utilities';
@@ -160,6 +160,7 @@ describe(`when querying for a term: fetch by Id`, () => {
 
     describe(`when the user is unauthenticated`, () => {
         beforeAll(async () => {
+            // TODO switch it to createTestingModule
             ({ app, testRepositoryProvider, databaseProvider } = await setUpIntegrationTest(
                 {
                     ARANGO_DB_NAME: testDatabaseName,

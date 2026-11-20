@@ -29,6 +29,7 @@ import { ResourceUpdateNotificationsController } from './controllers/resources/r
 import { BibliographicCitationModule } from './domain-modules/bibliographic-citation.module';
 import { DigitalTextModule } from './domain-modules/digital-text.module';
 import { EdgeConnectionModule } from './domain-modules/edge-connection.module';
+import { GeospatialMapModule } from './domain-modules/geospatial-map.module';
 import { PlaylistModule } from './domain-modules/playlist.module';
 import { SongModule } from './domain-modules/song.module';
 import { SpatialFeatureModule } from './domain-modules/spatial-feature.module';
@@ -79,6 +80,7 @@ import { WebOfKnowledgeModule } from './domain-modules/web-of-knowledge/web-of-k
         BibliographicCitationModule,
         DigitalTextModule,
         SpatialFeatureModule,
+        GeospatialMapModule,
         PlaylistModule,
         MemoryMatchModule,
         DynamicDataTypeModule,
