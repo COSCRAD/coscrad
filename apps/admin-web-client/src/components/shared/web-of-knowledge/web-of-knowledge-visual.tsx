@@ -16,6 +16,18 @@ import ForceGraph3D, {
 import * as THREE from 'three';
 import { getOriginalTextItem } from '../../resources/terms/term-detail.page';
 
+const DEFAULT_COLOUR = '#fffb00';
+
+const nodeColorByResourceType: Partial<Record<ResourceType, string>> = {
+    spatialFeature: '#00a2ff',
+    term: '#947ba8',
+};
+
+const getResourceColour = (type: ResourceType): string => {
+    // TypeScript knows RESOURCE_COLOURS[type] can be undefined, requiring a fallback
+    return nodeColorByResourceType[type] ?? DEFAULT_COLOUR;
+};
+
 interface MyCustomNode {
     id: string;
     type: ResourceType;
@@ -70,13 +82,13 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                         id: fromResource.resource.id,
                         type: fromResource.resource.type as ResourceType,
                         val: 5,
-                        color: '#3b82f6',
+                        color: getResourceColour(fromResource.resource.type as ResourceType),
                     },
                     {
                         id: toResource.resource.id,
                         type: toResource.resource.type as ResourceType,
                         val: 5,
-                        color: '#11a73e',
+                        color: getResourceColour(toResource.resource.type as ResourceType),
                     },
                 ];
 
@@ -256,7 +268,7 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                     // 1. Create a ThreeJS Group container to house our meshes
                     const group = new THREE.Group();
 
-                    const nodeColor = node.color || '#38bdf8';
+                    const nodeColor = node.color || DEFAULT_COLOUR;
 
                     // 2. Define the core base node sphere dimensions and material
                     const baseRadius = 5;
@@ -324,7 +336,6 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                             borderBottom: '1px solid rgba(56, 189, 248, 0.4)',
                         }}
                     />
-
                     {/* Header row with a Close Button */}
                     <div
                         style={{
@@ -342,7 +353,7 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                                 fontWeight: 'bold',
                             }}
                         >
-                            Group?
+                            Type: {selectedNode.type}
                         </span>
                         <button
                             onClick={() => setSelectedNode(null)}
@@ -358,11 +369,9 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                             ✕
                         </button>
                     </div>
-
                     <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: 600 }}>
                         {selectedNode.name}
                     </h3>
-
                     <p
                         style={{
                             fontSize: '14px',
@@ -373,7 +382,6 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                     >
                         {selectedNode.id}
                     </p>
-
                     <hr
                         style={{
                             border: 'none',
@@ -381,7 +389,6 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                             margin: '12px 0',
                         }}
                     />
-
                     {/* Technical Metadata Rows */}
                     <div
                         style={{
