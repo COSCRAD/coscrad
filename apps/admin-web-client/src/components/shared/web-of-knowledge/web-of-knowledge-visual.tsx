@@ -14,17 +14,32 @@ import ForceGraph3D, {
     NodeObject,
 } from 'react-force-graph-3d';
 import * as THREE from 'three';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import { getOriginalTextItem } from '../../resources/terms/term-detail.page';
 
 const DEFAULT_COLOUR = '#fffb00';
 
+const DEFAULT_ICON = 'Previews/XK-Weaver-Preview.png';
+
+const baseIconUrl = 'https://kaaltsidakah.net/raven/Map';
+
+const nodeIconUrlByResourceType: Partial<Record<ResourceType, string>> = {
+    spatialFeature: 'SpatialFeature.svg',
+    term: 'Term.svg',
+};
+
+const getResourceIcon = (type: ResourceType): string => {
+    const icon = nodeIconUrlByResourceType[type] ?? DEFAULT_ICON;
+
+    return `${baseIconUrl}/${icon}?v=${Date.now()}`;
+};
+
 const nodeColorByResourceType: Partial<Record<ResourceType, string>> = {
-    spatialFeature: '#00a2ff',
-    term: '#947ba8',
+    spatialFeature: '#d10011',
+    term: '#0fd2ec',
 };
 
 const getResourceColour = (type: ResourceType): string => {
-    // TypeScript knows RESOURCE_COLOURS[type] can be undefined, requiring a fallback
     return nodeColorByResourceType[type] ?? DEFAULT_COLOUR;
 };
 
@@ -54,6 +69,7 @@ interface WebOfKnowledgeVisualProps {
 
 export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps): JSX.Element => {
     const POPUP_WIDTH = 260;
+
     const POPUP_HEIGHT = 110;
 
     // 🔽 CHANGE THIS VALUE: Lower numbers bring the popup closer to the node
@@ -61,6 +77,8 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
     const OFFSET_Y = 90;
 
     const fgContainerRef = useRef(null);
+
+    const billboardPivotsRef = useRef(new Set());
 
     const fgRef = useRef<ForceGraphMethods<StrictNode, StrictLink> | undefined>(null);
 
@@ -116,7 +134,105 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
             );
     }, [connections]);
 
-    console.log({ dataForGraph });
+    const createNodeObject = useCallback(
+        (node) => {
+            const svgLoader = new SVGLoader();
+            // 1. Create a ThreeJS Group container to house our meshes
+            const group = new THREE.Group();
+
+            console.log({ color: node.color });
+
+            const nodeColor = node.color || DEFAULT_COLOUR;
+
+            // 2. Define the core base node sphere dimensions and material
+            const { radius, widthSegments, heightSegments } = {
+                radius: 2,
+                widthSegments: 16,
+                heightSegments: 16,
+            };
+
+            const sphereGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+            const sphereMaterial = new THREE.MeshLambertMaterial({
+                color: nodeColor,
+            });
+            const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            group.add(sphereMesh);
+
+            const billboardPivot = new THREE.Group();
+            group.add(billboardPivot);
+            billboardPivotsRef.current.add(billboardPivot);
+
+            const resourceSVGIcon = getResourceIcon(node.type);
+
+            console.log({ resourceSVGIcon });
+
+            svgLoader.load(resourceSVGIcon, (data) => {
+                const svgGroup = new THREE.Group();
+
+                data.paths.forEach((path) => {
+                    if (path.userData.style.fill === 'none') return;
+
+                    const material = new THREE.MeshLambertMaterial({
+                        color: path.color,
+                        side: THREE.DoubleSide,
+                    });
+
+                    const shapes = path.toShapes();
+                    shapes.forEach((shape) => {
+                        const geometry = new THREE.ExtrudeGeometry(shape, {
+                            depth: 8, // Thickness along the Z-axis (in raw SVG units before wrapper.scale)
+                            bevelEnabled: false, // Set to true for rounded/chamfered edges
+                        });
+                        const mesh = new THREE.Mesh(geometry, material);
+                        svgGroup.add(mesh);
+                    });
+
+                    const box = new THREE.Box3().setFromObject(svgGroup);
+
+                    const size = box.getSize(new THREE.Vector3());
+
+                    const center = box.getCenter(new THREE.Vector3());
+
+                    svgGroup.position.sub(center);
+
+                    const maxDim = Math.max(size.x, size.y);
+
+                    const scaleFactor = maxDim > 0 ? 6 / maxDim : 1;
+
+                    const wrapper = new THREE.Group();
+
+                    wrapper.add(svgGroup);
+
+                    wrapper.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+                    wrapper.rotation.x = Math.PI;
+
+                    wrapper.position.set(0, 4.5, 0);
+
+                    group.add(wrapper);
+                });
+            });
+
+            // 3. CHECK IF FOCUSED: If yes, layer a glowing wireframe shell ring around it
+            if (selectedNode && node.id === selectedNode.id) {
+                // Make the halo slightly larger than the core node sphere radius
+                const haloGeometry = new THREE.SphereGeometry(radius + 0.5, 17, 17);
+
+                const haloMaterial = new THREE.MeshBasicMaterial({
+                    color: '#fda500', // Uses the node's native color tracking
+                    wireframe: true, // 💡 THE HIGHLIGHT: Forces wireframe layout pattern
+                    transparent: true,
+                    opacity: 0.9, // Subdued glow effect
+                });
+
+                const haloMesh = new THREE.Mesh(haloGeometry, haloMaterial);
+                group.add(haloMesh);
+            }
+
+            return group;
+        },
+        [selectedNode]
+    );
 
     // 3. Calculator function to project 3D coordinates to Screen coordinates
     const updatePopupPosition = useCallback(() => {
@@ -251,8 +367,8 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                 // --- Optional: Animated Particles running along links ---
                 linkDirectionalParticles={2}
                 linkDirectionalParticleSpeed={0.005}
-                linkDirectionalParticleWidth={2}
-                linkDirectionalArrowLength={3.5}
+                linkDirectionalParticleWidth={0.5}
+                linkDirectionalArrowLength={2}
                 linkDirectionalArrowRelPos={1}
                 linkCurvature={0.45}
                 onNodeClick={handleNodeClick}
@@ -264,39 +380,7 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                     node.fz = node.z;
                 }}
                 // 🛠️ GENERATE CUSTOM 3D OBJECT WITH CONDITIONALLY HIGHLIGHTED HALO
-                nodeThreeObject={(node: any) => {
-                    // 1. Create a ThreeJS Group container to house our meshes
-                    const group = new THREE.Group();
-
-                    const nodeColor = node.color || DEFAULT_COLOUR;
-
-                    // 2. Define the core base node sphere dimensions and material
-                    const baseRadius = 5;
-                    const coreGeometry = new THREE.SphereGeometry(baseRadius, 16, 16);
-                    const coreMaterial = new THREE.MeshLambertMaterial({
-                        color: nodeColor,
-                    });
-                    const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
-                    group.add(coreMesh);
-
-                    // 3. CHECK IF FOCUSED: If yes, layer a glowing wireframe shell ring around it
-                    if (selectedNode && node.id === selectedNode.id) {
-                        // Make the halo slightly larger than the core node sphere radius
-                        const haloGeometry = new THREE.SphereGeometry(baseRadius + 1.5, 12, 12);
-
-                        const haloMaterial = new THREE.MeshBasicMaterial({
-                            color: '#fda500', // Uses the node's native color tracking
-                            wireframe: true, // 💡 THE HIGHLIGHT: Forces wireframe layout pattern
-                            transparent: true,
-                            opacity: 0.9, // Subdued glow effect
-                        });
-
-                        const haloMesh = new THREE.Mesh(haloGeometry, haloMaterial);
-                        group.add(haloMesh);
-                    }
-
-                    return group;
-                }}
+                nodeThreeObject={createNodeObject}
             />
 
             {selectedNode && (
@@ -353,7 +437,7 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                                 fontWeight: 'bold',
                             }}
                         >
-                            Type: {selectedNode.type}
+                            {selectedNode.type}
                         </span>
                         <button
                             onClick={() => setSelectedNode(null)}
@@ -399,10 +483,10 @@ export const WebOfKnowledgeVisual = ({ connections }: WebOfKnowledgeVisualProps)
                             gap: '6px',
                         }}
                     >
-                        <strong>Node ID:</strong>{' '}
+                        <strong>Resource ID:</strong>{' '}
                         <span style={{ color: '#f1f5f9' }}>{selectedNode.id}</span>
-                        <strong>Weight:</strong>{' '}
-                        <span style={{ color: '#f1f5f9' }}>{selectedNode.val} units</span>
+                        <strong>Resource Type:</strong>{' '}
+                        <span style={{ color: '#f1f5f9' }}>{selectedNode.type}</span>
                     </div>
                 </div>
             )}
