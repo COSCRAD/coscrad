@@ -47,7 +47,11 @@ export interface UserQueryOptions {
     // TODO[https://coscrad.atlassian.net/browse/CWEBJIRA-328] Support custom user-defined sort order
 }
 
-const extractPathsFromUserFilter = (filter: CoscradFilterCondition, paths = []): string[] => {
+// TODO move this to utils directory  next to `validateFieldPathForCoscradModel`
+export const extractPathsFromUserFilter = (
+    filter: CoscradFilterCondition,
+    paths = []
+): string[] => {
     const { type } = filter;
 
     if (type === CoscradConditionBlockType.SIMPLE) {

@@ -16,7 +16,13 @@ const buildCommandTypeFilter = (
     if (isNullOrUndefined(context)) return (_: string) => true;
 
     if (isCommandWriteContext(context))
-        return (commandType: string) => context.getAvailableCommands().includes(commandType);
+        return (commandType: string) => {
+            const availableCommands = context.getAvailableCommands();
+
+            const result = availableCommands.includes(commandType);
+
+            return result;
+        };
 
     if (isCommandViewIndexContext(context))
         return (commandType: string) => context.getIndexScopedCommands().includes(commandType);
