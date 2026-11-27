@@ -45,6 +45,7 @@ import {
     ISpatialFeatureQueryRepository,
     SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
 } from '../domain/models/spatial-feature/queries/spatial-feature-query-repository.interface';
+import { ArangoSpatialFeatureQueryRepository } from '../domain/models/spatial-feature/repositories/arango-spatial-feature-query-repository';
 import { ArangoTagQueryRepository } from '../domain/models/tag/repositories/arango-tag-query-repository';
 import {
     ITagQueryRepository,
@@ -159,7 +160,7 @@ export class PersistenceModule implements OnApplicationShutdown {
         const spatialFeatureQueryRepository = {
             provide: SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN,
             useFactory: (arangoConnectionProvider: ArangoConnectionProvider) => {
-                const singleton = new ArangoTermQueryRepository(
+                const singleton = new ArangoSpatialFeatureQueryRepository(
                     arangoConnectionProvider,
                     new ConsoleCoscradCliLogger()
                 );

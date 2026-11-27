@@ -1,4 +1,4 @@
-import { GeometricFeatureType, ResourceType } from '@coscrad/api-interfaces';
+import { AggregateType, GeometricFeatureType, ResourceType } from '@coscrad/api-interfaces';
 import { BooleanDataType, FromDomainModel, NestedDataType } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
 import { ApiProperty } from '@nestjs/swagger';
@@ -9,7 +9,6 @@ import {
     ViewModelId,
 } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
-import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { EventSourcedTagViewModel } from '../../../../queries/buildViewModelForResource/viewModels/tag.view-model.event-sourced';
 import { CoscradDataExample } from '../../../../test-data/utilities';
 import { DTO } from '../../../../types/DTO';
@@ -19,8 +18,7 @@ import { AggregateId } from '../../../types/AggregateId';
 import { Aggregate } from '../../aggregate.entity';
 import { ContributionSummary } from '../../user-management';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
-import { ISpatialFeature } from '../interfaces/spatial-feature.interface';
-import { PointCreated } from '../point/commands';
+import { PointCreated, SpatialFeatureCompositeIdentifier } from '../point/commands';
 import { SpatialFeatureProperties } from '../point/entities/spatial-feature-properties.entity';
 
 type PointTuple = [number, number];
@@ -136,6 +134,13 @@ export class EventSourcedSpatialFeatureViewModel {
         this.properties = new SpatialFeatureProperties(properties);
     }
 
+    getCompositeIdentifier(): SpatialFeatureCompositeIdentifier {
+        return {
+            type: AggregateType.spatialFeature,
+            id: this.id,
+        };
+    }
+
     // TODO static fromPointCreated
 
     static fromDto(
@@ -177,26 +182,5 @@ export class EventSourcedSpatialFeatureViewModel {
         });
 
         return instance;
-    }
-
-    static fromDomainModel({
-        type,
-        id,
-        geometry,
-        properties,
-    }: ISpatialFeature): SpatialFeatureViewModel {
-        const geometryView: GeometryViewModel = {
-            type: geometry.type,
-            coordinates: geometry.coordinates.toTuple(),
-        };
-
-        return new SpatialFeatureViewModel({
-            id,
-            // TODO make this full ML Text
-            name: buildMultilingualTextWithSingleItem('name'),
-            type,
-            properties,
-            geometry: geometryView,
-        });
     }
 }
