@@ -13,6 +13,9 @@ import { PersistenceModule } from '../../../../../persistence/persistence.module
 import generateDatabaseNameForTestSuite from '../../../../../persistence/repositories/__tests__/generateDatabaseNameForTestSuite';
 import { TestEventStream } from '../../../../../test-data/events';
 import { buildTestInstance } from '../../../../../test-data/utilities';
+import { ResourceConnectionDenormalizer } from '../../../context/commands/connect-resources-with-note/resource-connection.denormalizer.event-handler';
+import { ResourcesConnectedWithNote } from '../../../context/commands/connect-resources-with-note/resources-connected-with-note.event';
+import { ResourcesConnectedWithNoteEventHandler } from '../../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { NoteAboutResourceCreated } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event';
 import { NoteAboutResourceCreatedEventHandler } from '../../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { ResourceNoteDenormalizer } from '../../../context/commands/create-note-about-resource/resource-note.denormalizer.event-handler';
@@ -23,7 +26,14 @@ import {
 } from '../../queries/spatial-feature-query-repository.interface';
 import { EventSourcedSpatialFeatureViewModel } from '../../queries/spatial-feature.view-model.event-sourced';
 
-const existingPoint = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+const toPoint = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+    id: buildDummyUuid(12),
+    notes: {},
+    connections: {},
+});
+
+const fromPoint = buildTestInstance(EventSourcedSpatialFeatureViewModel, {
+    id: buildDummyUuid(13),
     notes: {},
     connections: {},
 });
@@ -45,10 +55,23 @@ const noteCreated = new TestEventStream().andThen<NoteAboutResourceCreated>(
         payload: {
             text: noteText,
             languageCode: langaugeCodeForNote,
-            resourceCompositeIdentifier: existingPoint.getCompositeIdentifier(),
+            resourceCompositeIdentifier: toPoint.getCompositeIdentifier(),
         },
     },
     NoteAboutResourceCreated
+);
+
+const resourcesConnected = new TestEventStream().andThen<ResourcesConnectedWithNote>(
+    {
+        type: 'RESOURCES_CONNECTED_WITH_NOTE',
+        payload: {
+            text: noteText,
+            languageCode: langaugeCodeForNote,
+            toMemberCompositeIdentifier: toPoint.getCompositeIdentifier(),
+            fromMemberCompositeIdentifier: fromPoint.getCompositeIdentifier(),
+        },
+    },
+    ResourcesConnectedWithNote
 );
 
 /**
@@ -68,7 +91,11 @@ describe(`when handling a "NOTE_CREATED" event for a point`, () => {
 
     let noteCreatedHandler: NoteAboutResourceCreatedEventHandler;
 
-    let denormalizer: ResourceNoteDenormalizer;
+    let noteDenormalizer: ResourceNoteDenormalizer;
+
+    let resourcesConnectedHandler: ResourcesConnectedWithNoteEventHandler;
+
+    let connectionDenormalizer: ResourceConnectionDenormalizer;
 
     beforeAll(async () => {
         const moduleRef = await Test.createTestingModule({
@@ -108,7 +135,11 @@ describe(`when handling a "NOTE_CREATED" event for a point`, () => {
 
         noteCreatedHandler = app.get(NoteAboutResourceCreatedEventHandler);
 
-        denormalizer = app.get(ResourceNoteDenormalizer);
+        noteDenormalizer = app.get(ResourceNoteDenormalizer);
+
+        resourcesConnectedHandler = app.get(ResourcesConnectedWithNoteEventHandler);
+
+        connectionDenormalizer = app.get(ResourceConnectionDenormalizer);
     });
 
     afterAll(async () => {
@@ -118,28 +149,56 @@ describe(`when handling a "NOTE_CREATED" event for a point`, () => {
     beforeEach(async () => {
         await databaseProvider.clearViews();
 
-        await testQueryRepository.create(existingPoint);
+        await testQueryRepository.create(toPoint);
     });
 
-    it(`should add the note for the target point`, async () => {
-        const event = noteCreated.as(noteCompositeIdentifier)[0] as NoteAboutResourceCreated;
+    describe(`when a note about a spatial feature has been created`, () => {
+        it(`should add the note for the target point`, async () => {
+            const event = noteCreated.as(noteCompositeIdentifier)[0] as NoteAboutResourceCreated;
 
-        await noteCreatedHandler.handle(event);
+            await noteCreatedHandler.handle(event);
 
-        await denormalizer.handle(event);
+            await noteDenormalizer.handle(event);
 
-        const updatedView = (await testQueryRepository.fetchById(
-            existingPoint.id
-        )) as EventSourcedSpatialFeatureViewModel;
+            const updatedView = (await testQueryRepository.fetchById(
+                toPoint.id
+            )) as EventSourcedSpatialFeatureViewModel;
 
-        const { notes } = updatedView;
+            const { notes } = updatedView;
 
-        expect(Object.values(notes)).toHaveLength(1);
+            expect(Object.values(notes)).toHaveLength(1);
 
-        const note = Array.from(Object.values(notes))[0];
+            const note = Array.from(Object.values(notes))[0];
 
-        expect(note.note.original.text).toBe(noteText);
+            expect(note.note.original.text).toBe(noteText);
 
-        expect(note.note.original.languageCode).toBe(langaugeCodeForNote);
+            expect(note.note.original.languageCode).toBe(langaugeCodeForNote);
+        });
+    });
+
+    describe(`when a spatial feature has been connected to another spatial feature`, () => {
+        it(`should add the connection info to each member`, async () => {
+            const event = resourcesConnected.as(
+                noteCompositeIdentifier
+            )[0] as ResourcesConnectedWithNote;
+
+            await resourcesConnectedHandler.handle(event);
+
+            await connectionDenormalizer.handle(event);
+
+            const updatedView = (await testQueryRepository.fetchById(
+                toPoint.id
+            )) as EventSourcedSpatialFeatureViewModel;
+
+            const { connections } = updatedView;
+
+            expect(Object.values(connections)).toHaveLength(1);
+
+            const connection = Array.from(Object.values(connections))[0];
+
+            expect(connection.note.original.text).toBe(noteText);
+
+            expect(connection.note.original.languageCode).toBe(langaugeCodeForNote);
+        });
     });
 });
