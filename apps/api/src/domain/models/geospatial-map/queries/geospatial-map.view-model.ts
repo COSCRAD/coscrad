@@ -1,5 +1,8 @@
 import { BooleanDataType, NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { isBoolean, isNonEmptyObject } from '@coscrad/validation-constraints';
+import { DetailScopedCommandWriteContext } from '../../../../app/controllers/command/services/command-info-service';
+import { Maybe } from '../../../../lib/types/maybe';
+import { NotFound } from '../../../../lib/types/not-found';
 import cloneToPlainObject from '../../../../lib/utilities/cloneToPlainObject';
 import { ConnectionRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels';
 import { NoteRecordForResourceViewModel } from '../../../../queries/buildViewModelForResource/viewModels/note-record-for-resource.view-model';
@@ -11,9 +14,11 @@ import { MultilingualText } from '../../../common/entities/multilingual-text';
 import { AggregateId } from '../../../types/AggregateId';
 import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
+import { AccessControlList } from '../../shared/access-control/access-control-list.entity';
 import { SpatialFeatureProperties } from '../../spatial-feature/point/entities/spatial-feature-properties.entity';
 import { GeometryViewModel } from '../../spatial-feature/queries/spatial-feature.view-model.event-sourced';
 import { ContributionSummary } from '../../user-management';
+import { CoscradUserWithGroups } from '../../user-management/user/entities/user/coscrad-user-with-groups';
 import buildDummyUuid from '../../__tests__/utilities/buildDummyUuid';
 import { GeospatialMapCompositeIdentifier } from '../commands/create-map.command';
 import { MapCreated } from '../commands/map-created.event';
@@ -38,6 +43,7 @@ export class SpatialFeatureViewForMap {
         type: ResourceType.map,
         id: buildDummyUuid(8),
         isPublished: true,
+        accessControlList: new AccessControlList().toDTO(),
         name: buildMultilingualTextWithSingleItem('test map name'),
         description: buildMultilingualTextWithSingleItem('test description name'),
         tags: [],
@@ -47,7 +53,7 @@ export class SpatialFeatureViewForMap {
         spatialFeaturesById: {},
     },
 })
-export class GeospatialMapViewModel {
+export class GeospatialMapViewModel implements DetailScopedCommandWriteContext {
     // @Literal
     readonly type = ResourceType.map;
 
@@ -68,6 +74,13 @@ export class GeospatialMapViewModel {
         description: 'indicates whether this resource is available to the public',
     })
     isPublished: boolean;
+
+    @NestedDataType(AccessControlList, {
+        label: 'access control list',
+        description: 'includes lists of IDs for users and user groups who can read this resource',
+        isPrivate: true,
+    })
+    accessControlList: AccessControlList;
 
     @NestedDataType(ContributionSummary, {
         label: 'contributions',
@@ -92,6 +105,8 @@ export class GeospatialMapViewModel {
 
     connections: Record<string, ConnectionRecordForResourceViewModel>;
 
+    // actions: string[] = [];
+
     // @Lookuptable
     spatialFeaturesById: Record<AggregateId, SpatialFeatureViewForMap> = {};
 
@@ -104,6 +119,7 @@ export class GeospatialMapViewModel {
             notes,
             connections,
             isPublished,
+            accessControlList,
             contributions,
             spatialFeaturesById,
         } = viewModelDto;
@@ -111,6 +127,8 @@ export class GeospatialMapViewModel {
         this.id = id;
 
         this.isPublished = isBoolean(isPublished) ? isPublished : false;
+
+        this.accessControlList = new AccessControlList(accessControlList);
 
         this.name = new MultilingualText(name);
 
@@ -133,6 +151,44 @@ export class GeospatialMapViewModel {
                 );
             }
         );
+    }
+
+    /**
+     * Note that we are not currently using the dynamic command panel. The
+     * main reason we abondoned this is that it didn't make for a good UX due
+     * to missing context when we rendered forms. Currently we rely 100% on out-of-band knowledge
+     * to build the admin client. But we may want to improve the dynamic command form design by binding
+     * command forms to deeply nested properties so that the user doesn't need to enter information such
+     * as `pageIdentifier`, `targetTranscriptLineItem`, etc.
+     */
+    getAvailableCommands(): string[] {
+        const allActions: string[] = [];
+
+        if (this.isPublished) {
+            allActions.push('UNPUBLISH_RESOURCE');
+        } else {
+            allActions.push('PUBLISH_RESOURCE');
+        }
+
+        return allActions;
+    }
+
+    getCompositeIdentifier(): { type: AggregateType; id: string } {
+        throw new Error('Method not implemented.');
+    }
+
+    public forUser(userWithGroups: CoscradUserWithGroups): Maybe<GeospatialMapViewModel> {
+        if (this.isPublished || this.accessControlList.canUserWithGroups(userWithGroups)) {
+            // TODO convert to a DTO and remove private props here
+
+            Object.assign(this, {
+                actions: this.getAvailableCommands(),
+            });
+
+            return this;
+        }
+
+        return NotFound;
     }
 
     // TODO can we have some kind of warning if we get the casing wrong on ~~fromDTO~~  -> `fromDto`?
@@ -158,6 +214,7 @@ export class GeospatialMapViewModel {
                 description.languageCode
             ),
             isPublished: false,
+            accessControlList: new AccessControlList(),
             spatialFeaturesById: {},
             contributions: [],
             connections: {},

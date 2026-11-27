@@ -1,13 +1,20 @@
-import { IGeospatialMapViewModel, IIndexQueryResult } from '@coscrad/api-interfaces';
+import {
+    ICommandFormAndLabels,
+    IGeospatialMapViewModel,
+    IIndexQueryResult,
+} from '@coscrad/api-interfaces';
 import { Inject, Injectable, NotImplementedException } from '@nestjs/common';
-import { isNotFound, NotFound } from 'apps/api/src/lib/types/not-found';
-import { CommandInfoService } from '../../../app/controllers/command/services/command-info-service';
+import {
+    CommandContext,
+    CommandInfoService,
+} from '../../../app/controllers/command/services/command-info-service';
 import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
 import { Maybe } from '../../../lib/types/maybe';
+import { isNotFound, NotFound } from '../../../lib/types/not-found';
+import { fetchActionsForUser } from '../../services/query-services/utilities/fetch-actions-for-user';
 import { AggregateId } from '../../types/AggregateId';
 import { ResourceType } from '../../types/ResourceType';
 import { CoscradUserWithGroups } from '../user-management/user/entities/user/coscrad-user-with-groups';
-import { GeospatialMapViewModel } from './queries/geospatial-map.view-model';
 import {
     GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN,
     IGeospatialMapQueryRepository,
@@ -27,11 +34,15 @@ export class GeospatialMapQueryService {
         id: AggregateId,
         userWithGroups?: CoscradUserWithGroups
     ): Promise<Maybe<IGeospatialMapViewModel>> {
-        const result = (await this.geospatialMapQueryRepo.fetchById(id)) as GeospatialMapViewModel;
+        const result = await this.geospatialMapQueryRepo.fetchById(id, userWithGroups);
 
         if (isNotFound(result)) return NotFound;
 
-        return this(result, userWithGroups);
+        const transformed = result as unknown as IGeospatialMapViewModel;
+
+        transformed.actions = this.fetchUserActions(userWithGroups, [result]);
+
+        return transformed;
     }
 
     async fetchMany(
@@ -39,5 +50,14 @@ export class GeospatialMapQueryService {
         _options?: UserQueryOptions
     ): Promise<IIndexQueryResult<IGeospatialMapViewModel>> {
         throw new NotImplementedException();
+    }
+
+    private fetchUserActions(
+        systemUser: CoscradUserWithGroups,
+        commandContexts: CommandContext[]
+    ): ICommandFormAndLabels[] {
+        return commandContexts.flatMap((commandContext) =>
+            fetchActionsForUser(this.commandInfoService, systemUser, commandContext)
+        );
     }
 }

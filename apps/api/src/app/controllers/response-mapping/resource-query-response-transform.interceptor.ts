@@ -102,6 +102,7 @@ export class ResourceQueryResponseTransformInterceptor<T> implements NestInterce
         }
 
         // TODO remove private props
+        // This could be part of `forUser`'s responsibility
         const withoutPrivateProps = removePrivateProperties(forUser);
 
         /**

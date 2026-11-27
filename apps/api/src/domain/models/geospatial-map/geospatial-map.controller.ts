@@ -1,35 +1,24 @@
 import {
     Body,
-    Controller,
     Get,
+    NotImplementedException,
     Param,
     Request,
-    UseFilters,
     UseGuards,
     UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 import buildByIdApiParamMetadata from '../../../app/controllers/resources/common/buildByIdApiParamMetadata';
-import sendInternalResultAsHttpResponse from '../../../app/controllers/resources/common/sendInternalResultAsHttpResponse';
-import { RESOURCES_ROUTE_PREFIX } from '../../../app/controllers/resources/constants';
+import { UserQueryOptions } from '../../../app/controllers/resources/term.controller';
 import { QueryResponseTransformInterceptor } from '../../../app/controllers/response-mapping';
-import {
-    CoscradInternalErrorFilter,
-    CoscradInvalidUserInputFilter,
-    CoscradNotFoundFilter,
-} from '../../../app/controllers/response-mapping/CoscradExceptions/exception-filters';
-import buildViewModelPathForResourceType from '../../../app/controllers/utilities/buildIndexPathForResourceType';
+import { ResourceController } from '../../../app/domain-modules/web-of-knowledge';
 import { OptionalJwtAuthGuard } from '../../../authorization/optional-jwt-auth-guard';
 import { ResourceType } from '../../types/ResourceType';
 import { GeospatialMapQueryService } from './geospatial-map-query.service';
 
-@ApiTags(RESOURCES_ROUTE_PREFIX)
-@Controller(buildViewModelPathForResourceType(ResourceType.map))
-@UseFilters(
-    new CoscradNotFoundFilter(),
-    new CoscradInvalidUserInputFilter(),
-    new CoscradInternalErrorFilter()
-)
+@ResourceController({
+    resourceType: ResourceType.map,
+})
 @UseInterceptors(QueryResponseTransformInterceptor)
 export class GeospatialMapController {
     constructor(private readonly geospatialMapQueryService: GeospatialMapQueryService) {}
@@ -38,12 +27,16 @@ export class GeospatialMapController {
     @UseGuards(OptionalJwtAuthGuard)
     @ApiParam(buildByIdApiParamMetadata())
     @Get(`/:id`)
-    async fetchById(@Request() req, @Body() res, @Param('id') id: string) {
+    async fetchById(@Request() req, @Param('id') id: string) {
         const searchResult = await this.geospatialMapQueryService.fetchById(
             id,
             req.user || undefined
         );
 
-        return sendInternalResultAsHttpResponse(res, searchResult);
+        return searchResult;
+    }
+
+    async fetchMany(@Request() _req, @Body() _userQueryOptions?: UserQueryOptions) {
+        throw new NotImplementedException();
     }
 }

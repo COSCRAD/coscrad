@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when querying for a geospatial map: fetch by id when the user is a system (COSCRAD) admin when the geospatial map has not been published when there is a geospatial map with the given ID should find it 1`] = `
+{
+  "actions": [
+    "PUBLISH_RESOURCE",
+  ],
+  "connections": {},
+  "contributions": [],
+  "description": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "test description name",
+      },
+    ],
+  },
+  "id": "9b1deb4d-3b7d-4bad-9bdd-2b0d7b100001",
+  "isPublished": false,
+  "name": {
+    "items": [
+      {
+        "languageCode": "en",
+        "role": "original",
+        "text": "test map name",
+      },
+    ],
+  },
+  "notes": {},
+  "spatialFeaturesById": {},
+  "tags": [],
+  "type": "map",
+}
+`;
