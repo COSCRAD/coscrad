@@ -9,6 +9,7 @@ import {
 import { CreateMap } from '../../domain/models/geospatial-map/commands/create-map.command';
 import { CreateMapCommandHandler } from '../../domain/models/geospatial-map/commands/create-map.command-handler';
 import { MapCreated } from '../../domain/models/geospatial-map/commands/map-created.event';
+import { MapCreatedEventHandler } from '../../domain/models/geospatial-map/commands/map-created.event-handler';
 import { MapNameTranslated } from '../../domain/models/geospatial-map/commands/translate-map-name/map-name-translated.event';
 import { TranslateMapName } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command';
 import { TranslateMapNameCommandHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command-handler';
@@ -62,6 +63,7 @@ import { DynamicDataTypeModule } from '../../validation';
             provide: ctor,
             useValue: ctor,
         })),
+        MapCreatedEventHandler,
     ],
 })
 export class GeospatialMapModule {}
