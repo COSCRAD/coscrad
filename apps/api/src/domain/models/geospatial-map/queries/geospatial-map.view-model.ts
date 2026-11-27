@@ -1,11 +1,18 @@
-import { NestedDataType } from '@coscrad/data-types';
+import { NestedDataType, NonEmptyString } from '@coscrad/data-types';
 import { DTO } from '../../../../types/DTO';
 import { MultilingualText } from '../../../common/entities/multilingual-text';
+import { AggregateType } from '../../../types/AggregateType';
 import { ResourceType } from '../../../types/ResourceType';
 import { GeospatialMapCompositeIdentifier } from '../commands/create-map.command';
 
 export class GeospatialMapViewModel {
     readonly type = ResourceType.map;
+
+    @NonEmptyString({
+        label: 'ID',
+        description: 'unique identifier for this map',
+    })
+    id: string;
 
     @NestedDataType(GeospatialMapCompositeIdentifier, {
         label: 'name',
@@ -27,5 +34,12 @@ export class GeospatialMapViewModel {
         this.name = new MultilingualText(name);
 
         this.description = new MultilingualText(description);
+    }
+
+    getCompositeIdentifier(): GeospatialMapCompositeIdentifier {
+        return {
+            type: AggregateType.map,
+            id: this.id,
+        };
     }
 }

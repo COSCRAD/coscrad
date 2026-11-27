@@ -14,6 +14,7 @@ import {
     IQueryRepositoryProvider,
 } from '../../shared/common-commands/publish-resource/resource-published.event-handler';
 import { SONG_QUERY_REPOSITORY_TOKEN } from '../../song/queries/song-query-repository.interface';
+import { SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN } from '../../spatial-feature/queries/spatial-feature-query-repository.interface';
 import {
     ITagQueryRepository,
     TAG_QUERY_REPOSITORY_PROVIDER_TOKEN,
@@ -41,6 +42,8 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
         private readonly songQueryRepository,
         @Inject(DIGITAL_TEXT_QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly digitalTextQueryRepository,
+        @Inject(SPATIAL_FEATURE_QUERY_REPOSITORY_TOKEN)
+        private readonly spatialFeatureQueryRepository,
         @Inject(TAG_QUERY_REPOSITORY_PROVIDER_TOKEN)
         private readonly tagQueryRepository,
         @Inject(NOTE_QUERY_REPOSITORY_PROVIDER_TOKEN)
@@ -78,6 +81,10 @@ export class ArangoQueryRepositoryProvider implements IQueryRepositoryProvider {
 
         if (resourceType === ResourceType.digitalText) {
             return this.digitalTextQueryRepository;
+        }
+
+        if (resourceType === ResourceType.spatialFeature) {
+            return this.spatialFeatureQueryRepository;
         }
 
         /**

@@ -1,7 +1,6 @@
 import { LanguageCode, PaginatedResponse } from '@coscrad/api-interfaces';
 import { FetchManyQueryOptions } from '../../../../app/domain-modules/web-of-knowledge/interfaces/resource-query-repository.interface';
 import { Maybe } from '../../../../lib/types/maybe';
-import { SpatialFeatureViewModel } from '../../../../queries/buildViewModelForResource/viewModels/spatial-data/spatial-feature.view-model';
 import { IQueryRepositoryForConnectable } from '../../context/commands/connect-resources-with-note/resources-connected-with-note.event-handler';
 import { IQueryRepositoryForAnnotatable } from '../../context/commands/create-note-about-resource/note-about-resource-created.event-handler';
 import { IAccessible } from '../../shared/common-commands/grant-resource-read-access-to-user/resource-read-access-granted-to-user.event-handler';
@@ -20,9 +19,9 @@ export interface ISpatialFeatureQueryRepository
         IQueryRepositoryForAttributable,
         IAccessible,
         IPublishable {
-    create(view: SpatialFeatureViewModel): Promise<void>;
+    create(view: EventSourcedSpatialFeatureViewModel): Promise<void>;
 
-    createMany(views: SpatialFeatureViewModel[]): Promise<void>;
+    createMany(views: EventSourcedSpatialFeatureViewModel[]): Promise<void>;
 
     fetchById(
         id: string,

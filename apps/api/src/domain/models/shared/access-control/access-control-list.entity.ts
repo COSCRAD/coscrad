@@ -89,4 +89,11 @@ export class AccessControlList extends BaseDomainModel {
 
         return this.canUser(userId) || groups.some(({ id: groupId }) => this.canGroup(groupId));
     }
+
+    static buildEmpty(): AccessControlList {
+        return new AccessControlList({
+            allowedGroupIds: [],
+            allowedUserIds: [],
+        });
+    }
 }

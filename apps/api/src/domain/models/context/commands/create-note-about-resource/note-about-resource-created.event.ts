@@ -1,9 +1,9 @@
 import { AggregateType, LanguageCode } from '@coscrad/api-interfaces';
 import { CoscradEvent } from '../../../../../domain/common';
 import { CoscradDataExample } from '../../../../../test-data/utilities';
+import { BaseEvent } from '../../../shared/events/base-event.entity';
 import buildDummyUuid from '../../../__tests__/utilities/buildDummyUuid';
 import { dummyDateNow } from '../../../__tests__/utilities/dummyDateNow';
-import { BaseEvent } from '../../../shared/events/base-event.entity';
 import { CreateNoteAboutResource } from './create-note-about-resource.command';
 
 export type NoteAboutResourceCreatedPayload = CreateNoteAboutResource;

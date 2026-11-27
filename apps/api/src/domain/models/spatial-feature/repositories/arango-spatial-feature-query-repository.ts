@@ -209,14 +209,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
             role: MultilingualTextItemRole.original,
         };
 
-        const cursor = await this.database.query({
+        await this.database.query({
             query,
             bindVars,
         });
-
-        const result = await cursor.all();
-
-        console.log({ result });
     }
 
     async count(): Promise<number> {
