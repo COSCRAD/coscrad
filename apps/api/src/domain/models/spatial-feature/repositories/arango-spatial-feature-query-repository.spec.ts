@@ -219,7 +219,7 @@ describe(`ArangoSpatialFeatureRepository`, () => {
         });
     });
 
-    describe.skip(`create`, () => {
+    describe(`create`, () => {
         beforeEach(async () => {
             await databaseProvider.clearViews();
         });

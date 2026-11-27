@@ -62,10 +62,10 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
     }
 
     async createMany(views: EventSourcedSpatialFeatureViewModel[]): Promise<void> {
-        // @ts-expect-error TODO fix this as abov e
+        // @ts-expect-error The generic `DTO` type is not playing nice with records here.
         const documents = views.map(mapEntityDTOToDatabaseDocument);
 
-        // @ts-expect-error TODO fix this
+        // @ts-expect-error see above
         await this.database.createMany(documents);
     }
 
@@ -129,6 +129,7 @@ export class ArangoSpatialFeatureQueryRepository implements ISpatialFeatureQuery
         };
     }
 
+    // TODO can we pass the translationItem here?
     async translateSpatialFeatureName(
         id: string,
         translation: string,

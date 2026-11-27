@@ -1,5 +1,6 @@
 import { CommandModule } from '@coscrad/commands';
 import { Module } from '@nestjs/common';
+import { ConsoleCoscradCliLogger } from '../../coscrad-cli/logging';
 import {
     AddSpatialFeatureToMap,
     AddSpatialFeatureToMapCommandHandler,
@@ -8,13 +9,17 @@ import {
 import { CreateMap } from '../../domain/models/geospatial-map/commands/create-map.command';
 import { CreateMapCommandHandler } from '../../domain/models/geospatial-map/commands/create-map.command-handler';
 import { MapCreated } from '../../domain/models/geospatial-map/commands/map-created.event';
+import { MapCreatedEventHandler } from '../../domain/models/geospatial-map/commands/map-created.event-handler';
 import { MapNameTranslated } from '../../domain/models/geospatial-map/commands/translate-map-name/map-name-translated.event';
 import { TranslateMapName } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command';
 import { TranslateMapNameCommandHandler } from '../../domain/models/geospatial-map/commands/translate-map-name/translate-map-name.command-handler';
 import { GeospatialMap } from '../../domain/models/geospatial-map/geospatial-map.entity';
+import { ArangoGeospatialMapQueryRepository } from '../../domain/models/geospatial-map/repositories/arango-geospatial-map-query-repository';
+import { GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN } from '../../domain/models/geospatial-map/repositories/geospatial-map-query-repository.interface';
 import { Point } from '../../domain/models/spatial-feature/point/entities/point.entity';
 import { IdGenerationModule } from '../../lib/id-generation/id-generation.module';
 import { CoscradNLPModule } from '../../lib/nlp';
+import { ArangoConnectionProvider } from '../../persistence/database/arango-connection.provider';
 import { PersistenceModule } from '../../persistence/persistence.module';
 import { DynamicDataTypeModule } from '../../validation';
 
@@ -29,6 +34,15 @@ import { DynamicDataTypeModule } from '../../validation';
     ],
     controllers: [],
     providers: [
+        {
+            provide: GEOSPATIAL_MAP_QUERY_REPOSITORY_TOKEN,
+            useFactory: (ArangoConnectionProvider: ArangoConnectionProvider) =>
+                new ArangoGeospatialMapQueryRepository(
+                    ArangoConnectionProvider,
+                    new ConsoleCoscradCliLogger()
+                ),
+            inject: [ArangoConnectionProvider],
+        },
         // Command Handlers
         CreateMapCommandHandler,
         TranslateMapNameCommandHandler,
@@ -49,6 +63,7 @@ import { DynamicDataTypeModule } from '../../validation';
             provide: ctor,
             useValue: ctor,
         })),
+        MapCreatedEventHandler,
     ],
 })
 export class GeospatialMapModule {}

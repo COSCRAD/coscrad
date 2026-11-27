@@ -25,7 +25,8 @@ import { SpatialFeatureProperties } from '../point/entities/spatial-feature-prop
 
 type PointTuple = [number, number];
 
-type GeometryViewModel = {
+// TODO make this a class
+export type GeometryViewModel = {
     type: GeometricFeatureType;
     coordinates: PointTuple | PointTuple[] | PointTuple[][];
 };
@@ -59,6 +60,7 @@ export class EventSourcedSpatialFeatureViewModel {
         description: 'uniquely identifies an entity from other entities of the same type',
     })
     @FromDomainModel(Aggregate as unknown as Ctor<unknown>)
+    // TODO do we really need this?
     readonly id: ViewModelId;
 
     // @NestedDataType(MultilingualText, {
